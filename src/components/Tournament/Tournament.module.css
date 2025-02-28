@@ -1,0 +1,1050 @@
+/**
+ * Tournament.module.css
+ * Styles for the Tournament component that handles the cat name voting interface.
+ * 
+ * Structure:
+ * - Layout & Container
+ * - Progress & Info Section
+ * - Matchup & Voting Area
+ * - Controls & Buttons
+ * - Modal Components
+ * - Animations
+ * - Responsive Design
+ * - Dark Mode
+ * - Accessibility
+ */
+
+/* Layout & Container
+   ========================================================================== */
+.tournament {
+  composes: container from '../../styles/base.css';
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: calc(100vh - var(--space-16));
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: var(--space-4);
+  position: relative;
+  isolation: isolate;
+  /* Prevent content shift during voting */
+  overflow-x: hidden;
+}
+
+/* Progress & Info Section
+   ========================================================================== */
+.progressInfo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 800px;
+  padding: var(--space-4);
+  margin-bottom: var(--space-6);
+  background: var(--surface-color);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  transition: transform var(--duration-normal) var(--ease-out),
+              box-shadow var(--duration-normal) var(--ease-out);
+  will-change: transform, box-shadow;
+}
+
+.progressInfo:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-lg);
+}
+
+.roundInfo {
+  composes: flex-col from '../../styles/base.css';
+  gap: var(--space-2);
+  font-weight: 500;
+}
+
+.roundNumber {
+  color: var(--primary-color);
+  font-size: var(--text-lg);
+  font-weight: 600;
+}
+
+.matchCount {
+  composes: textSm from '../../styles/base.css';
+  color: var(--text-secondary);
+}
+
+.percentageInfo {
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--text-secondary);
+  padding: var(--space-2) var(--space-4);
+  background: var(--surface-color);
+  border-radius: var(--radius-full);
+  transition: all var(--duration-normal) var(--ease-out);
+}
+
+/* Matchup & Voting Area
+   ========================================================================== */
+.tournamentLayout {
+  display: grid;
+  gap: var(--space-8);
+  margin-top: var(--space-4);
+}
+
+.matchup {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 1000px;
+  gap: var(--space-6);
+  composes: cardInteractive from '../../styles/base.css';
+  padding: var(--space-6);
+  background: var(--card-background);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  transition: all var(--duration-normal) var(--ease-out);
+  will-change: transform, box-shadow;
+  /* Improve touch target size on mobile */
+  min-height: 200px;
+}
+
+.namesRow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-8);
+  width: 100%;
+}
+
+.nameContainer {
+  flex: 1;
+  max-width: 400px;
+  min-width: 280px;
+  transition: transform var(--duration-normal) var(--ease-out);
+  animation: fadeInSlide 0.5s ease-out;
+}
+
+.nameContainer.selected {
+  transform: scale(1.02);
+}
+
+.nameContainer.loading {
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+.vsSection {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 80px;
+  height: 80px;
+  background: var(--surface-color);
+  border: 2px solid var(--border-color);
+  border-radius: var(--radius-full);
+  transition: all var(--duration-normal) var(--ease-out);
+}
+
+.vsText {
+  font-size: var(--text-xl);
+  font-weight: 600;
+  color: var(--primary-color);
+}
+
+.extraOptions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-4);
+  width: 100%;
+  max-width: 600px;
+  margin-top: var(--space-4);
+}
+
+.extraOptionsButton {
+  composes: btnSecondary from '../../styles/base.css';
+  min-width: 120px;
+  transition: all var(--duration-normal) var(--ease-out);
+}
+
+.extraOptionsButton:hover:not(:disabled) {
+  transform: translateY(-1px);
+}
+
+.extraOptionsButton:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.selected {
+  composes: btnPrimary from '../../styles/base.css';
+  background: var(--primary-color);
+}
+
+/* Controls & Buttons
+   ========================================================================== */
+.tournamentControls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-4);
+  width: 100%;
+  max-width: 800px;
+  margin-bottom: var(--space-6);
+  padding: var(--space-4);
+  background: var(--surface-color);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  transition: all var(--duration-normal) var(--ease-out);
+  /* Ensure controls are always accessible */
+  position: sticky;
+  top: env(safe-area-inset-top, 0);
+  z-index: var(--z-sticky);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.controlButton {
+  composes: btnPrimary from '../../styles/base.css';
+}
+
+.soundControls {
+  display: flex;
+  gap: var(--space-2);
+  align-items: center;
+  background: var(--surface-color);
+  padding: var(--space-2);
+  border-radius: var(--radius-full);
+  border: 1px solid var(--border-color);
+}
+
+.soundToggleButton {
+  composes: btnSecondary from '../../styles/base.css';
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  color: var(--text-primary);
+  background: var(--surface-color);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-full);
+  transition: all var(--duration-normal) var(--ease-out);
+}
+
+.soundToggleButton:hover:not(:disabled) {
+  color: var(--primary-500);
+  background: var(--card-hover);
+  border-color: var(--primary-300);
+  transform: translateY(-1px);
+}
+
+.soundToggleButton:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.soundToggleButton.muted {
+  color: var(--error-500);
+  background: rgb(var(--error-rgb) / 0.1);
+  border-color: var(--error-300);
+}
+
+.soundToggleButton.muted:hover {
+  color: var(--error-600);
+  background: rgb(var(--error-rgb) / 0.15);
+  border-color: var(--error-400);
+}
+
+.soundToggleButton.error {
+  color: var(--error-500);
+  background: rgb(var(--error-rgb) / 0.1);
+  border-color: var(--error-300);
+  animation: pulse 2s infinite;
+}
+
+.icon {
+  width: 20px;
+  height: 20px;
+  transition: transform var(--duration-normal) var(--ease-out);
+}
+
+.soundToggleButton:hover .icon {
+  transform: scale(1.1);
+}
+
+.trackInfo {
+  display: flex;
+  align-items: center;
+  padding: var(--space-2) var(--space-4);
+  background: var(--surface-color);
+  border-radius: var(--radius-full);
+  border: 1px solid var(--border-color);
+}
+
+.trackName {
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 150px;
+}
+
+.bracketToggle {
+  composes: btnSecondary from '../../styles/base.css';
+  width: 100%;
+  max-width: 800px;
+  margin: var(--space-4) auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-4);
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  background: var(--surface-color);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  transition: all var(--duration-normal) var(--ease-out);
+}
+
+.bracketToggle:hover {
+  background: var(--card-hover);
+  transform: translateY(-1px);
+}
+
+.bracketToggle:active {
+  transform: translateY(0);
+}
+
+.bracketToggleIcon {
+  font-size: var(--text-sm);
+  transition: transform var(--duration-normal) var(--ease-out);
+}
+
+.bracketView {
+  margin-top: var(--space-4);
+  padding: var(--space-4);
+  background: var(--surface-color);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  animation: slideDown 0.3s var(--ease-out);
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Modal Components
+   ========================================================================== */
+.modal {
+  composes: modal from '../../styles/base.css';
+  animation: fadeIn var(--duration-normal) var(--ease-out);
+  /* Improve modal accessibility */
+  outline: none;
+  box-shadow: var(--shadow-xl);
+}
+
+.modalBackdrop {
+  composes: modalBackdrop from '../../styles/base.css';
+  animation: fadeIn var(--duration-normal) var(--ease-out);
+}
+
+.modalContent {
+  composes: flex-col from '../../styles/base.css';
+  gap: var(--space-4);
+}
+
+.modalTitle {
+  composes: heading2 from '../../styles/base.css';
+}
+
+.modalText {
+  composes: text from '../../styles/base.css';
+}
+
+.modalActions {
+  composes: flex-center from '../../styles/base.css';
+  gap: var(--space-4);
+  margin-top: var(--space-4);
+}
+
+.confirmButton {
+  composes: btnPrimary from '../../styles/base.css';
+}
+
+.cancelButton {
+  composes: btnSecondary from '../../styles/base.css';
+}
+
+/* Animations
+   ========================================================================== */
+@keyframes fadeIn {
+  from { 
+    opacity: 0;
+    transform: scale(0.98);
+  }
+  to { 
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes slideUp {
+  from { 
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+@keyframes fadeInSlide {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive Design
+   ========================================================================== */
+@media (max-width: 768px) {
+  .tournament {
+    padding: var(--space-2);
+  }
+
+  .namesRow {
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+
+  .nameContainer {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .vsSection {
+    width: 60px;
+    height: 60px;
+    margin: var(--space-2) 0;
+  }
+
+  .vsText {
+    font-size: var(--text-base);
+  }
+
+  .extraOptions {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .extraOptionsButton {
+    width: 100%;
+  }
+
+  .tournamentControls {
+    flex-direction: column;
+    gap: var(--space-4);
+    /* Adjust sticky behavior for mobile */
+    position: sticky;
+    top: 0;
+    margin: 0 calc(var(--space-4) * -1);
+    border-radius: 0;
+  }
+
+  .controlButton {
+    width: 100%;
+  }
+
+  .matchup {
+    padding: var(--space-4);
+  }
+
+  /* Improve scrolling on mobile */
+  .bracketView {
+    margin: var(--space-2);
+    padding: var(--space-2);
+  }
+
+  .soundControls {
+    width: 100%;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    padding: var(--space-3);
+  }
+
+  .soundToggleButton {
+    width: 48px;
+    height: 48px;
+  }
+
+  .icon {
+    width: 24px;
+    height: 24px;
+  }
+
+  .trackInfo {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .trackName {
+    max-width: none;
+    text-align: center;
+  }
+
+  .bracketToggle {
+    margin: var(--space-2);
+    font-size: var(--text-xs);
+  }
+}
+
+/* Dark Mode
+   ========================================================================== */
+@media (prefers-color-scheme: dark) {
+  .vsSection {
+    background: rgb(var(--primary-rgb) / 0.2);
+  }
+
+  .progressInfo,
+  .tournamentControls,
+  .bracketView {
+    background: rgb(var(--black-rgb) / 0.2);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+
+  .matchup {
+    background: var(--card-background-dark);
+    border-color: var(--border-color-dark);
+  }
+
+  .modal {
+    background: var(--card-background-dark);
+  }
+
+  /* Improve contrast in dark mode */
+  .vsText {
+    color: var(--primary-400);
+  }
+
+  .extraOptionsButton {
+    background: rgb(var(--black-rgb) / 0.3);
+  }
+
+  .soundControls {
+    background: var(--surface-dark);
+    border-color: var(--border-color-dark);
+  }
+
+  .soundToggleButton {
+    background: var(--surface-dark);
+    border-color: var(--border-color-dark);
+    color: var(--text-primary-dark);
+  }
+
+  .soundToggleButton:hover:not(:disabled) {
+    background: var(--card-hover-dark);
+    border-color: var(--primary-400);
+    color: var(--primary-400);
+  }
+
+  .soundToggleButton.muted {
+    background: rgb(var(--error-rgb) / 0.15);
+    border-color: var(--error-400);
+    color: var(--error-400);
+  }
+
+  .soundToggleButton.muted:hover {
+    background: rgb(var(--error-rgb) / 0.2);
+    border-color: var(--error-300);
+    color: var(--error-300);
+  }
+
+  .soundToggleButton.error {
+    background: rgb(var(--error-rgb) / 0.15);
+    border-color: var(--error-400);
+    color: var(--error-400);
+  }
+
+  .trackInfo {
+    background: var(--surface-dark);
+    border-color: var(--border-color-dark);
+  }
+
+  .trackName {
+    color: var(--text-primary-dark);
+  }
+
+  .bracketToggle {
+    background: var(--surface-dark);
+    border-color: var(--border-color-dark);
+    color: var(--text-secondary-dark);
+  }
+
+  .bracketToggle:hover {
+    background: var(--card-hover-dark);
+  }
+
+  .bracketView {
+    background: var(--surface-dark);
+    border-color: var(--border-color-dark);
+  }
+}
+
+/* Accessibility
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  .tournament *,
+  .modal,
+  .modalBackdrop {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  .nameContainer.selected {
+    transform: none;
+  }
+
+  .extraOptionsButton:hover:not(:disabled),
+  .extraOptionsButton:active:not(:disabled) {
+    transform: none;
+  }
+
+  .soundToggleButton,
+  .icon {
+    transition: none;
+  }
+
+  .soundToggleButton:hover {
+    transform: none;
+  }
+
+  .soundToggleButton:hover .icon {
+    transform: none;
+  }
+
+  .soundToggleButton.error {
+    animation: none;
+  }
+
+  .bracketView {
+    animation: none;
+  }
+  
+  .bracketToggle,
+  .bracketToggleIcon {
+    transition: none;
+  }
+}
+
+/* Focus States */
+.extraOptionsButton:focus-visible,
+.controlButton:focus-visible,
+.soundToggleButton:focus-visible {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 2px;
+}
+
+/* Safe Area Insets for Mobile
+   ========================================================================== */
+@supports (padding: max(0px)) {
+  .tournament {
+    padding-top: max(var(--space-8), env(safe-area-inset-top));
+    padding-bottom: max(var(--space-4), env(safe-area-inset-bottom));
+  }
+}
+
+.randomizeButton {
+  composes: btnSecondary from '../../styles/base.css';
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-bottom: var(--space-4);
+}
+
+.randomizeButton svg {
+  width: 1.25em;
+  height: 1.25em;
+  transition: transform 0.3s ease;
+}
+
+.randomizeButton:hover svg {
+  transform: rotate(180deg);
+}
+
+.keyHints {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: rgba(0, 0, 0, 0.8);
+  padding: 15px;
+  border-radius: 10px;
+  color: white;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.8rem;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  animation: fadeIn 0.3s ease-in-out;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+}
+
+.keyHint {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  opacity: 0.8;
+  transition: opacity 0.2s;
+}
+
+.keyHint:hover {
+  opacity: 1;
+}
+
+/* Match Result Display
+   ========================================================================== */
+.matchResult {
+  position: fixed;
+  bottom: var(--space-8);
+  right: var(--space-8);
+  background: linear-gradient(135deg, var(--primary-500), var(--primary-600));
+  color: white;
+  padding: var(--space-4) var(--space-6);
+  border-radius: var(--radius-lg);
+  font-size: var(--text-lg);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: var(--z-tooltip);
+  animation: slideUp 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  border: 2px solid var(--primary-300);
+  max-width: 350px;
+}
+
+.resultContent {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.resultMessage {
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.resultMessage::before {
+  content: '🏆';
+  font-size: 1.2em;
+}
+
+.tournamentProgress {
+  font-size: var(--text-sm);
+  opacity: 0.9;
+  font-weight: 500;
+  color: var(--primary-100);
+}
+
+@keyframes slideUp {
+  0% {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Media Queries */
+@media (max-width: 768px) {
+  .matchResult {
+    bottom: var(--space-4);
+    right: var(--space-4);
+    font-size: var(--text-base);
+    padding: var(--space-3) var(--space-4);
+    max-width: calc(100% - var(--space-8));
+  }
+
+  .tournamentProgress {
+    font-size: var(--text-xs);
+  }
+}
+
+/* Dark mode adjustments */
+@media (prefers-color-scheme: dark) {
+  .matchResult {
+    background: linear-gradient(135deg, var(--primary-600), var(--primary-700));
+    border-color: var(--primary-400);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  }
+
+  .tournamentProgress {
+    color: var(--primary-200);
+  }
+}
+
+/* Remove old name insight styles */
+.nameInsight,
+.insightContent,
+.insightMessage,
+.insightProgress {
+  display: none;
+}
+
+/* Volume Controls
+   ========================================================================== */
+.volumeContainer {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.volumeControls {
+  position: absolute;
+  top: 50%;
+  left: calc(100% + var(--space-2));
+  transform: translateY(-50%);
+  background: var(--surface-color);
+  padding: var(--space-2);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+  box-shadow: var(--shadow-md);
+  z-index: var(--z-dropdown);
+}
+
+.volumeControls.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.volumeLabel {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+}
+
+.volumeSlider {
+  width: 80px;
+  height: 4px;
+  -webkit-appearance: none;
+  appearance: none;
+  background: var(--primary-200);
+  border-radius: var(--radius-full);
+  outline: none;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+}
+
+.volumeSlider:hover {
+  opacity: 1;
+}
+
+.volumeSlider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 12px;
+  height: 12px;
+  background: var(--primary-500);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: transform 0.1s;
+}
+
+.volumeSlider::-moz-range-thumb {
+  width: 12px;
+  height: 12px;
+  background: var(--primary-500);
+  border-radius: 50%;
+  cursor: pointer;
+  border: none;
+  transition: transform 0.1s;
+}
+
+.volumeSlider::-webkit-slider-thumb:hover,
+.volumeSlider::-webkit-slider-thumb:active {
+  transform: scale(1.2);
+}
+
+.volumeSlider::-moz-range-thumb:hover,
+.volumeSlider::-moz-range-thumb:active {
+  transform: scale(1.2);
+}
+
+/* Dark mode adjustments */
+@media (prefers-color-scheme: dark) {
+  .volumeControls {
+    background: var(--surface-dark);
+    border-color: var(--border-color-dark);
+  }
+
+  .volumeSlider {
+    background: var(--primary-700);
+  }
+
+  .volumeSlider::-webkit-slider-thumb {
+    background: var(--primary-400);
+  }
+
+  .volumeSlider::-moz-range-thumb {
+    background: var(--primary-400);
+  }
+}
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
+  .volumeControls {
+    position: fixed;
+    top: auto;
+    bottom: var(--space-4);
+    left: var(--space-4);
+    right: var(--space-4);
+    transform: none;
+    flex-direction: row;
+    justify-content: space-around;
+    padding: var(--space-4);
+    background: var(--surface-color);
+    border: 1px solid var(--border-color);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .volumeSlider {
+    width: 120px;
+  }
+}
+
+.musicControls {
+  position: fixed;
+  bottom: var(--space-4);
+  right: var(--space-4);
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2);
+  background: var(--surface-color);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  transition: all 0.3s var(--ease-out);
+  z-index: 100;
+}
+
+.musicControls.minimized {
+  width: auto;
+  padding: var(--space-2);
+}
+
+.musicControls.minimized .volumeControls,
+.musicControls.minimized .trackInfo {
+  display: none;
+}
+
+.musicToggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: all 0.2s var(--ease-out);
+}
+
+.musicToggle:hover {
+  color: var(--primary-500);
+  transform: scale(1.1);
+}
+
+.volumeControls {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.trackInfo {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+}
+
+.minimizeButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.2s var(--ease-out);
+}
+
+.minimizeButton:hover {
+  color: var(--primary-500);
+}
+
+@media (max-width: 768px) {
+  .musicControls {
+    bottom: var(--space-2);
+    right: var(--space-2);
+    max-width: calc(100% - var(--space-4));
+  }
+
+  .volumeControls {
+    flex-direction: column;
+    gap: var(--space-1);
+  }
+
+  .trackInfo {
+    font-size: var(--text-xs);
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  .musicControls {
+    background: var(--surface-dark);
+    border-color: var(--border-color-dark);
+  }
+} 
