@@ -18,8 +18,8 @@ class EloRating {
   constructor(defaultRating = 1500, kFactor = 32) {
     this.defaultRating = defaultRating;
     this.kFactor = kFactor;
-    this.minRating = 1000;
-    this.maxRating = 2000;
+    this.minRating = 0;
+    this.maxRating = 3000;
   }
 
   /**

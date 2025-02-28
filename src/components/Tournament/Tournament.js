@@ -6,7 +6,7 @@
 
 import React, { useState, useCallback, useEffect, useRef, useMemo, memo } from 'react';
 import { useTournament } from '../../hooks/useTournament';
-import { useKeyboardControls } from '../../hooks/useKeyboardControls';
+// import { useKeyboardControls } from '../../hooks/useKeyboardControls';
 import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
 import ErrorBoundary from '../ErrorBoundary/ErrorBoundary';
 import NameCard from '../NameCard/NameCard';

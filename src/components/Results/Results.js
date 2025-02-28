@@ -5,7 +5,7 @@
  */
 
 import React, { useState, useEffect, useCallback, memo, useMemo } from 'react';
-import ResultsTable from './ResultsTable';
+// import ResultsTable from './ResultsTable';
 import RankingAdjustment from '../RankingAdjustment/RankingAdjustment';
 import Bracket from '../Bracket/Bracket';
 import styles from './Results.module.css';
