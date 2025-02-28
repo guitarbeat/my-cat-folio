@@ -239,7 +239,12 @@ function useTournamentSetup(onStart) {
         // Sort names alphabetically for better UX
         const sortedNames = filteredNames.sort((a, b) => a.name.localeCompare(b.name));
         
-        console.log(`Loaded ${sortedNames.length} available names (${hiddenIds.size} hidden)`);
+        console.log('🎮 TournamentSetup: Data loaded', {
+          availableNames: sortedNames.length,
+          hiddenNames: hiddenIds.size,
+          userPreferences: hiddenData?.length || 0
+        });
+
         setAvailableNames(sortedNames);
         
         // If any currently selected names are now hidden, remove them
@@ -257,11 +262,15 @@ function useTournamentSetup(onStart) {
   }, []); // Empty dependency array since we only want to fetch once on mount
 
   const toggleName = (nameObj) => {
-    setSelectedNames(prev => 
-      prev.some(n => n.id === nameObj.id)
+    setSelectedNames(prev => {
+      const newSelectedNames = prev.some(n => n.id === nameObj.id)
         ? prev.filter(n => n.id !== nameObj.id)
-        : [...prev, nameObj]
-    );
+        : [...prev, nameObj];
+      
+      // Log the updated selected names
+      console.log('🎮 TournamentSetup: Selected names updated', newSelectedNames);
+      return newSelectedNames;
+    });
   };
 
   const handleSelectAll = () => {
