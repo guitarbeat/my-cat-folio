@@ -181,12 +181,12 @@ export function useTournament({ names = [], existingRatings = {}, onComplete }) 
           voteValue = 1;
           eloOutcome = 'right';
           break;
-        case 'both':
-          voteValue = Math.random() * 0.2 - 0.1;
+        case 'both': // Both equally liked with small random variance
+          voteValue = Math.random() * 0.1 - 0.05; // Small random value centered at 0
           eloOutcome = 'both';
           break;
-        case 'none':
-          voteValue = Math.random() * 0.1 - 0.05;
+        case 'none': // Neither liked with small random variance
+          voteValue = Math.random() * 0.06 - 0.03; // Even smaller random value centered at 0
           eloOutcome = 'none';
           break;
         default:

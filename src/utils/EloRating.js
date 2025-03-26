@@ -83,13 +83,13 @@ class EloRating {
         actualA = 0;
         actualB = 1;
         break;
-      case 'both': // Slight preference for first option
-        actualA = 0.6;
-        actualB = 0.4;
+      case 'both': // Both options are liked equally
+        actualA = 0.7;
+        actualB = 0.7;
         break;
-      case 'none': // True tie
-        actualA = 0.5;
-        actualB = 0.5;
+      case 'none': // True tie with lower boost than "both"
+        actualA = 0.3;
+        actualB = 0.3;
         break;
       default: // Default to tie
         actualA = 0.5;

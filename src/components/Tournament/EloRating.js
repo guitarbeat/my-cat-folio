@@ -61,13 +61,13 @@ class EloRating {
         lossesA++;
         winsB++;
         break;
-      case 'both':
+      case 'both': // Both names get an equal significant boost
         actualA = 0.7;
         actualB = 0.7;
         winsA++;
         winsB++;
         break;
-      case 'none':
+      case 'none': // Both names get an equal smaller boost
         actualA = 0.3;
         actualB = 0.3;
         break;
