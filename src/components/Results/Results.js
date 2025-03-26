@@ -8,6 +8,7 @@ import React, { useState, useEffect, useCallback, memo, useMemo } from 'react';
 // import ResultsTable from './ResultsTable';
 import RankingAdjustment from '../RankingAdjustment/RankingAdjustment';
 import Bracket from '../Bracket/Bracket';
+import CalendarButton from '../CalendarButton/CalendarButton';
 import styles from './Results.module.css';
 
 // Memoized stats card component for better performance
@@ -33,6 +34,7 @@ function Results({ ratings, onStartNew, userName, onUpdateRatings, currentTourna
   const [currentRankings, setCurrentRankings] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
+  const [hiddenNames, setHiddenNames] = useState(new Set());
 
   // Convert vote history to bracket matches
   const getBracketMatches = useCallback(() => {
@@ -251,6 +253,11 @@ function Results({ ratings, onStartNew, userName, onUpdateRatings, currentTourna
             </svg>
             Start New Tournament
           </button>
+          <CalendarButton 
+            rankings={currentRankings} 
+            userName={userName} 
+            hiddenNames={hiddenNames}
+          />
           <p className={styles.tip} role="note">
             Starting a new tournament will let you rate more names while keeping your current rankings.
           </p>

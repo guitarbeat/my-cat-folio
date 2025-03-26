@@ -20,7 +20,7 @@ function CalendarButton({ rankings, userName, hiddenNames }) {
 
     // Updated title with just emoji + winner name
     const text = `🐈‍⬛ ${winnerName}`;
-    const details = `Daily rankings for ${userName}:\n\n${
+    const details = `Cat name rankings for ${userName}:\n\n${
       activeNames
         .map((name, index) => `${index + 1}. ${name.name} (Rating: ${Math.round(name.rating || 1500)})`)
         .join('\n')

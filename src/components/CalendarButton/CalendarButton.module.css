@@ -10,6 +10,9 @@
   border: 2px solid var(--primary-700);
   font-weight: 500;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  font-size: 1rem;
+  cursor: pointer;
+  min-height: 2.75rem;
 }
 
 .button:hover {

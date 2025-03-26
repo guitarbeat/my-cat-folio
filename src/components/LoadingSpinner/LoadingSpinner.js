@@ -1,7 +1,7 @@
 /**
  * @module LoadingSpinner
  * @description An elegant loading spinner component that provides visual feedback
- * during asynchronous operations. Features a single orbital path with cat emoji animation.
+ * during asynchronous operations. Features a rotating cat animation.
  * 
  * @example
  * // Default size
@@ -22,7 +22,7 @@ import styles from './LoadingSpinner.module.css';
 
 /**
  * A modern, elegant loading spinner component that provides visual feedback
- * during asynchronous operations.
+ * during asynchronous operations using a rotating cat animation.
  * 
  * @param {Object} props
  * @param {('small'|'medium'|'large')} [props.size='medium'] - Size variant of the spinner
@@ -32,14 +32,12 @@ import styles from './LoadingSpinner.module.css';
 const LoadingSpinner = ({ size = 'medium', text }) => {
   return (
     <div className={styles.container} role="status" aria-label="Loading">
-      <div className={`${styles.core} ${styles[size]}`}>
-        <div className={styles.orbit}>
-          <div className={styles.dot} />
-          <div className={styles.dot} />
-          <div className={styles.dot} />
-        </div>
-        <div className={styles.center}>
-          <span className={styles.cat}>🐈‍⬛</span>
+      <div className={styles.box}>
+        <div className={`${styles.cat} ${styles[size]}`}>
+          <div className={styles.cat__head}></div>
+          <div className={styles.cat__body}></div>
+          <div className={styles.cat__body}></div>
+          <div className={styles.cat__tail}></div>
         </div>
       </div>
       {text && <p className={styles.text}>{text}</p>}
