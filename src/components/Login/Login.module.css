@@ -278,4 +278,32 @@
     background: #333;
     border-color: #666;
   }
+}
+
+/* Additional light mode specific styles to improve contrast */
+@media (prefers-color-scheme: light) {
+  .generateButton {
+    background: #1a1a1a;
+    border: 2px solid #333;
+    color: white;
+  }
+  
+  .generateButton:hover:not(:disabled) {
+    background: #2a2a2a;
+    border-color: #444;
+  }
+  
+  .generateButton:active:not(:disabled) {
+    background: #333;
+  }
+  
+  .startButton {
+    background: var(--primary-700);
+    color: white;
+    border: none;
+  }
+  
+  .startButton:hover:not(:disabled) {
+    background: var(--primary-800);
+  }
 } 

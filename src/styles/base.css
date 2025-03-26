@@ -63,27 +63,27 @@ body {
 /* Button Variants */
 .btnPrimary {
   composes: btn;
-  color: white;
-  background: var(--primary-color);
+  color: var(--button-text-light, white);
+  background: var(--button-primary-bg, var(--primary-color));
   border: none;
 }
 
 .btnPrimary:hover:not(:disabled) {
-  background: var(--primary-dark);
+  background: var(--button-primary-hover, var(--primary-dark));
   transform: translateY(-1px);
   box-shadow: var(--shadow-md);
 }
 
 .btnSecondary {
   composes: btn;
-  color: var(--text-primary);
-  background: var(--surface-color);
-  border: 1px solid var(--border-color);
+  color: var(--button-text-light, white);
+  background: var(--button-secondary-bg, #2a2a2a);
+  border: 1px solid #444;
 }
 
 .btnSecondary:hover:not(:disabled) {
-  background: var(--card-hover);
-  border-color: var(--primary-color);
+  background: var(--button-secondary-hover, #333);
+  border-color: #555;
 }
 
 .btnGhost {
@@ -234,14 +234,15 @@ body {
     background: rgb(var(--black-rgb) / 0.2);
   }
 
-  .btnSecondary {
-    background: rgb(var(--black-rgb) / 0.2);
-  }
-
   .modal {
     background: var(--surface-color);
     border-color: var(--border-color);
   }
+}
+
+/* Light Mode Overrides for Better Contrast */
+@media (prefers-color-scheme: light) {
+  /* Light mode specific styles are now handled via variables */
 }
 
 /* Typography */
