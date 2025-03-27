@@ -298,6 +298,12 @@ function App() {
             onUpdateRatings={handleUpdateRatings}
           />
         );
+      case 'loading':
+        return (
+          <div style={{ height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <LoadingSpinner size="large" text="Testing Loading Spinner..." />
+          </div>
+        );
       case 'tournament':
         if (tournamentComplete) {
           return (

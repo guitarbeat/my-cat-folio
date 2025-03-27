@@ -1,5 +1,14 @@
+/* Simple loading spinner with cat emoji */
+:root {
+  /* Basic variables */
+  --overlay-background: rgba(0, 0, 0, 0.5);
+  --overlay-blur: 4px;
+  --text-color: rgba(255, 255, 255, 0.95);
+  --text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  --space-6: 1.5rem;
+}
+
 .container {
-  composes: container from '../../styles/base.css';
   display: flex;
   align-items: center;
   justify-content: center;
@@ -11,135 +20,41 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgb(var(--black-rgb) / 0.8);
-  backdrop-filter: blur(4px);
+  background: var(--overlay-background);
+  backdrop-filter: saturate(150%) blur(var(--overlay-blur));
+  -webkit-backdrop-filter: saturate(150%) blur(var(--overlay-blur));
   z-index: 1000;
 }
 
-.cat {
-  position: relative;
-  width: 100%;
-  max-width: 20em;
-  overflow: hidden;
-  background-color: transparent;
-}
-
-.cat::before {
-  content: '';
-  display: block;
-  padding-bottom: 100%;
-}
-
-.cat:hover > * { 
-  animation-play-state: paused; 
-}
-
-.cat:active > * { 
-  animation-play-state: running; 
-}
-
-.catImg {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  animation: rotating 2.79s cubic-bezier(.65, .54, .12, .93) infinite;
-}
-
-.catImg::before {
-  content: '';
-  position: absolute;
-  width: 50%;
-  height: 50%;
-  background-size: 200%;
-  background-repeat: no-repeat;
-  background-image: url('https://images.weserv.nl/?url=i.imgur.com/M1raXX3.png&il');
-}
-
-.cat__head {
-  composes: catImg;
-}
-
-.cat__head::before {
-  top: 0;
-  right: 0;
-  background-position: 100% 0%;
-  transform-origin: 0% 100%;
-  transform: rotate(90deg);
-}
-
-.cat__tail {
-  composes: catImg;
-  animation-delay: .2s;
-}
-
-.cat__tail::before {
-  left: 0;
-  bottom: 0;
-  background-position: 0% 100%;
-  transform-origin: 100% 0%;
-  transform: rotate(-30deg);
-}
-
-.cat__body {
-  composes: catImg;
-  animation-delay: .1s;
-}
-
-.cat__body:nth-of-type(2) {
-  animation-delay: .2s;
-}
-
-.cat__body::before {
-  right: 0;
-  bottom: 0;
-  background-position: 100% 100%;
-  transform-origin: 0% 0%;
-}
-
-@keyframes rotating {
-  from { transform: rotate(720deg); }
-  to { transform: none; }
-}
-
-.box {
+/* Spinner styles */
+.spinner {
+  font-size: 5rem;
+  animation: spin 1.5s linear infinite;
   display: flex;
-  flex: 1;
-  flex-direction: column;
-  justify-content: center;
   align-items: center;
-  background-color: transparent;
+  justify-content: center;
 }
 
-/* Size variants - adjust cat container size */
-.small { 
-  --cat-size: 80px;
-  width: var(--cat-size);
-  height: var(--cat-size);
+/* Size variants */
+.small { font-size: 3rem; }
+.medium { font-size: 5rem; }
+.large { font-size: 7rem; }
+
+/* Simple rotation animation */
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 
-.medium { 
-  --cat-size: 120px;
-  width: var(--cat-size);
-  height: var(--cat-size);
-}
-
-.large { 
-  --cat-size: 160px;
-  width: var(--cat-size);
-  height: var(--cat-size);
-}
-
+/* Text styles */
 .text {
-  composes: text from '../../styles/base.css';
-  color: rgb(var(--white-rgb) / 0.9);
+  color: var(--text-color);
   margin-top: var(--space-6);
   letter-spacing: 0.05em;
-  text-shadow: 0 2px 4px rgb(var(--black-rgb) / 0.2);
+  text-shadow: var(--text-shadow);
 }
 
-/* Accessibility */
+/* Screen reader only */
 .srOnly {
   position: absolute;
   width: 1px;
@@ -154,11 +69,32 @@
 
 /* Dark mode adjustments */
 @media (prefers-color-scheme: dark) {
-  .container {
-    background: rgb(var(--black-rgb) / 0.9);
+  :root {
+    --overlay-background: rgba(0, 0, 0, 0.7);
   }
-  
-  .text {
-    color: rgb(var(--white-rgb) / 0.95);
+}
+
+/* Attribution styles */
+.attribution {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  font-weight: 300;
+  font-size: 15px;
+  color: gray;
+  margin: 10px;
+  padding: 0;
+}
+
+.attribution a {
+  color: gray;
+  text-decoration: underline;
+}
+
+/* Dark mode adjustments for attribution */
+@media (prefers-color-scheme: dark) {
+  .attribution,
+  .attribution a {
+    color: rgba(255, 255, 255, 0.7);
   }
 } 
