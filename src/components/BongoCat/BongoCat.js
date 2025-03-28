@@ -1,100 +1,115 @@
 /**
  * @component BongoCat
- * @description A fun animated cat that responds to user interactions like typing and tapping
+ * @description A fun animated cat that responds to user interactions
  */
 
-import React, { useEffect, useRef } from 'react';
+import React, { useState, useEffect, useCallback, memo, useRef } from 'react';
+import PropTypes from 'prop-types';
 import styles from './BongoCat.module.css';
 
-const BongoCat = ({ onKeyPress, text }) => {
-  const pawsUpRef = useRef(null);
-  const pawsDownRef = useRef(null);
+const BongoCat = memo(({ size = 1, color = '#000', onBongo }) => {
+  const [isPawsDown, setIsPawsDown] = useState(false);
+  const lastKeyTimeRef = useRef(0);
+  const keysHeldRef = useRef(new Set());
+
+  const handleKeyDown = useCallback((e) => {
+    if (e.ctrlKey || e.altKey || e.metaKey || e.shiftKey) return;
+    
+    const now = Date.now();
+    if (now - lastKeyTimeRef.current > 1000) {
+      lastKeyTimeRef.current = now;
+    }
+    
+    // Add the key to the set of keys being held down
+    keysHeldRef.current.add(e.key);
+    setIsPawsDown(true);
+    
+    // Only trigger onBongo if it wasn't already paws down
+    if (!isPawsDown && onBongo) {
+      onBongo();
+    }
+  }, [isPawsDown, onBongo]);
+
+  const handleKeyUp = useCallback((e) => {
+    // Remove the key from the set of keys being held down
+    keysHeldRef.current.delete(e.key);
+    
+    // If no keys are being held down anymore, set paws up
+    if (keysHeldRef.current.size === 0) {
+      setIsPawsDown(false);
+    }
+  }, []);
 
   useEffect(() => {
-    // Set up event listeners for mouse/touch events
-    document.addEventListener("mousedown", handleDown);
-    document.addEventListener("mouseup", handleUp);
-    document.addEventListener("touchstart", handleDown);
-    document.addEventListener("touchend", handleUp);
+    document.addEventListener("keydown", handleKeyDown);
+    document.addEventListener("keyup", handleKeyUp);
     
-    // Handle keyboard events if onKeyPress is used
-    if (onKeyPress) {
-      document.addEventListener("keydown", handleDown);
-      document.addEventListener("keyup", handleUp);
-    }
-
-    // Clean up event listeners on component unmount
     return () => {
-      document.removeEventListener("mousedown", handleDown);
-      document.removeEventListener("mouseup", handleUp);
-      document.removeEventListener("touchstart", handleDown);
-      document.removeEventListener("touchend", handleUp);
-      
-      if (onKeyPress) {
-        document.removeEventListener("keydown", handleDown);
-        document.removeEventListener("keyup", handleUp);
-      }
+      document.removeEventListener("keydown", handleKeyDown);
+      document.removeEventListener("keyup", handleKeyUp);
     };
-  }, [onKeyPress]);
-
-  const handleDown = () => {
-    if (pawsUpRef.current && pawsDownRef.current) {
-      pawsUpRef.current.classList.add(styles.hide);
-      pawsDownRef.current.classList.remove(styles.hide);
-    }
-  };
-
-  const handleUp = () => {
-    if (pawsUpRef.current && pawsDownRef.current) {
-      pawsUpRef.current.classList.remove(styles.hide);
-      pawsDownRef.current.classList.add(styles.hide);
-    }
-  };
+  }, [handleKeyDown, handleKeyUp]);
 
   return (
-    <div className={styles.container}>
-      <div className={styles.table}></div>
+    <div 
+      className={styles.container}
+      style={{
+        '--cat-bg': color,
+        '--cat-outline': color === '#000' ? '#222' : color === '#fff' ? '#eee' : color,
+        transform: `scale(${size})`
+      }}
+      role="img"
+      aria-label="Bongo cat animation"
+    >
+      <div className={styles.table} />
       <div className={styles.cat}>
-        <div className={styles.head}></div>
+        <div className={styles.head} />
         <div className={`${styles.ears} ${styles.fill}`}>
-          <div className={styles.ear}></div>
-          <div className={styles.ear}></div>
+          <div className={styles.ear} />
+          <div className={styles.ear} />
         </div>
         <div className={`${styles.ears} ${styles.outline}`}>
-          <div className={styles.ear}></div>
-          <div className={styles.ear}></div>
+          <div className={styles.ear} />
+          <div className={styles.ear} />
         </div>
         <div className={styles.face}>
           <div className={styles.eyes}>
-            <div className={styles.eye}></div>
-            <div className={styles.eye}></div>
+            <div className={styles.eye} />
+            <div className={styles.eye} />
           </div>
           <div className={styles.mouth}>
-            <div className={styles.uu}></div>
+            <div className={styles.uu} />
           </div>
         </div>
       </div>
-      <div className={`${styles.paws} ${styles.up}`} ref={pawsUpRef}>
+      <div className={`${styles.paws} ${styles.up} ${isPawsDown ? styles.hide : ''}`}>
         <div className={styles.paw}>
-          <div className={styles.palm}></div>
-          <div className={styles.bean}></div>
-          <div className={styles.bean}></div>
-          <div className={styles.bean}></div>
+          <div className={styles.palm} />
+          <div className={styles.bean} />
+          <div className={styles.bean} />
+          <div className={styles.bean} />
         </div>
         <div className={styles.paw}>
-          <div className={styles.palm}></div>
-          <div className={styles.bean}></div>
-          <div className={styles.bean}></div>
-          <div className={styles.bean}></div>
+          <div className={styles.palm} />
+          <div className={styles.bean} />
+          <div className={styles.bean} />
+          <div className={styles.bean} />
         </div>
       </div>
-      <div className={`${styles.paws} ${styles.down} ${styles.hide}`} ref={pawsDownRef}>
-        <div className={styles.paw}></div>
-        <div className={styles.paw}></div>
+      <div className={`${styles.paws} ${styles.down} ${isPawsDown ? '' : styles.hide}`}>
+        <div className={styles.paw} />
+        <div className={styles.paw} />
       </div>
-      {text && <div className={styles.clickme}>{text}</div>}
     </div>
   );
+});
+
+BongoCat.displayName = 'BongoCat';
+
+BongoCat.propTypes = {
+  size: PropTypes.number,
+  color: PropTypes.string,
+  onBongo: PropTypes.func
 };
 
 export default BongoCat; 
