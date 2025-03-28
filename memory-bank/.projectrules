@@ -1,0 +1,67 @@
+# Project Rules: Meow Namester
+
+## Code Style
+- Use functional components with hooks instead of class components
+- Follow the naming convention:
+  - Components: PascalCase
+  - Hooks: camelCase with 'use' prefix
+  - Utilities: camelCase
+  - CSS classes: kebab-case
+- Place component CSS modules alongside component files
+- Use JSDoc comments for all components and important functions
+- Prefer destructuring for props and state
+- Use async/await for asynchronous operations
+
+## Workflow Preferences
+- All new features should have corresponding documentation in the Memory Bank
+- Update Memory Bank files when making significant changes
+- Code should be formatted with Prettier before committing
+- CSS should be linted with Stylelint before committing
+- Breaking changes should be documented in activeContext.md
+- All UI components should be responsive for mobile devices
+- Avoid direct DOM manipulation; use React refs when needed
+
+## Implementation Patterns
+- **State Management**: Use React hooks for state management; avoid Redux
+- **Data Fetching**: Centralize Supabase calls in supabaseClient.js; don't call directly from components
+- **Authentication**: Handle through useUserSession hook; don't implement auth logic in components
+- **Error Handling**: Wrap components in ErrorBoundary; use try/catch for async operations
+- **Tournament Algorithm**: Modifications to the Elo rating system should maintain the K-factor balance
+- **Responsive Design**: Use CSS variables for consistent theming; avoid hardcoded values
+- **Performance**: Memoize expensive calculations and component renders
+- **Forms**: Implement controlled components for all form elements
+
+## Known Challenges
+- **Tournament Complexity**: The tournament pairing algorithm can become computationally expensive with large name sets; use chunking or pagination
+- **Authentication Flow**: Google OAuth integration has edge cases with session expiration; implement proper refresh token handling
+- **Local vs. Remote Data**: Sync strategies between local storage and Supabase need careful consideration for offline support
+- **Rating System Fine-tuning**: Elo parameters may need adjustment based on user patterns; monitor for rating inflation
+- **Chart Rendering**: ChartJS has known performance issues with large datasets; use data aggregation when necessary
+
+## Tool Usage
+- **Supabase**: Use the client SDK for all data operations; don't use raw SQL
+- **React**: Follow the latest patterns from React 19; prefer hooks over higher-order components
+- **CSS Modules**: Use composition for shared styles; avoid global CSS
+- **Git**: Use feature branches with descriptive names; squash before merging
+- **Chart.js**: Prefer streamlined configs; avoid excessive customization for better performance
+- **Vercel**: Use environment variables for configuration; avoid hardcoded values
+
+## Styling Preferences
+- **Color Palette**: Use CSS variables for all colors; primary colors defined in index.css
+- **Typography**: 
+  - Headings: Montserrat
+  - Body text: Open Sans
+  - Use rem units for font sizes
+- **Spacing**: Use 4px increments for margins and padding
+- **Border Radius**: 4px for small elements, 8px for cards, 16px for modals
+- **Animations**: Keep subtle; 200-300ms duration for transitions
+- **Icons**: Prefer @heroicons/react for consistent style
+
+## File Organization
+- Related components should be grouped in directories
+- Each component directory should include:
+  - ComponentName.js
+  - ComponentName.module.css (if needed)
+  - index.js (for clean exports)
+- Centralize shared utilities in the utils directory
+- Keep hook logic separate from UI components 
