@@ -130,7 +130,7 @@ function Login({ onLogin }) {
 
       <div className={styles.loginContainer} ref={containerRef}>
         <section className={styles.imageSection}>
-          <h1 className={styles.welcomeTitle}>Create Your Account</h1>
+          <h1 className={styles.welcomeTitle}>Welcome</h1>
           <img 
             src="/images/IMG_5071.JPG" 
             alt="Cute cat avatar" 
@@ -138,17 +138,13 @@ function Login({ onLogin }) {
             loading="eager"
           />
           <p className={styles.welcomeText}>
-            Create your voter account to join our cat-naming community! This is where you 
-            create or access your account - not where you suggest cat names.
+            Sign in or create an account to join our cat-naming community!
           </p>
         </section>
 
         <div className={styles.loginContent}>
           <div>
-            <h2 className={styles.loginTitle}>Sign In or Create Account</h2>
-            <p className={styles.importantNote} style={{ color: '#e44d26', marginBottom: '1rem', fontWeight: 'bold' }}>
-              ⚠️ Important: Remember your chosen name! You'll need it to access your voting history and results later.
-            </p>
+            <h2 className={styles.loginTitle}>Sign In</h2>
             <p className={styles.catFact}>{catFact || 'Loading a fun cat fact...'}</p>
             {isTyping ? (
               <p className={styles.helperText}>The cat is watching you type!</p>
@@ -198,24 +194,17 @@ function Login({ onLogin }) {
                   </>
                 ) : (
                   <>
-                    Sign In / Create Account
-                    <span className={styles.buttonEmoji} aria-hidden="true">🔐</span>
+                    Continue
+                    <span className={styles.buttonEmoji} aria-hidden="true">→</span>
                   </>
                 )}
               </span>
             </button>
           </form>
 
-          <div className={styles.helperText}>
-            <p style={{ marginBottom: '0.5rem' }}>
-              ✨ This is your account creation/login page. After signing in, you'll be able to:
-            </p>
-            <ul style={{ listStyle: 'inside', paddingLeft: '1rem' }}>
-              <li>Vote in cat name tournaments</li>
-              <li>Track your voting history</li>
-              <li>See tournament results</li>
-            </ul>
-          </div>
+          <p className={styles.helperText}>
+            After signing in, you'll be able to vote in cat name tournaments and see results.
+          </p>
         </div>
       </div>
     </div>
