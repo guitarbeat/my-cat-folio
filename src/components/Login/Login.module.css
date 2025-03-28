@@ -4,7 +4,7 @@
   display: grid;
   place-items: center;
   position: relative;
-  padding: 2rem;
+  padding: 3rem;
   overflow: hidden;
 }
 
@@ -218,10 +218,21 @@
   .loginContainer {
     grid-template-columns: 1fr;
     width: min(95%, 450px);
+    margin-top: 80px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .loginWrapper {
+    padding-top: 3rem;
+    padding-bottom: 2rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
   }
 
   .imageSection {
     padding: 2rem;
+    padding-top: 3rem;
   }
 
   .welcomeTitle {

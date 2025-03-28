@@ -8,9 +8,29 @@ function Login({ onLogin }) {
   const [error, setError] = useState('');
   const [catFact, setCatFact] = useState('');
   const [isTyping, setIsTyping] = useState(false);
+  const [offsetY, setOffsetY] = useState(-160);
   
   const containerRef = useRef(null);
   const typingTimeoutRef = useRef(null);
+
+  // Update offset based on screen size
+  useEffect(() => {
+    const updateOffset = () => {
+      // Use a smaller (less negative) offset on mobile to position the cat less behind
+      if (window.innerWidth <= 768) {
+        setOffsetY(-90); // Much less negative offset for mobile - brings cat more forward
+      } else {
+        setOffsetY(-160); // Original offset for desktop
+      }
+    };
+    
+    // Set initial offset
+    updateOffset();
+    
+    // Update offset on resize
+    window.addEventListener('resize', updateOffset);
+    return () => window.removeEventListener('resize', updateOffset);
+  }, []);
 
   const funnyPrefixes = [
     'Captain', 'Dr.', 'Professor', 'Lord', 'Lady', 'Sir', 'Duchess', 'Count',
@@ -90,11 +110,12 @@ function Login({ onLogin }) {
 
   return (
     <div className={styles.loginWrapper}>
-      {/* BongoCat component with all positioning logic handled internally */}
+      {/* BongoCat component with responsive offsetY */}
       <BongoCat 
         containerRef={containerRef}
         color="#000"
-         onBongo={() => console.log('Cat bongoed!')}
+        offsetY={offsetY}
+        onBongo={() => console.log('Cat bongoed!')}
       />
       
       <div className={styles.backgroundContainer}>

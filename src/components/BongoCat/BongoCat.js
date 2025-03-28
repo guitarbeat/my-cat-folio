@@ -30,18 +30,28 @@ const BongoCat = memo(({
     if (containerRef && containerRef.current) {
       const rect = containerRef.current.getBoundingClientRect();
       const viewportHeight = window.innerHeight;
+      const viewportWidth = window.innerWidth;
       const containerWidth = rect.width;
       
       // Position cat relative to the container
-      // Allow negative values to position the cat higher without restrictions
-      const optimalTop = rect.top + offsetY;
+      // Additional adjustment for mobile screens
+      let optimalTop = rect.top + offsetY;
+      
+      // Apply an additional offset for narrow screens to position the cat better
+      if (viewportWidth <= 768) {
+        const mobileAdjustment = 10; // Reduced adjustment for mobile to bring cat more forward
+        optimalTop = optimalTop + mobileAdjustment;
+      }
       
       setContainerTop(optimalTop);
       
-      // Scale cat based on container width
+      // Scale cat based on container width with a mobile-specific adjustment
       const baseSize = size;
       const scaleFactor = Math.min(containerWidth / 500, 1);
-      setCatSize(baseSize * scaleFactor);
+      
+      // Make the cat slightly smaller on mobile for better proportions
+      const mobileScaleFactor = viewportWidth <= 768 ? 0.9 : 1.0;
+      setCatSize(baseSize * scaleFactor * mobileScaleFactor);
       
       // Show/hide based on visibility
       setIsVisible(rect.top < viewportHeight);
@@ -93,19 +103,46 @@ const BongoCat = memo(({
       // Initial position calculation
       updatePosition();
       
-      // Add scroll listener for smooth updates
-      window.addEventListener('scroll', updatePosition, { passive: true });
+      // Improved scroll and position tracking
+      const handleScroll = () => {
+        requestAnimationFrame(updatePosition);
+      };
+      
+      // Track container position with multiple events to ensure it stays attached
+      window.addEventListener('scroll', handleScroll, { passive: true });
+      window.addEventListener('resize', handleScroll, { passive: true });
+      
+      // Additional events that might affect positioning
+      window.addEventListener('orientationchange', updatePosition);
+      window.addEventListener('load', updatePosition);
+      
+      // Use MutationObserver to detect DOM changes that might affect container position
+      const mutationObserver = new MutationObserver(updatePosition);
+      mutationObserver.observe(document.body, { 
+        childList: true, 
+        subtree: true, 
+        attributes: true
+      });
+      
+      return () => {
+        document.removeEventListener("keydown", handleKeyDown);
+        document.removeEventListener("keyup", handleKeyUp);
+        
+        if (resizeObserverRef.current) {
+          resizeObserverRef.current.disconnect();
+        }
+        
+        window.removeEventListener('scroll', handleScroll);
+        window.removeEventListener('resize', handleScroll);
+        window.removeEventListener('orientationchange', updatePosition);
+        window.removeEventListener('load', updatePosition);
+        mutationObserver.disconnect();
+      };
     }
     
     return () => {
       document.removeEventListener("keydown", handleKeyDown);
       document.removeEventListener("keyup", handleKeyUp);
-      
-      if (resizeObserverRef.current) {
-        resizeObserverRef.current.disconnect();
-      }
-      
-      window.removeEventListener('scroll', updatePosition);
     };
   }, [handleKeyDown, handleKeyUp, containerRef, updatePosition]);
 
@@ -170,7 +207,9 @@ const BongoCat = memo(({
   const downPawsZIndex = 9999; // Down paws above container with high z-index
   
   // Further adjust the paws position for the most natural cutoff effect
-  const pawsOffsetY = -20; // More pronounced offset to create the "reaching over" effect
+  // Make pawsOffsetY responsive to screen width
+  const isMobile = window.innerWidth <= 768;
+  const pawsOffsetY = isMobile ? -10 : -20; // Much smaller offset on mobile to bring paws forward
   
   // Adjust visibility management to ensure a clean cutoff
   const catVisibility = isVisible ? 'visible' : 'hidden';
@@ -192,7 +231,7 @@ const BongoCat = memo(({
           aspectRatio: '1',
           zIndex: catBodyZIndex, // Put cat body behind the container
           pointerEvents: 'none',
-          transition: 'top 0.3s ease, opacity 0.3s ease',
+          transition: 'top 0.2s ease-out, opacity 0.3s ease',
           opacity: isVisible ? 1 : 0,
           visibility: catVisibility
         }}
@@ -243,7 +282,7 @@ const BongoCat = memo(({
           aspectRatio: '1',
           zIndex: upPawsZIndex, // Same z-index as body, so behind container
           pointerEvents: 'none',
-          transition: 'top 0.3s ease, opacity 0.3s ease',
+          transition: 'top 0.2s ease-out, opacity 0.3s ease',
           opacity: isVisible ? 1 : 0,
           visibility: pawsVisibility,
           display: isPawsDown ? 'none' : 'block' // Hide when paws are down
@@ -288,7 +327,7 @@ const BongoCat = memo(({
           aspectRatio: '1',
           zIndex: downPawsZIndex, // Extremely high z-index to ensure down paws are on top
           pointerEvents: 'none',
-          transition: 'top 0.3s ease, opacity 0.3s ease',
+          transition: 'top 0.2s ease-out, opacity 0.3s ease',
           opacity: isVisible ? 1 : 0,
           visibility: pawsVisibility,
           display: isPawsDown ? 'block' : 'none' // Only show when paws are down
