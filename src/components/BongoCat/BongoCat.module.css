@@ -2,19 +2,19 @@
 
 /* Variables */
 :root {
-  --cat: #000; /* Black cat */
-  --outline: #222; /* Slightly lighter than black for contrast */
+  --cat-bg: #000; /* Black cat */
+  --cat-outline: #222; /* Slightly lighter than black for contrast */
   --toebean: #ff99aa; /* Brighter pink for visibility */
   --linesize: 2px;
   --scale: 0.2; /* Scale factor to make everything smaller */
+  --cat-size: 1;
 }
 
 /* Base Styles */
 .container {
   width: calc(80rem * var(--scale));
   height: calc(80rem * var(--scale));
-
-
+  transform: scale(var(--cat-size));
 }
 
 .container * {
@@ -34,14 +34,14 @@
 .head {
   width: calc(70rem * var(--scale));
   height: calc(60rem * var(--scale));
-  border: var(--linesize) solid var(--outline);
+  border: var(--linesize) solid var(--cat-outline);
   border-radius: 50%;
-  background: var(--cat);
+  background: var(--cat-bg);
 }
 
 /* Ears */
 .ears.fill .ear:first-child {
-  border-bottom: calc(8rem * var(--scale)) solid var(--cat);
+  border-bottom: calc(8rem * var(--scale)) solid var(--cat-bg);
   border-left: calc(7rem * var(--scale)) solid transparent;
   border-right: calc(7rem * var(--scale)) solid transparent;
   transform: translate(calc(17rem * var(--scale)), calc(-5rem * var(--scale))) rotate(-15deg);
@@ -50,7 +50,7 @@
 }
 
 .ears.fill .ear:last-child {
-  border-bottom: calc(10rem * var(--scale)) solid var(--cat);
+  border-bottom: calc(10rem * var(--scale)) solid var(--cat-bg);
   border-left: calc(3rem * var(--scale)) solid transparent;
   border-right: calc(9rem * var(--scale)) solid transparent;
   transform: translate(calc(53rem * var(--scale)), calc(-2rem * var(--scale))) rotate(33deg);
@@ -59,14 +59,14 @@
 }
 
 .ears.outline .ear:first-child {
-  border-bottom: calc(8rem * var(--scale)) solid var(--outline);
+  border-bottom: calc(8rem * var(--scale)) solid var(--cat-outline);
   border-left: calc(7rem * var(--scale)) solid transparent;
   border-right: calc(7rem * var(--scale)) solid transparent;
   transform: translate(calc(17rem * var(--scale)), calc(-5rem * var(--scale))) rotate(-15deg);
 }
 
 .ears.outline .ear:last-child {
-  border-bottom: calc(10rem * var(--scale)) solid var(--outline);
+  border-bottom: calc(10rem * var(--scale)) solid var(--cat-outline);
   border-left: calc(3rem * var(--scale)) solid transparent;
   border-right: calc(9rem * var(--scale)) solid transparent;
   transform: translate(calc(53rem * var(--scale)), calc(-2rem * var(--scale))) rotate(33deg);
@@ -113,7 +113,7 @@
   width: calc(4rem * var(--scale));
   height: calc(1.5rem * var(--scale));
   border-radius: 0 0 50% 50% / 0 0 100% 100%;
-  border: var(--outline) solid var(--linesize);
+  border: var(--cat-outline) solid var(--linesize);
   border-top: none;
   border-color: #444; /* Dark gray instead of black */
 }
@@ -136,9 +136,9 @@
   transform: rotate(150deg);
   width: calc(15rem * var(--scale));
   height: calc(14rem * var(--scale));
-  background: var(--cat);
-  border-bottom: var(--linesize) solid var(--outline);
-  border-right: var(--linesize) solid var(--outline);
+  background: var(--cat-bg);
+  border-bottom: var(--linesize) solid var(--cat-outline);
+  border-right: var(--linesize) solid var(--cat-outline);
   border-radius: 0 0 50% 50% / 0 0 70% 70%;
 }
 
@@ -173,10 +173,10 @@
 .paws.down .paw {
   width: calc(15rem * var(--scale));
   height: calc(13rem * var(--scale));
-  background: var(--cat);
-  border-bottom: var(--linesize) solid var(--outline);
-  border-left: var(--linesize) solid var(--outline);
-  border-right: var(--linesize) solid var(--outline);
+  background: var(--cat-bg);
+  border-bottom: var(--linesize) solid var(--cat-outline);
+  border-left: var(--linesize) solid var(--cat-outline);
+  border-right: var(--linesize) solid var(--cat-outline);
   border-radius: 0 0 50% 50% / 0 0 80% 80%;
   margin-top: calc(-0.5rem * var(--scale));
   transform-origin: 50% 0%;
@@ -190,8 +190,8 @@
   top: 0;
   right: 0;
   transform: translate(calc(1rem * var(--scale)), -90%);
-  background: var(--cat);
-  border-right: var(--linesize) solid var(--outline);
+  background: var(--cat-bg);
+  border-right: var(--linesize) solid var(--cat-outline);
   width: 100%;
   height: calc(3rem * var(--scale));
 }
@@ -208,8 +208,6 @@
   left: calc(65rem * var(--scale));
 }
 
-
-
 /* Animations */
 @keyframes blink {
   0% {
@@ -224,4 +222,17 @@
   100% {
     transform: scaley(1);
   }
+}
+
+/* For BongoCatDemo container */
+.demoContainer {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 180px;
+  max-width: 100%;
+  aspect-ratio: 1;
+  z-index: 20;
+  pointer-events: none;
+  transition: all 0.3s ease;
 }

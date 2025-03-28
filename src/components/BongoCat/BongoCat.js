@@ -56,12 +56,11 @@ const BongoCat = memo(({ size = 1, color = '#000', onBongo }) => {
       style={{
         '--cat-bg': color,
         '--cat-outline': color === '#000' ? '#222' : color === '#fff' ? '#eee' : color,
-        transform: `scale(${size})`
+        '--cat-size': size
       }}
       role="img"
       aria-label="Bongo cat animation"
     >
-      <div className={styles.table} />
       <div className={styles.cat}>
         <div className={styles.head} />
         <div className={`${styles.ears} ${styles.fill}`}>

@@ -6,6 +6,7 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import BongoCat from './BongoCat';
 import loginStyles from '../Login/Login.module.css';
+import styles from './BongoCat.module.css';
 
 // This demo shows how to integrate BongoCat with Login.js
 const BongoCatDemo = () => {
@@ -86,19 +87,11 @@ const BongoCatDemo = () => {
   // Improved BongoCat container renderer with transitions
   const renderBongoCat = () => (
     <div 
+      className={styles.demoContainer}
       style={{
-        position: 'absolute',
         top: containerTop > 0 ? `${containerTop}px` : '8vh',
-        left: '50%',
-        transform: 'translateX(-50%)',
-        width: '180px', // Increased fixed width
-        maxWidth: '100%',
-        aspectRatio: '1',
-        zIndex: 20,
-        pointerEvents: 'none',
         opacity: isVisible ? 1 : 0,
-        visibility: isVisible ? 'visible' : 'hidden',
-        transition: 'all 0.3s ease'
+        visibility: isVisible ? 'visible' : 'hidden'
       }}
     >
       <BongoCat 
