@@ -126,6 +126,18 @@ const Sidebar = ({ view, setView, isLoggedIn, userName, onLogout, isOpen, onTogg
             <span className={styles.buttonText}>Tournament</span>
           </button>
           
+          <button 
+            className={view === 'bongo' ? styles.active : styles.navButton}
+            onClick={() => {
+              setView('bongo');
+              onToggle();
+            }}
+            aria-current={view === 'bongo' ? 'page' : undefined}
+          >
+            <span className={styles.buttonIcon} aria-hidden="true">🐱</span>
+            <span className={styles.buttonText}>Bongo Cat</span>
+          </button>
+          
           {isLoggedIn && (
             <>
               <button 
