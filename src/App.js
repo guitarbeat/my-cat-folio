@@ -20,8 +20,7 @@ import {
   ErrorBoundary,
   Login,
   Profile,
-  TournamentSetup,
-  BongoCatDemo
+  TournamentSetup
 } from './components';
 import Sidebar from './components/Sidebar/Sidebar';
 import useUserSession from './hooks/useUserSession';
@@ -304,12 +303,6 @@ function App() {
           <div style={{ height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <LoadingSpinner size="large" text="Testing Loading Spinner..." />
           </div>
-        );
-      case 'bongo':
-        return (
-          <ErrorBoundary>
-            <BongoCatDemo />
-          </ErrorBoundary>
         );
       case 'tournament':
         if (tournamentComplete) {

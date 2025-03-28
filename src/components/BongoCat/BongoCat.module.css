@@ -124,7 +124,7 @@
 
 /* Paws */
 .paws {
-  width: calc(100rem * var(--scale));
+  width: calc(80rem * var(--scale));
   left: 50%;
   top: 70%;
   transform-origin: 50% 0%;
@@ -140,6 +140,7 @@
   border-bottom: var(--linesize) solid var(--cat-outline);
   border-right: var(--linesize) solid var(--cat-outline);
   border-radius: 0 0 50% 50% / 0 0 70% 70%;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
 }
 
 .paws.up .paw .palm {
@@ -149,6 +150,7 @@
   border-radius: 50%;
   top: calc(4rem * var(--scale));
   left: calc(6rem * var(--scale));
+  box-shadow: inset 0 -1px 2px rgba(0, 0, 0, 0.2);
 }
 
 .paws.up .paw .bean {
@@ -158,6 +160,7 @@
   border-radius: 50%;
   top: calc(9.5rem * var(--scale));
   left: calc(7rem * var(--scale));
+  box-shadow: inset 0 -1px 2px rgba(0, 0, 0, 0.2);
 }
 
 .paws.up .paw .bean:first-child {
@@ -181,6 +184,7 @@
   margin-top: calc(-0.5rem * var(--scale));
   transform-origin: 50% 0%;
   transform: rotate(15deg);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
 }
 
 .paws.down .paw::before {
@@ -224,15 +228,18 @@
   }
 }
 
-/* For BongoCatDemo container */
-.demoContainer {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 180px;
-  max-width: 100%;
-  aspect-ratio: 1;
-  z-index: 20;
-  pointer-events: none;
-  transition: all 0.3s ease;
+/* Helper class for BongoCat container with positioning is now handled in-component */
+.bongoContainer {
+  /* Empty class for component targeting - all styles applied inline for flexibility */
 }
+
+/* No longer needed since we're using a different approach for the paws */
+/* .pawsContainer {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+} */
+
+

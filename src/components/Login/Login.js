@@ -1,11 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import styles from './Login.module.css';
+import BongoCat from '../BongoCat/BongoCat';
 
 function Login({ onLogin }) {
   const [name, setName] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const [catFact, setCatFact] = useState('');
+  const [isTyping, setIsTyping] = useState(false);
+  
+  const containerRef = useRef(null);
+  const typingTimeoutRef = useRef(null);
 
   const funnyPrefixes = [
     'Captain', 'Dr.', 'Professor', 'Lord', 'Lady', 'Sir', 'Duchess', 'Count',
@@ -24,7 +29,21 @@ function Login({ onLogin }) {
     
     const generatedName = `${prefix} ${adjective}${randomNumber}`;
     setName(generatedName);
+    
+    // Trigger typing state for BongoCat
+    setIsTyping(true);
+    resetTypingTimer();
+    
     if (error) setError('');
+  };
+
+  const resetTypingTimer = () => {
+    if (typingTimeoutRef.current) {
+      clearTimeout(typingTimeoutRef.current);
+    }
+    typingTimeoutRef.current = setTimeout(() => {
+      setIsTyping(false);
+    }, 1000);
   };
 
   useEffect(() => {
@@ -33,10 +52,21 @@ function Login({ onLogin }) {
       .then(res => res.json())
       .then(data => setCatFact(data.fact))
       .catch(() => setCatFact('Cats make purr-fect companions!'));
+    
+    return () => {
+      if (typingTimeoutRef.current) {
+        clearTimeout(typingTimeoutRef.current);
+      }
+    };
   }, []);
 
   const handleNameChange = (e) => {
     setName(e.target.value);
+    
+    // Set typing state for BongoCat
+    setIsTyping(true);
+    resetTypingTimer();
+    
     if (error) setError('');
   };
 
@@ -60,6 +90,13 @@ function Login({ onLogin }) {
 
   return (
     <div className={styles.loginWrapper}>
+      {/* BongoCat component with all positioning logic handled internally */}
+      <BongoCat 
+        containerRef={containerRef}
+        color="#000"
+         onBongo={() => console.log('Cat bongoed!')}
+      />
+      
       <div className={styles.backgroundContainer}>
         <div className={styles.overlay} />
         <img 
@@ -70,7 +107,7 @@ function Login({ onLogin }) {
         />
       </div>
 
-      <div className={styles.loginContainer}>
+      <div className={styles.loginContainer} ref={containerRef}>
         <section className={styles.imageSection}>
           <h1 className={styles.welcomeTitle}>Create Your Account</h1>
           <img 
@@ -92,6 +129,9 @@ function Login({ onLogin }) {
               ⚠️ Important: Remember your chosen name! You'll need it to access your voting history and results later.
             </p>
             <p className={styles.catFact}>{catFact || 'Loading a fun cat fact...'}</p>
+            {isTyping ? (
+              <p className={styles.helperText}>The cat is watching you type!</p>
+            ) : null}
           </div>
           
           <form onSubmit={handleSubmit} className={styles.loginForm}>

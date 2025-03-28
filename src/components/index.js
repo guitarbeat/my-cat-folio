@@ -14,4 +14,3 @@ export { default as LoadingSpinner } from './LoadingSpinner/LoadingSpinner';
 export { default as NameCard } from './NameCard/NameCard';
 export { default as CalendarButton } from './CalendarButton/CalendarButton'; 
 export { default as BongoCat } from './BongoCat/BongoCat'; 
-export { default as BongoCatDemo } from './BongoCat/BongoCatDemo'; 
