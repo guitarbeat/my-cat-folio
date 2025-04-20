@@ -33,13 +33,12 @@ const BongoCat = memo(({
       const viewportWidth = window.innerWidth;
       const containerWidth = rect.width;
       
-      // Position cat relative to the container
-      // Additional adjustment for mobile screens
-      let optimalTop = rect.top + offsetY;
+      // Position cat slightly down from the top of the container
+      let optimalTop = 29; // Add 20px padding from top
       
       // Apply an additional offset for narrow screens to position the cat better
       if (viewportWidth <= 768) {
-        const mobileAdjustment = 10; // Reduced adjustment for mobile to bring cat more forward
+        const mobileAdjustment = 5; // Smaller adjustment for mobile
         optimalTop = optimalTop + mobileAdjustment;
       }
       
@@ -61,7 +60,7 @@ const BongoCat = memo(({
       const containerZ = containerStyle.zIndex === 'auto' ? 1 : parseInt(containerStyle.zIndex, 10);
       setContainerZIndex(containerZ);
     }
-  }, [containerRef, offsetY, size]);
+  }, [containerRef, size]);
 
   const handleKeyDown = useCallback((e) => {
     if (e.ctrlKey || e.altKey || e.metaKey || e.shiftKey) return;
@@ -229,11 +228,11 @@ const BongoCat = memo(({
           width: '180px',
           maxWidth: '100%',
           aspectRatio: '1',
-          zIndex: catBodyZIndex, // Put cat body behind the container
+          zIndex: catBodyZIndex,
           pointerEvents: 'none',
           transition: 'top 0.2s ease-out, opacity 0.3s ease',
           opacity: isVisible ? 1 : 0,
-          visibility: catVisibility
+          visibility: isVisible ? 'visible' : 'hidden'
         }}
       >
         <div 

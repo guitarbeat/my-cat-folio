@@ -8,7 +8,6 @@ function Login({ onLogin }) {
   const [error, setError] = useState('');
   const [catFact, setCatFact] = useState('');
   const [isTyping, setIsTyping] = useState(false);
-  const [offsetY, setOffsetY] = useState(-115);
   
   const containerRef = useRef(null);
   const typingTimeoutRef = useRef(null);
@@ -21,24 +20,6 @@ function Login({ onLogin }) {
     return () => {
       document.body.classList.remove('login-page');
     };
-  }, []);
-
-  // Update offset based on screen size
-  useEffect(() => {
-    const updateOffset = () => {
-      if (window.innerWidth <= 768) {
-        setOffsetY(-70);
-      } else {
-        setOffsetY(-115);
-      }
-    };
-    
-    // Set initial offset
-    updateOffset();
-    
-    // Update offset on resize
-    window.addEventListener('resize', updateOffset);
-    return () => window.removeEventListener('resize', updateOffset);
   }, []);
 
   const funnyPrefixes = [
@@ -118,11 +99,10 @@ function Login({ onLogin }) {
 
   return (
     <div className={styles.loginWrapper}>
-      {/* BongoCat component with responsive offsetY */}
+      {/* BongoCat component */}
       <BongoCat 
         containerRef={containerRef}
         color="#000"
-        offsetY={offsetY}
         onBongo={() => console.log('Cat bongoed!')}
       />
       

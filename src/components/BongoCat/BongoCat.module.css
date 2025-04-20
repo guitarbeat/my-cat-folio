@@ -15,6 +15,7 @@
   width: calc(80rem * var(--scale));
   height: calc(80rem * var(--scale));
   transform: scale(var(--cat-size));
+  position: relative;
 }
 
 .container * {
@@ -230,7 +231,15 @@
 
 /* Helper class for BongoCat container with positioning is now handled in-component */
 .bongoContainer {
-  /* Empty class for component targeting - all styles applied inline for flexibility */
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 180px;
+  max-width: 100%;
+  aspect-ratio: 1;
+  pointer-events: none;
+  transition: top 0.2s ease-out, opacity 0.3s ease;
 }
 
 /* No longer needed since we're using a different approach for the paws */
