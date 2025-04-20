@@ -80,37 +80,76 @@ export const getNamesWithDescriptions = async () => {
   }
 };
 
-// Add this function to track rating history
-export const addRatingHistory = async (userName, nameId, oldRating, newRating) => {
+// Add a function to create the rating_history table if it doesn't exist
+export const ensureRatingHistoryTable = async () => {
   try {
+    // Check if table exists
+    const { data: tableExists } = await supabase
+      .from('information_schema.tables')
+      .select('table_name')
+      .eq('table_name', 'rating_history')
+      .single();
+    
+    if (!tableExists) {
+      // Create the table using SQL - this requires you to have enabled database functions
+      // You may need to do this manually in the Supabase dashboard if this doesn't work
+      await supabase.rpc('create_rating_history_table');
+      console.log('Created rating_history table');
+    }
+  } catch (error) {
+    console.error('Error ensuring rating_history table exists:', error);
+  }
+};
+
+// Enhanced function to track rating changes with more context
+export const addRatingHistory = async (userName, nameId, oldRating, newRating, context = 'manual') => {
+  try {
+    // Get the name from the name_id
+    const { data: nameData } = await supabase
+      .from('name_options')
+      .select('name')
+      .eq('id', nameId)
+      .single();
+    
     const { error } = await supabase
       .from('rating_history')
       .insert({
         user_name: userName,
         name_id: nameId,
+        name: nameData?.name || 'Unknown',
         old_rating: oldRating,
         new_rating: newRating,
+        change: newRating - (oldRating || 0),
+        context, // 'tournament', 'manual', etc.
         timestamp: new Date().toISOString()
       });
       
     if (error) {
+      // If table doesn't exist, try to create it
+      if (error.code === '42P01') { // Table doesn't exist
+        await ensureRatingHistoryTable();
+        // Try again
+        return addRatingHistory(userName, nameId, oldRating, newRating, context);
+      }
       throw error;
     }
+    
+    return { success: true };
   } catch (error) {
     console.error('Error saving rating history:', error);
-    throw error;
+    return { success: false, error };
   }
 };
 
-// Enhanced function to update ratings with tracking of wins/losses
-export const updateRating = async (userName, nameId, newRating, outcome = null) => {
+// Improved rating update function with better history tracking
+export const updateRating = async (userName, nameId, newRating, outcome = null, context = 'tournament') => {
   const now = new Date().toISOString();
   
   try {
     // First get existing rating data
     const { data: existingData, error: fetchError } = await supabase
       .from('cat_name_ratings')
-      .select('rating, wins, losses')
+      .select('rating, wins, losses, updated_at')
       .eq('user_name', userName)
       .eq('name_id', nameId)
       .single();
@@ -121,7 +160,7 @@ export const updateRating = async (userName, nameId, newRating, outcome = null) 
     }
 
     // Get current values or initialize
-    const currentRating = existingData?.rating || DEFAULT_RATING;
+    const currentRating = existingData?.rating || 1500; // Use the DEFAULT_RATING constant value
     let wins = existingData?.wins || 0;
     let losses = existingData?.losses || 0;
     
@@ -131,7 +170,6 @@ export const updateRating = async (userName, nameId, newRating, outcome = null) 
     } else if (outcome === 'loss') {
       losses += 1;
     }
-    // Skip and tie don't affect win/loss record
 
     // Create backup of current data before updating
     if (existingData) {
@@ -151,6 +189,15 @@ export const updateRating = async (userName, nameId, newRating, outcome = null) 
         // Continue anyway - backup failure shouldn't stop the update
       }
     }
+
+    // Record to rating history
+    await addRatingHistory(
+      userName, 
+      nameId, 
+      currentRating, 
+      newRating, 
+      context
+    );
 
     // Update the rating with new values
     const { error } = await supabase
@@ -174,6 +221,8 @@ export const updateRating = async (userName, nameId, newRating, outcome = null) 
       error: null,
       data: {
         rating: newRating,
+        previous_rating: currentRating,
+        change: newRating - currentRating,
         wins,
         losses,
         updated_at: now
@@ -182,6 +231,38 @@ export const updateRating = async (userName, nameId, newRating, outcome = null) 
   } catch (error) {
     console.error('Error updating rating:', error);
     return { error };
+  }
+};
+
+// Add function to get rating history
+export const getRatingHistory = async (userName, nameId = null, limit = 20) => {
+  try {
+    let query = supabase
+      .from('rating_history')
+      .select('*')
+      .eq('user_name', userName)
+      .order('timestamp', { ascending: false })
+      .limit(limit);
+      
+    if (nameId) {
+      query = query.eq('name_id', nameId);
+    }
+    
+    const { data, error } = await query;
+    
+    if (error) {
+      // If table doesn't exist, create it
+      if (error.code === '42P01') {
+        await ensureRatingHistoryTable();
+        return getRatingHistory(userName, nameId, limit);
+      }
+      throw error;
+    }
+    
+    return data || [];
+  } catch (error) {
+    console.error('Error fetching rating history:', error);
+    return [];
   }
 };
 

@@ -42,41 +42,64 @@ function useSupabaseStorage(tableName, initialValue = [], userName = '') {
     try {
       setLoading(true);
       
-      const { data, error: fetchError } = await supabase
-        .from('cat_name_ratings')
+      // 1. First fetch all names
+      const { data: nameData, error: nameError } = await supabase
+        .from('name_options')
         .select(`
-          rating,
+          id,
+          name,
+          description
+        `)
+        .order('name');
+
+      if (nameError) throw nameError;
+
+      // 2. Fetch all hidden name IDs
+      const { data: hiddenData, error: hiddenError } = await supabase
+        .from('hidden_names')
+        .select('name_id');
+      
+      if (hiddenError) throw hiddenError;
+      
+      // 3. Create a Set of hidden IDs for efficient lookup
+      const hiddenIdSet = new Set(hiddenData?.map(item => item.name_id) || []);
+      
+      // 4. Filter out hidden names
+      const visibleNames = nameData?.filter(item => !hiddenIdSet.has(item.id)) || [];
+      
+      // 5. Fetch user ratings for these names
+      const { data: ratingsData, error: ratingsError } = await supabase
+        .from('cat_name_ratings')
+        .select('name_id, rating, wins, losses, updated_at')
+        .eq('user_name', userName)
+        .in('name_id', visibleNames.map(item => item.id));
+      
+      if (ratingsError) throw ratingsError;
+      
+      // 6. Create a map of ratings by name_id
+      const ratingsMap = (ratingsData || []).reduce((map, item) => {
+        map[item.name_id] = item;
+        return map;
+      }, {});
+      
+      // 7. Combine the data
+      const processedData = visibleNames.map(item => {
+        const ratingData = ratingsMap[item.id];
+        
+        const wins = parseInt(ratingData?.wins || 0, 10);
+        const losses = parseInt(ratingData?.losses || 0, 10);
+        
+        return {
+          id: item.id,
+          name: item.name,
+          description: item.description,
+          rating: parseInt(ratingData?.rating || DEFAULT_RATING, 10),
           wins,
           losses,
-          name_id,
-          updated_at,
-          name_options (
-            id,
-            name,
-            description
-          )
-        `)
-        .eq('user_name', userName)
-        .order('rating', { ascending: false });
-
-      if (fetchError) throw fetchError;
-
-      const processedData = data
-        ?.filter(item => item.name_options)
-        .map(item => {
-          const wins = parseInt(item.wins || 0, 10);
-          const losses = parseInt(item.losses || 0, 10);
-          
-          return {
-            id: item.name_id,
-            name: item.name_options.name,
-            description: item.name_options.description,
-            rating: parseInt(item.rating || DEFAULT_RATING, 10),
-            wins,
-            losses,
-            updated_at: item.updated_at || new Date().toISOString()
-          };
-        }) || initialValue;
+          updated_at: ratingData?.updated_at || new Date().toISOString(),
+          hasRating: !!ratingData
+        };
+      });
 
       setStoredValue(processedData);
     } catch (err) {

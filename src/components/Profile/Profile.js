@@ -917,6 +917,346 @@ const prepareChartData = (ratings, filterStatus, hiddenNames) => {
   };
 };
 
+// Add this new component for showing rating trends
+const RatingTrends = memo(({ userName, selectedName = null }) => {
+  const [ratingHistory, setRatingHistory] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [timeRange, setTimeRange] = useState('month'); // 'week', 'month', 'year', 'all'
+  
+  useEffect(() => {
+    const fetchHistory = async () => {
+      setIsLoading(true);
+      try {
+        // Import the function
+        const { getRatingHistory } = await import('../../supabase/supabaseClient');
+        const history = await getRatingHistory(userName, selectedName?.id, 100);
+        setRatingHistory(history);
+      } catch (error) {
+        console.error('Error fetching rating history:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    
+    fetchHistory();
+  }, [userName, selectedName]);
+  
+  // Process data based on time range
+  const filteredHistory = useMemo(() => {
+    if (!ratingHistory.length) return [];
+    
+    const now = new Date();
+    const filterDate = new Date();
+    
+    switch (timeRange) {
+      case 'week':
+        filterDate.setDate(now.getDate() - 7);
+        break;
+      case 'month':
+        filterDate.setMonth(now.getMonth() - 1);
+        break;
+      case 'year':
+        filterDate.setFullYear(now.getFullYear() - 1);
+        break;
+      default:
+        // 'all' - no filtering
+        return ratingHistory;
+    }
+    
+    return ratingHistory.filter(item => 
+      new Date(item.timestamp) >= filterDate
+    );
+  }, [ratingHistory, timeRange]);
+  
+  // Prepare chart data
+  const chartData = useMemo(() => {
+    if (!filteredHistory.length) return { labels: [], datasets: [] };
+    
+    // For a specific name
+    if (selectedName) {
+      return {
+        labels: filteredHistory.map(item => 
+          new Date(item.timestamp).toLocaleDateString()
+        ),
+        datasets: [
+          {
+            label: 'Rating',
+            data: filteredHistory.map(item => item.new_rating),
+            borderColor: 'rgba(75, 192, 192, 1)',
+            tension: 0.1,
+            fill: false
+          }
+        ]
+      };
+    }
+    
+    // Group by name for overall rating trends
+    const nameGroups = filteredHistory.reduce((acc, item) => {
+      if (!acc[item.name]) {
+        acc[item.name] = [];
+      }
+      acc[item.name].push(item);
+      return acc;
+    }, {});
+    
+    // Get top 5 most active names
+    const topNames = Object.entries(nameGroups)
+      .sort(([, a], [, b]) => b.length - a.length)
+      .slice(0, 5)
+      .map(([name]) => name);
+      
+    // Generate colors for each name
+    const colors = [
+      'rgba(75, 192, 192, 1)',
+      'rgba(255, 99, 132, 1)',
+      'rgba(54, 162, 235, 1)',
+      'rgba(255, 206, 86, 1)',
+      'rgba(153, 102, 255, 1)'
+    ];
+    
+    // Create a dataset for each name
+    const datasets = topNames.map((name, index) => ({
+      label: name,
+      data: nameGroups[name].map(item => ({
+        x: new Date(item.timestamp).toLocaleDateString(),
+        y: item.new_rating
+      })),
+      borderColor: colors[index % colors.length],
+      tension: 0.1,
+      fill: false
+    }));
+    
+    return {
+      datasets
+    };
+  }, [filteredHistory, selectedName]);
+  
+  if (isLoading) {
+    return <div className={styles.loadingSection}>Loading rating history...</div>;
+  }
+  
+  if (!filteredHistory.length) {
+    return (
+      <div className={styles.emptyState}>
+        <p>No rating history available for this time period.</p>
+      </div>
+    );
+  }
+  
+  return (
+    <div className={styles.ratingTrends}>
+      <div className={styles.trendControls}>
+        <h3 className={styles.sectionTitle}>
+          <span className={styles.sectionIcon}>📈</span>
+          Rating Trends
+        </h3>
+        <div className={styles.timeFilters}>
+          <button 
+            className={`${styles.button} ${timeRange === 'week' ? styles.primary : ''}`}
+            onClick={() => setTimeRange('week')}
+          >
+            Week
+          </button>
+          <button 
+            className={`${styles.button} ${timeRange === 'month' ? styles.primary : ''}`}
+            onClick={() => setTimeRange('month')}
+          >
+            Month
+          </button>
+          <button 
+            className={`${styles.button} ${timeRange === 'year' ? styles.primary : ''}`}
+            onClick={() => setTimeRange('year')}
+          >
+            Year
+          </button>
+          <button 
+            className={`${styles.button} ${timeRange === 'all' ? styles.primary : ''}`}
+            onClick={() => setTimeRange('all')}
+          >
+            All Time
+          </button>
+        </div>
+      </div>
+      
+      <div className={styles.chartWrapper}>
+        <Line 
+          data={chartData}
+          options={{
+            responsive: true,
+            plugins: {
+              title: {
+                display: true,
+                text: selectedName 
+                  ? `Rating History for ${selectedName.name}`
+                  : 'Rating Trends for Top Names'
+              },
+              tooltip: {
+                callbacks: {
+                  label: (context) => {
+                    const label = context.dataset.label || '';
+                    const value = context.parsed.y;
+                    return `${label}: ${value}`;
+                  }
+                }
+              }
+            },
+            scales: {
+              x: {
+                type: 'time',
+                time: {
+                  unit: timeRange === 'week' ? 'day' : 
+                         timeRange === 'month' ? 'week' : 'month'
+                }
+              },
+              y: {
+                title: {
+                  display: true,
+                  text: 'Rating'
+                }
+              }
+            }
+          }}
+        />
+      </div>
+      
+      {/* Recent changes summary */}
+      <div className={styles.recentChanges}>
+        <h4>Recent Rating Changes</h4>
+        <div className={styles.changesList}>
+          {filteredHistory.slice(0, 5).map((item, index) => (
+            <div 
+              key={index} 
+              className={`${styles.changeItem} ${
+                item.change > 0 ? styles.positive : 
+                item.change < 0 ? styles.negative : ''
+              }`}
+            >
+              <span className={styles.changeName}>{item.name}</span>
+              <span className={styles.changeValue}>
+                {item.change > 0 ? '+' : ''}{item.change}
+              </span>
+              <span className={styles.changeDate}>
+                {new Date(item.timestamp).toLocaleDateString()}
+              </span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+});
+
+// Add a Performance Insights component
+const PerformanceInsights = memo(({ ratings }) => {
+  // Calculate meaningful insights
+  const insights = useMemo(() => {
+    if (!ratings.length) return [];
+    
+    const totalMatches = ratings.reduce((sum, r) => sum + (r.wins || 0) + (r.losses || 0), 0);
+    const avgRating = Math.round(
+      ratings.reduce((sum, r) => sum + (r.rating || 1500), 0) / ratings.length
+    );
+    
+    // Best performing names (highest win rate with min 5 matches)
+    const bestPerformers = [...ratings]
+      .filter(r => (r.wins || 0) + (r.losses || 0) >= 5)
+      .sort((a, b) => {
+        const aRate = a.wins / (a.wins + a.losses);
+        const bRate = b.wins / (b.wins + b.losses);
+        return bRate - aRate;
+      })
+      .slice(0, 3);
+      
+    // Trending names (recent rating increases)
+    const trending = [...ratings]
+      .filter(r => r.updated_at && new Date(r.updated_at) > new Date(Date.now() - 7 * 24 * 60 * 60 * 1000))
+      .sort((a, b) => b.rating - a.rating)
+      .slice(0, 3);
+      
+    // Names that need attention (low win rates)
+    const needsAttention = [...ratings]
+      .filter(r => (r.wins || 0) + (r.losses || 0) >= 5 && r.wins / (r.wins + r.losses) < 0.4)
+      .sort((a, b) => {
+        const aRate = a.wins / (a.wins + a.losses);
+        const bRate = b.wins / (b.wins + b.losses);
+        return aRate - bRate;
+      })
+      .slice(0, 3);
+      
+    return {
+      totalMatches,
+      avgRating,
+      bestPerformers,
+      trending,
+      needsAttention
+    };
+  }, [ratings]);
+  
+  if (!ratings.length) return null;
+  
+  return (
+    <div className={styles.insightsContainer}>
+      <h3 className={styles.sectionTitle}>
+        <span className={styles.sectionIcon}>💡</span>
+        Performance Insights
+      </h3>
+      
+      <div className={styles.insightCards}>
+        {insights.bestPerformers?.length > 0 && (
+          <div className={styles.insightCard}>
+            <h4 className={styles.insightTitle}>Best Performers</h4>
+            <div className={styles.insightContent}>
+              {insights.bestPerformers.map((name, i) => (
+                <div key={i} className={styles.insightItem}>
+                  <span className={styles.insightRank}>{i+1}</span>
+                  <span className={styles.insightName}>{name.name}</span>
+                  <span className={styles.insightValue}>
+                    {Math.round((name.wins / (name.wins + name.losses)) * 100)}% win rate
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+        
+        {insights.trending?.length > 0 && (
+          <div className={styles.insightCard}>
+            <h4 className={styles.insightTitle}>Trending Names</h4>
+            <div className={styles.insightContent}>
+              {insights.trending.map((name, i) => (
+                <div key={i} className={styles.insightItem}>
+                  <span className={styles.insightRank}>{i+1}</span>
+                  <span className={styles.insightName}>{name.name}</span>
+                  <span className={styles.insightValue}>
+                    {name.rating} rating
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+        
+        {insights.needsAttention?.length > 0 && (
+          <div className={styles.insightCard}>
+            <h4 className={styles.insightTitle}>Needs Attention</h4>
+            <div className={styles.insightContent}>
+              {insights.needsAttention.map((name, i) => (
+                <div key={i} className={styles.insightItem}>
+                  <span className={styles.insightRank}>{i+1}</span>
+                  <span className={styles.insightName}>{name.name}</span>
+                  <span className={styles.insightValue}>
+                    {Math.round((name.wins / (name.wins + name.losses)) * 100)}% win rate
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+});
+
 // Main Component
 const Profile = ({ userName, onStartNewTournament }) => {
   // State
@@ -1196,14 +1536,30 @@ const Profile = ({ userName, onStartNewTournament }) => {
           />
         ) : (
           <>
+            <div className={styles.profileOverview}>
+              <ProfileStats 
+                ratings={currentlyViewedUser !== userName ? currentUserRatings : ratingsData} 
+                filterStatus={filterStatus} 
+              />
+              
+              {/* Add the new Performance Insights component */}
+              <PerformanceInsights 
+                ratings={currentlyViewedUser !== userName ? currentUserRatings : ratingsData}
+              />
+            </div>
+            
+            {/* Add the new Rating Trends component */}
+            <RatingTrends 
+              userName={currentlyViewedUser} 
+              selectedName={null}
+            />
+
             <FilterControls 
               onFilterChange={setFilterStatus}
               onSortChange={setSortBy}
               currentFilter={filterStatus}
               currentSort={sortBy}
             />
-
-            <ProfileStats ratings={currentlyViewedUser !== userName ? currentUserRatings : ratingsData} filterStatus={filterStatus} />
 
             <div className={styles.chartContainer}>
               <Bar 
