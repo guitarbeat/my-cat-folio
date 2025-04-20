@@ -102,15 +102,15 @@ export const addRatingHistory = async (userName, nameId, oldRating, newRating) =
   }
 };
 
-// Add this function to update ratings with proper timestamps
-export const updateRating = async (userName, nameId, newRating, wins = null, losses = null) => {
+// Enhanced function to update ratings with tracking of wins/losses
+export const updateRating = async (userName, nameId, newRating, outcome = null) => {
   const now = new Date().toISOString();
   
   try {
     // First get existing rating data
     const { data: existingData, error: fetchError } = await supabase
       .from('cat_name_ratings')
-      .select('wins, losses')
+      .select('rating, wins, losses')
       .eq('user_name', userName)
       .eq('name_id', nameId)
       .single();
@@ -120,29 +120,65 @@ export const updateRating = async (userName, nameId, newRating, wins = null, los
       return { error: fetchError };
     }
 
-    // Use provided wins/losses or keep existing ones
-    const finalWins = wins !== null ? wins : (existingData?.wins || 0);
-    const finalLosses = losses !== null ? losses : (existingData?.losses || 0);
+    // Get current values or initialize
+    const currentRating = existingData?.rating || DEFAULT_RATING;
+    let wins = existingData?.wins || 0;
+    let losses = existingData?.losses || 0;
+    
+    // Update wins/losses based on outcome if provided
+    if (outcome === 'win') {
+      wins += 1;
+    } else if (outcome === 'loss') {
+      losses += 1;
+    }
+    // Skip and tie don't affect win/loss record
 
+    // Create backup of current data before updating
+    if (existingData) {
+      try {
+        await supabase
+          .from('cat_name_ratings_backup')
+          .insert({
+            user_name: userName,
+            name_id: nameId,
+            rating: currentRating,
+            wins: existingData.wins || 0,
+            losses: existingData.losses || 0,
+            updated_at: existingData.updated_at || now
+          });
+      } catch (backupError) {
+        console.warn('Failed to create rating backup:', backupError);
+        // Continue anyway - backup failure shouldn't stop the update
+      }
+    }
+
+    // Update the rating with new values
     const { error } = await supabase
       .from('cat_name_ratings')
       .upsert({
         user_name: userName,
         name_id: nameId,
         rating: newRating,
-        wins: finalWins,
-        losses: finalLosses,
+        wins,
+        losses,
         updated_at: now
       }, {
-        onConflict: 'user_name,name_id'
+        onConflict: 'user_name,name_id',
+        returning: 'minimal'
       });
 
     if (error) throw error;
     
-    // Also update the rating history
-    await addRatingHistory(userName, nameId, null, newRating);
-    
-    return { error: null };
+    // Return success with updated values
+    return { 
+      error: null,
+      data: {
+        rating: newRating,
+        wins,
+        losses,
+        updated_at: now
+      }
+    };
   } catch (error) {
     console.error('Error updating rating:', error);
     return { error };

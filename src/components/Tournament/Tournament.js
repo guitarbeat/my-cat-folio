@@ -253,19 +253,25 @@ function TournamentContent({ onComplete, existingRatings = {}, names = [], userN
         const leftName = currentMatch.left.name;
         const rightName = currentMatch.right.name;
         
-        let leftWon = false;
-        let rightWon = false;
+        // Improved vote tracking logic
+        let leftOutcome = 'skip';
+        let rightOutcome = 'skip';
         
         switch (option) {
           case 'left':
-            leftWon = true;
+            leftOutcome = 'win';
+            rightOutcome = 'loss';
             break;
           case 'right':
-            rightWon = true;
+            leftOutcome = 'loss';
+            rightOutcome = 'win';
             break;
           case 'both':
-            leftWon = true;
-            rightWon = true;
+            leftOutcome = 'win';
+            rightOutcome = 'win';
+            break;
+          case 'neither':
+            // Both remain 'skip'
             break;
         }
         
@@ -273,20 +279,23 @@ function TournamentContent({ onComplete, existingRatings = {}, names = [], userN
           match: {
             left: {
               name: leftName,
+              id: currentMatch.left.id, // Make sure ID is included
               description: currentMatch.left.description || '',
-              won: leftWon
+              outcome: leftOutcome
             },
             right: {
               name: rightName,
+              id: currentMatch.right.id, // Make sure ID is included
               description: currentMatch.right.description || '',
-              won: rightWon
+              outcome: rightOutcome
             }
           },
-          result: option === 'left' ? -1 : option === 'right' ? 1 : 0,
-          ratings: updatedRatings
+          result: option === 'left' ? -1 : option === 'right' ? 1 : option === 'both' ? 0.5 : 0,
+          ratings: updatedRatings,
+          timestamp: new Date().toISOString() // Add timestamp for better tracking
         };
         
-        onVote(voteData);
+        await onVote(voteData);
       }
 
       setSelectedOption(null);
