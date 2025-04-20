@@ -48,13 +48,7 @@ function Login({ onLogin }) {
     const randomNumber = Math.floor(Math.random() * 99) + 1;
     
     const generatedName = `${prefix} ${adjective}${randomNumber}`;
-    setName(generatedName);
-    
-    // Trigger typing state for BongoCat
-    setIsTyping(true);
-    resetTypingTimer();
-    
-    if (error) setError('');
+    return generatedName;
   };
 
   const resetTypingTimer = () => {
@@ -93,20 +87,25 @@ function Login({ onLogin }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     
-    const trimmedName = name.trim();
-    if (!trimmedName) {
-      setError('Please enter your name');
-      return;
+    let finalName = name.trim();
+    
+    // If name is empty, generate a random one
+    if (!finalName) {
+      finalName = generateFunName();
+      setName(finalName);
     }
 
     setIsLoading(true);
     try {
-      await onLogin(trimmedName);
+      await onLogin(finalName);
     } catch (err) {
       setError(err.message || 'Something went wrong. Please try again.');
       setIsLoading(false);
     }
   };
+
+  // Example random name for preview
+  const exampleRandomName = useRef(generateFunName());
 
   return (
     <div className={styles.loginWrapper}>
@@ -130,7 +129,7 @@ function Login({ onLogin }) {
 
       <div className={styles.loginContainer} ref={containerRef}>
         <section className={styles.imageSection}>
-          <h1 className={styles.welcomeTitle}>Welcome</h1>
+          <h1 className={styles.welcomeTitle}>Help Aaron!</h1>
           <img 
             src="/images/IMG_5071.JPG" 
             alt="Cute cat avatar" 
@@ -138,13 +137,13 @@ function Login({ onLogin }) {
             loading="eager"
           />
           <p className={styles.welcomeText}>
-            Sign in or create an account to join our cat-naming community!
+            Join Aaron's over-engineered quest to find the perfect cat name through science and democracy!
           </p>
         </section>
 
         <div className={styles.loginContent}>
           <div>
-            <h2 className={styles.loginTitle}>Sign In</h2>
+            <h2 className={styles.loginTitle}>The Cat Name Olympics</h2>
             <p className={styles.catFact}>{catFact || 'Loading a fun cat fact...'}</p>
             {isTyping ? (
               <p className={styles.helperText}>The cat is watching you type!</p>
@@ -153,38 +152,36 @@ function Login({ onLogin }) {
           
           <form onSubmit={handleSubmit} className={styles.loginForm}>
             <div className={styles.inputWrapper}>
-              <label htmlFor="loginName" className={styles.inputLabel}>Your Account Name:</label>
-              <input
-                id="loginName"
-                type="text"
-                value={name}
-                onChange={handleNameChange}
-                placeholder="Enter name to sign in or create account"
-                className={`${styles.loginInput} ${error ? styles.error : ''}`}
-                autoFocus
-                disabled={isLoading}
-                aria-label="Your account name"
-                maxLength={30}
-              />
+              <label htmlFor="loginName" className={styles.inputLabel}>Your Judge Name:</label>
+              <div className={styles.inputContainer}>
+                <input
+                  id="loginName"
+                  type="text"
+                  value={name}
+                  onChange={handleNameChange}
+                  placeholder="Enter your name (or leave empty for a random identity)"
+                  className={`${styles.loginInput} ${error ? styles.error : ''}`}
+                  autoFocus
+                  disabled={isLoading}
+                  aria-label="Your name"
+                  maxLength={30}
+                />
+                {!name.trim() && (
+                  <div className={styles.randomNameIndicator} title="A random name will be generated">
+                    <span className={styles.diceIcon}>🎲</span>
+                  </div>
+                )}
+              </div>
               {error && <p className={styles.errorMessage} role="alert">{error}</p>}
+              <p className={styles.explainerText}>
+                Type your name to save your ratings, or leave it blank for a surprise name!
+              </p>
             </div>
 
-            <button
-              type="button"
-              onClick={generateFunName}
-              className={styles.generateButton}
-              disabled={isLoading}
-            >
-              <span className={styles.buttonContent}>
-                Generate Random Username
-                <span className={styles.buttonEmoji} aria-hidden="true">😺</span>
-              </span>
-            </button>
-            
             <button 
               type="submit" 
-              className={`${styles.startButton} ${isLoading ? styles.loading : ''}`}
-              disabled={!name.trim() || isLoading}
+              className={`${styles.singleButton} ${isLoading ? styles.loading : ''}`}
+              disabled={isLoading}
             >
               <span className={styles.buttonContent}>
                 {isLoading ? (
@@ -194,17 +191,30 @@ function Login({ onLogin }) {
                   </>
                 ) : (
                   <>
-                    Continue
-                    <span className={styles.buttonEmoji} aria-hidden="true">→</span>
+                    {name.trim() ? 'Start Judging!' : 'Get Random Name & Start'}
+                    <span className={styles.buttonEmoji} aria-hidden="true">🏆</span>
                   </>
                 )}
               </span>
             </button>
           </form>
 
-          <p className={styles.helperText}>
-            After signing in, you'll be able to vote in cat name tournaments and see results.
-          </p>
+          <div className={styles.namePreview}>
+            {name ? (
+              <p className={styles.helperText}>
+                You'll be known as <span className={styles.nameHighlight}>"{name}"</span> in Aaron's elaborate cat-naming tournament
+              </p>
+            ) : (
+              <div className={styles.randomPreview}>
+                <p className={styles.helperText}>
+                  Don't worry about typing a name – we'll generate a fun one automatically when you start!
+                </p>
+                <p className={styles.randomNameExample}>
+                  Example: <span className={styles.nameHighlight}>{exampleRandomName.current}</span>
+                </p>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>
