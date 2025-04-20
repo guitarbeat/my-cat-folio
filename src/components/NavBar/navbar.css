@@ -290,3 +290,35 @@ body.light-theme .scroll-to-top:focus {
     min-height: 44px;
   }
 }
+
+/* External project links */
+.navbar__item--external {
+  margin-left: auto;
+}
+
+.navbar__external-link {
+  color: var(--text-color);
+  text-decoration: none;
+  padding: var(--nav-item-padding);
+  border-radius: var(--border-radius);
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.navbar__external-link:hover {
+  background-color: var(--hover-bg-color);
+  transform: translateY(-2px);
+}
+
+.navbar__external-link::after {
+  content: "↗";
+  font-size: 0.8em;
+  opacity: 0.7;
+}
+
+/* Adjust spacing for external links in transparent navbar */
+.navbar.transparent .navbar__item--external {
+  margin-left: 1rem;
+}

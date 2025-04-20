@@ -57,6 +57,12 @@ function NavBar({
 		navItems.Profile = "#";
 	}
 
+	// Add external project links if on login page
+	const externalLinks = !isLoggedIn ? [
+		{ name: 'K-Pop Site', url: 'https://kpop.alw.lol' },
+		{ name: 'Personal Site', url: 'https://aaronwoods.info' }
+	] : [];
+
 	const handleThemeClick = useCallback(() => {
 		const now = Date.now();
 		const newClicks = [...themeClicks, now].filter(
@@ -129,6 +135,24 @@ function NavBar({
 			</a>
 		</li>
 	));
+
+	// Add external project links if on login page
+	if (!isLoggedIn) {
+		externalLinks.forEach((link) => {
+			navLinks.push(
+				<li key={link.name} className="navbar__item navbar__item--external">
+					<a
+						href={link.url}
+						target="_blank"
+						rel="noopener noreferrer"
+						className="navbar__external-link"
+					>
+						{link.name}
+					</a>
+				</li>
+			);
+		});
+	}
 
 	// Add logout button if user is logged in
 	if (isLoggedIn) {
