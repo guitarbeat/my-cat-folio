@@ -34,6 +34,77 @@ body {
   min-height: 100vh;
 }
 
+/* Force light theme when light-theme class is applied regardless of system preference */
+body.light-theme {
+  --primary-color: var(--primary-600);
+  --primary-light: var(--primary-100);
+  --primary-dark: var(--primary-800);
+  --surface-color: #f4f6fa;
+  --background-color: #eef1f6;
+  --text-primary: #2c3544;
+  --text-secondary: #4b5563;
+  --text-tertiary: #6b7280;
+  --border-color: #e5e7eb;
+  --card-background: #f8fafc;
+  --card-border: #e5e7eb;
+  --card-hover: #f1f5f9;
+  
+  --button-primary-bg: var(--primary-700);
+  --button-primary-hover: var(--primary-800);
+  --button-secondary-bg: #2a2a2a;
+  --button-secondary-hover: #333;
+  --button-text-light: white;
+  
+  --progress-background: var(--primary-100);
+  --progress-border: var(--primary-200);
+  --percentage-background: var(--surface-color);
+  --percentage-text: var(--primary-600);
+  --vs-background: var(--primary-200);
+  --vs-text: var(--primary-600);
+  --header-background: rgba(244, 246, 250, 0.9);
+  --header-border: var(--border-color);
+  
+  --shadow-color: rgba(var(--black-rgb), 0.1);
+  --shadow-color-light: rgba(var(--black-rgb), 0.05);
+  --shadow-color-medium: rgba(var(--black-rgb), 0.1);
+  --shadow-color-strong: rgba(var(--black-rgb), 0.15);
+}
+
+/* Force dark theme when body doesn't have light-theme class, regardless of system preference */
+body:not(.light-theme) {
+  --primary-color: var(--primary-400);
+  --primary-light: rgba(125, 127, 255, 0.15);
+  --primary-dark: var(--primary-200);
+  
+  --surface-color: #0a0c1c;
+  --background-color: #050714;
+  --card-background: #0f1225;
+  --card-border: #1a1f35;
+  --card-hover: #151830;
+  
+  --text-primary: #f8fafc;
+  --text-secondary: #e2e8f0;
+  --text-tertiary: #94a3b8;
+  
+  --border-color: #1a1f35;
+  
+  --button-primary-bg: var(--primary-400);
+  --button-primary-hover: var(--primary-300);
+  --button-secondary-bg: rgba(0, 0, 0, 0.2);
+  --button-secondary-hover: rgba(0, 0, 0, 0.3);
+  --button-text-light: white;
+  
+  --shadow-color: rgba(0, 0, 0, 0.5);
+  --shadow-color-light: rgba(0, 0, 0, 0.2);
+  --shadow-color-medium: rgba(0, 0, 0, 0.3);
+  --shadow-color-strong: rgba(0, 0, 0, 0.4);
+  
+  --overlay-light: rgba(0, 0, 0, 0.5);
+  --overlay-medium: rgba(0, 0, 0, 0.65);
+  --overlay-dark: rgba(0, 0, 0, 0.85);
+  --overlay-darker: rgba(0, 0, 0, 0.95);
+}
+
 .container {
   width: 100%;
   max-width: 1400px;
@@ -47,7 +118,7 @@ body {
   flex: 1;
   min-height: 100vh;
   padding: var(--space-6);
-  margin-left: 0;
+  margin-top: 65px; /* Height of the navbar */
   background: var(--background-color);
   transition: all 0.3s var(--ease-out);
   width: 100%;
@@ -55,8 +126,38 @@ body {
   z-index: 1;
 }
 
-.main-content.sidebar-open {
-  margin-left: 280px;
+/* Matrix mode styles */
+.app.matrix-mode .main-content {
+  position: relative;
+}
+
+.app.matrix-mode .main-content::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(45deg, #000000, #002200);
+  opacity: 0.9;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.app.matrix-mode .main-content::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%2300FF00' fill-opacity='0.1' fill-rule='evenodd'%3E%3Cpath d='M0 38.59l2.83-2.83 1.41 1.41L1.41 40H0v-1.41zM0 20.83l2.83-2.83 1.41 1.41L1.41 22.24H0v-1.41zM22.24 0l2.83 2.83 1.41-1.41L20.83 0H22.24zm1.41 18.41l2.83 2.83 1.41-1.41L20.83 12.91 22.24 14.32 20 16.56l-1.41-1.41 2.83-2.83-1.41-1.41L15.56 20l4.24 4.24 1.41-1.41-2.83-2.83 1.41-1.41 2.83 2.83 1.41-1.41-4.24-4.24-1.41 1.41zM1.41 0l2.83 2.83 1.41-1.41L0 0h1.41zM40 1.41l2.83 2.83 1.41-1.41L40 0v1.41zM20 18.41l2.83-2.83 1.41 1.41L16.56 14.32 20 10.08l-1.41-1.41-4.24 4.24L18.24 16.56l-1.41 1.41-2.83-2.83-1.41 1.41 4.24 4.24L18.24 19.4l1.41-1.41zM22.24 40l2.83-2.83 1.41 1.41L20.83 40h1.41zm18.59-18.59l-1.41-1.41-2.83 2.83-1.41-1.41 2.83-2.83-1.41-1.41-2.83 2.83-1.41-1.41 2.83-2.83-1.41-1.41-4.24 4.24 4.24 4.24 1.41-1.41-2.83-2.83 1.41-1.41 2.83 2.83 1.41-1.41-2.83-2.83 1.41-1.41 2.83 2.83 1.41-1.41-2.83-2.83 1.41-1.41 2.83 2.83z'/%3E%3C/g%3E%3C/svg%3E");
+  z-index: 2;
+  pointer-events: none;
+  animation: matrix-scroll 30s linear infinite;
+}
+
+@keyframes matrix-scroll {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 100% 100%;
+  }
 }
 
 @media (width >= 640px) {
@@ -75,9 +176,6 @@ body {
 @media (width >= 1024px) {
   .container {
     max-width: 1024px;
-  }
-  .main-content.sidebar-open {
-    width: calc(100% - 280px);
   }
 }
 
@@ -103,15 +201,7 @@ body {
   .main-content {
     width: 100%;
     padding: var(--space-4);
-    margin-left: 0;
-  }
-  
-  .main-content.sidebar-open {
-    margin-left: 0;
-    transform: translateX(80px);
-    opacity: 0.85;
-    pointer-events: none;
-    filter: blur(1px);
+    margin-top: 65px;
   }
 
   /* Improve touch targets */

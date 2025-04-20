@@ -22,11 +22,19 @@ import {
   Profile,
   TournamentSetup
 } from './components';
-import Sidebar from './components/Sidebar/Sidebar';
+import NavBar from './components/NavBar/NavBar';
 import useUserSession from './hooks/useUserSession';
 import { supabase, getNamesWithDescriptions } from './supabase/supabaseClient';
 import Tournament from './components/Tournament/Tournament';
 import LoadingSpinner from './components/LoadingSpinner/LoadingSpinner';
+
+// Theme Configuration
+const THEME = {
+  LIGHT: "light",
+  DARK: "dark",
+  STORAGE_KEY: "theme",
+  CLASS_NAME: "light-theme",
+};
 
 function App() {
   const { userName, isLoggedIn, login, logout, session } = useUserSession();
@@ -36,8 +44,25 @@ function App() {
   const [tournamentNames, setTournamentNames] = useState(null);
   const [names, setNames] = useState([]);
   const [voteHistory, setVoteHistory] = useState([]);
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [matrixMode, setMatrixMode] = useState(false);
   const [isTournamentLoading, setIsTournamentLoading] = useState(false);
+  const [isLightTheme, setIsLightTheme] = useState(() => {
+    // Initialize theme from localStorage or system preference
+    const savedTheme = localStorage.getItem(THEME.STORAGE_KEY);
+    if (savedTheme) {
+      return savedTheme === THEME.LIGHT;
+    }
+    return window.matchMedia("(prefers-color-scheme: light)").matches;
+  });
+
+  // Apply theme class on app init and when theme changes
+  useEffect(() => {
+    document.body.classList.toggle(THEME.CLASS_NAME, isLightTheme);
+  }, [isLightTheme]);
+  
+  const handleThemeChange = (isLight) => {
+    setIsLightTheme(isLight);
+  };
 
   useEffect(() => {
     const loadNames = async () => {
@@ -260,8 +285,10 @@ function App() {
     logout();
   };
 
-  const toggleSidebar = () => {
-    setIsSidebarOpen(!isSidebarOpen);
+  // Add matrix mode activation function
+  const handleMatrixActivate = () => {
+    setMatrixMode(true);
+    setTimeout(() => setMatrixMode(false), 5000); // Disable after 5 seconds
   };
 
   // Add effect to handle authentication state
@@ -345,17 +372,18 @@ function App() {
   };
 
   return (
-    <div className="app">
-      <Sidebar 
+    <div className={`app ${matrixMode ? 'matrix-mode' : ''}`}>
+      <NavBar 
         view={view}
         setView={setView}
         isLoggedIn={isLoggedIn}
         userName={userName}
         onLogout={handleLogout}
-        isOpen={isSidebarOpen}
-        onToggle={toggleSidebar}
+        onMatrixActivate={handleMatrixActivate}
+        isLightTheme={isLightTheme}
+        onThemeChange={handleThemeChange}
       />
-      <div className={`main-content ${isSidebarOpen ? 'sidebar-open' : ''}`}>
+      <div className="main-content">
         {renderMainContent()}
       </div>
       

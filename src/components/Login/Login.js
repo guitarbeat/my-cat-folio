@@ -8,19 +8,28 @@ function Login({ onLogin }) {
   const [error, setError] = useState('');
   const [catFact, setCatFact] = useState('');
   const [isTyping, setIsTyping] = useState(false);
-  const [offsetY, setOffsetY] = useState(-160);
+  const [offsetY, setOffsetY] = useState(-115);
   
   const containerRef = useRef(null);
   const typingTimeoutRef = useRef(null);
 
+  // Add login-page class to body when component mounts
+  useEffect(() => {
+    document.body.classList.add('login-page');
+    
+    // Remove class when component unmounts
+    return () => {
+      document.body.classList.remove('login-page');
+    };
+  }, []);
+
   // Update offset based on screen size
   useEffect(() => {
     const updateOffset = () => {
-      // Use a smaller (less negative) offset on mobile to position the cat less behind
       if (window.innerWidth <= 768) {
-        setOffsetY(-90); // Much less negative offset for mobile - brings cat more forward
+        setOffsetY(-70);
       } else {
-        setOffsetY(-160); // Original offset for desktop
+        setOffsetY(-115);
       }
     };
     
@@ -137,13 +146,13 @@ function Login({ onLogin }) {
             loading="eager"
           />
           <p className={styles.welcomeText}>
-            Join Aaron's over-engineered quest to find the perfect cat name through science and democracy!
+            Join Aaron's quest to find the perfect cat name through science and democracy!
           </p>
         </section>
 
         <div className={styles.loginContent}>
           <div>
-            <h2 className={styles.loginTitle}>The Cat Name Olympics</h2>
+            <h2 className={styles.loginTitle}>Cat Name Olympics</h2>
             <p className={styles.catFact}>{catFact || 'Loading a fun cat fact...'}</p>
             {isTyping ? (
               <p className={styles.helperText}>The cat is watching you type!</p>
@@ -202,12 +211,12 @@ function Login({ onLogin }) {
           <div className={styles.namePreview}>
             {name ? (
               <p className={styles.helperText}>
-                You'll be known as <span className={styles.nameHighlight}>"{name}"</span> in Aaron's elaborate cat-naming tournament
+                You'll be known as <span className={styles.nameHighlight}>"{name}"</span>
               </p>
             ) : (
               <div className={styles.randomPreview}>
                 <p className={styles.helperText}>
-                  Don't worry about typing a name – we'll generate a fun one automatically when you start!
+                  We'll generate a fun name automatically!
                 </p>
                 <p className={styles.randomNameExample}>
                   Example: <span className={styles.nameHighlight}>{exampleRandomName.current}</span>

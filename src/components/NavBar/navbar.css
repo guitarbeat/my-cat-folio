@@ -1,0 +1,292 @@
+/* Variables */
+:root {
+  --navbar-padding-mobile: 1rem 1.5rem;
+  --navbar-padding-desktop: 1rem 2rem;
+  --scroll-button-size-desktop: 40px;
+  --scroll-button-size-mobile: 42px;
+  --underline-height: 0.1em;
+  --transition-standard: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  --z-index-navbar: 1000;
+}
+
+/* Navbar styles */
+.navbar {
+  --local-font-size: 1.2rem;
+  position: fixed;
+  inset: 0 0 auto 0;
+  z-index: var(--z-index-navbar);
+  display: flex;
+  flex-flow: row nowrap;
+  padding: 0 1rem;
+  margin: 0;
+  list-style-type: none;
+  background: var(--card-background, #0f1225);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  transition: all var(--transition-standard);
+  overflow: visible !important;
+  height: 65px;
+  align-items: center;
+}
+
+/* Transparent navbar for login page */
+.navbar.transparent {
+  background: transparent;
+  box-shadow: none;
+  backdrop-filter: none;
+}
+
+/* Make text more readable in transparent navbar */
+.navbar.transparent .navbar__item {
+  color: #ffffff;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.navbar.transparent .navbar__item--logo .navbar__title {
+  font-weight: 700;
+  color: #ffffff;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
+}
+
+/* Theme switch in transparent mode */
+.navbar.transparent .theme-switch {
+  background-color: rgba(40, 40, 40, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+/* Dark theme navbar (default when no light-theme class) */
+.navbar:not(.light-theme):not(.transparent) {
+  background: var(--card-background, #0f1225);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* Light theme navbar */
+.navbar.light-theme:not(.transparent),
+body.light-theme .navbar:not(.transparent) {
+  background: #ffffff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+body.light-theme .navbar:not(.transparent) .navbar__item {
+  color: var(--text-primary, #2c3544);
+}
+
+/* Theme Switch */
+.navbar .theme-switch {
+  margin-left: 1.5rem;
+  margin-right: 0.5rem;
+  align-self: center;
+  transform: scale(0.8);
+  transition: transform 0.3s ease;
+  background: none;
+  border: none;
+  width: 40px;
+  height: 22px;
+  position: relative;
+  border-radius: 30px;
+  cursor: pointer;
+  padding: 0;
+  background-color: var(--text-primary, #000000);
+}
+  
+.navbar .theme-switch .switch-handle {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 18px;
+  height: 18px;
+  background-color: white;
+  border-radius: 50%;
+  transition: transform 0.3s ease;
+}
+  
+.navbar .theme-switch.light-theme .switch-handle {
+  transform: translateX(18px);
+}
+  
+.navbar .theme-switch .moon-phase-container {
+  width: 100%;
+  height: 100%;
+}
+
+/* Navigation Items */
+.navbar__item {
+  padding: var(--navbar-padding-desktop);
+  color: var(--text-primary, #f8fafc);
+  font-size: var(--local-font-size);
+  font-weight: 600;
+  text-transform: uppercase;
+  transition: all var(--transition-standard);
+  display: flex;
+  align-items: center;
+}
+  
+/* Underline effect */
+.navbar__item a {
+  color: inherit;
+  text-decoration: none;
+  transition: color 0.2s;
+  position: relative;
+}
+  
+.navbar__item a::after {
+  content: "";
+  display: block;
+  position: absolute;
+  width: 0;
+  height: var(--underline-height);
+  bottom: -5px;
+  left: 0;
+  background-color: transparent;
+  transition: all var(--transition-standard);
+}
+
+.navbar__item a:hover::after, 
+.navbar__item a.active::after {
+  width: 100%;
+  background-color: var(--primary-color, #5a5cff);
+}
+
+.navbar__item a:hover {
+  color: var(--primary-color, #5a5cff);
+}
+  
+.navbar__item a.active {
+  color: var(--primary-color, #5a5cff);
+}
+  
+/* Logo */
+.navbar__item--logo {
+  margin-right: auto;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+  
+.navbar__item--logo .navbar__logo {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+}
+  
+.navbar__item--logo .navbar__title {
+  font-weight: 700;
+  font-size: 1.25rem;
+}
+  
+/* User greeting */
+.navbar__item--user {
+  margin-right: 1rem;
+  font-size: 0.9rem;
+}
+  
+/* Logout button */
+.navbar__item--logout a {
+  color: var(--error-600, #dc2626);
+}
+  
+.navbar__item--logout a:hover {
+  color: var(--error-700, #b91c1c);
+}
+  
+.navbar__item--logout a::after {
+  background-color: var(--error-600, #dc2626);
+}
+
+/* Scroll to Top Button */
+.scroll-to-top {
+  position: fixed;
+  bottom: 25px;
+  right: 25px;
+  width: var(--scroll-button-size-desktop);
+  height: var(--scroll-button-size-desktop);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  border-radius: 50%;
+  background-color: var(--card-background, #0f1225);
+  color: var(--text-primary, #f8fafc);
+  border: 2px solid var(--text-primary, #f8fafc);
+  cursor: pointer;
+  opacity: 0;
+  transform: translateY(20px);
+  pointer-events: none;
+  z-index: 1000;
+  transition: all var(--transition-standard);
+}
+
+body.light-theme .scroll-to-top {
+  background-color: #ffffff;
+  color: var(--text-primary, #2c3544);
+  border-color: var(--text-primary, #2c3544);
+}
+
+.scroll-to-top.visible {
+  opacity: 0.7;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.scroll-to-top:hover {
+  opacity: 1;
+  transform: translateY(-2px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.scroll-to-top:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px var(--text-primary, #f8fafc);
+}
+
+body.light-theme .scroll-to-top:focus {
+  box-shadow: 0 0 0 3px var(--text-primary, #2c3544);
+}
+
+/* Utility Classes */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Media Queries */
+@media only screen and (max-width: 768px) {
+  .navbar {
+    --local-font-size: 1rem;
+    padding: 0 0.5rem;
+  }
+    
+  .navbar__item {
+    padding: 0.5rem;
+  }
+    
+  .navbar__item--logo .navbar__title {
+    display: none;
+  }
+    
+  .navbar .theme-switch {
+    transform: scale(0.7);
+    margin-left: 0.5rem;
+  }
+
+  .scroll-to-top {
+    bottom: 15px;
+    right: 15px;
+    width: var(--scroll-button-size-mobile);
+    height: var(--scroll-button-size-mobile);
+  }
+}
+
+/* Improve touch targets on mobile */
+@media (hover: none) and (pointer: coarse) {
+  .navbar__item a {
+    padding: 0.5rem 0;
+    min-height: 44px;
+  }
+}

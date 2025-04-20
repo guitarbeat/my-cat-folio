@@ -1,8 +1,6 @@
 // Third-party imports
 import React, { useState, useEffect, useCallback } from "react";
-
-// Context imports
-import { useAuth } from "../../effects/Matrix/AuthContext";
+import "./navbar.css";
 
 // Theme Configuration
 const THEME = {
@@ -35,19 +33,28 @@ const updateThemeColor = (isLight) => {
 	}
 };
 
-function NavBar({ items, onMatrixActivate }) {
+function NavBar({ 
+	view, 
+	setView, 
+	isLoggedIn, 
+	userName, 
+	onLogout, 
+	onMatrixActivate, 
+	isLightTheme, 
+	onThemeChange 
+}) {
 	const [showScrollTop, setShowScrollTop] = useState(false);
 	const [themeClicks, setThemeClicks] = useState([]);
-	const [isLightTheme, setIsLightTheme] = useState(getInitialTheme);
-	const { isUnlocked } = useAuth();
 
-	// Create navItems from props and conditionally add Tools if user is authenticated
-	// This ensures isUnlocked is used properly
-	const navItems = { ...items };
-
-	// Only add Tools nav item if user is unlocked/authenticated
-	if (isUnlocked) {
-		navItems.Tools = "/#tools";
+	// Define nav items based on login state
+	const navItems = {};
+	
+	// Always show Tournament
+	navItems.Tournament = "#";
+	
+	// Show Profile if logged in
+	if (isLoggedIn) {
+		navItems.Profile = "#";
 	}
 
 	const handleThemeClick = useCallback(() => {
@@ -64,15 +71,21 @@ function NavBar({ items, onMatrixActivate }) {
 			}
 		}
 
-		setIsLightTheme((prev) => {
-			const newTheme = !prev;
-			localStorage.setItem(
-				THEME.STORAGE_KEY,
-				newTheme ? THEME.LIGHT : THEME.DARK,
-			);
-			return newTheme;
-		});
-	}, [themeClicks, onMatrixActivate]);
+		// Toggle theme and save to localStorage
+		const newTheme = !isLightTheme;
+		localStorage.setItem(
+			THEME.STORAGE_KEY,
+			newTheme ? THEME.LIGHT : THEME.DARK,
+		);
+		
+		// Notify parent component
+		if (onThemeChange) {
+			onThemeChange(newTheme);
+		}
+		
+		// Update theme color meta tag
+		updateThemeColor(newTheme);
+	}, [themeClicks, onMatrixActivate, isLightTheme, onThemeChange]);
 
 	useEffect(() => {
 		const checkScroll = () => {
@@ -101,36 +114,71 @@ function NavBar({ items, onMatrixActivate }) {
 		};
 	}, []);
 
-	useEffect(() => {
-		const { body } = document;
-		body.classList.toggle(THEME.CLASS_NAME, isLightTheme);
-		updateThemeColor(isLightTheme);
-	}, [isLightTheme]);
+	// Create nav links
+	const navLinks = Object.keys(navItems).map((key) => (
+		<li key={key} className="navbar__item">
+			<a
+				href="#"
+				onClick={(event) => {
+					event.preventDefault();
+					setView(key.toLowerCase());
+				}}
+				className={view === key.toLowerCase() ? "active" : ""}
+			>
+				{key}
+			</a>
+		</li>
+	));
 
-	const links = Object.keys(navItems)
-		.reverse()
-		.map((key) => (
-			<li key={key} className="navbar__item">
+	// Add logout button if user is logged in
+	if (isLoggedIn) {
+		navLinks.push(
+			<li key="logout" className="navbar__item navbar__item--logout">
 				<a
-					href={navItems[key]}
+					href="#"
 					onClick={(event) => {
 						event.preventDefault();
-						const { href } = event.target;
-						if (href.startsWith("#")) {
-							window.location.href = `${window.location.origin}${href}`;
-						} else {
-							window.location.href = href;
-						}
+						onLogout();
 					}}
 				>
-					{key}
+					Logout
 				</a>
 			</li>
-		));
+		);
+	}
+
+	// Add site logo/name
+	const logoItem = (
+		<li key="logo" className="navbar__item navbar__item--logo">
+			<img 
+				src={`${process.env.PUBLIC_URL}/images/cat.gif`} 
+				alt="Cat animation" 
+				className="navbar__logo"
+				width="30"
+				height="30"
+			/>
+			<span className="navbar__title">Meow Namester</span>
+		</li>
+	);
+
+	// Add user name if logged in
+	let userInfo = null;
+	if (isLoggedIn && userName) {
+		userInfo = (
+			<li key="user" className="navbar__item navbar__item--user">
+				<span className="navbar__greeting">Welcome, {userName}</span>
+			</li>
+		);
+	}
+
+	// If not logged in (on login screen), make navbar transparent
+	const navbarClass = `navbar ${isLightTheme ? 'light-theme' : ''} ${!isLoggedIn ? 'transparent' : ''}`;
 
 	return (
-		<nav className="navbar">
-			{links}
+		<nav className={navbarClass}>
+			{logoItem}
+			{userInfo}
+			{navLinks}
 			<button
 				className={`theme-switch ${isLightTheme ? "light-theme" : ""}`}
 				onClick={handleThemeClick}
@@ -143,15 +191,17 @@ function NavBar({ items, onMatrixActivate }) {
 					<div className="moon-phase-container" />
 				</div>
 			</button>
-			<button
-				type="button"
-				className={`scroll-to-top ${showScrollTop ? "visible" : ""}`}
-				onClick={scrollToTop}
-				aria-label="Scroll to top"
-				aria-hidden={!showScrollTop}
-			>
-				↑
-			</button>
+			{isLoggedIn && (
+				<button
+					type="button"
+					className={`scroll-to-top ${showScrollTop ? "visible" : ""}`}
+					onClick={scrollToTop}
+					aria-label="Scroll to top"
+					aria-hidden={!showScrollTop}
+				>
+					↑
+				</button>
+			)}
 		</nav>
 	);
 }
