@@ -311,31 +311,25 @@ function TournamentSetupContent({ onStart }) {
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
 
   const handleMouseDown = (e) => {
-    if (!enlargedImage) {
-      return;
-    }
+    if (!enlargedImage) return;
     setIsDragging(true);
-    setDragStart({ x: e.clientX - dragOffset.x, y: e.clientY - dragOffset.y });
+    setDragStart({
+      x: e.clientX - dragOffset.x,
+      y: e.clientY - dragOffset.y
+    });
   };
 
   const handleMouseMove = (e) => {
-    if (!isDragging || !enlargedImage) {
-      return;
-    }
-    const newX = e.clientX - dragStart.x;
-    const newY = e.clientY - dragStart.y;
-    setDragOffset({ x: newX, y: newY });
+    if (!isDragging || !enlargedImage) return;
+    setDragOffset({
+      x: e.clientX - dragStart.x,
+      y: e.clientY - dragStart.y
+    });
   };
 
   const handleMouseUp = () => {
     setIsDragging(false);
   };
-
-  useEffect(() => {
-    if (!enlargedImage) {
-      setDragOffset({ x: 0, y: 0 });
-    }
-  }, [enlargedImage]);
 
   useEffect(() => {
     if (isDragging) {
@@ -346,7 +340,13 @@ function TournamentSetupContent({ onStart }) {
         window.removeEventListener('mouseup', handleMouseUp);
       };
     }
-  }, [isDragging]);
+  }, [isDragging, dragStart]);
+
+  useEffect(() => {
+    if (!enlargedImage) {
+      setDragOffset({ x: 0, y: 0 });
+    }
+  }, [enlargedImage]);
 
   if (isLoading) {
     return <LoadingSpinner />;
@@ -393,6 +393,9 @@ function TournamentSetupContent({ onStart }) {
                     src={`/images/${image}`}
                     alt={`Cat photo ${index + 1}`}
                     loading="lazy"
+                    decoding="async"
+                    width="200"
+                    height="200"
                   />
                 </div>
               ))}
@@ -432,9 +435,6 @@ function TournamentSetupContent({ onStart }) {
           <div 
             className={styles.overlayBackdrop}
             onClick={() => setEnlargedImage(null)}
-            role="button"
-            tabIndex={-1}
-            aria-label="Close enlarged image"
           >
             <div className={styles.overlayContent}>
               <img 
@@ -442,10 +442,12 @@ function TournamentSetupContent({ onStart }) {
                 alt="Enlarged cat photo"
                 className={styles.enlargedImage}
                 style={{
-                  transform: `translate(-50%, -50%) translate(${dragOffset.x}px, ${dragOffset.y}px)`,
+                  transform: `translate(${dragOffset.x}px, ${dragOffset.y}px)`,
                   cursor: isDragging ? 'grabbing' : 'grab'
                 }}
                 onMouseDown={handleMouseDown}
+                loading="eager"
+                decoding="async"
               />
               <button 
                 className={styles.closeButton}
@@ -453,7 +455,6 @@ function TournamentSetupContent({ onStart }) {
                   e.stopPropagation();
                   setEnlargedImage(null);
                 }}
-                aria-label="Close enlarged image"
               >
                 ×
               </button>
