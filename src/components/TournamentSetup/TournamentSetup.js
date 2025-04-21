@@ -318,7 +318,10 @@ function TournamentSetupContent({ onStart }) {
         position: { x: 0, y: 0 },
         isDragging: false,
         dragStart: { x: 0, y: 0 },
-        isMinimized: false
+        isMinimized: false,
+        size: { width: 90, height: 90 },
+        isResizing: false,
+        resizeStart: { x: 0, y: 0 }
       }];
     });
   };
@@ -377,14 +380,87 @@ function TournamentSetupContent({ onStart }) {
     })));
   };
 
+  const handleResizeStart = (imageSrc, e, handle) => {
+    e.stopPropagation();
+    setOpenImages(prev => prev.map(img => {
+      if (img.src === imageSrc) {
+        return {
+          ...img,
+          isResizing: true,
+          resizeHandle: handle,
+          resizeStart: {
+            x: e.clientX,
+            y: e.clientY
+          }
+        };
+      }
+      return img;
+    }));
+  };
+
+  const handleResizeMove = (e) => {
+    setOpenImages(prev => prev.map(img => {
+      if (img.isResizing) {
+        const deltaX = e.clientX - img.resizeStart.x;
+        const deltaY = e.clientY - img.resizeStart.y;
+        const aspectRatio = img.size.width / img.size.height;
+        
+        let newWidth = img.size.width;
+        let newHeight = img.size.height;
+
+        switch (img.resizeHandle) {
+          case 'nw':
+            newWidth = Math.max(200, img.size.width - deltaX);
+            newHeight = newWidth / aspectRatio;
+            break;
+          case 'ne':
+            newWidth = Math.max(200, img.size.width + deltaX);
+            newHeight = newWidth / aspectRatio;
+            break;
+          case 'sw':
+            newWidth = Math.max(200, img.size.width - deltaX);
+            newHeight = newWidth / aspectRatio;
+            break;
+          case 'se':
+            newWidth = Math.max(200, img.size.width + deltaX);
+            newHeight = newWidth / aspectRatio;
+            break;
+        }
+
+        return {
+          ...img,
+          size: {
+            width: newWidth,
+            height: newHeight
+          },
+          resizeStart: {
+            x: e.clientX,
+            y: e.clientY
+          }
+        };
+      }
+      return img;
+    }));
+  };
+
+  const handleResizeEnd = () => {
+    setOpenImages(prev => prev.map(img => ({
+      ...img,
+      isResizing: false,
+      resizeHandle: null
+    })));
+  };
+
   useEffect(() => {
     const hasDragging = openImages.some(img => img.isDragging);
-    if (hasDragging) {
-      window.addEventListener('mousemove', handleMouseMove);
-      window.addEventListener('mouseup', handleMouseUp);
+    const hasResizing = openImages.some(img => img.isResizing);
+    
+    if (hasDragging || hasResizing) {
+      window.addEventListener('mousemove', hasResizing ? handleResizeMove : handleMouseMove);
+      window.addEventListener('mouseup', hasResizing ? handleResizeEnd : handleMouseUp);
       return () => {
-        window.removeEventListener('mousemove', handleMouseMove);
-        window.removeEventListener('mouseup', handleMouseUp);
+        window.removeEventListener('mousemove', hasResizing ? handleResizeMove : handleMouseMove);
+        window.removeEventListener('mouseup', hasResizing ? handleResizeEnd : handleMouseUp);
       };
     }
   }, [openImages]);
@@ -479,21 +555,49 @@ function TournamentSetupContent({ onStart }) {
             onClick={() => handleImageClose(image.src)}
           >
             <div className={styles.overlayContent}>
-              <img 
-                src={`/images/${image.src}`}
-                alt="Enlarged cat photo"
-                className={`${styles.enlargedImage} ${image.isMinimized ? styles.minimizedImage : ''}`}
+              <div 
+                className={styles.imageWrapper}
                 style={{
-                  transform: `translate(${image.position.x}px, ${image.position.y}px)`,
-                  cursor: image.isDragging ? 'grabbing' : 'grab'
+                  width: `${image.size.width}%`,
+                  height: `${image.size.height}%`,
+                  transform: `translate(${image.position.x}px, ${image.position.y}px)`
                 }}
-                onMouseDown={(e) => {
-                  e.stopPropagation();
-                  handleMouseDown(image.src, e);
-                }}
-                loading="eager"
-                decoding="async"
-              />
+              >
+                <img 
+                  src={`/images/${image.src}`}
+                  alt="Enlarged cat photo"
+                  className={`${styles.enlargedImage} ${image.isMinimized ? styles.minimizedImage : ''}`}
+                  style={{
+                    cursor: image.isDragging ? 'grabbing' : 'grab'
+                  }}
+                  onMouseDown={(e) => {
+                    e.stopPropagation();
+                    handleMouseDown(image.src, e);
+                  }}
+                  loading="eager"
+                  decoding="async"
+                />
+                {!image.isMinimized && (
+                  <>
+                    <div 
+                      className={`${styles.resizeHandle} ${styles.nw}`}
+                      onMouseDown={(e) => handleResizeStart(image.src, e, 'nw')}
+                    />
+                    <div 
+                      className={`${styles.resizeHandle} ${styles.ne}`}
+                      onMouseDown={(e) => handleResizeStart(image.src, e, 'ne')}
+                    />
+                    <div 
+                      className={`${styles.resizeHandle} ${styles.sw}`}
+                      onMouseDown={(e) => handleResizeStart(image.src, e, 'sw')}
+                    />
+                    <div 
+                      className={`${styles.resizeHandle} ${styles.se}`}
+                      onMouseDown={(e) => handleResizeStart(image.src, e, 'se')}
+                    />
+                  </>
+                )}
+              </div>
               <div className={styles.imageControls}>
                 <button 
                   className={styles.minimizeButton}
@@ -516,7 +620,7 @@ function TournamentSetupContent({ onStart }) {
                 </button>
               </div>
               <p className={styles.imageInstructions}>
-                Click and drag to pan • Press ESC or click outside to close
+                Click and drag to pan • Drag corners to resize • Press ESC or click outside to close
               </p>
             </div>
           </div>

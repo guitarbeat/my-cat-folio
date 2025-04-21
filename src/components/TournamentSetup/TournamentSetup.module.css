@@ -289,10 +289,19 @@
   overflow: hidden;
 }
 
+.imageWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: width var(--duration-normal) var(--ease-out),
+              height var(--duration-normal) var(--ease-out);
+}
+
 .enlargedImage {
-  position: absolute;
-  max-width: 90%;
-  max-height: 90%;
+  position: relative;
+  width: 100%;
+  height: 100%;
   border-radius: var(--radius-xl);
   box-shadow: var(--shadow-2xl);
   cursor: grab;
@@ -301,6 +310,46 @@
   user-select: none;
   transform-origin: center;
   transition: transform var(--duration-normal) var(--ease-out);
+}
+
+.resizeHandle {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  background: var(--white);
+  border: 2px solid var(--primary-500);
+  border-radius: var(--radius-full);
+  z-index: 1003;
+  cursor: pointer;
+}
+
+.resizeHandle:hover {
+  background: var(--primary-500);
+  transform: scale(1.2);
+}
+
+.resizeHandle.nw {
+  top: -6px;
+  left: -6px;
+  cursor: nw-resize;
+}
+
+.resizeHandle.ne {
+  top: -6px;
+  right: -6px;
+  cursor: ne-resize;
+}
+
+.resizeHandle.sw {
+  bottom: -6px;
+  left: -6px;
+  cursor: sw-resize;
+}
+
+.resizeHandle.se {
+  bottom: -6px;
+  right: -6px;
+  cursor: se-resize;
 }
 
 .enlargedImage.minimizedImage {
