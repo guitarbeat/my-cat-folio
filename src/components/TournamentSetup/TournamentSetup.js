@@ -306,33 +306,69 @@ function TournamentSetupContent({ onStart }) {
   } = useTournamentSetup(onStart);
 
   const [isExpanded, setIsExpanded] = useState(false);
-  const [isDragging, setIsDragging] = useState(false);
-  const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
-  const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
+  const [openImages, setOpenImages] = useState([]);
 
-  const handleMouseDown = (e) => {
-    if (!enlargedImage) return;
-    setIsDragging(true);
-    setDragStart({
-      x: e.clientX - dragOffset.x,
-      y: e.clientY - dragOffset.y
+  const handleImageOpen = (image) => {
+    setOpenImages(prev => {
+      // Check if image is already open
+      if (prev.some(img => img.src === image)) {
+        return prev;
+      }
+      // Add new image with initial position
+      return [...prev, {
+        src: image,
+        position: { x: 0, y: 0 },
+        isDragging: false,
+        dragStart: { x: 0, y: 0 }
+      }];
     });
+  };
+
+  const handleImageClose = (imageSrc) => {
+    setOpenImages(prev => prev.filter(img => img.src !== imageSrc));
+  };
+
+  const handleMouseDown = (imageSrc, e) => {
+    setOpenImages(prev => prev.map(img => {
+      if (img.src === imageSrc) {
+        return {
+          ...img,
+          isDragging: true,
+          dragStart: {
+            x: e.clientX - img.position.x,
+            y: e.clientY - img.position.y
+          }
+        };
+      }
+      return img;
+    }));
   };
 
   const handleMouseMove = (e) => {
-    if (!isDragging || !enlargedImage) return;
-    setDragOffset({
-      x: e.clientX - dragStart.x,
-      y: e.clientY - dragStart.y
-    });
+    setOpenImages(prev => prev.map(img => {
+      if (img.isDragging) {
+        return {
+          ...img,
+          position: {
+            x: e.clientX - img.dragStart.x,
+            y: e.clientY - img.dragStart.y
+          }
+        };
+      }
+      return img;
+    }));
   };
 
   const handleMouseUp = () => {
-    setIsDragging(false);
+    setOpenImages(prev => prev.map(img => ({
+      ...img,
+      isDragging: false
+    })));
   };
 
   useEffect(() => {
-    if (isDragging) {
+    const hasDragging = openImages.some(img => img.isDragging);
+    if (hasDragging) {
       window.addEventListener('mousemove', handleMouseMove);
       window.addEventListener('mouseup', handleMouseUp);
       return () => {
@@ -340,13 +376,7 @@ function TournamentSetupContent({ onStart }) {
         window.removeEventListener('mouseup', handleMouseUp);
       };
     }
-  }, [isDragging, dragStart]);
-
-  useEffect(() => {
-    if (!enlargedImage) {
-      setDragOffset({ x: 0, y: 0 });
-    }
-  }, [enlargedImage]);
+  }, [openImages]);
 
   if (isLoading) {
     return <LoadingSpinner />;
@@ -384,7 +414,7 @@ function TournamentSetupContent({ onStart }) {
                 <div 
                   key={image}
                   className={styles.photoThumbnail}
-                  onClick={() => setEnlargedImage(image)}
+                  onClick={() => handleImageOpen(image)}
                   role="button"
                   tabIndex={0}
                   aria-label={`View cat photo ${index + 1}`}
@@ -431,21 +461,25 @@ function TournamentSetupContent({ onStart }) {
           )}
         </main>
 
-        {enlargedImage && (
+        {openImages.map((image) => (
           <div 
+            key={image.src}
             className={styles.overlayBackdrop}
-            onClick={() => setEnlargedImage(null)}
+            onClick={() => handleImageClose(image.src)}
           >
             <div className={styles.overlayContent}>
               <img 
-                src={`/images/${enlargedImage}`}
+                src={`/images/${image.src}`}
                 alt="Enlarged cat photo"
                 className={styles.enlargedImage}
                 style={{
-                  transform: `translate(${dragOffset.x}px, ${dragOffset.y}px)`,
-                  cursor: isDragging ? 'grabbing' : 'grab'
+                  transform: `translate(${image.position.x}px, ${image.position.y}px)`,
+                  cursor: image.isDragging ? 'grabbing' : 'grab'
                 }}
-                onMouseDown={handleMouseDown}
+                onMouseDown={(e) => {
+                  e.stopPropagation();
+                  handleMouseDown(image.src, e);
+                }}
                 loading="eager"
                 decoding="async"
               />
@@ -453,7 +487,7 @@ function TournamentSetupContent({ onStart }) {
                 className={styles.closeButton}
                 onClick={(e) => {
                   e.stopPropagation();
-                  setEnlargedImage(null);
+                  handleImageClose(image.src);
                 }}
               >
                 ×
@@ -463,7 +497,7 @@ function TournamentSetupContent({ onStart }) {
               </p>
             </div>
           </div>
-        )}
+        ))}
       </div>
     </div>
   );
