@@ -4,9 +4,9 @@
 :root {
   --cat-bg: #000; /* Black cat */
   --cat-outline: #222; /* Slightly lighter than black for contrast */
-  --toebean: #ff99aa; /* Brighter pink for visibility */
+  --toebean: #44262c; /* Brighter pink for visibility */
   --linesize: 2px;
-  --scale: 0.3; /* Scale factor to make everything smaller */
+  --scale: 0.4; /* Scale factor to make everything smaller */
   --cat-size: 1;
 }
 
