@@ -310,22 +310,33 @@ function TournamentSetupContent({ onStart }) {
 
   const handleImageOpen = (image) => {
     setOpenImages(prev => {
-      // Check if image is already open
       if (prev.some(img => img.src === image)) {
         return prev;
       }
-      // Add new image with initial position
       return [...prev, {
         src: image,
         position: { x: 0, y: 0 },
         isDragging: false,
-        dragStart: { x: 0, y: 0 }
+        dragStart: { x: 0, y: 0 },
+        isMinimized: false
       }];
     });
   };
 
   const handleImageClose = (imageSrc) => {
     setOpenImages(prev => prev.filter(img => img.src !== imageSrc));
+  };
+
+  const handleMinimize = (imageSrc) => {
+    setOpenImages(prev => prev.map(img => {
+      if (img.src === imageSrc) {
+        return {
+          ...img,
+          isMinimized: !img.isMinimized
+        };
+      }
+      return img;
+    }));
   };
 
   const handleMouseDown = (imageSrc, e) => {
@@ -464,14 +475,14 @@ function TournamentSetupContent({ onStart }) {
         {openImages.map((image) => (
           <div 
             key={image.src}
-            className={styles.overlayBackdrop}
+            className={`${styles.overlayBackdrop} ${image.isMinimized ? styles.minimized : ''}`}
             onClick={() => handleImageClose(image.src)}
           >
             <div className={styles.overlayContent}>
               <img 
                 src={`/images/${image.src}`}
                 alt="Enlarged cat photo"
-                className={styles.enlargedImage}
+                className={`${styles.enlargedImage} ${image.isMinimized ? styles.minimizedImage : ''}`}
                 style={{
                   transform: `translate(${image.position.x}px, ${image.position.y}px)`,
                   cursor: image.isDragging ? 'grabbing' : 'grab'
@@ -483,15 +494,27 @@ function TournamentSetupContent({ onStart }) {
                 loading="eager"
                 decoding="async"
               />
-              <button 
-                className={styles.closeButton}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleImageClose(image.src);
-                }}
-              >
-                ×
-              </button>
+              <div className={styles.imageControls}>
+                <button 
+                  className={styles.minimizeButton}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleMinimize(image.src);
+                  }}
+                  aria-label={image.isMinimized ? "Maximize image" : "Minimize image"}
+                >
+                  {image.isMinimized ? '↗' : '↙'}
+                </button>
+                <button 
+                  className={styles.closeButton}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleImageClose(image.src);
+                  }}
+                >
+                  ×
+                </button>
+              </div>
               <p className={styles.imageInstructions}>
                 Click and drag to pan • Press ESC or click outside to close
               </p>

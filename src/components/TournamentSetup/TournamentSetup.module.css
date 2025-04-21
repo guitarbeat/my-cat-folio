@@ -273,6 +273,11 @@
   z-index: 1000;
 }
 
+.overlayBackdrop.minimized {
+  background: transparent;
+  backdrop-filter: none;
+}
+
 .overlayContent {
   position: fixed;
   inset: 0;
@@ -295,17 +300,48 @@
   touch-action: none;
   user-select: none;
   transform-origin: center;
+  transition: transform var(--duration-normal) var(--ease-out);
 }
 
-.enlargedImage:active {
-  cursor: grabbing;
+.enlargedImage.minimizedImage {
+  max-width: 200px;
+  max-height: 200px;
+  box-shadow: var(--shadow-lg);
+  cursor: default;
+}
+
+.imageControls {
+  position: absolute;
+  top: var(--space-4);
+  right: var(--space-4);
+  display: flex;
+  gap: var(--space-2);
+  z-index: 1002;
+}
+
+.minimizeButton {
+  composes: btnIcon from '../../styles/base.css';
+  width: 40px;
+  height: 40px;
+  font-size: var(--text-xl);
+  color: var(--white);
+  background: rgb(var(--black-rgb) / 0.5);
+  border: none;
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all var(--duration-normal) var(--ease-out);
+}
+
+.minimizeButton:hover {
+  background: rgb(var(--black-rgb) / 0.7);
+  transform: scale(1.1);
 }
 
 .closeButton {
   composes: btnIcon from '../../styles/base.css';
-  position: absolute;
-  top: var(--space-4);
-  right: var(--space-4);
   width: 40px;
   height: 40px;
   font-size: var(--text-2xl);
@@ -313,7 +349,16 @@
   background: rgb(var(--black-rgb) / 0.5);
   border: none;
   border-radius: var(--radius-full);
-  z-index: 1002;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all var(--duration-normal) var(--ease-out);
+}
+
+.closeButton:hover {
+  background: rgb(var(--black-rgb) / 0.7);
+  transform: scale(1.1);
 }
 
 .imageInstructions {
