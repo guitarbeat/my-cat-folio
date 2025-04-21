@@ -6,7 +6,7 @@
   --cat-outline: #222; /* Slightly lighter than black for contrast */
   --toebean: #44262c; /* Brighter pink for visibility */
   --linesize: 2px;
-  --scale: 0.25; /* Scale factor to make everything smaller */
+  --scale: 0.22; /* Scale factor to make everything smaller */
   --cat-size: 1;
 }
 

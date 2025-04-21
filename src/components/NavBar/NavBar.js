@@ -45,6 +45,7 @@ function NavBar({
 }) {
 	const [showScrollTop, setShowScrollTop] = useState(false);
 	const [themeClicks, setThemeClicks] = useState([]);
+	const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
 	// Define nav items based on login state
 	const navItems = {};
@@ -59,9 +60,9 @@ function NavBar({
 
 	// Add external project links if on login page
 	const externalLinks = isLoggedIn ? [] : [
-                       		{ name: 'K-Pop Site', url: 'https://kpop.alw.lol' },
-                       		{ name: 'Personal Site', url: 'https://aaronwoods.info' }
-                       	];
+		{ name: 'K-Pop Site', url: 'https://kpop.alw.lol' },
+		{ name: 'Personal Site', url: 'https://aaronwoods.info' }
+	];
 
 	const handleThemeClick = useCallback(() => {
 		const now = Date.now();
@@ -92,6 +93,15 @@ function NavBar({
 		// Update theme color meta tag
 		updateThemeColor(newTheme);
 	}, [themeClicks, onMatrixActivate, isLightTheme, onThemeChange]);
+
+	const handleMobileMenuClick = useCallback(() => {
+		setIsMobileMenuOpen(!isMobileMenuOpen);
+	}, [isMobileMenuOpen]);
+
+	const handleNavItemClick = useCallback((key) => {
+		setView(key.toLowerCase());
+		setIsMobileMenuOpen(false);
+	}, [setView]);
 
 	useEffect(() => {
 		const checkScroll = () => {
@@ -127,7 +137,7 @@ function NavBar({
 				href="#"
 				onClick={(event) => {
 					event.preventDefault();
-					setView(key.toLowerCase());
+					handleNavItemClick(key);
 				}}
 				className={view === key.toLowerCase() ? "active" : ""}
 			>
@@ -163,6 +173,7 @@ function NavBar({
 					onClick={(event) => {
 						event.preventDefault();
 						onLogout();
+						setIsMobileMenuOpen(false);
 					}}
 				>
 					Logout
@@ -196,25 +207,37 @@ function NavBar({
 	}
 
 	// If not logged in (on login screen), make navbar transparent
-	const navbarClass = `navbar ${isLightTheme ? 'light-theme' : ''} ${isLoggedIn ? '' : 'transparent'}`;
+	const navbarClass = `navbar ${isLightTheme ? 'light-theme' : ''} ${isLoggedIn ? '' : 'transparent'} ${isMobileMenuOpen ? 'mobile-menu-open' : ''}`;
 
 	return (
-		<nav className={navbarClass}>
-			{logoItem}
-			{userInfo}
-			{navLinks}
-			<button
-				className={`theme-switch ${isLightTheme ? "light-theme" : ""}`}
-				onClick={handleThemeClick}
-				role="switch"
-				aria-checked={isLightTheme}
-				aria-label={`Switch to ${isLightTheme ? "dark" : "light"} theme`}
-				type="button"
-			>
-				<div className="switch-handle">
-					<div className="moon-phase-container" />
+		<>
+			<nav className={navbarClass}>
+				{logoItem}
+				<button 
+					className="navbar__mobile-menu-button"
+					onClick={handleMobileMenuClick}
+					aria-label="Toggle menu"
+					aria-expanded={isMobileMenuOpen}
+				>
+					<span className="navbar__mobile-menu-icon"></span>
+				</button>
+				<div className="navbar__menu-container">
+					{userInfo}
+					{navLinks}
+					<button
+						className={`theme-switch ${isLightTheme ? "light-theme" : ""}`}
+						onClick={handleThemeClick}
+						role="switch"
+						aria-checked={isLightTheme}
+						aria-label={`Switch to ${isLightTheme ? "dark" : "light"} theme`}
+						type="button"
+					>
+						<div className="switch-handle">
+							<div className="moon-phase-container" />
+						</div>
+					</button>
 				</div>
-			</button>
+			</nav>
 			{isLoggedIn && (
 				<button
 					type="button"
@@ -226,7 +249,7 @@ function NavBar({
 					↑
 				</button>
 			)}
-		</nav>
+		</>
 	);
 }
 
