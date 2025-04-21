@@ -34,16 +34,28 @@ const MatchResult = {
 
 function Match({ match, isLastRound }) {
   const status = useMemo(() => {
-    if (!match.winner && match.winner !== 0) return MatchResult.PENDING;
-    if (match.winner === -1) return MatchResult.FIRST_WIN;
-    if (match.winner === 1) return MatchResult.SECOND_WIN;
-    if (match.winner === 0) return MatchResult.BOTH_ADVANCE;
-    if (match.winner === 2) return MatchResult.NEITHER;
+    if (!match.winner && match.winner !== 0) {
+      return MatchResult.PENDING;
+    }
+    if (match.winner === -1) {
+      return MatchResult.FIRST_WIN;
+    }
+    if (match.winner === 1) {
+      return MatchResult.SECOND_WIN;
+    }
+    if (match.winner === 0) {
+      return MatchResult.BOTH_ADVANCE;
+    }
+    if (match.winner === 2) {
+      return MatchResult.NEITHER;
+    }
     return MatchResult.SKIPPED;
   }, [match.winner]);
 
   const getPlayerClass = (isFirst) => {
-    if (!match.winner && match.winner !== 0) return styles.player;
+    if (!match.winner && match.winner !== 0) {
+      return styles.player;
+    }
     switch (status) {
       case MatchResult.FIRST_WIN:
         return isFirst ? styles.playerWinner : styles.playerLoser;
@@ -121,7 +133,9 @@ function Round({ matches, roundNumber, isLastRound }) {
 
 function Bracket({ matches }) {
   const tree = useMemo(() => {
-    if (!matches || matches.length === 0) return [];
+    if (!matches || matches.length === 0) {
+      return [];
+    }
     
     const totalRounds = Math.ceil(Math.log2(matches.length + 1));
     const rounds = Array(totalRounds).fill().map(() => []);

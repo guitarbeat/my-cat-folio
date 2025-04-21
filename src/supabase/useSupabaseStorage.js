@@ -14,7 +14,9 @@ function useSupabaseStorage(tableName, initialValue = [], userName = '') {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    if (!userName) return;
+    if (!userName) {
+      return;
+    }
     fetchData();
     
     // Set up real-time subscription
@@ -52,14 +54,18 @@ function useSupabaseStorage(tableName, initialValue = [], userName = '') {
         `)
         .order('name');
 
-      if (nameError) throw nameError;
+      if (nameError) {
+        throw nameError;
+      }
 
       // 2. Fetch all hidden name IDs
       const { data: hiddenData, error: hiddenError } = await supabase
         .from('hidden_names')
         .select('name_id');
       
-      if (hiddenError) throw hiddenError;
+      if (hiddenError) {
+        throw hiddenError;
+      }
       
       // 3. Create a Set of hidden IDs for efficient lookup
       const hiddenIdSet = new Set(hiddenData?.map(item => item.name_id) || []);
@@ -74,7 +80,9 @@ function useSupabaseStorage(tableName, initialValue = [], userName = '') {
         .eq('user_name', userName)
         .in('name_id', visibleNames.map(item => item.id));
       
-      if (ratingsError) throw ratingsError;
+      if (ratingsError) {
+        throw ratingsError;
+      }
       
       // 6. Create a map of ratings by name_id
       const ratingsMap = (ratingsData || []).reduce((map, item) => {
@@ -111,7 +119,9 @@ function useSupabaseStorage(tableName, initialValue = [], userName = '') {
   }
 
   async function setValue(newValue) {
-    if (!userName) return;
+    if (!userName) {
+      return;
+    }
     
     try {      
       // First, ensure all names exist in name_options
@@ -124,7 +134,9 @@ function useSupabaseStorage(tableName, initialValue = [], userName = '') {
         .select('id, name')
         .in('name', names);
 
-      if (nameError) throw nameError;
+      if (nameError) {
+        throw nameError;
+      }
 
       // Create a map of name to name_id
       const nameToIdMap = nameOptions.reduce((acc, { id, name }) => {
@@ -160,7 +172,9 @@ function useSupabaseStorage(tableName, initialValue = [], userName = '') {
           returning: 'minimal'
         });
 
-      if (upsertError) throw upsertError;
+      if (upsertError) {
+        throw upsertError;
+      }
 
       // Fetch updated data to verify
       const { error: verifyError } = await supabase
@@ -192,7 +206,9 @@ function useSupabaseStorage(tableName, initialValue = [], userName = '') {
   }
 
   async function clearUserData() {
-    if (!userName) return;
+    if (!userName) {
+      return;
+    }
 
     try {
       const { error: deleteError } = await supabase
@@ -200,7 +216,9 @@ function useSupabaseStorage(tableName, initialValue = [], userName = '') {
         .delete()
         .eq('user_name', userName);
 
-      if (deleteError) throw deleteError;
+      if (deleteError) {
+        throw deleteError;
+      }
 
       setStoredValue(initialValue);
     } catch (err) {

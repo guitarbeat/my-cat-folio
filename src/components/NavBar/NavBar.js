@@ -58,10 +58,10 @@ function NavBar({
 	}
 
 	// Add external project links if on login page
-	const externalLinks = !isLoggedIn ? [
-		{ name: 'K-Pop Site', url: 'https://kpop.alw.lol' },
-		{ name: 'Personal Site', url: 'https://aaronwoods.info' }
-	] : [];
+	const externalLinks = isLoggedIn ? [] : [
+                       		{ name: 'K-Pop Site', url: 'https://kpop.alw.lol' },
+                       		{ name: 'Personal Site', url: 'https://aaronwoods.info' }
+                       	];
 
 	const handleThemeClick = useCallback(() => {
 		const now = Date.now();
@@ -196,7 +196,7 @@ function NavBar({
 	}
 
 	// If not logged in (on login screen), make navbar transparent
-	const navbarClass = `navbar ${isLightTheme ? 'light-theme' : ''} ${!isLoggedIn ? 'transparent' : ''}`;
+	const navbarClass = `navbar ${isLightTheme ? 'light-theme' : ''} ${isLoggedIn ? '' : 'transparent'}`;
 
 	return (
 		<nav className={navbarClass}>

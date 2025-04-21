@@ -228,7 +228,9 @@ function useTournamentSetup(onStart) {
           supabase.from('hidden_names').select('name_id')
         ]);
         
-        if (hiddenError) throw hiddenError;
+        if (hiddenError) {
+          throw hiddenError;
+        }
         
         // Create Set of hidden IDs for O(1) lookup
         const hiddenIds = new Set(hiddenData?.map(item => item.name_id) || []);
@@ -309,13 +311,17 @@ function TournamentSetupContent({ onStart }) {
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
 
   const handleMouseDown = (e) => {
-    if (!enlargedImage) return;
+    if (!enlargedImage) {
+      return;
+    }
     setIsDragging(true);
     setDragStart({ x: e.clientX - dragOffset.x, y: e.clientY - dragOffset.y });
   };
 
   const handleMouseMove = (e) => {
-    if (!isDragging || !enlargedImage) return;
+    if (!isDragging || !enlargedImage) {
+      return;
+    }
     const newX = e.clientX - dragStart.x;
     const newY = e.clientY - dragStart.y;
     setDragOffset({ x: newX, y: newY });
@@ -342,7 +348,9 @@ function TournamentSetupContent({ onStart }) {
     }
   }, [isDragging]);
 
-  if (isLoading) return <LoadingSpinner />;
+  if (isLoading) {
+    return <LoadingSpinner />;
+  }
 
   if (error) {
     return (

@@ -65,7 +65,9 @@ export const getNamesWithDescriptions = async () => {
     // Execute query with ordering
     const { data, error } = await query.order('name');
 
-    if (error) throw error;
+    if (error) {
+      throw error;
+    }
     
     // Process the data to include the latest updated_at
     const processedData = data.map(item => ({
@@ -214,7 +216,9 @@ export const updateRating = async (userName, nameId, newRating, outcome = null, 
         returning: 'minimal'
       });
 
-    if (error) throw error;
+    if (error) {
+      throw error;
+    }
     
     // Return success with updated values
     return { 

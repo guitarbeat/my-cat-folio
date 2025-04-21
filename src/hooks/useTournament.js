@@ -87,7 +87,9 @@ export function useTournament({ names = [], existingRatings = {}, onComplete }) 
 
   // Reset tournament state when names change
   useEffect(() => {
-    if (!names || names.length === 0) return;
+    if (!names || names.length === 0) {
+      return;
+    }
 
     const nameStrings = names.map(n => n.name);
     const newSorter = new PreferenceSorter(nameStrings);
@@ -115,56 +117,56 @@ export function useTournament({ names = [], existingRatings = {}, onComplete }) 
 
   // Define getCurrentRatings first since it's used in handleVote
   const getCurrentRatings = useCallback(() => {
-    const ratingsArray = names.map(name => {
-      const existingData = typeof currentRatings[name.name] === 'object'
-        ? currentRatings[name.name]
-        : { rating: currentRatings[name.name] || 1500, wins: 0, losses: 0 };
-
-      const totalNames = names.length;
-      const position = matchHistory.filter(vote => 
-        (vote.match.left.name === name.name && vote.result === 'left') ||
-        (vote.match.right.name === name.name && vote.result === 'right')
-      ).length;
-
-      // Count wins and losses from vote history
-      const wins = matchHistory.filter(vote => 
-        (vote.match.left.name === name.name && vote.result === 'left') ||
-        (vote.match.right.name === name.name && vote.result === 'right')
-      ).length;
-
-      const losses = matchHistory.filter(vote => 
-        (vote.match.left.name === name.name && vote.result === 'right') ||
-        (vote.match.right.name === name.name && vote.result === 'left')
-      ).length;
-
-      const ratingSpread = Math.min(1000, totalNames * 25);
-      const positionValue = ((totalNames - position - 1) / (totalNames - 1)) * ratingSpread;
-      const newPositionRating = 1500 + positionValue;
-      const matchesPlayed = currentMatchNumber;
-      const maxMatches = totalMatches;
-      const blendFactor = Math.min(0.8, (matchesPlayed / maxMatches) * 0.9);
-      const newRating = Math.round(
-        (blendFactor * newPositionRating) +
-        ((1 - blendFactor) * existingData.rating)
-      );
-      const minRating = 1000;
-      const maxRating = 2000;
-      const finalRating = Math.max(minRating, Math.min(maxRating, newRating));
-
-      return {
-        name: name.name,
-        rating: finalRating,
-        wins: existingData.wins + wins,
-        losses: existingData.losses + losses,
-        confidence: (matchesPlayed / maxMatches)
-      };
-    });
-
-    return ratingsArray;
+    return names.map(name => {
+          const existingData = typeof currentRatings[name.name] === 'object'
+            ? currentRatings[name.name]
+            : { rating: currentRatings[name.name] || 1500, wins: 0, losses: 0 };
+    
+          const totalNames = names.length;
+          const position = matchHistory.filter(vote => 
+            (vote.match.left.name === name.name && vote.result === 'left') ||
+            (vote.match.right.name === name.name && vote.result === 'right')
+          ).length;
+    
+          // Count wins and losses from vote history
+          const wins = matchHistory.filter(vote => 
+            (vote.match.left.name === name.name && vote.result === 'left') ||
+            (vote.match.right.name === name.name && vote.result === 'right')
+          ).length;
+    
+          const losses = matchHistory.filter(vote => 
+            (vote.match.left.name === name.name && vote.result === 'right') ||
+            (vote.match.right.name === name.name && vote.result === 'left')
+          ).length;
+    
+          const ratingSpread = Math.min(1000, totalNames * 25);
+          const positionValue = ((totalNames - position - 1) / (totalNames - 1)) * ratingSpread;
+          const newPositionRating = 1500 + positionValue;
+          const matchesPlayed = currentMatchNumber;
+          const maxMatches = totalMatches;
+          const blendFactor = Math.min(0.8, (matchesPlayed / maxMatches) * 0.9);
+          const newRating = Math.round(
+            (blendFactor * newPositionRating) +
+            ((1 - blendFactor) * existingData.rating)
+          );
+          const minRating = 1000;
+          const maxRating = 2000;
+          const finalRating = Math.max(minRating, Math.min(maxRating, newRating));
+    
+          return {
+            name: name.name,
+            rating: finalRating,
+            wins: existingData.wins + wins,
+            losses: existingData.losses + losses,
+            confidence: (matchesPlayed / maxMatches)
+          };
+        });
   }, [names, currentRatings, matchHistory, currentMatchNumber, totalMatches]);
 
   const handleVote = useCallback((result) => {
-    if (isTransitioning || !resolveVote || isError) return;
+    if (isTransitioning || !resolveVote || isError) {
+      return;
+    }
 
     try {
       setIsTransitioning(true);
@@ -389,7 +391,9 @@ export function useTournament({ names = [], existingRatings = {}, onComplete }) 
   };
 
   const handleUndo = useCallback(() => {
-    if (isTransitioning || !canUndo || matchHistory.length === 0) return;
+    if (isTransitioning || !canUndo || matchHistory.length === 0) {
+      return;
+    }
 
     setIsTransitioning(true);
 

@@ -1,5 +1,7 @@
 export const formatTimestamp = (timestamp) => {
-  if (!timestamp) return 'Never';
+  if (!timestamp) {
+    return 'Never';
+  }
   const date = new Date(timestamp);
   const now = new Date();
   const diff = now - date;
@@ -26,11 +28,13 @@ export const formatTimestamp = (timestamp) => {
 };
 
 export const calculateUserStats = (ratings) => {
-  if (!ratings?.length) return {
-    avgRating: 0,
-    totalGames: 0,
-    winRate: 0
-  };
+  if (!ratings?.length) {
+    return {
+      avgRating: 0,
+      totalGames: 0,
+      winRate: 0
+    };
+  }
   
   const totalGames = ratings.reduce((sum, r) => sum + (r.wins + r.losses), 0);
   const totalWins = ratings.reduce((sum, r) => sum + r.wins, 0);

@@ -72,7 +72,9 @@ const Button = memo(({ onClick, className, disabled, children, variant = 'defaul
 ));
 
 const Modal = memo(({ title, isOpen, onClose, children }) => {
-  if (!isOpen) return null;
+  if (!isOpen) {
+    return null;
+  }
   
   return (
     <div className={styles.modalOverlay}>
@@ -101,8 +103,12 @@ const StatsCard = memo(({ label, value, emoji }) => (
 // Utility Functions
 const calculateStats = (ratings, filterStatus = FILTER_OPTIONS.STATUS.ALL) => {
   const filteredRatings = ratings.filter(r => {
-    if (filterStatus === FILTER_OPTIONS.STATUS.ACTIVE) return !r.isHidden;
-    if (filterStatus === FILTER_OPTIONS.STATUS.HIDDEN) return r.isHidden;
+    if (filterStatus === FILTER_OPTIONS.STATUS.ACTIVE) {
+      return !r.isHidden;
+    }
+    if (filterStatus === FILTER_OPTIONS.STATUS.HIDDEN) {
+      return r.isHidden;
+    }
     return true;
   });
 
@@ -128,10 +134,14 @@ const processUserRatings = (data) => {
   const lastActivity = {};
   const ratingsByUser = {};
 
-  if (!data) return { lastActivity, ratingsByUser };
+  if (!data) {
+    return { lastActivity, ratingsByUser };
+  }
 
   data.forEach(item => {
-    if (!item.name_options) return;
+    if (!item.name_options) {
+      return;
+    }
     
     const userName = item.user_name;
     
@@ -542,11 +552,17 @@ const ChartSection = memo(({ aggregatedNames, filterStatus }) => {
     };
 
     aggregatedNames.forEach(name => {
-      if (name.averageRating >= 1800) distribution['Elite (1800+)']++;
-      else if (name.averageRating >= 1650) distribution['Strong (1650-1799)']++;
-      else if (name.averageRating >= 1500) distribution['Good (1500-1649)']++;
-      else if (name.averageRating >= 1350) distribution['Average (1350-1499)']++;
-      else distribution['Developing (<1350)']++;
+      if (name.averageRating >= 1800) {
+        distribution['Elite (1800+)']++;
+      } else if (name.averageRating >= 1650) {
+               distribution['Strong (1650-1799)']++;
+             } else if (name.averageRating >= 1500) {
+                      distribution['Good (1500-1649)']++;
+                    } else if (name.averageRating >= 1350) {
+                             distribution['Average (1350-1499)']++;
+                           } else {
+                             distribution['Developing (<1350)']++;
+                           }
     });
 
     return {
@@ -690,7 +706,9 @@ const AggregatedStats = memo(({
           .from('hidden_names')
           .select('name_id');
 
-        if (hiddenError) throw hiddenError;
+        if (hiddenError) {
+          throw hiddenError;
+        }
 
         const newHiddenNames = new Set(hiddenData?.map(item => item.name_id) || []);
         setHiddenNames(newHiddenNames);
@@ -708,13 +726,19 @@ const AggregatedStats = memo(({
     // Combine ratings for each name across all users
     Object.values(allUsersRatings).forEach(userRatings => {
       userRatings.forEach(rating => {
-        if (!rating) return; // Skip if rating is undefined
+        if (!rating) {
+          return;
+        } // Skip if rating is undefined
         
         const isHidden = hiddenNames.has(rating.id);
         
         // Apply filter
-        if (filterStatus === FILTER_OPTIONS.STATUS.ACTIVE && isHidden) return;
-        if (filterStatus === FILTER_OPTIONS.STATUS.HIDDEN && !isHidden) return;
+        if (filterStatus === FILTER_OPTIONS.STATUS.ACTIVE && isHidden) {
+          return;
+        }
+        if (filterStatus === FILTER_OPTIONS.STATUS.HIDDEN && !isHidden) {
+          return;
+        }
 
         if (!nameMap.has(rating.name)) {
           nameMap.set(rating.name, {
@@ -892,8 +916,12 @@ const FilterControls = memo(({ onFilterChange, onSortChange, currentFilter, curr
 const prepareChartData = (ratings, filterStatus, hiddenNames) => {
   const filteredRatings = ratings.filter(r => {
     const isHidden = hiddenNames.has(r.id);
-    if (filterStatus === FILTER_OPTIONS.STATUS.ACTIVE) return !isHidden;
-    if (filterStatus === FILTER_OPTIONS.STATUS.HIDDEN) return isHidden;
+    if (filterStatus === FILTER_OPTIONS.STATUS.ACTIVE) {
+      return !isHidden;
+    }
+    if (filterStatus === FILTER_OPTIONS.STATUS.HIDDEN) {
+      return isHidden;
+    }
     return true;
   });
 
@@ -943,7 +971,9 @@ const RatingTrends = memo(({ userName, selectedName = null }) => {
   
   // Process data based on time range
   const filteredHistory = useMemo(() => {
-    if (!ratingHistory.length) return [];
+    if (!ratingHistory.length) {
+      return [];
+    }
     
     const now = new Date();
     const filterDate = new Date();
@@ -970,7 +1000,9 @@ const RatingTrends = memo(({ userName, selectedName = null }) => {
   
   // Prepare chart data
   const chartData = useMemo(() => {
-    if (!filteredHistory.length) return { labels: [], datasets: [] };
+    if (!filteredHistory.length) {
+      return { labels: [], datasets: [] };
+    }
     
     // For a specific name
     if (selectedName) {
@@ -1150,7 +1182,9 @@ const RatingTrends = memo(({ userName, selectedName = null }) => {
 const PerformanceInsights = memo(({ ratings }) => {
   // Calculate meaningful insights
   const insights = useMemo(() => {
-    if (!ratings.length) return [];
+    if (!ratings.length) {
+      return [];
+    }
     
     const totalMatches = ratings.reduce((sum, r) => sum + (r.wins || 0) + (r.losses || 0), 0);
     const avgRating = Math.round(
@@ -1192,7 +1226,9 @@ const PerformanceInsights = memo(({ ratings }) => {
     };
   }, [ratings]);
   
-  if (!ratings.length) return null;
+  if (!ratings.length) {
+    return null;
+  }
   
   return (
     <div className={styles.insightsContainer}>
@@ -1284,7 +1320,9 @@ const Profile = ({ userName, onStartNewTournament }) => {
         .from('hidden_names')
         .select('name_id');
 
-      if (hiddenError) throw hiddenError;
+      if (hiddenError) {
+        throw hiddenError;
+      }
 
       const newHiddenNames = new Set(hiddenData?.map(item => item.name_id) || []);
       setHiddenNames(newHiddenNames);
@@ -1310,7 +1348,9 @@ const Profile = ({ userName, onStartNewTournament }) => {
         `)
         .eq('user_name', targetUserName);
 
-      if (fetchError) throw fetchError;
+      if (fetchError) {
+        throw fetchError;
+      }
 
       const processedRatings = data
         ?.filter(item => item.name_options)
@@ -1349,7 +1389,9 @@ const Profile = ({ userName, onStartNewTournament }) => {
           )
         `);
 
-      if (fetchError) throw fetchError;
+      if (fetchError) {
+        throw fetchError;
+      }
 
       const { lastActivity, ratingsByUser } = processUserRatings(data);
       setUserLastActivity(lastActivity);
@@ -1401,14 +1443,18 @@ const Profile = ({ userName, onStartNewTournament }) => {
 
   const handleToggleNameVisibility = useCallback(async (nameId, nameText) => {
     const isHidden = hiddenNames.has(nameId);
-    if (!window.confirm(`Are you sure you want to ${isHidden ? 'show' : 'hide'} this name?`)) return;
+    if (!window.confirm(`Are you sure you want to ${isHidden ? 'show' : 'hide'} this name?`)) {
+      return;
+    }
 
     try {
       const { error } = isHidden 
         ? await supabase.from('hidden_names').delete().eq('name_id', nameId)
         : await supabase.from('hidden_names').insert([{ name_id: nameId }]);
 
-      if (error) throw error;
+      if (error) {
+        throw error;
+      }
 
       // Refresh hidden names after toggling
       await fetchHiddenNames();
@@ -1421,7 +1467,9 @@ const Profile = ({ userName, onStartNewTournament }) => {
     try {
       setDeleteNameStatus({ loading: true, error: null });
       const { error } = await deleteName(nameId);
-      if (error) throw error;
+      if (error) {
+        throw error;
+      }
 
       setRatingsData(prev => prev.filter(r => r.id !== nameId));
       setShowDeleteNameConfirm(false);
@@ -1466,7 +1514,9 @@ const Profile = ({ userName, onStartNewTournament }) => {
     
     return dataToUse
       .filter(r => {
-        if (!r || !r.name) return false;
+        if (!r || !r.name) {
+          return false;
+        }
         const isHidden = hiddenNames.has(r.id);
         return filterStatus === FILTER_OPTIONS.STATUS.ACTIVE ? !isHidden : isHidden;
       })
@@ -1488,8 +1538,12 @@ const Profile = ({ userName, onStartNewTournament }) => {
     [ratingsData, filterStatus, hiddenNames, currentUserRatings, currentlyViewedUser, userName]
   );
 
-  if (ratingsLoading) return <LoadingSpinner />;
-  if (ratingsError) return <div>Error: {ratingsError.message}</div>;
+  if (ratingsLoading) {
+    return <LoadingSpinner />;
+  }
+  if (ratingsError) {
+    return <div>Error: {ratingsError.message}</div>;
+  }
 
   const users = Object.entries(allUsersRatings).map(([name, ratings]) => ({
     id: name,

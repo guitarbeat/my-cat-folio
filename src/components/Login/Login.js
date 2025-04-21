@@ -37,8 +37,7 @@ function Login({ onLogin }) {
     const adjective = funnyAdjectives[Math.floor(Math.random() * funnyAdjectives.length)];
     const randomNumber = Math.floor(Math.random() * 99) + 1;
     
-    const generatedName = `${prefix} ${adjective}${randomNumber}`;
-    return generatedName;
+    return `${prefix} ${adjective}${randomNumber}`;
   };
 
   const resetTypingTimer = () => {
@@ -71,7 +70,9 @@ function Login({ onLogin }) {
     setIsTyping(true);
     resetTypingTimer();
     
-    if (error) setError('');
+    if (error) {
+      setError('');
+    }
   };
 
   const handleSubmit = async (e) => {

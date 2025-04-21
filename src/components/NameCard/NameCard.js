@@ -41,7 +41,9 @@ function NameCard({
   }, [isRippling]);
 
   const handleInteraction = (event) => {
-    if (disabled) return;
+    if (disabled) {
+      return;
+    }
 
     if (event.type === 'click' || (event.type === 'keydown' && (event.key === 'Enter' || event.key === ' '))) {
       event.preventDefault();

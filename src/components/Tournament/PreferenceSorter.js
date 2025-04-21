@@ -94,16 +94,16 @@ export class PreferenceSorter {
                 if (result <= -0.5) {
                     merged.push(this.items[i++]);
                 } else if (result >= 0.5) {
-                    merged.push(this.items[j++]);
-                } else {
-                    if (result < 0) {
-                        merged.push(this.items[i++]);
-                        merged.push(this.items[j++]);
-                    } else {
-                        merged.push(this.items[j++]);
-                        merged.push(this.items[i++]);
-                    }
-                }
+                                           merged.push(this.items[j++]);
+                                       }
+                       else if (result < 0) {
+                                               merged.push(this.items[i++]);
+                                               merged.push(this.items[j++]);
+                                           }
+                       else {
+                                               merged.push(this.items[j++]);
+                                               merged.push(this.items[i++]);
+                                           }
             } catch (error) {
                 console.error('Comparison failed:', error);
                 // Handle cancellation or fallback strategy

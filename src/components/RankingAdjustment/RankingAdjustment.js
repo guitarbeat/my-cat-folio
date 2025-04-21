@@ -9,7 +9,9 @@ function RankingAdjustment({ rankings, onSave, onCancel }) {
 
   // Helper function to check if rankings have actually changed
   const haveRankingsChanged = (newItems, oldRankings) => {
-    if (newItems.length !== oldRankings.length) return true;
+    if (newItems.length !== oldRankings.length) {
+      return true;
+    }
     return newItems.some((item, index) => {
       return item.name !== oldRankings[index].name || 
              item.rating !== oldRankings[index].rating;
@@ -69,7 +71,9 @@ function RankingAdjustment({ rankings, onSave, onCancel }) {
 
   const handleDragEnd = (result) => {
     setIsDragging(false);
-    if (!result.destination) return;
+    if (!result.destination) {
+      return;
+    }
 
     const newItems = Array.from(items);
     const [reorderedItem] = newItems.splice(result.source.index, 1);

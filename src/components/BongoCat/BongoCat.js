@@ -39,7 +39,7 @@ const BongoCat = memo(({
       // Apply an additional offset for narrow screens to position the cat better
       if (viewportWidth <= 768) {
         const mobileAdjustment = 5; // Smaller adjustment for mobile
-        optimalTop = optimalTop + mobileAdjustment;
+        optimalTop += mobileAdjustment;
       }
       
       setContainerTop(optimalTop);
@@ -63,7 +63,9 @@ const BongoCat = memo(({
   }, [containerRef, size]);
 
   const handleKeyDown = useCallback((e) => {
-    if (e.ctrlKey || e.altKey || e.metaKey || e.shiftKey) return;
+    if (e.ctrlKey || e.altKey || e.metaKey || e.shiftKey) {
+      return;
+    }
     
     const now = Date.now();
     if (now - lastKeyTimeRef.current > 1000) {

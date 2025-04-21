@@ -46,7 +46,7 @@ const Sidebar = ({ view, setView, isLoggedIn, userName, onLogout, isOpen, onTogg
 
   // Lock body scroll when sidebar is open
   useEffect(() => {
-    const body = document.body;
+    const {body} = document;
     if (isOpen) {
       const scrollbarWidth = window.innerWidth - body.clientWidth;
       body.style.overflow = 'hidden';

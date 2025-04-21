@@ -150,8 +150,12 @@ function TournamentContent({ onComplete, existingRatings = {}, names = [], userN
       const newMuted = !prev;
       try {
         if (newMuted) {
-          if (musicRef.current) musicRef.current.pause();
-          if (audioRef.current) audioRef.current.pause();
+          if (musicRef.current) {
+            musicRef.current.pause();
+          }
+          if (audioRef.current) {
+            audioRef.current.pause();
+          }
         } else if (musicRef.current) {
           musicRef.current.play().catch(() => {
             setAudioError('Unable to play audio. Click to try again.');
@@ -314,7 +318,9 @@ function TournamentContent({ onComplete, existingRatings = {}, names = [], userN
 
   // Separate click handler for name cards
   const handleNameCardClick = (option) => {
-    if (isProcessing || isTransitioning) return;
+    if (isProcessing || isTransitioning) {
+      return;
+    }
     
     // Set the selected option first
     setSelectedOption(option);
@@ -340,7 +346,9 @@ function TournamentContent({ onComplete, existingRatings = {}, names = [], userN
   // Add keyboard controls
   useEffect(() => {
     const handleKeyPress = (e) => {
-      if (isProcessing || isTransitioning) return;
+      if (isProcessing || isTransitioning) {
+        return;
+      }
       
       switch(e.key) {
         case 'ArrowLeft':
@@ -379,7 +387,9 @@ function TournamentContent({ onComplete, existingRatings = {}, names = [], userN
 
   // Match result component
   const MatchResult = () => {
-    if (!showMatchResult || !lastMatchResult) return null;
+    if (!showMatchResult || !lastMatchResult) {
+      return null;
+    }
 
     return (
       <div 
@@ -415,10 +425,15 @@ function TournamentContent({ onComplete, existingRatings = {}, names = [], userN
     return matchHistory.map((vote, index) => {
       // Convert numeric result to winner format
       let winner;
-      if (vote.result < -0.1) winner = -1;      // left won
-      else if (vote.result > 0.1) winner = 1;   // right won
-      else if (Math.abs(vote.result) <= 0.1) winner = 0;  // both or neither
-      else winner = 2; // skip
+      if (vote.result < -0.1) {
+        winner = -1;
+      } else if (vote.result > 0.1) {
+               winner = 1;
+             } else if (Math.abs(vote.result) <= 0.1) {
+                      winner = 0;
+                    } else {
+                      winner = 2;
+                    } // skip
 
       return {
         id: index + 1,

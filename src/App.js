@@ -114,8 +114,12 @@ function App() {
         const { left, right } = match;
         
         // Initialize if not exists (safety check)
-        if (!tournamentResults[left.name]) tournamentResults[left.name] = { wins: 0, losses: 0 };
-        if (!tournamentResults[right.name]) tournamentResults[right.name] = { wins: 0, losses: 0 };
+        if (!tournamentResults[left.name]) {
+          tournamentResults[left.name] = { wins: 0, losses: 0 };
+        }
+        if (!tournamentResults[right.name]) {
+          tournamentResults[right.name] = { wins: 0, losses: 0 };
+        }
         
         // Update based on numeric result
         if (result < -0.1) {  // left won (using threshold to account for floating point)
@@ -245,7 +249,9 @@ function App() {
         .select('id, name')
         .in('name', Object.keys(updatedRatings));
 
-      if (nameError) throw nameError;
+      if (nameError) {
+        throw nameError;
+      }
 
       // Create records for database update
       const recordsToUpsert = nameOptions
@@ -270,7 +276,9 @@ function App() {
           returning: 'minimal'
         });
 
-      if (upsertError) throw upsertError;
+      if (upsertError) {
+        throw upsertError;
+      }
 
       // Update local state
       setRatings(updatedRatings);

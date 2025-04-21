@@ -17,8 +17,12 @@ class EloRating {
   }
 
   getKFactor(rating, games = 0) {
-    if (games < 15) return this.kFactor * 2;
-    if (rating < 1400 || rating > 2000) return this.kFactor * 1.5;
+    if (games < 15) {
+      return this.kFactor * 2;
+    }
+    if (rating < 1400 || rating > 2000) {
+      return this.kFactor * 1.5;
+    }
     return this.kFactor;
   }
 

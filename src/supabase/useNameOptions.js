@@ -42,7 +42,9 @@ function useNameOptions() {
         .select('name, description')
         .order('created_at', { ascending: true });
 
-      if (fetchError) throw fetchError;
+      if (fetchError) {
+        throw fetchError;
+      }
 
       setNameOptions(data);
     } catch (err) {
@@ -54,7 +56,9 @@ function useNameOptions() {
   }
 
   async function addNameOption(newName, description = '') {
-    if (!newName?.trim()) return;
+    if (!newName?.trim()) {
+      return;
+    }
     
     try {
       setLoading(true);
@@ -91,7 +95,9 @@ function useNameOptions() {
         .delete()
         .eq('name', name);
 
-      if (deleteError) throw deleteError;
+      if (deleteError) {
+        throw deleteError;
+      }
     } catch (err) {
       console.error('Error removing name option:', err);
       setError(err);

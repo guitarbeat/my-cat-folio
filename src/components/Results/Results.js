@@ -38,7 +38,9 @@ function Results({ ratings, onStartNew, userName, onUpdateRatings, currentTourna
 
   // Convert vote history to bracket matches
   const getBracketMatches = useCallback(() => {
-    if (!voteHistory || !voteHistory.length) return [];
+    if (!voteHistory || !voteHistory.length) {
+      return [];
+    }
     
     // Filter to only include matches from the current tournament
     const tournamentNameSet = new Set(currentTournamentNames?.map(n => n.name) || []);
@@ -165,9 +167,13 @@ function Results({ ratings, onStartNew, userName, onUpdateRatings, currentTourna
 
     return () => {
       if (window.vfx) {
-        if (header) window.vfx.remove(header);
+        if (header) {
+          window.vfx.remove(header);
+        }
         statCards.forEach(card => window.vfx.remove(card));
-        if (bracket) window.vfx.remove(bracket);
+        if (bracket) {
+          window.vfx.remove(bracket);
+        }
       }
     };
   }, []);
