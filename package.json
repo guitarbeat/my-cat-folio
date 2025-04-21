@@ -1,18 +1,27 @@
 {
   "name": "meow-namester",
   "version": "1.0.1",
+  "description": "A React application for managing cat names and related data",
   "main": "index.js",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "lint:css": "stylelint \"src/**/*.css\" --fix"
+    "lint:css": "stylelint \"src/**/*.css\" --fix",
+    "lint:js": "eslint \"src/**/*.{js,jsx}\" --fix",
+    "format": "prettier --write \"src/**/*.{js,jsx,css,scss}\"",
+    "prepare": "husky install",
+    "audit:fix": "npm audit fix"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "react",
+    "cats",
+    "names",
+    "management"
+  ],
+  "author": "Aaron",
   "license": "ISC",
-  "description": "",
   "dependencies": {
     "@googleapis/calendar": "^9.8.0",
     "@hello-pangea/dnd": "^18.0.1",
@@ -46,11 +55,29 @@
   },
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
+    "@types/react": "^18.2.0",
+    "@types/react-dom": "^18.2.0",
+    "eslint": "^8.56.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-react": "^7.33.2",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "husky": "^9.0.11",
+    "lint-staged": "^15.2.2",
     "postcss-preset-env": "^10.1.5",
     "prettier": "^3.5.3",
     "stylelint": "^16.17.0",
     "stylelint-config-recess-order": "^6.0.0",
     "stylelint-config-standard": "^37.0.0",
     "stylelint-declaration-block-no-ignored-properties": "^2.8.0"
+  },
+  "lint-staged": {
+    "*.{js,jsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{css,scss}": [
+      "stylelint --fix",
+      "prettier --write"
+    ]
   }
 }
