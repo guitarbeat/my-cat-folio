@@ -13,6 +13,7 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import LoadingSpinner from './components/LoadingSpinner/LoadingSpinner';
+import { Analytics } from "@vercel/analytics/react"
 
 // Check if we're on the test loading page
 const isLoadingTest = window.location.pathname.includes('/loading');
