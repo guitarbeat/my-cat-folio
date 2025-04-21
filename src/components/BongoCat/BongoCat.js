@@ -12,7 +12,7 @@ const BongoCat = memo(({
   color = '#000', 
   onBongo, 
   containerRef, 
-  offsetY = -160, 
+  offsetY = -120,
   zIndex = 20 
 }) => {
   const [isPawsDown, setIsPawsDown] = useState(false);
@@ -34,11 +34,11 @@ const BongoCat = memo(({
       const containerWidth = rect.width;
       
       // Position cat slightly down from the top of the container
-      let optimalTop = 29; // Add 20px padding from top
+      let optimalTop = 19;
       
       // Apply an additional offset for narrow screens to position the cat better
       if (viewportWidth <= 768) {
-        const mobileAdjustment = 5; // Smaller adjustment for mobile
+        const mobileAdjustment = 5;
         optimalTop += mobileAdjustment;
       }
       

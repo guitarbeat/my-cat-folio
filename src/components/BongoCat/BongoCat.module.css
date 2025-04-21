@@ -16,6 +16,7 @@
   height: calc(80rem * var(--scale));
   transform: scale(var(--cat-size));
   position: relative;
+  top: -10px; /* Added to move the cat up slightly */
 }
 
 .container * {
@@ -240,6 +241,7 @@
   aspect-ratio: 1;
   pointer-events: none;
   transition: top 0.2s ease-out, opacity 0.3s ease;
+  z-index: 20; /* Ensure cat stays above other elements */
 }
 
 /* No longer needed since we're using a different approach for the paws */
