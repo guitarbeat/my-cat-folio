@@ -51,6 +51,11 @@ The app will be available at `http://localhost:3000`.
 
 If additional packages are missing, run `npm install` to ensure all dependencies from `package.json` are installed.
 
+## License
+
+Use of this project requires express permission from the author. See the
+[LICENSE](LICENSE) file for details on requesting permission.
+
 ## Linting
 
 Run ESLint on the JavaScript and JSX files:
