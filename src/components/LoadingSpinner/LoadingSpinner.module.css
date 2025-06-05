@@ -79,9 +79,7 @@
 
 /* Dark mode adjustments */
 :global(body:not(.light-theme)) {
-  :root {
-    --overlay-background: rgba(0, 0, 0, 0.7);
-  }
+  --overlay-background: rgba(0, 0, 0, 0.7);
 }
 
 /* Attribution styles */
