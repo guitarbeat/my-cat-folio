@@ -20,12 +20,11 @@ import {
   RadarController,
   RadialLinearScale,
 } from "chart.js";
-import { Bar, Pie } from "react-chartjs-2";
+import { Bar, Pie, Line } from "react-chartjs-2";
 import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
 import StatsCard from "../StatsCard/StatsCard";
 import styles from "./Profile.module.css";
 import { formatTimestamp } from "../../utils/adminActions";
-import PropTypes from "prop-types";
 
 // Register Chart.js components
 ChartJS.register(
@@ -43,7 +42,7 @@ ChartJS.register(
   RadialLinearScale,
 );
 
-// Constants and Configurations
+
 const TIME_FILTERS = ["All Time", "Today", "This Week", "This Month"];
 export const DEFAULT_RATING = 1500;
 const ACTIVE_THRESHOLD = 3600000; // 1 hour in milliseconds
@@ -85,7 +84,7 @@ const Button = memo(
   ),
 );
 
-const Modal = memo(({ title, isOpen, onClose, children }) => {
+const Modal = memo(({ title, isOpen, children }) => {
   if (!isOpen) {
     return null;
   }
@@ -349,7 +348,7 @@ const NameCard = memo(
         {isAdmin && (
           <div className={styles.cardActions}>
             <button
-              onClick={() => onToggleVisibility(id, nameText)}
+              onClick={() => onToggleVisibility(id)}
               className={`${styles.visibilityToggle} ${isHidden ? styles.hidden : ""}`}
               aria-label={`${isHidden ? "Show" : "Hide"} ${nameText}`}
             >
@@ -1504,17 +1503,15 @@ const PerformanceInsights = memo(({ ratings }) => {
 const Profile = ({ userName, onStartNewTournament }) => {
   // State
   const [isAdmin] = useState(userName.toLowerCase() === "aaron");
-  const [viewMode, setViewMode] = useState("individual");
   const [hiddenNames, setHiddenNames] = useState(new Set());
   const [showDeleteNameConfirm, setShowDeleteNameConfirm] = useState(false);
-  const [nameToDelete, setNameToDelete] = useState(null);
+  const [nameToDelete] = useState(null);
   const [deleteNameStatus, setDeleteNameStatus] = useState({
     loading: false,
     error: null,
   });
   const [allUsersRatings, setAllUsersRatings] = useState({});
   const [userLastActivity, setUserLastActivity] = useState({});
-  const [loadingAllUsers, setLoadingAllUsers] = useState(false);
   const [currentUserRatings, setCurrentUserRatings] = useState([]);
   const [currentlyViewedUser, setCurrentlyViewedUser] = useState(userName);
   const [showAggregated, setShowAggregated] = useState(false);
@@ -1593,7 +1590,6 @@ const Profile = ({ userName, onStartNewTournament }) => {
 
   const fetchAllUsersRatings = useCallback(async () => {
     try {
-      setLoadingAllUsers(true);
 
       const { data, error: fetchError } = await supabase.from(
         "cat_name_ratings",
@@ -1620,7 +1616,7 @@ const Profile = ({ userName, onStartNewTournament }) => {
     } catch (err) {
       console.error("Error fetching all users ratings:", err);
     } finally {
-      setLoadingAllUsers(false);
+      // no-op
     }
   }, []);
 
@@ -1672,7 +1668,7 @@ const Profile = ({ userName, onStartNewTournament }) => {
   );
 
   const handleToggleNameVisibility = useCallback(
-    async (nameId, nameText) => {
+    async (nameId) => {
       const isHidden = hiddenNames.has(nameId);
       if (
         !window.confirm(
@@ -1718,26 +1714,6 @@ const Profile = ({ userName, onStartNewTournament }) => {
     [setRatingsData],
   );
 
-  const sortedRatings = useMemo(() => {
-    const dataToUse =
-      currentlyViewedUser !== userName ? currentUserRatings : ratingsData;
-    return [...dataToUse].sort((a, b) => {
-      switch (sortBy) {
-        case FILTER_OPTIONS.SORT.RATING:
-          return b.rating - a.rating;
-        case FILTER_OPTIONS.SORT.WORST_RATING:
-          return a.rating - b.rating;
-        case FILTER_OPTIONS.SORT.NAME:
-          return a.name.localeCompare(b.name);
-        case FILTER_OPTIONS.SORT.LAST_UPDATED:
-          return new Date(b.updated_at) - new Date(a.updated_at);
-        case FILTER_OPTIONS.SORT.MATCHES:
-          return b.wins + b.losses - (a.wins + a.losses);
-        default:
-          return 0;
-      }
-    });
-  }, [ratingsData, sortBy, currentUserRatings, currentlyViewedUser, userName]);
 
   const filteredRatings = useMemo(() => {
     const dataToUse =
@@ -1799,7 +1775,6 @@ const Profile = ({ userName, onStartNewTournament }) => {
 
   if (ratingsLoading) {
     return <LoadingSpinner />;
-import StatsCard from "../StatsCard/StatsCard";
   }
   if (ratingsError) {
     return <div>Error: {ratingsError.message}</div>;
@@ -1821,7 +1796,7 @@ import StatsCard from "../StatsCard/StatsCard";
   return (
     <div className={styles.profileContainer}>
       <header className={styles.profileHeader}>
-        <h1>{currentlyViewedUser}'s Cat Name Rankings</h1>
+        <h1>{currentlyViewedUser}&apos;s Cat Name Rankings</h1>
         <div className={styles.headerActions}>
           {isAdmin && (
             <Button
@@ -1945,7 +1920,6 @@ import StatsCard from "../StatsCard/StatsCard";
       <Modal
         title="Delete Name"
         isOpen={showDeleteNameConfirm}
-        onClose={() => setShowDeleteNameConfirm(false)}
       >
         <p>
           Are you sure you want to permanently delete{" "}

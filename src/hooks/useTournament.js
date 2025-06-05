@@ -13,6 +13,7 @@ export function useTournament({
 
   const invalidNames = !Array.isArray(names) || names.length < 2;
 
+
   // Create a stable storage key using the names array and user name
   const tournamentId = useMemo(() => {
     const sortedNames = [...names]
@@ -75,13 +76,15 @@ export function useTournament({
     }
   }, [userName, tournamentState.userName, updateTournamentState]);
 
-  // Reset error state when names change
-  useEffect(() => {
+// Validate names array when it changes
+useEffect(() => {
+  if (!Array.isArray(names) || names.length < 2) {
+    console.error("Invalid names array:", names);
+    setIsError(true);
+  } else {
     setIsError(false);
-    if (invalidNames) {
-      setIsError(true);
-    }
-  }, [names, invalidNames]);
+  }
+}, [names]);
 
 
   // Reset tournament state when names change
@@ -414,8 +417,10 @@ export function useTournament({
       setCurrentMatch(null);
       setIsTransitioning(false);
       setRoundNumber(1);
+
         setCurrentMatchNumber(1);
         updateTournamentState({ matchHistory: [] });
+
       setCanUndo(false);
       throw error; // Propagate error to parent
     }
@@ -431,7 +436,9 @@ export function useTournament({
     const lastVote = matchHistory[matchHistory.length - 1];
     setCurrentMatch(lastVote.match);
     setCurrentMatchNumber(lastVote.matchNumber);
+
       updateTournamentState({ matchHistory: matchHistory.slice(0, -1) });
+
 
     if (sorter) {
       sorter.undoLastPreference();
@@ -450,21 +457,19 @@ export function useTournament({
 
   const progress = Math.round((currentMatchNumber / totalMatches) * 100);
 
-  if (invalidNames) {
+  if (isError) {
     return {
       currentMatch: null,
-      isTransitioning: false,
+      handleVote: () => {},
+      progress: 0,
       roundNumber: 0,
       currentMatchNumber: 0,
       totalMatches: 0,
-      progress: 0,
-      handleVote: () => {},
-      handleUndo: () => {},
-      canUndo: false,
-      getCurrentRatings: () => [],
-      isError,
       matchHistory: [],
-      userName: userName || "anonymous",
+      getCurrentRatings: () => [],
+      isError: true,
+      userName: tournamentState.userName,
+
     };
   }
 

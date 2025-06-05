@@ -10,7 +10,6 @@ import React, {
   useEffect,
   useRef,
   useMemo,
-  memo,
 } from "react";
 import PropTypes from "prop-types";
 import { useTournament } from "../../hooks/useTournament";
@@ -27,7 +26,6 @@ function TournamentContent({
   onComplete,
   existingRatings = {},
   names = [],
-  userName,
   onVote,
 }) {
   const [randomizedNames, setRandomizedNames] = useState([]);

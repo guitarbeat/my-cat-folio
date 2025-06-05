@@ -16,6 +16,7 @@
  * @requires REACT_APP_SUPABASE_ANON_KEY - Environment variable for Supabase anonymous key
  */
 
+/* eslint-env node */
 import { createClient } from '@supabase/supabase-js';
 import devLog from '../utils/logger';
 

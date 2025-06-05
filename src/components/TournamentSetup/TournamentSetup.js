@@ -442,7 +442,6 @@ function TournamentSetupContent({ onStart }) {
       prev.map((img) => {
         if (img.isResizing) {
           const deltaX = e.clientX - img.resizeStart.x;
-          const deltaY = e.clientY - img.resizeStart.y;
           const aspectRatio = img.size.width / img.size.height;
 
           let newWidth = img.size.width;
