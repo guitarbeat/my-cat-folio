@@ -32,23 +32,3 @@ export const formatTimestamp = (timestamp) => {
   return date.toLocaleDateString();
 };
 
-export const calculateUserStats = (ratings) => {
-  if (!ratings?.length) {
-    return {
-      avgRating: 0,
-      totalGames: 0,
-      winRate: 0,
-    };
-  }
-
-  const totalGames = ratings.reduce((sum, r) => sum + (r.wins + r.losses), 0);
-  const totalWins = ratings.reduce((sum, r) => sum + r.wins, 0);
-
-  return {
-    avgRating: Math.round(
-      ratings.reduce((sum, r) => sum + (r.rating || 1500), 0) / ratings.length,
-    ),
-    totalGames,
-    winRate: totalGames ? Math.round((totalWins / totalGames) * 100) : 0,
-  };
-};
