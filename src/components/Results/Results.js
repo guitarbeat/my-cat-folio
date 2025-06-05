@@ -10,18 +10,7 @@ import RankingAdjustment from "../RankingAdjustment/RankingAdjustment";
 import Bracket from "../Bracket/Bracket";
 import CalendarButton from "../CalendarButton/CalendarButton";
 import styles from "./Results.module.css";
-
-// Memoized stats card component for better performance
-const StatsCard = memo(({ title, value }) => (
-  <div
-    className={styles.statCard}
-    role="status"
-    aria-label={`${title}: ${value}`}
-  >
-    <h3>{title}</h3>
-    <div className={styles.statValue}>{value}</div>
-  </div>
-));
+import StatsCard from "../StatsCard/StatsCard";
 
 // Toast component extracted for reusability
 const Toast = memo(({ message, type, onClose }) => (
@@ -263,7 +252,12 @@ function Results({
 
       <div className={styles.content}>
         <div className={styles.statsGrid}>
-          <StatsCard title="Total Names" value={currentRankings.length} />
+          <StatsCard
+            title="Total Names"
+            value={currentRankings.length}
+            className={styles.statCard}
+            valueClassName={styles.statValue}
+          />
         </div>
 
         <RankingAdjustment
