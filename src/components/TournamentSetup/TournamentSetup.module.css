@@ -1,6 +1,6 @@
 /* Base Layout */
 .container {
-  composes: container from '../../styles/base.css';
+  composes: container from "../../styles/base.css";
   width: 100%;
   max-width: var(--container-max-width);
   padding: var(--space-4);
@@ -33,7 +33,7 @@
 }
 
 .expandToggle {
-  composes: btnSecondary from '../../styles/base.css';
+  composes: btnSecondary from "../../styles/base.css";
   display: flex;
   align-items: center;
   gap: var(--space-2);
@@ -90,12 +90,12 @@
 }
 
 .heading {
-  composes: heading3 from '../../styles/base.css';
+  composes: heading3 from "../../styles/base.css";
   margin-bottom: var(--space-2);
 }
 
 .selectionGuide {
-  composes: text from '../../styles/base.css';
+  composes: text from "../../styles/base.css";
   color: var(--text-secondary);
   margin-bottom: var(--space-4);
 }
@@ -109,7 +109,7 @@
 
 /* Name Counter */
 .nameCount {
-  composes: cardInteractive from '../../styles/base.css';
+  composes: cardInteractive from "../../styles/base.css";
   padding: var(--space-4);
   margin: var(--space-6) 0;
 }
@@ -128,7 +128,7 @@
 }
 
 .selectAllButton {
-  composes: btnSecondary from '../../styles/base.css';
+  composes: btnSecondary from "../../styles/base.css";
 }
 
 .helperText {
@@ -146,7 +146,7 @@
 }
 
 .startButton {
-  composes: btnPrimary from '../../styles/base.css';
+  composes: btnPrimary from "../../styles/base.css";
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -174,7 +174,7 @@
 }
 
 .photoSidebarContent {
-  composes: cardInteractive from '../../styles/base.css';
+  composes: cardInteractive from "../../styles/base.css";
   padding: var(--space-4);
   margin-bottom: var(--space-4);
 }
@@ -207,7 +207,7 @@
 
 /* Suggestion Section */
 .suggestionSection {
-  composes: cardInteractive from '../../styles/base.css';
+  composes: cardInteractive from "../../styles/base.css";
   padding: var(--space-4);
 }
 
@@ -259,7 +259,7 @@
 }
 
 .submitButton {
-  composes: btnPrimary from '../../styles/base.css';
+  composes: btnPrimary from "../../styles/base.css";
   width: 100%;
   margin-top: var(--space-2);
 }
@@ -294,8 +294,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: width var(--duration-normal) var(--ease-out),
-              height var(--duration-normal) var(--ease-out);
+  transition:
+    width var(--duration-normal) var(--ease-out),
+    height var(--duration-normal) var(--ease-out);
 }
 
 .enlargedImage {
@@ -369,7 +370,7 @@
 }
 
 .minimizeButton {
-  composes: btnIcon from '../../styles/base.css';
+  composes: btnIcon from "../../styles/base.css";
   width: 40px;
   height: 40px;
   font-size: var(--text-xl);
@@ -390,7 +391,7 @@
 }
 
 .closeButton {
-  composes: btnIcon from '../../styles/base.css';
+  composes: btnIcon from "../../styles/base.css";
   width: 40px;
   height: 40px;
   font-size: var(--text-2xl);
@@ -436,8 +437,13 @@
 
 /* Animations */
 @keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.6; }
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.6;
+  }
 }
 
 /* Dark Mode */
@@ -513,4 +519,4 @@
   .helperText {
     animation: none;
   }
-} 
+}

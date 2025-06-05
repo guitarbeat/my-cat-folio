@@ -45,33 +45,33 @@ class EloRating {
   calculateNewRatings(ratingA, ratingB, outcome, stats = {}) {
     const expectedA = this.getExpectedScore(ratingA, ratingB);
     const expectedB = this.getExpectedScore(ratingB, ratingA);
-    
+
     let actualA, actualB;
     let winsA = stats.winsA || 0;
     let lossesA = stats.lossesA || 0;
     let winsB = stats.winsB || 0;
     let lossesB = stats.lossesB || 0;
 
-    switch(outcome) {
-      case 'left':
+    switch (outcome) {
+      case "left":
         actualA = 1;
         actualB = 0;
         winsA++;
         lossesB++;
         break;
-      case 'right':
+      case "right":
         actualA = 0;
         actualB = 1;
         lossesA++;
         winsB++;
         break;
-      case 'both': // Both names get an equal significant boost
+      case "both": // Both names get an equal significant boost
         actualA = 0.7;
         actualB = 0.7;
         winsA++;
         winsB++;
         break;
-      case 'none': // Both names get an equal smaller boost
+      case "none": // Both names get an equal smaller boost
         actualA = 0.3;
         actualB = 0.3;
         break;
@@ -89,9 +89,9 @@ class EloRating {
       winsA,
       lossesA,
       winsB,
-      lossesB
+      lossesB,
     };
   }
 }
 
-export default EloRating; 
+export default EloRating;

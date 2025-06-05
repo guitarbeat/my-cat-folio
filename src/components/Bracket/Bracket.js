@@ -3,7 +3,7 @@
  * @description A React component that displays a tournament bracket visualization.
  * Shows the progression of matches in a merge sort tournament structure.
  * Supports different match outcomes including wins, ties, and skipped matches.
- * 
+ *
  * @example
  * <Bracket
  *   matches={[
@@ -11,7 +11,7 @@
  *     { id: 2, name1: "Luna", name2: "Shadow", winner: 1 }
  *   ]}
  * />
- * 
+ *
  * @param {Object} props
  * @param {Array} props.matches - Array of match objects containing match details
  * @param {number} props.matches[].id - Unique identifier for the match
@@ -20,16 +20,16 @@
  * @param {number} props.matches[].winner - Winner indicator (-1: first, 1: second, 0: both, 2: skip)
  */
 
-import React, { useMemo } from 'react';
-import styles from './Bracket.module.css';
+import React, { useMemo } from "react";
+import styles from "./Bracket.module.css";
 
 const MatchResult = {
-  PENDING: 'pending',
-  FIRST_WIN: 'first',
-  SECOND_WIN: 'second',
-  BOTH_ADVANCE: 'both',
-  SKIPPED: 'skip',
-  NEITHER: 'neither'
+  PENDING: "pending",
+  FIRST_WIN: "first",
+  SECOND_WIN: "second",
+  BOTH_ADVANCE: "both",
+  SKIPPED: "skip",
+  NEITHER: "neither",
 };
 
 function Match({ match, isLastRound }) {
@@ -73,13 +73,33 @@ function Match({ match, isLastRound }) {
   const getResultBadge = (isFirst) => {
     switch (status) {
       case MatchResult.FIRST_WIN:
-        return isFirst && <span className={styles.winnerBadge} title="Winner">✓</span>;
+        return (
+          isFirst && (
+            <span className={styles.winnerBadge} title="Winner">
+              ✓
+            </span>
+          )
+        );
       case MatchResult.SECOND_WIN:
-        return !isFirst && <span className={styles.winnerBadge} title="Winner">✓</span>;
+        return (
+          !isFirst && (
+            <span className={styles.winnerBadge} title="Winner">
+              ✓
+            </span>
+          )
+        );
       case MatchResult.BOTH_ADVANCE:
-        return <span className={styles.tieBadge} title="Both Liked">♥</span>;
+        return (
+          <span className={styles.tieBadge} title="Both Liked">
+            ♥
+          </span>
+        );
       case MatchResult.NEITHER:
-        return <span className={styles.skipBadge} title="Skipped">⊘</span>;
+        return (
+          <span className={styles.skipBadge} title="Skipped">
+            ⊘
+          </span>
+        );
       default:
         return null;
     }
@@ -115,16 +135,12 @@ function Round({ matches, roundNumber, isLastRound }) {
       <div className={styles.roundHeader}>
         <span className={styles.roundTitle}>Round {roundNumber}</span>
         <span className={styles.roundMatches}>
-          {matches.length} {matches.length === 1 ? 'match' : 'matches'}
+          {matches.length} {matches.length === 1 ? "match" : "matches"}
         </span>
       </div>
       <div className={styles.matches}>
         {matches.map((match) => (
-          <Match 
-            key={match.id} 
-            match={match} 
-            isLastRound={isLastRound}
-          />
+          <Match key={match.id} match={match} isLastRound={isLastRound} />
         ))}
       </div>
     </div>
@@ -136,11 +152,13 @@ function Bracket({ matches }) {
     if (!matches || matches.length === 0) {
       return [];
     }
-    
+
     const totalRounds = Math.ceil(Math.log2(matches.length + 1));
-    const rounds = Array(totalRounds).fill().map(() => []);
-    
-    matches.forEach(match => {
+    const rounds = Array(totalRounds)
+      .fill()
+      .map(() => []);
+
+    matches.forEach((match) => {
       const roundIndex = Math.floor(Math.log2(match.id));
       if (roundIndex >= 0 && roundIndex < totalRounds) {
         rounds[roundIndex].push(match);
@@ -148,17 +166,13 @@ function Bracket({ matches }) {
     });
 
     // Sort matches within each round
-    rounds.forEach(round => round.sort((a, b) => a.id - b.id));
-    
+    rounds.forEach((round) => round.sort((a, b) => a.id - b.id));
+
     return rounds;
   }, [matches]);
 
   if (!matches || matches.length === 0) {
-    return (
-      <div className={styles.emptyState}>
-        No matches to display yet
-      </div>
-    );
+    return <div className={styles.emptyState}>No matches to display yet</div>;
   }
 
   return (
@@ -177,4 +191,4 @@ function Bracket({ matches }) {
   );
 }
 
-export default React.memo(Bracket); 
+export default React.memo(Bracket);

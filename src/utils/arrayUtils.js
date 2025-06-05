@@ -5,7 +5,7 @@
  */
 export function shuffleArray(array) {
   if (!Array.isArray(array)) {
-    console.warn('shuffleArray received non-array input:', array);
+    console.warn("shuffleArray received non-array input:", array);
     return [];
   }
 
@@ -15,4 +15,4 @@ export function shuffleArray(array) {
     [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
   }
   return newArray;
-} 
+}

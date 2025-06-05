@@ -1,7 +1,7 @@
 @value cardBase, pageContainer, gridLayout from '../../styles/shared.module.css';
 
 .container {
-  composes: container from '../../styles/base.css';
+  composes: container from "../../styles/base.css";
   width: 100%;
   max-width: 1024px;
   padding: var(--space-4);
@@ -89,7 +89,7 @@
 }
 
 .statCard {
-  composes: cardInteractive from '../../styles/base.css';
+  composes: cardInteractive from "../../styles/base.css";
   position: relative;
   min-width: 140px;
   padding: 1.5rem;
@@ -134,7 +134,7 @@
 }
 
 .startNewButton {
-  composes: btnPrimary from '../../styles/base.css';
+  composes: btnPrimary from "../../styles/base.css";
   display: inline-flex;
   gap: var(--space-2);
   align-items: center;
@@ -204,7 +204,7 @@
 }
 
 .tournamentBracket {
-  composes: cardInteractive from '../../styles/base.css';
+  composes: cardInteractive from "../../styles/base.css";
   padding: var(--space-8);
   margin: var(--space-8) 0;
   overflow-x: auto;
@@ -218,7 +218,9 @@
 }
 
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 @keyframes slideIn {
@@ -401,7 +403,7 @@
 
 /* Tournament Bracket */
 .bracketContainer {
-  composes: cardInteractive from '../../styles/base.css';
+  composes: cardInteractive from "../../styles/base.css";
   padding: var(--space-4);
   margin-bottom: var(--space-6);
   overflow-x: auto;
@@ -416,7 +418,7 @@
 }
 
 .actionButton {
-  composes: btnPrimary from '../../styles/base.css';
+  composes: btnPrimary from "../../styles/base.css";
   min-width: 200px;
 }
 
@@ -449,4 +451,4 @@
     width: 100%;
     justify-content: center;
   }
-} 
+}

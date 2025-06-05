@@ -9,10 +9,14 @@
   }
 
   .resultsHeader {
-    background: linear-gradient(to right, var(--primary-900), var(--primary-800));
+    background: linear-gradient(
+      to right,
+      var(--primary-900),
+      var(--primary-800)
+    );
   }
 
   .rankingItem:hover {
     background: var(--card-hover-dark);
   }
-} 
+}

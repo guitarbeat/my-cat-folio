@@ -17,7 +17,7 @@
 /* Layout & Container
    ========================================================================== */
 .tournament {
-  composes: container from '../../styles/base.css';
+  composes: container from "../../styles/base.css";
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -47,8 +47,9 @@
   border: 1px solid var(--border-color);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-md);
-  transition: transform var(--duration-normal) var(--ease-out),
-              box-shadow var(--duration-normal) var(--ease-out);
+  transition:
+    transform var(--duration-normal) var(--ease-out),
+    box-shadow var(--duration-normal) var(--ease-out);
   will-change: transform, box-shadow;
 }
 
@@ -58,7 +59,7 @@
 }
 
 .roundInfo {
-  composes: flex-col from '../../styles/base.css';
+  composes: flex-col from "../../styles/base.css";
   gap: var(--space-2);
   font-weight: 500;
 }
@@ -70,7 +71,7 @@
 }
 
 .matchCount {
-  composes: textSm from '../../styles/base.css';
+  composes: textSm from "../../styles/base.css";
   color: var(--text-secondary);
 }
 
@@ -100,7 +101,7 @@
   width: 100%;
   max-width: 1000px;
   gap: var(--space-6);
-  composes: cardInteractive from '../../styles/base.css';
+  composes: cardInteractive from "../../styles/base.css";
   padding: var(--space-6);
   background: var(--card-background);
   border: 1px solid var(--border-color);
@@ -165,7 +166,7 @@
 }
 
 .extraOptionsButton {
-  composes: btnSecondary from '../../styles/base.css';
+  composes: btnSecondary from "../../styles/base.css";
   min-width: 120px;
   transition: all var(--duration-normal) var(--ease-out);
 }
@@ -179,7 +180,7 @@
 }
 
 .selected {
-  composes: btnPrimary from '../../styles/base.css';
+  composes: btnPrimary from "../../styles/base.css";
   background: var(--primary-color);
 }
 
@@ -207,7 +208,7 @@
 }
 
 .controlButton {
-  composes: btnPrimary from '../../styles/base.css';
+  composes: btnPrimary from "../../styles/base.css";
 }
 
 .soundControls {
@@ -221,7 +222,7 @@
 }
 
 .soundToggleButton {
-  composes: btnSecondary from '../../styles/base.css';
+  composes: btnSecondary from "../../styles/base.css";
   display: flex;
   align-items: center;
   justify-content: center;
@@ -295,7 +296,7 @@
 }
 
 .bracketToggle {
-  composes: btnSecondary from '../../styles/base.css';
+  composes: btnSecondary from "../../styles/base.css";
   width: 100%;
   max-width: 800px;
   margin: var(--space-4) auto;
@@ -351,7 +352,7 @@
 /* Modal Components
    ========================================================================== */
 .modal {
-  composes: modal from '../../styles/base.css';
+  composes: modal from "../../styles/base.css";
   animation: fadeIn var(--duration-normal) var(--ease-out);
   /* Improve modal accessibility */
   outline: none;
@@ -359,52 +360,52 @@
 }
 
 .modalBackdrop {
-  composes: modalBackdrop from '../../styles/base.css';
+  composes: modalBackdrop from "../../styles/base.css";
   animation: fadeIn var(--duration-normal) var(--ease-out);
 }
 
 .modalContent {
-  composes: flex-col from '../../styles/base.css';
+  composes: flex-col from "../../styles/base.css";
   gap: var(--space-4);
 }
 
 .modalTitle {
-  composes: heading2 from '../../styles/base.css';
+  composes: heading2 from "../../styles/base.css";
 }
 
 .modalText {
-  composes: text from '../../styles/base.css';
+  composes: text from "../../styles/base.css";
 }
 
 .modalActions {
-  composes: flex-center from '../../styles/base.css';
+  composes: flex-center from "../../styles/base.css";
   gap: var(--space-4);
   margin-top: var(--space-4);
 }
 
 .confirmButton {
-  composes: btnPrimary from '../../styles/base.css';
+  composes: btnPrimary from "../../styles/base.css";
 }
 
 .cancelButton {
-  composes: btnSecondary from '../../styles/base.css';
+  composes: btnSecondary from "../../styles/base.css";
 }
 
 /* Animations
    ========================================================================== */
 @keyframes fadeIn {
-  from { 
+  from {
     opacity: 0;
     transform: scale(0.98);
   }
-  to { 
+  to {
     opacity: 1;
     transform: scale(1);
   }
 }
 
 @keyframes slideUp {
-  from { 
+  from {
     opacity: 0;
     transform: translateY(10px);
   }
@@ -415,9 +416,15 @@
 }
 
 @keyframes pulse {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.05); }
-  100% { transform: scale(1); }
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
 }
 
 @keyframes fadeInSlide {
@@ -657,7 +664,7 @@
   .bracketView {
     animation: none;
   }
-  
+
   .bracketToggle,
   .bracketToggleIcon {
     transition: none;
@@ -682,7 +689,7 @@
 }
 
 .randomizeButton {
-  composes: btnSecondary from '../../styles/base.css';
+  composes: btnSecondary from "../../styles/base.css";
   display: flex;
   align-items: center;
   gap: var(--space-2);
@@ -707,7 +714,7 @@
   padding: 15px;
   border-radius: 10px;
   color: white;
-  font-family: 'Press Start 2P', monospace;
+  font-family: "Press Start 2P", monospace;
   font-size: 0.8rem;
   z-index: 1000;
   display: flex;
@@ -761,7 +768,7 @@
 }
 
 .resultMessage::before {
-  content: '🏆';
+  content: "🏆";
   font-size: 1.2em;
 }
 
@@ -1047,4 +1054,4 @@
     background: var(--surface-dark);
     border-color: var(--border-color-dark);
   }
-} 
+}
