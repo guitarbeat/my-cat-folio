@@ -22,6 +22,7 @@ import {
 } from "chart.js";
 import { Bar, Pie } from "react-chartjs-2";
 import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
+import StatsCard from "../StatsCard/StatsCard";
 import styles from "./Profile.module.css";
 import { formatTimestamp } from "../../utils/adminActions";
 import PropTypes from "prop-types";
@@ -122,13 +123,6 @@ const Card = memo(({ className, children, ...props }) => (
   </div>
 ));
 
-const StatsCard = memo(({ label, value, emoji }) => (
-  <Card className={styles.statItem}>
-    <span className={styles.statLabel}>{label}</span>
-    <span className={styles.statValue}>{value}</span>
-    {emoji && <span className={styles.statEmoji}>{emoji}</span>}
-  </Card>
-));
 
 // Utility Functions
 const calculateStats = (ratings, filterStatus = FILTER_OPTIONS.STATUS.ALL) => {
@@ -233,25 +227,57 @@ const ProfileStats = memo(({ ratings, filterStatus }) => {
         }
         value={stats.totalNames}
         emoji="📝"
+        className={styles.statItem}
+        labelClassName={styles.statLabel}
+        valueClassName={styles.statValue}
+        emojiClassName={styles.statEmoji}
       />
       <StatsCard
         label="Average Rating"
         value={stats.averageRating}
         emoji="⭐"
+        className={styles.statItem}
+        labelClassName={styles.statLabel}
+        valueClassName={styles.statValue}
+        emojiClassName={styles.statEmoji}
       />
-      <StatsCard label="Total Matches" value={stats.totalMatches} emoji="🎮" />
-      <StatsCard label="Win Rate" value={`${stats.winRate}%`} emoji="🏆" />
+      <StatsCard
+        label="Total Matches"
+        value={stats.totalMatches}
+        emoji="🎮"
+        className={styles.statItem}
+        labelClassName={styles.statLabel}
+        valueClassName={styles.statValue}
+        emojiClassName={styles.statEmoji}
+      />
+      <StatsCard
+        label="Win Rate"
+        value={`${stats.winRate}%`}
+        emoji="🏆"
+        className={styles.statItem}
+        labelClassName={styles.statLabel}
+        valueClassName={styles.statValue}
+        emojiClassName={styles.statEmoji}
+      />
       {filterStatus === FILTER_OPTIONS.STATUS.ALL && (
         <>
           <StatsCard
             label="Active Names"
             value={stats.activeNames}
             emoji="✅"
+            className={styles.statItem}
+            labelClassName={styles.statLabel}
+            valueClassName={styles.statValue}
+            emojiClassName={styles.statEmoji}
           />
           <StatsCard
             label="Hidden Names"
             value={stats.hiddenNames}
             emoji="🔒"
+            className={styles.statItem}
+            labelClassName={styles.statLabel}
+            valueClassName={styles.statValue}
+            emojiClassName={styles.statEmoji}
           />
         </>
       )}
@@ -957,29 +983,57 @@ const AggregatedStats = memo(
             }
             value={stats.totalNames}
             emoji="📝"
+            className={styles.statItem}
+            labelClassName={styles.statLabel}
+            valueClassName={styles.statValue}
+            emojiClassName={styles.statEmoji}
           />
           <StatsCard
             label="Average Rating"
             value={stats.averageRating}
             emoji="⭐"
+            className={styles.statItem}
+            labelClassName={styles.statLabel}
+            valueClassName={styles.statValue}
+            emojiClassName={styles.statEmoji}
           />
           <StatsCard
             label="Total Matches"
             value={stats.totalMatches}
             emoji="🎮"
+            className={styles.statItem}
+            labelClassName={styles.statLabel}
+            valueClassName={styles.statValue}
+            emojiClassName={styles.statEmoji}
           />
-          <StatsCard label="Win Rate" value={`${stats.winRate}%`} emoji="🏆" />
+          <StatsCard
+            label="Win Rate"
+            value={`${stats.winRate}%`}
+            emoji="🏆"
+            className={styles.statItem}
+            labelClassName={styles.statLabel}
+            valueClassName={styles.statValue}
+            emojiClassName={styles.statEmoji}
+          />
           {filterStatus === FILTER_OPTIONS.STATUS.ALL && (
             <>
               <StatsCard
                 label="Active Names"
                 value={stats.activeNames}
                 emoji="✅"
+                className={styles.statItem}
+                labelClassName={styles.statLabel}
+                valueClassName={styles.statValue}
+                emojiClassName={styles.statEmoji}
               />
               <StatsCard
                 label="Hidden Names"
                 value={stats.hiddenNames}
                 emoji="🔒"
+                className={styles.statItem}
+                labelClassName={styles.statLabel}
+                valueClassName={styles.statValue}
+                emojiClassName={styles.statEmoji}
               />
             </>
           )}
@@ -1762,6 +1816,7 @@ const Profile = ({ userName, onStartNewTournament }) => {
 
   if (ratingsLoading) {
     return <LoadingSpinner />;
+import StatsCard from "../StatsCard/StatsCard";
   }
   if (ratingsError) {
     return <div>Error: {ratingsError.message}</div>;
