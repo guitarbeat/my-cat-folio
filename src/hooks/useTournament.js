@@ -11,7 +11,6 @@ export function useTournament({
 }) {
   const { userName } = useUserSession();
 
-  const invalidNames = !Array.isArray(names) || names.length < 2;
 
 
   // Create a stable storage key using the names array and user name

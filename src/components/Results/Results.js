@@ -5,7 +5,7 @@
  */
 
 
-import React, { useState, useEffect, useCallback, memo, useMemo } from "react";
+import React, { useState, useEffect, useCallback, memo } from "react";
 
 import PropTypes from "prop-types";
 

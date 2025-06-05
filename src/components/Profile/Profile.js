@@ -3,6 +3,7 @@
  * @description Displays user statistics and saved tournament data.
  */
 import React, { useState, useCallback, useMemo, memo, useEffect } from "react";
+import PropTypes from "prop-types";
 import useSupabaseStorage from "../../supabase/useSupabaseStorage";
 import { supabase, deleteName } from "../../supabase/supabaseClient";
 import {
