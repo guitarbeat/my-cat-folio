@@ -3,6 +3,7 @@
  * @description Button that exports tournament results to Google Calendar.
  */
 import React from "react";
+import PropTypes from "prop-types";
 import styles from "./CalendarButton.module.css";
 
 function CalendarButton({ rankings, userName, hiddenNames }) {
@@ -56,5 +57,13 @@ function CalendarButton({ rankings, userName, hiddenNames }) {
     </button>
   );
 }
+
+CalendarButton.displayName = "CalendarButton";
+
+CalendarButton.propTypes = {
+  rankings: PropTypes.arrayOf(PropTypes.object).isRequired,
+  userName: PropTypes.string.isRequired,
+  hiddenNames: PropTypes.instanceOf(Set).isRequired,
+};
 
 export default CalendarButton;

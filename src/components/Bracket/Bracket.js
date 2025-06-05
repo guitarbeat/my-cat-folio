@@ -21,6 +21,7 @@
  */
 
 import React, { useMemo } from "react";
+import PropTypes from "prop-types";
 import styles from "./Bracket.module.css";
 
 const MatchResult = {
@@ -190,5 +191,18 @@ function Bracket({ matches }) {
     </div>
   );
 }
+
+Bracket.displayName = "Bracket";
+
+Bracket.propTypes = {
+  matches: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      name1: PropTypes.string.isRequired,
+      name2: PropTypes.string,
+      winner: PropTypes.number,
+    }),
+  ).isRequired,
+};
 
 export default React.memo(Bracket);

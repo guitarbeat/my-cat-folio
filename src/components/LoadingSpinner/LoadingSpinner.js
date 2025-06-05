@@ -20,6 +20,7 @@
  */
 
 import React from "react";
+import PropTypes from "prop-types";
 import styles from "./LoadingSpinner.module.css";
 
 /**
@@ -39,6 +40,13 @@ const LoadingSpinner = ({ size = "medium", text }) => {
       <span className={styles.srOnly}>Loading...</span>
     </div>
   );
+};
+
+LoadingSpinner.displayName = "LoadingSpinner";
+
+LoadingSpinner.propTypes = {
+  size: PropTypes.oneOf(["small", "medium", "large"]),
+  text: PropTypes.string,
 };
 
 export default LoadingSpinner;

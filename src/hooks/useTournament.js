@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef, useMemo } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import { PreferenceSorter } from "../components/Tournament/PreferenceSorter";
 import EloRating from "../components/Tournament/EloRating";
 import useLocalStorage from "./useLocalStorage";
@@ -9,7 +9,9 @@ export function useTournament({
   existingRatings = {},
   onComplete,
 }) {
-  const { userName, isLoggedIn } = useUserSession();
+  const { userName } = useUserSession();
+
+  const invalidNames = !Array.isArray(names) || names.length < 2;
 
   // Create a stable storage key using the names array and user name
   const tournamentId = useMemo(() => {
@@ -76,24 +78,11 @@ export function useTournament({
   // Reset error state when names change
   useEffect(() => {
     setIsError(false);
-  }, [names]);
+    if (invalidNames) {
+      setIsError(true);
+    }
+  }, [names, invalidNames]);
 
-  // Add validation check with early return
-  if (!Array.isArray(names) || names.length < 2) {
-    console.error("Invalid names array:", names);
-    setIsError(true);
-    return {
-      currentMatch: null,
-      handleVote: () => {},
-      progress: 0,
-      roundNumber: 0,
-      currentMatchNumber: 0,
-      totalMatches: 0,
-      matchHistory: [],
-      getCurrentRatings: () => [],
-      isError: true,
-    };
-  }
 
   // Reset tournament state when names change
   useEffect(() => {
@@ -460,6 +449,24 @@ export function useTournament({
   }, [isTransitioning, canUndo, matchHistory, names.length, sorter]);
 
   const progress = Math.round((currentMatchNumber / totalMatches) * 100);
+
+  if (invalidNames) {
+    return {
+      currentMatch: null,
+      isTransitioning: false,
+      roundNumber: 0,
+      currentMatchNumber: 0,
+      totalMatches: 0,
+      progress: 0,
+      handleVote: () => {},
+      handleUndo: () => {},
+      canUndo: false,
+      getCurrentRatings: () => [],
+      isError,
+      matchHistory: [],
+      userName: userName || "anonymous",
+    };
+  }
 
   return {
     currentMatch,

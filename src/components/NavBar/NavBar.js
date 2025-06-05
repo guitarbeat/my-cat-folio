@@ -4,6 +4,7 @@
  */
 // Third-party imports
 import React, { useState, useEffect, useCallback } from "react";
+import PropTypes from "prop-types";
 import "./navbar.css";
 
 // Theme Configuration
@@ -20,14 +21,6 @@ const scrollToTop = () => {
     top: 0,
     behavior: "smooth",
   });
-};
-
-const getInitialTheme = () => {
-  const savedTheme = localStorage.getItem(THEME.STORAGE_KEY);
-  if (savedTheme) {
-    return savedTheme === THEME.LIGHT;
-  }
-  return window.matchMedia("(prefers-color-scheme: light)").matches;
 };
 
 const updateThemeColor = (isLight) => {
@@ -261,5 +254,18 @@ function NavBar({
     </>
   );
 }
+
+NavBar.displayName = "NavBar";
+
+NavBar.propTypes = {
+  view: PropTypes.string.isRequired,
+  setView: PropTypes.func.isRequired,
+  isLoggedIn: PropTypes.bool.isRequired,
+  userName: PropTypes.string,
+  onLogout: PropTypes.func.isRequired,
+  onMatrixActivate: PropTypes.func,
+  isLightTheme: PropTypes.bool.isRequired,
+  onThemeChange: PropTypes.func.isRequired,
+};
 
 export default NavBar;

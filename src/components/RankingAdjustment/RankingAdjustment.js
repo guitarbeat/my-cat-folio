@@ -3,6 +3,7 @@
  * @description Drag-and-drop interface for manually reordering name rankings.
  */
 import React, { useState, useEffect } from "react";
+import PropTypes from "prop-types";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import "./RankingAdjustment.css";
 
@@ -223,5 +224,13 @@ function RankingAdjustment({ rankings, onSave, onCancel }) {
     </div>
   );
 }
+
+RankingAdjustment.displayName = "RankingAdjustment";
+
+RankingAdjustment.propTypes = {
+  rankings: PropTypes.arrayOf(PropTypes.object).isRequired,
+  onSave: PropTypes.func.isRequired,
+  onCancel: PropTypes.func.isRequired,
+};
 
 export default RankingAdjustment;
