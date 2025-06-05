@@ -425,8 +425,8 @@ export function useTournament({
       setCurrentMatch(null);
       setIsTransitioning(false);
       setRoundNumber(1);
-      setCurrentMatchNumber(1);
-      setMatchHistory([]);
+        setCurrentMatchNumber(1);
+        updateTournamentState({ matchHistory: [] });
       setCanUndo(false);
       throw error; // Propagate error to parent
     }
@@ -442,7 +442,7 @@ export function useTournament({
     const lastVote = matchHistory[matchHistory.length - 1];
     setCurrentMatch(lastVote.match);
     setCurrentMatchNumber(lastVote.matchNumber);
-    setMatchHistory((prev) => prev.slice(0, -1));
+      updateTournamentState({ matchHistory: matchHistory.slice(0, -1) });
 
     if (sorter) {
       sorter.undoLastPreference();

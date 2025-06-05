@@ -157,7 +157,7 @@ function Login({ onLogin }) {
             loading="eager"
           />
           <p className={styles.welcomeText}>
-            Join Aaron's quest to find the perfect cat name through science and
+            Join Aaron&apos;s quest to find the perfect cat name through science and
             democracy!
           </p>
         </section>
