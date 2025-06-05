@@ -15,7 +15,13 @@ Meow Namester is a web application that helps you pick the perfect cat name thro
    ```bash
    npm install
    ```
-3. Create an `.env` file in the project root with your Supabase credentials:
+3. Copy `.env.example` to `.env` and add your Supabase credentials:
+
+   ```bash
+   cp .env.example .env
+   ```
+
+   Edit `.env` and fill in:
 
    ```env
    REACT_APP_SUPABASE_URL=your-supabase-url
