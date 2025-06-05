@@ -1,3 +1,7 @@
+/**
+ * @module NavBar
+ * @description Responsive navigation bar with theme toggle and links.
+ */
 // Third-party imports
 import React, { useState, useEffect, useCallback } from "react";
 import "./navbar.css";

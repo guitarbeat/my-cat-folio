@@ -1,3 +1,7 @@
+/**
+ * @module Sidebar
+ * @description Collapsible sidebar navigation for switching views.
+ */
 import React, { useEffect, useCallback, useState } from 'react';
 import styles from './Sidebar.module.css';
 

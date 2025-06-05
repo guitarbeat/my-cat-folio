@@ -1,3 +1,7 @@
+/**
+ * Set of common chart colors used throughout the application.
+ * @type {Object<string, string>}
+ */
 export const CHART_COLORS = {
   RATING: '#4BC0C0',
   AGGREGATED: '#9966FF',

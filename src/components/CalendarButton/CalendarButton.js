@@ -1,3 +1,7 @@
+/**
+ * @module CalendarButton
+ * @description Button that exports tournament results to Google Calendar.
+ */
 import React from 'react';
 import styles from './CalendarButton.module.css';
 
