@@ -51,12 +51,8 @@
   position: absolute;
   inset: 0;
   pointer-events: none;
-  content: '';
-  background: linear-gradient(
-    45deg,
-    var(--primary-color) 0%,
-    transparent 20%
-  );
+  content: "";
+  background: linear-gradient(45deg, var(--primary-color) 0%, transparent 20%);
   border-radius: inherit;
   opacity: 0.05;
 }
@@ -374,7 +370,8 @@
 }
 
 @keyframes glow {
-  0%, 100% {
+  0%,
+  100% {
     box-shadow: 0 0 5px var(--primary-color);
   }
   50% {
@@ -476,7 +473,7 @@
       var(--primary-600) 0%,
       var(--primary-800) 100%
     );
-    box-shadow: 
+    box-shadow:
       0 0 0 1px var(--primary-400),
       var(--shadow-lg),
       0 0 20px rgba(var(--primary-rgb), 0.3);
@@ -485,4 +482,4 @@
   .ranking-header h2 {
     text-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
   }
-} 
+}

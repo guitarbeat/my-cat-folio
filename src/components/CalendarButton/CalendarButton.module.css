@@ -71,8 +71,8 @@
   .button {
     transition: none;
   }
-  
+
   .button:hover {
     transform: none;
   }
-} 
+}

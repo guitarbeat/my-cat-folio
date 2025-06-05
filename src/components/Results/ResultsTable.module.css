@@ -47,7 +47,7 @@
 }
 
 .noResults {
-  composes: cardInteractive from '../../styles/base.css';
+  composes: cardInteractive from "../../styles/base.css";
   padding: var(--space-8);
   text-align: center;
   color: var(--text-secondary);
@@ -121,4 +121,4 @@
     padding: var(--space-2);
     font-size: var(--text-xs);
   }
-} 
+}

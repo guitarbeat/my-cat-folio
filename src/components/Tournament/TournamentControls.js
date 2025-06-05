@@ -2,20 +2,20 @@
  * @module TournamentControls
  * @description Provides sound and game controls during a tournament.
  */
-import React, { useState } from 'react';
-import { 
-  SpeakerWaveIcon, 
-  SpeakerXMarkIcon, 
+import React, { useState } from "react";
+import {
+  SpeakerWaveIcon,
+  SpeakerXMarkIcon,
   MusicalNoteIcon,
   ExclamationCircleIcon,
-  ArrowPathIcon
-} from '@heroicons/react/24/outline';
-import styles from './Tournament.module.css';
+  ArrowPathIcon,
+} from "@heroicons/react/24/outline";
+import styles from "./Tournament.module.css";
 
-const TournamentControls = ({ 
-  onEndEarly, 
-  isTransitioning, 
-  isMuted, 
+const TournamentControls = ({
+  onEndEarly,
+  isTransitioning,
+  isMuted,
   onToggleMute,
   onNextTrack,
   trackInfo,
@@ -23,7 +23,7 @@ const TournamentControls = ({
   onRetryAudio,
   onRandomize,
   volume,
-  onVolumeChange
+  onVolumeChange,
 }) => {
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [showVolume, setShowVolume] = useState(false);
@@ -34,12 +34,18 @@ const TournamentControls = ({
   };
 
   return (
-    <div className={styles.tournamentControls} role="toolbar" aria-label="Tournament controls">
+    <div
+      className={styles.tournamentControls}
+      role="toolbar"
+      aria-label="Tournament controls"
+    >
       <div className={styles.soundControls}>
         <button
           onClick={audioError ? onRetryAudio : onToggleMute}
-          className={`${styles.soundToggleButton} ${isMuted ? styles.muted : ''} ${audioError ? styles.error : ''}`}
-          aria-label={isMuted ? "Unmute tournament sounds" : "Mute tournament sounds"}
+          className={`${styles.soundToggleButton} ${isMuted ? styles.muted : ""} ${audioError ? styles.error : ""}`}
+          aria-label={
+            isMuted ? "Unmute tournament sounds" : "Mute tournament sounds"
+          }
           aria-pressed={isMuted}
           disabled={isTransitioning}
           title={isMuted ? "Unmute" : "Mute"}
@@ -52,12 +58,14 @@ const TournamentControls = ({
         </button>
 
         {!isMuted && (
-          <div 
+          <div
             className={styles.volumeContainer}
             onMouseEnter={() => setShowVolume(true)}
             onMouseLeave={() => setShowVolume(false)}
           >
-            <div className={`${styles.volumeControls} ${showVolume ? styles.show : ''}`}>
+            <div
+              className={`${styles.volumeControls} ${showVolume ? styles.show : ""}`}
+            >
               <label className={styles.volumeLabel}>
                 🎵
                 <input
@@ -66,7 +74,9 @@ const TournamentControls = ({
                   max="1"
                   step="0.1"
                   value={volume.music}
-                  onChange={(e) => onVolumeChange('music', parseFloat(e.target.value))}
+                  onChange={(e) =>
+                    onVolumeChange("music", parseFloat(e.target.value))
+                  }
                   className={styles.volumeSlider}
                 />
               </label>
@@ -78,7 +88,9 @@ const TournamentControls = ({
                   max="1"
                   step="0.1"
                   value={volume.effects}
-                  onChange={(e) => onVolumeChange('effects', parseFloat(e.target.value))}
+                  onChange={(e) =>
+                    onVolumeChange("effects", parseFloat(e.target.value))
+                  }
                   className={styles.volumeSlider}
                 />
               </label>
@@ -92,7 +104,11 @@ const TournamentControls = ({
             className={styles.soundToggleButton}
             aria-label="Next track"
             disabled={isTransitioning}
-            title={trackInfo ? `Now Playing: ${trackInfo.name}\nClick for next track` : 'Next track'}
+            title={
+              trackInfo
+                ? `Now Playing: ${trackInfo.name}\nClick for next track`
+                : "Next track"
+            }
           >
             <MusicalNoteIcon className={styles.icon} aria-hidden="true" />
           </button>
@@ -127,7 +143,7 @@ const TournamentControls = ({
         Randomize
       </button>
 
-      <button 
+      <button
         onClick={() => setShowConfirmation(true)}
         className={styles.controlButton}
         disabled={isTransitioning}
@@ -138,31 +154,33 @@ const TournamentControls = ({
 
       {showConfirmation && (
         <>
-          <div 
-            className={styles.modalBackdrop} 
+          <div
+            className={styles.modalBackdrop}
             onClick={() => setShowConfirmation(false)}
             aria-hidden="true"
           />
-          <div 
+          <div
             className={styles.modal}
             role="dialog"
             aria-labelledby="confirm-end-title"
             aria-describedby="confirm-end-description"
           >
-            <h2 id="confirm-end-title" className={styles.modalTitle}>End Tournament?</h2>
+            <h2 id="confirm-end-title" className={styles.modalTitle}>
+              End Tournament?
+            </h2>
             <p id="confirm-end-description" className={styles.modalText}>
               Are you sure you want to end the tournament early?
             </p>
             <div className={styles.modalActions}>
-              <button 
-                onClick={handleEndConfirm} 
+              <button
+                onClick={handleEndConfirm}
                 className={styles.confirmButton}
                 autoFocus
               >
                 Yes, End Tournament
               </button>
-              <button 
-                onClick={() => setShowConfirmation(false)} 
+              <button
+                onClick={() => setShowConfirmation(false)}
                 className={styles.cancelButton}
               >
                 Cancel
@@ -175,4 +193,4 @@ const TournamentControls = ({
   );
 };
 
-export default TournamentControls; 
+export default TournamentControls;

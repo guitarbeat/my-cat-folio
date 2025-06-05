@@ -1,5 +1,5 @@
 .card {
-  composes: cardInteractive from '../../styles/base.css';
+  composes: cardInteractive from "../../styles/base.css";
   position: relative;
   display: flex;
   flex-direction: column;
@@ -28,14 +28,14 @@
 }
 
 .name {
-  composes: heading3 from '../../styles/base.css';
+  composes: heading3 from "../../styles/base.css";
   margin: 0;
   line-height: 1.2;
   transition: transform var(--duration-normal) var(--ease-out);
 }
 
 .description {
-  composes: text from '../../styles/base.css';
+  composes: text from "../../styles/base.css";
   margin: 0;
   overflow: hidden;
   display: -webkit-box;
@@ -166,4 +166,4 @@
   .description {
     transition: none;
   }
-} 
+}
