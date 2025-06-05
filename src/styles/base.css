@@ -235,7 +235,7 @@ body {
 }
 
 /* Dark Mode Overrides */
-@media (prefers-color-scheme: dark) {
+:global(body:not(.light-theme)) {
   .glass {
     background: rgb(var(--black-rgb) / 0.2);
   }
@@ -247,7 +247,7 @@ body {
 }
 
 /* Light Mode Overrides for Better Contrast */
-@media (prefers-color-scheme: light) {
+:global(body.light-theme) {
   /* Light mode specific styles are now handled via variables */
 }
 

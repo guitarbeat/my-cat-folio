@@ -561,7 +561,7 @@
   }
 }
 
-@media (prefers-color-scheme: dark) {
+:global(body:not(.light-theme)) {
   .loginContent {
     background: rgba(17, 24, 39, 0.95);
   }
@@ -658,7 +658,7 @@
 }
 
 /* Additional light mode specific styles to improve contrast */
-@media (prefers-color-scheme: light) {
+:global(body.light-theme) {
   .singleButton {
     background: linear-gradient(45deg, #4f46e5, #6366f1);
     color: white;

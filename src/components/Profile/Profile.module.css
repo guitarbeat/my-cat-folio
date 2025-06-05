@@ -18,7 +18,7 @@
 }
 
 /* Dark Mode Colors */
-@media (prefers-color-scheme: dark) {
+:global(body:not(.light-theme)) {
   :root {
     --bg-primary: #1f2937;
     --bg-secondary: #111827;
@@ -406,7 +406,7 @@
 }
 
 /* Dark mode adjustments */
-@media (prefers-color-scheme: dark) {
+:global(body:not(.light-theme)) {
   .nameCard:not(.isHidden) {
     background: linear-gradient(
       135deg,
@@ -934,7 +934,7 @@
 }
 
 /* Dark mode refinements */
-@media (prefers-color-scheme: dark) {
+:global(body:not(.light-theme)) {
   .userCard.active {
     background: linear-gradient(
       165deg,
@@ -1160,7 +1160,7 @@
 }
 
 /* Dark mode adjustments */
-@media (prefers-color-scheme: dark) {
+:global(body:not(.light-theme)) {
   .aggregatedCard {
     background: color-mix(
       in srgb,
@@ -1245,7 +1245,7 @@
   }
 }
 
-@media (prefers-color-scheme: dark) {
+:global(body:not(.light-theme)) {
   .chartWrapper,
   .pieChartWrapper {
     background: color-mix(
@@ -1616,7 +1616,7 @@
 }
 
 /* Dark Mode Refinements */
-@media (prefers-color-scheme: dark) {
+:global(body:not(.light-theme)) {
   .aggregatedCard {
     background: color-mix(
       in srgb,
@@ -1749,7 +1749,7 @@
 }
 
 /* Dark Mode Refinements */
-@media (prefers-color-scheme: dark) {
+:global(body:not(.light-theme)) {
   .chartHeader {
     background: color-mix(in srgb, var(--bg-secondary) 95%, transparent);
   }
@@ -2020,7 +2020,7 @@
 }
 
 /* Dark mode adjustments */
-@media (prefers-color-scheme: dark) {
+:global(body:not(.light-theme)) {
   .ratingTrends {
     background-color: color-mix(
       in srgb,

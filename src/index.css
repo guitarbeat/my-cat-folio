@@ -49,6 +49,14 @@ body.light-theme {
   --card-border: #e5e7eb;
   --card-hover: #f1f5f9;
 
+  /* Synced dark-mode variables for components using legacy names */
+  --surface-dark: #f4f6fa;
+  --card-background-dark: #f8fafc;
+  --card-hover-dark: #f1f5f9;
+  --border-color-dark: #e5e7eb;
+  --text-primary-dark: #2c3544;
+  --text-secondary-dark: #4b5563;
+
   --button-primary-bg: var(--primary-700);
   --button-primary-hover: var(--primary-800);
   --button-secondary-bg: #2a2a2a;
@@ -81,6 +89,14 @@ body:not(.light-theme) {
   --card-background: #0f1225;
   --card-border: #1a1f35;
   --card-hover: #151830;
+
+  /* Synced dark-mode variables for components using legacy names */
+  --surface-dark: #0a0c1c;
+  --card-background-dark: #0f1225;
+  --card-hover-dark: #151830;
+  --border-color-dark: #1a1f35;
+  --text-primary-dark: #f8fafc;
+  --text-secondary-dark: #e2e8f0;
 
   --text-primary: #f8fafc;
   --text-secondary: #e2e8f0;
@@ -493,7 +509,7 @@ span {
   }
 }
 
-@media (prefers-color-scheme: dark) {
+:global(body:not(.light-theme)) {
   h1,
   h2,
   h3 {

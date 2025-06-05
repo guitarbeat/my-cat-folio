@@ -34,7 +34,7 @@
 }
 
 /* Dark mode adjustments */
-@media (prefers-color-scheme: dark) {
+:global(body:not(.light-theme)) {
   .button {
     background: var(--primary-700);
     border-color: var(--primary-800);

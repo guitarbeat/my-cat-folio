@@ -76,7 +76,7 @@
 }
 
 /* Dark mode adjustments */
-@media (prefers-color-scheme: dark) {
+:global(body:not(.light-theme)) {
   .content {
     background: var(--surface-dark);
     border-color: var(--border-color-dark);

@@ -102,7 +102,7 @@
 }
 
 /* Dark mode adjustments */
-@media (prefers-color-scheme: dark) {
+:global(body:not(.light-theme)) {
   .card {
     background: var(--card-background-dark);
     border-color: var(--border-color-dark);

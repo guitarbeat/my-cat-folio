@@ -1,4 +1,4 @@
-@media (prefers-color-scheme: dark) {
+:global(body:not(.light-theme)) {
   .cardBase {
     background: var(--surface-dark);
     border-color: var(--border-color-dark);

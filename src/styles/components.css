@@ -229,7 +229,7 @@
 }
 
 /* Dark Mode Adjustments */
-@media (prefers-color-scheme: dark) {
+:global(body:not(.light-theme)) {
   .btn-secondary,
   .list-item {
     background: rgb(var(--black-rgb) / 0.2);

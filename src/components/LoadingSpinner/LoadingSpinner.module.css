@@ -78,7 +78,7 @@
 }
 
 /* Dark mode adjustments */
-@media (prefers-color-scheme: dark) {
+:global(body:not(.light-theme)) {
   :root {
     --overlay-background: rgba(0, 0, 0, 0.7);
   }
@@ -102,7 +102,7 @@
 }
 
 /* Dark mode adjustments for attribution */
-@media (prefers-color-scheme: dark) {
+:global(body:not(.light-theme)) {
   .attribution,
   .attribution a {
     color: rgba(255, 255, 255, 0.7);

@@ -269,7 +269,7 @@
 }
 
 /* Dark mode adjustments */
-@media (prefers-color-scheme: dark) {
+:global(body:not(.light-theme)) {
   .container {
     background: var(--surface-dark);
   }
