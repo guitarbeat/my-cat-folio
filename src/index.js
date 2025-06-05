@@ -12,7 +12,6 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
 import App from "./App";
-import LoadingSpinner from "./components/LoadingSpinner/LoadingSpinner";
 // import { Analytics } from "@vercel/analytics/react"
 
 // Check if we're on the test loading page
@@ -83,9 +82,10 @@ const LoadingTest = () => {
   );
 };
 
+
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    {isLoadingTest ? <LoadingTest /> : <App />}
+    <App />
   </React.StrictMode>,
 );

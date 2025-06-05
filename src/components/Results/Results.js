@@ -4,7 +4,11 @@
  * Shows the tournament results with ratings and provides option to restart.
  */
 
-import React, { useState, useEffect, useCallback, memo } from "react";
+
+import React, { useState, useEffect, useCallback, memo, useMemo } from "react";
+
+import PropTypes from "prop-types";
+
 import RankingAdjustment from "../RankingAdjustment/RankingAdjustment";
 import Bracket from "../Bracket/Bracket";
 import CalendarButton from "../CalendarButton/CalendarButton";
@@ -307,5 +311,16 @@ function Results({
     </div>
   );
 }
+
+Results.displayName = "Results";
+
+Results.propTypes = {
+  ratings: PropTypes.object.isRequired,
+  onStartNew: PropTypes.func.isRequired,
+  userName: PropTypes.string.isRequired,
+  onUpdateRatings: PropTypes.func.isRequired,
+  currentTournamentNames: PropTypes.array,
+  voteHistory: PropTypes.array,
+};
 
 export default memo(Results);

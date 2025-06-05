@@ -47,7 +47,7 @@ function useUserSession() {
         const storedUser = localStorage.getItem("catNamesUser");
         if (storedUser) {
           devLog('Found stored user:', storedUser);
-          // Check if the stored user exists in the database
+
           const { data, error: dbError } = await supabase
             .from("app_users")
             .select("user_name")

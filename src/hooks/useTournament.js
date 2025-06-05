@@ -11,6 +11,9 @@ export function useTournament({
 }) {
   const { userName } = useUserSession();
 
+  const invalidNames = !Array.isArray(names) || names.length < 2;
+
+
   // Create a stable storage key using the names array and user name
   const tournamentId = useMemo(() => {
     const sortedNames = [...names]
@@ -82,6 +85,7 @@ useEffect(() => {
     setIsError(false);
   }
 }, [names]);
+
 
   // Reset tournament state when names change
   useEffect(() => {
@@ -413,11 +417,10 @@ useEffect(() => {
       setCurrentMatch(null);
       setIsTransitioning(false);
       setRoundNumber(1);
-      setCurrentMatchNumber(1);
-        updateTournamentState((prev) => ({
-          ...prev,
-          matchHistory: [],
-        }));
+
+        setCurrentMatchNumber(1);
+        updateTournamentState({ matchHistory: [] });
+
       setCanUndo(false);
       throw error; // Propagate error to parent
     }
@@ -433,10 +436,9 @@ useEffect(() => {
     const lastVote = matchHistory[matchHistory.length - 1];
     setCurrentMatch(lastVote.match);
     setCurrentMatchNumber(lastVote.matchNumber);
-    updateTournamentState((prev) => ({
-      ...prev,
-      matchHistory: prev.matchHistory.slice(0, -1),
-    }));
+
+      updateTournamentState({ matchHistory: matchHistory.slice(0, -1) });
+
 
     if (sorter) {
       sorter.undoLastPreference();
@@ -467,6 +469,7 @@ useEffect(() => {
       getCurrentRatings: () => [],
       isError: true,
       userName: tournamentState.userName,
+
     };
   }
 

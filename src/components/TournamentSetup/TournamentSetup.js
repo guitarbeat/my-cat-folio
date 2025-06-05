@@ -3,6 +3,7 @@
  * @description Wizard for selecting cat names and starting a tournament.
  */
 import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import { supabase, getNamesWithDescriptions } from '../../supabase/supabaseClient';
 import devLog from '../../utils/logger';
 import { LoadingSpinner, NameCard, ErrorBoundary } from '../';
@@ -208,7 +209,7 @@ const NameSuggestionSection = () => {
               id="suggestion-description"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              placeholder="Tell us about this name's meaning or origin"
+              placeholder="Tell us about this name&apos;s meaning or origin"
               maxLength={500}
               disabled={loading}
             />
@@ -692,5 +693,11 @@ function TournamentSetup(props) {
     </ErrorBoundary>
   );
 }
+
+TournamentSetup.displayName = "TournamentSetup";
+
+TournamentSetup.propTypes = {
+  onStart: PropTypes.func.isRequired,
+};
 
 export default TournamentSetup;

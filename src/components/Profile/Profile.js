@@ -42,7 +42,6 @@ ChartJS.register(
   RadialLinearScale,
 );
 
-// Constants and Configurations
 
 const TIME_FILTERS = ["All Time", "Today", "This Week", "This Month"];
 export const DEFAULT_RATING = 1500;
@@ -1949,6 +1948,13 @@ const Profile = ({ userName, onStartNewTournament }) => {
       </Modal>
     </div>
   );
+};
+
+Profile.displayName = "Profile";
+
+Profile.propTypes = {
+  userName: PropTypes.string.isRequired,
+  onStartNewTournament: PropTypes.func.isRequired,
 };
 
 export default Profile;

@@ -11,6 +11,7 @@ import React, {
   useRef,
   useMemo,
 } from "react";
+import PropTypes from "prop-types";
 import { useTournament } from "../../hooks/useTournament";
 // import { useKeyboardControls } from '../../hooks/useKeyboardControls';
 import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
@@ -640,5 +641,15 @@ function Tournament(props) {
     </ErrorBoundary>
   );
 }
+
+Tournament.displayName = "Tournament";
+
+Tournament.propTypes = {
+  names: PropTypes.array,
+  existingRatings: PropTypes.object,
+  onComplete: PropTypes.func,
+  userName: PropTypes.string,
+  onVote: PropTypes.func,
+};
 
 export default Tournament;

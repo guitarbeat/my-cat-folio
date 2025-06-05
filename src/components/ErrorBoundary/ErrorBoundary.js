@@ -5,6 +5,7 @@
  */
 
 import React from "react";
+import PropTypes from "prop-types";
 import styles from "./ErrorBoundary.module.css";
 
 class ErrorBoundary extends React.Component {
@@ -70,5 +71,11 @@ class ErrorBoundary extends React.Component {
     return this.props.children;
   }
 }
+
+ErrorBoundary.displayName = "ErrorBoundary";
+
+ErrorBoundary.propTypes = {
+  children: PropTypes.node,
+};
 
 export default ErrorBoundary;
