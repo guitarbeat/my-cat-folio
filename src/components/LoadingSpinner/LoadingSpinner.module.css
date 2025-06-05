@@ -36,14 +36,24 @@
 }
 
 /* Size variants */
-.small { font-size: 3rem; }
-.medium { font-size: 5rem; }
-.large { font-size: 7rem; }
+.small {
+  font-size: 3rem;
+}
+.medium {
+  font-size: 5rem;
+}
+.large {
+  font-size: 7rem;
+}
 
 /* Simple rotation animation */
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 /* Text styles */
@@ -97,4 +107,4 @@
   .attribution a {
     color: rgba(255, 255, 255, 0.7);
   }
-} 
+}

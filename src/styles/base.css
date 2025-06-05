@@ -1,8 +1,10 @@
 /* Reset and Base Styles */
-@import url('./variables.css');
+@import url("./variables.css");
 
 /* Global Reset */
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
@@ -176,7 +178,7 @@ body {
 }
 
 .loading::after {
-  content: '';
+  content: "";
   position: absolute;
   inset: 0;
   background: rgb(var(--black-rgb) / 0.1);
@@ -185,12 +187,16 @@ body {
 
 /* Animations */
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 @keyframes slideUp {
-  from { 
+  from {
     opacity: 0;
     transform: translateY(10px);
   }
@@ -298,7 +304,9 @@ body {
 }
 
 .focusRing:focus-visible {
-  box-shadow: 0 0 0 2px var(--background-color), 0 0 0 4px var(--primary-color);
+  box-shadow:
+    0 0 0 2px var(--background-color),
+    0 0 0 4px var(--primary-color);
 }
 
 /* Error States */
@@ -375,17 +383,26 @@ body {
 }
 
 .loader:before {
-  content: '😺';
+  content: "😺";
   font-size: 3rem;
   position: absolute;
   animation: 1s linear infinite cat-bounce;
 }
 
 @keyframes cat-bounce {
-  0%, 100% { transform: translateY(0) rotate(0deg); }
-  25% { transform: translateY(-20px) rotate(10deg); }
-  50% { transform: translateY(0) rotate(0deg); }
-  75% { transform: translateY(-10px) rotate(-10deg); }
+  0%,
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  25% {
+    transform: translateY(-20px) rotate(10deg);
+  }
+  50% {
+    transform: translateY(0) rotate(0deg);
+  }
+  75% {
+    transform: translateY(-10px) rotate(-10deg);
+  }
 }
 
 /* Keep existing .loader-text styles */

@@ -63,7 +63,7 @@
 }
 
 .profileHeader::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
@@ -87,7 +87,7 @@
 }
 
 .profileHeader h1::before {
-  content: '👤';
+  content: "👤";
   font-size: 1.5rem;
 }
 
@@ -184,7 +184,9 @@
   border-radius: 0.375rem;
   box-shadow: var(--shadow-sm);
   padding: 0.75rem;
-  transition: transform 0.2s, box-shadow 0.2s;
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
   border: 1px solid var(--border-color);
 }
 
@@ -341,7 +343,9 @@
   flex-wrap: wrap;
 }
 
-.wins, .losses, .winRate {
+.wins,
+.losses,
+.winRate {
   font-weight: 500;
 }
 
@@ -454,8 +458,16 @@
   }
 
   .profileHeader {
-    background-color: color-mix(in srgb, var(--bg-primary) 95%, var(--accent-primary));
-    border-color: color-mix(in srgb, var(--border-color) 50%, var(--accent-primary));
+    background-color: color-mix(
+      in srgb,
+      var(--bg-primary) 95%,
+      var(--accent-primary)
+    );
+    border-color: color-mix(
+      in srgb,
+      var(--border-color) 50%,
+      var(--accent-primary)
+    );
   }
 
   .profileHeader::before {
@@ -472,16 +484,21 @@
   }
 
   .aggregatedHeader {
-    background-color: color-mix(in srgb, var(--bg-primary) 95%, var(--accent-primary));
+    background-color: color-mix(
+      in srgb,
+      var(--bg-primary) 95%,
+      var(--accent-primary)
+    );
     padding-bottom: 1rem;
     margin-bottom: 1.5rem;
-    border-bottom: 1px solid color-mix(in srgb, var(--border-color) 60%, transparent);
+    border-bottom: 1px solid
+      color-mix(in srgb, var(--border-color) 60%, transparent);
   }
 
   .aggregatedHeader .sectionTitle {
     color: var(--text-primary);
   }
-  
+
   .aggregatedHeader .sectionSubtitle {
     color: color-mix(in srgb, var(--text-secondary) 80%, white);
   }
@@ -770,7 +787,7 @@
 }
 
 .userCard::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
@@ -812,7 +829,7 @@
 }
 
 .userName::before {
-  content: '👤';
+  content: "👤";
   font-size: 1.125rem;
 }
 
@@ -853,11 +870,11 @@
 }
 
 .userStat:first-child .userStatLabel::before {
-  content: '📊';
+  content: "📊";
 }
 
 .userStat:last-child .userStatLabel::before {
-  content: '⭐';
+  content: "⭐";
 }
 
 .userStatValue {
@@ -876,7 +893,7 @@
 }
 
 .lastActive::before {
-  content: '🕒';
+  content: "🕒";
   font-size: 0.875rem;
 }
 
@@ -894,7 +911,11 @@
 }
 
 .userCard.active .userStats {
-  background: color-mix(in srgb, var(--bg-secondary) 95%, var(--accent-primary));
+  background: color-mix(
+    in srgb,
+    var(--bg-secondary) 95%,
+    var(--accent-primary)
+  );
 }
 
 .userActions {
@@ -923,7 +944,11 @@
   }
 
   .userCard.active .userStats {
-    background: color-mix(in srgb, var(--bg-secondary) 85%, var(--accent-primary));
+    background: color-mix(
+      in srgb,
+      var(--bg-secondary) 85%,
+      var(--accent-primary)
+    );
   }
 
   .userStat {
@@ -1023,7 +1048,7 @@
 }
 
 .hiddenText::before {
-  content: '🔒';
+  content: "🔒";
   font-size: 0.875rem;
 }
 
@@ -1137,11 +1162,19 @@
 /* Dark mode adjustments */
 @media (prefers-color-scheme: dark) {
   .aggregatedCard {
-    background: color-mix(in srgb, var(--bg-primary) 95%, var(--accent-primary));
+    background: color-mix(
+      in srgb,
+      var(--bg-primary) 95%,
+      var(--accent-primary)
+    );
   }
 
   .aggregatedCard:hover {
-    background: color-mix(in srgb, var(--bg-primary) 90%, var(--accent-primary));
+    background: color-mix(
+      in srgb,
+      var(--bg-primary) 90%,
+      var(--accent-primary)
+    );
   }
 
   .aggregatedStats {
@@ -1199,7 +1232,7 @@
   .chartRow {
     grid-template-columns: 1fr;
   }
-  
+
   .pieChartWrapper {
     height: 350px;
   }
@@ -1215,12 +1248,20 @@
 @media (prefers-color-scheme: dark) {
   .chartWrapper,
   .pieChartWrapper {
-    background: color-mix(in srgb, var(--bg-primary) 95%, var(--accent-primary));
+    background: color-mix(
+      in srgb,
+      var(--bg-primary) 95%,
+      var(--accent-primary)
+    );
   }
-  
+
   .chartWrapper:hover,
   .pieChartWrapper:hover {
-    background: color-mix(in srgb, var(--bg-primary) 90%, var(--accent-primary));
+    background: color-mix(
+      in srgb,
+      var(--bg-primary) 90%,
+      var(--accent-primary)
+    );
   }
 }
 
@@ -1314,7 +1355,7 @@
 }
 
 .nameCard.isHidden::before {
-  content: '🔒';
+  content: "🔒";
   position: absolute;
   top: 0.5rem;
   right: 0.5rem;
@@ -1476,7 +1517,7 @@
 }
 
 .aggregatedCard.isHidden::before {
-  content: '🔒';
+  content: "🔒";
   position: absolute;
   top: 0.75rem;
   right: 0.75rem;
@@ -1501,7 +1542,11 @@
 }
 
 .aggregatedCard:hover .aggregatedStats {
-  background-color: color-mix(in srgb, var(--bg-secondary) 95%, var(--accent-primary));
+  background-color: color-mix(
+    in srgb,
+    var(--bg-secondary) 95%,
+    var(--accent-primary)
+  );
 }
 
 .statRow {
@@ -1573,7 +1618,11 @@
 /* Dark Mode Refinements */
 @media (prefers-color-scheme: dark) {
   .aggregatedCard {
-    background: color-mix(in srgb, var(--bg-primary) 95%, var(--accent-primary));
+    background: color-mix(
+      in srgb,
+      var(--bg-primary) 95%,
+      var(--accent-primary)
+    );
   }
 
   .aggregatedCard.isHidden {
@@ -1582,7 +1631,11 @@
   }
 
   .aggregatedCard:hover {
-    background: color-mix(in srgb, var(--bg-primary) 90%, var(--accent-primary));
+    background: color-mix(
+      in srgb,
+      var(--bg-primary) 90%,
+      var(--accent-primary)
+    );
   }
 
   .aggregatedStats {
@@ -1702,7 +1755,11 @@
   }
 
   .chartControls {
-    background: color-mix(in srgb, var(--bg-primary) 95%, var(--accent-primary));
+    background: color-mix(
+      in srgb,
+      var(--bg-primary) 95%,
+      var(--accent-primary)
+    );
   }
 
   .chartSelect {
@@ -1874,7 +1931,9 @@
   border-radius: 0.75rem;
   padding: 1rem;
   flex: 1;
-  transition: transform 0.2s, box-shadow 0.2s;
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
   border: 1px solid var(--border-color);
 }
 
@@ -1898,15 +1957,15 @@
 }
 
 .insightCard:nth-child(1) .insightTitle::before {
-  content: '🏆';
+  content: "🏆";
 }
 
 .insightCard:nth-child(2) .insightTitle::before {
-  content: '📈';
+  content: "📈";
 }
 
 .insightCard:nth-child(3) .insightTitle::before {
-  content: '⚠️';
+  content: "⚠️";
 }
 
 .insightContent {
@@ -1924,7 +1983,11 @@
 }
 
 .insightItem:hover {
-  background-color: color-mix(in srgb, var(--bg-primary) 95%, var(--accent-primary));
+  background-color: color-mix(
+    in srgb,
+    var(--bg-primary) 95%,
+    var(--accent-primary)
+  );
 }
 
 .insightRank {
@@ -1959,38 +2022,50 @@
 /* Dark mode adjustments */
 @media (prefers-color-scheme: dark) {
   .ratingTrends {
-    background-color: color-mix(in srgb, var(--bg-primary) 95%, var(--accent-primary));
+    background-color: color-mix(
+      in srgb,
+      var(--bg-primary) 95%,
+      var(--accent-primary)
+    );
   }
-  
+
   .chartWrapper {
     background-color: color-mix(in srgb, var(--bg-secondary) 95%, transparent);
     border-color: color-mix(in srgb, var(--border-color) 80%, transparent);
   }
-  
+
   .recentChanges {
     background-color: color-mix(in srgb, var(--bg-secondary) 95%, transparent);
   }
-  
+
   .changeItem {
     background-color: color-mix(in srgb, var(--bg-primary) 95%, transparent);
   }
-  
+
   .insightsContainer {
-    background-color: color-mix(in srgb, var(--bg-primary) 95%, var(--accent-primary));
+    background-color: color-mix(
+      in srgb,
+      var(--bg-primary) 95%,
+      var(--accent-primary)
+    );
   }
-  
+
   .insightCard {
     background-color: color-mix(in srgb, var(--bg-secondary) 95%, transparent);
   }
-  
+
   .insightItem {
     background-color: color-mix(in srgb, var(--bg-primary) 95%, transparent);
   }
 
   .positive .changeValue {
-    background-color: color-mix(in srgb, var(--accent-success) 30%, transparent);
+    background-color: color-mix(
+      in srgb,
+      var(--accent-success) 30%,
+      transparent
+    );
   }
-  
+
   .negative .changeValue {
     background-color: color-mix(in srgb, var(--accent-danger) 30%, transparent);
   }
@@ -2001,7 +2076,7 @@
   .profileOverview {
     grid-template-columns: 1fr;
   }
-  
+
   .chartWrapper {
     height: 350px;
   }
@@ -2012,25 +2087,25 @@
     flex-direction: column;
     align-items: flex-start;
   }
-  
+
   .timeFilters {
     width: 100%;
     justify-content: space-between;
   }
-  
+
   .chartWrapper {
     height: 300px;
   }
-  
+
   .changeItem {
     flex-wrap: wrap;
   }
-  
+
   .changeName {
     width: 100%;
     margin-bottom: 0.5rem;
   }
-  
+
   .changeDate {
     width: 100%;
     text-align: right;
@@ -2043,22 +2118,22 @@
   .insightsContainer {
     padding: 1rem;
   }
-  
+
   .chartWrapper {
     height: 250px;
     padding: 0.75rem;
   }
-  
+
   .timeFilters .button {
     flex: 1;
     min-width: auto;
   }
-  
+
   .insightCards {
     gap: 0.75rem;
   }
-  
+
   .insightCard {
     padding: 0.75rem;
   }
-} 
+}

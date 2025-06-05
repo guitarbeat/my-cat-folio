@@ -1,5 +1,5 @@
 .container {
-  composes: cardInteractive from '../../styles/base.css';
+  composes: cardInteractive from "../../styles/base.css";
   width: 100%;
   padding: var(--space-4);
   overflow-x: auto;
@@ -38,7 +38,7 @@
 }
 
 .roundHeader {
-  composes: cardInteractive from '../../styles/base.css';
+  composes: cardInteractive from "../../styles/base.css";
   padding: var(--space-2);
   margin-bottom: var(--space-4);
   text-align: center;
@@ -69,12 +69,12 @@
 }
 
 /* Progressive spacing between matches */
-.round:nth-child(2) .matches { 
+.round:nth-child(2) .matches {
   gap: var(--space-8);
   padding-top: var(--space-4);
 }
 
-.round:nth-child(3) .matches { 
+.round:nth-child(3) .matches {
   gap: var(--space-16);
   padding-top: var(--space-8);
 }
@@ -105,7 +105,7 @@
 }
 
 .matchContent {
-  composes: cardInteractive from '../../styles/base.css';
+  composes: cardInteractive from "../../styles/base.css";
   position: relative;
   z-index: 2;
   width: 100%;
@@ -262,7 +262,7 @@
   .matches {
     height: auto;
   }
-  
+
   .round:first-child {
     height: fit-content;
   }
@@ -357,4 +357,4 @@
     opacity: 1;
     transform: translateX(0);
   }
-} 
+}

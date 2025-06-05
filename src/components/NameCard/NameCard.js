@@ -4,9 +4,9 @@
  * with consistent styling and behavior across the application.
  */
 
-import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
-import styles from './NameCard.module.css';
+import React, { useState, useEffect } from "react";
+import PropTypes from "prop-types";
+import styles from "./NameCard.module.css";
 
 /**
  * NameCard Component
@@ -27,8 +27,8 @@ function NameCard({
   onClick,
   disabled = false,
   shortcutHint,
-  className = '',
-  size = 'medium'
+  className = "",
+  size = "medium",
 }) {
   const [rippleStyle, setRippleStyle] = useState({});
   const [isRippling, setIsRippling] = useState(false);
@@ -45,19 +45,22 @@ function NameCard({
       return;
     }
 
-    if (event.type === 'click' || (event.type === 'keydown' && (event.key === 'Enter' || event.key === ' '))) {
+    if (
+      event.type === "click" ||
+      (event.type === "keydown" && (event.key === "Enter" || event.key === " "))
+    ) {
       event.preventDefault();
-      
+
       // Create ripple effect
       const rect = event.currentTarget.getBoundingClientRect();
       const x = event.clientX ? event.clientX - rect.left : rect.width / 2;
       const y = event.clientY ? event.clientY - rect.top : rect.height / 2;
-      
+
       setRippleStyle({
         left: `${x}px`,
-        top: `${y}px`
+        top: `${y}px`,
       });
-      
+
       setIsRippling(true);
       onClick?.();
     }
@@ -68,11 +71,13 @@ function NameCard({
     styles[size],
     isSelected && styles.selected,
     disabled && styles.disabled,
-    className
-  ].filter(Boolean).join(' ');
+    className,
+  ]
+    .filter(Boolean)
+    .join(" ");
 
   return (
-    <div 
+    <div
       className={cardClasses}
       onClick={handleInteraction}
       onKeyDown={handleInteraction}
@@ -89,10 +94,12 @@ function NameCard({
         </span>
       )}
       {isSelected && (
-        <span className={styles.checkMark} aria-hidden="true">✓</span>
+        <span className={styles.checkMark} aria-hidden="true">
+          ✓
+        </span>
       )}
       {isRippling && (
-        <span 
+        <span
           className={styles.rippleEffect}
           style={rippleStyle}
           aria-hidden="true"
@@ -110,7 +117,7 @@ NameCard.propTypes = {
   disabled: PropTypes.bool,
   shortcutHint: PropTypes.string,
   className: PropTypes.string,
-  size: PropTypes.oneOf(['small', 'medium'])
+  size: PropTypes.oneOf(["small", "medium"]),
 };
 
-export default NameCard; 
+export default NameCard;
