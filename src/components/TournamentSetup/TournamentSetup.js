@@ -4,6 +4,7 @@
  */
 import React, { useState, useEffect } from 'react';
 import { supabase, getNamesWithDescriptions } from '../../supabase/supabaseClient';
+import devLog from '../../utils/logger';
 import { LoadingSpinner, NameCard, ErrorBoundary } from '../';
 import useNameOptions from '../../supabase/useNameOptions';
 import styles from './TournamentSetup.module.css';
@@ -245,7 +246,7 @@ function useTournamentSetup(onStart) {
         // Sort names alphabetically for better UX
         const sortedNames = filteredNames.sort((a, b) => a.name.localeCompare(b.name));
         
-        console.log('🎮 TournamentSetup: Data loaded', {
+        devLog('🎮 TournamentSetup: Data loaded', {
           availableNames: sortedNames.length,
           hiddenNames: hiddenIds.size,
           userPreferences: hiddenData?.length || 0
@@ -274,7 +275,7 @@ function useTournamentSetup(onStart) {
         : [...prev, nameObj];
       
       // Log the updated selected names
-      console.log('🎮 TournamentSetup: Selected names updated', newSelectedNames);
+      devLog('🎮 TournamentSetup: Selected names updated', newSelectedNames);
       return newSelectedNames;
     });
   };
