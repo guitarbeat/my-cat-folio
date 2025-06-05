@@ -3,6 +3,7 @@
  * @description User login component with fun cat-themed interactions.
  */
 import React, { useState, useEffect, useRef } from 'react';
+import PropTypes from 'prop-types';
 import devLog from '../../utils/logger';
 import styles from './Login.module.css';
 import BongoCat from '../BongoCat/BongoCat';
@@ -157,7 +158,7 @@ function Login({ onLogin }) {
             loading="eager"
           />
           <p className={styles.welcomeText}>
-            Join Aaron's quest to find the perfect cat name through science and
+            Join Aaron&apos;s quest to find the perfect cat name through science and
             democracy!
           </p>
         </section>
@@ -259,5 +260,11 @@ function Login({ onLogin }) {
     </div>
   );
 }
+
+Login.displayName = "Login";
+
+Login.propTypes = {
+  onLogin: PropTypes.func.isRequired,
+};
 
 export default Login;

@@ -44,23 +44,6 @@ ChartJS.register(
 );
 
 // Constants and Configurations
-const SORT_CONFIG = {
-  individual: [
-    { key: "rating", label: "Rating" },
-    { key: "name", label: "Name" },
-    { key: "wins", label: "Wins" },
-    { key: "losses", label: "Losses" },
-    { key: "updated_at", label: "Last Updated" },
-  ],
-  aggregated: [
-    { key: "avgRating", label: "Average Rating" },
-    { key: "totalRatings", label: "Times Rated" },
-    { key: "name", label: "Name" },
-    { key: "totalWins", label: "Total Wins" },
-    { key: "totalLosses", label: "Total Losses" },
-  ],
-};
-
 const TIME_FILTERS = ["All Time", "Today", "This Week", "This Month"];
 export const DEFAULT_RATING = 1500;
 const ACTIVE_THRESHOLD = 3600000; // 1 hour in milliseconds
@@ -1991,6 +1974,13 @@ import StatsCard from "../StatsCard/StatsCard";
       </Modal>
     </div>
   );
+};
+
+Profile.displayName = "Profile";
+
+Profile.propTypes = {
+  userName: PropTypes.string.isRequired,
+  onStartNewTournament: PropTypes.func.isRequired,
 };
 
 export default Profile;

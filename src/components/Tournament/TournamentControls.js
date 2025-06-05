@@ -3,6 +3,7 @@
  * @description Provides sound and game controls during a tournament.
  */
 import React, { useState } from "react";
+import PropTypes from "prop-types";
 import {
   SpeakerWaveIcon,
   SpeakerXMarkIcon,
@@ -191,6 +192,25 @@ const TournamentControls = ({
       )}
     </div>
   );
+};
+
+TournamentControls.displayName = "TournamentControls";
+
+TournamentControls.propTypes = {
+  onEndEarly: PropTypes.func.isRequired,
+  isTransitioning: PropTypes.bool.isRequired,
+  isMuted: PropTypes.bool.isRequired,
+  onToggleMute: PropTypes.func.isRequired,
+  onNextTrack: PropTypes.func.isRequired,
+  trackInfo: PropTypes.object,
+  audioError: PropTypes.string,
+  onRetryAudio: PropTypes.func.isRequired,
+  onRandomize: PropTypes.func.isRequired,
+  volume: PropTypes.shape({
+    music: PropTypes.number,
+    effects: PropTypes.number,
+  }).isRequired,
+  onVolumeChange: PropTypes.func.isRequired,
 };
 
 export default TournamentControls;

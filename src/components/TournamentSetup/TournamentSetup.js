@@ -3,6 +3,7 @@
  * @description Wizard for selecting cat names and starting a tournament.
  */
 import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import { supabase, getNamesWithDescriptions } from '../../supabase/supabaseClient';
 import devLog from '../../utils/logger';
 import { LoadingSpinner, NameCard, ErrorBoundary } from '../';
@@ -39,12 +40,12 @@ const WelcomeSection = ({ isExpanded, setIsExpanded }) => (
         <span className={styles.toggleIcon}>{isExpanded ? "−" : "+"}</span>
       </button>
       <div id="welcome-instructions" className={styles.instructionsContent}>
-        <p>here's how it works:</p>
+        <p>here&apos;s how it works:</p>
         <ol className={styles.tournamentSteps}>
           <li>pick some names you vibe with</li>
           <li>vote on your faves in 1v1 battles</li>
           <li>watch the best name win</li>
-          <li>that's it!</li>
+          <li>that&apos;s it!</li>
         </ol>
       </div>
     </div>
@@ -208,7 +209,7 @@ const NameSuggestionSection = () => {
               id="suggestion-description"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              placeholder="Tell us about this name's meaning or origin"
+              placeholder="Tell us about this name&apos;s meaning or origin"
               maxLength={500}
               disabled={loading}
             />
@@ -230,11 +231,10 @@ const NameSuggestionSection = () => {
   );
 };
 
-function useTournamentSetup(onStart) {
+function useTournamentSetup() {
   const [availableNames, setAvailableNames] = useState([]);
   const [selectedNames, setSelectedNames] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [enlargedImage, setEnlargedImage] = useState(null);
   const [error, setError] = useState(null);
 
   useEffect(() => {
@@ -316,8 +316,6 @@ function useTournamentSetup(onStart) {
     selectedNames,
     isLoading,
     error,
-    enlargedImage,
-    setEnlargedImage,
     toggleName,
     handleSelectAll,
   };
@@ -329,11 +327,9 @@ function TournamentSetupContent({ onStart }) {
     selectedNames,
     isLoading,
     error,
-    enlargedImage,
-    setEnlargedImage,
     toggleName,
     handleSelectAll,
-  } = useTournamentSetup(onStart);
+  } = useTournamentSetup();
 
   const [isExpanded, setIsExpanded] = useState(false);
   const [openImages, setOpenImages] = useState([]);
@@ -698,5 +694,11 @@ function TournamentSetup(props) {
     </ErrorBoundary>
   );
 }
+
+TournamentSetup.displayName = "TournamentSetup";
+
+TournamentSetup.propTypes = {
+  onStart: PropTypes.func.isRequired,
+};
 
 export default TournamentSetup;

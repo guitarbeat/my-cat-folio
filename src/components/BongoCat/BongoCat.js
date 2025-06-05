@@ -13,8 +13,6 @@ const BongoCat = memo(
     color = "#000",
     onBongo,
     containerRef,
-    offsetY = -120,
-    zIndex = 20,
   }) => {
     const [isPawsDown, setIsPawsDown] = useState(false);
     const [containerTop, setContainerTop] = useState(0);
@@ -225,7 +223,6 @@ const BongoCat = memo(
     const pawsOffsetY = isMobile ? -10 : -20; // Much smaller offset on mobile to bring paws forward
 
     // Adjust visibility management to ensure a clean cutoff
-    const catVisibility = isVisible ? "visible" : "hidden";
     const pawsVisibility = isVisible ? "visible" : "hidden";
 
     // Render the positioned cat when containerRef is provided
@@ -376,8 +373,6 @@ BongoCat.propTypes = {
   color: PropTypes.string,
   onBongo: PropTypes.func,
   containerRef: PropTypes.object,
-  offsetY: PropTypes.number,
-  zIndex: PropTypes.number,
 };
 
 export default BongoCat;
