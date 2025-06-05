@@ -4,14 +4,39 @@ import EloRating from "../components/Tournament/EloRating";
 import useLocalStorage from "./useLocalStorage";
 import useUserSession from "./useUserSession";
 
+/**
+ * Calculate the blended rating for a name.
+ * @param {number} existingRating - Previous rating value
+ * @param {number} position - Position in sorted list
+ * @param {number} totalNames - Total number of names
+ * @param {number} matchesPlayed - Matches completed
+ * @param {number} maxMatches - Total matches in tournament
+ * @returns {number} Final rating between 1000 and 2000
+ */
+function computeRating(
+  existingRating,
+  position,
+  totalNames,
+  matchesPlayed,
+  maxMatches,
+) {
+  const ratingSpread = Math.min(1000, totalNames * 25);
+  const positionValue =
+    ((totalNames - position - 1) / (totalNames - 1)) * ratingSpread;
+  const newPositionRating = 1500 + positionValue;
+  const blendFactor = Math.min(0.8, (matchesPlayed / maxMatches) * 0.9);
+  const newRating = Math.round(
+    blendFactor * newPositionRating + (1 - blendFactor) * existingRating,
+  );
+  return Math.max(1000, Math.min(2000, newRating));
+}
+
 export function useTournament({
   names = [],
   existingRatings = {},
   onComplete,
 }) {
   const { userName } = useUserSession();
-
-
 
   // Create a stable storage key using the names array and user name
   const tournamentId = useMemo(() => {
@@ -75,16 +100,15 @@ export function useTournament({
     }
   }, [userName, tournamentState.userName, updateTournamentState]);
 
-// Validate names array when it changes
-useEffect(() => {
-  if (!Array.isArray(names) || names.length < 2) {
-    console.error("Invalid names array:", names);
-    setIsError(true);
-  } else {
-    setIsError(false);
-  }
-}, [names]);
-
+  // Validate names array when it changes
+  useEffect(() => {
+    if (!Array.isArray(names) || names.length < 2) {
+      console.error("Invalid names array:", names);
+      setIsError(true);
+    } else {
+      setIsError(false);
+    }
+  }, [names]);
 
   // Reset tournament state when names change
   useEffect(() => {
@@ -144,20 +168,13 @@ useEffect(() => {
           (vote.match.right.name === name.name && vote.result === "left"),
       ).length;
 
-      const ratingSpread = Math.min(1000, totalNames * 25);
-      const positionValue =
-        ((totalNames - position - 1) / (totalNames - 1)) * ratingSpread;
-      const newPositionRating = 1500 + positionValue;
-      const matchesPlayed = currentMatchNumber;
-      const maxMatches = totalMatches;
-      const blendFactor = Math.min(0.8, (matchesPlayed / maxMatches) * 0.9);
-      const newRating = Math.round(
-        blendFactor * newPositionRating +
-          (1 - blendFactor) * existingData.rating,
+      const finalRating = computeRating(
+        existingData.rating,
+        position,
+        totalNames,
+        currentMatchNumber,
+        totalMatches,
       );
-      const minRating = 1000;
-      const maxRating = 2000;
-      const finalRating = Math.max(minRating, Math.min(maxRating, newRating));
 
       return {
         name: name.name,
@@ -381,20 +398,13 @@ useEffect(() => {
 
         const totalNames = sortedResults.length;
         const position = index;
-        const ratingSpread = Math.min(1000, totalNames * 25);
-        const positionValue =
-          ((totalNames - position - 1) / (totalNames - 1)) * ratingSpread;
-        const newPositionRating = 1500 + positionValue;
-        const matchesPlayed = currentMatchNumber;
-        const maxMatches = totalMatches;
-        const blendFactor = Math.min(0.8, (matchesPlayed / maxMatches) * 0.9);
-        const newRating = Math.round(
-          blendFactor * newPositionRating +
-            (1 - blendFactor) * existingData.rating,
+        const finalRating = computeRating(
+          existingData.rating,
+          position,
+          totalNames,
+          currentMatchNumber,
+          totalMatches,
         );
-        const minRating = 1000;
-        const maxRating = 2000;
-        const finalRating = Math.max(minRating, Math.min(maxRating, newRating));
 
         return {
           name,
@@ -417,8 +427,8 @@ useEffect(() => {
       setIsTransitioning(false);
       setRoundNumber(1);
 
-        setCurrentMatchNumber(1);
-        updateTournamentState({ matchHistory: [] });
+      setCurrentMatchNumber(1);
+      updateTournamentState({ matchHistory: [] });
 
       setCanUndo(false);
       throw error; // Propagate error to parent
@@ -436,8 +446,7 @@ useEffect(() => {
     setCurrentMatch(lastVote.match);
     setCurrentMatchNumber(lastVote.matchNumber);
 
-      updateTournamentState({ matchHistory: matchHistory.slice(0, -1) });
-
+    updateTournamentState({ matchHistory: matchHistory.slice(0, -1) });
 
     if (sorter) {
       sorter.undoLastPreference();
@@ -468,7 +477,6 @@ useEffect(() => {
       getCurrentRatings: () => [],
       isError: true,
       userName: tournamentState.userName,
-
     };
   }
 

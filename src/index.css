@@ -6,6 +6,7 @@
 
 /* Import Base Styles */
 @import url("./styles/base.css");
+@import url("./styles/theme.css");
 
 /* Import Utility Classes */
 @import url("./styles/utilities.css");
@@ -32,100 +33,6 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   min-height: 100vh;
-}
-
-/* Force light theme when light-theme class is applied regardless of system preference */
-body.light-theme {
-  --primary-color: var(--primary-600);
-  --primary-light: var(--primary-100);
-  --primary-dark: var(--primary-800);
-  --surface-color: #f4f6fa;
-  --background-color: #eef1f6;
-  --text-primary: #2c3544;
-  --text-secondary: #4b5563;
-  --text-tertiary: #6b7280;
-  --border-color: #e5e7eb;
-  --card-background: #f8fafc;
-  --card-border: #e5e7eb;
-  --card-hover: #f1f5f9;
-
-  /* Synced dark-mode variables for components using legacy names */
-  --surface-dark: #f4f6fa;
-  --card-background-dark: #f8fafc;
-  --card-hover-dark: #f1f5f9;
-  --border-color-dark: #e5e7eb;
-  --text-primary-dark: #2c3544;
-  --text-secondary-dark: #4b5563;
-
-  --button-primary-bg: var(--primary-700);
-  --button-primary-hover: var(--primary-800);
-  --button-secondary-bg: #2a2a2a;
-  --button-secondary-hover: #333;
-  --button-text-light: white;
-
-  --progress-background: var(--primary-100);
-  --progress-border: var(--primary-200);
-  --percentage-background: var(--surface-color);
-  --percentage-text: var(--primary-600);
-  --vs-background: var(--primary-200);
-  --vs-text: var(--primary-600);
-  --header-background: rgba(244, 246, 250, 0.9);
-  --header-border: var(--border-color);
-
-  --shadow-color: rgba(var(--black-rgb), 0.1);
-  --shadow-color-light: rgba(var(--black-rgb), 0.05);
-  --shadow-color-medium: rgba(var(--black-rgb), 0.1);
-  --shadow-color-strong: rgba(var(--black-rgb), 0.15);
-}
-
-/* Force dark theme when body doesn't have light-theme class, regardless of system preference */
-body:not(.light-theme) {
-  --primary-color: var(--primary-400);
-  --primary-light: rgba(125, 127, 255, 0.15);
-  --primary-dark: var(--primary-200);
-
-  --surface-color: #0a0c1c;
-  --background-color: #050714;
-  --card-background: #0f1225;
-  --card-border: #1a1f35;
-  --card-hover: #151830;
-
-  /* Synced dark-mode variables for components using legacy names */
-  --surface-dark: #0a0c1c;
-  --card-background-dark: #0f1225;
-  --card-hover-dark: #151830;
-  --border-color-dark: #1a1f35;
-  --text-primary-dark: #f8fafc;
-  --text-secondary-dark: #e2e8f0;
-
-  --text-primary: #f8fafc;
-  --text-secondary: #e2e8f0;
-  --text-tertiary: #94a3b8;
-
-  --border-color: #1a1f35;
-
-  --button-primary-bg: var(--primary-400);
-  --button-primary-hover: var(--primary-300);
-  --button-secondary-bg: rgba(0, 0, 0, 0.2);
-  --button-secondary-hover: rgba(0, 0, 0, 0.3);
-  --button-text-light: white;
-
-  --shadow-color: rgba(0, 0, 0, 0.5);
-  --shadow-color-light: rgba(0, 0, 0, 0.2);
-  --shadow-color-medium: rgba(0, 0, 0, 0.3);
-  --shadow-color-strong: rgba(0, 0, 0, 0.4);
-
-  --overlay-light: rgba(0, 0, 0, 0.5);
-  --overlay-medium: rgba(0, 0, 0, 0.65);
-  --overlay-dark: rgba(0, 0, 0, 0.85);
-  --overlay-darker: rgba(0, 0, 0, 0.95);
-}
-
-.container {
-  width: 100%;
-  max-width: 1400px;
-  padding: 0 var(--space-4);
-  margin: 0 auto;
 }
 
 .button-primary:hover:not(:disabled) {

@@ -7,13 +7,72 @@ import React, { useState, useEffect, useCallback, memo, useRef } from "react";
 import PropTypes from "prop-types";
 import styles from "./BongoCat.module.css";
 
+/**
+ * Render the core cat body without paws.
+ * @returns {JSX.Element}
+ */
+const CatBody = () => (
+  <div className={styles.cat}>
+    <div className={styles.head} />
+    <div className={`${styles.ears} ${styles.fill}`}>
+      <div className={styles.ear} />
+      <div className={styles.ear} />
+    </div>
+    <div className={`${styles.ears} ${styles.outline}`}>
+      <div className={styles.ear} />
+      <div className={styles.ear} />
+    </div>
+    <div className={styles.face}>
+      <div className={styles.eyes}>
+        <div className={styles.eye} />
+        <div className={styles.eye} />
+      </div>
+      <div className={styles.mouth}>
+        <div className={styles.uu} />
+      </div>
+    </div>
+  </div>
+);
+
+/**
+ * Render a set of paws.
+ * @param {Object} params
+ * @param {"up"|"down"} params.position - Which paw orientation to render
+ * @returns {JSX.Element}
+ */
+const Paws = ({ position, className = "" }) => (
+  <div className={`${styles.paws} ${styles[position]} ${className}`.trim()}>
+    {position === "up" ? (
+      <>
+        <div className={styles.paw}>
+          <div className={styles.palm} />
+          <div className={styles.bean} />
+          <div className={styles.bean} />
+          <div className={styles.bean} />
+        </div>
+        <div className={styles.paw}>
+          <div className={styles.palm} />
+          <div className={styles.bean} />
+          <div className={styles.bean} />
+          <div className={styles.bean} />
+        </div>
+      </>
+    ) : (
+      <>
+        <div className={styles.paw} />
+        <div className={styles.paw} />
+      </>
+    )}
+  </div>
+);
+
+Paws.propTypes = {
+  position: PropTypes.oneOf(["up", "down"]).isRequired,
+  className: PropTypes.string,
+};
+
 const BongoCat = memo(
-  ({
-    size = 0.5,
-    color = "#000",
-    onBongo,
-    containerRef,
-  }) => {
+  ({ size = 0.5, color = "#000", onBongo, containerRef }) => {
     const [isPawsDown, setIsPawsDown] = useState(false);
     const [containerTop, setContainerTop] = useState(0);
     const [catSize, setCatSize] = useState(size);
@@ -55,11 +114,13 @@ const BongoCat = memo(
         setIsVisible(rect.top < viewportHeight);
 
         // Get container's z-index for layering
-        const containerStyle = window.getComputedStyle(containerRef.current);
+        const containerComputedStyle = window.getComputedStyle(
+          containerRef.current,
+        );
         const containerZ =
-          containerStyle.zIndex === "auto"
+          containerComputedStyle.zIndex === "auto"
             ? 1
-            : parseInt(containerStyle.zIndex, 10);
+            : parseInt(containerComputedStyle.zIndex, 10);
         setContainerZIndex(containerZ);
       }
     }, [containerRef, size]);
@@ -152,62 +213,25 @@ const BongoCat = memo(
       };
     }, [handleKeyDown, handleKeyUp, containerRef, updatePosition]);
 
+    const styleVars = {
+      "--cat-bg": color,
+      "--cat-outline":
+        color === "#000" ? "#222" : color === "#fff" ? "#eee" : color,
+      "--cat-size": catSize,
+    };
+
     // If no containerRef is provided, just render the cat without positioning
     if (!containerRef) {
       return (
         <div
           className={styles.container}
-          style={{
-            "--cat-bg": color,
-            "--cat-outline":
-              color === "#000" ? "#222" : color === "#fff" ? "#eee" : color,
-            "--cat-size": catSize,
-          }}
+          style={styleVars}
           role="img"
           aria-label="Bongo cat animation"
         >
-          <div className={styles.cat}>
-            <div className={styles.head} />
-            <div className={`${styles.ears} ${styles.fill}`}>
-              <div className={styles.ear} />
-              <div className={styles.ear} />
-            </div>
-            <div className={`${styles.ears} ${styles.outline}`}>
-              <div className={styles.ear} />
-              <div className={styles.ear} />
-            </div>
-            <div className={styles.face}>
-              <div className={styles.eyes}>
-                <div className={styles.eye} />
-                <div className={styles.eye} />
-              </div>
-              <div className={styles.mouth}>
-                <div className={styles.uu} />
-              </div>
-            </div>
-          </div>
-          <div
-            className={`${styles.paws} ${styles.up} ${isPawsDown ? styles.hide : ""}`}
-          >
-            <div className={styles.paw}>
-              <div className={styles.palm} />
-              <div className={styles.bean} />
-              <div className={styles.bean} />
-              <div className={styles.bean} />
-            </div>
-            <div className={styles.paw}>
-              <div className={styles.palm} />
-              <div className={styles.bean} />
-              <div className={styles.bean} />
-              <div className={styles.bean} />
-            </div>
-          </div>
-          <div
-            className={`${styles.paws} ${styles.down} ${isPawsDown ? "" : styles.hide}`}
-          >
-            <div className={styles.paw} />
-            <div className={styles.paw} />
-          </div>
+          <CatBody />
+          <Paws position="up" className={isPawsDown ? styles.hide : ""} />
+          <Paws position="down" className={isPawsDown ? "" : styles.hide} />
         </div>
       );
     }
@@ -248,35 +272,11 @@ const BongoCat = memo(
         >
           <div
             className={styles.container}
-            style={{
-              "--cat-bg": color,
-              "--cat-outline":
-                color === "#000" ? "#222" : color === "#fff" ? "#eee" : color,
-              "--cat-size": catSize,
-            }}
+            style={styleVars}
             role="img"
             aria-label="Bongo cat animation"
           >
-            <div className={styles.cat}>
-              <div className={styles.head} />
-              <div className={`${styles.ears} ${styles.fill}`}>
-                <div className={styles.ear} />
-                <div className={styles.ear} />
-              </div>
-              <div className={`${styles.ears} ${styles.outline}`}>
-                <div className={styles.ear} />
-                <div className={styles.ear} />
-              </div>
-              <div className={styles.face}>
-                <div className={styles.eyes}>
-                  <div className={styles.eye} />
-                  <div className={styles.eye} />
-                </div>
-                <div className={styles.mouth}>
-                  <div className={styles.uu} />
-                </div>
-              </div>
-            </div>
+            <CatBody />
           </div>
         </div>
 
@@ -291,38 +291,16 @@ const BongoCat = memo(
             width: "180px",
             maxWidth: "100%",
             aspectRatio: "1",
-            zIndex: upPawsZIndex, // Same z-index as body, so behind container
+            zIndex: upPawsZIndex,
             pointerEvents: "none",
             transition: "top 0.2s ease-out, opacity 0.3s ease",
             opacity: isVisible ? 1 : 0,
             visibility: pawsVisibility,
-            display: isPawsDown ? "none" : "block", // Hide when paws are down
+            display: isPawsDown ? "none" : "block",
           }}
         >
-          <div
-            className={styles.container}
-            style={{
-              "--cat-bg": color,
-              "--cat-outline":
-                color === "#000" ? "#222" : color === "#fff" ? "#eee" : color,
-              "--cat-size": catSize,
-            }}
-          >
-            {/* Up paws - behind container */}
-            <div className={`${styles.paws} ${styles.up}`}>
-              <div className={styles.paw}>
-                <div className={styles.palm} />
-                <div className={styles.bean} />
-                <div className={styles.bean} />
-                <div className={styles.bean} />
-              </div>
-              <div className={styles.paw}>
-                <div className={styles.palm} />
-                <div className={styles.bean} />
-                <div className={styles.bean} />
-                <div className={styles.bean} />
-              </div>
-            </div>
+          <div className={styles.container} style={styleVars}>
+            <Paws position="up" />
           </div>
         </div>
 
@@ -337,28 +315,16 @@ const BongoCat = memo(
             width: "180px",
             maxWidth: "100%",
             aspectRatio: "1",
-            zIndex: downPawsZIndex, // Extremely high z-index to ensure down paws are on top
+            zIndex: downPawsZIndex,
             pointerEvents: "none",
             transition: "top 0.2s ease-out, opacity 0.3s ease",
             opacity: isVisible ? 1 : 0,
             visibility: pawsVisibility,
-            display: isPawsDown ? "block" : "none", // Only show when paws are down
+            display: isPawsDown ? "block" : "none",
           }}
         >
-          <div
-            className={styles.container}
-            style={{
-              "--cat-bg": color,
-              "--cat-outline":
-                color === "#000" ? "#222" : color === "#fff" ? "#eee" : color,
-              "--cat-size": catSize,
-            }}
-          >
-            {/* Down paws - above container */}
-            <div className={`${styles.paws} ${styles.down}`}>
-              <div className={styles.paw} />
-              <div className={styles.paw} />
-            </div>
+          <div className={styles.container} style={styleVars}>
+            <Paws position="down" />
           </div>
         </div>
       </>

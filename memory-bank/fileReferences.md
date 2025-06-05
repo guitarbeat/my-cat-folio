@@ -12,6 +12,8 @@ This document serves as a comprehensive index of important files in the project,
 
 - `src/index.css`: Global CSS styles
   - References: [Technical Context](techContext.md)
+- `src/styles/theme.css`: Light and dark theme variables
+  - References: [Technical Context](techContext.md)
 
 ## Components
 
