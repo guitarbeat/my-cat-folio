@@ -447,7 +447,7 @@
 }
 
 /* Dark Mode */
-@media (prefers-color-scheme: dark) {
+:global(body:not(.light-theme)) {
   .tournamentSteps li::before {
     background: var(--primary-900);
     color: var(--primary-200);
