@@ -337,7 +337,12 @@
   left: -100%;
   width: 100%;
   height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
   transition: all 0.6s ease;
   z-index: -1;
 }
@@ -474,82 +479,82 @@
     scrollbar-width: none;
     -ms-overflow-style: none;
   }
-  
+
   .loginContainer::-webkit-scrollbar {
     display: none;
   }
-  
+
   .loginWrapper {
     padding: 0.5rem;
     min-height: 100vh;
     align-items: center;
   }
-  
+
   .imageSection {
     padding: 1rem 0.75rem;
     gap: 0.5rem;
   }
-  
+
   .welcomeTitle {
     font-size: 1.5rem;
   }
-  
+
   .welcomeText {
     font-size: 0.85rem;
     line-height: 1.3;
     padding: 0 0.5rem;
   }
-  
+
   .loginContent {
     padding: 1rem 0.75rem;
     gap: 0.5rem;
   }
-  
+
   .loginTitle {
     font-size: 1.4rem;
     margin-bottom: 0.3rem;
   }
-  
+
   .catImage {
     width: min(100%, 140px);
   }
-  
+
   .catFact {
     font-size: 0.8rem;
     padding: 6px 10px;
     line-height: 1.3;
   }
-  
+
   .explainerText {
     font-size: 0.75rem;
     margin-top: 0.3rem;
   }
-  
+
   .buttonGroup {
     flex-direction: column;
   }
-  
+
   .singleButton {
     padding: 0.6rem 1rem;
     font-size: 0.9rem;
   }
-  
+
   .helperText {
     font-size: 0.8rem;
   }
-  
+
   .namePreview {
     padding: 0.4rem;
   }
-  
+
   .randomNameExample {
     font-size: 0.8rem;
   }
-  
+
   .inputWrapper {
     margin-bottom: 0;
   }
-  
+
   .loginInput {
     padding: 0.6rem 1rem;
     font-size: 0.9rem;
@@ -659,8 +664,8 @@
     color: white;
     border: none;
   }
-  
+
   .singleButton:hover:not(:disabled) {
     background: linear-gradient(45deg, #4338ca, #4f46e5);
   }
-} 
+}

@@ -10,7 +10,7 @@
   --primary-700: #3235db;
   --primary-800: #2426b3;
   --primary-900: #1c1d8a;
-  
+
   /* Modern Grays */
   --gray-50: #f8fafc;
   --gray-100: #f1f5f9;
@@ -22,11 +22,11 @@
   --gray-700: #334155;
   --gray-800: #1e293b;
   --gray-900: #0f172a;
-  
+
   /* Accent Colors */
   --purple-500: #8b5cf6;
   --purple-600: #7c3aed;
-  
+
   /* Theme Colors - Softer Light Mode */
   --primary-color: var(--primary-600);
   --primary-light: var(--primary-100);
@@ -40,14 +40,14 @@
   --card-background: #f8fafc;
   --card-border: #e5e7eb;
   --card-hover: #f1f5f9;
-  
+
   /* Enhanced Contrast Colors for Light Mode */
   --button-primary-bg: var(--primary-700);
   --button-primary-hover: var(--primary-800);
   --button-secondary-bg: #2a2a2a;
   --button-secondary-hover: #333;
   --button-text-light: white;
-  
+
   /* Component Colors - Adjusted for Softer Light Mode */
   --progress-background: var(--primary-100);
   --progress-border: var(--primary-200);
@@ -57,7 +57,7 @@
   --vs-text: var(--primary-600);
   --header-background: rgba(244, 246, 250, 0.9);
   --header-border: var(--border-color);
-  
+
   /* RGB Values for Opacity */
   --primary-rgb: 79, 70, 229;
   --error-rgb: 239, 68, 68;
@@ -66,34 +66,37 @@
   --purple-rgb: 107, 70, 193;
   --black-rgb: 0, 0, 0;
   --white-rgb: 255, 255, 255;
-  
+
   /* Effects */
   --shadow-color: rgba(var(--black-rgb), 0.1);
   --shadow-color-light: rgba(var(--black-rgb), 0.05);
   --shadow-color-medium: rgba(var(--black-rgb), 0.1);
   --shadow-color-strong: rgba(var(--black-rgb), 0.15);
-  
+
   --shadow-sm: 0 1px 2px var(--shadow-color);
-  --shadow-md: 0 4px 6px -1px var(--shadow-color), 0 2px 4px -2px var(--shadow-color);
-  --shadow-lg: 0 10px 15px -3px var(--shadow-color), 0 4px 6px -4px var(--shadow-color);
-  --shadow-xl: 0 20px 25px -5px var(--shadow-color), 0 8px 10px -6px var(--shadow-color);
-  
+  --shadow-md:
+    0 4px 6px -1px var(--shadow-color), 0 2px 4px -2px var(--shadow-color);
+  --shadow-lg:
+    0 10px 15px -3px var(--shadow-color), 0 4px 6px -4px var(--shadow-color);
+  --shadow-xl:
+    0 20px 25px -5px var(--shadow-color), 0 8px 10px -6px var(--shadow-color);
+
   --text-shadow-sm: 0 2px 8px rgba(var(--black-rgb), 0.2);
   --text-shadow-lg: 0 2px 12px rgba(var(--black-rgb), 0.4);
-  
+
   --overlay-light: rgba(var(--black-rgb), 0.4);
   --overlay-medium: rgba(var(--black-rgb), 0.5);
   --overlay-dark: rgba(var(--black-rgb), 0.75);
   --overlay-darker: rgba(var(--black-rgb), 0.9);
-  
+
   --hover-overlay: rgba(var(--white-rgb), 0.1);
   --active-overlay: rgba(var(--white-rgb), 0.2);
-  
+
   /* Typography */
   --font-sans: "Inter", system-ui, -apple-system, sans-serif;
   --font-serif: "Playfair Display", georgia, serif;
   --font-mono: "JetBrains Mono", monospace;
-  
+
   --text-xs: 0.75rem;
   --text-sm: 0.875rem;
   --text-base: 1rem;
@@ -103,14 +106,14 @@
   --text-3xl: 1.875rem;
   --text-4xl: 2.25rem;
   --text-5xl: 3rem;
-  
+
   --text-responsive-xs: clamp(0.75rem, 1.5vw, 0.875rem);
   --text-responsive-sm: clamp(0.875rem, 1.75vw, 1rem);
   --text-responsive-base: clamp(1rem, 2vw, 1.125rem);
   --text-responsive-lg: clamp(1.125rem, 2.25vw, 1.25rem);
   --text-responsive-xl: clamp(1.25rem, 2.5vw, 1.5rem);
   --text-responsive-2xl: clamp(1.5rem, 3vw, 2rem);
-  
+
   /* Spacing */
   --space-1: 0.25rem;
   --space-2: 0.5rem;
@@ -124,7 +127,7 @@
   --space-16: 4rem;
   --space-20: 5rem;
   --space-24: 6rem;
-  
+
   /* Border Radius */
   --radius-sm: 0.375rem;
   --radius-md: 0.5rem;
@@ -132,24 +135,24 @@
   --radius-xl: 1rem;
   --radius-2xl: 1.5rem;
   --radius-full: 9999px;
-  
+
   /* Transitions */
   --transition-all: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   --transition-transform: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   --transition-opacity: opacity 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   --transition-smooth: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   --transition-bounce: 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-  
+
   /* Easing */
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-in-out-expo: cubic-bezier(0.87, 0, 0.13, 1);
   --ease-elastic: cubic-bezier(0.68, -0.6, 0.32, 1.6);
-  
+
   /* Animation Duration */
   --duration-fast: 150ms;
   --duration-normal: 250ms;
   --duration-slow: 350ms;
-  
+
   /* Z-Index */
   --z-negative: -1;
   --z-0: 0;
@@ -172,31 +175,31 @@
     --primary-color: var(--primary-400);
     --primary-light: rgba(125, 127, 255, 0.15);
     --primary-dark: var(--primary-200);
-    
+
     --surface-color: #0a0c1c;
     --background-color: #050714;
     --card-background: #0f1225;
     --card-border: #1a1f35;
     --card-hover: #151830;
-    
+
     --text-primary: #f8fafc;
     --text-secondary: #e2e8f0;
     --text-tertiary: #94a3b8;
-    
+
     --border-color: #1a1f35;
-    
+
     /* Dark Mode Button Colors */
     --button-primary-bg: var(--primary-400);
     --button-primary-hover: var(--primary-300);
     --button-secondary-bg: rgba(0, 0, 0, 0.2);
     --button-secondary-hover: rgba(0, 0, 0, 0.3);
     --button-text-light: white;
-    
+
     --shadow-color: rgba(0, 0, 0, 0.5);
     --shadow-color-light: rgba(0, 0, 0, 0.2);
     --shadow-color-medium: rgba(0, 0, 0, 0.3);
     --shadow-color-strong: rgba(0, 0, 0, 0.4);
-    
+
     --overlay-light: rgba(0, 0, 0, 0.5);
     --overlay-medium: rgba(0, 0, 0, 0.65);
     --overlay-dark: rgba(0, 0, 0, 0.85);

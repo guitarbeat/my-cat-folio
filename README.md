@@ -7,7 +7,7 @@ Meow Namester is a web application that helps you pick the perfect cat name thro
 1. Clone the repository
 
    ```bash
-   git clone https://github.com/yourusername/meow-namester-react.git
+   git clone https://github.com/guitarbeat/meow-namester-react.git
    cd meow-namester-react
    ```
 2. Install dependencies
@@ -15,7 +15,13 @@ Meow Namester is a web application that helps you pick the perfect cat name thro
    ```bash
    npm install
    ```
-3. Create an `.env` file in the project root with your Supabase credentials:
+3. Copy `.env.example` to `.env` and add your Supabase credentials:
+
+   ```bash
+   cp .env.example .env
+   ```
+
+   Edit `.env` and fill in:
 
    ```env
    REACT_APP_SUPABASE_URL=your-supabase-url
@@ -44,3 +50,22 @@ The app will be available at `http://localhost:3000`.
   - `REACT_APP_SUPABASE_ANON_KEY`
 
 If additional packages are missing, run `npm install` to ensure all dependencies from `package.json` are installed.
+
+## License
+
+Use of this project requires express permission from the author. See the
+[LICENSE](LICENSE) file for details on requesting permission.
+
+## Linting
+
+Run ESLint on the JavaScript and JSX files:
+
+```bash
+npm run lint:js
+```
+
+Run Stylelint on the CSS files:
+
+```bash
+npm run lint:css
+```

@@ -51,7 +51,7 @@
 
 .navbar__mobile-menu-icon::before,
 .navbar__mobile-menu-icon::after {
-  content: '';
+  content: "";
   position: absolute;
   width: 24px;
   height: 2px;
@@ -133,7 +133,7 @@ body.light-theme .navbar:not(.transparent) .navbar__item {
   padding: 0;
   background-color: var(--text-primary, #000000);
 }
-  
+
 .navbar .theme-switch .switch-handle {
   position: absolute;
   top: 2px;
@@ -147,7 +147,7 @@ body.light-theme .navbar:not(.transparent) .navbar__item {
   align-items: center;
   justify-content: center;
 }
-  
+
 .navbar .theme-switch.light-theme {
   background-color: #e2e8f0;
 }
@@ -173,7 +173,7 @@ body.light-theme .navbar:not(.transparent) .navbar__item {
   display: flex;
   align-items: center;
 }
-  
+
 /* Underline effect */
 .navbar__item a {
   color: inherit;
@@ -181,7 +181,7 @@ body.light-theme .navbar:not(.transparent) .navbar__item {
   transition: color 0.2s;
   position: relative;
 }
-  
+
 .navbar__item a::after {
   content: "";
   display: block;
@@ -194,7 +194,7 @@ body.light-theme .navbar:not(.transparent) .navbar__item {
   transition: all var(--transition-standard);
 }
 
-.navbar__item a:hover::after, 
+.navbar__item a:hover::after,
 .navbar__item a.active::after {
   width: 100%;
   background-color: var(--primary-color, #5a5cff);
@@ -203,11 +203,11 @@ body.light-theme .navbar:not(.transparent) .navbar__item {
 .navbar__item a:hover {
   color: var(--primary-color, #5a5cff);
 }
-  
+
 .navbar__item a.active {
   color: var(--primary-color, #5a5cff);
 }
-  
+
 /* Logo */
 .navbar__item--logo {
   margin-right: auto;
@@ -215,33 +215,33 @@ body.light-theme .navbar:not(.transparent) .navbar__item {
   align-items: center;
   gap: 0.5rem;
 }
-  
+
 .navbar__item--logo .navbar__logo {
   width: 30px;
   height: 30px;
   border-radius: 50%;
 }
-  
+
 .navbar__item--logo .navbar__title {
   font-weight: 700;
   font-size: 1.25rem;
 }
-  
+
 /* User greeting */
 .navbar__item--user {
   margin-right: 1rem;
   font-size: 0.9rem;
 }
-  
+
 /* Logout button */
 .navbar__item--logout a {
   color: var(--error-600, #dc2626);
 }
-  
+
 .navbar__item--logout a:hover {
   color: var(--error-700, #b91c1c);
 }
-  
+
 .navbar__item--logout a::after {
   background-color: var(--error-600, #dc2626);
 }
@@ -318,7 +318,9 @@ body.light-theme .scroll-to-top:focus {
     align-items: stretch;
     transform: translateY(-100%);
     opacity: 0;
-    transition: transform var(--transition-standard), opacity var(--transition-standard);
+    transition:
+      transform var(--transition-standard),
+      opacity var(--transition-standard);
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   }
 
