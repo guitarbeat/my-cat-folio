@@ -13,7 +13,6 @@ import { Chart as ChartJS,
 } from 'chart.js';
 import { Bar, Pie } from 'react-chartjs-2';
 import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
-// import CalendarButton from '../depreciated/CalendarButton/CalendarButton';
 import styles from './Profile.module.css';
 import { formatTimestamp } from '../../utils/adminActions';
 import PropTypes from 'prop-types';

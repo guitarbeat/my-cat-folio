@@ -35,7 +35,6 @@
 - **Tournament Selection Lag**: Slight delay when selecting large numbers of names - Medium severity - Being addressed in performance optimization
 - **Chart Rendering Inconsistency**: Charts occasionally fail to render in certain browsers - Low severity - Workaround: refresh the page
 - **Authentication Flow Disruption**: Sometimes users are redirected incorrectly after login - Medium severity - Under investigation
-- **Mobile View Layout**: Sidebar navigation breaks on very small screens - Low severity - Temporary fix with CSS media queries in place
 - **Database Query Timeout**: Occasional timeout on large data queries - High severity - Working on query optimization
 
 ## File References
