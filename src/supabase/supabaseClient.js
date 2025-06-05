@@ -16,7 +16,9 @@
  * @requires REACT_APP_SUPABASE_ANON_KEY - Environment variable for Supabase anonymous key
  */
 
-import { createClient } from "@supabase/supabase-js";
+import { createClient } from '@supabase/supabase-js';
+import devLog from '../utils/logger';
+
 
 const supabaseUrl = process.env.REACT_APP_SUPABASE_URL;
 const supabaseAnonKey = process.env.REACT_APP_SUPABASE_ANON_KEY;
@@ -95,8 +97,9 @@ export const ensureRatingHistoryTable = async () => {
     if (!tableExists) {
       // Create the table using SQL - this requires you to have enabled database functions
       // You may need to do this manually in the Supabase dashboard if this doesn't work
-      await supabase.rpc("create_rating_history_table");
-      console.log("Created rating_history table");
+      await supabase.rpc('create_rating_history_table');
+      devLog('Created rating_history table');
+
     }
   } catch (error) {
     console.error("Error ensuring rating_history table exists:", error);

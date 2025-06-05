@@ -2,14 +2,13 @@
  * @module TournamentSetup
  * @description Wizard for selecting cat names and starting a tournament.
  */
-import React, { useState, useEffect } from "react";
-import {
-  supabase,
-  getNamesWithDescriptions,
-} from "../../supabase/supabaseClient";
-import { LoadingSpinner, NameCard, ErrorBoundary } from "../";
-import useNameOptions from "../../supabase/useNameOptions";
-import styles from "./TournamentSetup.module.css";
+import React, { useState, useEffect } from 'react';
+import { supabase, getNamesWithDescriptions } from '../../supabase/supabaseClient';
+import devLog from '../../utils/logger';
+import { LoadingSpinner, NameCard, ErrorBoundary } from '../';
+import useNameOptions from '../../supabase/useNameOptions';
+import styles from './TournamentSetup.module.css';
+
 
 const CAT_IMAGES = [
   "IMG_4844.jpg",
@@ -266,11 +265,11 @@ function useTournamentSetup(onStart) {
         );
 
         // Sort names alphabetically for better UX
-        const sortedNames = filteredNames.sort((a, b) =>
-          a.name.localeCompare(b.name),
-        );
 
-        console.log("🎮 TournamentSetup: Data loaded", {
+        const sortedNames = filteredNames.sort((a, b) => a.name.localeCompare(b.name));
+        
+        devLog('🎮 TournamentSetup: Data loaded', {
+
           availableNames: sortedNames.length,
           hiddenNames: hiddenIds.size,
           userPreferences: hiddenData?.length || 0,
@@ -300,10 +299,8 @@ function useTournamentSetup(onStart) {
         : [...prev, nameObj];
 
       // Log the updated selected names
-      console.log(
-        "🎮 TournamentSetup: Selected names updated",
-        newSelectedNames,
-      );
+      devLog('🎮 TournamentSetup: Selected names updated', newSelectedNames);
+
       return newSelectedNames;
     });
   };

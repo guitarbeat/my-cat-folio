@@ -21,8 +21,10 @@
  * @property {Function} logout - Async function to log out the current user
  */
 
-import { useState, useEffect, useCallback } from "react";
-import { supabase } from "../supabase/supabaseClient";
+import { useState, useEffect, useCallback } from 'react';
+import { supabase } from '../supabase/supabaseClient';
+import devLog from '../utils/logger';
+
 
 function useUserSession() {
   // Initialize state with localStorage value immediately
@@ -44,8 +46,8 @@ function useUserSession() {
       try {
         const storedUser = localStorage.getItem("catNamesUser");
         if (storedUser) {
-          console.log("Found stored user:", storedUser);
-          // Verify user exists in database
+          devLog('Found stored user:', storedUser);
+ser exists in database
           const { data, error: dbError } = await supabase
             .from("app_users")
             .select("user_name")
@@ -79,10 +81,11 @@ function useUserSession() {
    */
   const login = useCallback(async (name) => {
     try {
-      console.log("Attempting to login with name:", name);
+      devLog('Attempting to login with name:', name);
+      
+      if (!name || typeof name !== 'string' || name.trim() === '') {
+        throw new Error('Please enter a valid name');
 
-      if (!name || typeof name !== "string" || name.trim() === "") {
-        throw new Error("Please enter a valid name");
       }
 
       const trimmedName = name.trim();
@@ -107,8 +110,9 @@ function useUserSession() {
       setUserName(trimmedName);
       setIsLoggedIn(true);
       setError(null);
+      
+      devLog('Login successful. Current user:', trimmedName);
 
-      console.log("Login successful. Current user:", trimmedName);
     } catch (err) {
       console.error("Login error:", err);
       setError(err.message);
@@ -121,17 +125,19 @@ function useUserSession() {
    * Clears local storage and resets session state
    */
   const logout = useCallback(async () => {
-    console.log("Logging out user:", userName);
-    localStorage.removeItem("catNamesUser");
-    setUserName("");
+    devLog('Logging out user:', userName);
+    localStorage.removeItem('catNamesUser');
+    setUserName('');
     setIsLoggedIn(false);
     setError(null);
-    console.log("Logout complete");
+    devLog('Logout complete');
+
   }, [userName]);
 
   // Add a debug log whenever userName changes
   useEffect(() => {
-    console.log("Current user session state:", {
+    devLog('Current user session state:', {
+
       userName,
       isLoggedIn,
       error,

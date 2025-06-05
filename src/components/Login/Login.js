@@ -2,9 +2,10 @@
  * @module Login
  * @description User login component with fun cat-themed interactions.
  */
-import React, { useState, useEffect, useRef } from "react";
-import styles from "./Login.module.css";
-import BongoCat from "../BongoCat/BongoCat";
+import React, { useState, useEffect, useRef } from 'react';
+import devLog from '../../utils/logger';
+import styles from './Login.module.css';
+import BongoCat from '../BongoCat/BongoCat';
 
 function Login({ onLogin }) {
   const [name, setName] = useState("");
@@ -132,7 +133,8 @@ function Login({ onLogin }) {
       <BongoCat
         containerRef={containerRef}
         color="#000"
-        onBongo={() => console.log("Cat bongoed!")}
+        onBongo={() => devLog('Cat bongoed!')}
+
       />
 
       <div className={styles.backgroundContainer}>
