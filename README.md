@@ -7,7 +7,7 @@ Meow Namester is a web application that helps you pick the perfect cat name thro
 1. Clone the repository
 
    ```bash
-   git clone https://github.com/yourusername/meow-namester-react.git
+   git clone https://github.com/guitarbeat/meow-namester-react.git
    cd meow-namester-react
    ```
 2. Install dependencies
