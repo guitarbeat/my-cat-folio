@@ -19,22 +19,20 @@
 
 /* Dark Mode Colors */
 :global(body:not(.light-theme)) {
-  :root {
-    --bg-primary: #1f2937;
-    --bg-secondary: #111827;
-    --text-primary: #f9fafb;
-    --text-secondary: #9ca3af;
-    --border-color: #374151;
-    --accent-primary: #6366f1;
-    --accent-primary-hover: #818cf8;
-    --accent-danger: #ef4444;
-    --accent-danger-hover: #f87171;
-    --accent-success: #10b981;
-    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
-    --shadow-md: 0 2px 4px rgba(0, 0, 0, 0.4);
-    --overlay-light: rgba(255, 255, 255, 0.05);
-    --overlay-dark: rgba(0, 0, 0, 0.2);
-  }
+  --bg-primary: #1f2937;
+  --bg-secondary: #111827;
+  --text-primary: #f9fafb;
+  --text-secondary: #9ca3af;
+  --border-color: #374151;
+  --accent-primary: #6366f1;
+  --accent-primary-hover: #818cf8;
+  --accent-danger: #ef4444;
+  --accent-danger-hover: #f87171;
+  --accent-success: #10b981;
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 2px 4px rgba(0, 0, 0, 0.4);
+  --overlay-light: rgba(255, 255, 255, 0.05);
+  --overlay-dark: rgba(0, 0, 0, 0.2);
 }
 
 /* Container Layouts */
