@@ -31,7 +31,6 @@ This document serves as a comprehensive index of important files in the project,
 
 ### User Interface
 
-- `src/components/Sidebar/Sidebar.js`: Navigation sidebar
   - References: [Active Context](activeContext.md)
 
 - `src/components/NameCard/NameCard.js`: Display card for cat names
@@ -93,9 +92,6 @@ This document serves as a comprehensive index of important files in the project,
   - References: [Technical Context](techContext.md)
 
 - `src/utils/arrayUtils.js`: Array manipulation helpers
-  - References: [Technical Context](techContext.md)
-
-- `src/utils/chartConfig.js`: Chart configuration
   - References: [Technical Context](techContext.md)
 
 ## Configuration Files

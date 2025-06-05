@@ -4,7 +4,6 @@
 The project is currently focused on documenting the codebase through the Memory Bank system to improve project maintainability and onboarding. This is a significant improvement to ensure knowledge continuity and provide a comprehensive overview of the project's structure, purpose, and technical details.
 
 ## Recent Changes
-- **March 28, 2023**: Updates to sidebar component (src/components/Sidebar/Sidebar.js)
 - **March 28, 2023**: Enhancements to login component (src/components/Login/Login.js)
 - **March 28, 2023**: Added BongoCat animation component (src/components/BongoCat/BongoCat.js)
 - **March 27, 2023**: Updates to tournament logic in useTournament hook (src/hooks/useTournament.js)
@@ -37,5 +36,4 @@ The project is currently focused on documenting the codebase through the Memory 
 - `src/App.js`: Main application component that needs refactoring for cleaner code organization
 - `src/hooks/useTournament.js`: Tournament logic that requires performance optimization
 - `src/components/Results/Results.js`: Results component being enhanced with new visualizations
-- `src/components/Sidebar/Sidebar.js`: Recently updated sidebar navigation
 - `src/components/BongoCat/BongoCat.js`: Newly added animation component 
