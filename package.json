@@ -21,7 +21,7 @@
     "management"
   ],
   "author": "Aaron",
-  "license": "ISC",
+  "license": "UNLICENSED",
   "dependencies": {
     "@googleapis/calendar": "^9.8.0",
     "@hello-pangea/dnd": "^18.0.1",
