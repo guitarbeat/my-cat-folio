@@ -4,7 +4,7 @@
  * Shows the tournament results with ratings and provides option to restart.
  */
 
-import React, { useState, useEffect, useCallback, memo, useMemo } from "react";
+import React, { useState, useEffect, useCallback, memo } from "react";
 import RankingAdjustment from "../RankingAdjustment/RankingAdjustment";
 import Bracket from "../Bracket/Bracket";
 import CalendarButton from "../CalendarButton/CalendarButton";
@@ -37,7 +37,7 @@ function Results({
     message: "",
     type: "success",
   });
-  const [hiddenNames, setHiddenNames] = useState(new Set());
+  const [hiddenNames] = useState(new Set());
 
   // Convert vote history to bracket matches
   const getBracketMatches = useCallback(() => {
@@ -195,9 +195,6 @@ function Results({
       }
     };
   }, []);
-
-  // Memoize processed rankings
-  const processedRankings = useMemo(() => processRankings(ratings), [ratings]);
 
   // Optimize vfx.js usage
   useEffect(() => {

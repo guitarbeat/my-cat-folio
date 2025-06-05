@@ -24,7 +24,7 @@ import {
 } from "./components";
 import NavBar from "./components/NavBar/NavBar";
 import useUserSession from "./hooks/useUserSession";
-import { supabase, getNamesWithDescriptions } from "./supabase/supabaseClient";
+import { supabase } from "./supabase/supabaseClient";
 import Tournament from "./components/Tournament/Tournament";
 import LoadingSpinner from "./components/LoadingSpinner/LoadingSpinner";
 

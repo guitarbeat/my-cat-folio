@@ -9,6 +9,7 @@
     "es2021": true
   },
   "parserOptions": {
+    "ecmaVersion": 2022,
     "ecmaFeatures": {
       "jsx": true
     },
@@ -18,5 +19,9 @@
     "react": {
       "version": "detect"
     }
+  },
+  "rules": {
+    "react/prop-types": "off",
+    "react/display-name": "off"
   }
 }

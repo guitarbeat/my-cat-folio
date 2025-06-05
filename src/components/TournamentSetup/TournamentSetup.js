@@ -39,12 +39,12 @@ const WelcomeSection = ({ isExpanded, setIsExpanded }) => (
         <span className={styles.toggleIcon}>{isExpanded ? "−" : "+"}</span>
       </button>
       <div id="welcome-instructions" className={styles.instructionsContent}>
-        <p>here's how it works:</p>
+        <p>here&apos;s how it works:</p>
         <ol className={styles.tournamentSteps}>
           <li>pick some names you vibe with</li>
           <li>vote on your faves in 1v1 battles</li>
           <li>watch the best name win</li>
-          <li>that's it!</li>
+          <li>that&apos;s it!</li>
         </ol>
       </div>
     </div>
@@ -230,11 +230,10 @@ const NameSuggestionSection = () => {
   );
 };
 
-function useTournamentSetup(onStart) {
+function useTournamentSetup() {
   const [availableNames, setAvailableNames] = useState([]);
   const [selectedNames, setSelectedNames] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [enlargedImage, setEnlargedImage] = useState(null);
   const [error, setError] = useState(null);
 
   useEffect(() => {
@@ -316,8 +315,6 @@ function useTournamentSetup(onStart) {
     selectedNames,
     isLoading,
     error,
-    enlargedImage,
-    setEnlargedImage,
     toggleName,
     handleSelectAll,
   };
@@ -329,11 +326,9 @@ function TournamentSetupContent({ onStart }) {
     selectedNames,
     isLoading,
     error,
-    enlargedImage,
-    setEnlargedImage,
     toggleName,
     handleSelectAll,
-  } = useTournamentSetup(onStart);
+  } = useTournamentSetup();
 
   const [isExpanded, setIsExpanded] = useState(false);
   const [openImages, setOpenImages] = useState([]);
@@ -446,7 +441,6 @@ function TournamentSetupContent({ onStart }) {
       prev.map((img) => {
         if (img.isResizing) {
           const deltaX = e.clientX - img.resizeStart.x;
-          const deltaY = e.clientY - img.resizeStart.y;
           const aspectRatio = img.size.width / img.size.height;
 
           let newWidth = img.size.width;

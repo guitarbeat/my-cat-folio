@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef, useMemo } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import { PreferenceSorter } from "../components/Tournament/PreferenceSorter";
 import EloRating from "../components/Tournament/EloRating";
 import useLocalStorage from "./useLocalStorage";
@@ -9,7 +9,7 @@ export function useTournament({
   existingRatings = {},
   onComplete,
 }) {
-  const { userName, isLoggedIn } = useUserSession();
+  const { userName } = useUserSession();
 
   // Create a stable storage key using the names array and user name
   const tournamentId = useMemo(() => {
@@ -82,21 +82,6 @@ useEffect(() => {
     setIsError(false);
   }
 }, [names]);
-
-// If validation failed, return early with basic object
-if (isError) {
-  return {
-    currentMatch: null,
-    handleVote: () => {},
-    progress: 0,
-    roundNumber: 0,
-    currentMatchNumber: 0,
-    totalMatches: 0,
-    matchHistory: [],
-    getCurrentRatings: () => [],
-    isError: true,
-  };
-}
 
   // Reset tournament state when names change
   useEffect(() => {
@@ -469,6 +454,21 @@ if (isError) {
   }, [isTransitioning, canUndo, matchHistory, names.length, sorter]);
 
   const progress = Math.round((currentMatchNumber / totalMatches) * 100);
+
+  if (isError) {
+    return {
+      currentMatch: null,
+      handleVote: () => {},
+      progress: 0,
+      roundNumber: 0,
+      currentMatchNumber: 0,
+      totalMatches: 0,
+      matchHistory: [],
+      getCurrentRatings: () => [],
+      isError: true,
+      userName: tournamentState.userName,
+    };
+  }
 
   return {
     currentMatch,

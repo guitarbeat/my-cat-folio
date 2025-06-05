@@ -43,7 +43,7 @@ class ErrorBoundary extends React.Component {
             <div className={styles.icon}>⚠️</div>
             <h2 className={styles.title}>Something went wrong</h2>
             <p className={styles.message}>
-              We're sorry, but something unexpected happened. You can try
+              We&apos;re sorry, but something unexpected happened. You can try
               refreshing the page or contact support if the problem persists.
               {process.env.NODE_ENV === "development" && this.state.error && (
                 <>
