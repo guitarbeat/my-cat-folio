@@ -22,14 +22,6 @@ const scrollToTop = () => {
   });
 };
 
-const getInitialTheme = () => {
-  const savedTheme = localStorage.getItem(THEME.STORAGE_KEY);
-  if (savedTheme) {
-    return savedTheme === THEME.LIGHT;
-  }
-  return window.matchMedia("(prefers-color-scheme: light)").matches;
-};
-
 const updateThemeColor = (isLight) => {
   const themeColorMeta = document.querySelector("meta#theme-color");
   if (themeColorMeta) {

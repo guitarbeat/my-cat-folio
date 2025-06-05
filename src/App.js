@@ -37,12 +37,11 @@ const THEME = {
 };
 
 function App() {
-  const { userName, isLoggedIn, login, logout, session } = useUserSession();
+  const { userName, isLoggedIn, login, logout } = useUserSession();
   const [ratings, setRatings] = useState({});
   const [view, setView] = useState("tournament");
   const [tournamentComplete, setTournamentComplete] = useState(false);
   const [tournamentNames, setTournamentNames] = useState(null);
-  const [names, setNames] = useState([]);
   const [voteHistory, setVoteHistory] = useState([]);
   const [matrixMode, setMatrixMode] = useState(false);
   const [isTournamentLoading, setIsTournamentLoading] = useState(false);
@@ -64,18 +63,6 @@ function App() {
     setIsLightTheme(isLight);
   };
 
-  useEffect(() => {
-    const loadNames = async () => {
-      try {
-        const namesData = await getNamesWithDescriptions();
-        setNames(namesData);
-      } catch (error) {
-        console.error("Error loading names:", error);
-      }
-    };
-
-    loadNames();
-  }, []);
 
   // Reset tournament state when changing views
   useEffect(() => {

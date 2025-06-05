@@ -20,7 +20,7 @@ import {
   RadarController,
   RadialLinearScale,
 } from "chart.js";
-import { Bar, Pie } from "react-chartjs-2";
+import { Bar, Pie, Line } from "react-chartjs-2";
 import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
 import StatsCard from "../StatsCard/StatsCard";
 import styles from "./Profile.module.css";

@@ -20,7 +20,7 @@ const isLoadingTest = window.location.pathname.includes("/loading");
 
 const LoadingTest = () => {
   const [size, setSize] = React.useState("large");
-  const [text, setText] = React.useState("Testing Loading Spinner...");
+  const [text] = React.useState("Testing Loading Spinner...");
   const [isDarkMode, setIsDarkMode] = React.useState(
     window.matchMedia("(prefers-color-scheme: dark)").matches,
   );

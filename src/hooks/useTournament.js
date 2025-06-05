@@ -73,27 +73,30 @@ export function useTournament({
     }
   }, [userName, tournamentState.userName, updateTournamentState]);
 
-  // Reset error state when names change
-  useEffect(() => {
-    setIsError(false);
-  }, [names]);
-
-  // Add validation check with early return
+// Validate names array when it changes
+useEffect(() => {
   if (!Array.isArray(names) || names.length < 2) {
     console.error("Invalid names array:", names);
     setIsError(true);
-    return {
-      currentMatch: null,
-      handleVote: () => {},
-      progress: 0,
-      roundNumber: 0,
-      currentMatchNumber: 0,
-      totalMatches: 0,
-      matchHistory: [],
-      getCurrentRatings: () => [],
-      isError: true,
-    };
+  } else {
+    setIsError(false);
   }
+}, [names]);
+
+// If validation failed, return early with basic object
+if (isError) {
+  return {
+    currentMatch: null,
+    handleVote: () => {},
+    progress: 0,
+    roundNumber: 0,
+    currentMatchNumber: 0,
+    totalMatches: 0,
+    matchHistory: [],
+    getCurrentRatings: () => [],
+    isError: true,
+  };
+}
 
   // Reset tournament state when names change
   useEffect(() => {
@@ -426,7 +429,10 @@ export function useTournament({
       setIsTransitioning(false);
       setRoundNumber(1);
       setCurrentMatchNumber(1);
-      setMatchHistory([]);
+        updateTournamentState((prev) => ({
+          ...prev,
+          matchHistory: [],
+        }));
       setCanUndo(false);
       throw error; // Propagate error to parent
     }
@@ -442,7 +448,10 @@ export function useTournament({
     const lastVote = matchHistory[matchHistory.length - 1];
     setCurrentMatch(lastVote.match);
     setCurrentMatchNumber(lastVote.matchNumber);
-    setMatchHistory((prev) => prev.slice(0, -1));
+    updateTournamentState((prev) => ({
+      ...prev,
+      matchHistory: prev.matchHistory.slice(0, -1),
+    }));
 
     if (sorter) {
       sorter.undoLastPreference();
