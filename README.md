@@ -44,3 +44,17 @@ The app will be available at `http://localhost:3000`.
   - `REACT_APP_SUPABASE_ANON_KEY`
 
 If additional packages are missing, run `npm install` to ensure all dependencies from `package.json` are installed.
+
+## Linting
+
+Run ESLint on the JavaScript and JSX files:
+
+```bash
+npm run lint:js
+```
+
+Run Stylelint on the CSS files:
+
+```bash
+npm run lint:css
+```
