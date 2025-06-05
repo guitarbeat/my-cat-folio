@@ -1,3 +1,7 @@
+/**
+ * @module TournamentSetup
+ * @description Wizard for selecting cat names and starting a tournament.
+ */
 import React, { useState, useEffect } from 'react';
 import { supabase, getNamesWithDescriptions } from '../../supabase/supabaseClient';
 import { LoadingSpinner, NameCard, ErrorBoundary } from '../';

@@ -1,3 +1,7 @@
+/**
+ * @module Login
+ * @description User login component with fun cat-themed interactions.
+ */
 import React, { useState, useEffect, useRef } from 'react';
 import styles from './Login.module.css';
 import BongoCat from '../BongoCat/BongoCat';

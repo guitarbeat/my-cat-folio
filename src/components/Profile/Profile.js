@@ -1,3 +1,7 @@
+/**
+ * @module Profile
+ * @description Displays user statistics and saved tournament data.
+ */
 import React, { useState, useCallback, useMemo, memo, useEffect } from 'react';
 import useSupabaseStorage from '../../supabase/useSupabaseStorage';
 import { supabase, deleteName } from '../../supabase/supabaseClient';

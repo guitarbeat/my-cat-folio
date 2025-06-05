@@ -1,3 +1,7 @@
+/**
+ * @module RankingAdjustment
+ * @description Drag-and-drop interface for manually reordering name rankings.
+ */
 import React, { useState, useEffect } from 'react';
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
 import './RankingAdjustment.css';

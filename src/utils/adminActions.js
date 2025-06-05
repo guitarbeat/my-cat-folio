@@ -1,3 +1,8 @@
+/**
+ * Format a timestamp into a human friendly string.
+ * @param {number|string|null} timestamp - UNIX timestamp or ISO string.
+ * @returns {string} Readable relative time value.
+ */
 export const formatTimestamp = (timestamp) => {
   if (!timestamp) {
     return 'Never';

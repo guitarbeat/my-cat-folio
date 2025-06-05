@@ -1,3 +1,7 @@
+/**
+ * @module TournamentControls
+ * @description Provides sound and game controls during a tournament.
+ */
 import React, { useState } from 'react';
 import { 
   SpeakerWaveIcon, 
