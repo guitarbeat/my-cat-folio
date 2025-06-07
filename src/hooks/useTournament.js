@@ -181,7 +181,7 @@ export function useTournament({
         rating: finalRating,
         wins: existingData.wins + wins,
         losses: existingData.losses + losses,
-        confidence: matchesPlayed / maxMatches,
+        confidence: currentMatchNumber / totalMatches,
       };
     });
   }, [names, currentRatings, matchHistory, currentMatchNumber, totalMatches]);
@@ -411,7 +411,7 @@ export function useTournament({
           rating: finalRating,
           wins: existingData.wins,
           losses: existingData.losses,
-          confidence: matchesPlayed / maxMatches,
+          confidence: currentMatchNumber / totalMatches,
         };
       });
 
