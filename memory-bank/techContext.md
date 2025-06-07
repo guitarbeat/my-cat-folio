@@ -41,9 +41,10 @@
 The application is built using the standard Create React App build process and deployed to Vercel for hosting. The build process includes:
 
 1. Development using `npm start` for local testing
-2. CSS linting with `npm run lint:css` using Stylelint
-3. Building production assets with `npm run build`
-4. Deployment to Vercel for hosting
+2. Running unit tests with `npm test`
+3. CSS linting with `npm run lint:css` using Stylelint
+4. Building production assets with `npm run build`
+5. Deployment to Vercel for hosting
 
 Environment variables are managed through `.env` files with separate configurations for development and production environments. The Vercel deployment automatically handles environment variable configuration for production.
 

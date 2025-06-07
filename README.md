@@ -69,3 +69,27 @@ Run Stylelint on the CSS files:
 ```bash
 npm run lint:css
 ```
+
+## Testing
+
+Run the unit tests with:
+
+```bash
+npm test
+```
+
+The React testing environment starts in watch mode. Press `q` to quit.
+
+## Production Build
+
+Create an optimized build for deployment:
+
+```bash
+npm run build
+```
+
+The compiled app will be written to the `build` directory.
+
+## Documentation
+
+More detailed project documentation lives in the `memory-bank` directory. These files describe the overall design, technical context and development progress.
