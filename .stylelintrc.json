@@ -2,5 +2,15 @@
   "extends": [
     "stylelint-config-standard",
     "stylelint-config-recess-order"
-  ]
+  ],
+  "rules": {
+    "selector-class-pattern": null,
+    "selector-pseudo-class-no-unknown": [true, {"ignorePseudoClasses": ["global", "export"]}],
+    "property-no-unknown": [true, {"ignoreProperties": ["composes", "cardBase", "pageContainer", "gridLayout"]}],
+    "at-rule-no-unknown": [true, {"ignoreAtRules": ["value"]}],
+    "no-duplicate-selectors": null,
+    "no-descending-specificity": null,
+    "block-no-empty": null,
+    "keyframes-name-pattern": null
+  }
 }

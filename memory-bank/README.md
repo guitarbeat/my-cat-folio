@@ -48,4 +48,6 @@ Every developer working on this project is responsible for maintaining and updat
 
 ## Memory Bank Maintenance
 
-The effectiveness of this system depends entirely on the accuracy and completeness of the documentation. Invest time in maintaining these files to ensure project continuity. 
+The effectiveness of this system depends entirely on the accuracy and completeness of the documentation. Invest time in maintaining these files to ensure project continuity.
+
+For installation and usage instructions, refer to the main `README.md` in the project root.
