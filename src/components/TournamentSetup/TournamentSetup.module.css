@@ -369,32 +369,12 @@
   z-index: 1002;
 }
 
-.minimizeButton {
-  composes: btnIcon from "../../styles/base.css";
-  width: 40px;
-  height: 40px;
-  font-size: var(--text-xl);
-  color: var(--white);
-  background: rgb(var(--black-rgb) / 0.5);
-  border: none;
-  border-radius: var(--radius-full);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: all var(--duration-normal) var(--ease-out);
-}
-
-.minimizeButton:hover {
-  background: rgb(var(--black-rgb) / 0.7);
-  transform: scale(1.1);
-}
-
+/* Base button styles */
+.minimizeButton,
 .closeButton {
   composes: btnIcon from "../../styles/base.css";
   width: 40px;
   height: 40px;
-  font-size: var(--text-2xl);
   color: var(--white);
   background: rgb(var(--black-rgb) / 0.5);
   border: none;
@@ -406,9 +386,19 @@
   transition: all var(--duration-normal) var(--ease-out);
 }
 
+.minimizeButton:hover,
 .closeButton:hover {
   background: rgb(var(--black-rgb) / 0.7);
   transform: scale(1.1);
+}
+
+/* Specific button styles */
+.minimizeButton {
+  font-size: var(--text-xl);
+}
+
+.closeButton {
+  font-size: var(--text-2xl);
 }
 
 .imageInstructions {

@@ -2,7 +2,9 @@
 
 ## Overview
 JSCPD analysis found 14 instances of code duplication across 54 files (29 JS, 25 CSS).
-- **Total duplication**: 157 lines (1.29%) out of 12,162 total lines
+- **Original duplication**: 157 lines (1.29%) out of 12,162 total lines
+- **Current duplication**: 112 lines (0.92%) out of 12,116 total lines
+- **Improvement**: Reduced by 45 lines (0.37% reduction)
 - **Priority**: Low duplication percentage indicates generally clean codebase
 
 ## JavaScript Refactoring Tasks
@@ -30,26 +32,30 @@ JSCPD analysis found 14 instances of code duplication across 54 files (29 JS, 25
 
 ## CSS Refactoring Tasks
 
-### 3. TournamentSetup.module.css - Internal Duplication
+### 3. TournamentSetup.module.css - Internal Duplication ✅ COMPLETED
 **Files**: `src/components/TournamentSetup/TournamentSetup.module.css`
 **Issues**:
 - Lines 376-388 vs 397-409 (12 lines, 95 tokens)
 
 **Tasks**:
-- [ ] Extract duplicate CSS rules into shared classes
-- [ ] Consider using CSS custom properties for repeated values
-- [ ] Review component structure for potential consolidation
+- [x] Extract duplicate CSS rules into shared classes
+- [x] Consider using CSS custom properties for repeated values
+- [x] Review component structure for potential consolidation
 
-### 4. BongoCat.module.css - Repeated Styles
+**Solution**: Consolidated `.minimizeButton` and `.closeButton` styles into shared base styles with specific overrides.
+
+### 4. BongoCat.module.css - Repeated Styles ✅ COMPLETED
 **Files**: `src/components/BongoCat/BongoCat.module.css`
 **Issues**:
 - Lines 46-51 vs 66-71 (5 lines, 84 tokens)
 - Lines 56-61 vs 74-79 (5 lines, 84 tokens)
 
 **Tasks**:
-- [ ] Create shared CSS classes for repeated animations/transitions
-- [ ] Extract common BongoCat styling patterns
-- [ ] Consider using CSS-in-JS or styled-components for better organization
+- [x] Create shared CSS classes for repeated animations/transitions
+- [x] Extract common BongoCat styling patterns
+- [x] Consider using CSS-in-JS or styled-components for better organization
+
+**Solution**: Refactored ear styles to use shared base classes with variant-specific overrides for fill/outline styles.
 
 ### 5. Cross-File CSS Duplication
 
@@ -88,25 +94,29 @@ JSCPD analysis found 14 instances of code duplication across 54 files (29 JS, 25
 - [ ] Consider creating utility mixins or functions
 - [ ] Review if both instances are necessary
 
-### 7. Base.css - Internal Duplication
+### 7. Base.css - Internal Duplication ✅ COMPLETED
 **Files**: `src/styles/base.css`
 **Issues**:
 - Lines 128-136 vs 359-367 (8 lines, 79 tokens)
 
 **Tasks**:
-- [ ] Consolidate duplicate base styles
-- [ ] Review CSS organization and structure
+- [x] Consolidate duplicate base styles
+- [x] Review CSS organization and structure
 
-### 8. Index vs Reset Duplication
+**Solution**: Removed duplicate `.input` class definition, keeping the more complete version.
+
+### 8. Index vs Reset Duplication ✅ COMPLETED
 **Files**:
 - `src/index.css` vs `src/styles/reset.css`
 **Issues**:
 - Lines 20-35 vs 7-22 (15 lines, 85 tokens)
 
 **Tasks**:
-- [ ] Consolidate reset styles into a single location
-- [ ] Remove duplicate CSS reset rules
-- [ ] Ensure proper cascade order
+- [x] Consolidate reset styles into a single location
+- [x] Remove duplicate CSS reset rules
+- [x] Ensure proper cascade order
+
+**Solution**: Removed duplicate reset styles from `index.css`, keeping them centralized in `reset.css`.
 
 ## General Refactoring Recommendations
 

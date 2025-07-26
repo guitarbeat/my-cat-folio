@@ -356,22 +356,7 @@ body {
   border-color: var(--primary-color);
 }
 
-.input {
-  width: 100%;
-  padding: var(--space-3);
-  font-size: var(--text-base);
-  color: var(--text-primary);
-  background: var(--surface-color);
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-md);
-  transition: all var(--transition-smooth);
-}
-
-.input:disabled {
-  opacity: 0.7;
-  cursor: not-allowed;
-  background: var(--card-background);
-}
+/* Removed duplicate .input definition - keeping the one at lines 128-145 */
 
 /* Existing loader replacement */
 .loader {
