@@ -1,0 +1,1206 @@
+{
+  "statistics": {
+    "detectionDate": "2025-07-26T21:51:14.276Z",
+    "formats": {
+      "css": {
+        "sources": {
+          "src/components/TournamentSetup/TournamentSetup.module.css": {
+            "lines": 521,
+            "tokens": 3062,
+            "sources": 1,
+            "clones": 2,
+            "duplicatedLines": 24,
+            "duplicatedTokens": 190,
+            "percentage": 4.61,
+            "percentageTokens": 6.21,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/components/StatsCard/StatsCard.module.css": {
+            "lines": 13,
+            "tokens": 58,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/components/Results/Results.module.css": {
+            "lines": 453,
+            "tokens": 2691,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/components/RankingAdjustment/RankingAdjustment.css": {
+            "lines": 484,
+            "tokens": 3051,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/components/NavBar/navbar.css": {
+            "lines": 426,
+            "tokens": 2500,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/components/NameSuggestion/NameSuggestion.css": {
+            "lines": 186,
+            "tokens": 1012,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/components/NameCard/NameCard.module.css": {
+            "lines": 168,
+            "tokens": 973,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/components/Login/Login.module.css": {
+            "lines": 670,
+            "tokens": 4150,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/components/LoadingSpinner/LoadingSpinner.module.css": {
+            "lines": 107,
+            "tokens": 623,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/components/ErrorBoundary/ErrorBoundary.module.css": {
+            "lines": 125,
+            "tokens": 706,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/components/CalendarButton/CalendarButton.module.css": {
+            "lines": 77,
+            "tokens": 502,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/components/Bracket/Bracket.module.css": {
+            "lines": 359,
+            "tokens": 2249,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/components/BongoCat/BongoCat.module.css": {
+            "lines": 259,
+            "tokens": 2247,
+            "sources": 1,
+            "clones": 4,
+            "duplicatedLines": 20,
+            "duplicatedTokens": 336,
+            "percentage": 7.72,
+            "percentageTokens": 14.95,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/styles/variables.css": {
+            "lines": 228,
+            "tokens": 1839,
+            "sources": 1,
+            "clones": 3,
+            "duplicatedLines": 37,
+            "duplicatedTokens": 369,
+            "percentage": 16.23,
+            "percentageTokens": 20.07,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/styles/utilities.css": {
+            "lines": 928,
+            "tokens": 4445,
+            "sources": 1,
+            "clones": 2,
+            "duplicatedLines": 62,
+            "duplicatedTokens": 250,
+            "percentage": 6.68,
+            "percentageTokens": 5.62,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/styles/theme.css": {
+            "lines": 83,
+            "tokens": 682,
+            "sources": 1,
+            "clones": 3,
+            "duplicatedLines": 37,
+            "duplicatedTokens": 369,
+            "percentage": 44.58,
+            "percentageTokens": 54.11,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/styles/shared.module.css": {
+            "lines": 24,
+            "tokens": 144,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/styles/responsive.css": {
+            "lines": 27,
+            "tokens": 123,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/styles/reset.css": {
+            "lines": 60,
+            "tokens": 244,
+            "sources": 1,
+            "clones": 1,
+            "duplicatedLines": 15,
+            "duplicatedTokens": 85,
+            "percentage": 25,
+            "percentageTokens": 34.84,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/styles/darkMode.css": {
+            "lines": 21,
+            "tokens": 108,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/styles/components.css": {
+            "lines": 241,
+            "tokens": 1488,
+            "sources": 1,
+            "clones": 2,
+            "duplicatedLines": 20,
+            "duplicatedTokens": 164,
+            "percentage": 8.3,
+            "percentageTokens": 11.02,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/styles/base.css": {
+            "lines": 439,
+            "tokens": 2628,
+            "sources": 1,
+            "clones": 4,
+            "duplicatedLines": 36,
+            "duplicatedTokens": 322,
+            "percentage": 8.2,
+            "percentageTokens": 12.25,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/styles/animations.css": {
+            "lines": 28,
+            "tokens": 141,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/styles/accessibility.css": {
+            "lines": 15,
+            "tokens": 80,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/index.css": {
+            "lines": 502,
+            "tokens": 3109,
+            "sources": 1,
+            "clones": 1,
+            "duplicatedLines": 15,
+            "duplicatedTokens": 85,
+            "percentage": 2.99,
+            "percentageTokens": 2.73,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          }
+        },
+        "total": {
+          "lines": 6444,
+          "tokens": 38855,
+          "sources": 25,
+          "clones": 11,
+          "duplicatedLines": 133,
+          "duplicatedTokens": 1085,
+          "percentage": 2.06,
+          "percentageTokens": 2.79,
+          "newDuplicatedLines": 0,
+          "newClones": 0
+        }
+      },
+      "javascript": {
+        "sources": {
+          "src/components/TournamentSetup/TournamentSetup.js": {
+            "lines": 702,
+            "tokens": 5895,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/components/Tournament/TournamentControls.js": {
+            "lines": 215,
+            "tokens": 1566,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/components/Tournament/Tournament.js": {
+            "lines": 654,
+            "tokens": 5361,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/components/Tournament/PreferenceSorter.js": {
+            "lines": 126,
+            "tokens": 1268,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/components/Tournament/EloRating.js": {
+            "lines": 96,
+            "tokens": 724,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/components/StatsCard/StatsCard.js": {
+            "lines": 40,
+            "tokens": 346,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/components/Results/Results.js": {
+            "lines": 325,
+            "tokens": 2742,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/components/RankingAdjustment/RankingAdjustment.js": {
+            "lines": 235,
+            "tokens": 2069,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/components/NavBar/NavBar.js": {
+            "lines": 270,
+            "tokens": 1895,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/components/NameCard/NameCard.js": {
+            "lines": 122,
+            "tokens": 866,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/components/Login/Login.js": {
+            "lines": 269,
+            "tokens": 2092,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/components/LoadingSpinner/LoadingSpinner.test.js": {
+            "lines": 12,
+            "tokens": 129,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/components/LoadingSpinner/LoadingSpinner.js": {
+            "lines": 51,
+            "tokens": 230,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/components/ErrorBoundary/ErrorBoundary.js": {
+            "lines": 80,
+            "tokens": 580,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/components/CalendarButton/CalendarButton.js": {
+            "lines": 68,
+            "tokens": 600,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/components/Bracket/Bracket.js": {
+            "lines": 207,
+            "tokens": 1655,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/components/BongoCat/BongoCat.js": {
+            "lines": 343,
+            "tokens": 2801,
+            "sources": 1,
+            "clones": 4,
+            "duplicatedLines": 36,
+            "duplicatedTokens": 326,
+            "percentage": 10.5,
+            "percentageTokens": 11.64,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/utils/logger.js": {
+            "lines": 11,
+            "tokens": 51,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/utils/arrayUtils.js": {
+            "lines": 17,
+            "tokens": 164,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/utils/adminActions.js": {
+            "lines": 32,
+            "tokens": 219,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/supabase/useSupabaseStorage.js": {
+            "lines": 247,
+            "tokens": 1769,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/supabase/useNameOptions.js": {
+            "lines": 119,
+            "tokens": 785,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/supabase/supabaseClient.js": {
+            "lines": 339,
+            "tokens": 2323,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/hooks/useUserSession.js": {
+            "lines": 156,
+            "tokens": 933,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/hooks/useTournament.js": {
+            "lines": 497,
+            "tokens": 4052,
+            "sources": 1,
+            "clones": 2,
+            "duplicatedLines": 12,
+            "duplicatedTokens": 158,
+            "percentage": 2.41,
+            "percentageTokens": 3.9,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/hooks/useLocalStorage.js": {
+            "lines": 38,
+            "tokens": 219,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/components/index.js": {
+            "lines": 16,
+            "tokens": 188,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/index.js": {
+            "lines": 21,
+            "tokens": 86,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          },
+          "src/App.js": {
+            "lines": 410,
+            "tokens": 3041,
+            "sources": 1,
+            "clones": 0,
+            "duplicatedLines": 0,
+            "duplicatedTokens": 0,
+            "percentage": 0,
+            "percentageTokens": 0,
+            "newDuplicatedLines": 0,
+            "newClones": 0
+          }
+        },
+        "total": {
+          "lines": 5718,
+          "tokens": 44649,
+          "sources": 29,
+          "clones": 3,
+          "duplicatedLines": 24,
+          "duplicatedTokens": 242,
+          "percentage": 0.42,
+          "percentageTokens": 0.54,
+          "newDuplicatedLines": 0,
+          "newClones": 0
+        }
+      }
+    },
+    "total": {
+      "lines": 12162,
+      "tokens": 83504,
+      "sources": 54,
+      "clones": 14,
+      "duplicatedLines": 157,
+      "duplicatedTokens": 1327,
+      "percentage": 1.29,
+      "percentageTokens": 1.59,
+      "newDuplicatedLines": 0,
+      "newClones": 0
+    }
+  },
+  "duplicates": [
+    {
+      "format": "css",
+      "lines": 13,
+      "fragment": ");\n  color: var(--white);\n  background: rgb(var(--black-rgb) / 0.5);\n  border: none;\n  border-radius: var(--radius-full);\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  cursor: pointer;\n  transition: all var(--duration-normal) var(--ease-out);\n}\n\n.closeButton:hover",
+      "tokens": 0,
+      "firstFile": {
+        "name": "src/components/TournamentSetup/TournamentSetup.module.css",
+        "start": 397,
+        "end": 409,
+        "startLoc": {
+          "line": 397,
+          "column": 11,
+          "position": 2356
+        },
+        "endLoc": {
+          "line": 409,
+          "column": 19,
+          "position": 2451
+        }
+      },
+      "secondFile": {
+        "name": "src/components/TournamentSetup/TournamentSetup.module.css",
+        "start": 376,
+        "end": 388,
+        "startLoc": {
+          "line": 376,
+          "column": 10,
+          "position": 2191
+        },
+        "endLoc": {
+          "line": 388,
+          "column": 22,
+          "position": 2286
+        }
+      }
+    },
+    {
+      "format": "css",
+      "lines": 6,
+      "fragment": ");\n  border-left: calc(7rem * var(--scale)) solid transparent;\n  border-right: calc(7rem * var(--scale)) solid transparent;\n  transform: translate(calc(17rem * var(--scale)), calc(-5rem * var(--scale)))\n    rotate(-15deg);\n}",
+      "tokens": 0,
+      "firstFile": {
+        "name": "src/components/BongoCat/BongoCat.module.css",
+        "start": 66,
+        "end": 71,
+        "startLoc": {
+          "line": 66,
+          "column": 14,
+          "position": 603
+        },
+        "endLoc": {
+          "line": 71,
+          "column": 2,
+          "position": 687
+        }
+      },
+      "secondFile": {
+        "name": "src/components/BongoCat/BongoCat.module.css",
+        "start": 46,
+        "end": 51,
+        "startLoc": {
+          "line": 46,
+          "column": 9,
+          "position": 311
+        },
+        "endLoc": {
+          "line": 51,
+          "column": 4,
+          "position": 396
+        }
+      }
+    },
+    {
+      "format": "css",
+      "lines": 6,
+      "fragment": ");\n  border-left: calc(3rem * var(--scale)) solid transparent;\n  border-right: calc(9rem * var(--scale)) solid transparent;\n  transform: translate(calc(53rem * var(--scale)), calc(-2rem * var(--scale)))\n    rotate(33deg);\n}",
+      "tokens": 0,
+      "firstFile": {
+        "name": "src/components/BongoCat/BongoCat.module.css",
+        "start": 74,
+        "end": 79,
+        "startLoc": {
+          "line": 74,
+          "column": 14,
+          "position": 715
+        },
+        "endLoc": {
+          "line": 79,
+          "column": 2,
+          "position": 799
+        }
+      },
+      "secondFile": {
+        "name": "src/components/BongoCat/BongoCat.module.css",
+        "start": 56,
+        "end": 61,
+        "startLoc": {
+          "line": 56,
+          "column": 9,
+          "position": 457
+        },
+        "endLoc": {
+          "line": 61,
+          "column": 4,
+          "position": 542
+        }
+      }
+    },
+    {
+      "format": "javascript",
+      "lines": 8,
+      "fragment": ">\n        <div className={styles.paw}>\n          <div className={styles.palm} />\n          <div className={styles.bean} />\n          <div className={styles.bean} />\n          <div className={styles.bean} />\n        </div>\n      </",
+      "tokens": 0,
+      "firstFile": {
+        "name": "src/components/BongoCat/BongoCat.js",
+        "start": 52,
+        "end": 59,
+        "startLoc": {
+          "line": 52,
+          "column": 4,
+          "position": 475
+        },
+        "endLoc": {
+          "line": 59,
+          "column": 2,
+          "position": 558
+        }
+      },
+      "secondFile": {
+        "name": "src/components/BongoCat/BongoCat.js",
+        "start": 46,
+        "end": 53,
+        "startLoc": {
+          "line": 46,
+          "column": 2,
+          "position": 396
+        },
+        "endLoc": {
+          "line": 53,
+          "column": 4,
+          "position": 479
+        }
+      }
+    },
+    {
+      "format": "javascript",
+      "lines": 12,
+      "fragment": "}\n        <div\n          className={styles.bongoContainer}\n          style={{\n            position: \"absolute\",\n            top: `${containerTop + pawsOffsetY}px`,\n            left: \"50%\",\n            transform: \"translateX(-50%)\",\n            width: \"180px\",\n            maxWidth: \"100%\",\n            aspectRatio: \"1\",\n            zIndex: downPawsZIndex",
+      "tokens": 0,
+      "firstFile": {
+        "name": "src/components/BongoCat/BongoCat.js",
+        "start": 307,
+        "end": 318,
+        "startLoc": {
+          "line": 307,
+          "column": 52,
+          "position": 2538
+        },
+        "endLoc": {
+          "line": 318,
+          "column": 15,
+          "position": 2618
+        }
+      },
+      "secondFile": {
+        "name": "src/components/BongoCat/BongoCat.js",
+        "start": 283,
+        "end": 294,
+        "startLoc": {
+          "line": 283,
+          "column": 56,
+          "position": 2351
+        },
+        "endLoc": {
+          "line": 294,
+          "column": 13,
+          "position": 2431
+        }
+      }
+    },
+    {
+      "format": "css",
+      "lines": 32,
+      "fragment": ");\n}\n\n.text-sm {\n  font-size: var(--text-sm);\n}\n\n.text-base {\n  font-size: var(--text-base);\n}\n\n.text-lg {\n  font-size: var(--text-lg);\n}\n\n.text-xl {\n  font-size: var(--text-xl);\n}\n\n.text-2xl {\n  font-size: var(--text-2xl);\n}\n\n.text-3xl {\n  font-size: var(--text-3xl);\n}\n\n.text-4xl {\n  font-size: var(--text-4xl);\n}\n\n/* Dimensions */",
+      "tokens": 0,
+      "firstFile": {
+        "name": "src/styles/utilities.css",
+        "start": 685,
+        "end": 716,
+        "startLoc": {
+          "line": 685,
+          "column": 12,
+          "position": 3262
+        },
+        "endLoc": {
+          "line": 716,
+          "column": 17,
+          "position": 3387
+        }
+      },
+      "secondFile": {
+        "name": "src/styles/utilities.css",
+        "start": 221,
+        "end": 244,
+        "startLoc": {
+          "line": 221,
+          "column": 10,
+          "position": 1092
+        },
+        "endLoc": {
+          "line": 244,
+          "column": 10,
+          "position": 1209
+        }
+      }
+    },
+    {
+      "format": "css",
+      "lines": 14,
+      "fragment": "--primary-color: var(--primary-600);\n  --primary-light: var(--primary-100);\n  --primary-dark: var(--primary-800);\n  --surface-color: #f4f6fa;\n  --background-color: #eef1f6;\n  --text-primary: #2c3544;\n  --text-secondary: #4b5563;\n  --text-tertiary: #6b7280;\n  --border-color: #e5e7eb;\n  --card-background: #f8fafc;\n  --card-border: #e5e7eb;\n  --card-hover: #f1f5f9;\n\n  /* Synced dark-mode variables for components using legacy names */",
+      "tokens": 0,
+      "firstFile": {
+        "name": "src/styles/theme.css",
+        "start": 2,
+        "end": 15,
+        "startLoc": {
+          "line": 2,
+          "column": 3,
+          "position": 5
+        },
+        "endLoc": {
+          "line": 15,
+          "column": 67,
+          "position": 99
+        }
+      },
+      "secondFile": {
+        "name": "src/styles/variables.css",
+        "start": 31,
+        "end": 44,
+        "startLoc": {
+          "line": 31,
+          "column": 3,
+          "position": 174
+        },
+        "endLoc": {
+          "line": 44,
+          "column": 46,
+          "position": 268
+        }
+      }
+    },
+    {
+      "format": "css",
+      "lines": 10,
+      "fragment": "--progress-background: var(--primary-100);\n  --progress-border: var(--primary-200);\n  --percentage-background: var(--surface-color);\n  --percentage-text: var(--primary-600);\n  --vs-background: var(--primary-200);\n  --vs-text: var(--primary-600);\n  --header-background: rgba(244, 246, 250, 0.9);\n  --header-border: var(--border-color);\n\n  --shadow-color",
+      "tokens": 0,
+      "firstFile": {
+        "name": "src/styles/theme.css",
+        "start": 29,
+        "end": 38,
+        "startLoc": {
+          "line": 29,
+          "column": 3,
+          "position": 187
+        },
+        "endLoc": {
+          "line": 38,
+          "column": 15,
+          "position": 274
+        }
+      },
+      "secondFile": {
+        "name": "src/styles/variables.css",
+        "start": 52,
+        "end": 61,
+        "startLoc": {
+          "line": 52,
+          "column": 3,
+          "position": 316
+        },
+        "endLoc": {
+          "line": 61,
+          "column": 29,
+          "position": 403
+        }
+      }
+    },
+    {
+      "format": "css",
+      "lines": 16,
+      "fragment": "--button-primary-bg: var(--primary-400);\n  --button-primary-hover: var(--primary-300);\n  --button-secondary-bg: rgba(0, 0, 0, 0.2);\n  --button-secondary-hover: rgba(0, 0, 0, 0.3);\n  --button-text-light: white;\n\n  --shadow-color: rgba(0, 0, 0, 0.5);\n  --shadow-color-light: rgba(0, 0, 0, 0.2);\n  --shadow-color-medium: rgba(0, 0, 0, 0.3);\n  --shadow-color-strong: rgba(0, 0, 0, 0.4);\n\n  --overlay-light: rgba(0, 0, 0, 0.5);\n  --overlay-medium: rgba(0, 0, 0, 0.65);\n  --overlay-dark: rgba(0, 0, 0, 0.85);\n  --overlay-darker: rgba(0, 0, 0, 0.95);\n}",
+      "tokens": 0,
+      "firstFile": {
+        "name": "src/styles/theme.css",
+        "start": 69,
+        "end": 84,
+        "startLoc": {
+          "line": 69,
+          "column": 3,
+          "position": 494
+        },
+        "endLoc": {
+          "line": 84,
+          "column": 2,
+          "position": 682
+        }
+      },
+      "secondFile": {
+        "name": "src/styles/variables.css",
+        "start": 192,
+        "end": 207,
+        "startLoc": {
+          "line": 192,
+          "column": 5,
+          "position": 1531
+        },
+        "endLoc": {
+          "line": 207,
+          "column": 2,
+          "position": 1720
+        }
+      }
+    },
+    {
+      "format": "css",
+      "lines": 10,
+      "fragment": ".btn {\n  display: inline-flex;\n  align-items: center;\n  justify-content: center;\n  gap: var(--space-2);\n  padding: var(--space-3) var(--space-4);\n  font-size: var(--text-base);\n  font-weight: 500;\n  border-radius: var(--radius-md);\n  cursor",
+      "tokens": 0,
+      "firstFile": {
+        "name": "src/styles/base.css",
+        "start": 46,
+        "end": 55,
+        "startLoc": {
+          "line": 46,
+          "column": 1,
+          "position": 201
+        },
+        "endLoc": {
+          "line": 55,
+          "column": 7,
+          "position": 279
+        }
+      },
+      "secondFile": {
+        "name": "src/styles/components.css",
+        "start": 23,
+        "end": 32,
+        "startLoc": {
+          "line": 23,
+          "column": 1,
+          "position": 116
+        },
+        "endLoc": {
+          "line": 32,
+          "column": 11,
+          "position": 194
+        }
+      }
+    },
+    {
+      "format": "css",
+      "lines": 12,
+      "fragment": "{\n  width: 100%;\n  padding: var(--space-3);\n  font-size: var(--text-base);\n  color: var(--text-primary);\n  background: var(--surface-color);\n  border: 1px solid var(--border-color);\n  border-radius: var(--radius-md);\n  transition: var(--transition-all);\n}\n\n.input:focus",
+      "tokens": 0,
+      "firstFile": {
+        "name": "src/styles/base.css",
+        "start": 128,
+        "end": 139,
+        "startLoc": {
+          "line": 128,
+          "column": 2,
+          "position": 701
+        },
+        "endLoc": {
+          "line": 139,
+          "column": 13,
+          "position": 787
+        }
+      },
+      "secondFile": {
+        "name": "src/styles/components.css",
+        "start": 83,
+        "end": 94,
+        "startLoc": {
+          "line": 83,
+          "column": 2,
+          "position": 482
+        },
+        "endLoc": {
+          "line": 94,
+          "column": 18,
+          "position": 568
+        }
+      }
+    },
+    {
+      "format": "css",
+      "lines": 9,
+      "fragment": ".input {\n  width: 100%;\n  padding: var(--space-3);\n  font-size: var(--text-base);\n  color: var(--text-primary);\n  background: var(--surface-color);\n  border: 1px solid var(--border-color);\n  border-radius: var(--radius-md);\n  transition: all",
+      "tokens": 0,
+      "firstFile": {
+        "name": "src/styles/base.css",
+        "start": 359,
+        "end": 367,
+        "startLoc": {
+          "line": 359,
+          "column": 1,
+          "position": 2093
+        },
+        "endLoc": {
+          "line": 367,
+          "column": 4,
+          "position": 2172
+        }
+      },
+      "secondFile": {
+        "name": "src/styles/base.css",
+        "start": 128,
+        "end": 91,
+        "startLoc": {
+          "line": 128,
+          "column": 1,
+          "position": 699
+        },
+        "endLoc": {
+          "line": 91,
+          "column": 4,
+          "position": 559
+        }
+      }
+    },
+    {
+      "format": "javascript",
+      "lines": 7,
+      "fragment": "= matchHistory.filter(\n        (vote) =>\n          (vote.match.left.name === name.name && vote.result === \"left\") ||\n          (vote.match.right.name === name.name && vote.result === \"right\"),\n      ).length;\n\n      const",
+      "tokens": 0,
+      "firstFile": {
+        "name": "src/hooks/useTournament.js",
+        "start": 159,
+        "end": 165,
+        "startLoc": {
+          "line": 159,
+          "column": 2,
+          "position": 1439
+        },
+        "endLoc": {
+          "line": 165,
+          "column": 6,
+          "position": 1518
+        }
+      },
+      "secondFile": {
+        "name": "src/hooks/useTournament.js",
+        "start": 152,
+        "end": 158,
+        "startLoc": {
+          "line": 152,
+          "column": 2,
+          "position": 1353
+        },
+        "endLoc": {
+          "line": 158,
+          "column": 43,
+          "position": 1432
+        }
+      }
+    },
+    {
+      "format": "css",
+      "lines": 16,
+      "fragment": ": 0;\n}\n\nhtml {\n  font-size: 16px;\n  scroll-behavior: smooth;\n}\n\nbody {\n  font-family: var(--font-sans);\n  line-height: 1.6;\n  color: var(--text-primary);\n  background-color: var(--background-color);\n  -webkit-font-smoothing: antialiased;\n  -moz-osx-font-smoothing: grayscale;\n  min-height",
+      "tokens": 0,
+      "firstFile": {
+        "name": "src/index.css",
+        "start": 20,
+        "end": 35,
+        "startLoc": {
+          "line": 20,
+          "column": 7,
+          "position": 59
+        },
+        "endLoc": {
+          "line": 35,
+          "column": 11,
+          "position": 144
+        }
+      },
+      "secondFile": {
+        "name": "src/styles/reset.css",
+        "start": 7,
+        "end": 22,
+        "startLoc": {
+          "line": 7,
+          "column": 8,
+          "position": 22
+        },
+        "endLoc": {
+          "line": 22,
+          "column": 2,
+          "position": 106
+        }
+      }
+    }
+  ],
+  "filename": "/home/ubuntu/.nvm/versions/node/v22.16.0/lib/node_modules/jscpd/node_modules/@jscpd/html-reporter/dist/templates/main.pug"
+}
