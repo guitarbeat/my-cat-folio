@@ -41,41 +41,41 @@
   background: var(--cat-bg);
 }
 
-/* Ears */
-.ears.fill .ear:first-child {
-  border-bottom: calc(8rem * var(--scale)) solid var(--cat-bg);
+/* Ears - Base styles */
+.ears .ear:first-child {
   border-left: calc(7rem * var(--scale)) solid transparent;
   border-right: calc(7rem * var(--scale)) solid transparent;
   transform: translate(calc(17rem * var(--scale)), calc(-5rem * var(--scale)))
     rotate(-15deg);
+}
+
+.ears .ear:last-child {
+  border-left: calc(3rem * var(--scale)) solid transparent;
+  border-right: calc(9rem * var(--scale)) solid transparent;
+  transform: translate(calc(53rem * var(--scale)), calc(-2rem * var(--scale)))
+    rotate(33deg);
+}
+
+/* Fill variant */
+.ears.fill .ear:first-child {
+  border-bottom: calc(8rem * var(--scale)) solid var(--cat-bg);
   top: calc(1.2rem * var(--scale));
   left: calc(0.4rem * var(--scale));
 }
 
 .ears.fill .ear:last-child {
   border-bottom: calc(10rem * var(--scale)) solid var(--cat-bg);
-  border-left: calc(3rem * var(--scale)) solid transparent;
-  border-right: calc(9rem * var(--scale)) solid transparent;
-  transform: translate(calc(53rem * var(--scale)), calc(-2rem * var(--scale)))
-    rotate(33deg);
   top: calc(1.7rem * var(--scale));
   left: calc(-0.5rem * var(--scale));
 }
 
+/* Outline variant */
 .ears.outline .ear:first-child {
   border-bottom: calc(8rem * var(--scale)) solid var(--cat-outline);
-  border-left: calc(7rem * var(--scale)) solid transparent;
-  border-right: calc(7rem * var(--scale)) solid transparent;
-  transform: translate(calc(17rem * var(--scale)), calc(-5rem * var(--scale)))
-    rotate(-15deg);
 }
 
 .ears.outline .ear:last-child {
   border-bottom: calc(10rem * var(--scale)) solid var(--cat-outline);
-  border-left: calc(3rem * var(--scale)) solid transparent;
-  border-right: calc(9rem * var(--scale)) solid transparent;
-  transform: translate(calc(53rem * var(--scale)), calc(-2rem * var(--scale)))
-    rotate(33deg);
 }
 
 /* Face */
