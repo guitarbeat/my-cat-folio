@@ -142,36 +142,39 @@ export function useTournament({
 
   // Define getCurrentRatings first since it's used in handleVote
   const getCurrentRatings = useCallback(() => {
+    const countPlayerVotes = (playerName, outcome) => {
+      return matchHistory.filter((vote) => {
+        const { left, right } = vote.match;
+        if (outcome === "win") {
+          return (
+            (left.name === playerName && vote.result === "left") ||
+            (right.name === playerName && vote.result === "right")
+          );
+        }
+        if (outcome === "loss") {
+          return (
+            (left.name === playerName && vote.result === "right") ||
+            (right.name === playerName && vote.result === "left")
+          );
+        }
+        return false;
+      }).length;
+    };
+
     return names.map((name) => {
       const existingData =
         typeof currentRatings[name.name] === "object"
           ? currentRatings[name.name]
           : { rating: currentRatings[name.name] || 1500, wins: 0, losses: 0 };
 
-      const totalNames = names.length;
-      const position = matchHistory.filter(
-        (vote) =>
-          (vote.match.left.name === name.name && vote.result === "left") ||
-          (vote.match.right.name === name.name && vote.result === "right"),
-      ).length;
-
-      // Count wins and losses from vote history
-      const wins = matchHistory.filter(
-        (vote) =>
-          (vote.match.left.name === name.name && vote.result === "left") ||
-          (vote.match.right.name === name.name && vote.result === "right"),
-      ).length;
-
-      const losses = matchHistory.filter(
-        (vote) =>
-          (vote.match.left.name === name.name && vote.result === "right") ||
-          (vote.match.right.name === name.name && vote.result === "left"),
-      ).length;
+      const wins = countPlayerVotes(name.name, "win");
+      const losses = countPlayerVotes(name.name, "loss");
+      const position = wins; // Position is based on wins
 
       const finalRating = computeRating(
         existingData.rating,
         position,
-        totalNames,
+        names.length,
         currentMatchNumber,
         totalMatches,
       );

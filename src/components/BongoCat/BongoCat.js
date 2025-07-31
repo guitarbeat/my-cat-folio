@@ -40,22 +40,21 @@ const CatBody = () => (
  * @param {"up"|"down"} params.position - Which paw orientation to render
  * @returns {JSX.Element}
  */
+const Paw = () => (
+  <div className={styles.paw}>
+    <div className={styles.palm} />
+    <div className={styles.bean} />
+    <div className={styles.bean} />
+    <div className={styles.bean} />
+  </div>
+);
+
 const Paws = ({ position, className = "" }) => (
   <div className={`${styles.paws} ${styles[position]} ${className}`.trim()}>
     {position === "up" ? (
       <>
-        <div className={styles.paw}>
-          <div className={styles.palm} />
-          <div className={styles.bean} />
-          <div className={styles.bean} />
-          <div className={styles.bean} />
-        </div>
-        <div className={styles.paw}>
-          <div className={styles.palm} />
-          <div className={styles.bean} />
-          <div className={styles.bean} />
-          <div className={styles.bean} />
-        </div>
+        <Paw />
+        <Paw />
       </>
     ) : (
       <>
@@ -69,6 +68,51 @@ const Paws = ({ position, className = "" }) => (
 Paws.propTypes = {
   position: PropTypes.oneOf(["up", "down"]).isRequired,
   className: PropTypes.string,
+};
+
+const PawsContainer = ({
+  containerTop,
+  pawsOffsetY,
+  zIndex,
+  isVisible,
+  pawsVisibility,
+  display,
+  styleVars,
+  pawsPosition,
+}) => (
+  <div
+    className={styles.bongoContainer}
+    style={{
+      position: "absolute",
+      top: `${containerTop + pawsOffsetY}px`,
+      left: "50%",
+      transform: "translateX(-50%)",
+      width: "180px",
+      maxWidth: "100%",
+      aspectRatio: "1",
+      zIndex,
+      pointerEvents: "none",
+      transition: "top 0.2s ease-out, opacity 0.3s ease",
+      opacity: isVisible ? 1 : 0,
+      visibility: pawsVisibility,
+      display,
+    }}
+  >
+    <div className={styles.container} style={styleVars}>
+      <Paws position={pawsPosition} />
+    </div>
+  </div>
+);
+
+PawsContainer.propTypes = {
+  containerTop: PropTypes.number.isRequired,
+  pawsOffsetY: PropTypes.number.isRequired,
+  zIndex: PropTypes.number.isRequired,
+  isVisible: PropTypes.bool.isRequired,
+  pawsVisibility: PropTypes.string.isRequired,
+  display: PropTypes.string.isRequired,
+  styleVars: PropTypes.object.isRequired,
+  pawsPosition: PropTypes.string.isRequired,
 };
 
 const BongoCat = memo(
@@ -281,52 +325,28 @@ const BongoCat = memo(
         </div>
 
         {/* Up paws - behind container (same z-index as body) */}
-        <div
-          className={styles.bongoContainer}
-          style={{
-            position: "absolute",
-            top: `${containerTop + pawsOffsetY}px`,
-            left: "50%",
-            transform: "translateX(-50%)",
-            width: "180px",
-            maxWidth: "100%",
-            aspectRatio: "1",
-            zIndex: upPawsZIndex,
-            pointerEvents: "none",
-            transition: "top 0.2s ease-out, opacity 0.3s ease",
-            opacity: isVisible ? 1 : 0,
-            visibility: pawsVisibility,
-            display: isPawsDown ? "none" : "block",
-          }}
-        >
-          <div className={styles.container} style={styleVars}>
-            <Paws position="up" />
-          </div>
-        </div>
+        <PawsContainer
+          containerTop={containerTop}
+          pawsOffsetY={pawsOffsetY}
+          zIndex={upPawsZIndex}
+          isVisible={isVisible}
+          pawsVisibility={pawsVisibility}
+          display={isPawsDown ? "none" : "block"}
+          styleVars={styleVars}
+          pawsPosition="up"
+        />
 
         {/* Down paws - above container with high z-index */}
-        <div
-          className={styles.bongoContainer}
-          style={{
-            position: "absolute",
-            top: `${containerTop + pawsOffsetY}px`,
-            left: "50%",
-            transform: "translateX(-50%)",
-            width: "180px",
-            maxWidth: "100%",
-            aspectRatio: "1",
-            zIndex: downPawsZIndex,
-            pointerEvents: "none",
-            transition: "top 0.2s ease-out, opacity 0.3s ease",
-            opacity: isVisible ? 1 : 0,
-            visibility: pawsVisibility,
-            display: isPawsDown ? "block" : "none",
-          }}
-        >
-          <div className={styles.container} style={styleVars}>
-            <Paws position="down" />
-          </div>
-        </div>
+        <PawsContainer
+          containerTop={containerTop}
+          pawsOffsetY={pawsOffsetY}
+          zIndex={downPawsZIndex}
+          isVisible={isVisible}
+          pawsVisibility={pawsVisibility}
+          display={isPawsDown ? "block" : "none"}
+          styleVars={styleVars}
+          pawsPosition="down"
+        />
       </>
     );
   },
