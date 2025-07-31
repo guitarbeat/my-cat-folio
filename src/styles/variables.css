@@ -27,37 +27,6 @@
   --purple-500: #8b5cf6;
   --purple-600: #7c3aed;
 
-  /* Theme Colors - Softer Light Mode */
-  --primary-color: var(--primary-600);
-  --primary-light: var(--primary-100);
-  --primary-dark: var(--primary-800);
-  --surface-color: #f4f6fa;
-  --background-color: #eef1f6;
-  --text-primary: #2c3544;
-  --text-secondary: #4b5563;
-  --text-tertiary: #6b7280;
-  --border-color: #e5e7eb;
-  --card-background: #f8fafc;
-  --card-border: #e5e7eb;
-  --card-hover: #f1f5f9;
-
-  /* Enhanced Contrast Colors for Light Mode */
-  --button-primary-bg: var(--primary-700);
-  --button-primary-hover: var(--primary-800);
-  --button-secondary-bg: #2a2a2a;
-  --button-secondary-hover: #333;
-  --button-text-light: white;
-
-  /* Component Colors - Adjusted for Softer Light Mode */
-  --progress-background: var(--primary-100);
-  --progress-border: var(--primary-200);
-  --percentage-background: var(--surface-color);
-  --percentage-text: var(--primary-600);
-  --vs-background: var(--primary-200);
-  --vs-text: var(--primary-600);
-  --header-background: rgba(244, 246, 250, 0.9);
-  --header-border: var(--border-color);
-
   /* RGB Values for Opacity */
   --primary-rgb: 79, 70, 229;
   --error-rgb: 239, 68, 68;
@@ -68,11 +37,6 @@
   --white-rgb: 255, 255, 255;
 
   /* Effects */
-  --shadow-color: rgba(var(--black-rgb), 0.1);
-  --shadow-color-light: rgba(var(--black-rgb), 0.05);
-  --shadow-color-medium: rgba(var(--black-rgb), 0.1);
-  --shadow-color-strong: rgba(var(--black-rgb), 0.15);
-
   --shadow-sm: 0 1px 2px var(--shadow-color);
   --shadow-md:
     0 4px 6px -1px var(--shadow-color), 0 2px 4px -2px var(--shadow-color);
@@ -167,44 +131,6 @@
   --z-modal: 300;
   --z-popover: 400;
   --z-toast: 500;
-}
-
-/* Dark Mode */
-@media (prefers-color-scheme: dark) {
-  :root {
-    --primary-color: var(--primary-400);
-    --primary-light: rgba(125, 127, 255, 0.15);
-    --primary-dark: var(--primary-200);
-
-    --surface-color: #0a0c1c;
-    --background-color: #050714;
-    --card-background: #0f1225;
-    --card-border: #1a1f35;
-    --card-hover: #151830;
-
-    --text-primary: #f8fafc;
-    --text-secondary: #e2e8f0;
-    --text-tertiary: #94a3b8;
-
-    --border-color: #1a1f35;
-
-    /* Dark Mode Button Colors */
-    --button-primary-bg: var(--primary-400);
-    --button-primary-hover: var(--primary-300);
-    --button-secondary-bg: rgba(0, 0, 0, 0.2);
-    --button-secondary-hover: rgba(0, 0, 0, 0.3);
-    --button-text-light: white;
-
-    --shadow-color: rgba(0, 0, 0, 0.5);
-    --shadow-color-light: rgba(0, 0, 0, 0.2);
-    --shadow-color-medium: rgba(0, 0, 0, 0.3);
-    --shadow-color-strong: rgba(0, 0, 0, 0.4);
-
-    --overlay-light: rgba(0, 0, 0, 0.5);
-    --overlay-medium: rgba(0, 0, 0, 0.65);
-    --overlay-dark: rgba(0, 0, 0, 0.85);
-    --overlay-darker: rgba(0, 0, 0, 0.95);
-  }
 }
 
 /* High Contrast Mode */
