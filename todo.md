@@ -11,16 +11,6 @@
 - Theming: light/dark toggle with persisted preference and matrix easter egg
 - Linting and formatting: ESLint, Stylelint, Prettier; basic unit test for spinner
 
-## Immediate setup
-- [ ] Create `.env` from `.env.example` with `REACT_APP_SUPABASE_URL` and `REACT_APP_SUPABASE_ANON_KEY`
-- [ ] Ensure Supabase schema and RPCs exist:
-  - Tables: `app_users`, `name_options`, `cat_name_ratings`, `hidden_names`, `rating_history` (or RPC to create)
-  - RPCs: `create_rating_history_table`, `delete_name_cascade`
-  - Constraints/Indexes:
-    - `name_options.name` unique index (case-insensitive if desired)
-    - `cat_name_ratings (user_name, name_id)` unique constraint (used by upsert)
-  - RLS policies for above tables and realtime channel on `name_options`
-
 ## Product polish
 - [ ] Verify dark theme styles and `light-theme` class behavior across views
 - [ ] Tune audio UX: default volume levels, graceful autoplay failure messaging
@@ -38,12 +28,7 @@
 - [ ] Add admin auth/flag before showing destructive actions
 - [ ] Add export (CSV/JSON) for a user’s ratings and aggregated stats
 
-## Calendar integration
-- [ ] Decide between simple Google Calendar template URL (current) vs API
-- [ ] If API: use `@googleapis/calendar` or remove the dependency if not needed
-
 ## Data and performance
-- [ ] Add indexes on frequently filtered/sorted fields (e.g., `cat_name_ratings.updated_at`, `hidden_names.name_id`)
 - [ ] Batch Supabase requests where possible; handle rate limits
 - [ ] Consider caching name options in localStorage with ETag-style validation
 
@@ -54,7 +39,6 @@
 
 ## Tooling and CI
 - [ ] Initialize Husky hooks (`npm run prepare`) and add pre-commit lint/format
-- [ ] Add CI for lint/test/build
 - [ ] Consider moving from `react-scripts` to Vite for faster dev/build
 
 ## Cleanup
@@ -70,5 +54,4 @@
 ## Nice-to-haves / Backlog
 - [ ] Internationalization
 - [ ] Social sharing of results
-- [ ] Email notifications
 - [ ] PWA/offline support
