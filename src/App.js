@@ -14,12 +14,10 @@
  * @returns {JSX.Element} The complete application UI
  */
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Suspense } from "react";
 import {
-  Results,
   ErrorBoundary,
   Login,
-  Profile,
   TournamentSetup,
 } from "./components";
 import NavBar from "./components/NavBar/NavBar";
@@ -27,6 +25,10 @@ import useUserSession from "./hooks/useUserSession";
 import { supabase } from "./supabase/supabaseClient";
 import Tournament from "./components/Tournament/Tournament";
 import LoadingSpinner from "./components/LoadingSpinner/LoadingSpinner";
+
+// Lazy-loaded components for performance
+const Results = React.lazy(() => import("./components/Results/Results"));
+const Profile = React.lazy(() => import("./components/Profile/Profile"));
 
 // Theme Configuration
 const THEME = {
@@ -57,6 +59,14 @@ function App() {
   // Apply theme class on app init and when theme changes
   useEffect(() => {
     document.body.classList.toggle(THEME.CLASS_NAME, isLightTheme);
+  }, [isLightTheme]);
+
+  // Persist theme preference to localStorage
+  useEffect(() => {
+    localStorage.setItem(
+      THEME.STORAGE_KEY,
+      isLightTheme ? THEME.LIGHT : THEME.DARK,
+    );
   }, [isLightTheme]);
 
   const handleThemeChange = (isLight) => {
@@ -397,10 +407,21 @@ function App() {
         isLightTheme={isLightTheme}
         onThemeChange={handleThemeChange}
       />
-      <div className="main-content">{renderMainContent()}</div>
+      <div className="main-content">
+        <Suspense
+          fallback={<LoadingSpinner size="large" text="Loading..." />}
+        >
+          {renderMainContent()}
+        </Suspense>
+      </div>
 
       {isTournamentLoading && (
-        <div className="global-loading-overlay">
+        <div
+          className="global-loading-overlay"
+          role="status"
+          aria-live="polite"
+          aria-busy="true"
+        >
           <LoadingSpinner text="Initializing Tournament..." />
         </div>
       )}
