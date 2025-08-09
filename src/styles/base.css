@@ -88,6 +88,27 @@ body {
   border-color: #555;
 }
 
+.btnDanger {
+  composes: btn;
+  color: white;
+  background: rgb(var(--error-rgb));
+  border: 1px solid rgba(var(--error-rgb), 0.9);
+}
+
+.btnDanger:hover:not(:disabled) {
+  background: color-mix(in srgb, rgb(var(--error-rgb)) 90%, black 10%);
+  border-color: color-mix(in srgb, rgb(var(--error-rgb)) 85%, black 15%);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+/* Size modifiers */
+.btnSmall {
+  padding: var(--space-2) var(--space-3);
+  font-size: var(--text-sm);
+  border-radius: var(--radius-sm);
+}
+
 .btnGhost {
   composes: btn;
   color: var(--text-primary);

@@ -90,19 +90,14 @@
 
 /* Button Styles */
 .button {
-  padding: 0.25rem 0.5rem;
-  border-radius: 0.25rem;
-  font-size: 0.75rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s;
-  border: 1px solid transparent;
-  background-color: var(--accent-primary);
-  color: var(--bg-primary);
+  composes: btn from "../../styles/base.css";
   height: 28px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  gap: 0.25rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
   white-space: nowrap;
 }
 
@@ -115,25 +110,23 @@
   cursor: not-allowed;
 }
 
-.button.delete {
-  background-color: var(--accent-danger);
+.buttonDelete {
+  composes: btnDanger from "../../styles/base.css";
 }
 
-.button.delete:hover {
+.buttonDelete:hover {
   background-color: var(--accent-danger-hover);
 }
 
-.button.hidden {
+.buttonHidden {
   background-color: var(--text-secondary);
 }
 
-.button.primary {
-  background-color: var(--accent-primary);
-  color: var(--bg-primary);
-  border: 1px solid var(--accent-primary);
+.buttonPrimary {
+  composes: btnPrimary from "../../styles/base.css";
 }
 
-.button.primary:hover {
+.buttonPrimary:hover {
   background-color: var(--accent-primary-hover);
   border-color: var(--accent-primary-hover);
 }

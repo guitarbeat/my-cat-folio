@@ -72,11 +72,12 @@ const Button = memo(
     disabled,
     children,
     variant = "default",
+    size = "default",
     ...props
   }) => (
     <button
       onClick={onClick}
-      className={`${styles.button} ${styles[variant]} ${className || ""}`}
+      className={`${styles.button} ${styles[variant]} ${size === "small" ? "btnSmall" : ""} ${className || ""}`}
       disabled={disabled}
       {...props}
     >
@@ -361,7 +362,7 @@ const NameCard = memo(
             {isHidden && (
               <button
                 onClick={() => onDelete(name)}
-                className={`${styles.button} ${styles.delete}`}
+                className={`${styles.button} ${styles.buttonDelete}`}
                 aria-label={`Delete ${nameText}`}
               >
                 🗑️ Delete
@@ -1269,25 +1270,25 @@ const RatingTrends = memo(({ userName, selectedName = null }) => {
         </h3>
         <div className={styles.timeFilters}>
           <button
-            className={`${styles.button} ${timeRange === "week" ? styles.primary : ""}`}
+            className={`${styles.button} ${timeRange === "week" ? styles.buttonPrimary : ""}`}
             onClick={() => setTimeRange("week")}
           >
             Week
           </button>
           <button
-            className={`${styles.button} ${timeRange === "month" ? styles.primary : ""}`}
+            className={`${styles.button} ${timeRange === "month" ? styles.buttonPrimary : ""}`}
             onClick={() => setTimeRange("month")}
           >
             Month
           </button>
           <button
-            className={`${styles.button} ${timeRange === "year" ? styles.primary : ""}`}
+            className={`${styles.button} ${timeRange === "year" ? styles.buttonPrimary : ""}`}
             onClick={() => setTimeRange("year")}
           >
             Year
           </button>
           <button
-            className={`${styles.button} ${timeRange === "all" ? styles.primary : ""}`}
+            className={`${styles.button} ${timeRange === "all" ? styles.buttonPrimary : ""}`}
             onClick={() => setTimeRange("all")}
           >
             All Time
