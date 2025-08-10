@@ -2,16 +2,16 @@
   composes: container from "../../styles/base.css";
   display: flex;
   flex-direction: column;
+  gap: var(--space-6);
   align-items: center;
   justify-content: center;
   min-height: 50vh;
   padding: var(--space-8);
   text-align: center;
-  gap: var(--space-6);
 }
 
 .content {
-  composes: cardInteractive from "../../styles/base.css";
+  composes: cardinteractive from "../../styles/base.css";
   max-width: 600px;
   padding: var(--space-8);
   border-radius: var(--radius-xl);
@@ -19,8 +19,8 @@
 }
 
 .icon {
-  font-size: var(--text-4xl);
   margin-bottom: var(--space-4);
+  font-size: var(--text-4xl);
 }
 
 .title {
@@ -31,24 +31,24 @@
 
 .message {
   composes: text from "../../styles/base.css";
-  color: var(--text-secondary);
   margin-bottom: var(--space-6);
   line-height: 1.6;
+  color: var(--text-secondary);
 }
 
 .refreshButton {
-  composes: btnPrimary from "../../styles/base.css";
+  composes: btnprimary from "../../styles/base.css";
   display: inline-flex;
-  align-items: center;
   gap: var(--space-2);
+  align-items: center;
   padding: var(--space-3) var(--space-6);
   font-size: var(--text-lg);
   transition: all var(--duration-normal) var(--ease-out);
 }
 
 .refreshButton:hover {
-  transform: translateY(-2px);
   box-shadow: var(--shadow-lg);
+  transform: translateY(-2px);
 }
 
 .refreshIcon {
@@ -60,6 +60,7 @@
     opacity: 0;
     transform: translateY(20px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -70,6 +71,7 @@
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
@@ -92,7 +94,7 @@
 }
 
 /* Responsive adjustments */
-@media (max-width: 768px) {
+@media (width <= 768px) {
   .container {
     padding: var(--space-4);
   }

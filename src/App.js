@@ -59,6 +59,15 @@ function App() {
   // Apply theme class on app init and when theme changes
   useEffect(() => {
     document.body.classList.toggle(THEME.CLASS_NAME, isLightTheme);
+
+    // Sync meta theme-color for mobile browser UI
+    const themeColorMeta = document.querySelector("meta[name='theme-color']");
+    if (themeColorMeta) {
+      themeColorMeta.setAttribute(
+        "content",
+        isLightTheme ? "#eef1f6" : "#050714",
+      );
+    }
   }, [isLightTheme]);
 
   // Persist theme preference to localStorage

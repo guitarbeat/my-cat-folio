@@ -1,8 +1,8 @@
 /* Common Shared Styles */
 .pageContainer {
   max-width: 1200px;
-  margin: 0 auto;
   padding: var(--space-4);
+  margin: 0 auto;
 }
 
 .cardInteractive {
@@ -19,7 +19,7 @@
 
 /* Export values for composition */
 :export {
-  cardBase: cardInteractive;
-  pageContainer: pageContainer;
-  gridLayout: gridLayout;
+  cardBase: cardinteractive;
+  pageContainer: pagecontainer;
+  gridLayout: gridlayout;
 }

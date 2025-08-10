@@ -2,10 +2,10 @@
 
 /* Cards */
 .card-base {
+  padding: var(--space-4);
   background: var(--card-background);
   border: 1px solid var(--card-border);
   border-radius: var(--radius-lg);
-  padding: var(--space-4);
   transition: var(--transition-all);
 }
 
@@ -15,22 +15,22 @@
 }
 
 .card-interactive:hover {
-  transform: translateY(-2px);
   box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
 }
 
 /* Buttons */
 .btn {
   display: inline-flex;
+  gap: var(--space-2);
   align-items: center;
   justify-content: center;
-  gap: var(--space-2);
   padding: var(--space-3) var(--space-4);
   font-size: var(--text-base);
   font-weight: 500;
+  cursor: pointer;
   border-radius: var(--radius-md);
   transition: var(--transition-all);
-  cursor: pointer;
 }
 
 .btn-primary {
@@ -70,8 +70,8 @@
 .input-group {
   position: relative;
   display: flex;
-  align-items: center;
   gap: var(--space-2);
+  align-items: center;
 }
 
 .form-label {
@@ -92,16 +92,16 @@
 }
 
 .form-input:focus {
+  outline: none;
   border-color: var(--primary-color);
   box-shadow: 0 0 0 3px var(--primary-light);
-  outline: none;
 }
 
 /* Badges */
 .badge {
   display: inline-flex;
-  align-items: center;
   gap: var(--space-1);
+  align-items: center;
   padding: var(--space-1) var(--space-2);
   font-size: var(--text-xs);
   font-weight: 500;
@@ -127,19 +127,19 @@
 }
 
 .tooltip::before {
-  content: attr(data-tooltip);
   position: absolute;
   bottom: 100%;
   left: 50%;
-  transform: translateX(-50%);
   padding: var(--space-2);
   font-size: var(--text-xs);
   color: white;
+  white-space: nowrap;
+  pointer-events: none;
+  content: attr(data-tooltip);
   background: var(--gray-800);
   border-radius: var(--radius-sm);
-  white-space: nowrap;
   opacity: 0;
-  pointer-events: none;
+  transform: translateX(-50%);
   transition: var(--transition-all);
 }
 
@@ -152,23 +152,23 @@
 .modal-backdrop {
   position: fixed;
   inset: 0;
-  background: rgb(var(--black-rgb) / 0.5);
-  backdrop-filter: blur(4px);
   z-index: var(--z-modal);
+  background: rgb(var(--black-rgb) / 50%);
+  backdrop-filter: blur(4px);
 }
 
 .modal {
   position: fixed;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%);
+  z-index: var(--z-modal);
   width: min(90%, 500px);
   max-height: 90vh;
   overflow-y: auto;
   background: var(--card-background);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-xl);
-  z-index: var(--z-modal);
+  transform: translate(-50%, -50%);
 }
 
 .modal-header {
@@ -185,9 +185,9 @@
 
 .modal-footer {
   display: flex;
+  gap: var(--space-2);
   align-items: center;
   justify-content: flex-end;
-  gap: var(--space-2);
   padding: var(--space-4);
   border-top: 1px solid var(--border-color);
 }
@@ -201,8 +201,8 @@
 
 .list-item {
   display: flex;
-  align-items: center;
   gap: var(--space-3);
+  align-items: center;
   padding: var(--space-3);
   background: var(--surface-color);
   border-radius: var(--radius-md);
@@ -232,7 +232,7 @@
 :global(body:not(.light-theme)) {
   .btn-secondary,
   .list-item {
-    background: rgb(var(--black-rgb) / 0.2);
+    background: rgb(var(--black-rgb) / 20%);
   }
 
   .modal {

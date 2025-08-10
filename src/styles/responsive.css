@@ -1,4 +1,4 @@
-@media (max-width: 768px) {
+@media (width <= 768px) {
   .statsGrid,
   .resultsGrid {
     grid-template-columns: 1fr;
@@ -17,7 +17,7 @@
   }
 }
 
-@media (max-width: 480px) {
+@media (width <= 480px) {
   .cardBase {
     padding: var(--space-3);
   }

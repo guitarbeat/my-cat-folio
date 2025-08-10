@@ -2,30 +2,30 @@
 
 .container {
   composes: container from "../../styles/base.css";
+  position: relative;
+  z-index: var(--z-0);
   width: 100%;
   max-width: 1024px;
   padding: var(--space-4);
   margin: 0 auto;
-  position: relative;
-  z-index: var(--z-0);
 }
 
 .header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: var(--space-6);
   padding: var(--space-4);
+  margin-bottom: var(--space-6);
   background: var(--surface-color);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-md);
 }
 
 .header h1 {
+  margin: 0;
   font-size: var(--text-3xl);
   font-weight: 600;
   color: var(--text-primary);
-  margin: 0;
 }
 
 .headerActions {
@@ -35,16 +35,16 @@
 
 .actionButton {
   display: flex;
-  align-items: center;
   gap: var(--space-2);
+  align-items: center;
   padding: var(--space-3) var(--space-4);
   font-size: var(--text-base);
   font-weight: 500;
   color: var(--text-primary);
+  cursor: pointer;
   background: var(--surface-color);
   border: 2px solid var(--primary-400);
   border-radius: var(--radius-lg);
-  cursor: pointer;
   transition: all var(--duration-normal) var(--ease-out-expo);
 }
 
@@ -52,13 +52,13 @@
   color: white;
   background: var(--primary-500);
   border-color: var(--primary-600);
-  transform: translateY(-1px);
   box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
 }
 
 .actionButton:active {
-  transform: translateY(0);
   box-shadow: var(--shadow-sm);
+  transform: translateY(0);
 }
 
 .buttonIcon {
@@ -89,7 +89,7 @@
 }
 
 .statCard {
-  composes: cardInteractive from "../../styles/base.css";
+  composes: cardinteractive from "../../styles/base.css";
   position: relative;
   min-width: 140px;
   padding: 1.5rem;
@@ -123,9 +123,9 @@
   display: flex;
   flex-wrap: wrap;
   gap: var(--space-4);
-  margin-top: var(--space-6);
-  width: 100%;
   justify-content: space-between;
+  width: 100%;
+  margin-top: var(--space-6);
 }
 
 .actions button {
@@ -134,7 +134,7 @@
 }
 
 .startNewButton {
-  composes: btnPrimary from "../../styles/base.css";
+  composes: btnprimary from "../../styles/base.css";
   display: inline-flex;
   gap: var(--space-2);
   align-items: center;
@@ -204,7 +204,7 @@
 }
 
 .tournamentBracket {
-  composes: cardInteractive from "../../styles/base.css";
+  composes: cardinteractive from "../../styles/base.css";
   padding: var(--space-8);
   margin: var(--space-8) 0;
   overflow-x: auto;
@@ -228,6 +228,7 @@
     opacity: 0;
     transform: translateX(100%);
   }
+
   to {
     opacity: 1;
     transform: translateX(0);
@@ -269,7 +270,7 @@
 }
 
 /* Responsive adjustments */
-@media (max-width: 1024px) {
+@media (width <= 1024px) {
   .container {
     padding: var(--space-3);
   }
@@ -306,12 +307,12 @@
   }
 
   .tournamentBracket h3 {
-    font-size: var(--text-xl);
     margin-bottom: var(--space-4);
+    font-size: var(--text-xl);
   }
 }
 
-@media (max-width: 768px) {
+@media (width <= 768px) {
   .container {
     padding: var(--space-2);
   }
@@ -353,8 +354,8 @@
   }
 
   .startNewButton {
-    width: 100%;
     justify-content: center;
+    width: 100%;
   }
 
   .tip {
@@ -362,9 +363,9 @@
   }
 
   .toast {
-    left: var(--space-2);
     right: var(--space-2);
     bottom: var(--space-2);
+    left: var(--space-2);
     text-align: center;
   }
 }
@@ -386,11 +387,11 @@
 
 /* Results Header */
 .resultsHeader {
+  padding: 2rem;
+  margin-bottom: 2rem;
   background: linear-gradient(135deg, var(--primary-100), var(--primary-50));
   border: 1px solid var(--primary-200);
   border-radius: 1rem;
-  padding: 2rem;
-  margin-bottom: 2rem;
 }
 
 /* Results Grid */
@@ -403,7 +404,7 @@
 
 /* Tournament Bracket */
 .bracketContainer {
-  composes: cardInteractive from "../../styles/base.css";
+  composes: cardinteractive from "../../styles/base.css";
   padding: var(--space-4);
   margin-bottom: var(--space-6);
   overflow-x: auto;
@@ -418,7 +419,7 @@
 }
 
 .actionButton {
-  composes: btnPrimary from "../../styles/base.css";
+  composes: btnprimary from "../../styles/base.css";
   min-width: 200px;
 }
 
@@ -427,28 +428,28 @@
   position: fixed;
   bottom: var(--space-4);
   left: 50%;
-  transform: translateX(-50%);
+  z-index: 1000;
   padding: var(--space-4);
   border-radius: var(--radius-lg);
+  transform: translateX(-50%);
   animation: slideUp 0.3s var(--ease-out);
-  z-index: 1000;
 }
 
-@media (max-width: 640px) {
+@media (width <= 640px) {
   .header {
     flex-direction: column;
     gap: var(--space-4);
-    text-align: center;
     padding: var(--space-3);
+    text-align: center;
   }
 
   .headerActions {
-    width: 100%;
     flex-direction: column;
+    width: 100%;
   }
 
   .actionButton {
-    width: 100%;
     justify-content: center;
+    width: 100%;
   }
 }
