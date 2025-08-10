@@ -28,15 +28,15 @@
 
 .welcomeText.expanded {
   max-height: 500px;
-  opacity: 1;
   margin-top: var(--space-4);
+  opacity: 1;
 }
 
 .expandToggle {
-  composes: btnSecondary from "../../styles/base.css";
+  composes: btnsecondary from "../../styles/base.css";
   display: flex;
-  align-items: center;
   gap: var(--space-2);
+  align-items: center;
   margin-top: var(--space-2);
 }
 
@@ -55,9 +55,9 @@
 }
 
 .tournamentSteps {
-  list-style: none;
   padding: 0;
   margin: var(--space-4) 0;
+  list-style: none;
   counter-reset: step;
 }
 
@@ -69,7 +69,6 @@
 }
 
 .tournamentSteps li::before {
-  content: counter(step);
   position: absolute;
   left: 0;
   display: flex;
@@ -77,11 +76,12 @@
   justify-content: center;
   width: 24px;
   height: 24px;
-  background: var(--primary-100);
-  color: var(--primary-700);
-  border-radius: var(--radius-full);
   font-size: var(--text-sm);
   font-weight: 600;
+  color: var(--primary-700);
+  content: counter(step);
+  background: var(--primary-100);
+  border-radius: var(--radius-full);
 }
 
 /* Name Selection */
@@ -96,8 +96,8 @@
 
 .selectionGuide {
   composes: text from "../../styles/base.css";
-  color: var(--text-secondary);
   margin-bottom: var(--space-4);
+  color: var(--text-secondary);
 }
 
 .cardsContainer {
@@ -109,16 +109,16 @@
 
 /* Name Counter */
 .nameCount {
-  composes: cardInteractive from "../../styles/base.css";
+  composes: cardinteractive from "../../styles/base.css";
   padding: var(--space-4);
   margin: var(--space-6) 0;
 }
 
 .countAndSelect {
   display: flex;
+  gap: var(--space-4);
   align-items: center;
   justify-content: space-between;
-  gap: var(--space-4);
 }
 
 .countText {
@@ -128,33 +128,33 @@
 }
 
 .selectAllButton {
-  composes: btnSecondary from "../../styles/base.css";
+  composes: btnsecondary from "../../styles/base.css";
 }
 
 .helperText {
   display: block;
   margin-top: var(--space-2);
-  color: var(--primary-500);
   font-size: var(--text-sm);
+  color: var(--primary-500);
   animation: pulse 2s infinite;
 }
 
 /* Start Button */
 .startSection {
-  text-align: center;
   margin: var(--space-6) 0;
+  text-align: center;
 }
 
 .startButton {
-  composes: btnPrimary from "../../styles/base.css";
+  composes: btnprimary from "../../styles/base.css";
   display: flex;
   flex-direction: column;
-  align-items: center;
   gap: var(--space-2);
+  align-items: center;
   width: 100%;
   max-width: 400px;
-  margin: 0 auto;
   padding: var(--space-4);
+  margin: 0 auto;
 }
 
 .buttonText {
@@ -174,7 +174,7 @@
 }
 
 .photoSidebarContent {
-  composes: cardInteractive from "../../styles/base.css";
+  composes: cardinteractive from "../../styles/base.css";
   padding: var(--space-4);
   margin-bottom: var(--space-4);
 }
@@ -190,8 +190,8 @@
   position: relative;
   aspect-ratio: 1;
   overflow: hidden;
-  border-radius: var(--radius-lg);
   cursor: pointer;
+  border-radius: var(--radius-lg);
   transition: transform var(--duration-normal) var(--ease-out);
 }
 
@@ -207,7 +207,7 @@
 
 /* Suggestion Section */
 .suggestionSection {
-  composes: cardInteractive from "../../styles/base.css";
+  composes: cardinteractive from "../../styles/base.css";
   padding: var(--space-4);
 }
 
@@ -216,8 +216,8 @@
 }
 
 .suggestionIntro {
-  color: var(--text-secondary);
   margin: var(--space-2) 0 var(--space-4);
+  color: var(--text-secondary);
 }
 
 .suggestionForm {
@@ -248,9 +248,9 @@
 
 .formGroup input:focus,
 .formGroup textarea:focus {
-  border-color: var(--primary-400);
-  box-shadow: 0 0 0 2px rgb(var(--primary-rgb) / 0.2);
   outline: none;
+  border-color: var(--primary-400);
+  box-shadow: 0 0 0 2px rgb(var(--primary-rgb) / 20%);
 }
 
 .formGroup textarea {
@@ -259,7 +259,7 @@
 }
 
 .submitButton {
-  composes: btnPrimary from "../../styles/base.css";
+  composes: btnprimary from "../../styles/base.css";
   width: 100%;
   margin-top: var(--space-2);
 }
@@ -268,9 +268,9 @@
 .overlayBackdrop {
   position: fixed;
   inset: 0;
-  background: rgb(var(--black-rgb) / 0.8);
-  backdrop-filter: blur(8px);
   z-index: 1000;
+  background: rgb(var(--black-rgb) / 80%);
+  backdrop-filter: blur(8px);
 }
 
 .overlayBackdrop.minimized {
@@ -281,10 +281,10 @@
 .overlayContent {
   position: fixed;
   inset: 0;
+  z-index: 1001;
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 1001;
   padding: var(--space-8);
   overflow: hidden;
 }
@@ -303,25 +303,25 @@
   position: relative;
   width: 100%;
   height: 100%;
+  touch-action: none;
+  cursor: grab;
+  user-select: none;
+  object-fit: contain;
   border-radius: var(--radius-xl);
   box-shadow: var(--shadow-2xl);
-  cursor: grab;
-  object-fit: contain;
-  touch-action: none;
-  user-select: none;
   transform-origin: center;
   transition: transform var(--duration-normal) var(--ease-out);
 }
 
 .resizeHandle {
   position: absolute;
+  z-index: 1003;
   width: 12px;
   height: 12px;
+  cursor: pointer;
   background: var(--white);
   border: 2px solid var(--primary-500);
   border-radius: var(--radius-full);
-  z-index: 1003;
-  cursor: pointer;
 }
 
 .resizeHandle:hover {
@@ -348,47 +348,47 @@
 }
 
 .resizeHandle.se {
-  bottom: -6px;
   right: -6px;
+  bottom: -6px;
   cursor: se-resize;
 }
 
 .enlargedImage.minimizedImage {
   max-width: 200px;
   max-height: 200px;
-  box-shadow: var(--shadow-lg);
   cursor: default;
+  box-shadow: var(--shadow-lg);
 }
 
 .imageControls {
   position: absolute;
   top: var(--space-4);
   right: var(--space-4);
+  z-index: 1002;
   display: flex;
   gap: var(--space-2);
-  z-index: 1002;
 }
 
 /* Base button styles */
 .minimizeButton,
 .closeButton {
-  composes: btnIcon from "../../styles/base.css";
-  width: 40px;
-  height: 40px;
-  color: var(--white);
-  background: rgb(var(--black-rgb) / 0.5);
-  border: none;
-  border-radius: var(--radius-full);
+  composes: btnicon from "../../styles/base.css";
   display: flex;
   align-items: center;
   justify-content: center;
+  width: 40px;
+  height: 40px;
+  color: var(--white);
   cursor: pointer;
+  background: rgb(var(--black-rgb) / 50%);
+  border: none;
+  border-radius: var(--radius-full);
   transition: all var(--duration-normal) var(--ease-out);
 }
 
 .minimizeButton:hover,
 .closeButton:hover {
-  background: rgb(var(--black-rgb) / 0.7);
+  background: rgb(var(--black-rgb) / 70%);
   transform: scale(1.1);
 }
 
@@ -405,24 +405,24 @@
   position: absolute;
   bottom: var(--space-4);
   left: 50%;
-  transform: translateX(-50%);
   padding: var(--space-2) var(--space-4);
-  color: var(--white);
-  background: rgb(var(--black-rgb) / 0.5);
-  border-radius: var(--radius-full);
   font-size: var(--text-sm);
+  color: var(--white);
   white-space: nowrap;
+  background: rgb(var(--black-rgb) / 50%);
+  border-radius: var(--radius-full);
+  transform: translateX(-50%);
 }
 
 /* Messages */
 .errorMessage {
-  color: var(--error-500);
   margin: var(--space-2) 0;
+  color: var(--error-500);
 }
 
 .successMessage {
-  color: var(--success-500);
   margin: var(--space-2) 0;
+  color: var(--success-500);
 }
 
 /* Animations */
@@ -431,6 +431,7 @@
   100% {
     opacity: 1;
   }
+
   50% {
     opacity: 0.6;
   }
@@ -439,26 +440,26 @@
 /* Dark Mode */
 :global(body:not(.light-theme)) {
   .tournamentSteps li::before {
-    background: var(--primary-900);
     color: var(--primary-200);
+    background: var(--primary-900);
   }
 
   .formGroup input,
   .formGroup textarea {
+    color: var(--text-primary-dark);
     background: var(--surface-dark);
     border-color: var(--border-color-dark);
-    color: var(--text-primary-dark);
   }
 
   .formGroup input:focus,
   .formGroup textarea:focus {
     border-color: var(--primary-400);
-    box-shadow: 0 0 0 2px rgb(var(--primary-rgb) / 0.3);
+    box-shadow: 0 0 0 2px rgb(var(--primary-rgb) / 30%);
   }
 }
 
 /* Responsive Design */
-@media (max-width: 1024px) {
+@media (width <= 1024px) {
   .tournamentLayout {
     grid-template-columns: 1fr;
   }
@@ -473,7 +474,7 @@
   }
 }
 
-@media (max-width: 768px) {
+@media (width <= 768px) {
   .container {
     padding: var(--space-2);
   }

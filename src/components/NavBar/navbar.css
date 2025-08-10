@@ -13,48 +13,49 @@
 /* Navbar styles */
 .navbar {
   --local-font-size: 1.2rem;
+
   position: fixed;
-  inset: 0 0 auto 0;
+  inset: 0 0 auto;
   z-index: var(--z-index-navbar);
   display: flex;
   flex-flow: row nowrap;
+  align-items: center;
+  height: 65px;
   padding: 0 1rem;
   margin: 0;
+  overflow: visible !important;
   list-style-type: none;
   background: var(--card-background, #0f1225);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 2px 8px rgb(0 0 0 / 20%);
   transition: all var(--transition-standard);
-  overflow: visible !important;
-  height: 65px;
-  align-items: center;
 }
 
 /* Mobile Menu Button */
 .navbar__mobile-menu-button {
+  z-index: 1001;
   display: none;
+  padding: 0.5rem;
+  margin-left: auto;
+  cursor: pointer;
   background: none;
   border: none;
-  padding: 0.5rem;
-  cursor: pointer;
-  margin-left: auto;
-  z-index: 1001;
 }
 
 .navbar__mobile-menu-icon {
+  position: relative;
   display: block;
   width: 24px;
   height: 2px;
   background-color: var(--text-primary, #f8fafc);
-  position: relative;
   transition: background-color var(--transition-standard);
 }
 
 .navbar__mobile-menu-icon::before,
 .navbar__mobile-menu-icon::after {
-  content: "";
   position: absolute;
   width: 24px;
   height: 2px;
+  content: "";
   background-color: var(--text-primary, #f8fafc);
   transition: transform var(--transition-standard);
 }
@@ -70,8 +71,8 @@
 /* Menu Container */
 .navbar__menu-container {
   display: flex;
-  align-items: center;
   gap: 1rem;
+  align-items: center;
 }
 
 /* Transparent navbar for login page */
@@ -83,33 +84,33 @@
 
 /* Make text more readable in transparent navbar */
 .navbar.transparent .navbar__item {
-  color: #ffffff;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+  color: #fff;
+  text-shadow: 0 1px 2px rgb(0 0 0 / 50%);
 }
 
 .navbar.transparent .navbar__item--logo .navbar__title {
   font-weight: 700;
-  color: #ffffff;
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
+  color: #fff;
+  text-shadow: 0 1px 3px rgb(0 0 0 / 70%);
 }
 
 /* Theme switch in transparent mode */
 .navbar.transparent .theme-switch {
-  background-color: rgba(40, 40, 40, 0.8);
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  background-color: rgb(40 40 40 / 80%);
+  border: 1px solid rgb(255 255 255 / 30%);
 }
 
 /* Dark theme navbar (default when no light-theme class) */
-.navbar:not(.light-theme):not(.transparent) {
+.navbar:not(.light-theme, .transparent) {
   background: var(--card-background, #0f1225);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 2px 8px rgb(0 0 0 / 30%);
 }
 
 /* Light theme navbar */
 .navbar.light-theme:not(.transparent),
 body.light-theme .navbar:not(.transparent) {
-  background: #ffffff;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  background: #fff;
+  box-shadow: 0 2px 8px rgb(0 0 0 / 10%);
 }
 
 body.light-theme .navbar:not(.transparent) .navbar__item {
@@ -118,34 +119,34 @@ body.light-theme .navbar:not(.transparent) .navbar__item {
 
 /* Theme Switch */
 .navbar .theme-switch {
-  margin-left: 1.5rem;
-  margin-right: 0.5rem;
+  position: relative;
   align-self: center;
-  transform: scale(0.8);
-  transition: transform 0.3s ease;
-  background: none;
-  border: none;
   width: 40px;
   height: 22px;
-  position: relative;
-  border-radius: 30px;
-  cursor: pointer;
   padding: 0;
-  background-color: var(--text-primary, #000000);
+  margin-right: 0.5rem;
+  margin-left: 1.5rem;
+  cursor: pointer;
+  background: none;
+  background-color: var(--text-primary, #000);
+  border: none;
+  border-radius: 30px;
+  transform: scale(0.8);
+  transition: transform 0.3s ease;
 }
 
 .navbar .theme-switch .switch-handle {
   position: absolute;
   top: 2px;
   left: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 18px;
   height: 18px;
   background-color: white;
   border-radius: 50%;
   transition: transform 0.3s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
 .navbar .theme-switch.light-theme {
@@ -153,8 +154,8 @@ body.light-theme .navbar:not(.transparent) .navbar__item {
 }
 
 .navbar .theme-switch.light-theme .switch-handle {
-  transform: translateX(18px);
   background-color: #2c3544;
+  transform: translateX(18px);
 }
 
 .navbar .theme-switch .moon-phase-container {
@@ -164,32 +165,32 @@ body.light-theme .navbar:not(.transparent) .navbar__item {
 
 /* Navigation Items */
 .navbar__item {
-  padding: var(--navbar-padding-desktop);
-  color: var(--text-primary, #f8fafc);
-  font-size: var(--local-font-size);
-  font-weight: 600;
-  text-transform: uppercase;
-  transition: all var(--transition-standard);
   display: flex;
   align-items: center;
+  padding: var(--navbar-padding-desktop);
+  font-size: var(--local-font-size);
+  font-weight: 600;
+  color: var(--text-primary, #f8fafc);
+  text-transform: uppercase;
+  transition: all var(--transition-standard);
 }
 
 /* Underline effect */
 .navbar__item a {
+  position: relative;
   color: inherit;
   text-decoration: none;
   transition: color 0.2s;
-  position: relative;
 }
 
 .navbar__item a::after {
-  content: "";
-  display: block;
   position: absolute;
-  width: 0;
-  height: var(--underline-height);
   bottom: -5px;
   left: 0;
+  display: block;
+  width: 0;
+  height: var(--underline-height);
+  content: "";
   background-color: transparent;
   transition: all var(--transition-standard);
 }
@@ -210,10 +211,10 @@ body.light-theme .navbar:not(.transparent) .navbar__item {
 
 /* Logo */
 .navbar__item--logo {
-  margin-right: auto;
   display: flex;
-  align-items: center;
   gap: 0.5rem;
+  align-items: center;
+  margin-right: auto;
 }
 
 .navbar__item--logo .navbar__logo {
@@ -223,8 +224,8 @@ body.light-theme .navbar:not(.transparent) .navbar__item {
 }
 
 .navbar__item--logo .navbar__title {
-  font-weight: 700;
   font-size: 1.25rem;
+  font-weight: 700;
 }
 
 /* User greeting */
@@ -249,42 +250,42 @@ body.light-theme .navbar:not(.transparent) .navbar__item {
 /* Scroll to Top Button */
 .scroll-to-top {
   position: fixed;
-  bottom: 25px;
   right: 25px;
-  width: var(--scroll-button-size-desktop);
-  height: var(--scroll-button-size-desktop);
+  bottom: 25px;
+  z-index: 1000;
   display: flex;
   align-items: center;
   justify-content: center;
+  width: var(--scroll-button-size-desktop);
+  height: var(--scroll-button-size-desktop);
   font-size: 24px;
-  border-radius: 50%;
-  background-color: var(--card-background, #0f1225);
   color: var(--text-primary, #f8fafc);
-  border: 2px solid var(--text-primary, #f8fafc);
+  pointer-events: none;
   cursor: pointer;
+  background-color: var(--card-background, #0f1225);
+  border: 2px solid var(--text-primary, #f8fafc);
+  border-radius: 50%;
   opacity: 0;
   transform: translateY(20px);
-  pointer-events: none;
-  z-index: 1000;
   transition: all var(--transition-standard);
 }
 
 body.light-theme .scroll-to-top {
-  background-color: #ffffff;
   color: var(--text-primary, #2c3544);
+  background-color: #fff;
   border-color: var(--text-primary, #2c3544);
 }
 
 .scroll-to-top.visible {
+  pointer-events: auto;
   opacity: 0.7;
   transform: translateY(0);
-  pointer-events: auto;
 }
 
 .scroll-to-top:hover {
+  box-shadow: 0 2px 8px rgb(0 0 0 / 20%);
   opacity: 1;
   transform: translateY(-2px);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
 .scroll-to-top:focus {
@@ -297,10 +298,10 @@ body.light-theme .scroll-to-top:focus {
 }
 
 /* Mobile Styles */
-@media screen and (max-width: 768px) {
+@media screen and (width <= 768px) {
   .navbar {
-    padding: 0 1rem;
     height: 60px;
+    padding: 0 1rem;
   }
 
   .navbar__mobile-menu-button {
@@ -310,23 +311,23 @@ body.light-theme .scroll-to-top:focus {
   .navbar__menu-container {
     position: fixed;
     top: 60px;
-    left: 0;
     right: 0;
-    background: var(--card-background, #0f1225);
-    padding: 1rem;
+    left: 0;
     flex-direction: column;
     align-items: stretch;
-    transform: translateY(-100%);
+    padding: 1rem;
+    background: var(--card-background, #0f1225);
+    box-shadow: 0 4px 6px rgb(0 0 0 / 10%);
     opacity: 0;
+    transform: translateY(-100%);
     transition:
       transform var(--transition-standard),
       opacity var(--transition-standard);
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   }
 
   .navbar.mobile-menu-open .navbar__menu-container {
-    transform: translateY(0);
     opacity: 1;
+    transform: translateY(0);
   }
 
   .navbar.mobile-menu-open .navbar__mobile-menu-icon {
@@ -334,19 +335,19 @@ body.light-theme .scroll-to-top:focus {
   }
 
   .navbar.mobile-menu-open .navbar__mobile-menu-icon::before {
-    transform: rotate(45deg);
     top: 0;
+    transform: rotate(45deg);
   }
 
   .navbar.mobile-menu-open .navbar__mobile-menu-icon::after {
-    transform: rotate(-45deg);
     bottom: 0;
+    transform: rotate(-45deg);
   }
 
   .navbar__item {
     padding: 0.75rem 1rem;
     font-size: 1rem;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    border-bottom: 1px solid rgb(255 255 255 / 10%);
   }
 
   .navbar__item:last-child {
@@ -362,30 +363,30 @@ body.light-theme .scroll-to-top:focus {
   }
 
   .scroll-to-top {
+    right: 20px;
+    bottom: 20px;
     width: var(--scroll-button-size-mobile);
     height: var(--scroll-button-size-mobile);
-    bottom: 20px;
-    right: 20px;
   }
 
   /* Transparent navbar adjustments for mobile */
   .navbar.transparent .navbar__menu-container {
-    background: rgba(0, 0, 0, 0.8);
+    background: rgb(0 0 0 / 80%);
     backdrop-filter: blur(8px);
   }
 
   .navbar.transparent .navbar__item {
-    border-bottom-color: rgba(255, 255, 255, 0.2);
+    border-bottom-color: rgb(255 255 255 / 20%);
   }
 }
 
 /* Touch device optimizations */
 @media (hover: none) and (pointer: coarse) {
   .navbar__item a {
-    padding: 0.5rem;
-    min-height: 44px;
     display: flex;
     align-items: center;
+    min-height: 44px;
+    padding: 0.5rem;
   }
 
   .navbar__item a::after {
@@ -393,7 +394,7 @@ body.light-theme .scroll-to-top:focus {
   }
 
   .navbar__item a:active {
-    background-color: rgba(255, 255, 255, 0.1);
+    background-color: rgb(255 255 255 / 10%);
   }
 
   .scroll-to-top {
@@ -405,7 +406,7 @@ body.light-theme .scroll-to-top:focus {
 
 /* External Links */
 .navbar__item--external {
-  border-left: 1px solid rgba(255, 255, 255, 0.2);
+  border-left: 1px solid rgb(255 255 255 / 20%);
 }
 
 .navbar__external-link {
@@ -423,5 +424,5 @@ body.light-theme .scroll-to-top:focus {
 }
 
 .navbar.transparent .navbar__item--external {
-  border-left-color: rgba(255, 255, 255, 0.3);
+  border-left-color: rgb(255 255 255 / 30%);
 }

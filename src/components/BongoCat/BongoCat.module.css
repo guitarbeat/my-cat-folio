@@ -12,11 +12,11 @@
 
 /* Base Styles */
 .container {
+  position: relative;
+  top: -10px; /* Added to move the cat up slightly */
   width: calc(80rem * var(--scale));
   height: calc(80rem * var(--scale));
   transform: scale(var(--cat-size));
-  position: relative;
-  top: -10px; /* Added to move the cat up slightly */
 }
 
 .container * {
@@ -36,37 +36,37 @@
 .head {
   width: calc(70rem * var(--scale));
   height: calc(60rem * var(--scale));
+  background: var(--cat-bg);
   border: var(--linesize) solid var(--cat-outline);
   border-radius: 50%;
-  background: var(--cat-bg);
 }
 
 /* Ears - Base styles */
 .ears .ear:first-child {
-  border-left: calc(7rem * var(--scale)) solid transparent;
   border-right: calc(7rem * var(--scale)) solid transparent;
+  border-left: calc(7rem * var(--scale)) solid transparent;
   transform: translate(calc(17rem * var(--scale)), calc(-5rem * var(--scale)))
     rotate(-15deg);
 }
 
 .ears .ear:last-child {
-  border-left: calc(3rem * var(--scale)) solid transparent;
   border-right: calc(9rem * var(--scale)) solid transparent;
+  border-left: calc(3rem * var(--scale)) solid transparent;
   transform: translate(calc(53rem * var(--scale)), calc(-2rem * var(--scale)))
     rotate(33deg);
 }
 
 /* Fill variant */
 .ears.fill .ear:first-child {
-  border-bottom: calc(8rem * var(--scale)) solid var(--cat-bg);
   top: calc(1.2rem * var(--scale));
   left: calc(0.4rem * var(--scale));
+  border-bottom: calc(8rem * var(--scale)) solid var(--cat-bg);
 }
 
 .ears.fill .ear:last-child {
-  border-bottom: calc(10rem * var(--scale)) solid var(--cat-bg);
   top: calc(1.7rem * var(--scale));
   left: calc(-0.5rem * var(--scale));
+  border-bottom: calc(10rem * var(--scale)) solid var(--cat-bg);
 }
 
 /* Outline variant */
@@ -80,9 +80,9 @@
 
 /* Face */
 .face {
-  width: calc(70rem * var(--scale));
   top: calc(20rem * var(--scale));
   left: calc(17rem * var(--scale));
+  width: calc(70rem * var(--scale));
 }
 
 .eyes {
@@ -94,8 +94,8 @@
   display: inline-block;
   width: calc(3rem * var(--scale));
   height: calc(3rem * var(--scale));
-  border-radius: 50%;
   background: #fff; /* White eyes for visibility */
+  border-radius: 50%;
   animation: blink 5s ease infinite;
 }
 
@@ -104,8 +104,8 @@
 }
 
 .mouth {
-  left: calc(6.5rem * var(--scale));
   top: calc(1rem * var(--scale));
+  left: calc(6.5rem * var(--scale));
 }
 
 .uu {
@@ -114,14 +114,14 @@
 
 .uu::before,
 .uu::after {
-  content: "";
   display: inline-block;
   width: calc(4rem * var(--scale));
   height: calc(1.5rem * var(--scale));
-  border-radius: 0 0 50% 50% / 0 0 100% 100%;
+  content: "";
   border: var(--cat-outline) solid var(--linesize);
-  border-top: none;
   border-color: #444; /* Dark gray instead of black */
+  border-top: none;
+  border-radius: 0 0 50% 50% / 0 0 100% 100%;
 }
 
 .uu::after {
@@ -130,43 +130,43 @@
 
 /* Paws */
 .paws {
-  width: calc(80rem * var(--scale));
-  left: 50%;
   top: 70%;
+  left: 50%;
+  width: calc(80rem * var(--scale));
+  transform: translateX(-50%);
   transform-origin: 50% 0%;
-  transform: translatex(-50%);
 }
 
 .paws.up .paw {
-  transform-origin: 50% 0%;
-  transform: rotate(150deg);
   width: calc(15rem * var(--scale));
   height: calc(14rem * var(--scale));
   background: var(--cat-bg);
-  border-bottom: var(--linesize) solid var(--cat-outline);
   border-right: var(--linesize) solid var(--cat-outline);
+  border-bottom: var(--linesize) solid var(--cat-outline);
   border-radius: 0 0 50% 50% / 0 0 70% 70%;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 1px 4px rgb(0 0 0 / 30%);
+  transform: rotate(150deg);
+  transform-origin: 50% 0%;
 }
 
 .paws.up .paw .palm {
-  background: var(--toebean);
-  width: calc(4rem * var(--scale));
-  height: calc(4rem * var(--scale));
-  border-radius: 50%;
   top: calc(4rem * var(--scale));
   left: calc(6rem * var(--scale));
-  box-shadow: inset 0 -1px 2px rgba(0, 0, 0, 0.2);
+  width: calc(4rem * var(--scale));
+  height: calc(4rem * var(--scale));
+  background: var(--toebean);
+  border-radius: 50%;
+  box-shadow: inset 0 -1px 2px rgb(0 0 0 / 20%);
 }
 
 .paws.up .paw .bean {
-  background: var(--toebean);
-  width: calc(2.5rem * var(--scale));
-  height: calc(2.5rem * var(--scale));
-  border-radius: 50%;
   top: calc(9.5rem * var(--scale));
   left: calc(7rem * var(--scale));
-  box-shadow: inset 0 -1px 2px rgba(0, 0, 0, 0.2);
+  width: calc(2.5rem * var(--scale));
+  height: calc(2.5rem * var(--scale));
+  background: var(--toebean);
+  border-radius: 50%;
+  box-shadow: inset 0 -1px 2px rgb(0 0 0 / 20%);
 }
 
 .paws.up .paw .bean:first-child {
@@ -182,28 +182,28 @@
 .paws.down .paw {
   width: calc(15rem * var(--scale));
   height: calc(13rem * var(--scale));
+  margin-top: calc(-0.5rem * var(--scale));
   background: var(--cat-bg);
+  border-right: var(--linesize) solid var(--cat-outline);
   border-bottom: var(--linesize) solid var(--cat-outline);
   border-left: var(--linesize) solid var(--cat-outline);
-  border-right: var(--linesize) solid var(--cat-outline);
   border-radius: 0 0 50% 50% / 0 0 80% 80%;
-  margin-top: calc(-0.5rem * var(--scale));
-  transform-origin: 50% 0%;
+  box-shadow: 0 1px 4px rgb(0 0 0 / 30%);
   transform: rotate(15deg);
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+  transform-origin: 50% 0%;
 }
 
 .paws.down .paw::before {
-  content: "";
-  display: block;
   position: absolute;
   top: 0;
   right: 0;
-  transform: translate(calc(1rem * var(--scale)), -90%);
-  background: var(--cat-bg);
-  border-right: var(--linesize) solid var(--cat-outline);
+  display: block;
   width: 100%;
   height: calc(3rem * var(--scale));
+  content: "";
+  background: var(--cat-bg);
+  border-right: var(--linesize) solid var(--cat-outline);
+  transform: translate(calc(1rem * var(--scale)), -90%);
 }
 
 .paws.down .paw:first-child {
@@ -221,16 +221,19 @@
 /* Animations */
 @keyframes blink {
   0% {
-    transform: scaley(1);
+    transform: scaleY(1);
   }
+
   3% {
-    transform: scaley(0.1);
+    transform: scaleY(0.1);
   }
+
   6% {
-    transform: scaley(1);
+    transform: scaleY(1);
   }
+
   100% {
-    transform: scaley(1);
+    transform: scaleY(1);
   }
 }
 
@@ -239,18 +242,19 @@
   position: absolute;
   top: 0;
   left: 50%;
-  transform: translateX(-50%);
+  z-index: 20; /* Ensure cat stays above other elements */
   width: 180px;
   max-width: 100%;
   aspect-ratio: 1;
   pointer-events: none;
+  transform: translateX(-50%);
   transition:
     top 0.2s ease-out,
     opacity 0.3s ease;
-  z-index: 20; /* Ensure cat stays above other elements */
 }
 
 /* No longer needed since we're using a different approach for the paws */
+
 /* .pawsContainer {
   position: absolute;
   width: 100%;

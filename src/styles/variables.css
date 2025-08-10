@@ -38,7 +38,6 @@
   --success-700: #047857;
   --success-800: #065f46;
   --success-900: #064e3b;
-
   --error-50: #fef2f2;
   --error-100: #fee2e2;
   --error-200: #fecaca;
@@ -49,7 +48,6 @@
   --error-700: #b91c1c;
   --error-800: #991b1b;
   --error-900: #7f1d1d;
-
   --warning-50: #fffbeb;
   --warning-100: #fef3c7;
   --warning-200: #fde68a;
@@ -78,15 +76,12 @@
     0 10px 15px -3px var(--shadow-color), 0 4px 6px -4px var(--shadow-color);
   --shadow-xl:
     0 20px 25px -5px var(--shadow-color), 0 8px 10px -6px var(--shadow-color);
-
   --text-shadow-sm: 0 2px 8px rgba(var(--black-rgb), 0.2);
   --text-shadow-lg: 0 2px 12px rgba(var(--black-rgb), 0.4);
-
   --overlay-light: rgba(var(--black-rgb), 0.4);
   --overlay-medium: rgba(var(--black-rgb), 0.5);
   --overlay-dark: rgba(var(--black-rgb), 0.75);
   --overlay-darker: rgba(var(--black-rgb), 0.9);
-
   --hover-overlay: rgba(var(--white-rgb), 0.1);
   --active-overlay: rgba(var(--white-rgb), 0.2);
 
@@ -94,7 +89,6 @@
   --font-sans: "Inter", system-ui, -apple-system, sans-serif;
   --font-serif: "Playfair Display", georgia, serif;
   --font-mono: "JetBrains Mono", monospace;
-
   --text-xs: 0.75rem;
   --text-sm: 0.875rem;
   --text-base: 1rem;
@@ -104,7 +98,6 @@
   --text-3xl: 1.875rem;
   --text-4xl: 2.25rem;
   --text-5xl: 3rem;
-
   --text-responsive-xs: clamp(0.75rem, 1.5vw, 0.875rem);
   --text-responsive-sm: clamp(0.875rem, 1.75vw, 1rem);
   --text-responsive-base: clamp(1rem, 2vw, 1.125rem);
