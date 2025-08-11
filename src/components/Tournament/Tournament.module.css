@@ -72,7 +72,7 @@
 }
 
 .matchCount {
-  composes: textsm from "../../styles/base.css";
+  composes: textSm from "../../styles/base.css";
   color: var(--text-secondary);
 }
 
@@ -95,7 +95,7 @@
 }
 
 .matchup {
-  composes: cardinteractive from "../../styles/base.css";
+  composes: cardInteractive from "../../styles/base.css";
   display: flex;
   flex-direction: column;
   gap: var(--space-6);
@@ -168,7 +168,7 @@
 }
 
 .extraOptionsButton {
-  composes: btnsecondary from "../../styles/base.css";
+  composes: btnSecondary from "../../styles/base.css";
   min-width: 120px;
   transition: all var(--duration-normal) var(--ease-out);
 }
@@ -182,7 +182,7 @@
 }
 
 .selected {
-  composes: btnprimary from "../../styles/base.css";
+  composes: btnPrimary from "../../styles/base.css";
   background: var(--primary-color);
 }
 
@@ -210,7 +210,7 @@
 }
 
 .controlButton {
-  composes: btnprimary from "../../styles/base.css";
+  composes: btnPrimary from "../../styles/base.css";
 }
 
 .soundControls {
@@ -224,7 +224,7 @@
 }
 
 .soundToggleButton {
-  composes: btnsecondary from "../../styles/base.css";
+  composes: btnSecondary from "../../styles/base.css";
   display: flex;
   align-items: center;
   justify-content: center;
@@ -298,7 +298,7 @@
 }
 
 .bracketToggle {
-  composes: btnsecondary from "../../styles/base.css";
+  composes: btnSecondary from "../../styles/base.css";
   display: flex;
   gap: var(--space-2);
   align-items: center;
@@ -364,7 +364,7 @@
 }
 
 .modalBackdrop {
-  composes: modalbackdrop from "../../styles/base.css";
+  composes: modalBackdrop from "../../styles/base.css";
   animation: fadeIn var(--duration-normal) var(--ease-out);
 }
 
@@ -388,11 +388,11 @@
 }
 
 .confirmButton {
-  composes: btnprimary from "../../styles/base.css";
+  composes: btnPrimary from "../../styles/base.css";
 }
 
 .cancelButton {
-  composes: btnsecondary from "../../styles/base.css";
+  composes: btnSecondary from "../../styles/base.css";
 }
 
 /* Animations
@@ -698,7 +698,7 @@
 }
 
 .randomizeButton {
-  composes: btnsecondary from "../../styles/base.css";
+  composes: btnSecondary from "../../styles/base.css";
   display: flex;
   gap: var(--space-2);
   align-items: center;
