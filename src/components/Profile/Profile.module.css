@@ -111,7 +111,7 @@
 }
 
 .buttonDelete {
-  composes: btnDanger from "../../styles/base.css";
+  composes: btndanger from "../../styles/base.css";
 }
 
 .buttonDelete:hover {
@@ -123,7 +123,7 @@
 }
 
 .buttonPrimary {
-  composes: btnPrimary from "../../styles/base.css";
+  composes: btnprimary from "../../styles/base.css";
 }
 
 .buttonPrimary:hover {

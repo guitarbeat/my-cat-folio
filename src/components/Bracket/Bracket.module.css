@@ -1,5 +1,5 @@
 .container {
-  composes: cardInteractive from "../../styles/base.css";
+  composes: cardinteractive from "../../styles/base.css";
   width: 100%;
   padding: var(--space-4);
   overflow-x: auto;
@@ -40,7 +40,7 @@
 }
 
 .roundHeader {
-  composes: cardInteractive from "../../styles/base.css";
+  composes: cardinteractive from "../../styles/base.css";
   padding: var(--space-2);
   margin-bottom: var(--space-4);
   text-align: center;
@@ -107,7 +107,7 @@
 }
 
 .matchContent {
-  composes: cardInteractive from "../../styles/base.css";
+  composes: cardinteractive from "../../styles/base.css";
   position: relative;
   z-index: 2;
   width: 100%;
@@ -198,13 +198,13 @@
 }
 
 .tieBadge {
-  composes: winnerBadge;
+  composes: winnerbadge;
   color: var(--success-500);
   background: var(--success-50);
 }
 
 .skipBadge {
-  composes: winnerBadge;
+  composes: winnerbadge;
   color: var(--warning-500);
   background: var(--warning-50);
 }

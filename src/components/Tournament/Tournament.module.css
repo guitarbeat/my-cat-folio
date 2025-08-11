@@ -72,7 +72,7 @@
 }
 
 .matchCount {
-  composes: textSm from "../../styles/base.css";
+  composes: textsm from "../../styles/base.css";
   color: var(--text-secondary);
 }
 
@@ -95,7 +95,7 @@
 }
 
 .matchup {
-  composes: cardInteractive from "../../styles/base.css";
+  composes: cardinteractive from "../../styles/base.css";
   display: flex;
   flex-direction: column;
   gap: var(--space-6);
@@ -168,7 +168,7 @@
 }
 
 .extraOptionsButton {
-  composes: btnSecondary from "../../styles/base.css";
+  composes: btnsecondary from "../../styles/base.css";
   min-width: 120px;
   transition: all var(--duration-normal) var(--ease-out);
 }
@@ -182,7 +182,7 @@
 }
 
 .selected {
-  composes: btnPrimary from "../../styles/base.css";
+  composes: btnprimary from "../../styles/base.css";
   background: var(--primary-color);
 }
 
@@ -205,12 +205,11 @@
   border: 1px solid var(--border-color);
   border-radius: var(--radius-lg);
   backdrop-filter: blur(8px);
-  backdrop-filter: blur(8px);
   transition: all var(--duration-normal) var(--ease-out);
 }
 
 .controlButton {
-  composes: btnPrimary from "../../styles/base.css";
+  composes: btnprimary from "../../styles/base.css";
 }
 
 .soundControls {
@@ -224,7 +223,7 @@
 }
 
 .soundToggleButton {
-  composes: btnSecondary from "../../styles/base.css";
+  composes: btnsecondary from "../../styles/base.css";
   display: flex;
   align-items: center;
   justify-content: center;
@@ -298,7 +297,7 @@
 }
 
 .bracketToggle {
-  composes: btnSecondary from "../../styles/base.css";
+  composes: btnsecondary from "../../styles/base.css";
   display: flex;
   gap: var(--space-2);
   align-items: center;
@@ -364,7 +363,7 @@
 }
 
 .modalBackdrop {
-  composes: modalBackdrop from "../../styles/base.css";
+  composes: modalbackdrop from "../../styles/base.css";
   animation: fadeIn var(--duration-normal) var(--ease-out);
 }
 
@@ -388,11 +387,11 @@
 }
 
 .confirmButton {
-  composes: btnPrimary from "../../styles/base.css";
+  composes: btnprimary from "../../styles/base.css";
 }
 
 .cancelButton {
-  composes: btnSecondary from "../../styles/base.css";
+  composes: btnsecondary from "../../styles/base.css";
 }
 
 /* Animations
@@ -553,7 +552,6 @@
   .bracketView {
     background: rgb(var(--black-rgb) / 20%);
     backdrop-filter: blur(12px);
-    backdrop-filter: blur(12px);
   }
 
   .matchup {
@@ -698,7 +696,7 @@
 }
 
 .randomizeButton {
-  composes: btnSecondary from "../../styles/base.css";
+  composes: btnsecondary from "../../styles/base.css";
   display: flex;
   gap: var(--space-2);
   align-items: center;
@@ -880,7 +878,6 @@
   width: 80px;
   height: 4px;
   appearance: none;
-  appearance: none;
   outline: none;
   background: var(--primary-200);
   border-radius: var(--radius-full);
@@ -895,7 +892,6 @@
 .volumeSlider::-webkit-slider-thumb {
   width: 12px;
   height: 12px;
-  appearance: none;
   appearance: none;
   cursor: pointer;
   background: var(--primary-500);
