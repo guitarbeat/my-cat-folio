@@ -33,7 +33,7 @@
 }
 
 .expandToggle {
-  composes: btnsecondary from "../../styles/base.css";
+  composes: btnSecondary from "../../styles/base.css";
   display: flex;
   gap: var(--space-2);
   align-items: center;
@@ -109,7 +109,7 @@
 
 /* Name Counter */
 .nameCount {
-  composes: cardinteractive from "../../styles/base.css";
+  composes: cardInteractive from "../../styles/base.css";
   padding: var(--space-4);
   margin: var(--space-6) 0;
 }
@@ -128,7 +128,7 @@
 }
 
 .selectAllButton {
-  composes: btnsecondary from "../../styles/base.css";
+  composes: btnSecondary from "../../styles/base.css";
 }
 
 .helperText {
@@ -146,7 +146,7 @@
 }
 
 .startButton {
-  composes: btnprimary from "../../styles/base.css";
+  composes: btnPrimary from "../../styles/base.css";
   display: flex;
   flex-direction: column;
   gap: var(--space-2);
@@ -173,8 +173,8 @@
   top: var(--space-4);
 }
 
-.photoSidebarContent {
-  composes: cardinteractive from "../../styles/base.css";
+  .photoSidebarContent {
+  composes: cardInteractive from "../../styles/base.css";
   padding: var(--space-4);
   margin-bottom: var(--space-4);
 }
@@ -207,7 +207,7 @@
 
 /* Suggestion Section */
 .suggestionSection {
-  composes: cardinteractive from "../../styles/base.css";
+  composes: cardInteractive from "../../styles/base.css";
   padding: var(--space-4);
 }
 
@@ -259,7 +259,7 @@
 }
 
 .submitButton {
-  composes: btnprimary from "../../styles/base.css";
+  composes: btnPrimary from "../../styles/base.css";
   width: 100%;
   margin-top: var(--space-2);
 }
@@ -372,7 +372,7 @@
 /* Base button styles */
 .minimizeButton,
 .closeButton {
-  composes: btnicon from "../../styles/base.css";
+  composes: btnIcon from "../../styles/base.css";
   display: flex;
   align-items: center;
   justify-content: center;

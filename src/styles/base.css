@@ -291,6 +291,14 @@ body.light-theme {
   color: var(--text-primary);
 }
 
+.heading3 {
+  margin-bottom: var(--space-2);
+  font-family: var(--font-serif);
+  font-size: clamp(var(--text-lg), 2.5vw, var(--text-2xl));
+  line-height: 1.3;
+  color: var(--text-primary);
+}
+
 .text {
   font-size: var(--text-base);
   line-height: 1.6;
