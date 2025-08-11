@@ -19,7 +19,7 @@
 
 /* Export values for composition */
 :export {
-  cardBase: cardInteractive;
-  pageContainer: pageContainer;
-  gridLayout: gridLayout;
+  cardBase: cardinteractive;
+  pageContainer: pagecontainer;
+  gridLayout: gridlayout;
 }

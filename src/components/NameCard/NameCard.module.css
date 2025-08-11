@@ -1,5 +1,5 @@
 .card {
-  composes: cardInteractive from "../../styles/base.css";
+  composes: cardinteractive from "../../styles/base.css";
   position: relative;
   display: flex;
   flex-direction: column;

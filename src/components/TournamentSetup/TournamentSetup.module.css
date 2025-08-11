@@ -33,7 +33,7 @@
 }
 
 .expandToggle {
-  composes: btnSecondary from "../../styles/base.css";
+  composes: btnsecondary from "../../styles/base.css";
   display: flex;
   gap: var(--space-2);
   align-items: center;
@@ -109,7 +109,7 @@
 
 /* Name Counter */
 .nameCount {
-  composes: cardInteractive from "../../styles/base.css";
+  composes: cardinteractive from "../../styles/base.css";
   padding: var(--space-4);
   margin: var(--space-6) 0;
 }
@@ -128,7 +128,7 @@
 }
 
 .selectAllButton {
-  composes: btnSecondary from "../../styles/base.css";
+  composes: btnsecondary from "../../styles/base.css";
 }
 
 .helperText {
@@ -146,7 +146,7 @@
 }
 
 .startButton {
-  composes: btnPrimary from "../../styles/base.css";
+  composes: btnprimary from "../../styles/base.css";
   display: flex;
   flex-direction: column;
   gap: var(--space-2);
@@ -174,7 +174,7 @@
 }
 
   .photoSidebarContent {
-  composes: cardInteractive from "../../styles/base.css";
+  composes: cardinteractive from "../../styles/base.css";
   padding: var(--space-4);
   margin-bottom: var(--space-4);
 }
@@ -207,7 +207,7 @@
 
 /* Suggestion Section */
 .suggestionSection {
-  composes: cardInteractive from "../../styles/base.css";
+  composes: cardinteractive from "../../styles/base.css";
   padding: var(--space-4);
 }
 
@@ -259,7 +259,7 @@
 }
 
 .submitButton {
-  composes: btnPrimary from "../../styles/base.css";
+  composes: btnprimary from "../../styles/base.css";
   width: 100%;
   margin-top: var(--space-2);
 }
@@ -319,7 +319,7 @@
   width: 12px;
   height: 12px;
   cursor: pointer;
-  background: var(--white);
+  background: rgb(var(--white-rgb));
   border: 2px solid var(--primary-500);
   border-radius: var(--radius-full);
 }
@@ -372,13 +372,13 @@
 /* Base button styles */
 .minimizeButton,
 .closeButton {
-  composes: btnIcon from "../../styles/base.css";
+  composes: btnicon from "../../styles/base.css";
   display: flex;
   align-items: center;
   justify-content: center;
   width: 40px;
   height: 40px;
-  color: var(--white);
+  color: rgb(var(--white-rgb));
   cursor: pointer;
   background: rgb(var(--black-rgb) / 50%);
   border: none;
@@ -407,7 +407,7 @@
   left: 50%;
   padding: var(--space-2) var(--space-4);
   font-size: var(--text-sm);
-  color: var(--white);
+  color: rgb(var(--white-rgb));
   white-space: nowrap;
   background: rgb(var(--black-rgb) / 50%);
   border-radius: var(--radius-full);
@@ -510,4 +510,25 @@
   .helperText {
     animation: none;
   }
+}
+
+/* Fix: export tokens for compound selectors and add missing classes used by JSX */
+.minimized {}
+.minimizedImage {}
+.nw {}
+.ne {}
+.sw {}
+.se {}
+
+/* Missing layout hooks */
+.header {
+  composes: card from "../../styles/base.css";
+  padding: var(--space-4);
+  margin-bottom: var(--space-4);
+}
+
+.namesContent {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
 }
