@@ -1,7 +1,7 @@
 /* Simple loading spinner with cat emoji */
 :root {
   /* Basic variables */
-  --overlay-background: rgb(0 0 0 / 50%);
+  --overlay-background: var(--overlay-light);
   --overlay-blur: 4px;
   --text-color: rgb(255 255 255 / 95%);
   --text-shadow: 0 2px 4px rgb(0 0 0 / 20%);
@@ -77,8 +77,8 @@
 }
 
 /* Dark mode adjustments */
-:global(body:not(.light-theme)) {
-  --overlay-background: rgb(0 0 0 / 70%);
+body:not(.light-theme) {
+  --overlay-background: var(--overlay-medium);
 }
 
 /* Attribution styles */
@@ -99,7 +99,7 @@
 }
 
 /* Dark mode adjustments for attribution */
-:global(body:not(.light-theme)) {
+body:not(.light-theme) {
   .attribution,
   .attribution a {
     color: rgb(255 255 255 / 70%);

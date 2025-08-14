@@ -40,36 +40,36 @@ body.light-theme {
 
 body:not(.light-theme) {
   --primary-color: var(--primary-400);
-  --primary-light: rgb(125 127 255 / 15%);
+  --primary-light: rgb(125 127 255 / 20%);
   --primary-dark: var(--primary-200);
-  --surface-color: #0a0c1c;
-  --background-color: #050714;
-  --card-background: #0f1225;
-  --card-border: #1a1f35;
-  --card-hover: #151830;
+  --surface-color: #111428;
+  --background-color: #0b1020;
+  --card-background: #121633;
+  --card-border: #263056;
+  --card-hover: #1a1f3d;
 
   /* Synced dark-mode variables for components using legacy names */
-  --surface-dark: #0a0c1c;
-  --card-background-dark: #0f1225;
-  --card-hover-dark: #151830;
-  --border-color-dark: #1a1f35;
+  --surface-dark: #111428;
+  --card-background-dark: #121633;
+  --card-hover-dark: #1a1f3d;
+  --border-color-dark: #263056;
   --text-primary-dark: #f8fafc;
   --text-secondary-dark: #e2e8f0;
   --text-primary: #f8fafc;
   --text-secondary: #e2e8f0;
-  --text-tertiary: #94a3b8;
-  --border-color: #1a1f35;
+  --text-tertiary: #a5b4c7;
+  --border-color: #263056;
   --button-primary-bg: var(--primary-400);
   --button-primary-hover: var(--primary-300);
-  --button-secondary-bg: rgb(0 0 0 / 20%);
-  --button-secondary-hover: rgb(0 0 0 / 30%);
+  --button-secondary-bg: rgb(255 255 255 / 10%);
+  --button-secondary-hover: rgb(255 255 255 / 18%);
   --button-text-light: white;
-  --shadow-color: rgb(0 0 0 / 50%);
-  --shadow-color-light: rgb(0 0 0 / 20%);
-  --shadow-color-medium: rgb(0 0 0 / 30%);
-  --shadow-color-strong: rgb(0 0 0 / 40%);
-  --overlay-light: rgb(0 0 0 / 50%);
-  --overlay-medium: rgb(0 0 0 / 65%);
-  --overlay-dark: rgb(0 0 0 / 85%);
-  --overlay-darker: rgb(0 0 0 / 95%);
+  --shadow-color: rgb(0 0 0 / 40%);
+  --shadow-color-light: rgb(0 0 0 / 15%);
+  --shadow-color-medium: rgb(0 0 0 / 25%);
+  --shadow-color-strong: rgb(0 0 0 / 35%);
+  --overlay-light: rgb(0 0 0 / 35%);
+  --overlay-medium: rgb(0 0 0 / 50%);
+  --overlay-dark: rgb(0 0 0 / 65%);
+  --overlay-darker: rgb(0 0 0 / 75%);
 }

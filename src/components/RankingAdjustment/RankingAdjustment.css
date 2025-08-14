@@ -215,7 +215,7 @@
 }
 
 /* Dark mode adjustments */
-:global(body:not(.light-theme)) {
+body:not(.light-theme) {
   .rankings-header {
     color: white;
     background: var(--primary-600);

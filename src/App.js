@@ -48,12 +48,11 @@ function App() {
   const [matrixMode, setMatrixMode] = useState(false);
   const [isTournamentLoading, setIsTournamentLoading] = useState(false);
   const [isLightTheme, setIsLightTheme] = useState(() => {
-    // Initialize theme from localStorage or system preference
     const savedTheme = localStorage.getItem(THEME.STORAGE_KEY);
     if (savedTheme) {
       return savedTheme === THEME.LIGHT;
     }
-    return window.matchMedia("(prefers-color-scheme: light)").matches;
+    return true; // Default to light theme on first load
   });
 
   // Apply theme class on app init and when theme changes
@@ -353,14 +352,7 @@ function App() {
         );
       case "loading":
         return (
-          <div
-            style={{
-              height: "100vh",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
+          <div className="fullScreenCenter">
             <LoadingSpinner size="large" text="Testing Loading Spinner..." />
           </div>
         );
