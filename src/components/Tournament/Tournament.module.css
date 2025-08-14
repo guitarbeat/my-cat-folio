@@ -542,7 +542,7 @@
 
 /* Dark Mode
    ========================================================================== */
-:global(body:not(.light-theme)) {
+body:not(.light-theme) {
   .vsSection {
     background: rgb(var(--primary-rgb) / 20%);
   }
@@ -550,7 +550,7 @@
   .progressInfo,
   .tournamentControls,
   .bracketView {
-    background: rgb(var(--black-rgb) / 20%);
+    background: var(--overlay-light);
     backdrop-filter: blur(12px);
   }
 
@@ -569,7 +569,7 @@
   }
 
   .extraOptionsButton {
-    background: rgb(var(--black-rgb) / 30%);
+    background: var(--overlay-medium);
   }
 
   .soundControls {

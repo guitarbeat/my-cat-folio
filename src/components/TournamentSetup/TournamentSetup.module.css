@@ -269,7 +269,7 @@
   position: fixed;
   inset: 0;
   z-index: 1000;
-  background: rgb(var(--black-rgb) / 80%);
+  background: var(--overlay-dark);
   backdrop-filter: blur(8px);
 }
 
@@ -380,7 +380,7 @@
   height: 40px;
   color: rgb(var(--white-rgb));
   cursor: pointer;
-  background: rgb(var(--black-rgb) / 50%);
+  background: var(--overlay-medium);
   border: none;
   border-radius: var(--radius-full);
   transition: all var(--duration-normal) var(--ease-out);
@@ -388,7 +388,7 @@
 
 .minimizeButton:hover,
 .closeButton:hover {
-  background: rgb(var(--black-rgb) / 70%);
+  background: var(--overlay-dark);
   transform: scale(1.1);
 }
 
@@ -409,7 +409,7 @@
   font-size: var(--text-sm);
   color: rgb(var(--white-rgb));
   white-space: nowrap;
-  background: rgb(var(--black-rgb) / 50%);
+  background: var(--overlay-medium);
   border-radius: var(--radius-full);
   transform: translateX(-50%);
 }
@@ -438,7 +438,7 @@
 }
 
 /* Dark Mode */
-:global(body:not(.light-theme)) {
+body:not(.light-theme) {
   .tournamentSteps li::before {
     color: var(--primary-200);
     background: var(--primary-900);

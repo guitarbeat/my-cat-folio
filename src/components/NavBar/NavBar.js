@@ -26,7 +26,7 @@ const scrollToTop = () => {
 const updateThemeColor = (isLight) => {
   const themeColorMeta = document.querySelector("meta[name='theme-color']");
   if (themeColorMeta) {
-    themeColorMeta.setAttribute("content", isLight ? "#eef1f6" : "#050714");
+    themeColorMeta.setAttribute("content", isLight ? "#eef1f6" : "#0b1020");
   }
 };
 

@@ -236,9 +236,9 @@
 }
 
 /* Dark mode adjustments */
-:global(body:not(.light-theme)) {
+body:not(.light-theme) {
   .header {
-    background: var(--surface-dark);
+    background: var(--surface-color);
   }
 
   .userName {
@@ -246,8 +246,8 @@
   }
 
   .statCard {
-    background: var(--card-background-dark);
-    border-color: var(--border-color-dark);
+    background: var(--card-background);
+    border-color: var(--border-color);
   }
 
   .statValue {
@@ -260,12 +260,12 @@
   }
 
   .tournamentBracket {
-    background: var(--surface-dark);
+    background: var(--surface-color);
   }
 
   .resultsHeader {
-    background: linear-gradient(135deg, var(--primary-800), var(--primary-900));
-    border-color: var(--primary-700);
+    background: linear-gradient(135deg, var(--primary-700), var(--primary-800));
+    border-color: var(--primary-600);
   }
 }
 

@@ -14,7 +14,7 @@
 }
 
 /* Dark Mode Colors */
-:global(body:not(.light-theme)) {
+body:not(.light-theme) {
   /* Map to global dark theme tokens */
   --bg-primary: var(--card-background);
   --bg-secondary: var(--surface-color);
@@ -390,7 +390,7 @@
 }
 
 /* Dark mode adjustments */
-:global(body:not(.light-theme)) {
+body:not(.light-theme) {
   .nameCard:not(.isHidden) {
     background: linear-gradient(
       135deg,
@@ -916,7 +916,7 @@
 }
 
 /* Dark mode refinements */
-:global(body:not(.light-theme)) {
+body:not(.light-theme) {
   .userCard.active {
     background: linear-gradient(
       165deg,
@@ -1142,7 +1142,7 @@
 }
 
 /* Dark mode adjustments */
-:global(body:not(.light-theme)) {
+body:not(.light-theme) {
   .aggregatedCard {
     background: color-mix(
       in srgb,
@@ -1227,7 +1227,7 @@
   }
 }
 
-:global(body:not(.light-theme)) {
+body:not(.light-theme) {
   .chartWrapper,
   .pieChartWrapper {
     background: color-mix(
@@ -1598,7 +1598,7 @@
 }
 
 /* Dark Mode Refinements */
-:global(body:not(.light-theme)) {
+body:not(.light-theme) {
   .aggregatedCard {
     background: color-mix(
       in srgb,
@@ -1731,7 +1731,7 @@
 }
 
 /* Dark Mode Refinements */
-:global(body:not(.light-theme)) {
+body:not(.light-theme) {
   .chartHeader {
     background: color-mix(in srgb, var(--bg-secondary) 95%, transparent);
   }
@@ -2002,7 +2002,7 @@
 }
 
 /* Dark mode adjustments */
-:global(body:not(.light-theme)) {
+body:not(.light-theme) {
   .ratingTrends {
     background-color: color-mix(
       in srgb,

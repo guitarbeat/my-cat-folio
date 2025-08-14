@@ -1,15 +1,10 @@
-/* Import CSS Variables first */
-@import url("./styles/variables.css");
-
-/* Import Reset Styles */
+/* Import order: reset → variables → theme → base → utilities → components */
 @import url("./styles/reset.css");
-
-/* Import Base Styles */
-@import url("./styles/base.css");
+@import url("./styles/variables.css");
 @import url("./styles/theme.css");
-
-/* Import Utility Classes */
+@import url("./styles/base.css");
 @import url("./styles/utilities.css");
+@import url("./styles/components.css");
 
 /* Base Styles */
 
@@ -477,7 +472,7 @@ body:not(.light-theme) {
   z-index: var(--z-modal);
   display: grid;
   place-items: center;
-  background: rgb(var(--black-rgb) / 80%);
+  background: var(--overlay-dark);
   backdrop-filter: blur(8px);
 }
 

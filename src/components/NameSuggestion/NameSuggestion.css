@@ -94,7 +94,7 @@
   opacity: 0.5;
 }
 
-:global(body:not(.light-theme)) {
+body:not(.light-theme) {
   .suggestion-card {
     background: var(--card-background);
     box-shadow: 0 4px 6px var(--shadow-color-strong);
