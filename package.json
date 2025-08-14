@@ -71,7 +71,8 @@
     "stylelint": "^16.23.1",
     "stylelint-config-recess-order": "^6.1.0",
     "stylelint-config-standard": "^37.0.0",
-    "stylelint-declaration-block-no-ignored-properties": "^2.8.0"
+    "stylelint-declaration-block-no-ignored-properties": "^2.8.0",
+    "stylelint-declaration-strict-value": "^1.10.0"
   },
   "lint-staged": {
     "*.{js,jsx}": [
