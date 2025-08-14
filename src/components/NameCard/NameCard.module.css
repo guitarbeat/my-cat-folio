@@ -103,16 +103,6 @@
 
 /* Dark mode adjustments */
 :global(body:not(.light-theme)) {
-  .card {
-    background: var(--card-background-dark);
-    border-color: var(--border-color-dark);
-  }
-
-  .card:hover {
-    background: var(--card-hover-dark);
-    border-color: var(--primary-400);
-  }
-
   .selected {
     background: var(--primary-900);
     border-color: var(--primary-400);
