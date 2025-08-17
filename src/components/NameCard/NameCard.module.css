@@ -114,18 +114,37 @@
   .card {
     min-height: 140px;
     padding: var(--space-3);
+    background: var(--mobile-card-background, var(--card-background));
+    border-color: var(--mobile-card-border, var(--card-border));
+    box-shadow: 0 2px 4px var(--shadow-color-light);
+  }
+
+  .card:hover {
+    background: var(--mobile-card-hover, var(--card-hover));
+    border-color: var(--primary-color);
+    box-shadow: 0 4px 8px var(--shadow-color-medium);
+    transform: translateY(-1px) scale(1.01);
   }
 
   .name {
     font-size: var(--text-lg);
+    color: var(--mobile-text-primary, var(--text-primary));
   }
 
   .description {
     font-size: var(--text-sm);
+    color: var(--mobile-text-secondary, var(--text-secondary));
   }
 
   .small {
     min-height: 120px;
+  }
+
+  /* Enhanced mobile touch feedback */
+  .card:active {
+    transform: scale(0.98);
+    background: var(--mobile-card-hover, var(--card-hover));
+    box-shadow: 0 1px 2px var(--shadow-color-light);
   }
 }
 
@@ -133,6 +152,7 @@
   .card {
     min-height: 120px;
     padding: var(--space-2);
+    border-radius: var(--radius-md);
   }
 
   .name {
@@ -149,11 +169,100 @@
   }
 }
 
+/* iPhone-specific adjustments */
+@media (width <= 430px) {
+  .card {
+    min-height: 110px;
+    padding: var(--space-2);
+    background: var(--mobile-card-background, var(--card-background));
+    border: 2px solid var(--mobile-card-border, var(--card-border));
+  }
+
+  .card:hover {
+    border-color: var(--primary-color);
+    transform: translateY(-1px);
+  }
+
+  .name {
+    font-size: var(--text-sm);
+    font-weight: 600;
+  }
+
+  .description {
+    font-size: var(--text-xs);
+    line-height: 1.4;
+  }
+}
+
+/* Touch device optimizations */
+@media (hover: none) and (pointer: coarse) {
+  .card {
+    transition: transform 0.1s ease, background-color 0.1s ease;
+  }
+
+  .card:active {
+    transform: scale(0.98);
+    background: var(--mobile-card-hover, var(--card-hover));
+  }
+
+  .card:hover {
+    transform: none;
+    box-shadow: var(--shadow-sm);
+  }
+
+  /* Enhanced touch feedback for selected state */
+  .selected:active {
+    background: var(--primary-100);
+    border-color: var(--primary-400);
+  }
+
+  :global(body:not(.light-theme)) .selected:active {
+    background: var(--primary-800);
+    border-color: var(--primary-300);
+  }
+}
+
+/* High contrast mode for mobile */
+@media (prefers-contrast: more) {
+  @media (width <= 768px) {
+    .card {
+      border-width: 2px;
+      border-color: var(--text-primary);
+    }
+
+    .card:hover {
+      border-width: 3px;
+      border-color: var(--primary-color);
+    }
+
+    .selected {
+      border-width: 3px;
+      border-color: var(--primary-color);
+    }
+
+    .name {
+      font-weight: 700;
+    }
+
+    .description {
+      opacity: 1;
+    }
+  }
+}
+
 /* Reduced Motion */
 @media (prefers-reduced-motion: reduce) {
   .card,
   .checkMark,
   .description {
     transition: none;
+  }
+
+  .card:hover {
+    transform: none;
+  }
+
+  .card:active {
+    transform: none;
   }
 }

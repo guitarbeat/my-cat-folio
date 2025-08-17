@@ -1,10 +1,11 @@
-/* Import order: reset → variables → theme → base → utilities → components */
+/* Import order: reset → variables → theme → base → utilities → components → mobile */
 @import url("./styles/reset.css");
 @import url("./styles/variables.css");
 @import url("./styles/theme.css");
 @import url("./styles/base.css");
 @import url("./styles/utilities.css");
 @import url("./styles/components.css");
+@import url("./styles/mobile.css");
 
 /* Base Styles */
 
@@ -393,6 +394,46 @@ span {
   .global-loading-overlay {
     padding: var(--space-4);
   }
+
+  /* Enhanced mobile color contrast */
+  .name-card {
+    background: var(--card-background);
+    border-color: var(--card-border);
+  }
+
+  .name-card:hover {
+    background: var(--card-hover);
+    border-color: var(--primary-color);
+  }
+
+  /* Mobile-specific button colors */
+  .button-primary,
+  .button-secondary {
+    color: var(--button-text-light, white);
+    background: var(--button-primary-bg, var(--primary-color));
+    border: 1px solid var(--primary-color);
+  }
+
+  .button-secondary {
+    background: var(--button-secondary-bg, transparent);
+    color: var(--text-primary);
+    border-color: var(--border-color);
+  }
+
+  /* Mobile header adjustments */
+  header {
+    padding: var(--space-6) var(--space-4);
+    margin-bottom: var(--space-6);
+  }
+
+  .header-image {
+    width: 100px;
+    height: 100px;
+  }
+
+  h1 {
+    font-size: var(--text-3xl);
+  }
 }
 
 /* iPhone-specific adjustments */
@@ -416,6 +457,51 @@ span {
   .header-image {
     width: 80px;
     height: 80px;
+  }
+
+  /* Enhanced mobile color scheme for small screens */
+  .name-card {
+    padding: var(--space-3);
+    border-radius: var(--radius-lg);
+  }
+
+  .button-primary,
+  .button-secondary {
+    padding: var(--space-3) var(--space-4);
+    font-size: var(--text-sm);
+    border-radius: var(--radius-md);
+  }
+
+  /* Better mobile text contrast */
+  h1, h2, h3 {
+    color: var(--text-primary);
+  }
+
+  p, span, li {
+    color: var(--text-secondary);
+  }
+}
+
+/* Enhanced mobile touch feedback */
+@media (hover: none) and (pointer: coarse) {
+  .name-card:active {
+    transform: scale(0.98);
+    background: var(--card-hover);
+  }
+
+  .button-primary:active,
+  .button-secondary:active {
+    transform: scale(0.95);
+  }
+
+  .nav-menu button:active {
+    background: var(--primary-100);
+    color: var(--primary-700);
+  }
+
+  body:not(.light-theme) .nav-menu button:active {
+    background: var(--primary-light);
+    color: var(--primary-300);
   }
 }
 
@@ -447,6 +533,23 @@ body:not(.light-theme) {
     --error-600: #c80000;
     --success-600: green;
     --warning-600: #c85000;
+  }
+
+  /* Enhanced contrast for mobile */
+  @media (width <= 768px) {
+    .name-card {
+      border-width: 2px;
+      border-color: var(--text-primary);
+    }
+
+    .button-primary,
+    .button-secondary {
+      border-width: 2px;
+    }
+
+    .nav-menu button {
+      border: 1px solid var(--border-color);
+    }
   }
 }
 
@@ -501,6 +604,23 @@ body:not(.light-theme) {
     .main-content {
       padding-right: max(var(--space-4), env(safe-area-inset-right));
       padding-left: max(var(--space-4), env(safe-area-inset-left));
+    }
+
+    header {
+      padding-right: max(var(--space-4), env(safe-area-inset-right));
+      padding-left: max(var(--space-4), env(safe-area-inset-left));
+    }
+  }
+
+  @media (width <= 430px) {
+    .main-content {
+      padding-right: max(var(--space-3), env(safe-area-inset-right));
+      padding-left: max(var(--space-3), env(safe-area-inset-left));
+    }
+
+    header {
+      padding-right: max(var(--space-3), env(safe-area-inset-right));
+      padding-left: max(var(--space-3), env(safe-area-inset-left));
     }
   }
 }
