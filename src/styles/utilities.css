@@ -932,10 +932,110 @@
   .name-card:hover {
     box-shadow: var(--shadow-md);
   }
+
+  /* Enhanced mobile color utilities */
+  .mobile\:bg-card {
+    background-color: var(--card-background);
+  }
+
+  .mobile\:text-primary {
+    color: var(--text-primary);
+  }
+
+  .mobile\:text-secondary {
+    color: var(--text-secondary);
+  }
+
+  .mobile\:border-card {
+    border-color: var(--card-border);
+  }
+
+  /* Mobile touch feedback utilities */
+  .mobile\:touch-feedback:active {
+    transform: scale(0.98);
+    background-color: var(--card-hover);
+  }
+
+  .mobile\:touch-feedback-light:active {
+    transform: scale(0.98);
+    background-color: var(--primary-100);
+  }
 }
 
 @media (width <= 480px) {
   .nav-menu button {
     padding: var(--space-2) var(--space-3);
+  }
+
+  /* Small mobile specific utilities */
+  .mobile-sm\:text-sm {
+    font-size: var(--text-sm);
+  }
+
+  .mobile-sm\:p-3 {
+    padding: var(--space-3);
+  }
+
+  .mobile-sm\:gap-3 {
+    gap: var(--space-3);
+  }
+}
+
+/* Touch device optimizations */
+@media (hover: none) and (pointer: coarse) {
+  /* Enhanced touch feedback for all interactive elements */
+  .touch\:active-scale:active {
+    transform: scale(0.95);
+  }
+
+  .touch\:active-bg:active {
+    background-color: var(--card-hover);
+  }
+
+  .touch\:active-border:active {
+    border-color: var(--primary-color);
+  }
+
+  /* Touch-friendly button states */
+  .touch\:button-active:active {
+    transform: scale(0.95);
+    background-color: var(--primary-700);
+    color: white;
+  }
+
+  .touch\:button-secondary-active:active {
+    transform: scale(0.95);
+    background-color: var(--card-hover);
+    border-color: var(--primary-color);
+  }
+}
+
+/* High contrast mode utilities */
+@media (prefers-contrast: more) {
+  .high-contrast\:border-2 {
+    border-width: 2px;
+  }
+
+  .high-contrast\:text-bold {
+    font-weight: 700;
+  }
+
+  .high-contrast\:shadow-strong {
+    box-shadow: var(--shadow-color-strong);
+  }
+}
+
+/* Reduced motion utilities */
+@media (prefers-reduced-motion: reduce) {
+  .motion-reduce\:transition-none {
+    transition: none;
+  }
+
+  .motion-reduce\:animate-none {
+    animation: none;
+  }
+
+  .motion-reduce\:transform-none {
+    transform: none;
   }
 }
