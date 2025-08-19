@@ -347,7 +347,7 @@ body.light-theme .scroll-to-top:focus {
   .navbar__item {
     padding: 0.75rem 1rem;
     font-size: 1rem;
-    border-bottom: 1px solid rgb(255 255 255 / 10%);
+    border-bottom: 1px solid var(--border-color, rgb(255 255 255 / 10%));
   }
 
   .navbar__item:last-child {
@@ -378,6 +378,46 @@ body.light-theme .scroll-to-top:focus {
   .navbar.transparent .navbar__item {
     border-bottom-color: rgb(255 255 255 / 20%);
   }
+
+  /* Enhanced mobile menu colors for better contrast */
+  .navbar:not(.transparent) .navbar__menu-container {
+    background: var(--card-background, #0f1225);
+    border-top: 1px solid var(--border-color, #263056);
+  }
+
+  .navbar.light-theme .navbar__menu-container {
+    background: var(--card-background, #f8fafc);
+    border-top: 1px solid var(--border-color, #e5e7eb);
+  }
+
+  /* Mobile menu item hover states */
+  .navbar__item:hover {
+    background-color: var(--card-hover, rgb(255 255 255 / 5%));
+  }
+
+  .navbar.light-theme .navbar__item:hover {
+    background-color: var(--card-hover, #f1f5f9);
+  }
+}
+
+/* iPhone-specific adjustments */
+@media screen and (width <= 430px) {
+  .navbar {
+    padding: 0 0.75rem;
+  }
+
+  .navbar__item--logo .navbar__title {
+    font-size: 1rem;
+  }
+
+  .navbar__menu-container {
+    padding: 0.75rem;
+  }
+
+  .navbar__item {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.9rem;
+  }
 }
 
 /* Touch device optimizations */
@@ -394,13 +434,27 @@ body.light-theme .scroll-to-top:focus {
   }
 
   .navbar__item a:active {
-    background-color: rgb(255 255 255 / 10%);
+    background-color: var(--card-hover, rgb(255 255 255 / 10%));
+  }
+
+  .navbar.light-theme .navbar__item a:active {
+    background-color: var(--card-hover, #f1f5f9);
   }
 
   .scroll-to-top {
     width: 50px;
     height: 50px;
     font-size: 28px;
+  }
+
+  /* Enhanced touch feedback */
+  .navbar__mobile-menu-button:active {
+    background-color: var(--card-hover, rgb(255 255 255 / 10%));
+    border-radius: var(--radius-md);
+  }
+
+  .navbar.light-theme .navbar__mobile-menu-button:active {
+    background-color: var(--card-hover, #f1f5f9);
   }
 }
 
@@ -425,4 +479,19 @@ body.light-theme .scroll-to-top:focus {
 
 .navbar.transparent .navbar__item--external {
   border-left-color: rgb(255 255 255 / 30%);
+}
+
+/* Safe area insets for modern mobile devices */
+@supports (padding: max(0px)) {
+  .navbar {
+    padding-left: max(1rem, env(safe-area-inset-left));
+    padding-right: max(1rem, env(safe-area-inset-right));
+  }
+
+  @media screen and (width <= 768px) {
+    .navbar__menu-container {
+      padding-left: max(1rem, env(safe-area-inset-left));
+      padding-right: max(1rem, env(safe-area-inset-right));
+    }
+  }
 }
