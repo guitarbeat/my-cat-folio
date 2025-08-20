@@ -63,6 +63,25 @@ img {
   outline-offset: 2px;
 }
 
+/* Ensure sufficient contrast for all text elements */
+h1, h2, h3, h4, h5, h6 {
+  color: var(--text-primary);
+  font-weight: 600; /* Ensure headings have sufficient weight for contrast */
+}
+
+/* Improve button text contrast */
+button {
+  color: var(--text-primary);
+  font-weight: 500; /* Ensure button text has sufficient weight */
+}
+
+/* Ensure form elements have good contrast */
+input, textarea, select {
+  color: var(--text-primary);
+  background-color: var(--card-background);
+  border-color: var(--border-color);
+}
+
 /* ===== variables.css ===== */
 :root {
   /* Cool Color Palette for Black Kitten Theme */
@@ -239,6 +258,18 @@ img {
     --warning-600: #b45309;
     --purple-600: #6d28d9;
   }
+  
+  body.light-theme {
+    --text-primary: #000000; /* Pure black for maximum contrast */
+    --text-secondary: #1f2937; /* Very dark for maximum contrast */
+    --card-background: #ffffff; /* Pure white background */
+  }
+  
+  body:not(.light-theme) {
+    --text-primary: #ffffff; /* Pure white for maximum contrast */
+    --text-secondary: #e5e7eb; /* Very light for maximum contrast */
+    --card-background: #000000; /* Pure black background */
+  }
 }
 
 /* Reduced Motion */
@@ -258,8 +289,8 @@ body.light-theme {
   --primary-dark: var(--primary-800);
   --surface-color: #f4f6fa;
   --background-color: #eef1f6;
-  --text-primary: #2c3544;
-  --text-secondary: #4b5563;
+  --text-primary: #1f2937; /* Darker for better contrast */
+  --text-secondary: #374151; /* Darker for better contrast */
   --text-tertiary: #6b7280;
   --border-color: #e5e7eb;
   --card-background: #f8fafc;
@@ -309,9 +340,9 @@ body:not(.light-theme) {
   --border-color-dark: #263056;
   --text-primary-dark: #f8fafc;
   --text-secondary-dark: #e2e8f0;
-  --text-primary: #f8fafc;
+  --text-primary: #ffffff; /* Brighter white for better contrast */
   --text-secondary: #e2e8f0;
-  --text-tertiary: #a5b4c7;
+  --text-tertiary: #cbd5e1; /* Brighter for better contrast */
   --border-color: #263056;
   --button-primary-bg: var(--primary-400);
   --button-primary-hover: var(--primary-300);
