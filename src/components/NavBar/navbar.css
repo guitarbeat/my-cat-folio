@@ -20,6 +20,7 @@
   display: flex;
   flex-flow: row nowrap;
   align-items: center;
+  justify-content: space-between;
   height: 65px;
   padding: 0 1rem;
   margin: 0;
@@ -73,6 +74,22 @@
   display: flex;
   gap: 1rem;
   align-items: center;
+  width: 100%;
+  justify-content: space-between;
+}
+
+/* Navigation List */
+.navbar__menu-list {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 1rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  width: 100%;
+  flex-wrap: nowrap;
+  overflow: visible;
 }
 
 /* Transparent navbar for login page */
@@ -114,7 +131,7 @@ body.light-theme .navbar:not(.transparent) {
 }
 
 body.light-theme .navbar:not(.transparent) .navbar__item {
-  color: var(--text-primary, #2c3544);
+  color: var(--text-primary, #1f2937);
 }
 
 /* Theme Switch */
@@ -170,9 +187,11 @@ body.light-theme .navbar:not(.transparent) .navbar__item {
   padding: var(--navbar-padding-desktop);
   font-size: var(--local-font-size);
   font-weight: 600;
-  color: var(--text-primary, #f8fafc);
+  color: var(--text-primary, #ffffff);
   text-transform: uppercase;
   transition: all var(--transition-standard);
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 /* Underline effect */
@@ -198,15 +217,15 @@ body.light-theme .navbar:not(.transparent) .navbar__item {
 .navbar__item a:hover::after,
 .navbar__item a.active::after {
   width: 100%;
-  background-color: var(--primary-color, #5a5cff);
+  background-color: var(--primary-color, #4f46e5);
 }
 
 .navbar__item a:hover {
-  color: var(--primary-color, #5a5cff);
+  color: var(--primary-color, #4f46e5);
 }
 
 .navbar__item a.active {
-  color: var(--primary-color, #5a5cff);
+  color: var(--primary-color, #4f46e5);
 }
 
 /* Logo */
@@ -215,6 +234,8 @@ body.light-theme .navbar:not(.transparent) .navbar__item {
   gap: 0.5rem;
   align-items: center;
   margin-right: auto;
+  flex-shrink: 0;
+  min-width: 0;
 }
 
 .navbar__item--logo .navbar__logo-link {
@@ -245,6 +266,7 @@ body.light-theme .navbar:not(.transparent) .navbar__item {
 .navbar__item--logo .navbar__title {
   font-size: 1.25rem;
   font-weight: 700;
+  color: inherit;
 }
 
 /* User greeting */
@@ -317,7 +339,7 @@ body.light-theme .scroll-to-top:focus {
 }
 
 body.light-theme .navbar__item--logo .navbar__logo-link:focus {
-  outline-color: var(--text-primary, #2c3544);
+  outline-color: var(--text-primary, #1f2937);
 }
 
 /* Mobile Styles */

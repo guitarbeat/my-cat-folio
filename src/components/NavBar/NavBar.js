@@ -227,7 +227,7 @@ function NavBar({
     <>
       <nav className={navbarClass}>
         <div className="navbar__menu-container">
-          <ul className="navbar__menu-list" role="menubar">
+          <ul className="navbar__menu-list" role="navigation">
             {logoItem}
             {userInfo}
             {navLinks}

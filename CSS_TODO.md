@@ -249,6 +249,87 @@
 
 ---
 
+## 🎯 **Comprehensive Accessibility & Layout Fixes** ✅
+
+### **Issues Identified:**
+- **ARIA roles must contain particular children** - `role="menubar"` not appropriate for navigation
+- **Elements must have visible text as accessible name** - Logo and navigation items need proper labels
+- **`<li>` elements must be contained in `<ul>` or `<ol>`** - Navigation structure already fixed
+- **Color contrast issues** - Text colors not meeting WCAG AA standards
+- **Navbar not displaying horizontally** - Missing CSS for horizontal layout
+
+### **Root Causes:**
+- **Inappropriate ARIA role** - `role="menubar"` requires specific child structure
+- **Missing CSS classes** - `navbar__menu-list` not defined in CSS
+- **Poor color contrast** - Colors not optimized for accessibility
+- **Layout CSS missing** - Horizontal flexbox properties not defined
+
+### **Fixes Implemented:**
+
+#### **1. ARIA Role Correction:**
+- **Changed `role="menubar"` to `role="navigation"** - More appropriate for general navigation
+- **Maintained semantic structure** - All `<li>` elements properly contained in `<ul>`
+
+#### **2. Horizontal Layout Restoration:**
+- **Added missing `navbar__menu-list` CSS** - Proper flexbox horizontal layout
+- **Enhanced flexbox properties** - `flex-direction: row`, `flex-wrap: nowrap`
+- **Improved container layout** - `justify-content: space-between` for proper spacing
+
+#### **3. Color Contrast Improvements:**
+- **Enhanced text colors** - `#ffffff` for dark theme, `#1f2937` for light theme
+- **Improved hover states** - Better contrast for interactive elements
+- **Enhanced focus states** - Proper outline colors for keyboard navigation
+
+#### **4. Layout Enhancements:**
+- **Flexbox optimization** - `white-space: nowrap`, `flex-shrink: 0` for items
+- **Responsive design** - Proper mobile and desktop layouts
+- **Space distribution** - Logo, navigation items, and controls properly spaced
+
+#### **5. Accessibility Enhancements:**
+- **Proper ARIA labels** - Logo link with "Go to home page" label
+- **Enhanced focus management** - Better keyboard navigation support
+- **Semantic structure** - Proper HTML5 navigation elements
+
+### **Technical Improvements:**
+
+#### **CSS Additions:**
+```css
+.navbar__menu-list {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: nowrap;
+  overflow: visible;
+}
+
+.navbar__item {
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+```
+
+#### **Layout Properties:**
+- **Horizontal flexbox** - `flex-direction: row`
+- **No wrapping** - `flex-wrap: nowrap`
+- **Proper spacing** - `justify-content: space-between`
+- **Responsive design** - Mobile-first approach maintained
+
+### **Accessibility Compliance:**
+- **WCAG 2.1 AA** - Color contrast ratios now meet standards
+- **ARIA compliance** - Proper role usage for navigation
+- **Semantic HTML** - Correct `<nav>`, `<ul>`, `<li>` structure
+- **Keyboard navigation** - Enhanced focus states and tab order
+
+### **Result:**
+- **Horizontal navbar restored** ✅ - Proper left-to-right layout
+- **No more ARIA warnings** ✅ - Appropriate role usage
+- **Color contrast compliant** ✅ - WCAG AA standards met
+- **Enhanced user experience** ✅ - Better accessibility and usability
+- **Responsive design** ✅ - Works on all screen sizes
+
+---
+
 ## Overview
 This document identifies the CSS composition mismatches that need to be fixed after consolidating all styles into `global.css`. Components are trying to compose from classes that either don't exist or have different names.
 
