@@ -82,6 +82,23 @@ input, textarea, select {
   border-color: var(--border-color);
 }
 
+/* Global theme enforcement for all text elements */
+p, span, div, label, a, li, td, th {
+  color: var(--text-primary);
+}
+
+/* Global theme enforcement for backgrounds */
+div, section, article, aside, header, footer, main {
+  background-color: var(--background-color);
+}
+
+/* Global theme enforcement for cards and containers */
+.card, .container, .wrapper, .section, .panel {
+  background-color: var(--card-background);
+  border-color: var(--card-border);
+  color: var(--text-primary);
+}
+
 /* Global contrast improvements for interactive elements */
 *[class*="selected"],
 *[class*="active"],
@@ -95,6 +112,36 @@ body:not(.light-theme) *[class*="selected"],
 body:not(.light-theme) *[class*="active"],
 body:not(.light-theme) *[class*="hover"] {
   color: var(--text-primary) !important; /* Force white text for maximum contrast */
+}
+
+/* Theme enforcement for common component patterns */
+[class*="Tournament_"],
+[class*="TournamentSetup_"],
+[class*="Results_"],
+[class*="Profile_"],
+[class*="NameCard_"],
+[class*="Bracket_"],
+[class*="ErrorBoundary_"] {
+  color: var(--text-primary);
+  background-color: var(--card-background);
+}
+
+/* Ensure all text content uses theme colors */
+[class*="__text"],
+[class*="__name"],
+[class*="__title"],
+[class*="__description"],
+[class*="__label"] {
+  color: var(--text-primary) !important;
+}
+
+/* Ensure all card and container elements use theme backgrounds */
+[class*="__card"],
+[class*="__container"],
+[class*="__wrapper"],
+[class*="__section"] {
+  background-color: var(--card-background) !important;
+  border-color: var(--card-border) !important;
 }
 
 /* ===== variables.css ===== */
@@ -262,6 +309,17 @@ body:not(.light-theme) *[class*="hover"] {
   --z-modal: 300;
   --z-popover: 400;
   --z-toast: 500;
+
+  /* Default Theme Variables (will be overridden by theme classes) */
+  --text-primary: #ffffff;
+  --text-secondary: #e2e8f0;
+  --text-tertiary: #cbd5e1;
+  --background-color: #0b1020;
+  --card-background: #121633;
+  --card-border: #263056;
+  --card-hover: #1a1f3d;
+  --border-color: #263056;
+  --surface-color: #111428;
 }
 
 /* High Contrast Mode */
@@ -278,12 +336,18 @@ body:not(.light-theme) *[class*="hover"] {
     --text-primary: #000000; /* Pure black for maximum contrast */
     --text-secondary: #1f2937; /* Very dark for maximum contrast */
     --card-background: #ffffff; /* Pure white background */
+    --background-color: #ffffff;
+    --card-border: #000000;
+    --border-color: #000000;
   }
   
   body:not(.light-theme) {
     --text-primary: #ffffff; /* Pure white for maximum contrast */
     --text-secondary: #e5e7eb; /* Very light for maximum contrast */
     --card-background: #000000; /* Pure black background */
+    --background-color: #000000;
+    --card-border: #ffffff;
+    --border-color: #ffffff;
   }
 }
 
@@ -304,13 +368,13 @@ body.light-theme {
   --primary-dark: var(--primary-800);
   --surface-color: #f4f6fa;
   --background-color: #eef1f6;
-  --text-primary: #1f2937; /* Darker for better contrast */
-  --text-secondary: #374151; /* Darker for better contrast */
-  --text-tertiary: #6b7280;
-  --border-color: #e5e7eb;
-  --card-background: #f8fafc;
-  --card-border: #e5e7eb;
-  --card-hover: #f1f5f9;
+  --text-primary: #111827; /* Even darker for better contrast */
+  --text-secondary: #1f2937; /* Darker for better contrast */
+  --text-tertiary: #374151; /* Darker for better contrast */
+  --border-color: #d1d5db;
+  --card-background: #ffffff;
+  --card-border: #d1d5db;
+  --card-hover: #f9fafb;
 
   /* Synced dark-mode variables for components using legacy names */
   --surface-dark: #f4f6fa;
@@ -353,11 +417,11 @@ body:not(.light-theme) {
   --card-background-dark: #121633;
   --card-hover-dark: #1a1f3d;
   --border-color-dark: #263056;
-  --text-primary-dark: #f8fafc;
+  --text-primary-dark: #ffffff;
   --text-secondary-dark: #e2e8f0;
-  --text-primary: #ffffff; /* Brighter white for better contrast */
-  --text-secondary: #e2e8f0;
-  --text-tertiary: #cbd5e1; /* Brighter for better contrast */
+  --text-primary: #ffffff; /* Pure white for maximum contrast */
+  --text-secondary: #f1f5f9; /* Brighter for better contrast */
+  --text-tertiary: #e2e8f0; /* Brighter for better contrast */
   --border-color: #263056;
   --button-primary-bg: var(--primary-400);
   --button-primary-hover: var(--primary-300);
@@ -2398,6 +2462,46 @@ body:not(.light-theme) {
       padding-right: max(var(--space-4), env(safe-area-inset-right));
       padding-left: max(var(--space-4), env(safe-area-inset-left));
     }
+  }
+}
+
+/* ===== FINAL THEME ENFORCEMENT ===== */
+/* Ensure all elements use theme colors - this is the final fallback */
+* {
+  color: var(--text-primary);
+}
+
+/* Override any hardcoded colors with theme variables */
+[style*="color:"] {
+  color: var(--text-primary) !important;
+}
+
+[style*="background-color:"] {
+  background-color: var(--card-background) !important;
+}
+
+/* Force theme colors on all text elements */
+p, span, div, h1, h2, h3, h4, h5, h6, a, button, input, textarea, select, label, li, td, th {
+  color: var(--text-primary) !important;
+}
+
+/* Force theme backgrounds on all container elements */
+div, section, article, aside, header, footer, main, .card, .container, .wrapper, .section, .panel {
+  background-color: var(--card-background) !important;
+}
+
+/* Ensure proper contrast for all interactive elements */
+button, input, textarea, select, a {
+  color: var(--text-primary) !important;
+  background-color: var(--card-background) !important;
+  border-color: var(--border-color) !important;
+}
+
+/* High contrast enforcement for accessibility */
+@media (prefers-contrast: more) {
+  * {
+    color: var(--text-primary) !important;
+    background-color: var(--card-background) !important;
   }
 }
 
