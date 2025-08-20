@@ -687,6 +687,49 @@ p, span, div, label, a, li, td, th, small, strong, em, b, i {
 
 ---
 
+## 🎯 **Reverted Aggressive CSS Changes** ✅
+
+### **Issue Identified:**
+- **Over-aggressive CSS enforcement** - Added `!important` rules that broke the site
+- **Misunderstood the problem** - Tried to fix theme issues that were already solved
+- **CSS specificity wars** - Added rules that conflicted with existing component styles
+
+### **Root Cause:**
+- **Misinterpreted CSS_TODO.md** - Thought there were theme problems when there weren't
+- **Added unnecessary `!important` rules** - Broke existing component styling
+- **Over-engineered solution** - The CSS composition fixes were already complete
+
+### **What I Did Wrong:**
+- **Added aggressive global selectors** like `*`, `p, span, div`, `[class*="text"]`
+- **Used `!important` declarations** that overrode component-specific styles
+- **Tried to "fix" theme issues** that were already working through CSS composition
+
+### **What I've Reverted:**
+- **Removed all `!important` declarations** - Restored normal CSS specificity
+- **Removed aggressive global selectors** - No more `*`, `p, span, div` overrides
+- **Removed component pattern matching** - No more `[class*="Tournament_"]` rules
+- **Removed high contrast mode overrides** - Restored normal theme behavior
+
+### **Current Status:**
+- **Site should be working again** ✅ - All aggressive CSS removed
+- **Original CSS composition fixes remain** ✅ - Import paths and class names still fixed
+- **Theme system intact** ✅ - Light/dark mode should work as intended
+- **Component styling preserved** ✅ - No more global overrides
+
+### **Lesson Learned:**
+- **Read the CSS_TODO.md carefully** - It showed 100% completion for styling
+- **Don't add `!important` rules** - They break existing component styles
+- **CSS composition ≠ theme enforcement** - These are different problems
+- **Trust the existing fixes** - The CSS_TODO.md was already complete
+
+### **What Actually Works:**
+- **CSS composition fixes** ✅ - Components import from `global.css` correctly
+- **Class name matching** ✅ - All component classes match `global.css` definitions
+- **Theme variables** ✅ - CSS variables are properly defined and used
+- **Component-specific styles** ✅ - Each component maintains its own styling
+
+---
+
 ## Overview
 This document identifies the CSS composition mismatches that need to be fixed after consolidating all styles into `global.css`. Components are trying to compose from classes that either don't exist or have different names.
 
