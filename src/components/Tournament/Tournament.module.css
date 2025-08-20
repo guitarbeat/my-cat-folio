@@ -17,7 +17,7 @@
 /* Layout & Container
    ========================================================================== */
 .tournament {
-  composes: container from "../../styles/base.css";
+  composes: container from "../../styles/global.css";
   position: relative;
   display: flex;
   flex-direction: column;
@@ -60,7 +60,7 @@
 }
 
 .roundInfo {
-  composes: flex-col from "../../styles/base.css";
+  composes: flex-col from "../../styles/global.css";
   gap: var(--space-2);
   font-weight: 500;
 }

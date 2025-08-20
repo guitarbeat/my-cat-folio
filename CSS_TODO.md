@@ -16,6 +16,7 @@
 - Missing classes (`toast`, `player`, `winnerBadge`) have been added to `global.css`
 - All 8 components now have proper CSS composition working
 - Compatibility shim (`base.css`) has been removed - no longer needed
+- **Build-breaking references fixed** - found and corrected 2 remaining `base.css` imports in Tournament component
 
 ### **What Remains:**
 - Testing and verification that all components render correctly
