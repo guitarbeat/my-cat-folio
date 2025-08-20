@@ -82,6 +82,21 @@ input, textarea, select {
   border-color: var(--border-color);
 }
 
+/* Global contrast improvements for interactive elements */
+*[class*="selected"],
+*[class*="active"],
+*[class*="hover"] {
+  /* Ensure text remains visible when background changes */
+  color: var(--text-primary) !important;
+}
+
+/* Dark theme specific contrast rules */
+body:not(.light-theme) *[class*="selected"],
+body:not(.light-theme) *[class*="active"],
+body:not(.light-theme) *[class*="hover"] {
+  color: var(--text-primary) !important; /* Force white text for maximum contrast */
+}
+
 /* ===== variables.css ===== */
 :root {
   /* Cool Color Palette for Black Kitten Theme */
