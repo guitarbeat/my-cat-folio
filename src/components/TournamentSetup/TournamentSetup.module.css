@@ -309,7 +309,7 @@
   user-select: none;
   object-fit: contain;
   border-radius: var(--radius-xl);
-  box-shadow: var(--shadow-2xl);
+  box-shadow: var(--shadow-xl);
   transform-origin: center;
   transition: transform var(--duration-normal) var(--ease-out);
 }
@@ -516,10 +516,46 @@ body:not(.light-theme) {
 /* Fix: export tokens for compound selectors and add missing classes used by JSX */
 .minimized {}
 .minimizedImage {}
-.nw {}
-.ne {}
-.sw {}
-.se {}
+
+/* Resize handle positions */
+.nw { top: 0; left: 0; cursor: nw-resize; }
+.ne { top: 0; right: 0; cursor: ne-resize; }
+.sw { bottom: 0; left: 0; cursor: sw-resize; }
+.se { bottom: 0; right: 0; cursor: se-resize; }
+
+/* Missing classes used by JSX */
+.enlargedImage {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+.resizeHandle {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  background: var(--primary-500);
+  border: 2px solid rgb(var(--white-rgb));
+  border-radius: var(--radius-full);
+  z-index: 10;
+}
+
+.minimizeButton {
+  composes: btnSecondary from "../../styles/global.css";
+  position: absolute;
+  top: var(--space-4);
+  right: var(--space-4);
+  z-index: 10;
+  padding: var(--space-2);
+  min-width: auto;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
 /* Missing layout hooks */
 .header {
