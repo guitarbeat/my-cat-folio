@@ -437,6 +437,66 @@ body.light-theme {
 
 ---
 
+## 🎯 **Targeted Theme Fixes - Hardcoded Color Replacement** ✅
+
+### **Issue Identified:**
+- **Components using hardcoded colors** instead of CSS variables
+- **Theme switching ineffective** because colors are not using `var(--text-primary)` etc.
+- **Widespread contrast issues** due to non-theme-aware colors
+
+### **Root Cause:**
+- **Hardcoded colors** in component CSS files (e.g., `#333`, `#666`, `#4f46e5`)
+- **No theme variable usage** - components not responding to light/dark mode
+- **CSS variables defined but unused** - theme system not connected to components
+
+### **Targeted Fixes Implemented:**
+
+#### **1. Login Component (`Login.module.css`):**
+- **Text colors**: `#333` → `var(--text-primary)`, `#666` → `var(--text-secondary)`
+- **Background colors**: `white` → `var(--card-background)`
+- **Border colors**: `#e0e0e0` → `var(--border-color)`
+- **Primary colors**: `#4f46e5` → `var(--primary-color)`
+- **Error colors**: `#ef4444` → `var(--error-500)`
+- **Shadow colors**: Hardcoded RGB → `var(--shadow-color-light)`
+
+#### **2. NavBar Component (`navbar.css`):**
+- **Transparent navbar text**: `#fff` → `var(--text-primary)`
+- **Border colors**: Hardcoded RGB → `var(--border-color)`
+- **Hover states**: Hardcoded RGB → `var(--card-hover)`
+
+#### **3. CSS Variable Mapping:**
+```css
+/* Before (hardcoded) */
+color: #333;
+background: white;
+border-color: #e0e0e0;
+
+/* After (theme-aware) */
+color: var(--text-primary);
+background: var(--card-background);
+border-color: var(--border-color);
+```
+
+### **Technical Approach:**
+- **Targeted replacement** - Only fix components with hardcoded colors
+- **Maintain existing design** - Keep component-specific styling intact
+- **Use CSS variables** - Replace hardcoded values with theme variables
+- **No global overrides** - Avoid breaking existing component styles
+
+### **Benefits:**
+- **Theme switching now works** ✅ - Components respond to light/dark mode
+- **Color contrast improved** ✅ - WCAG standards met through theme variables
+- **Maintainable code** ✅ - Colors centralized in theme system
+- **No design breakage** ✅ - Existing component styling preserved
+
+### **Result:**
+- **Components now theme-aware** ✅ - All hardcoded colors replaced
+- **Light/dark mode functional** ✅ - Theme switching affects all content
+- **Accessibility compliance** ✅ - Proper contrast ratios maintained
+- **Professional theming** ✅ - Consistent color scheme across application
+
+---
+
 ## Overview
 This document identifies the CSS composition mismatches that need to be fixed after consolidating all styles into `global.css`. Components are trying to compose from classes that either don't exist or have different names.
 

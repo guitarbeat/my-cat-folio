@@ -82,22 +82,7 @@ input, textarea, select {
   border-color: var(--border-color);
 }
 
-/* Global theme enforcement for all text elements */
-p, span, div, label, a, li, td, th {
-  color: var(--text-primary);
-}
 
-/* Global theme enforcement for backgrounds */
-div, section, article, aside, header, footer, main {
-  background-color: var(--background-color);
-}
-
-/* Global theme enforcement for cards and containers */
-.card, .container, .wrapper, .section, .panel {
-  background-color: var(--card-background);
-  border-color: var(--card-border);
-  color: var(--text-primary);
-}
 
 /* Global contrast improvements for interactive elements */
 *[class*="selected"],
@@ -114,35 +99,7 @@ body:not(.light-theme) *[class*="hover"] {
   color: var(--text-primary) !important; /* Force white text for maximum contrast */
 }
 
-/* Theme enforcement for common component patterns */
-[class*="Tournament_"],
-[class*="TournamentSetup_"],
-[class*="Results_"],
-[class*="Profile_"],
-[class*="NameCard_"],
-[class*="Bracket_"],
-[class*="ErrorBoundary_"] {
-  color: var(--text-primary);
-  background-color: var(--card-background);
-}
 
-/* Ensure all text content uses theme colors */
-[class*="__text"],
-[class*="__name"],
-[class*="__title"],
-[class*="__description"],
-[class*="__label"] {
-  color: var(--text-primary) !important;
-}
-
-/* Ensure all card and container elements use theme backgrounds */
-[class*="__card"],
-[class*="__container"],
-[class*="__wrapper"],
-[class*="__section"] {
-  background-color: var(--card-background) !important;
-  border-color: var(--card-border) !important;
-}
 
 /* ===== variables.css ===== */
 :root {
@@ -331,24 +288,6 @@ body:not(.light-theme) *[class*="hover"] {
     --warning-600: #b45309;
     --purple-600: #6d28d9;
   }
-  
-  body.light-theme {
-    --text-primary: #000000; /* Pure black for maximum contrast */
-    --text-secondary: #1f2937; /* Very dark for maximum contrast */
-    --card-background: #ffffff; /* Pure white background */
-    --background-color: #ffffff;
-    --card-border: #000000;
-    --border-color: #000000;
-  }
-  
-  body:not(.light-theme) {
-    --text-primary: #ffffff; /* Pure white for maximum contrast */
-    --text-secondary: #e5e7eb; /* Very light for maximum contrast */
-    --card-background: #000000; /* Pure black background */
-    --background-color: #000000;
-    --card-border: #ffffff;
-    --border-color: #ffffff;
-  }
 }
 
 /* Reduced Motion */
@@ -368,7 +307,7 @@ body.light-theme {
   --primary-dark: var(--primary-800);
   --surface-color: #f4f6fa;
   --background-color: #eef1f6;
-  --text-primary: #111827; /* Even darker for better contrast */
+  --text-primary: #111827; /* Darker for better contrast */
   --text-secondary: #1f2937; /* Darker for better contrast */
   --text-tertiary: #374151; /* Darker for better contrast */
   --border-color: #d1d5db;
@@ -378,11 +317,11 @@ body.light-theme {
 
   /* Synced dark-mode variables for components using legacy names */
   --surface-dark: #f4f6fa;
-  --card-background-dark: #f8fafc;
-  --card-hover-dark: #f1f5f9;
-  --border-color-dark: #e5e7eb;
-  --text-primary-dark: #2c3544;
-  --text-secondary-dark: #4b5563;
+  --card-background-dark: #ffffff;
+  --card-hover-dark: #f9fafb;
+  --border-color-dark: #d1d5db;
+  --text-primary-dark: #111827;
+  --text-secondary-dark: #1f2937;
   --button-primary-bg: var(--primary-700);
   --button-primary-hover: var(--primary-800);
   --button-secondary-bg: #2a2a2a;
@@ -2465,43 +2404,5 @@ body:not(.light-theme) {
   }
 }
 
-/* ===== FINAL THEME ENFORCEMENT ===== */
-/* Ensure all elements use theme colors - this is the final fallback */
-* {
-  color: var(--text-primary);
-}
 
-/* Override any hardcoded colors with theme variables */
-[style*="color:"] {
-  color: var(--text-primary) !important;
-}
-
-[style*="background-color:"] {
-  background-color: var(--card-background) !important;
-}
-
-/* Force theme colors on all text elements */
-p, span, div, h1, h2, h3, h4, h5, h6, a, button, input, textarea, select, label, li, td, th {
-  color: var(--text-primary) !important;
-}
-
-/* Force theme backgrounds on all container elements */
-div, section, article, aside, header, footer, main, .card, .container, .wrapper, .section, .panel {
-  background-color: var(--card-background) !important;
-}
-
-/* Ensure proper contrast for all interactive elements */
-button, input, textarea, select, a {
-  color: var(--text-primary) !important;
-  background-color: var(--card-background) !important;
-  border-color: var(--border-color) !important;
-}
-
-/* High contrast enforcement for accessibility */
-@media (prefers-contrast: more) {
-  * {
-    color: var(--text-primary) !important;
-    background-color: var(--card-background) !important;
-  }
-}
 
