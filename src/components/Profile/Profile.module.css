@@ -102,7 +102,7 @@
 }
 
 .buttonDelete {
-  composes: btnDanger from "../../styles/global.css";
+  composes: btndanger from "../../styles/global.css";
 }
 
 .buttonDelete:hover {
@@ -114,7 +114,7 @@
 }
 
 .buttonPrimary {
-  composes: btnPrimary from "../../styles/global.css";
+  composes: btnprimary from "../../styles/global.css";
 }
 
 .buttonPrimary:hover {
@@ -1254,9 +1254,9 @@
 }
 
 .statItem:hover {
-  transform: translateY(-2px);
   background: var(--card-hover);
   border: 1px solid var(--accent-primary);
+  transform: translateY(-2px);
 }
 
 /* Ensure proper contrast for selected/active states */
@@ -1271,8 +1271,8 @@
 .statLabel {
   margin-bottom: 0.5rem;
   font-size: var(--text-sm);
-  color: var(--text-secondary);
   font-weight: 500; /* Ensure sufficient weight for contrast */
+  color: var(--text-secondary);
 }
 
 .statValue {

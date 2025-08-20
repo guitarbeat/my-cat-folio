@@ -72,7 +72,7 @@
 }
 
 .matchCount {
-  composes: textSm from "../../styles/global.css";
+  composes: textsm from "../../styles/global.css";
   color: var(--text-secondary);
 }
 
@@ -95,7 +95,7 @@
 }
 
 .matchup {
-  composes: cardInteractive from "../../styles/global.css";
+  composes: cardinteractive from "../../styles/global.css";
   display: flex;
   flex-direction: column;
   gap: var(--space-6);
@@ -168,7 +168,7 @@
 }
 
 .extraOptionsButton {
-  composes: btnSecondary from "../../styles/global.css";
+  composes: btnsecondary from "../../styles/global.css";
   min-width: 120px;
   transition: all var(--duration-normal) var(--ease-out);
 }
@@ -182,7 +182,7 @@
 }
 
 .selected {
-  composes: btnPrimary from "../../styles/global.css";
+  composes: btnprimary from "../../styles/global.css";
   background: var(--primary-color);
 }
 
@@ -209,7 +209,7 @@
 }
 
 .controlButton {
-  composes: btnPrimary from "../../styles/global.css";
+  composes: btnprimary from "../../styles/global.css";
 }
 
 .soundControls {
@@ -223,7 +223,7 @@
 }
 
 .soundToggleButton {
-  composes: btnSecondary from "../../styles/global.css";
+  composes: btnsecondary from "../../styles/global.css";
   display: flex;
   align-items: center;
   justify-content: center;
@@ -297,7 +297,7 @@
 }
 
 .bracketToggle {
-  composes: btnSecondary from "../../styles/global.css";
+  composes: btnsecondary from "../../styles/global.css";
   display: flex;
   gap: var(--space-2);
   align-items: center;
@@ -363,7 +363,7 @@
 }
 
 .modalBackdrop {
-  composes: modalBackdrop from "../../styles/global.css";
+  composes: modalbackdrop from "../../styles/global.css";
   animation: fadeIn var(--duration-normal) var(--ease-out);
 }
 
@@ -387,11 +387,11 @@
 }
 
 .confirmButton {
-  composes: btnPrimary from "../../styles/global.css";
+  composes: btnprimary from "../../styles/global.css";
 }
 
 .cancelButton {
-  composes: btnSecondary from "../../styles/global.css";
+  composes: btnsecondary from "../../styles/global.css";
 }
 
 /* Animations
@@ -606,7 +606,7 @@
 }
 
 .randomizeButton {
-  composes: btnSecondary from "../../styles/global.css";
+  composes: btnsecondary from "../../styles/global.css";
   display: flex;
   gap: var(--space-2);
   align-items: center;

@@ -1,0 +1,220 @@
+/**
+ * @module tournamentUtils
+ * @description Utility functions for tournament logic and state management
+ */
+
+/**
+ * Calculate the blended rating for a name.
+ * @param {number} existingRating - Previous rating value
+ * @param {number} position - Position in sorted list
+ * @param {number} totalNames - Total number of names
+ * @param {number} matchesPlayed - Matches completed
+ * @param {number} maxMatches - Total matches in tournament
+ * @returns {number} Final rating between 1000 and 2000
+ */
+export function computeRating(
+  existingRating,
+  position,
+  totalNames,
+  matchesPlayed,
+  maxMatches,
+) {
+  const ratingSpread = Math.min(1000, totalNames * 25);
+  const positionValue =
+    ((totalNames - position - 1) / (totalNames - 1)) * ratingSpread;
+  const newPositionRating = 1500 + positionValue;
+  const blendFactor = Math.min(0.8, (matchesPlayed / maxMatches) * 0.9);
+  const newRating = Math.round(
+    blendFactor * newPositionRating + (1 - blendFactor) * existingRating,
+  );
+  return Math.max(1000, Math.min(2000, newRating));
+}
+
+/**
+ * Count player votes for a specific outcome
+ * @param {Array} matchHistory - Array of match votes
+ * @param {string} playerName - Name of the player
+ * @param {string} outcome - Outcome to count ('win' or 'loss')
+ * @returns {number} Count of votes for the specified outcome
+ */
+export function countPlayerVotes(matchHistory, playerName, outcome) {
+  return matchHistory.filter((vote) => {
+    const { left, right } = vote.match;
+    if (outcome === "win") {
+      return (
+        (left.name === playerName && vote.result === "left") ||
+        (right.name === playerName && vote.result === "right")
+      );
+    }
+    if (outcome === "loss") {
+      return (
+        (left.name === playerName && vote.result === "right") ||
+        (right.name === playerName && vote.result === "left")
+      );
+    }
+    return false;
+  }).length;
+}
+
+/**
+ * Get current ratings for all players
+ * @param {Array} names - Array of name objects
+ * @param {Object} currentRatings - Current ratings object
+ * @param {Array} matchHistory - Array of match votes
+ * @param {number} currentMatchNumber - Current match number
+ * @param {number} totalMatches - Total matches in tournament
+ * @returns {Array} Array of player ratings with stats
+ */
+export function getCurrentRatings(
+  names,
+  currentRatings,
+  matchHistory,
+  currentMatchNumber,
+  totalMatches,
+) {
+  return names.map((name) => {
+    const existingData =
+      typeof currentRatings[name.name] === "object"
+        ? currentRatings[name.name]
+        : { rating: currentRatings[name.name] || 1500, wins: 0, losses: 0 };
+
+    const wins = countPlayerVotes(matchHistory, name.name, "win");
+    const losses = countPlayerVotes(matchHistory, name.name, "loss");
+    const position = wins; // Position is based on wins
+
+    const finalRating = computeRating(
+      existingData.rating,
+      position,
+      names.length,
+      currentMatchNumber,
+      totalMatches,
+    );
+
+    return {
+      name: name.name,
+      rating: finalRating,
+      wins: existingData.wins + wins,
+      losses: existingData.wins + losses,
+      confidence: currentMatchNumber / totalMatches,
+    };
+  });
+}
+
+/**
+ * Convert vote result to preference value and Elo outcome
+ * @param {string} result - Vote result ('left', 'right', 'both', 'none')
+ * @returns {Object} Object containing voteValue and eloOutcome
+ */
+export function convertVoteToPreference(result) {
+  let voteValue;
+  let eloOutcome;
+  
+  switch (result) {
+    case "left":
+      voteValue = -1;
+      eloOutcome = "left";
+      break;
+    case "right":
+      voteValue = 1;
+      eloOutcome = "right";
+      break;
+    case "both": // Both equally liked with small random variance
+      voteValue = Math.random() * 0.1 - 0.05; // Small random value centered at 0
+      eloOutcome = "both";
+      break;
+    case "none": // Neither liked with small random variance
+      voteValue = Math.random() * 0.06 - 0.03; // Even smaller random value centered at 0
+      eloOutcome = "none";
+      break;
+    default:
+      voteValue = 0;
+      eloOutcome = "none";
+  }
+
+  return { voteValue, eloOutcome };
+}
+
+/**
+ * Create vote data object
+ * @param {Object} params - Parameters for creating vote data
+ * @param {number} params.currentMatchNumber - Current match number
+ * @param {number} params.voteValue - Vote preference value
+ * @param {string} params.userName - User name
+ * @param {Object} params.currentMatch - Current match object
+ * @param {Object} params.ratings - Ratings before and after
+ * @returns {Object} Vote data object
+ */
+export function createVoteData({
+  currentMatchNumber,
+  voteValue,
+  userName,
+  currentMatch,
+  ratings,
+}) {
+  return {
+    matchNumber: currentMatchNumber,
+    result: voteValue,
+    timestamp: Date.now(),
+    userName: userName || "anonymous",
+    match: {
+      left: {
+        name: currentMatch.left.name,
+        description: currentMatch.left.description || "",
+        won: ratings.after.left > ratings.before.left,
+      },
+      right: {
+        name: currentMatch.right.name,
+        description: currentMatch.right.description || "",
+        won: ratings.after.right > ratings.before.right,
+      },
+    },
+    ratings,
+  };
+}
+
+/**
+ * Calculate estimated total matches for a tournament
+ * @param {number} nameCount - Number of names in tournament
+ * @returns {number} Estimated total matches
+ */
+export function calculateEstimatedMatches(nameCount) {
+  return nameCount <= 2 ? 1 : Math.ceil(nameCount * Math.log2(nameCount));
+}
+
+/**
+ * Check if round should increment
+ * @param {number} currentMatchNumber - Current match number
+ * @param {number} namesLength - Number of names in tournament
+ * @returns {boolean} True if round should increment
+ */
+export function shouldIncrementRound(currentMatchNumber, namesLength) {
+  if (namesLength <= 2) return false;
+  const matchesPerRound = Math.ceil(namesLength / 2);
+  return currentMatchNumber % matchesPerRound === 0;
+}
+
+/**
+ * Create tournament state object
+ * @param {Object} params - Parameters for tournament state
+ * @param {Array} params.names - Array of names
+ * @param {Object} params.existingRatings - Existing ratings
+ * @param {number} params.currentMatchNumber - Current match number
+ * @param {number} params.roundNumber - Current round number
+ * @param {Array} params.matchHistory - Match history
+ * @returns {Object} Tournament state object
+ */
+export function createTournamentState({
+  names,
+  existingRatings,
+  currentMatchNumber,
+  roundNumber,
+  matchHistory,
+}) {
+  return {
+    names,
+    existingRatings,
+    currentMatchNumber,
+    roundNumber,
+    matchHistory,
+  };
+}

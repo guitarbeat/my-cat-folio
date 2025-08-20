@@ -27,14 +27,14 @@
   }
 
   .button-primary {
-    background: var(--button-primary-bg, var(--primary-color));
     color: var(--button-text-light, white);
+    background: var(--button-primary-bg, var(--primary-color));
     border: 2px solid var(--primary-color);
   }
 
   .button-secondary {
-    background: var(--button-secondary-bg, transparent);
     color: var(--text-primary);
+    background: var(--button-secondary-bg, transparent);
     border: 2px solid var(--border-color);
   }
 
@@ -54,8 +54,8 @@
   }
 
   .nav-menu button.active {
-    background: var(--primary-500);
     color: white;
+    background: var(--primary-500);
     border-color: var(--primary-600);
   }
 
@@ -85,10 +85,10 @@
     min-height: 44px;
     padding: var(--space-3) var(--space-4);
     font-size: var(--text-base);
+    color: var(--text-primary);
+    background: var(--surface-color);
     border: 2px solid var(--border-color);
     border-radius: var(--radius-md);
-    background: var(--surface-color);
-    color: var(--text-primary);
   }
 
   .input:focus {
@@ -102,8 +102,8 @@
   /* Enhanced small mobile colors */
   .name-card {
     padding: var(--space-3);
-    border-radius: var(--radius-lg);
     background: var(--mobile-card-background, var(--card-background));
+    border-radius: var(--radius-lg);
   }
 
   .button-primary,
@@ -140,9 +140,9 @@
 @media (hover: none) and (pointer: coarse) {
   /* Enhanced touch feedback */
   .name-card:active {
-    transform: scale(0.98);
     background: var(--mobile-card-hover, var(--card-hover));
     box-shadow: 0 1px 2px var(--shadow-color-light);
+    transform: scale(0.98);
   }
 
   .button-primary:active,
@@ -160,9 +160,9 @@
   }
 
   .nav-menu button:active {
-    transform: scale(0.95);
-    background: var(--primary-100);
     color: var(--primary-700);
+    background: var(--primary-100);
+    transform: scale(0.95);
   }
 
   /* Touch-friendly navigation */
@@ -181,8 +181,8 @@
 @media (prefers-contrast: more) {
   @media (width <= 768px) {
     .name-card {
-      border-width: 3px;
       border-color: var(--text-primary);
+      border-width: 3px;
     }
 
     .button-primary,
@@ -236,35 +236,35 @@
 @supports (padding: max(0px)) {
   @media (width <= 768px) {
     .main-content {
-      padding-left: max(var(--space-4), env(safe-area-inset-left));
       padding-right: max(var(--space-4), env(safe-area-inset-right));
+      padding-left: max(var(--space-4), env(safe-area-inset-left));
     }
 
     header {
-      padding-left: max(var(--space-4), env(safe-area-inset-left));
       padding-right: max(var(--space-4), env(safe-area-inset-right));
+      padding-left: max(var(--space-4), env(safe-area-inset-left));
     }
 
     .container {
-      padding-left: max(var(--space-4), env(safe-area-inset-left));
       padding-right: max(var(--space-4), env(safe-area-inset-right));
+      padding-left: max(var(--space-4), env(safe-area-inset-left));
     }
   }
 
   @media (width <= 430px) {
     .main-content {
-      padding-left: max(var(--space-3), env(safe-area-inset-left));
       padding-right: max(var(--space-3), env(safe-area-inset-right));
+      padding-left: max(var(--space-3), env(safe-area-inset-left));
     }
 
     header {
-      padding-left: max(var(--space-3), env(safe-area-inset-left));
       padding-right: max(var(--space-3), env(safe-area-inset-right));
+      padding-left: max(var(--space-3), env(safe-area-inset-left));
     }
 
     .container {
-      padding-left: max(var(--space-3), env(safe-area-inset-left));
       padding-right: max(var(--space-3), env(safe-area-inset-right));
+      padding-left: max(var(--space-3), env(safe-area-inset-left));
     }
   }
 }
@@ -282,7 +282,7 @@
   }
 
   .mobile\:text-enhanced {
-    color: var(--mobile-text-primary, var(--text-primary));
     font-weight: 600;
+    color: var(--mobile-text-primary, var(--text-primary));
   }
 }

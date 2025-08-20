@@ -33,7 +33,7 @@
 }
 
 .expandToggle {
-  composes: btnSecondary from "../../styles/global.css";
+  composes: btnsecondary from "../../styles/global.css";
   display: flex;
   gap: var(--space-2);
   align-items: center;
@@ -109,7 +109,7 @@
 
 /* Name Counter */
 .nameCount {
-  composes: cardInteractive from "../../styles/global.css";
+  composes: cardinteractive from "../../styles/global.css";
   padding: var(--space-4);
   margin: var(--space-6) 0;
 }
@@ -125,11 +125,11 @@
   font-size: var(--text-lg);
   font-weight: 600; /* Increased weight for better contrast */
   color: var(--text-primary);
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1); /* Subtle shadow for better readability */
+  text-shadow: 0 1px 2px rgb(0 0 0 / 10%); /* Subtle shadow for better readability */
 }
 
 .selectAllButton {
-  composes: btnSecondary from "../../styles/global.css";
+  composes: btnsecondary from "../../styles/global.css";
 }
 
 .helperText {
@@ -147,7 +147,7 @@
 }
 
 .startButton {
-  composes: btnPrimary from "../../styles/global.css";
+  composes: btnprimary from "../../styles/global.css";
   display: flex;
   flex-direction: column;
   gap: var(--space-2);
@@ -175,7 +175,7 @@
 }
 
 .photoSidebarContent {
-  composes: cardInteractive from "../../styles/global.css";
+  composes: cardinteractive from "../../styles/global.css";
   padding: var(--space-4);
   margin-bottom: var(--space-4);
 }
@@ -208,7 +208,7 @@
 
 /* Suggestion Section */
 .suggestionSection {
-  composes: cardInteractive from "../../styles/global.css";
+  composes: cardinteractive from "../../styles/global.css";
   padding: var(--space-4);
 }
 
@@ -260,7 +260,7 @@
 }
 
 .submitButton {
-  composes: btnPrimary from "../../styles/global.css";
+  composes: btnprimary from "../../styles/global.css";
   width: 100%;
   margin-top: var(--space-2);
 }
@@ -393,7 +393,7 @@
 /* Base button styles */
 .minimizeButton,
 .closeButton {
-  composes: btnIcon from "../../styles/global.css";
+  composes: btnicon from "../../styles/global.css";
   display: flex;
   align-items: center;
   justify-content: center;
@@ -517,6 +517,7 @@
 /* Fix: export tokens for compound selectors and add missing classes used by JSX */
 .minimized {
 }
+
 .minimizedImage {
 }
 
@@ -526,19 +527,22 @@
   left: 0;
   cursor: nw-resize;
 }
+
 .ne {
   top: 0;
   right: 0;
   cursor: ne-resize;
 }
+
 .sw {
   bottom: 0;
   left: 0;
   cursor: sw-resize;
 }
+
 .se {
-  bottom: 0;
   right: 0;
+  bottom: 0;
   cursor: se-resize;
 }
 
@@ -546,34 +550,34 @@
 .enlargedImage {
   width: 100%;
   height: 100%;
-  object-fit: contain;
   user-select: none;
+  object-fit: contain;
   -webkit-user-drag: none;
 }
 
 .resizeHandle {
   position: absolute;
+  z-index: 10;
   width: 12px;
   height: 12px;
   background: var(--primary-500);
   border: 2px solid rgb(var(--white-rgb));
   border-radius: var(--radius-full);
-  z-index: 10;
 }
 
 .minimizeButton {
-  composes: btnSecondary from "../../styles/global.css";
+  composes: btnsecondary from "../../styles/global.css";
   position: absolute;
   top: var(--space-4);
   right: var(--space-4);
   z-index: 10;
-  padding: var(--space-2);
-  min-width: auto;
-  width: 40px;
-  height: 40px;
   display: flex;
   align-items: center;
   justify-content: center;
+  width: 40px;
+  min-width: auto;
+  height: 40px;
+  padding: var(--space-2);
 }
 
 /* Missing layout hooks */

@@ -23,11 +23,11 @@
 .bongoContainer {
   position: absolute;
   left: 50%;
-  transform: translateX(-50%);
   width: 180px;
   max-width: 100%;
   aspect-ratio: 1;
   pointer-events: none;
+  transform: translateX(-50%);
   transition:
     top 0.2s ease-out,
     opacity 0.3s ease;
@@ -36,24 +36,24 @@
 .bongoContainerPositioned {
   position: absolute;
   left: 50%;
-  transform: translateX(-50%);
   width: 180px;
   max-width: 100%;
   aspect-ratio: 1;
   pointer-events: none;
+  transform: translateX(-50%);
   transition:
     top 0.2s ease-out,
     opacity 0.3s ease;
 }
 
 .bongoContainerVisible {
-  opacity: 1;
   visibility: visible;
+  opacity: 1;
 }
 
 .bongoContainerHidden {
-  opacity: 0;
   visibility: hidden;
+  opacity: 0;
 }
 
 .container * {

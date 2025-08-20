@@ -619,8 +619,7 @@ function TournamentSetupContent({ onStart }) {
                 <img
                   src={`/images/${image.src}`}
                   alt="Enlarged cat photo"
-                  className={`${styles.enlargedImage} ${image.isMinimized ? styles.minimizedImage : ""}`}
-                  className={`${styles.enlargedImage} ${image.isDragging ? styles.imageWrapperDragging : styles.imageWrapperNotDragging}`}
+                  className={`${styles.enlargedImage} ${image.isMinimized ? styles.minimizedImage : ""} ${image.isDragging ? styles.imageWrapperDragging : styles.imageWrapperNotDragging}`}
                   onMouseDown={(e) => {
                     e.stopPropagation();
                     handleMouseDown(image.src, e);

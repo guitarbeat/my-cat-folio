@@ -74,22 +74,21 @@
   display: flex;
   gap: 1rem;
   align-items: center;
-  width: 100%;
   justify-content: space-between;
+  width: 100%;
 }
 
 /* Navigation List */
 .navbar__menu-list {
   display: flex;
-  flex-direction: row;
-  align-items: center;
+  flex-flow: row nowrap;
   gap: 1rem;
-  margin: 0;
-  padding: 0;
-  list-style: none;
+  align-items: center;
   width: 100%;
-  flex-wrap: nowrap;
+  padding: 0;
+  margin: 0;
   overflow: visible;
+  list-style: none;
 }
 
 /* Transparent navbar for login page */
@@ -183,15 +182,15 @@ body.light-theme .navbar:not(.transparent) .navbar__item {
 /* Navigation Items */
 .navbar__item {
   display: flex;
+  flex-shrink: 0;
   align-items: center;
   padding: var(--navbar-padding-desktop);
   font-size: var(--local-font-size);
   font-weight: 600;
-  color: var(--text-primary, #ffffff);
+  color: var(--text-primary, #fff);
   text-transform: uppercase;
-  transition: all var(--transition-standard);
   white-space: nowrap;
-  flex-shrink: 0;
+  transition: all var(--transition-standard);
 }
 
 /* Underline effect */
@@ -231,19 +230,19 @@ body.light-theme .navbar:not(.transparent) .navbar__item {
 /* Logo */
 .navbar__item--logo {
   display: flex;
+  flex-shrink: 0;
   gap: 0.5rem;
   align-items: center;
-  margin-right: auto;
-  flex-shrink: 0;
   min-width: 0;
+  margin-right: auto;
 }
 
 .navbar__item--logo .navbar__logo-link {
   display: flex;
   gap: 0.5rem;
   align-items: center;
-  text-decoration: none;
   color: inherit;
+  text-decoration: none;
   transition: opacity var(--transition-standard);
 }
 
@@ -529,14 +528,14 @@ body.light-theme .navbar__item--logo .navbar__logo-link:focus {
 /* Safe area insets for modern mobile devices */
 @supports (padding: max(0px)) {
   .navbar {
-    padding-left: max(1rem, env(safe-area-inset-left));
     padding-right: max(1rem, env(safe-area-inset-right));
+    padding-left: max(1rem, env(safe-area-inset-left));
   }
 
   @media screen and (width <= 768px) {
     .navbar__menu-container {
-      padding-left: max(1rem, env(safe-area-inset-left));
       padding-right: max(1rem, env(safe-area-inset-right));
+      padding-left: max(1rem, env(safe-area-inset-left));
     }
   }
 }

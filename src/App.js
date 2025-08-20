@@ -18,17 +18,17 @@ import React, { useState, useEffect, Suspense } from "react";
 import {
   ErrorBoundary,
   Login,
-  TournamentSetup,
 } from "./components";
 import NavBar from "./components/NavBar/NavBar";
 import useUserSession from "./hooks/useUserSession";
 import { supabase } from "./supabase/supabaseClient";
-import Tournament from "./components/Tournament/Tournament";
 import LoadingSpinner from "./components/LoadingSpinner/LoadingSpinner";
 
 // Lazy-loaded components for performance
 const Results = React.lazy(() => import("./components/Results/Results"));
 const Profile = React.lazy(() => import("./components/Profile/Profile"));
+const TournamentSetup = React.lazy(() => import("./components/TournamentSetup/TournamentSetup"));
+const Tournament = React.lazy(() => import("./components/Tournament/Tournament"));
 
 // Theme Configuration
 const THEME = {
@@ -106,9 +106,9 @@ function App() {
       const ratingsArray = Array.isArray(finalRatings)
         ? finalRatings
         : Object.entries(finalRatings).map(([name, rating]) => ({
-            name,
-            rating,
-          }));
+          name,
+          rating,
+        }));
 
       // Initialize tournament results for all names
       const tournamentResults = {};

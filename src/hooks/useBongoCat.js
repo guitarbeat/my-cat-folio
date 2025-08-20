@@ -1,0 +1,163 @@
+/**
+ * @module useBongoCat
+ * @description Custom hook for BongoCat component event handling and positioning
+ */
+
+import { useCallback, useEffect, useRef, useState } from 'react';
+
+/**
+ * Custom hook for BongoCat component functionality
+ * @param {Object} options - Hook options
+ * @param {Object} options.containerRef - Reference to the container element
+ * @param {number} options.size - Base size of the cat
+ * @param {Function} options.onBongo - Callback when cat is bongoed
+ * @returns {Object} Hook state and handlers
+ */
+export function useBongoCat({ containerRef, size, onBongo }) {
+  const [isPawsDown, setIsPawsDown] = useState(false);
+  const [containerTop, setContainerTop] = useState(0);
+  const [catSize, setCatSize] = useState(size);
+  const [isVisible, setIsVisible] = useState(true);
+  const [containerZIndex, setContainerZIndex] = useState(0);
+
+  const lastKeyTimeRef = useRef(0);
+  const keysHeldRef = useRef(new Set());
+  const resizeObserverRef = useRef(null);
+
+  // Calculate position based on container position with debouncing
+  const updatePosition = useCallback(() => {
+    if (containerRef && containerRef.current) {
+      const rect = containerRef.current.getBoundingClientRect();
+      const viewportHeight = window.innerHeight;
+      const viewportWidth = window.innerWidth;
+      const containerWidth = rect.width;
+
+      // Position cat slightly down from the top of the container
+      let optimalTop = 19;
+
+      // Apply an additional offset for narrow screens to position the cat better
+      if (viewportWidth <= 768) {
+        const mobileAdjustment = 5;
+        optimalTop += mobileAdjustment;
+      }
+
+      setContainerTop(optimalTop);
+
+      // Scale cat based on container width with a mobile-specific adjustment
+      const baseSize = size;
+      const scaleFactor = Math.min(containerWidth / 500, 1);
+
+      // Make the cat slightly smaller on mobile for better proportions
+      const mobileScaleFactor = viewportWidth <= 768 ? 0.9 : 1.0;
+      setCatSize(baseSize * scaleFactor * mobileScaleFactor);
+
+      // Show/hide based on visibility
+      setIsVisible(rect.top < viewportHeight);
+
+      // Get container's z-index for layering
+      const containerComputedStyle = window.getComputedStyle(
+        containerRef.current,
+      );
+      const containerZ =
+        containerComputedStyle.zIndex === "auto"
+          ? 1
+          : parseInt(containerComputedStyle.zIndex, 10);
+      setContainerZIndex(containerZ);
+    }
+  }, [containerRef, size]);
+
+  const handleKeyDown = useCallback(
+    (e) => {
+      if (e.ctrlKey || e.altKey || e.metaKey || e.shiftKey) {
+        return;
+      }
+
+      const now = Date.now();
+      if (now - lastKeyTimeRef.current > 1000) {
+        lastKeyTimeRef.current = now;
+      }
+
+      // Add the key to the set of keys being held down
+      keysHeldRef.current.add(e.key);
+      setIsPawsDown(true);
+
+      // Only trigger onBongo if it wasn't already paws down
+      if (!isPawsDown && onBongo) {
+        onBongo();
+      }
+    },
+    [isPawsDown, onBongo],
+  );
+
+  const handleKeyUp = useCallback((e) => {
+    // Remove the key from the set of keys being held down
+    keysHeldRef.current.delete(e.key);
+
+    // If no keys are being held down anymore, set paws up
+    if (keysHeldRef.current.size === 0) {
+      setIsPawsDown(false);
+    }
+  }, []);
+
+  // Set up event listeners and observers
+  useEffect(() => {
+    document.addEventListener("keydown", handleKeyDown);
+    document.addEventListener("keyup", handleKeyUp);
+
+    // Set up ResizeObserver for container positioning
+    if (containerRef && containerRef.current) {
+      resizeObserverRef.current = new ResizeObserver(updatePosition);
+      resizeObserverRef.current.observe(containerRef.current);
+
+      // Initial position calculation
+      updatePosition();
+
+      // Improved scroll and position tracking
+      const handleScroll = () => {
+        requestAnimationFrame(updatePosition);
+      };
+
+      // Track container position with multiple events to ensure it stays attached
+      window.addEventListener("scroll", handleScroll, { passive: true });
+      window.addEventListener("resize", handleScroll, { passive: true });
+
+      // Additional events that might affect positioning
+      window.addEventListener("orientationchange", updatePosition);
+      window.addEventListener("load", updatePosition);
+
+      // Use MutationObserver to detect DOM changes that might affect container position
+      const mutationObserver = new MutationObserver(updatePosition);
+      mutationObserver.observe(document.body, {
+        childList: true,
+        subtree: true,
+        attributes: true,
+      });
+
+      return () => {
+        if (resizeObserverRef.current) {
+          resizeObserverRef.current.disconnect();
+        }
+
+        window.removeEventListener("scroll", handleScroll);
+        window.removeEventListener("resize", handleScroll);
+        window.removeEventListener("orientationchange", updatePosition);
+        window.removeEventListener("load", updatePosition);
+        mutationObserver.disconnect();
+      };
+    }
+
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+      document.removeEventListener("keyup", handleKeyUp);
+    };
+  }, [handleKeyDown, handleKeyUp, containerRef, updatePosition]);
+
+  return {
+    isPawsDown,
+    containerTop,
+    catSize,
+    isVisible,
+    containerZIndex,
+    updatePosition,
+  };
+}

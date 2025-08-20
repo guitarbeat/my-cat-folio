@@ -1,6 +1,7 @@
 /* Consolidated global stylesheet: reset → variables → theme → base → utilities → components → app rules */
 
 /* ===== reset.css ===== */
+
 /* Reset and Base Styles */
 *,
 *::before,
@@ -70,14 +71,14 @@ h3,
 h4,
 h5,
 h6 {
-  color: var(--text-primary);
   font-weight: 600; /* Ensure headings have sufficient weight for contrast */
+  color: var(--text-primary);
 }
 
 /* Improve button text contrast */
 button {
-  color: var(--text-primary);
   font-weight: 500; /* Ensure button text has sufficient weight */
+  color: var(--text-primary);
 }
 
 /* Ensure form elements have good contrast */
@@ -260,7 +261,7 @@ select {
   --text-secondary: #1f2937;
   --text-tertiary: #374151;
   --background-color: #eef1f6;
-  --card-background: #ffffff;
+  --card-background: #fff;
   --card-border: #d1d5db;
   --card-hover: #f9fafb;
   --border-color: #d1d5db;
@@ -299,13 +300,13 @@ body.light-theme {
   --text-secondary: #1f2937; /* Darker for better contrast */
   --text-tertiary: #374151; /* Darker for better contrast */
   --border-color: #d1d5db;
-  --card-background: #ffffff;
+  --card-background: #fff;
   --card-border: #d1d5db;
   --card-hover: #f9fafb;
 
   /* Synced dark-mode variables for components using legacy names */
   --surface-dark: #f4f6fa;
-  --card-background-dark: #ffffff;
+  --card-background-dark: #fff;
   --card-hover-dark: #f9fafb;
   --border-color-dark: #d1d5db;
   --text-primary-dark: #111827;
@@ -344,9 +345,9 @@ body:not(.light-theme) {
   --card-background-dark: #1a1f3d; /* Softened from #121633 */
   --card-hover-dark: #242a45; /* Softened from #1a1f3d */
   --border-color-dark: #2a2f4a; /* Softened from #263056 */
-  --text-primary-dark: #ffffff;
+  --text-primary-dark: #fff;
   --text-secondary-dark: #e2e8f0;
-  --text-primary: #ffffff; /* Pure white for maximum contrast */
+  --text-primary: #fff; /* Pure white for maximum contrast */
   --text-secondary: #f1f5f9; /* Brighter for better contrast */
   --text-tertiary: #e2e8f0; /* Brighter for better contrast */
   --border-color: #263056;
@@ -366,7 +367,9 @@ body:not(.light-theme) {
 }
 
 /* ===== base.css ===== */
+
 /* Reset and Base Styles */
+
 /* Global Reset */
 *,
 *::before,
@@ -839,6 +842,7 @@ body.light-theme {
 @custom-media --no-hover (hover: none);
 
 /* ===== utilities.css ===== */
+
 /* Layout */
 .container {
   width: 100%;
@@ -1778,6 +1782,7 @@ body.light-theme {
 }
 
 /* ===== components.css ===== */
+
 /* Component Base Styles */
 
 /* Cards */
