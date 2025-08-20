@@ -65,21 +65,21 @@ img {
 
 /* Ensure sufficient contrast for all text elements */
 h1, h2, h3, h4, h5, h6 {
-  color: var(--text-primary);
+  color: var(--text-primary) !important;
   font-weight: 600; /* Ensure headings have sufficient weight for contrast */
 }
 
 /* Improve button text contrast */
 button {
-  color: var(--text-primary);
+  color: var(--text-primary) !important;
   font-weight: 500; /* Ensure button text has sufficient weight */
 }
 
 /* Ensure form elements have good contrast */
 input, textarea, select {
-  color: var(--text-primary);
-  background-color: var(--card-background);
-  border-color: var(--border-color);
+  color: var(--text-primary) !important;
+  background-color: var(--card-background) !important;
+  border-color: var(--border-color) !important;
 }
 
 
@@ -97,6 +97,43 @@ body:not(.light-theme) *[class*="selected"],
 body:not(.light-theme) *[class*="active"],
 body:not(.light-theme) *[class*="hover"] {
   color: var(--text-primary) !important; /* Force white text for maximum contrast */
+}
+
+/* Additional theme enforcement for common elements */
+p, span, div, label, a, li, td, th, small, strong, em, b, i {
+  color: var(--text-primary) !important;
+}
+
+/* Force theme colors on all text content */
+[class*="text"], [class*="name"], [class*="title"], [class*="description"], [class*="label"] {
+  color: var(--text-primary) !important;
+}
+
+/* Force theme backgrounds on all container elements */
+[class*="card"], [class*="container"], [class*="wrapper"], [class*="section"], [class*="panel"] {
+  background-color: var(--card-background) !important;
+  border-color: var(--card-border) !important;
+}
+
+/* Specific component theme enforcement */
+[class*="Tournament_"],
+[class*="TournamentSetup_"],
+[class*="Results_"],
+[class*="Profile_"],
+[class*="NameCard_"],
+[class*="Bracket_"],
+[class*="ErrorBoundary_"],
+[class*="Login_"],
+[class*="NavBar_"] {
+  color: var(--text-primary) !important;
+  background-color: var(--card-background) !important;
+}
+
+/* Force theme colors on all interactive elements */
+button, a, input, textarea, select, [role="button"], [role="link"] {
+  color: var(--text-primary) !important;
+  background-color: var(--card-background) !important;
+  border-color: var(--border-color) !important;
 }
 
 
@@ -287,6 +324,23 @@ body:not(.light-theme) *[class*="hover"] {
     --success-600: #059669;
     --warning-600: #b45309;
     --purple-600: #6d28d9;
+  }
+  
+  /* Force maximum contrast in high contrast mode */
+  * {
+    color: var(--text-primary) !important;
+    background-color: var(--card-background) !important;
+  }
+  
+  /* Ensure text is always visible */
+  body.light-theme * {
+    color: #000000 !important;
+    background-color: #ffffff !important;
+  }
+  
+  body:not(.light-theme) * {
+    color: #ffffff !important;
+    background-color: #000000 !important;
   }
 }
 

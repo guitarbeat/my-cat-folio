@@ -93,9 +93,16 @@ const Modal = memo(({ title, isOpen, children }) => {
 
   return (
     <div className={styles.modalOverlay}>
-      <div className={styles.modal}>
-        <h3>{title}</h3>
-        {children}
+      <div 
+        className={styles.modal}
+        role="dialog"
+        aria-labelledby="modal-title"
+        aria-describedby="modal-content"
+      >
+        <h3 id="modal-title">{title}</h3>
+        <div id="modal-content">
+          {children}
+        </div>
       </div>
     </div>
   );
