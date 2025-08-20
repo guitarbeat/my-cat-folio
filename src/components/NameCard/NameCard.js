@@ -4,7 +4,7 @@
  * with consistent styling and behavior across the application.
  */
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import PropTypes from "prop-types";
 import styles from "./NameCard.module.css";
 
@@ -32,6 +32,9 @@ function NameCard({
 }) {
   const [rippleStyle, setRippleStyle] = useState({});
   const [isRippling, setIsRippling] = useState(false);
+  const [tiltStyle, setTiltStyle] = useState({});
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const cardRef = useRef(null);
 
   useEffect(() => {
     if (isRippling) {
@@ -39,6 +42,65 @@ function NameCard({
       return () => clearTimeout(timer);
     }
   }, [isRippling]);
+
+  // Tilt effect and mouse follow
+  useEffect(() => {
+    const card = cardRef.current;
+    if (!card || disabled) return;
+
+    const handleMouseMove = (e) => {
+      const rect = card.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      
+      // Calculate center of card
+      const centerX = rect.width / 2;
+      const centerY = rect.height / 2;
+      
+      // Calculate tilt angles (max 15 degrees)
+      const tiltX = ((y - centerY) / centerY) * -15;
+      const tiltY = ((x - centerX) / centerX) * 15;
+      
+      // Calculate mouse position for background effect
+      const mouseX = ((x / rect.width) * 100);
+      const mouseY = ((y / rect.height) * 100);
+      
+      setTiltStyle({
+        transform: `perspective(1000px) rotateX(${tiltX}deg) rotateY(${tiltY}deg) scale3d(1.05, 1.05, 1.05)`,
+        transition: 'transform 0.1s ease-out'
+      });
+      
+      setMousePosition({ x: mouseX, y: mouseY });
+      
+      // Set CSS custom properties for mouse position
+      if (card) {
+        card.style.setProperty('--mouse-x', `${mouseX}%`);
+        card.style.setProperty('--mouse-y', `${mouseY}%`);
+      }
+    };
+
+    const handleMouseLeave = () => {
+      setTiltStyle({
+        transform: 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)',
+        transition: 'transform 0.5s ease-out'
+      });
+      setMousePosition({ x: 50, y: 50 });
+      
+      // Reset CSS custom properties
+      if (card) {
+        card.style.setProperty('--mouse-x', '50%');
+        card.style.setProperty('--mouse-y', '50%');
+      }
+    };
+
+    card.addEventListener('mousemove', handleMouseMove);
+    card.addEventListener('mouseleave', handleMouseLeave);
+
+    return () => {
+      card.removeEventListener('mousemove', handleMouseMove);
+      card.removeEventListener('mouseleave', handleMouseLeave);
+    };
+  }, [disabled]);
 
   const handleInteraction = (event) => {
     if (disabled) {
@@ -66,6 +128,26 @@ function NameCard({
     }
   };
 
+  // Enhanced accessibility for button state
+  const getAriaLabel = () => {
+    let label = name;
+    if (description) {
+      label += ` - ${description}`;
+    }
+    if (isSelected) {
+      label += ' (selected)';
+    }
+    if (disabled) {
+      label += ' (disabled)';
+    }
+    return label;
+  };
+
+  // Generate safe ID for aria-describedby
+  const getSafeId = (text) => {
+    return text.replace(/[^a-zA-Z0-9]/g, '-').toLowerCase();
+  };
+
   const cardClasses = [
     styles.card,
     styles[size],
@@ -77,17 +159,29 @@ function NameCard({
     .join(" ");
 
   return (
-    <div
+    <button
+      ref={cardRef}
       className={cardClasses}
       onClick={handleInteraction}
       onKeyDown={handleInteraction}
-      role="button"
-      tabIndex={disabled ? -1 : 0}
-      aria-disabled={disabled}
-      aria-selected={isSelected}
+      disabled={disabled}
+      aria-pressed={isSelected}
+      aria-label={getAriaLabel()}
+      aria-describedby={description ? `${getSafeId(name)}-description` : undefined}
+      type="button"
+      style={tiltStyle}
     >
+      {/* Background mouse follow effect */}
+      <div 
+        className={styles.backgroundEffect}
+        style={{
+          background: `radial-gradient(circle at ${mousePosition.x}% ${mousePosition.y}%, rgba(var(--primary-rgb), 0.1) 0%, transparent 50%)`,
+          opacity: disabled ? 0 : 1
+        }}
+      />
+      
       <h3 className={styles.name}>{name}</h3>
-      {description && <p className={styles.description}>{description}</p>}
+      {description && <p id={`${getSafeId(name)}-description`} className={styles.description}>{description}</p>}
       {shortcutHint && (
         <span className={styles.shortcutHint} aria-hidden="true">
           {shortcutHint}
@@ -105,8 +199,8 @@ function NameCard({
           aria-hidden="true"
         />
       )}
-    </div>
-  );
+      </button>
+    );
 }
 
 NameCard.propTypes = {

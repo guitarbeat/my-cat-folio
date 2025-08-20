@@ -1,7 +1,7 @@
 @value cardBase, pageContainer, gridLayout from '../../styles/shared.module.css';
 
 .container {
-  composes: container from "../../styles/base.css";
+  composes: container from "../../styles/global.css";
   position: relative;
   z-index: var(--z-0);
   width: 100%;
@@ -89,7 +89,7 @@
 }
 
 .statCard {
-  composes: cardinteractive from "../../styles/base.css";
+  composes: cardInteractive from "../../styles/global.css";
   position: relative;
   min-width: 140px;
   padding: 1.5rem;
@@ -134,7 +134,7 @@
 }
 
 .startNewButton {
-  composes: btnprimary from "../../styles/base.css";
+  composes: btnPrimary from "../../styles/global.css";
   display: inline-flex;
   gap: var(--space-2);
   align-items: center;
@@ -204,7 +204,7 @@
 }
 
 .tournamentBracket {
-  composes: cardinteractive from "../../styles/base.css";
+  composes: cardInteractive from "../../styles/global.css";
   padding: var(--space-8);
   margin: var(--space-8) 0;
   overflow-x: auto;
@@ -404,7 +404,7 @@ body:not(.light-theme) {
 
 /* Tournament Bracket */
 .bracketContainer {
-  composes: cardinteractive from "../../styles/base.css";
+  composes: cardInteractive from "../../styles/global.css";
   padding: var(--space-4);
   margin-bottom: var(--space-6);
   overflow-x: auto;
@@ -419,7 +419,7 @@ body:not(.light-theme) {
 }
 
 .actionButton {
-  composes: btnprimary from "../../styles/base.css";
+  composes: btnPrimary from "../../styles/global.css";
   min-width: 200px;
 }
 

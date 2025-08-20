@@ -119,7 +119,7 @@
   height: calc(1.5rem * var(--scale));
   content: "";
   border: var(--cat-outline) solid var(--linesize);
-  border-color: #444; /* Dark gray instead of black */
+  border-color: var(--border-color); /* Use theme border color */
   border-top: none;
   border-radius: 0 0 50% 50% / 0 0 100% 100%;
 }

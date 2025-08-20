@@ -90,7 +90,7 @@ body:not(.light-theme) {
 
 /* Button Styles */
 .button {
-  composes: btn from "../../styles/base.css";
+  composes: btn from "../../styles/global.css";
   display: inline-flex;
   gap: 0.25rem;
   align-items: center;
@@ -111,7 +111,7 @@ body:not(.light-theme) {
 }
 
 .buttonDelete {
-  composes: btndanger from "../../styles/base.css";
+  composes: btnDanger from "../../styles/global.css";
 }
 
 .buttonDelete:hover {
@@ -123,7 +123,7 @@ body:not(.light-theme) {
 }
 
 .buttonPrimary {
-  composes: btnprimary from "../../styles/base.css";
+  composes: btnPrimary from "../../styles/global.css";
 }
 
 .buttonPrimary:hover {
@@ -1421,12 +1421,29 @@ body:not(.light-theme) {
 
 .statItem:hover {
   transform: translateY(-2px);
+  background: var(--card-hover);
+  border: 1px solid var(--accent-primary);
+}
+
+/* Ensure proper contrast for selected/active states */
+.statItem:active,
+.statItem.selected {
+  background: var(--primary-50);
+  border: 1px solid var(--accent-primary);
+}
+
+/* Dark theme adjustments for better contrast */
+body:not(.light-theme) .statItem:active,
+body:not(.light-theme) .statItem.selected {
+  background: var(--primary-900);
+  border: 1px solid var(--accent-primary);
 }
 
 .statLabel {
   margin-bottom: 0.5rem;
   font-size: var(--text-sm);
   color: var(--text-secondary);
+  font-weight: 500; /* Ensure sufficient weight for contrast */
 }
 
 .statValue {
@@ -1438,6 +1455,34 @@ body:not(.light-theme) {
 .statEmoji {
   margin-top: 0.5rem;
   font-size: 1.5rem;
+}
+
+/* Ensure text remains visible in all states */
+.statItem:hover .statLabel,
+.statItem:hover .statValue,
+.statItem:active .statLabel,
+.statItem:active .statValue,
+.statItem.selected .statLabel,
+.statItem.selected .statValue {
+  color: var(--text-primary); /* Force primary text color for visibility */
+}
+
+/* Dark theme text contrast improvements */
+body:not(.light-theme) .statItem .statLabel {
+  color: var(--text-secondary);
+}
+
+body:not(.light-theme) .statItem .statValue {
+  color: var(--primary-400); /* Brighter primary color for dark theme */
+}
+
+body:not(.light-theme) .statItem:hover .statLabel,
+body:not(.light-theme) .statItem:hover .statValue,
+body:not(.light-theme) .statItem:active .statLabel,
+body:not(.light-theme) .statItem:active .statValue,
+body:not(.light-theme) .statItem.selected .statLabel,
+body:not(.light-theme) .statItem.selected .statValue {
+  color: var(--text-primary); /* Force white text for maximum contrast */
 }
 
 /* Responsive Adjustments */

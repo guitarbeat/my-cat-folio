@@ -20,6 +20,7 @@
   display: flex;
   flex-flow: row nowrap;
   align-items: center;
+  justify-content: space-between;
   height: 65px;
   padding: 0 1rem;
   margin: 0;
@@ -73,6 +74,22 @@
   display: flex;
   gap: 1rem;
   align-items: center;
+  width: 100%;
+  justify-content: space-between;
+}
+
+/* Navigation List */
+.navbar__menu-list {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 1rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  width: 100%;
+  flex-wrap: nowrap;
+  overflow: visible;
 }
 
 /* Transparent navbar for login page */
@@ -84,13 +101,13 @@
 
 /* Make text more readable in transparent navbar */
 .navbar.transparent .navbar__item {
-  color: #fff;
+  color: var(--text-primary);
   text-shadow: 0 1px 2px rgb(0 0 0 / 50%);
 }
 
 .navbar.transparent .navbar__item--logo .navbar__title {
   font-weight: 700;
-  color: #fff;
+  color: var(--text-primary);
   text-shadow: 0 1px 3px rgb(0 0 0 / 70%);
 }
 
@@ -114,7 +131,7 @@ body.light-theme .navbar:not(.transparent) {
 }
 
 body.light-theme .navbar:not(.transparent) .navbar__item {
-  color: var(--text-primary, #2c3544);
+  color: var(--text-primary, #1f2937);
 }
 
 /* Theme Switch */
@@ -150,11 +167,11 @@ body.light-theme .navbar:not(.transparent) .navbar__item {
 }
 
 .navbar .theme-switch.light-theme {
-  background-color: #e2e8f0;
+  background-color: var(--card-hover);
 }
 
 .navbar .theme-switch.light-theme .switch-handle {
-  background-color: #2c3544;
+  background-color: var(--text-primary);
   transform: translateX(18px);
 }
 
@@ -170,9 +187,11 @@ body.light-theme .navbar:not(.transparent) .navbar__item {
   padding: var(--navbar-padding-desktop);
   font-size: var(--local-font-size);
   font-weight: 600;
-  color: var(--text-primary, #f8fafc);
+  color: var(--text-primary, #ffffff);
   text-transform: uppercase;
   transition: all var(--transition-standard);
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 /* Underline effect */
@@ -198,15 +217,15 @@ body.light-theme .navbar:not(.transparent) .navbar__item {
 .navbar__item a:hover::after,
 .navbar__item a.active::after {
   width: 100%;
-  background-color: var(--primary-color, #5a5cff);
+  background-color: var(--primary-color, #4f46e5);
 }
 
 .navbar__item a:hover {
-  color: var(--primary-color, #5a5cff);
+  color: var(--primary-color, #4f46e5);
 }
 
 .navbar__item a.active {
-  color: var(--primary-color, #5a5cff);
+  color: var(--primary-color, #4f46e5);
 }
 
 /* Logo */
@@ -215,6 +234,27 @@ body.light-theme .navbar:not(.transparent) .navbar__item {
   gap: 0.5rem;
   align-items: center;
   margin-right: auto;
+  flex-shrink: 0;
+  min-width: 0;
+}
+
+.navbar__item--logo .navbar__logo-link {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  text-decoration: none;
+  color: inherit;
+  transition: opacity var(--transition-standard);
+}
+
+.navbar__item--logo .navbar__logo-link:hover {
+  opacity: 0.8;
+}
+
+.navbar__item--logo .navbar__logo-link:focus {
+  outline: 2px solid var(--text-primary, #f8fafc);
+  outline-offset: 2px;
+  border-radius: 4px;
 }
 
 .navbar__item--logo .navbar__logo {
@@ -226,6 +266,7 @@ body.light-theme .navbar:not(.transparent) .navbar__item {
 .navbar__item--logo .navbar__title {
   font-size: 1.25rem;
   font-weight: 700;
+  color: inherit;
 }
 
 /* User greeting */
@@ -272,7 +313,7 @@ body.light-theme .navbar:not(.transparent) .navbar__item {
 
 body.light-theme .scroll-to-top {
   color: var(--text-primary, #2c3544);
-  background-color: #fff;
+  background-color: var(--card-background);
   border-color: var(--text-primary, #2c3544);
 }
 
@@ -295,6 +336,10 @@ body.light-theme .scroll-to-top {
 
 body.light-theme .scroll-to-top:focus {
   box-shadow: 0 0 0 3px var(--text-primary, #2c3544);
+}
+
+body.light-theme .navbar__item--logo .navbar__logo-link:focus {
+  outline-color: var(--text-primary, #1f2937);
 }
 
 /* Mobile Styles */
@@ -347,7 +392,7 @@ body.light-theme .scroll-to-top:focus {
   .navbar__item {
     padding: 0.75rem 1rem;
     font-size: 1rem;
-    border-bottom: 1px solid var(--border-color, rgb(255 255 255 / 10%));
+    border-bottom: 1px solid var(--border-color);
   }
 
   .navbar__item:last-child {
@@ -392,11 +437,11 @@ body.light-theme .scroll-to-top:focus {
 
   /* Mobile menu item hover states */
   .navbar__item:hover {
-    background-color: var(--card-hover, rgb(255 255 255 / 5%));
+    background-color: var(--card-hover);
   }
 
   .navbar.light-theme .navbar__item:hover {
-    background-color: var(--card-hover, #f1f5f9);
+    background-color: var(--card-hover);
   }
 }
 

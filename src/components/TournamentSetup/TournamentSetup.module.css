@@ -1,6 +1,6 @@
 /* Base Layout */
 .container {
-  composes: container from "../../styles/base.css";
+  composes: container from "../../styles/global.css";
   width: 100%;
   max-width: var(--container-max-width);
   padding: var(--space-4);
@@ -33,7 +33,7 @@
 }
 
 .expandToggle {
-  composes: btnsecondary from "../../styles/base.css";
+  composes: btnSecondary from "../../styles/global.css";
   display: flex;
   gap: var(--space-2);
   align-items: center;
@@ -90,12 +90,12 @@
 }
 
 .heading {
-  composes: heading3 from "../../styles/base.css";
+  composes: heading3 from "../../styles/global.css";
   margin-bottom: var(--space-2);
 }
 
 .selectionGuide {
-  composes: text from "../../styles/base.css";
+  composes: text from "../../styles/global.css";
   margin-bottom: var(--space-4);
   color: var(--text-secondary);
 }
@@ -109,7 +109,7 @@
 
 /* Name Counter */
 .nameCount {
-  composes: cardinteractive from "../../styles/base.css";
+  composes: cardInteractive from "../../styles/global.css";
   padding: var(--space-4);
   margin: var(--space-6) 0;
 }
@@ -123,12 +123,13 @@
 
 .countText {
   font-size: var(--text-lg);
-  font-weight: 500;
+  font-weight: 600; /* Increased weight for better contrast */
   color: var(--text-primary);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1); /* Subtle shadow for better readability */
 }
 
 .selectAllButton {
-  composes: btnsecondary from "../../styles/base.css";
+  composes: btnSecondary from "../../styles/global.css";
 }
 
 .helperText {
@@ -146,7 +147,7 @@
 }
 
 .startButton {
-  composes: btnprimary from "../../styles/base.css";
+  composes: btnPrimary from "../../styles/global.css";
   display: flex;
   flex-direction: column;
   gap: var(--space-2);
@@ -174,7 +175,7 @@
 }
 
   .photoSidebarContent {
-  composes: cardinteractive from "../../styles/base.css";
+  composes: cardInteractive from "../../styles/global.css";
   padding: var(--space-4);
   margin-bottom: var(--space-4);
 }
@@ -207,7 +208,7 @@
 
 /* Suggestion Section */
 .suggestionSection {
-  composes: cardinteractive from "../../styles/base.css";
+  composes: cardInteractive from "../../styles/global.css";
   padding: var(--space-4);
 }
 
@@ -259,7 +260,7 @@
 }
 
 .submitButton {
-  composes: btnprimary from "../../styles/base.css";
+  composes: btnPrimary from "../../styles/global.css";
   width: 100%;
   margin-top: var(--space-2);
 }
@@ -308,7 +309,7 @@
   user-select: none;
   object-fit: contain;
   border-radius: var(--radius-xl);
-  box-shadow: var(--shadow-2xl);
+  box-shadow: var(--shadow-xl);
   transform-origin: center;
   transition: transform var(--duration-normal) var(--ease-out);
 }
@@ -372,7 +373,7 @@
 /* Base button styles */
 .minimizeButton,
 .closeButton {
-  composes: btnicon from "../../styles/base.css";
+  composes: btnIcon from "../../styles/global.css";
   display: flex;
   align-items: center;
   justify-content: center;
@@ -515,14 +516,50 @@ body:not(.light-theme) {
 /* Fix: export tokens for compound selectors and add missing classes used by JSX */
 .minimized {}
 .minimizedImage {}
-.nw {}
-.ne {}
-.sw {}
-.se {}
+
+/* Resize handle positions */
+.nw { top: 0; left: 0; cursor: nw-resize; }
+.ne { top: 0; right: 0; cursor: ne-resize; }
+.sw { bottom: 0; left: 0; cursor: sw-resize; }
+.se { bottom: 0; right: 0; cursor: se-resize; }
+
+/* Missing classes used by JSX */
+.enlargedImage {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+.resizeHandle {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  background: var(--primary-500);
+  border: 2px solid rgb(var(--white-rgb));
+  border-radius: var(--radius-full);
+  z-index: 10;
+}
+
+.minimizeButton {
+  composes: btnSecondary from "../../styles/global.css";
+  position: absolute;
+  top: var(--space-4);
+  right: var(--space-4);
+  z-index: 10;
+  padding: var(--space-2);
+  min-width: auto;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
 /* Missing layout hooks */
 .header {
-  composes: card from "../../styles/base.css";
+  composes: card from "../../styles/global.css";
   padding: var(--space-4);
   margin-bottom: var(--space-4);
 }

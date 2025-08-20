@@ -207,7 +207,7 @@
   margin: 0 0 0.5rem;
   font-size: 1.75rem;
   font-weight: 600;
-  color: #333;
+  color: var(--text-primary);
 }
 
 .loginTitle::after {
@@ -227,9 +227,9 @@
   font-size: 0.9rem;
   font-style: italic;
   line-height: 1.4;
-  color: #666;
-  background: rgb(0 0 0 / 2%);
-  border-left: 3px solid rgb(0 0 0 / 5%);
+  color: var(--text-secondary);
+  background: var(--card-hover);
+  border-left: 3px solid var(--border-color);
   border-radius: 0 8px 8px 0;
 }
 
@@ -289,27 +289,27 @@
   width: 100%;
   padding: 1rem 1.2rem;
   font-size: 1rem;
-  background: white;
-  border: 2px solid #e0e0e0;
+  background: var(--card-background);
+  border: 2px solid var(--border-color);
   border-radius: 12px;
-  box-shadow: 0 2px 6px rgb(0 0 0 / 3%);
+  box-shadow: 0 2px 6px var(--shadow-color-light);
   transition: all 0.2s ease;
 }
 
 .loginInput:focus {
   outline: none;
-  border-color: #4f46e5;
-  box-shadow: 0 0 0 3px rgb(79 70 229 / 15%);
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgb(var(--primary-rgb) / 15%);
 }
 
 .loginInput.error {
-  border-color: #ef4444;
+  border-color: var(--error-500);
 }
 
 .errorMessage {
   margin: 0.5rem 0 0;
   font-size: 0.875rem;
-  color: #ef4444;
+  color: var(--error-500);
 }
 
 .buttonGroup {
@@ -330,10 +330,10 @@
   color: white;
   text-align: center;
   cursor: pointer;
-  background: linear-gradient(135deg, #5a5cff, #4041c4);
+  background: linear-gradient(135deg, var(--primary-500), var(--primary-700));
   border: none;
   border-radius: 12px;
-  box-shadow: 0 4px 12px rgb(90 92 255 / 30%);
+  box-shadow: 0 4px 12px rgb(var(--primary-rgb) / 30%);
   transition: all 0.3s ease;
 }
 
@@ -355,8 +355,8 @@
 }
 
 .singleButton:hover:not(:disabled) {
-  background: linear-gradient(45deg, #4338ca, #4f46e5);
-  box-shadow: 0 8px 25px rgb(79 70 229 / 50%);
+  background: linear-gradient(45deg, var(--primary-700), var(--primary-600));
+  box-shadow: 0 8px 25px rgb(var(--primary-rgb) / 50%);
   transform: translateY(-3px);
 }
 
@@ -365,7 +365,7 @@
 }
 
 .singleButton:active:not(:disabled) {
-  box-shadow: 0 4px 16px rgb(79 70 229 / 40%);
+  box-shadow: 0 4px 16px rgb(var(--primary-rgb) / 40%);
   transform: translateY(-1px);
 }
 
@@ -419,7 +419,7 @@
   margin: 0;
   font-size: 0.85rem;
   line-height: 1.4;
-  color: #777;
+  color: var(--text-tertiary);
   text-align: center;
   transition: all 0.3s ease;
   animation: fadeIn 0.5s ease;
@@ -435,13 +435,13 @@
   margin: 0.5rem 0 0;
   font-size: 0.8rem;
   font-style: italic;
-  color: #777;
+  color: var(--text-tertiary);
 }
 
 .namePreview {
   padding: 0.5rem;
   text-align: center;
-  background: rgb(0 0 0 / 3%);
+  background: var(--card-hover);
   border-radius: 8px;
 }
 
@@ -449,7 +449,7 @@
   position: relative;
   display: inline-block;
   font-weight: 600;
-  color: #4f46e5;
+  color: var(--primary-color);
 }
 
 .nameHighlight::after {
@@ -459,7 +459,7 @@
   width: 100%;
   height: 2px;
   content: "";
-  background: rgb(79 70 229 / 30%);
+  background: rgb(var(--primary-rgb) / 30%);
   border-radius: 2px;
 }
 
@@ -473,8 +473,8 @@
   padding-top: 4px;
   margin: 0;
   font-size: 0.85rem;
-  color: #666;
-  border-top: 1px dashed rgb(0 0 0 / 10%);
+  color: var(--text-secondary);
+  border-top: 1px dashed var(--border-color);
   opacity: 0.8;
 }
 
@@ -579,11 +579,11 @@
   }
 
   .loginTitle::after {
-    background: linear-gradient(to right, #6366f1, transparent);
+    background: linear-gradient(to right, var(--primary-500), transparent);
   }
 
   .catFact {
-    color: #9ca3af;
+    color: var(--text-tertiary);
     background: rgb(255 255 255 / 5%);
     border-left-color: rgb(255 255 255 / 10%);
   }
@@ -599,49 +599,49 @@
   }
 
   .helperText {
-    color: #9ca3af;
+    color: var(--text-tertiary);
     background: rgb(255 255 255 / 3%);
     border-color: rgb(255 255 255 / 10%);
   }
 
   .singleButton {
     color: white;
-    background: #222;
-    border-color: #444;
+    background: var(--card-background);
+    border-color: var(--border-color);
   }
 
   .singleButton::before {
-    background: linear-gradient(45deg, #333, #222);
+    background: linear-gradient(45deg, var(--card-hover), var(--card-background));
   }
 
   .singleButton:hover:not(:disabled) {
-    background: #333;
-    border-color: #666;
+    background: var(--card-hover);
+    border-color: var(--border-color);
   }
 
   .singleButton:hover:not(:disabled)::before {
-    background: linear-gradient(45deg, #444, #333);
+    background: linear-gradient(45deg, var(--card-hover), var(--card-background));
   }
 
   .explainerText {
-    color: #9ca3af;
+    color: var(--text-tertiary);
   }
 
   .namePreview {
-    background: rgb(79 70 229 / 10%);
-    border-color: rgb(99 102 241 / 20%);
+    background: rgb(var(--primary-rgb) / 10%);
+    border-color: rgb(var(--primary-rgb) / 20%);
   }
 
   .nameHighlight {
-    color: #818cf8;
+    color: var(--primary-400);
   }
 
   .nameHighlight::after {
-    background: rgb(99 102 241 / 40%);
+    background: rgb(var(--primary-rgb) / 40%);
   }
 
   .randomNameIndicator {
-    background: rgb(79 70 229 / 15%);
+    background: rgb(var(--primary-rgb) / 15%);
   }
 
   @keyframes pulse {
@@ -662,7 +662,7 @@
   }
 
   .randomNameExample {
-    color: #9ca3af;
+    color: var(--text-tertiary);
     border-top-color: rgb(255 255 255 / 10%);
   }
 }
@@ -671,11 +671,11 @@
 :global(body.light-theme) {
   .singleButton {
     color: white;
-    background: linear-gradient(45deg, #4f46e5, #6366f1);
+    background: linear-gradient(45deg, var(--primary-600), var(--primary-500));
     border: none;
   }
 
   .singleButton:hover:not(:disabled) {
-    background: linear-gradient(45deg, #4338ca, #4f46e5);
+    background: linear-gradient(45deg, var(--primary-700), var(--primary-600));
   }
 }
