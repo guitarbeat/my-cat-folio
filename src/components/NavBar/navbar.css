@@ -217,6 +217,25 @@ body.light-theme .navbar:not(.transparent) .navbar__item {
   margin-right: auto;
 }
 
+.navbar__item--logo .navbar__logo-link {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  text-decoration: none;
+  color: inherit;
+  transition: opacity var(--transition-standard);
+}
+
+.navbar__item--logo .navbar__logo-link:hover {
+  opacity: 0.8;
+}
+
+.navbar__item--logo .navbar__logo-link:focus {
+  outline: 2px solid var(--text-primary, #f8fafc);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
 .navbar__item--logo .navbar__logo {
   width: 30px;
   height: 30px;
@@ -295,6 +314,10 @@ body.light-theme .scroll-to-top {
 
 body.light-theme .scroll-to-top:focus {
   box-shadow: 0 0 0 3px var(--text-primary, #2c3544);
+}
+
+body.light-theme .navbar__item--logo .navbar__logo-link:focus {
+  outline-color: var(--text-primary, #2c3544);
 }
 
 /* Mobile Styles */

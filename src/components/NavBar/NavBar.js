@@ -187,14 +187,24 @@ function NavBar({
   // Add site logo/name
   const logoItem = (
     <li key="logo" className="navbar__item navbar__item--logo">
-      <img
-        src={`${process.env.PUBLIC_URL}/images/cat.gif`}
-        alt="Cat animation"
-        className="navbar__logo"
-        width="30"
-        height="30"
-      />
-      <span className="navbar__title">Meow Namester</span>
+      <a 
+        href="#" 
+        onClick={(e) => {
+          e.preventDefault();
+          setView('home');
+        }}
+        className="navbar__logo-link"
+        aria-label="Go to home page"
+      >
+        <img
+          src={`${process.env.PUBLIC_URL}/images/cat.gif`}
+          alt="Cat animation"
+          className="navbar__logo"
+          width="30"
+          height="30"
+        />
+        <span className="navbar__title">Meow Namester</span>
+      </a>
     </li>
   );
 
@@ -203,7 +213,9 @@ function NavBar({
   if (isLoggedIn && userName) {
     userInfo = (
       <li key="user" className="navbar__item navbar__item--user">
-        <span className="navbar__greeting">Welcome, {userName}</span>
+        <span className="navbar__greeting" aria-label={`Welcome, ${userName}`}>
+          Welcome, {userName}
+        </span>
       </li>
     );
   }
@@ -214,20 +226,20 @@ function NavBar({
   return (
     <>
       <nav className={navbarClass}>
-        {logoItem}
-        <button
-          className="navbar__mobile-menu-button"
-          onClick={handleMobileMenuClick}
-          aria-label="Toggle menu"
-          aria-expanded={isMobileMenuOpen}
-        >
-          <span className="navbar__mobile-menu-icon"></span>
-        </button>
         <div className="navbar__menu-container">
           <ul className="navbar__menu-list" role="menubar">
+            {logoItem}
             {userInfo}
             {navLinks}
           </ul>
+          <button
+            className="navbar__mobile-menu-button"
+            onClick={handleMobileMenuClick}
+            aria-label="Toggle menu"
+            aria-expanded={isMobileMenuOpen}
+          >
+            <span className="navbar__mobile-menu-icon"></span>
+          </button>
           <button
             className={`theme-switch ${isLightTheme ? "light-theme" : ""}`}
             onClick={handleThemeClick}
