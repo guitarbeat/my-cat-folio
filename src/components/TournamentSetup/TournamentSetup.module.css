@@ -174,7 +174,7 @@
   top: var(--space-4);
 }
 
-  .photoSidebarContent {
+.photoSidebarContent {
   composes: cardInteractive from "../../styles/global.css";
   padding: var(--space-4);
   margin-bottom: var(--space-4);
@@ -438,26 +438,7 @@
   }
 }
 
-/* Dark Mode */
-body:not(.light-theme) {
-  .tournamentSteps li::before {
-    color: var(--primary-200);
-    background: var(--primary-900);
-  }
-
-  .formGroup input,
-  .formGroup textarea {
-    color: var(--text-primary-dark);
-    background: var(--surface-dark);
-    border-color: var(--border-color-dark);
-  }
-
-  .formGroup input:focus,
-  .formGroup textarea:focus {
-    border-color: var(--primary-400);
-    box-shadow: 0 0 0 2px rgb(var(--primary-rgb) / 30%);
-  }
-}
+/* Dark Mode - removed in favor of global theme tokens */
 
 /* Responsive Design */
 @media (width <= 1024px) {
@@ -514,14 +495,32 @@ body:not(.light-theme) {
 }
 
 /* Fix: export tokens for compound selectors and add missing classes used by JSX */
-.minimized {}
-.minimizedImage {}
+.minimized {
+}
+.minimizedImage {
+}
 
 /* Resize handle positions */
-.nw { top: 0; left: 0; cursor: nw-resize; }
-.ne { top: 0; right: 0; cursor: ne-resize; }
-.sw { bottom: 0; left: 0; cursor: sw-resize; }
-.se { bottom: 0; right: 0; cursor: se-resize; }
+.nw {
+  top: 0;
+  left: 0;
+  cursor: nw-resize;
+}
+.ne {
+  top: 0;
+  right: 0;
+  cursor: ne-resize;
+}
+.sw {
+  bottom: 0;
+  left: 0;
+  cursor: sw-resize;
+}
+.se {
+  bottom: 0;
+  right: 0;
+  cursor: se-resize;
+}
 
 /* Missing classes used by JSX */
 .enlargedImage {

@@ -235,39 +235,7 @@
   }
 }
 
-/* Dark mode adjustments */
-body:not(.light-theme) {
-  .header {
-    background: var(--surface-color);
-  }
-
-  .userName {
-    color: var(--primary-400);
-  }
-
-  .statCard {
-    background: var(--card-background);
-    border-color: var(--border-color);
-  }
-
-  .statValue {
-    color: var(--primary-400);
-  }
-
-  .loadingSpinner {
-    border-color: var(--primary-900);
-    border-top-color: var(--primary-400);
-  }
-
-  .tournamentBracket {
-    background: var(--surface-color);
-  }
-
-  .resultsHeader {
-    background: linear-gradient(135deg, var(--primary-700), var(--primary-800));
-    border-color: var(--primary-600);
-  }
-}
+/* Dark mode adjustments - removed in favor of CSS variable tokens */
 
 /* Responsive adjustments */
 @media (width <= 1024px) {

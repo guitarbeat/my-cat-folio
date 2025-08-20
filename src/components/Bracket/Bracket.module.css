@@ -270,73 +270,7 @@
   }
 }
 
-/* Dark mode adjustments */
-:global(body:not(.light-theme)) {
-  .container {
-    background: var(--surface-dark);
-  }
-
-  .roundHeader {
-    background: var(--surface-dark);
-    border-color: var(--border-color-dark);
-  }
-
-  .matchContent {
-    background: var(--surface-dark);
-    border-color: var(--border-color-dark);
-  }
-
-  .player {
-    background: var(--surface-dark);
-    border-color: var(--border-color-dark);
-  }
-
-  .playerWinner {
-    background: rgb(var(--primary-rgb) / 20%);
-    border-color: var(--primary-400);
-  }
-
-  .playerBothWin {
-    background: rgb(var(--success-rgb) / 20%);
-    border-color: var(--success-400);
-  }
-
-  .playerNeither {
-    background: rgb(var(--warning-rgb) / 10%);
-    border-color: var(--warning-300);
-  }
-
-  .playerBye {
-    background: var(--surface-dark);
-    border-color: var(--border-color-dark);
-  }
-
-  .matchConnector {
-    background: var(--primary-300);
-  }
-
-  .match:hover .matchConnector {
-    background: var(--primary-500);
-  }
-
-  .winnerBadge {
-    background: rgb(var(--primary-rgb) / 20%);
-  }
-
-  .tieBadge {
-    background: rgb(var(--success-rgb) / 20%);
-  }
-
-  .skipBadge {
-    background: rgb(var(--warning-rgb) / 20%);
-  }
-
-  .emptyState {
-    color: var(--text-secondary-dark);
-    background: var(--surface-dark);
-    border-color: var(--border-color-dark);
-  }
-}
+/* Dark mode adjustments - removed in favor of global theme tokens */
 
 /* Accessibility improvements */
 @media (prefers-reduced-motion: reduce) {

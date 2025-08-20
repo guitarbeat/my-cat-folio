@@ -64,7 +64,12 @@ img {
 }
 
 /* Ensure sufficient contrast for all text elements */
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   color: var(--text-primary);
   font-weight: 600; /* Ensure headings have sufficient weight for contrast */
 }
@@ -76,19 +81,13 @@ button {
 }
 
 /* Ensure form elements have good contrast */
-input, textarea, select {
+input,
+textarea,
+select {
   color: var(--text-primary);
   background-color: var(--card-background);
   border-color: var(--border-color);
 }
-
-
-
-
-
-
-
-
 
 /* ===== variables.css ===== */
 :root {
@@ -256,16 +255,16 @@ input, textarea, select {
   --z-popover: 400;
   --z-toast: 500;
 
-  /* Default Theme Variables (will be overridden by theme classes) */
-  --text-primary: #ffffff;
-  --text-secondary: #e2e8f0;
-  --text-tertiary: #cbd5e1;
-  --background-color: #0b1020;
-  --card-background: #121633;
-  --card-border: #263056;
-  --card-hover: #1a1f3d;
-  --border-color: #263056;
-  --surface-color: #111428;
+  /* Default Theme Variables (light theme by default) */
+  --text-primary: #111827;
+  --text-secondary: #1f2937;
+  --text-tertiary: #374151;
+  --background-color: #eef1f6;
+  --card-background: #ffffff;
+  --card-border: #d1d5db;
+  --card-hover: #f9fafb;
+  --border-color: #d1d5db;
+  --surface-color: #f4f6fa;
 }
 
 /* High Contrast Mode */
@@ -277,8 +276,6 @@ input, textarea, select {
     --warning-600: #b45309;
     --purple-600: #6d28d9;
   }
-  
-  
 }
 
 /* Reduced Motion */
@@ -336,17 +333,17 @@ body:not(.light-theme) {
   --primary-color: var(--primary-400);
   --primary-light: rgb(125 127 255 / 20%);
   --primary-dark: var(--primary-200);
-  --surface-color: #111428;
-  --background-color: #0b1020;
-  --card-background: #121633;
-  --card-border: #263056;
-  --card-hover: #1a1f3d;
+  --surface-color: #1a1f35; /* Softened from #111428 */
+  --background-color: #0f1420; /* Softened from #0b1020 */
+  --card-background: #1a1f3d; /* Softened from #121633 */
+  --card-border: #2a2f4a; /* Softened from #263056 */
+  --card-hover: #242a45; /* Softened from #1a1f3d */
 
   /* Synced dark-mode variables for components using legacy names */
-  --surface-dark: #111428;
-  --card-background-dark: #121633;
-  --card-hover-dark: #1a1f3d;
-  --border-color-dark: #263056;
+  --surface-dark: #1a1f35; /* Softened from #111428 */
+  --card-background-dark: #1a1f3d; /* Softened from #121633 */
+  --card-hover-dark: #242a45; /* Softened from #1a1f3d */
+  --border-color-dark: #2a2f4a; /* Softened from #263056 */
   --text-primary-dark: #ffffff;
   --text-secondary-dark: #e2e8f0;
   --text-primary: #ffffff; /* Pure white for maximum contrast */
@@ -362,10 +359,10 @@ body:not(.light-theme) {
   --shadow-color-light: rgb(0 0 0 / 15%);
   --shadow-color-medium: rgb(0 0 0 / 25%);
   --shadow-color-strong: rgb(0 0 0 / 35%);
-  --overlay-light: rgb(0 0 0 / 35%);
-  --overlay-medium: rgb(0 0 0 / 50%);
-  --overlay-dark: rgb(0 0 0 / 65%);
-  --overlay-darker: rgb(0 0 0 / 75%);
+  --overlay-light: rgb(0 0 0 / 25%); /* Reduced from 35% */
+  --overlay-medium: rgb(0 0 0 / 40%); /* Reduced from 50% */
+  --overlay-dark: rgb(0 0 0 / 55%); /* Reduced from 65% */
+  --overlay-darker: rgb(0 0 0 / 65%); /* Reduced from 75% */
 }
 
 /* ===== base.css ===== */
@@ -633,17 +630,7 @@ body {
   backdrop-filter: blur(8px);
 }
 
-/* Dark Mode Overrides */
-body:not(.light-theme) {
-  .glass {
-    background: var(--overlay-light);
-  }
-
-  .modal {
-    background: var(--surface-color);
-    border-color: var(--border-color);
-  }
-}
+/* Dark Mode Overrides - removed in favor of global theme tokens */
 
 /* Light Mode Overrides for Better Contrast */
 body.light-theme {
@@ -2021,18 +2008,7 @@ body.light-theme {
   }
 }
 
-/* Dark Mode Adjustments */
-body:not(.light-theme) {
-  .btn-secondary,
-  .list-item {
-    background: var(--surface-color);
-  }
-
-  .modal {
-    background: var(--surface-color);
-    border: 1px solid var(--border-color);
-  }
-}
+/* Dark Mode Adjustments - removed in favor of global theme tokens */
 
 /* ===== index.css (app rules) ===== */
 .button-primary:hover:not(:disabled) {
@@ -2244,25 +2220,7 @@ h1 {
   }
 }
 
-body:not(.light-theme) {
-  h1,
-  h2,
-  h3 {
-    color: var(--text-primary);
-  }
-
-  p {
-    color: var(--text-secondary);
-  }
-
-  .card-base:active {
-    transform: scale(0.98);
-  }
-
-  .main-content.sidebar-open {
-    opacity: 0.75;
-  }
-}
+/* Dark mode adjustments - removed in favor of global theme tokens */
 
 @media (prefers-contrast: more) {
   :root {
@@ -2394,6 +2352,3 @@ body:not(.light-theme) {
     }
   }
 }
-
-
-

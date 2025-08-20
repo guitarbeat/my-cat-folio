@@ -33,24 +33,7 @@
   filter: drop-shadow(0 1px 1px rgb(0 0 0 / 10%));
 }
 
-/* Dark mode adjustments */
-:global(body:not(.light-theme)) {
-  .button {
-    color: var(--text-primary-dark);
-    background: var(--primary-700);
-    border-color: var(--primary-800);
-  }
-
-  .button:hover {
-    background: var(--primary-800);
-    border-color: var(--primary-900);
-  }
-
-  .button:disabled {
-    background: var(--neutral-700);
-    border-color: var(--neutral-800);
-  }
-}
+/* Dark mode adjustments - removed in favor of global theme tokens */
 
 /* Responsive adjustments */
 @media (width <= 768px) {

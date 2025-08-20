@@ -214,14 +214,7 @@
   border-bottom: 2px solid var(--card-border);
 }
 
-/* Dark mode adjustments */
-body:not(.light-theme) {
-  .rankings-header {
-    color: white;
-    background: var(--primary-600);
-    border-bottom-color: var(--primary-700);
-  }
-}
+/* Dark mode adjustments - removed in favor of global theme tokens */
 
 .ranking-card {
   display: grid;
@@ -438,51 +431,4 @@ body:not(.light-theme) {
   }
 }
 
-/* Dark mode adjustments */
-:global(body:not(.light-theme)) {
-  .ranking-card:hover {
-    background: rgba(var(--primary-rgb), 0.15);
-    border-color: var(--primary-400);
-  }
-
-  .ranking-card.dragging {
-    background: rgba(var(--primary-rgb), 0.2);
-    border-color: var(--primary-300);
-  }
-
-  .rank-badge {
-    color: var(--primary-300);
-    background: rgba(var(--primary-rgb), 0.2);
-    border-color: var(--primary-400);
-  }
-
-  .ranking-card:hover .rank-badge {
-    color: var(--primary-200);
-    background: rgba(var(--primary-rgb), 0.3);
-    border-color: var(--primary-300);
-  }
-
-  .stats .rating {
-    color: var(--primary-300);
-  }
-
-  .ranking-card:hover .drag-handle {
-    color: var(--primary-300);
-  }
-
-  .ranking-header {
-    background: linear-gradient(
-      135deg,
-      var(--primary-600) 0%,
-      var(--primary-800) 100%
-    );
-    box-shadow:
-      0 0 0 1px var(--primary-400),
-      var(--shadow-lg),
-      0 0 20px rgba(var(--primary-rgb), 0.3);
-  }
-
-  .ranking-header h2 {
-    text-shadow: 0 2px 12px rgb(0 0 0 / 40%);
-  }
-}
+/* Dark mode adjustments - removed in favor of global theme tokens */

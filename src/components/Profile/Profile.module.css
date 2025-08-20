@@ -9,24 +9,15 @@
   --accent-primary: var(--primary-color);
   --accent-primary-hover: var(--primary-dark);
   --accent-danger: rgb(var(--error-rgb));
-  --accent-danger-hover: color-mix(in srgb, rgb(var(--error-rgb)) 85%, black 15%);
+  --accent-danger-hover: color-mix(
+    in srgb,
+    rgb(var(--error-rgb)) 85%,
+    black 15%
+  );
   --accent-success: var(--success-500);
 }
 
-/* Dark Mode Colors */
-body:not(.light-theme) {
-  /* Map to global dark theme tokens */
-  --bg-primary: var(--card-background);
-  --bg-secondary: var(--surface-color);
-  --text-primary: var(--text-primary);
-  --text-secondary: var(--text-secondary);
-  --border-color: var(--border-color);
-  --accent-primary: var(--primary-color);
-  --accent-primary-hover: var(--primary-light);
-  --accent-danger: rgb(var(--error-rgb));
-  --accent-danger-hover: color-mix(in srgb, rgb(var(--error-rgb)) 75%, white 25%);
-  --accent-success: var(--success-500);
-}
+/* Dark Mode Colors - removed in favor of global theme tokens */
 
 /* Container Layouts */
 .profileContainer {
@@ -389,104 +380,7 @@ body:not(.light-theme) {
   text-align: center;
 }
 
-/* Dark mode adjustments */
-body:not(.light-theme) {
-  .nameCard:not(.isHidden) {
-    background: linear-gradient(
-      135deg,
-      var(--bg-primary) 0%,
-      color-mix(in srgb, var(--success-900) 15%, var(--bg-primary)) 100%
-    );
-    border-left: 4px solid var(--success-500);
-  }
-
-  .nameCard.isHidden {
-    background: linear-gradient(
-      135deg,
-      var(--bg-primary) 0%,
-      color-mix(in srgb, var(--warning-900) 15%, var(--bg-primary)) 100%
-    );
-    border-left: 4px solid var(--warning-500);
-  }
-
-  .nameCard.isHidden .nameTitle::after {
-    color: var(--warning-300);
-    background: color-mix(in srgb, var(--warning-900) 30%, var(--bg-primary));
-  }
-
-  .stats {
-    background: var(--surface-dark);
-  }
-
-  .wins {
-    color: var(--success-400);
-    background: rgb(var(--success-rgb) / 20%);
-  }
-
-  .losses {
-    color: var(--error-400);
-    background: rgb(var(--error-rgb) / 20%);
-  }
-
-  .winRate {
-    color: var(--primary-400);
-    background: rgb(var(--primary-rgb) / 20%);
-  }
-
-  .matchInfo {
-    border-color: var(--border-color-dark);
-  }
-
-  .profileContainer {
-    background-color: var(--bg-secondary);
-  }
-
-  .profileHeader {
-    background-color: color-mix(
-      in srgb,
-      var(--bg-primary) 95%,
-      var(--accent-primary)
-    );
-    border-color: color-mix(
-      in srgb,
-      var(--border-color) 50%,
-      var(--accent-primary)
-    );
-  }
-
-  .profileHeader::before {
-    background: linear-gradient(
-      to right,
-      var(--accent-primary),
-      color-mix(in srgb, var(--accent-success) 70%, var(--bg-primary))
-    );
-    opacity: 0.8;
-  }
-
-  .mainContent {
-    background-color: transparent;
-  }
-
-  .aggregatedHeader {
-    padding-bottom: 1rem;
-    margin-bottom: 1.5rem;
-    background-color: color-mix(
-      in srgb,
-      var(--bg-primary) 95%,
-      var(--accent-primary)
-    );
-    border-bottom: 1px solid
-      color-mix(in srgb, var(--border-color) 60%, transparent);
-  }
-
-  .aggregatedHeader .sectionTitle {
-    color: var(--text-primary);
-  }
-
-  .aggregatedHeader .sectionSubtitle {
-    color: color-mix(in srgb, var(--text-secondary) 80%, white);
-  }
-}
+/* Dark mode adjustments - removed in favor of global theme tokens */
 
 /* Reduced Motion */
 @media (prefers-reduced-motion: reduce) {
@@ -915,28 +809,7 @@ body:not(.light-theme) {
   opacity: 1;
 }
 
-/* Dark mode refinements */
-body:not(.light-theme) {
-  .userCard.active {
-    background: linear-gradient(
-      165deg,
-      color-mix(in srgb, var(--bg-primary) 90%, var(--accent-primary)),
-      var(--bg-primary)
-    );
-  }
-
-  .userCard.active .userStats {
-    background: color-mix(
-      in srgb,
-      var(--bg-secondary) 85%,
-      var(--accent-primary)
-    );
-  }
-
-  .userStat {
-    background: color-mix(in srgb, var(--bg-primary) 95%, transparent);
-  }
-}
+/* Dark mode refinements - removed in favor of global theme tokens */
 
 /* Mobile refinements */
 @media (width <= 640px) {
@@ -1141,28 +1014,7 @@ body:not(.light-theme) {
   color: var(--text-primary);
 }
 
-/* Dark mode adjustments */
-body:not(.light-theme) {
-  .aggregatedCard {
-    background: color-mix(
-      in srgb,
-      var(--bg-primary) 95%,
-      var(--accent-primary)
-    );
-  }
-
-  .aggregatedCard:hover {
-    background: color-mix(
-      in srgb,
-      var(--bg-primary) 90%,
-      var(--accent-primary)
-    );
-  }
-
-  .aggregatedStats {
-    background-color: color-mix(in srgb, var(--bg-secondary) 80%, transparent);
-  }
-}
+/* Dark mode adjustments - removed in favor of global theme tokens */
 
 .chartsContainer {
   display: flex;
@@ -1227,25 +1079,7 @@ body:not(.light-theme) {
   }
 }
 
-body:not(.light-theme) {
-  .chartWrapper,
-  .pieChartWrapper {
-    background: color-mix(
-      in srgb,
-      var(--bg-primary) 95%,
-      var(--accent-primary)
-    );
-  }
-
-  .chartWrapper:hover,
-  .pieChartWrapper:hover {
-    background: color-mix(
-      in srgb,
-      var(--bg-primary) 90%,
-      var(--accent-primary)
-    );
-  }
-}
+/* Dark mode adjustments - removed in favor of global theme tokens */
 
 /* Mobile adjustments */
 @media (width <= 640px) {
@@ -1432,12 +1266,7 @@ body:not(.light-theme) {
   border: 1px solid var(--accent-primary);
 }
 
-/* Dark theme adjustments for better contrast */
-body:not(.light-theme) .statItem:active,
-body:not(.light-theme) .statItem.selected {
-  background: var(--primary-900);
-  border: 1px solid var(--accent-primary);
-}
+/* Dark theme adjustments - removed in favor of global theme tokens */
 
 .statLabel {
   margin-bottom: 0.5rem;
@@ -1467,23 +1296,7 @@ body:not(.light-theme) .statItem.selected {
   color: var(--text-primary); /* Force primary text color for visibility */
 }
 
-/* Dark theme text contrast improvements */
-body:not(.light-theme) .statItem .statLabel {
-  color: var(--text-secondary);
-}
-
-body:not(.light-theme) .statItem .statValue {
-  color: var(--primary-400); /* Brighter primary color for dark theme */
-}
-
-body:not(.light-theme) .statItem:hover .statLabel,
-body:not(.light-theme) .statItem:hover .statValue,
-body:not(.light-theme) .statItem:active .statLabel,
-body:not(.light-theme) .statItem:active .statValue,
-body:not(.light-theme) .statItem.selected .statLabel,
-body:not(.light-theme) .statItem.selected .statValue {
-  color: var(--text-primary); /* Force white text for maximum contrast */
-}
+/* Dark theme text contrast improvements - removed in favor of global theme tokens */
 
 /* Responsive Adjustments */
 @media (width <= 768px) {
@@ -1642,42 +1455,7 @@ body:not(.light-theme) .statItem.selected .statValue {
   transform: translateY(-2px);
 }
 
-/* Dark Mode Refinements */
-body:not(.light-theme) {
-  .aggregatedCard {
-    background: color-mix(
-      in srgb,
-      var(--bg-primary) 95%,
-      var(--accent-primary)
-    );
-  }
-
-  .aggregatedCard.isHidden {
-    background: color-mix(in srgb, var(--bg-secondary) 95%, transparent);
-    border-color: var(--border-color);
-  }
-
-  .aggregatedCard:hover {
-    background: color-mix(
-      in srgb,
-      var(--bg-primary) 90%,
-      var(--accent-primary)
-    );
-  }
-
-  .aggregatedStats {
-    background-color: color-mix(in srgb, var(--bg-secondary) 90%, transparent);
-  }
-
-  .statRow {
-    background-color: color-mix(in srgb, var(--bg-primary) 95%, transparent);
-  }
-
-  .chartWrapper,
-  .pieChartWrapper {
-    background-color: color-mix(in srgb, var(--bg-secondary) 95%, transparent);
-  }
-}
+/* Dark Mode Refinements - removed in favor of global theme tokens */
 
 /* Responsive Adjustments */
 @media (width <= 1024px) {
@@ -1775,24 +1553,7 @@ body:not(.light-theme) {
   box-shadow: 0 0 0 2px var(--primary-light);
 }
 
-/* Dark Mode Refinements */
-body:not(.light-theme) {
-  .chartHeader {
-    background: color-mix(in srgb, var(--bg-secondary) 95%, transparent);
-  }
-
-  .chartControls {
-    background: color-mix(
-      in srgb,
-      var(--bg-primary) 95%,
-      var(--accent-primary)
-    );
-  }
-
-  .chartSelect {
-    background: var(--bg-primary);
-  }
-}
+/* Dark Mode Refinements - removed in favor of global theme tokens */
 
 /* Responsive Adjustments */
 @media (width <= 768px) {
@@ -2046,57 +1807,7 @@ body:not(.light-theme) {
   border-radius: 0.25rem;
 }
 
-/* Dark mode adjustments */
-body:not(.light-theme) {
-  .ratingTrends {
-    background-color: color-mix(
-      in srgb,
-      var(--bg-primary) 95%,
-      var(--accent-primary)
-    );
-  }
-
-  .chartWrapper {
-    background-color: color-mix(in srgb, var(--bg-secondary) 95%, transparent);
-    border-color: color-mix(in srgb, var(--border-color) 80%, transparent);
-  }
-
-  .recentChanges {
-    background-color: color-mix(in srgb, var(--bg-secondary) 95%, transparent);
-  }
-
-  .changeItem {
-    background-color: color-mix(in srgb, var(--bg-primary) 95%, transparent);
-  }
-
-  .insightsContainer {
-    background-color: color-mix(
-      in srgb,
-      var(--bg-primary) 95%,
-      var(--accent-primary)
-    );
-  }
-
-  .insightCard {
-    background-color: color-mix(in srgb, var(--bg-secondary) 95%, transparent);
-  }
-
-  .insightItem {
-    background-color: color-mix(in srgb, var(--bg-primary) 95%, transparent);
-  }
-
-  .positive .changeValue {
-    background-color: color-mix(
-      in srgb,
-      var(--accent-success) 30%,
-      transparent
-    );
-  }
-
-  .negative .changeValue {
-    background-color: color-mix(in srgb, var(--accent-danger) 30%, transparent);
-  }
-}
+/* Dark mode adjustments - removed in favor of global theme tokens */
 
 /* Responsive adjustments */
 @media (width <= 1024px) {

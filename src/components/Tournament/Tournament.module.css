@@ -540,97 +540,7 @@
   }
 }
 
-/* Dark Mode
-   ========================================================================== */
-body:not(.light-theme) {
-  .vsSection {
-    background: rgb(var(--primary-rgb) / 20%);
-  }
-
-  .progressInfo,
-  .tournamentControls,
-  .bracketView {
-    background: var(--overlay-light);
-    backdrop-filter: blur(12px);
-  }
-
-  .matchup {
-    background: var(--card-background-dark);
-    border-color: var(--border-color-dark);
-  }
-
-  .modal {
-    background: var(--card-background-dark);
-  }
-
-  /* Improve contrast in dark mode */
-  .vsText {
-    color: var(--primary-400);
-  }
-
-  .extraOptionsButton {
-    background: var(--overlay-medium);
-  }
-
-  .soundControls {
-    background: var(--surface-dark);
-    border-color: var(--border-color-dark);
-  }
-
-  .soundToggleButton {
-    color: var(--text-primary-dark);
-    background: var(--surface-dark);
-    border-color: var(--border-color-dark);
-  }
-
-  .soundToggleButton:hover:not(:disabled) {
-    color: var(--primary-400);
-    background: var(--card-hover-dark);
-    border-color: var(--primary-400);
-  }
-
-  .soundToggleButton.muted {
-    color: var(--error-400);
-    background: rgb(var(--error-rgb) / 15%);
-    border-color: var(--error-400);
-  }
-
-  .soundToggleButton.muted:hover {
-    color: var(--error-300);
-    background: rgb(var(--error-rgb) / 20%);
-    border-color: var(--error-300);
-  }
-
-  .soundToggleButton.error {
-    color: var(--error-400);
-    background: rgb(var(--error-rgb) / 15%);
-    border-color: var(--error-400);
-  }
-
-  .trackInfo {
-    background: var(--surface-dark);
-    border-color: var(--border-color-dark);
-  }
-
-  .trackName {
-    color: var(--text-primary-dark);
-  }
-
-  .bracketToggle {
-    color: var(--text-secondary-dark);
-    background: var(--surface-dark);
-    border-color: var(--border-color-dark);
-  }
-
-  .bracketToggle:hover {
-    background: var(--card-hover-dark);
-  }
-
-  .bracketView {
-    background: var(--surface-dark);
-    border-color: var(--border-color-dark);
-  }
-}
+/* Dark Mode - removed in favor of global theme tokens */
 
 /* Accessibility
    ========================================================================== */
@@ -813,18 +723,7 @@ body:not(.light-theme) {
   }
 }
 
-/* Dark mode adjustments */
-:global(body:not(.light-theme)) {
-  .matchResult {
-    background: linear-gradient(135deg, var(--primary-600), var(--primary-700));
-    border-color: var(--primary-400);
-    box-shadow: 0 4px 12px rgb(0 0 0 / 30%);
-  }
-
-  .tournamentProgress {
-    color: var(--primary-200);
-  }
-}
+/* Dark mode adjustments - removed in favor of global theme tokens */
 
 /* Remove old name insight styles */
 .nameInsight,
@@ -919,25 +818,7 @@ body:not(.light-theme) {
   transform: scale(1.2);
 }
 
-/* Dark mode adjustments */
-:global(body:not(.light-theme)) {
-  .volumeControls {
-    background: var(--surface-dark);
-    border-color: var(--border-color-dark);
-  }
-
-  .volumeSlider {
-    background: var(--primary-700);
-  }
-
-  .volumeSlider::-webkit-slider-thumb {
-    background: var(--primary-400);
-  }
-
-  .volumeSlider::-moz-range-thumb {
-    background: var(--primary-400);
-  }
-}
+/* Dark mode adjustments - removed in favor of global theme tokens */
 
 /* Mobile adjustments */
 @media (width <= 768px) {
@@ -1052,9 +933,4 @@ body:not(.light-theme) {
   }
 }
 
-:global(body:not(.light-theme)) {
-  .musicControls {
-    background: var(--surface-dark);
-    border-color: var(--border-color-dark);
-  }
-}
+/* Dark mode adjustments - removed in favor of global theme tokens */

@@ -77,21 +77,7 @@
   }
 }
 
-/* Dark mode adjustments */
-:global(body:not(.light-theme)) {
-  .content {
-    background: var(--surface-dark);
-    border-color: var(--border-color-dark);
-  }
-
-  .title {
-    color: var(--error-400);
-  }
-
-  .message {
-    color: var(--text-secondary-dark);
-  }
-}
+/* Dark mode adjustments - removed in favor of global theme tokens */
 
 /* Responsive adjustments */
 @media (width <= 768px) {
