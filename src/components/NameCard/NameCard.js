@@ -66,6 +66,26 @@ function NameCard({
     }
   };
 
+  // Enhanced accessibility for button state
+  const getAriaLabel = () => {
+    let label = name;
+    if (description) {
+      label += ` - ${description}`;
+    }
+    if (isSelected) {
+      label += ' (selected)';
+    }
+    if (disabled) {
+      label += ' (disabled)';
+    }
+    return label;
+  };
+
+  // Generate safe ID for aria-describedby
+  const getSafeId = (text) => {
+    return text.replace(/[^a-zA-Z0-9]/g, '-').toLowerCase();
+  };
+
   const cardClasses = [
     styles.card,
     styles[size],
@@ -82,11 +102,14 @@ function NameCard({
       onClick={handleInteraction}
       onKeyDown={handleInteraction}
       disabled={disabled}
-      aria-selected={isSelected}
+      aria-pressed={isSelected}
+      aria-label={getAriaLabel()}
+      aria-describedby={description ? `${getSafeId(name)}-description` : undefined}
+
       type="button"
     >
       <h3 className={styles.name}>{name}</h3>
-      {description && <p className={styles.description}>{description}</p>}
+      {description && <p id={`${getSafeId(name)}-description`} className={styles.description}>{description}</p>}
       {shortcutHint && (
         <span className={styles.shortcutHint} aria-hidden="true">
           {shortcutHint}
