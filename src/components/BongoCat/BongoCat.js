@@ -81,20 +81,10 @@ const PawsContainer = ({
   pawsPosition,
 }) => (
   <div
-    className={styles.bongoContainer}
+    className={`${styles.bongoContainer} ${isVisible ? styles.bongoContainerVisible : styles.bongoContainerHidden}`}
     style={{
-      position: "absolute",
       top: `${containerTop + pawsOffsetY}px`,
-      left: "50%",
-      transform: "translateX(-50%)",
-      width: "180px",
-      maxWidth: "100%",
-      aspectRatio: "1",
       zIndex,
-      pointerEvents: "none",
-      transition: "top 0.2s ease-out, opacity 0.3s ease",
-      opacity: isVisible ? 1 : 0,
-      visibility: pawsVisibility,
       display,
     }}
   >
@@ -298,20 +288,10 @@ const BongoCat = memo(
       <>
         {/* Base cat body with lower z-index */}
         <div
-          className={styles.bongoContainer}
+          className={`${styles.bongoContainerPositioned} ${isVisible ? styles.bongoContainerVisible : styles.bongoContainerHidden}`}
           style={{
-            position: "absolute",
             top: `${containerTop}px`,
-            left: "50%",
-            transform: "translateX(-50%)",
-            width: "180px",
-            maxWidth: "100%",
-            aspectRatio: "1",
             zIndex: catBodyZIndex,
-            pointerEvents: "none",
-            transition: "top 0.2s ease-out, opacity 0.3s ease",
-            opacity: isVisible ? 1 : 0,
-            visibility: isVisible ? "visible" : "hidden",
           }}
         >
           <div

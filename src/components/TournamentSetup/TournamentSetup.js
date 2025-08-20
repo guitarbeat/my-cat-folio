@@ -97,7 +97,7 @@ const NameSelection = ({ selectedNames, availableNames, onToggleName }) => (
           isSelected={selectedNames.some((n) => n.id === nameObj.id)}
           onClick={() => onToggleName(nameObj)}
           size="small"
-          // shortcutHint={`Press Enter to ${selectedNames.some(n => n.id === nameObj.id) ? 'deselect' : 'select'} ${nameObj.name}`}
+        // shortcutHint={`Press Enter to ${selectedNames.some(n => n.id === nameObj.id) ? 'deselect' : 'select'} ${nameObj.name}`}
         />
       ))}
     </div>
@@ -267,7 +267,7 @@ function useTournamentSetup() {
         // Sort names alphabetically for better UX
 
         const sortedNames = filteredNames.sort((a, b) => a.name.localeCompare(b.name));
-        
+
         devLog('🎮 TournamentSetup: Data loaded', {
 
           availableNames: sortedNames.length,
@@ -609,7 +609,7 @@ function TournamentSetupContent({ onStart }) {
           >
             <div className={styles.overlayContent}>
               <div
-                className={styles.imageWrapper}
+                className={`${styles.imageWrapperDynamic} ${styles.imageWrapper}`}
                 style={{
                   width: `${image.size.width}%`,
                   height: `${image.size.height}%`,
@@ -620,9 +620,7 @@ function TournamentSetupContent({ onStart }) {
                   src={`/images/${image.src}`}
                   alt="Enlarged cat photo"
                   className={`${styles.enlargedImage} ${image.isMinimized ? styles.minimizedImage : ""}`}
-                  style={{
-                    cursor: image.isDragging ? "grabbing" : "grab",
-                  }}
+                  className={`${styles.enlargedImage} ${image.isDragging ? styles.imageWrapperDragging : styles.imageWrapperNotDragging}`}
                   onMouseDown={(e) => {
                     e.stopPropagation();
                     handleMouseDown(image.src, e);

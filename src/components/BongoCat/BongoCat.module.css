@@ -19,6 +19,43 @@
   transform: scale(var(--cat-size));
 }
 
+/* Dynamic positioning classes to replace inline styles */
+.bongoContainer {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 180px;
+  max-width: 100%;
+  aspect-ratio: 1;
+  pointer-events: none;
+  transition:
+    top 0.2s ease-out,
+    opacity 0.3s ease;
+}
+
+.bongoContainerPositioned {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 180px;
+  max-width: 100%;
+  aspect-ratio: 1;
+  pointer-events: none;
+  transition:
+    top 0.2s ease-out,
+    opacity 0.3s ease;
+}
+
+.bongoContainerVisible {
+  opacity: 1;
+  visibility: visible;
+}
+
+.bongoContainerHidden {
+  opacity: 0;
+  visibility: hidden;
+}
+
 .container * {
   position: absolute;
 }

@@ -300,6 +300,26 @@
     height var(--duration-normal) var(--ease-out);
 }
 
+/* Dynamic positioning classes to replace inline styles */
+.imageWrapperDynamic {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition:
+    width var(--duration-normal) var(--ease-out),
+    height var(--duration-normal) var(--ease-out),
+    transform var(--duration-normal) var(--ease-out);
+}
+
+.imageWrapperDragging {
+  cursor: grabbing;
+}
+
+.imageWrapperNotDragging {
+  cursor: grab;
+}
+
 .enlargedImage {
   position: relative;
   width: 100%;

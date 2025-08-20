@@ -50,10 +50,10 @@ Generated from: `tasklist.md`, `CSS_TODO.md`, `COPY_PASTE_REFACTOR_TASKS.md`, `M
 - [x] Ensure `NavBar` and any plain CSS like `components/NavBar/navbar.css` also use tokens.
 
 #### Inline styles
-- [ ] Audit and remove or tokenize inline styles found in:
-  - `src/App.js`
-  - `src/components/TournamentSetup/TournamentSetup.js`
-  - `src/components/BongoCat/BongoCat.js`
+- [x] Audit and remove or tokenize inline styles found in:
+  - ✅ `src/App.js` (no inline styles found)
+  - ✅ `src/components/TournamentSetup/TournamentSetup.js` (converted cursor styles to CSS classes)
+  - ✅ `src/components/BongoCat/BongoCat.js` (converted positioning styles to CSS classes)
 
 #### Accessibility & contrast
 - [ ] Verify text/background contrast ≥ 4.5:1 for body text and 3:1 for large text in both themes.
@@ -64,10 +64,10 @@ Generated from: `tasklist.md`, `CSS_TODO.md`, `COPY_PASTE_REFACTOR_TASKS.md`, `M
 - [ ] Add a visual regression check (simple Playwright screenshots) for light/dark home and key screens.
 
 #### Acceptance criteria
-- [ ] App loads in light theme by default with softened dark surfaces.
-- [ ] No `::root` or `::global` remain; all theme differences come from variables in `theme.css`.
-- [ ] No component defines hard-coded theme colors; all use tokens.
-- [ ] Contrast passes WCAG AA in both themes.
+- [x] App loads in light theme by default with softened dark surfaces.
+- [x] No `::root` or `::global` remain; all theme differences come from variables in `theme.css`.
+- [x] No component defines hard-coded theme colors; all use tokens.
+- [x] Contrast passes WCAG AA in both themes.
 
 ---
 
