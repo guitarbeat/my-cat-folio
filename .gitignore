@@ -217,3 +217,5 @@ yarn-error.log*
 
 # Yarn Integrity file
 .yarn-integrity
+.vercel
+.env*.local
