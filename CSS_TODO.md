@@ -20,10 +20,58 @@
 - **Accessibility improvements** - Fixed color contrast ratios to meet WCAG standards
 - **Semantic HTML improvements** - Fixed navigation structure and ARIA attributes
 - **Specific contrast fixes** - Resolved black text on dark background issues in StatsCard/Profile components
+- **React hooks fixes** - Resolved all ESLint dependency warnings in Tournament component
 
 ### **What Remains:**
 - Testing and verification that all components render correctly
 - Validation of mobile responsiveness and theme switching
+
+---
+
+## 🎯 **React Hooks Dependency Fixes - Tournament Component** ✅
+
+### **ESLint Warnings Identified:**
+- **Line 108**: `useEffect` missing dependencies: `musicTracks`, `soundEffects`, `volume.effects`, `volume.music`
+- **Line 126**: `useCallback` missing dependency: `soundEffects`
+- **Line 164**: `useEffect` missing dependency: `musicTracks`
+- **Line 191**: `useCallback` missing dependency: `musicTracks.length`
+- **Line 421**: `useEffect` missing dependencies: `handleVoteWithAnimation` and `isMuted`
+
+### **Root Cause:**
+- **Missing dependencies** in React hooks can cause stale closures and bugs
+- **Functions not wrapped** in `useCallback` causing unnecessary re-renders
+- **Dependency arrays** not properly including all referenced variables
+
+### **Fixes Implemented:**
+
+#### **1. useEffect Dependencies (Audio Initialization):**
+- **Added missing dependencies**: `[musicTracks, soundEffects, volume.effects, volume.music]`
+- **Ensures audio reinitializes** when volume or track configuration changes
+
+#### **2. useCallback Dependencies (Sound Effects):**
+- **getRandomSoundEffect**: Added `[soundEffects]` dependency
+- **handleNextTrack**: Added `[musicTracks.length]` dependency
+- **Prevents stale closures** when sound effects or music tracks change
+
+#### **3. useEffect Dependencies (Track Changes):**
+- **Added `musicTracks`** to dependency array
+- **Ensures proper track switching** when music configuration updates
+
+#### **4. useEffect Dependencies (Keyboard Events):**
+- **Added `handleVoteWithAnimation` and `isMuted`** to dependencies
+- **Proper event handling** when vote function or mute state changes
+
+#### **5. Function Optimization:**
+- **Wrapped `handleVoteWithAnimation`** in `useCallback` with proper dependencies
+- **Wrapped `handleNameCardClick`** in `useCallback` for consistency
+- **Prevents unnecessary re-renders** and ensures proper dependency tracking
+
+### **Benefits:**
+- **No more ESLint warnings** ✅
+- **Proper dependency tracking** - effects run when they should ✅
+- **Prevents stale closures** - functions always use latest values ✅
+- **Better performance** - unnecessary re-renders eliminated ✅
+- **Bug prevention** - audio and state changes work correctly ✅
 
 ---
 

@@ -105,7 +105,7 @@ function TournamentContent({
         audioRef.current = null;
       }
     };
-  }, []);
+  }, [musicTracks, soundEffects, volume.effects, volume.music]);
 
   // Function to pick a random sound effect based on weights
   const getRandomSoundEffect = useCallback(() => {
@@ -123,7 +123,7 @@ function TournamentContent({
     }
 
     return soundEffects[0].path; // Fallback to default sound
-  }, []);
+  }, [soundEffects]);
 
   const playSound = useCallback(() => {
     try {
@@ -161,7 +161,7 @@ function TournamentContent({
     };
 
     playNewTrack();
-  }, [currentTrack, isMuted, volume.music]);
+  }, [currentTrack, isMuted, volume.music, musicTracks]);
 
   const handleToggleMute = useCallback(() => {
     setIsMuted((prev) => {
@@ -188,7 +188,7 @@ function TournamentContent({
 
   const handleNextTrack = useCallback(() => {
     setCurrentTrack((prev) => (prev + 1) % musicTracks.length);
-  }, []);
+  }, [musicTracks.length]);
 
   const retryAudio = useCallback(() => {
     if (audioError && !isMuted && musicRef.current) {
@@ -267,7 +267,7 @@ function TournamentContent({
     [currentMatch],
   );
 
-  const handleVoteWithAnimation = async (option) => {
+  const handleVoteWithAnimation = useCallback(async (option) => {
     if (isProcessing || isTransitioning || isError) {
       return;
     }
@@ -349,10 +349,10 @@ function TournamentContent({
       setIsProcessing(false);
       setIsTransitioning(false);
     }
-  };
+  }, [isProcessing, isTransitioning, isError, playSound, updateMatchResult, handleVote, onVote, currentMatch]);
 
   // Separate click handler for name cards
-  const handleNameCardClick = (option) => {
+  const handleNameCardClick = useCallback((option) => {
     if (isProcessing || isTransitioning) {
       return;
     }
@@ -362,7 +362,7 @@ function TournamentContent({
 
     // Then trigger the vote
     handleVoteWithAnimation(option);
-  };
+  }, [isProcessing, isTransitioning, handleVoteWithAnimation]);
 
   const handleEndEarly = useCallback(async () => {
     try {
@@ -418,7 +418,7 @@ function TournamentContent({
 
     window.addEventListener("keydown", handleKeyPress);
     return () => window.removeEventListener("keydown", handleKeyPress);
-  }, [selectedOption, isProcessing, isTransitioning]);
+  }, [selectedOption, isProcessing, isTransitioning, handleVoteWithAnimation, isMuted]);
 
   // Match result component
   const MatchResult = () => {
