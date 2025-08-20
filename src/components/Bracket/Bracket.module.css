@@ -1,5 +1,5 @@
 .container {
-  composes: cardinteractive from "../../styles/base.css";
+  composes: cardInteractive from "../../styles/global.css";
   width: 100%;
   padding: var(--space-4);
   overflow-x: auto;
@@ -40,7 +40,7 @@
 }
 
 .roundHeader {
-  composes: cardinteractive from "../../styles/base.css";
+  composes: cardInteractive from "../../styles/global.css";
   padding: var(--space-2);
   margin-bottom: var(--space-4);
   text-align: center;
@@ -107,7 +107,7 @@
 }
 
 .matchContent {
-  composes: cardinteractive from "../../styles/base.css";
+  composes: cardInteractive from "../../styles/global.css";
   position: relative;
   z-index: 2;
   width: 100%;

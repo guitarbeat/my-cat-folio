@@ -1,5 +1,5 @@
 .container {
-  composes: container from "../../styles/base.css";
+  composes: container from "../../styles/global.css";
   display: flex;
   flex-direction: column;
   gap: var(--space-6);
@@ -11,7 +11,7 @@
 }
 
 .content {
-  composes: cardinteractive from "../../styles/base.css";
+  composes: cardInteractive from "../../styles/global.css";
   max-width: 600px;
   padding: var(--space-8);
   border-radius: var(--radius-xl);
@@ -24,20 +24,20 @@
 }
 
 .title {
-  composes: heading2 from "../../styles/base.css";
+  composes: heading2 from "../../styles/global.css";
   margin-bottom: var(--space-4);
   color: var(--error-600);
 }
 
 .message {
-  composes: text from "../../styles/base.css";
+  composes: text from "../../styles/global.css";
   margin-bottom: var(--space-6);
   line-height: 1.6;
   color: var(--text-secondary);
 }
 
 .refreshButton {
-  composes: btnprimary from "../../styles/base.css";
+  composes: btnPrimary from "../../styles/global.css";
   display: inline-flex;
   gap: var(--space-2);
   align-items: center;

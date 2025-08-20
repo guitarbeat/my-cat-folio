@@ -1,6 +1,6 @@
 /* Base Layout */
 .container {
-  composes: container from "../../styles/base.css";
+  composes: container from "../../styles/global.css";
   width: 100%;
   max-width: var(--container-max-width);
   padding: var(--space-4);
@@ -33,7 +33,7 @@
 }
 
 .expandToggle {
-  composes: btnsecondary from "../../styles/base.css";
+  composes: btnSecondary from "../../styles/global.css";
   display: flex;
   gap: var(--space-2);
   align-items: center;
@@ -90,12 +90,12 @@
 }
 
 .heading {
-  composes: heading3 from "../../styles/base.css";
+  composes: heading3 from "../../styles/global.css";
   margin-bottom: var(--space-2);
 }
 
 .selectionGuide {
-  composes: text from "../../styles/base.css";
+  composes: text from "../../styles/global.css";
   margin-bottom: var(--space-4);
   color: var(--text-secondary);
 }
@@ -109,7 +109,7 @@
 
 /* Name Counter */
 .nameCount {
-  composes: cardinteractive from "../../styles/base.css";
+  composes: cardInteractive from "../../styles/global.css";
   padding: var(--space-4);
   margin: var(--space-6) 0;
 }
@@ -128,7 +128,7 @@
 }
 
 .selectAllButton {
-  composes: btnsecondary from "../../styles/base.css";
+  composes: btnSecondary from "../../styles/global.css";
 }
 
 .helperText {
@@ -146,7 +146,7 @@
 }
 
 .startButton {
-  composes: btnprimary from "../../styles/base.css";
+  composes: btnPrimary from "../../styles/global.css";
   display: flex;
   flex-direction: column;
   gap: var(--space-2);
@@ -174,7 +174,7 @@
 }
 
   .photoSidebarContent {
-  composes: cardinteractive from "../../styles/base.css";
+  composes: cardInteractive from "../../styles/global.css";
   padding: var(--space-4);
   margin-bottom: var(--space-4);
 }
@@ -207,7 +207,7 @@
 
 /* Suggestion Section */
 .suggestionSection {
-  composes: cardinteractive from "../../styles/base.css";
+  composes: cardInteractive from "../../styles/global.css";
   padding: var(--space-4);
 }
 
@@ -259,7 +259,7 @@
 }
 
 .submitButton {
-  composes: btnprimary from "../../styles/base.css";
+  composes: btnPrimary from "../../styles/global.css";
   width: 100%;
   margin-top: var(--space-2);
 }
@@ -372,7 +372,7 @@
 /* Base button styles */
 .minimizeButton,
 .closeButton {
-  composes: btnicon from "../../styles/base.css";
+  composes: btnIcon from "../../styles/global.css";
   display: flex;
   align-items: center;
   justify-content: center;
@@ -522,7 +522,7 @@ body:not(.light-theme) {
 
 /* Missing layout hooks */
 .header {
-  composes: card from "../../styles/base.css";
+  composes: card from "../../styles/global.css";
   padding: var(--space-4);
   margin-bottom: var(--space-4);
 }

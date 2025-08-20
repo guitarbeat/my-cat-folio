@@ -72,7 +72,7 @@
 }
 
 .matchCount {
-  composes: textsm from "../../styles/base.css";
+  composes: textSm from "../../styles/global.css";
   color: var(--text-secondary);
 }
 
@@ -95,7 +95,7 @@
 }
 
 .matchup {
-  composes: cardinteractive from "../../styles/base.css";
+  composes: cardInteractive from "../../styles/global.css";
   display: flex;
   flex-direction: column;
   gap: var(--space-6);
@@ -168,7 +168,7 @@
 }
 
 .extraOptionsButton {
-  composes: btnsecondary from "../../styles/base.css";
+  composes: btnSecondary from "../../styles/global.css";
   min-width: 120px;
   transition: all var(--duration-normal) var(--ease-out);
 }
@@ -182,7 +182,7 @@
 }
 
 .selected {
-  composes: btnprimary from "../../styles/base.css";
+  composes: btnPrimary from "../../styles/global.css";
   background: var(--primary-color);
 }
 
@@ -209,7 +209,7 @@
 }
 
 .controlButton {
-  composes: btnprimary from "../../styles/base.css";
+  composes: btnPrimary from "../../styles/global.css";
 }
 
 .soundControls {
@@ -223,7 +223,7 @@
 }
 
 .soundToggleButton {
-  composes: btnsecondary from "../../styles/base.css";
+  composes: btnSecondary from "../../styles/global.css";
   display: flex;
   align-items: center;
   justify-content: center;
@@ -297,7 +297,7 @@
 }
 
 .bracketToggle {
-  composes: btnsecondary from "../../styles/base.css";
+  composes: btnSecondary from "../../styles/global.css";
   display: flex;
   gap: var(--space-2);
   align-items: center;
@@ -354,7 +354,7 @@
 /* Modal Components
    ========================================================================== */
 .modal {
-  composes: modal from "../../styles/base.css";
+  composes: modal from "../../styles/global.css";
 
   /* Improve modal accessibility */
   outline: none;
@@ -363,35 +363,35 @@
 }
 
 .modalBackdrop {
-  composes: modalbackdrop from "../../styles/base.css";
+  composes: modalBackdrop from "../../styles/global.css";
   animation: fadeIn var(--duration-normal) var(--ease-out);
 }
 
 .modalContent {
-  composes: flex-col from "../../styles/base.css";
+  composes: flex-col from "../../styles/global.css";
   gap: var(--space-4);
 }
 
 .modalTitle {
-  composes: heading2 from "../../styles/base.css";
+  composes: heading2 from "../../styles/global.css";
 }
 
 .modalText {
-  composes: text from "../../styles/base.css";
+  composes: text from "../../styles/global.css";
 }
 
 .modalActions {
-  composes: flex-center from "../../styles/base.css";
+  composes: flex-center from "../../styles/global.css";
   gap: var(--space-4);
   margin-top: var(--space-4);
 }
 
 .confirmButton {
-  composes: btnprimary from "../../styles/base.css";
+  composes: btnPrimary from "../../styles/global.css";
 }
 
 .cancelButton {
-  composes: btnsecondary from "../../styles/base.css";
+  composes: btnSecondary from "../../styles/global.css";
 }
 
 /* Animations
@@ -696,7 +696,7 @@ body:not(.light-theme) {
 }
 
 .randomizeButton {
-  composes: btnsecondary from "../../styles/base.css";
+  composes: btnSecondary from "../../styles/global.css";
   display: flex;
   gap: var(--space-2);
   align-items: center;
