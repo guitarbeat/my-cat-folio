@@ -363,7 +363,7 @@ export function useTournament({
     ],
   );
 
-  const runTournament = async (tournamentSorter) => {
+  const runTournament = useCallback(async (tournamentSorter) => {
     try {
       const initialState = {
         names,
@@ -436,7 +436,7 @@ export function useTournament({
       setCanUndo(false);
       throw error; // Propagate error to parent
     }
-  };
+  }, [names, existingRatings, currentMatchNumber, totalMatches, onComplete, updateTournamentState]);
 
   const handleUndo = useCallback(() => {
     if (isTransitioning || !canUndo || matchHistory.length === 0) {
