@@ -26,6 +26,52 @@
   /* Enhanced visual hierarchy */
   backdrop-filter: blur(8px);
   border-image: linear-gradient(135deg, var(--border-color), var(--card-border)) 1;
+  
+  /* 3D Tilt Effect */
+  transform-style: preserve-3d;
+  perspective: 1000px;
+}
+
+/* Background mouse follow effect */
+.backgroundEffect {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  z-index: 0;
+  border-radius: var(--radius-xl);
+  transition: background 0.1s ease-out;
+  mix-blend-mode: soft-light;
+}
+
+/* Enhanced 3D content positioning */
+.name,
+.description,
+.checkMark {
+  position: relative;
+  z-index: 1;
+  transform: translateZ(20px);
+  transition: transform var(--duration-normal) var(--ease-out);
+}
+
+/* Tilt effect enhancements */
+.card:not(.disabled):hover {
+  transform-style: preserve-3d;
+}
+
+/* Smooth tilt transitions */
+.card:not(.disabled) {
+  transition: transform 0.1s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+/* Enhanced shadow on tilt */
+.card:not(.disabled):hover {
+  box-shadow: 
+    0 20px 40px rgba(var(--primary-rgb), 0.1),
+    0 10px 20px rgba(0, 0, 0, 0.1),
+    var(--shadow-xl);
 }
 
 .small {
@@ -78,7 +124,6 @@
   background: var(--card-hover);
   border-color: var(--primary-400);
   box-shadow: var(--shadow-xl);
-  transform: translateY(-4px) scale(1.03);
 }
 
 .card:hover .name {
@@ -89,6 +134,50 @@
 .card:hover .description {
   opacity: 1;
   color: var(--text-primary);
+}
+
+/* Enhanced tilt hover effect */
+.card:hover .backgroundEffect {
+  background: radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%), 
+    rgba(var(--primary-rgb), 0.15) 0%, 
+    rgba(var(--primary-rgb), 0.05) 30%, 
+    transparent 70%);
+}
+
+/* Dynamic mouse position variables */
+.card {
+  --mouse-x: 50%;
+  --mouse-y: 50%;
+}
+
+/* Enhanced 3D depth on hover */
+.card:not(.disabled):hover .name {
+  transform: translateZ(30px) translateY(-2px);
+  text-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.card:not(.disabled):hover .description {
+  transform: translateZ(25px) translateY(-1px);
+  opacity: 1;
+}
+
+.card:not(.disabled):hover .checkMark {
+  transform: translateZ(35px) scale(1.1);
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+}
+
+/* Smooth tilt animation */
+.card:not(.disabled) {
+  animation: float 6s ease-in-out infinite;
+}
+
+.card:not(.disabled):hover {
+  animation: none;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px) rotateX(0deg) rotateY(0deg); }
+  50% { transform: translateY(-5px) rotateX(1deg) rotateY(1deg); }
 }
 
 .selected {
@@ -292,7 +381,7 @@
   }
 
   .card:active {
-    transform: scale(0.98);
+    transform: scale(0.98) rotateX(5deg) rotateY(5deg);
     background: var(--mobile-card-hover, var(--card-hover));
   }
 
@@ -305,11 +394,17 @@
   .selected:active {
     background: var(--primary-100);
     border-color: var(--primary-400);
+    transform: scale(0.98) rotateX(2deg) rotateY(2deg);
   }
 
   :global(body:not(.light-theme)) .selected:active {
     background: var(--primary-800);
     border-color: var(--primary-300);
+  }
+  
+  /* Disable tilt on touch devices */
+  .backgroundEffect {
+    opacity: 0.3;
   }
 }
 
@@ -355,5 +450,14 @@
 
   .card:active {
     transform: none;
+  }
+  
+  /* Disable tilt effects for reduced motion */
+  .backgroundEffect {
+    opacity: 0;
+  }
+  
+  .card:not(.disabled) {
+    transition: none;
   }
 }
