@@ -2,11 +2,11 @@
  * @module Login
  * @description User login component with fun cat-themed interactions.
  */
-import React, { useState, useEffect, useRef } from 'react';
-import PropTypes from 'prop-types';
-import devLog from '../../utils/logger';
-import styles from './Login.module.css';
-import BongoCat from '../BongoCat/BongoCat';
+import React, { useState, useEffect, useRef } from "react";
+import PropTypes from "prop-types";
+import devLog from "../../utils/logger";
+import styles from "./Login.module.css";
+import BongoCat from "../BongoCat/BongoCat";
 
 function Login({ onLogin }) {
   const [name, setName] = useState("");
@@ -134,8 +134,7 @@ function Login({ onLogin }) {
       <BongoCat
         containerRef={containerRef}
         color="#000"
-        onBongo={() => devLog('Cat bongoed!')}
-
+        onBongo={() => devLog("Cat bongoed!")}
       />
 
       <div className={styles.backgroundContainer}>
@@ -158,8 +157,8 @@ function Login({ onLogin }) {
             loading="eager"
           />
           <p className={styles.welcomeText}>
-            Join Aaron&apos;s quest to find the perfect cat name through science and
-            democracy!
+            Join Aaron&apos;s quest to find the perfect cat name through science
+            and democracy!
           </p>
         </section>
 
@@ -167,10 +166,31 @@ function Login({ onLogin }) {
           <div>
             <h2 className={styles.loginTitle}>Cat Name Olympics</h2>
             <p className={styles.catFact}>
-              {catFact || "Loading a fun cat fact..."}
+              {catFact ? (
+                <>
+                  <span className={styles.catFactIcon}>🐱</span>
+                  {catFact}
+                </>
+              ) : (
+                <span className={styles.loadingFact}>
+                  <span className={styles.loadingDots}>
+                    Loading a fun cat fact
+                  </span>
+                  <span className={styles.loadingDots}>...</span>
+                </span>
+              )}
             </p>
             {isTyping ? (
-              <p className={styles.helperText}>The cat is watching you type!</p>
+              <div className={styles.typingIndicator}>
+                <span className={styles.typingText}>
+                  The cat is watching you type!
+                </span>
+                <span className={styles.typingDots}>
+                  <span className={styles.dot}>.</span>
+                  <span className={styles.dot}>.</span>
+                  <span className={styles.dot}>.</span>
+                </span>
+              </div>
             ) : null}
           </div>
 
@@ -210,11 +230,24 @@ function Login({ onLogin }) {
                 Type your name to save your ratings, or leave it blank for a
                 surprise name!
               </p>
+              {name.trim() && (
+                <div className={styles.characterCounter}>
+                  <span className={styles.counterText}>
+                    {name.length}/30 characters
+                  </span>
+                  <div className={styles.counterBar}>
+                    <div
+                      className={styles.counterProgress}
+                      style={{ width: `${(name.length / 30) * 100}%` }}
+                    />
+                  </div>
+                </div>
+              )}
             </div>
 
             <button
               type="submit"
-              className={`${styles.singleButton} ${isLoading ? styles.loading : ""}`}
+              className={`${styles.singleButton} ${isLoading ? styles.loading : ""} ${name.trim() ? styles.hasName : ""}`}
               disabled={isLoading}
             >
               <span className={styles.buttonContent}>

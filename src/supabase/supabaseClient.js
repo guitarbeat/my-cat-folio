@@ -12,8 +12,8 @@
  *   .from('table_name')
  *   .select('*');
  *
- * @requires REACT_APP_SUPABASE_URL - Environment variable for Supabase project URL
- * @requires REACT_APP_SUPABASE_ANON_KEY - Environment variable for Supabase anonymous key
+ * @requires VITE_SUPABASE_URL - Environment variable for Supabase project URL (or BAG_NEXT_PUBLIC_SUPABASE_URL)
+ * @requires VITE_SUPABASE_ANON_KEY - Environment variable for Supabase anonymous key (or BAG_NEXT_PUBLIC_SUPABASE_ANON_KEY)
  */
 
 /* eslint-env node */
@@ -21,12 +21,12 @@ import { createClient } from '@supabase/supabase-js';
 import devLog from '../utils/logger';
 
 
-const supabaseUrl = process.env.REACT_APP_SUPABASE_URL;
-const supabaseAnonKey = process.env.REACT_APP_SUPABASE_ANON_KEY;
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || import.meta.env.BAG_NEXT_PUBLIC_SUPABASE_URL;
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || import.meta.env.BAG_NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
 if (!supabaseUrl || !supabaseAnonKey) {
   throw new Error(
-    "Missing Supabase environment variables. Please check your .env file.",
+    "Missing Supabase environment variables. Please check your .env file. Required: VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY (or BAG_NEXT_PUBLIC_SUPABASE_URL and BAG_NEXT_PUBLIC_SUPABASE_ANON_KEY)",
   );
 }
 
