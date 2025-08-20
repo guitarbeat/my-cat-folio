@@ -67,7 +67,7 @@ function TournamentContent({
   const [showMatchResult, setShowMatchResult] = useState(false);
   const [showBracket, setShowBracket] = useState(false);
 
-  const musicTracks = [
+  const musicTracks = useMemo(() => [
     { path: "/sounds/AdhesiveWombat - Night Shade.mp3", name: "Night Shade" },
     { path: "/sounds/MiseryBusiness.mp3", name: "Misery Business" },
     { path: "/sounds/what-is-love.mp3", name: "What is Love" },
@@ -76,15 +76,15 @@ function TournamentContent({
       name: "Ultimate Showdown (8-Bit)",
     },
     { path: "/sounds/Main Menu 1 (Ruins).mp3", name: "Ruins" },
-  ];
+  ], []);
 
   // Sound effects configuration with updated weights
-  const soundEffects = [
+  const soundEffects = useMemo(() => [
     { path: "/sounds/gameboy-pluck.mp3", weight: 0.5 },
     { path: "/sounds/wow.mp3", weight: 0.2 },
     { path: "/sounds/surprise.mp3", weight: 0.1 },
     { path: "/sounds/level-up.mp3", weight: 0.2 },
-  ];
+  ], []);
 
   // Initialize audio only once
   useEffect(() => {

@@ -167,11 +167,11 @@ body.light-theme .navbar:not(.transparent) .navbar__item {
 }
 
 .navbar .theme-switch.light-theme {
-  background-color: #e2e8f0;
+  background-color: var(--card-hover);
 }
 
 .navbar .theme-switch.light-theme .switch-handle {
-  background-color: #2c3544;
+  background-color: var(--text-primary);
   transform: translateX(18px);
 }
 
@@ -313,7 +313,7 @@ body.light-theme .navbar:not(.transparent) .navbar__item {
 
 body.light-theme .scroll-to-top {
   color: var(--text-primary, #2c3544);
-  background-color: #fff;
+  background-color: var(--card-background);
   border-color: var(--text-primary, #2c3544);
 }
 

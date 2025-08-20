@@ -4,7 +4,7 @@
  * Manages real-time synchronization of data between the client and Supabase backend.
  */
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { supabase } from "./supabaseClient";
 import { DEFAULT_RATING } from "../components/Profile/Profile";
 
@@ -41,7 +41,7 @@ function useSupabaseStorage(tableName, initialValue = [], userName = "") {
     };
   }, [tableName, userName]);
 
-  async function fetchData() {
+  const fetchData = useCallback(async () => {
     try {
       setLoading(true);
 
@@ -125,7 +125,7 @@ function useSupabaseStorage(tableName, initialValue = [], userName = "") {
     } finally {
       setLoading(false);
     }
-  }
+  }, [userName]);
 
   async function setValue(newValue) {
     if (!userName) {

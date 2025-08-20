@@ -470,7 +470,7 @@ body {
 
 .btnSecondary:hover:not(:disabled) {
   background: var(--button-secondary-hover, #333);
-  border-color: #555;
+  border-color: var(--border-color);
 }
 
 .btnDanger {

@@ -138,7 +138,7 @@ export function useTournament({
     setCurrentRatings(existingRatings);
 
     runTournament(newSorter);
-  }, [names, updateTournamentState]);
+  }, [names, updateTournamentState, existingRatings, runTournament]);
 
   // Define getCurrentRatings first since it's used in handleVote
   const getCurrentRatings = useCallback(() => {
@@ -464,7 +464,7 @@ export function useTournament({
     setTimeout(() => {
       setIsTransitioning(false);
     }, 500);
-  }, [isTransitioning, canUndo, matchHistory, names.length, sorter]);
+  }, [isTransitioning, canUndo, matchHistory, names.length, sorter, currentMatchNumber, updateTournamentState]);
 
   const progress = Math.round((currentMatchNumber / totalMatches) * 100);
 

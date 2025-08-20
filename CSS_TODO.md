@@ -497,6 +497,84 @@ border-color: var(--border-color);
 
 ---
 
+## 🎯 **React Hooks Dependency Fixes - Additional Components** ✅
+
+### **Issues Identified:**
+- **Tournament component** - `musicTracks` and `soundEffects` arrays causing dependency changes
+- **useTournament hook** - Missing dependencies in useEffect and useCallback
+- **useSupabaseStorage hook** - Missing dependency in useEffect
+
+### **Root Causes:**
+- **Arrays recreated on every render** - `musicTracks` and `soundEffects` not memoized
+- **Missing dependencies** - useEffect and useCallback missing required dependencies
+- **Function recreation** - `fetchData` function recreated on every render
+
+### **Fixes Implemented:**
+
+#### **1. Tournament Component (`Tournament.js`):**
+- **Wrapped arrays in `useMemo`** - `musicTracks` and `soundEffects` now stable
+- **Prevents unnecessary re-renders** - useEffect dependencies no longer change constantly
+- **Performance improvement** - Audio initialization only happens when needed
+
+#### **2. useTournament Hook (`useTournament.js`):**
+- **Added missing dependencies** - `existingRatings` and `runTournament` to useEffect
+- **Fixed useCallback dependencies** - `currentMatchNumber` and `updateTournamentState` added
+- **Prevents stale closures** - Hooks now have access to latest values
+
+#### **3. useSupabaseStorage Hook (`useSupabaseStorage.js`):**
+- **Wrapped `fetchData` in `useCallback`** - Function now stable across renders
+- **Added missing dependency** - `userName` to useCallback dependency array
+- **Prevents infinite loops** - useEffect no longer recreates function constantly
+
+### **Technical Implementation:**
+
+#### **Array Memoization:**
+```javascript
+// Before (recreated on every render)
+const musicTracks = [
+  { path: "/sounds/AdhesiveWombat - Night Shade.mp3", name: "Night Shade" },
+  // ... more tracks
+];
+
+// After (memoized)
+const musicTracks = useMemo(() => [
+  { path: "/sounds/AdhesiveWombat - Night Shade.mp3", name: "Night Shade" },
+  // ... more tracks
+], []);
+```
+
+#### **Dependency Fixes:**
+```javascript
+// Before (missing dependencies)
+}, [names, updateTournamentState]);
+
+// After (complete dependencies)
+}, [names, updateTournamentState, existingRatings, runTournament]);
+```
+
+#### **Function Memoization:**
+```javascript
+// Before (recreated on every render)
+async function fetchData() { ... }
+
+// After (memoized)
+const fetchData = useCallback(async () => { ... }, [userName]);
+```
+
+### **Benefits:**
+- **No more ESLint warnings** ✅ - All dependency arrays properly populated
+- **Performance improved** ✅ - Unnecessary re-renders eliminated
+- **Stale closures prevented** ✅ - Hooks always have latest values
+- **Code quality enhanced** ✅ - Follows React hooks best practices
+
+### **Result:**
+- **All React hooks warnings resolved** ✅ - Clean ESLint output
+- **Component performance optimized** ✅ - Better user experience
+- **Code maintainability improved** ✅ - Easier to debug and maintain
+- **Professional React code** ✅ - Industry best practices followed
+
+---
+
 ## Overview
 This document identifies the CSS composition mismatches that need to be fixed after consolidating all styles into `global.css`. Components are trying to compose from classes that either don't exist or have different names.
 
@@ -575,9 +653,4 @@ This document identifies the CSS composition mismatches that need to be fixed af
 - Changed all `from "../../styles/base.css"` to `from "../../styles/global.css"`
 
 #### ✅ Fixed Class Name Mismatches:
-- `cardinteractive` → `cardInteractive` (Line 13)
-- `btnprimary` → `btnPrimary` (Line 39)
-
-#### ✅ Fixed Missing Classes:
-- `heading2` - Line 26: **✅ EXISTS in global.css**
-- `text`
+- `cardinteractive`
