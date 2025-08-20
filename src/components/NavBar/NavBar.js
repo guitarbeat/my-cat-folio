@@ -224,8 +224,10 @@ function NavBar({
           <span className="navbar__mobile-menu-icon"></span>
         </button>
         <div className="navbar__menu-container">
-          {userInfo}
-          {navLinks}
+          <ul className="navbar__menu-list" role="menubar">
+            {userInfo}
+            {navLinks}
+          </ul>
           <button
             className={`theme-switch ${isLightTheme ? "light-theme" : ""}`}
             onClick={handleThemeClick}
@@ -247,6 +249,7 @@ function NavBar({
           onClick={scrollToTop}
           aria-label="Scroll to top"
           aria-hidden={!showScrollTop}
+          tabIndex={showScrollTop ? 0 : -1}
         >
           ↑
         </button>

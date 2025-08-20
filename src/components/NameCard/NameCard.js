@@ -77,14 +77,13 @@ function NameCard({
     .join(" ");
 
   return (
-    <div
+    <button
       className={cardClasses}
       onClick={handleInteraction}
       onKeyDown={handleInteraction}
-      role="button"
-      tabIndex={disabled ? -1 : 0}
-      aria-disabled={disabled}
+      disabled={disabled}
       aria-selected={isSelected}
+      type="button"
     >
       <h3 className={styles.name}>{name}</h3>
       {description && <p className={styles.description}>{description}</p>}
@@ -105,8 +104,8 @@ function NameCard({
           aria-hidden="true"
         />
       )}
-    </div>
-  );
+      </button>
+    );
 }
 
 NameCard.propTypes = {

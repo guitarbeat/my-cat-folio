@@ -15,6 +15,12 @@
   border-radius: var(--radius-lg);
   transition: all var(--duration-normal) var(--ease-out-expo);
   will-change: transform;
+  
+  /* Reset button defaults */
+  background: var(--card-background);
+  border: 1px solid var(--border-color);
+  font-family: inherit;
+  text-align: left;
 }
 
 .small {

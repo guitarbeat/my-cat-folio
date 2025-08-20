@@ -18,10 +18,44 @@
 - Compatibility shim (`base.css`) has been removed - no longer needed
 - **Build-breaking references fixed** - found and corrected 2 remaining `base.css` imports in Tournament component
 - **Accessibility improvements** - Fixed color contrast ratios to meet WCAG standards
+- **Semantic HTML improvements** - Fixed navigation structure and ARIA attributes
 
 ### **What Remains:**
 - Testing and verification that all components render correctly
 - Validation of mobile responsiveness and theme switching
+
+---
+
+## 🎯 **Semantic HTML & ARIA Accessibility Fixes** ✅
+
+### **Issues Identified:**
+- **Semantic `<li>` elements** - Navigation items not wrapped in proper `<ul>` structure
+- **Focusable aria-hidden elements** - Scroll-to-top button focusable when hidden
+- **ARIA role compatibility** - NameCard using `role="button"` on `<div>` element
+
+### **Fixes Implemented:**
+
+#### **1. Navigation Structure (NavBar Component):**
+- **Added proper `<ul>` wrapper** with `role="menubar"` around navigation items
+- **Semantic list structure** - All `<li>` elements now properly contained within `<ul>`
+- **Improved navigation semantics** - Better screen reader support and keyboard navigation
+
+#### **2. Focus Management (Scroll-to-Top Button):**
+- **Added `tabIndex` control** - Button only focusable when visible (`tabIndex={showScrollTop ? 0 : -1}`)
+- **Proper aria-hidden behavior** - Hidden elements no longer focusable
+- **Accessible focus states** - Prevents keyboard users from focusing hidden elements
+
+#### **3. NameCard Component:**
+- **Changed from `<div>` to `<button>`** - Proper semantic element for interactive content
+- **Removed redundant ARIA attributes** - `role="button"` and `tabIndex` no longer needed
+- **Added proper button attributes** - `disabled`, `type="button"` for better accessibility
+- **Enhanced CSS styling** - Added button reset styles to maintain visual appearance
+
+### **Accessibility Benefits:**
+- **Screen Reader Support**: Better semantic structure for assistive technologies
+- **Keyboard Navigation**: Proper focus management and tab order
+- **ARIA Compliance**: Elements now have compatible roles and attributes
+- **WCAG Guidelines**: Meets semantic HTML requirements for accessibility
 
 ---
 
