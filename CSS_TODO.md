@@ -687,6 +687,93 @@ p, span, div, label, a, li, td, th, small, strong, em, b, i {
 
 ---
 
+## 🎯 **Tournament Setup Component - Missing CSS Classes Fixed** ✅
+
+### **Issues Discovered:**
+- **Missing CSS classes** - JSX using classes not defined in CSS module
+- **Incorrect CSS variable references** - Using non-existent variables 
+- **Incomplete component styling** - Key interactive elements missing styles
+
+### **Specific Problems Found:**
+
+#### **1. Missing CSS Classes:**
+- **`.enlargedImage`** - Used in JSX but not defined in CSS
+- **`.resizeHandle`** - Used for image resize functionality but missing
+- **`.minimizeButton`** - Button component without proper styling
+- **Resize handle positions** - `.nw`, `.ne`, `.sw`, `.se` were empty placeholders
+
+#### **2. Incorrect CSS Variable Usage:**
+- **`--shadow-2xl`** - Referenced but doesn't exist (only `--shadow-xl` available)
+- **`--white`** - Referenced but only `--white-rgb` exists in global.css
+
+### **Fixes Applied:**
+
+#### **1. Added Missing CSS Classes:**
+```css
+/* Image overlay functionality */
+.enlargedImage {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+.resizeHandle {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  background: var(--primary-500);
+  border: 2px solid rgb(var(--white-rgb));
+  border-radius: var(--radius-full);
+  z-index: 10;
+}
+
+.minimizeButton {
+  composes: btnSecondary from "../../styles/global.css";
+  position: absolute;
+  top: var(--space-4);
+  right: var(--space-4);
+  z-index: 10;
+  padding: var(--space-2);
+  min-width: auto;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Resize handle positions with proper cursors */
+.nw { top: 0; left: 0; cursor: nw-resize; }
+.ne { top: 0; right: 0; cursor: ne-resize; }
+.sw { bottom: 0; left: 0; cursor: sw-resize; }
+.se { bottom: 0; right: 0; cursor: se-resize; }
+```
+
+#### **2. Fixed CSS Variable References:**
+- **Changed `--shadow-2xl`** → `--shadow-xl` (line 311)
+- **Changed `--white`** → `rgb(var(--white-rgb))` for proper color reference
+
+### **Root Cause Analysis:**
+- **Component CSS incomplete** - JSX was referencing classes that were never implemented
+- **Copy-paste errors** - CSS variables referenced from different design systems
+- **Missing functionality** - Image overlay and resize features had no styling
+
+### **Impact:**
+- **Tournament Setup now fully functional** ✅ - All interactive elements properly styled
+- **Image overlay working** ✅ - Photo enlargement and resize handles functional
+- **No more missing class errors** ✅ - All JSX classes have corresponding CSS
+- **Proper CSS variable usage** ✅ - Only using variables that exist in global.css
+
+### **Lesson Learned:**
+- **Always check JSX → CSS mapping** - Ensure every className has corresponding CSS
+- **Verify CSS variable existence** - Use grep to confirm variables exist before referencing
+- **Test interactive components** - Complex features like image overlays need complete styling
+- **Component-by-component review** - Each component needs individual attention to work properly
+
+---
+
 ## 🎯 **Reverted Aggressive CSS Changes** ✅
 
 ### **Issue Identified:**
