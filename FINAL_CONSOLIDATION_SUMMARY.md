@@ -59,8 +59,8 @@ const globalStats = await supabase.rpc('get_global_cat_statistics');
 ```
 
 ### **3. Enhanced Views:**
-- **`enhanced_cat_names`** - Combines names with user ratings and metadata
-- **`ultimate_cat_data`** - Complete data view for advanced analytics
+- **`cat_enhanced_cat_names`** - Combines names with user ratings and metadata
+- **`cat_ultimate_cat_data`** - Complete data view for advanced analytics
 
 ## **💾 Space & Performance Savings**
 

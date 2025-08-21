@@ -38,9 +38,10 @@ export const catNamesAPI = {
       let hiddenIds = [];
       if (userName) {
         const { data: hiddenData, error: hiddenError } = await supabase
-          .from("cat_hidden_names")
+          .from("cat_name_ratings")
           .select("name_id")
-          .eq("user_name", userName);
+          .eq("user_name", userName)
+          .eq("is_hidden", true);
 
         if (hiddenError) throw hiddenError;
         hiddenIds = hiddenData?.map((item) => item.name_id) || [];
@@ -294,10 +295,20 @@ export const hiddenNamesAPI = {
    */
   async hideName(userName, nameId) {
     try {
-      const { error } = await supabase.from("cat_hidden_names").insert({
-        name_id: nameId,
-        user_name: userName,
-      });
+      // Update or insert the hidden status in cat_name_ratings
+      const { error } = await supabase
+        .from("cat_name_ratings")
+        .upsert({
+          name_id: nameId,
+          user_name: userName,
+          is_hidden: true,
+          rating: 1500, // Default rating if none exists
+          wins: 0,
+          losses: 0,
+        }, {
+          onConflict: "name_id,user_name",
+          ignoreDuplicates: false
+        });
 
       if (error) throw error;
       return { success: true };
@@ -312,9 +323,10 @@ export const hiddenNamesAPI = {
    */
   async unhideName(userName, nameId) {
     try {
+      // Update the hidden status to false in cat_name_ratings
       const { error } = await supabase
-        .from("cat_hidden_names")
-        .delete()
+        .from("cat_name_ratings")
+        .update({ is_hidden: false })
         .eq("name_id", nameId)
         .eq("user_name", userName);
 
@@ -332,11 +344,11 @@ export const hiddenNamesAPI = {
   async getHiddenNames(userName) {
     try {
       const { data, error } = await supabase
-        .from("cat_hidden_names")
+        .from("cat_name_ratings")
         .select(
           `
           name_id,
-          created_at,
+          updated_at,
           cat_name_options (
             id,
             name,
@@ -344,7 +356,8 @@ export const hiddenNamesAPI = {
           )
         `,
         )
-        .eq("user_name", userName);
+        .eq("user_name", userName)
+        .eq("is_hidden", true);
 
       if (error) throw error;
       return data || [];
@@ -369,22 +382,47 @@ export const tournamentsAPI = {
     tournamentData = {},
   ) {
     try {
-      const { data, error } = await supabase
-        .from("cat_tournaments")
-        .insert([
-          {
-            user_name: userName,
-            tournament_name: tournamentName,
-            participant_names: participantNames,
-            tournament_data: tournamentData,
-            status: "in_progress",
-          },
-        ])
+      // Create tournament in the consolidated cat_users table
+      const newTournament = {
+        id: crypto.randomUUID(), // Generate unique ID
+        user_name: userName,
+        tournament_name: tournamentName,
+        participant_names: participantNames,
+        tournament_data: tournamentData,
+        status: "in_progress",
+        created_at: new Date().toISOString(),
+      };
+
+      // Get or create user record
+      const { data: userData, error: userError } = await supabase
+        .from("cat_users")
+        .select("tournament_data")
+        .eq("user_name", userName)
+        .single();
+
+      if (userError && userError.code !== 'PGRST116') {
+        throw userError;
+      }
+
+      // Prepare tournament data array
+      const tournaments = userData?.tournament_data || [];
+      tournaments.push(newTournament);
+
+      // Update user's tournament data
+      const { error } = await supabase
+        .from("cat_users")
+        .upsert({
+          user_name: userName,
+          tournament_data: tournaments,
+        }, {
+          onConflict: "user_name",
+          ignoreDuplicates: false
+        })
         .select()
         .single();
 
       if (error) throw error;
-      return data;
+      return newTournament;
     } catch (error) {
       console.error("Error creating tournament:", error);
       throw error;
@@ -394,22 +432,14 @@ export const tournamentsAPI = {
   /**
    * Update tournament status
    */
-  async updateTournamentStatus(tournamentId, status, completedAt = null) {
+  // eslint-disable-next-line no-unused-vars
+  async updateTournamentStatus(tournamentId, status) {
     try {
-      const updateData = { status };
-      if (status === "completed" && completedAt) {
-        updateData.completed_at = completedAt;
-      }
-
-      const { data, error } = await supabase
-        .from("cat_tournaments")
-        .update(updateData)
-        .eq("id", tournamentId)
-        .select()
-        .single();
-
-      if (error) throw error;
-      return data;
+      // This function needs to be updated to work with the new schema
+      // For now, we'll need to know which user owns the tournament
+      // This is a limitation of the new consolidated schema
+      console.warn("updateTournamentStatus: This function needs to be updated for the new consolidated schema");
+      throw new Error("updateTournamentStatus: Function needs to be updated for new schema");
     } catch (error) {
       console.error("Error updating tournament:", error);
       throw error;
@@ -421,20 +451,26 @@ export const tournamentsAPI = {
    */
   async getUserTournaments(userName, status = null) {
     try {
-      let query = supabase
-        .from("cat_tournaments")
-        .select("*")
+      // Get tournaments from the consolidated cat_users table
+      const { data: userData, error } = await supabase
+        .from("cat_users")
+        .select("tournament_data")
         .eq("user_name", userName)
-        .order("created_at", { ascending: false });
+        .single();
 
-      if (status) {
-        query = query.eq("status", status);
-      }
-
-      const { data, error } = await query;
       if (error) throw error;
 
-      return data || [];
+      let tournaments = userData?.tournament_data || [];
+
+      // Filter by status if specified
+      if (status) {
+        tournaments = tournaments.filter(t => t.status === status);
+      }
+
+      // Sort by created_at (newest first)
+      tournaments.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+
+      return tournaments;
     } catch (error) {
       console.error("Error fetching tournaments:", error);
       return [];
@@ -452,8 +488,8 @@ export const userPreferencesAPI = {
   async getPreferences(userName) {
     try {
       const { data, error } = await supabase
-        .from("cat_user_preferences")
-        .select("*")
+        .from("cat_users")
+        .select("preferences")
         .eq("user_name", userName)
         .single();
 
@@ -461,7 +497,7 @@ export const userPreferencesAPI = {
 
       // Return defaults if no preferences exist
       return (
-        data || {
+        data?.preferences || {
           user_name: userName,
           preferred_categories: [],
           tournament_size_preference: 8,
@@ -481,13 +517,16 @@ export const userPreferencesAPI = {
    */
   async updatePreferences(userName, preferences) {
     try {
+      // Update preferences in the consolidated cat_users table
       const { data, error } = await supabase
-        .from("cat_user_preferences")
+        .from("cat_users")
         .upsert(
           {
             user_name: userName,
-            ...preferences,
-            updated_at: new Date().toISOString(),
+            preferences: {
+              ...preferences,
+              updated_at: new Date().toISOString(),
+            },
           },
           { onConflict: "user_name" },
         )
@@ -495,7 +534,7 @@ export const userPreferencesAPI = {
         .single();
 
       if (error) throw error;
-      return data;
+      return data?.preferences;
     } catch (error) {
       console.error("Error updating preferences:", error);
       throw error;
@@ -512,10 +551,11 @@ export const categoriesAPI = {
    */
   async getCategories() {
     try {
+      // Get categories from the consolidated cat_name_options table
       const { data, error } = await supabase
-        .from("cat_name_categories")
-        .select("*")
-        .order("name");
+        .from("cat_name_options")
+        .select("categories")
+        .not("categories", "is", null);
 
       if (error) throw error;
       return data || [];
@@ -600,9 +640,10 @@ export const deleteName = async (nameId) => {
 
     // Check if name is hidden
     const { data: hiddenData, error: hiddenError } = await supabase
-      .from("cat_hidden_names")
+      .from("cat_name_ratings")
       .select("*")
-      .eq("name_id", nameId);
+      .eq("name_id", nameId)
+      .eq("is_hidden", true);
 
     if (hiddenError) throw hiddenError;
     if (!hiddenData || hiddenData.length === 0) {

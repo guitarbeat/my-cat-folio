@@ -81,7 +81,7 @@ function useUserSession() {
           devLog("Found stored user:", storedUser);
 
           const { data, error: dbError } = await supabase
-            .from("app_users")
+            .from("cat_app_users")
             .select("user_name")
             .eq("user_name", storedUser)
             .single();
@@ -121,8 +121,8 @@ function useUserSession() {
 
       const trimmedName = name.trim();
 
-      // Create/update user in app_users table
-      const { error: upsertError } = await supabase.from("app_users").upsert(
+      // Create/update user in cat_app_users table
+      const { error: upsertError } = await supabase.from("cat_app_users").upsert(
         {
           user_name: trimmedName,
           created_at: new Date().toISOString(),

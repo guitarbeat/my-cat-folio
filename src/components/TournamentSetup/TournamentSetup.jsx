@@ -88,7 +88,7 @@ const NameSelection = ({
         const filteredNames = selectedCategory
           ? availableNames.filter(
               (name) =>
-                name.categories && name.categories.includes(selectedCategory),
+                name.categories && name.categories.includes(selectedCategory)
             )
           : availableNames;
 
@@ -100,7 +100,7 @@ const NameSelection = ({
                 (name.description &&
                   name.description
                     .toLowerCase()
-                    .includes(searchTerm.toLowerCase())),
+                    .includes(searchTerm.toLowerCase()))
             )
           : filteredNames;
 
@@ -149,7 +149,7 @@ const NameSelection = ({
                       availableNames.filter(
                         (name) =>
                           name.categories &&
-                          name.categories.includes(category.name),
+                          name.categories.includes(category.name)
                       ).length
                     }
                     )
@@ -242,7 +242,7 @@ const StartButton = ({ selectedNames, onStart, variant = "default" }) => {
         typeof nameObj === "object" &&
         nameObj.name &&
         typeof nameObj.name === "string" &&
-        nameObj.id,
+        nameObj.id
     );
   };
 
@@ -376,7 +376,10 @@ function useTournamentSetup() {
         const [namesData, { data: hiddenData, error: hiddenError }] =
           await Promise.all([
             getNamesWithDescriptions(),
-            supabase.from("cat_hidden_names").select("name_id"),
+            supabase
+              .from("cat_name_ratings")
+              .select("name_id")
+              .eq("is_hidden", true),
           ]);
 
         if (hiddenError) {
@@ -385,18 +388,18 @@ function useTournamentSetup() {
 
         // Create Set of hidden IDs for O(1) lookup
         const hiddenIds = new Set(
-          hiddenData?.map((item) => item.name_id) || [],
+          hiddenData?.map((item) => item.name_id) || []
         );
 
         // Filter out hidden names
         const filteredNames = namesData.filter(
-          (name) => !hiddenIds.has(name.id),
+          (name) => !hiddenIds.has(name.id)
         );
 
         // Sort names alphabetically for better UX
 
         const sortedNames = filteredNames.sort((a, b) =>
-          a.name.localeCompare(b.name),
+          a.name.localeCompare(b.name)
         );
 
         devLog("🎮 TournamentSetup: Data loaded", {
@@ -409,7 +412,7 @@ function useTournamentSetup() {
 
         // If any currently selected names are now hidden, remove them
         setSelectedNames((prev) =>
-          prev.filter((name) => !hiddenIds.has(name.id)),
+          prev.filter((name) => !hiddenIds.has(name.id))
         );
       } catch (err) {
         console.error("Error fetching names:", err);
@@ -437,7 +440,7 @@ function useTournamentSetup() {
 
   const handleSelectAll = () => {
     setSelectedNames(
-      selectedNames.length === availableNames.length ? [] : [...availableNames],
+      selectedNames.length === availableNames.length ? [] : [...availableNames]
     );
   };
 
@@ -511,7 +514,7 @@ function TournamentSetupContent({ onStart }) {
           };
         }
         return img;
-      }),
+      })
     );
   };
 
@@ -529,7 +532,7 @@ function TournamentSetupContent({ onStart }) {
           };
         }
         return img;
-      }),
+      })
     );
   };
 
@@ -546,7 +549,7 @@ function TournamentSetupContent({ onStart }) {
           };
         }
         return img;
-      }),
+      })
     );
   };
 
@@ -555,7 +558,7 @@ function TournamentSetupContent({ onStart }) {
       prev.map((img) => ({
         ...img,
         isDragging: false,
-      })),
+      }))
     );
   };
 
@@ -575,7 +578,7 @@ function TournamentSetupContent({ onStart }) {
           };
         }
         return img;
-      }),
+      })
     );
   };
 
@@ -621,7 +624,7 @@ function TournamentSetupContent({ onStart }) {
           };
         }
         return img;
-      }),
+      })
     );
   };
 
@@ -631,7 +634,7 @@ function TournamentSetupContent({ onStart }) {
         ...img,
         isResizing: false,
         resizeHandle: null,
-      })),
+      }))
     );
   };
 
@@ -642,20 +645,20 @@ function TournamentSetupContent({ onStart }) {
     if (hasDragging || hasResizing) {
       window.addEventListener(
         "mousemove",
-        hasResizing ? handleResizeMove : handleMouseMove,
+        hasResizing ? handleResizeMove : handleMouseMove
       );
       window.addEventListener(
         "mouseup",
-        hasResizing ? handleResizeEnd : handleMouseUp,
+        hasResizing ? handleResizeEnd : handleMouseUp
       );
       return () => {
         window.removeEventListener(
           "mousemove",
-          hasResizing ? handleResizeMove : handleMouseMove,
+          hasResizing ? handleResizeMove : handleMouseMove
         );
         window.removeEventListener(
           "mouseup",
-          hasResizing ? handleResizeEnd : handleMouseUp,
+          hasResizing ? handleResizeEnd : handleMouseUp
         );
       };
     }
@@ -754,8 +757,8 @@ function TournamentSetupContent({ onStart }) {
                     ? Math.round(
                         availableNames.reduce(
                           (sum, name) => sum + (name.avg_rating || 1500),
-                          0,
-                        ) / availableNames.length,
+                          0
+                        ) / availableNames.length
                       )
                     : 1500}{" "}
                   avg rating
@@ -764,7 +767,7 @@ function TournamentSetupContent({ onStart }) {
                   🔥{" "}
                   {
                     availableNames.filter(
-                      (name) => (name.popularity_score || 0) > 5,
+                      (name) => (name.popularity_score || 0) > 5
                     ).length
                   }{" "}
                   popular names

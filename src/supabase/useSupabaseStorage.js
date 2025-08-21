@@ -359,44 +359,44 @@ function useSupabaseStorage(userName = "") {
           )
           .subscribe(),
 
-        // Hidden names changes for this user
+        // Hidden names changes for this user (now in cat_name_ratings)
         supabase
-          .channel("cat_hidden_names_changes")
+          .channel("cat_name_ratings_hidden_changes")
           .on(
             "postgres_changes",
             {
               event: "*",
               schema: "public",
-              table: "cat_hidden_names",
+              table: "cat_name_ratings",
               filter: `user_name=eq.${userName}`,
             },
             fetchNames,
           )
           .subscribe(),
 
-        // Categories changes
+        // Categories changes (now in cat_name_options.categories)
         supabase
-          .channel("cat_categories_changes")
+          .channel("cat_name_options_categories_changes")
           .on(
             "postgres_changes",
             {
               event: "*",
               schema: "public",
-              table: "cat_name_categories",
+              table: "cat_name_options",
             },
             fetchCategories,
           )
           .subscribe(),
 
-        // User preferences changes
+        // User preferences changes (now in cat_users)
         supabase
-          .channel("cat_user_preferences_changes")
+          .channel("cat_users_preferences_changes")
           .on(
             "postgres_changes",
             {
               event: "*",
               schema: "public",
-              table: "cat_user_preferences",
+              table: "cat_users",
               filter: `user_name=eq.${userName}`,
             },
             fetchUserPreferences,
