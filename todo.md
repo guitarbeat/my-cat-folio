@@ -39,7 +39,7 @@
 
 ## Tooling and CI
 - [ ] Initialize Husky hooks (`npm run prepare`) and add pre-commit lint/format
-- [ ] Consider moving from `react-scripts` to Vite for faster dev/build
+- [x] ✅ Already migrated to Vite (see `package.json` scripts and `vite.config.mjs`)
 
 ## Cleanup
 - [ ] Remove or use unused deps: `@googleapis/calendar`, `@react-oauth/google`, `node-fetch`

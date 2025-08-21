@@ -1,12 +1,4 @@
 /* Simple loading spinner with cat emoji */
-:root {
-  /* Basic variables */
-  --overlay-background: var(--overlay-light);
-  --overlay-blur: 4px;
-  --text-color: rgb(255 255 255 / 95%);
-  --text-shadow: 0 2px 4px rgb(0 0 0 / 20%);
-  --space-6: 1.5rem;
-}
 
 .container {
   position: fixed;
@@ -18,8 +10,8 @@
   justify-content: center;
   width: 100%;
   min-height: 100vh;
-  background: var(--overlay-background);
-  backdrop-filter: saturate(150%) blur(var(--overlay-blur));
+  background: var(--overlay-light);
+  backdrop-filter: saturate(150%) blur(4px);
 }
 
 /* Spinner styles */
@@ -57,10 +49,10 @@
 
 /* Text styles */
 .text {
-  margin-top: var(--space-6);
-  color: var(--text-color);
+  margin-top: 1.5rem;
+  color: rgb(255 255 255 / 95%);
   letter-spacing: 0.05em;
-  text-shadow: var(--text-shadow);
+  text-shadow: 0 2px 4px rgb(0 0 0 / 20%);
 }
 
 /* Screen reader only */

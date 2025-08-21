@@ -1,7 +1,7 @@
 @import url("https://fonts.googleapis.com/css?family=Mali");
 
-/* Variables */
-:root {
+/* Component-specific variables - scoped to avoid conflicts with global theme */
+.bongoCat {
   --cat-bg: #000; /* Black cat */
   --cat-outline: #222; /* Slightly lighter than black for contrast */
   --toebean: #44262c; /* Brighter pink for visibility */

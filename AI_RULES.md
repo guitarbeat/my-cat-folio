@@ -5,34 +5,32 @@ This document outlines the core technologies used in the Meow Namester applicati
 ## Tech Stack Overview
 
 *   **Frontend Framework:** React 19 for building interactive user interfaces.
-*   **Language:** TypeScript for all new components and files, ensuring type safety and better maintainability.
+*   **Language:** JavaScript (ESNext) with JSX. TypeScript may be introduced incrementally in the future, but is not required today.
+*   **Build Tool:** Vite for development and production builds.
 *   **State Management:** React Hooks (`useState`, `useEffect`, `useCallback`, `useMemo`, `useRef`) for component-level state and custom hooks for reusable logic.
-*   **Backend & Database:** Supabase (`@supabase/supabase-js`) for all data storage, authentication, and real-time capabilities.
-*   **Styling:** Tailwind CSS for new styling and responsive design. Existing components use CSS Modules.
-*   **UI Component Library:** Shadcn/ui and Radix UI for pre-built, accessible UI components.
-*   **Icons:** `lucide-react` and `@heroicons/react` for vector icons.
-*   **Data Visualization:** `chart.js` with `react-chartjs-2` and `recharts` for displaying charts and graphs.
-*   **Drag and Drop:** `@hello-pangea/dnd` for drag-and-drop functionalities.
-*   **Routing:** React Router, with main application routes defined in `src/App.tsx`.
-*   **Linting & Formatting:** ESLint, Stylelint, and Prettier for consistent code quality.
+*   **Backend & Database:** Supabase (`@supabase/supabase-js`) for all data storage, authentication, and real-time capabilities. Environment variables: `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`.
+*   **Styling:** CSS Modules and global CSS. Do not introduce Tailwind unless a migration plan is approved.
+*   **UI Component Library:** None mandated. Prefer lightweight, custom components.
+*   **Icons:** `@heroicons/react`.
+*   **Data Visualization:** `chart.js` with `react-chartjs-2`.
+*   **Drag and Drop:** `@hello-pangea/dnd`.
+*   **Routing:** No router in use. Views are managed within `src/App.jsx` with local state and React.lazy.
+*   **Linting, Formatting & Testing:** ESLint, Stylelint, Prettier, and Vitest.
 
 ## Library Usage Guidelines
 
 To maintain consistency and efficiency, please adhere to the following rules when developing:
 
 *   **React:** Always use React for building UI components.
-*   **TypeScript:** All new files, components, and hooks **must** be written in TypeScript (`.ts` or `.tsx` extensions).
-*   **Supabase:** All interactions with the database, authentication, and storage **must** go through the Supabase client. Do not use direct API calls for backend operations.
+*   **Language:** Write new code in JavaScript (JSX). If TypeScript is introduced, prefer incremental opt-in and do not block builds on typing.
+*   **Supabase:** All interactions with the database, authentication, and storage go through the Supabase client configured in `src/supabase/supabaseClient.js`.
 *   **Styling:**
-    *   For **new components and features**, prioritize using **Tailwind CSS classes** for all styling.
-    *   For **existing components** that use CSS Modules (`.module.css`), continue to use and maintain their existing CSS Modules. Do not convert existing CSS Modules to Tailwind unless explicitly requested.
-    *   When building new UI elements, first check if a suitable component exists in **Shadcn/ui**. If it does, use the Shadcn/ui component.
-    *   If Shadcn/ui does not offer a specific component, use **Radix UI** primitives as a foundation for building custom, accessible components.
-    *   **Do not modify Shadcn/ui or Radix UI source files directly.** If customization is needed, create a new component that wraps or extends the library component.
-*   **Icons:** Use icons from `lucide-react` or `@heroicons/react`.
-*   **Data Visualization:** For any charting or data visualization needs, use `chart.js` (with `react-chartjs-2`) or `recharts`.
-*   **Drag and Drop:** For any drag-and-drop functionality, use `@hello-pangea/dnd`.
-*   **Routing:** All main application routes should be managed within `src/App.tsx` using React Router.
+    *   Use existing CSS Modules (`.module.css`) and global CSS files.
+    *   Do not introduce Tailwind, Shadcn/ui, or Radix UI without an explicit migration decision.
+*   **Icons:** Use `@heroicons/react`.
+*   **Data Visualization:** Use `chart.js` with `react-chartjs-2`.
+*   **Drag and Drop:** Use `@hello-pangea/dnd` where drag-and-drop is needed.
+*   **Routing:** Keep current pattern (views inside `App.jsx`) unless routing is explicitly added later.
 *   **File Structure:**
     *   All source code should reside in the `src` directory.
     *   Pages should be placed in `src/pages/`.
@@ -41,6 +39,6 @@ To maintain consistency and efficiency, please adhere to the following rules whe
     *   Utilities should be placed in `src/utils/`.
     *   Supabase-related files should be in `src/supabase/`.
     *   Directory names **must** be all lower-case. File names may use mixed-case.
-*   **Responsiveness:** All new UI components and features **must** be designed to be fully responsive across various screen sizes, utilizing Tailwind's responsive utilities.
+*   **Responsiveness:** Build responsive UIs using CSS Modules and global responsive utilities already present.
 *   **Accessibility:** Always prioritize accessibility (ARIA attributes, keyboard navigation, color contrast) in all new development.
 *   **Simplicity:** Keep code simple and elegant. Avoid over-engineering. Implement only what is requested, fully and functionally.

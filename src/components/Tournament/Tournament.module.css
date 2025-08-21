@@ -168,7 +168,7 @@
 }
 
 .extraOptionsButton {
-  composes: btnsecondary from "../../styles/global.css";
+  composes: btnSecondary from "../../styles/global.css";
   min-width: 120px;
   transition: all var(--duration-normal) var(--ease-out);
 }
@@ -182,7 +182,7 @@
 }
 
 .selected {
-  composes: btnprimary from "../../styles/global.css";
+  composes: btnPrimary from "../../styles/global.css";
   background: var(--primary-color);
 }
 
@@ -209,7 +209,7 @@
 }
 
 .controlButton {
-  composes: btnprimary from "../../styles/global.css";
+  composes: btnPrimary from "../../styles/global.css";
 }
 
 .soundControls {
@@ -223,7 +223,7 @@
 }
 
 .soundToggleButton {
-  composes: btnsecondary from "../../styles/global.css";
+  composes: btnSecondary from "../../styles/global.css";
   display: flex;
   align-items: center;
   justify-content: center;
@@ -297,7 +297,7 @@
 }
 
 .bracketToggle {
-  composes: btnsecondary from "../../styles/global.css";
+  composes: btnSecondary from "../../styles/global.css";
   display: flex;
   gap: var(--space-2);
   align-items: center;
@@ -387,11 +387,11 @@
 }
 
 .confirmButton {
-  composes: btnprimary from "../../styles/global.css";
+  composes: btnPrimary from "../../styles/global.css";
 }
 
 .cancelButton {
-  composes: btnsecondary from "../../styles/global.css";
+  composes: btnSecondary from "../../styles/global.css";
 }
 
 /* Animations
@@ -606,7 +606,7 @@
 }
 
 .randomizeButton {
-  composes: btnsecondary from "../../styles/global.css";
+  composes: btnSecondary from "../../styles/global.css";
   display: flex;
   gap: var(--space-2);
   align-items: center;

@@ -33,7 +33,7 @@
 }
 
 .expandToggle {
-  composes: btnsecondary from "../../styles/global.css";
+  composes: btnSecondary from "../../styles/global.css";
   display: flex;
   gap: var(--space-2);
   align-items: center;
@@ -129,7 +129,7 @@
 }
 
 .selectAllButton {
-  composes: btnsecondary from "../../styles/global.css";
+  composes: btnSecondary from "../../styles/global.css";
 }
 
 .helperText {
@@ -147,7 +147,7 @@
 }
 
 .startButton {
-  composes: btnprimary from "../../styles/global.css";
+  composes: btnPrimary from "../../styles/global.css";
   display: flex;
   flex-direction: column;
   gap: var(--space-2);
@@ -260,7 +260,7 @@
 }
 
 .submitButton {
-  composes: btnprimary from "../../styles/global.css";
+  composes: btnPrimary from "../../styles/global.css";
   width: 100%;
   margin-top: var(--space-2);
 }
@@ -393,7 +393,7 @@
 /* Base button styles */
 .minimizeButton,
 .closeButton {
-  composes: btnicon from "../../styles/global.css";
+  composes: btnIcon from "../../styles/global.css";
   display: flex;
   align-items: center;
   justify-content: center;
@@ -566,7 +566,7 @@
 }
 
 .minimizeButton {
-  composes: btnsecondary from "../../styles/global.css";
+  composes: btnSecondary from "../../styles/global.css";
   position: absolute;
   top: var(--space-4);
   right: var(--space-4);

@@ -1,5 +1,6 @@
-/* Variables */
-:root {
+/* Navbar styles with component-specific variables */
+.navbar {
+  --local-font-size: 1.2rem;
   --navbar-padding-mobile: 1rem 1.5rem;
   --navbar-padding-desktop: 1rem 2rem;
   --scroll-button-size-desktop: 40px;
@@ -8,11 +9,6 @@
   --transition-standard: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   --z-index-navbar: 1000;
   --mobile-menu-breakpoint: 768px;
-}
-
-/* Navbar styles */
-.navbar {
-  --local-font-size: 1.2rem;
 
   position: fixed;
   inset: 0 0 auto;
