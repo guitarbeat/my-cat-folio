@@ -1,5 +1,5 @@
 .card {
-  composes: cardinteractive from "../../styles/global.css";
+  composes: cardInteractive from "../../styles/global.css";
   position: relative;
   display: flex;
   flex-direction: column;
@@ -16,7 +16,7 @@
   /* Reset button defaults */
   background: var(--card-background);
   border: 2px solid var(--border-color);
-  border-radius: var(--radius-xl);
+  border-radius: var(--radius-lg);
   border-image: linear-gradient(135deg, var(--border-color), var(--card-border))
     1;
   box-shadow: var(--shadow-sm);
@@ -37,7 +37,7 @@
   inset: 0;
   z-index: 0;
   pointer-events: none;
-  border-radius: var(--radius-xl);
+  border-radius: var(--radius-lg);
   mix-blend-mode: soft-light;
   transition: background 0.1s ease-out;
 }

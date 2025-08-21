@@ -34,7 +34,7 @@ const TournamentControls = ({
   trackInfo,
   audioError,
   onRetryAudio,
-  onRandomize,
+
   volume,
   onVolumeChange,
 }) => {
@@ -146,17 +146,6 @@ const TournamentControls = ({
       </div>
 
       <button
-        onClick={onRandomize}
-        className={styles.randomizeButton}
-        disabled={isTransitioning}
-        aria-label="Randomize tournament order"
-        title="Randomize tournament order"
-      >
-        <ArrowPathIcon aria-hidden="true" />
-        Randomize
-      </button>
-
-      <button
         onClick={() => setShowConfirmation(true)}
         className={styles.controlButton}
         disabled={isTransitioning}
@@ -217,7 +206,7 @@ TournamentControls.propTypes = {
   trackInfo: PropTypes.object,
   audioError: PropTypes.string,
   onRetryAudio: PropTypes.func.isRequired,
-  onRandomize: PropTypes.func.isRequired,
+
   volume: PropTypes.shape({
     music: PropTypes.number,
     effects: PropTypes.number,

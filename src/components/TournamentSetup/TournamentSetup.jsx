@@ -193,7 +193,7 @@ const StartButton = ({ selectedNames, onStart }) => {
         typeof nameObj === "object" &&
         nameObj.name &&
         typeof nameObj.name === "string" &&
-        nameObj.id,
+        nameObj.id
     );
   };
 
@@ -337,18 +337,18 @@ function useTournamentSetup() {
 
         // Create Set of hidden IDs for O(1) lookup
         const hiddenIds = new Set(
-          hiddenData?.map((item) => item.name_id) || [],
+          hiddenData?.map((item) => item.name_id) || []
         );
 
         // Filter out hidden names
         const filteredNames = namesData.filter(
-          (name) => !hiddenIds.has(name.id),
+          (name) => !hiddenIds.has(name.id)
         );
 
         // Sort names alphabetically for better UX
 
         const sortedNames = filteredNames.sort((a, b) =>
-          a.name.localeCompare(b.name),
+          a.name.localeCompare(b.name)
         );
 
         devLog("🎮 TournamentSetup: Data loaded", {
@@ -361,7 +361,7 @@ function useTournamentSetup() {
 
         // If any currently selected names are now hidden, remove them
         setSelectedNames((prev) =>
-          prev.filter((name) => !hiddenIds.has(name.id)),
+          prev.filter((name) => !hiddenIds.has(name.id))
         );
       } catch (err) {
         console.error("Error fetching names:", err);
@@ -389,7 +389,7 @@ function useTournamentSetup() {
 
   const handleSelectAll = () => {
     setSelectedNames(
-      selectedNames.length === availableNames.length ? [] : [...availableNames],
+      selectedNames.length === availableNames.length ? [] : [...availableNames]
     );
   };
 
@@ -451,7 +451,7 @@ function TournamentSetupContent({ onStart }) {
           };
         }
         return img;
-      }),
+      })
     );
   };
 
@@ -469,7 +469,7 @@ function TournamentSetupContent({ onStart }) {
           };
         }
         return img;
-      }),
+      })
     );
   };
 
@@ -486,7 +486,7 @@ function TournamentSetupContent({ onStart }) {
           };
         }
         return img;
-      }),
+      })
     );
   };
 
@@ -495,7 +495,7 @@ function TournamentSetupContent({ onStart }) {
       prev.map((img) => ({
         ...img,
         isDragging: false,
-      })),
+      }))
     );
   };
 
@@ -515,7 +515,7 @@ function TournamentSetupContent({ onStart }) {
           };
         }
         return img;
-      }),
+      })
     );
   };
 
@@ -561,7 +561,7 @@ function TournamentSetupContent({ onStart }) {
           };
         }
         return img;
-      }),
+      })
     );
   };
 
@@ -571,7 +571,7 @@ function TournamentSetupContent({ onStart }) {
         ...img,
         isResizing: false,
         resizeHandle: null,
-      })),
+      }))
     );
   };
 
@@ -582,20 +582,20 @@ function TournamentSetupContent({ onStart }) {
     if (hasDragging || hasResizing) {
       window.addEventListener(
         "mousemove",
-        hasResizing ? handleResizeMove : handleMouseMove,
+        hasResizing ? handleResizeMove : handleMouseMove
       );
       window.addEventListener(
         "mouseup",
-        hasResizing ? handleResizeEnd : handleMouseUp,
+        hasResizing ? handleResizeEnd : handleMouseUp
       );
       return () => {
         window.removeEventListener(
           "mousemove",
-          hasResizing ? handleResizeMove : handleMouseMove,
+          hasResizing ? handleResizeMove : handleMouseMove
         );
         window.removeEventListener(
           "mouseup",
-          hasResizing ? handleResizeEnd : handleMouseUp,
+          hasResizing ? handleResizeEnd : handleMouseUp
         );
       };
     }
@@ -629,11 +629,82 @@ function TournamentSetupContent({ onStart }) {
 
   return (
     <div className={styles.container}>
-      <div className={styles.tournamentLayout}>
-        <aside className={styles.photoSidebar}>
-          <div className={styles.photoSidebarContent}>
-            <h3>Name This Star! 🌟</h3>
-            <p>Help choose a name worthy of this fabulous feline</p>
+      {/* Hero Section */}
+      <div className={styles.heroSection}>
+        <div className={styles.heroContent}>
+          <h1 className={styles.heroTitle}>🏆 Cat Name Tournament</h1>
+          <p className={styles.heroSubtitle}>
+            Choose your favorite cat names and let them compete in an epic
+            tournament!
+          </p>
+          <div className={styles.progressIndicator}>
+            <div className={styles.progressBar}>
+              <div
+                className={styles.progressFill}
+                style={{
+                  width: `${Math.max((selectedNames.length / Math.max(availableNames.length, 1)) * 100, 5)}%`,
+                }}
+              />
+            </div>
+            <span className={styles.progressText}>
+              {selectedNames.length} of {availableNames.length} names selected
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <div className={styles.mainContent}>
+        {/* Selection Panel */}
+        <div className={styles.selectionPanel}>
+          <div className={styles.panelHeader}>
+            <h2 className={styles.panelTitle}>Select Tournament Competitors</h2>
+            <p className={styles.panelSubtitle}>
+              Choose at least 2 names to start your tournament
+            </p>
+          </div>
+
+          <div className={styles.selectionControls}>
+            <button
+              onClick={handleSelectAll}
+              className={styles.selectAllButton}
+              aria-label={
+                selectedNames.length === availableNames.length
+                  ? "Deselect all names"
+                  : "Select all names"
+              }
+            >
+              {selectedNames.length === availableNames.length
+                ? "Deselect All"
+                : "Select All"}
+            </button>
+            <div className={styles.selectionStats}>
+              <span className={styles.selectedCount}>
+                {selectedNames.length}
+              </span>
+              <span className={styles.selectedLabel}>selected</span>
+            </div>
+          </div>
+
+          <NameSelection
+            selectedNames={selectedNames}
+            availableNames={availableNames}
+            onToggleName={toggleName}
+          />
+
+          {selectedNames.length >= 2 && (
+            <div className={styles.startSection}>
+              <StartButton selectedNames={selectedNames} onStart={onStart} />
+            </div>
+          )}
+        </div>
+
+        {/* Sidebar */}
+        <aside className={styles.sidebar}>
+          <div className={styles.sidebarCard}>
+            <h3 className={styles.sidebarTitle}>Meet the Stars! 🌟</h3>
+            <p className={styles.sidebarDescription}>
+              Click any photo to get a closer look at these adorable contestants
+            </p>
             <div className={styles.photoGrid}>
               {CAT_IMAGES.map((image, index) => (
                 <div
@@ -652,115 +723,104 @@ function TournamentSetupContent({ onStart }) {
                     width="200"
                     height="200"
                   />
+                  <div className={styles.photoOverlay}>
+                    <span className={styles.photoIcon}>👁️</span>
+                  </div>
                 </div>
               ))}
             </div>
           </div>
 
-          <NameSuggestionSection />
+          <div className={styles.sidebarCard}>
+            <NameSuggestionSection />
+          </div>
+
+          <div className={styles.sidebarCard}>
+            <WelcomeSection
+              isExpanded={isExpanded}
+              setIsExpanded={setIsExpanded}
+            />
+          </div>
         </aside>
+      </div>
 
-        <main className={styles.namesContent}>
-          <WelcomeSection
-            isExpanded={isExpanded}
-            setIsExpanded={setIsExpanded}
-          />
-
-          <NameSelection
-            selectedNames={selectedNames}
-            availableNames={availableNames}
-            onToggleName={toggleName}
-          />
-
-          <NameCounter
-            selectedCount={selectedNames.length}
-            totalCount={availableNames.length}
-            onSelectAll={handleSelectAll}
-          />
-
-          {selectedNames.length >= 2 && (
-            <StartButton selectedNames={selectedNames} onStart={onStart} />
-          )}
-        </main>
-
-        {openImages.map((image) => (
-          <div
-            key={image.src}
-            className={`${styles.overlayBackdrop} ${image.isMinimized ? styles.minimized : ""}`}
-            onClick={() => handleImageClose(image.src)}
-          >
-            <div className={styles.overlayContent}>
-              <div
-                className={`${styles.imageWrapperDynamic} ${styles.imageWrapper}`}
-                style={{
-                  width: `${image.size.width}%`,
-                  height: `${image.size.height}%`,
-                  transform: `translate(${image.position.x}px, ${image.position.y}px)`,
+      {openImages.map((image) => (
+        <div
+          key={image.src}
+          className={`${styles.overlayBackdrop} ${image.isMinimized ? styles.minimized : ""}`}
+          onClick={() => handleImageClose(image.src)}
+        >
+          <div className={styles.overlayContent}>
+            <div
+              className={`${styles.imageWrapperDynamic} ${styles.imageWrapper}`}
+              style={{
+                width: `${image.size.width}%`,
+                height: `${image.size.height}%`,
+                transform: `translate(${image.position.x}px, ${image.position.y}px)`,
+              }}
+            >
+              <img
+                src={`/images/${image.src}`}
+                alt="Enlarged cat photo"
+                className={`${styles.enlargedImage} ${image.isMinimized ? styles.minimizedImage : ""} ${image.isDragging ? styles.imageWrapperDragging : styles.imageWrapperNotDragging}`}
+                onMouseDown={(e) => {
+                  e.stopPropagation();
+                  handleMouseDown(image.src, e);
+                }}
+                loading="eager"
+                decoding="async"
+              />
+              {!image.isMinimized && (
+                <>
+                  <div
+                    className={`${styles.resizeHandle} ${styles.nw}`}
+                    onMouseDown={(e) => handleResizeStart(image.src, e, "nw")}
+                  />
+                  <div
+                    className={`${styles.resizeHandle} ${styles.ne}`}
+                    onMouseDown={(e) => handleResizeStart(image.src, e, "ne")}
+                  />
+                  <div
+                    className={`${styles.resizeHandle} ${styles.sw}`}
+                    onMouseDown={(e) => handleResizeStart(image.src, e, "sw")}
+                  />
+                  <div
+                    className={`${styles.resizeHandle} ${styles.se}`}
+                    onMouseDown={(e) => handleResizeStart(image.src, e, "se")}
+                  />
+                </>
+              )}
+            </div>
+            <div className={styles.imageControls}>
+              <button
+                className={styles.minimizeButton}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleMinimize(image.src);
+                }}
+                aria-label={
+                  image.isMinimized ? "Maximize image" : "Minimize image"
+                }
+              >
+                {image.isMinimized ? "↗" : "↙"}
+              </button>
+              <button
+                className={styles.closeButton}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleImageClose(image.src);
                 }}
               >
-                <img
-                  src={`/images/${image.src}`}
-                  alt="Enlarged cat photo"
-                  className={`${styles.enlargedImage} ${image.isMinimized ? styles.minimizedImage : ""} ${image.isDragging ? styles.imageWrapperDragging : styles.imageWrapperNotDragging}`}
-                  onMouseDown={(e) => {
-                    e.stopPropagation();
-                    handleMouseDown(image.src, e);
-                  }}
-                  loading="eager"
-                  decoding="async"
-                />
-                {!image.isMinimized && (
-                  <>
-                    <div
-                      className={`${styles.resizeHandle} ${styles.nw}`}
-                      onMouseDown={(e) => handleResizeStart(image.src, e, "nw")}
-                    />
-                    <div
-                      className={`${styles.resizeHandle} ${styles.ne}`}
-                      onMouseDown={(e) => handleResizeStart(image.src, e, "ne")}
-                    />
-                    <div
-                      className={`${styles.resizeHandle} ${styles.sw}`}
-                      onMouseDown={(e) => handleResizeStart(image.src, e, "sw")}
-                    />
-                    <div
-                      className={`${styles.resizeHandle} ${styles.se}`}
-                      onMouseDown={(e) => handleResizeStart(image.src, e, "se")}
-                    />
-                  </>
-                )}
-              </div>
-              <div className={styles.imageControls}>
-                <button
-                  className={styles.minimizeButton}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleMinimize(image.src);
-                  }}
-                  aria-label={
-                    image.isMinimized ? "Maximize image" : "Minimize image"
-                  }
-                >
-                  {image.isMinimized ? "↗" : "↙"}
-                </button>
-                <button
-                  className={styles.closeButton}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleImageClose(image.src);
-                  }}
-                >
-                  ×
-                </button>
-              </div>
-              <p className={styles.imageInstructions}>
-                Click and drag to pan • Drag corners to resize • Press ESC or
-                click outside to close
-              </p>
+                ×
+              </button>
             </div>
+            <p className={styles.imageInstructions}>
+              Click and drag to pan • Drag corners to resize • Press ESC or
+              click outside to close
+            </p>
           </div>
-        ))}
-      </div>
+        </div>
+      ))}
     </div>
   );
 }

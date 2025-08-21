@@ -120,7 +120,7 @@ function TournamentContent({
   onVote,
 }) {
   const [randomizedNames, setRandomizedNames] = useState([]);
-  const [isRandomizing, setIsRandomizing] = useState(false);
+
   const tournamentStateRef = useRef({ isActive: false });
 
   useEffect(() => {
@@ -157,6 +157,8 @@ function TournamentContent({
   const [lastMatchResult, setLastMatchResult] = useState(null);
   const [showMatchResult, setShowMatchResult] = useState(false);
   const [showBracket, setShowBracket] = useState(false);
+  const [showRoundTransition, setShowRoundTransition] = useState(false);
+  const [nextRoundNumber, setNextRoundNumber] = useState(null);
 
   const musicTracks = useMemo(
     () => [
@@ -169,7 +171,7 @@ function TournamentContent({
       },
       { path: "/sounds/Main Menu 1 (Ruins).mp3", name: "Ruins" },
     ],
-    [],
+    []
   );
 
   // Sound effects configuration with updated weights
@@ -180,7 +182,7 @@ function TournamentContent({
       { path: "/sounds/surprise.mp3", weight: 0.1 },
       { path: "/sounds/level-up.mp3", weight: 0.2 },
     ],
-    [],
+    []
   );
 
   // Initialize audio only once
@@ -208,7 +210,7 @@ function TournamentContent({
   const getRandomSoundEffect = useCallback(() => {
     const totalWeight = soundEffects.reduce(
       (sum, effect) => sum + effect.weight,
-      0,
+      0
     );
     let random = Math.random() * totalWeight;
 
@@ -305,7 +307,7 @@ function TournamentContent({
       setSelectedOption(null);
       setIsTransitioning(false);
       setIsProcessing(false);
-      setIsRandomizing(false);
+
       tournamentStateRef.current.isActive = false;
     }
   }, [isError]);
@@ -316,29 +318,6 @@ function TournamentContent({
       tournamentStateRef.current.isActive = true;
     }
   }, [currentMatch]);
-
-  const handleRandomize = useCallback(() => {
-    if (
-      !isTransitioning &&
-      !isProcessing &&
-      !isRandomizing &&
-      Array.isArray(names) &&
-      names.length > 0
-    ) {
-      if (tournamentStateRef.current.isActive) {
-        return;
-      }
-
-      setIsRandomizing(true);
-      setIsTransitioning(true);
-
-      setTimeout(() => {
-        setRandomizedNames(shuffleArray([...names]));
-        setIsRandomizing(false);
-        setIsTransitioning(false);
-      }, 500);
-    }
-  }, [names, isTransitioning, isProcessing, isRandomizing]);
 
   // Track match results and tournament progress
   const updateMatchResult = useCallback(
@@ -361,7 +340,7 @@ function TournamentContent({
       // Hide result after 2 seconds
       setTimeout(() => setShowMatchResult(false), 2500);
     },
-    [currentMatch],
+    [currentMatch]
   );
 
   const handleVoteWithAnimation = useCallback(
@@ -457,7 +436,7 @@ function TournamentContent({
       handleVote,
       onVote,
       currentMatch,
-    ],
+    ]
   );
 
   // Separate click handler for name cards
@@ -473,7 +452,7 @@ function TournamentContent({
       // Then trigger the vote
       handleVoteWithAnimation(option);
     },
-    [isProcessing, isTransitioning, handleVoteWithAnimation],
+    [isProcessing, isTransitioning, handleVoteWithAnimation]
   );
 
   const handleEndEarly = useCallback(async () => {
@@ -556,6 +535,23 @@ function TournamentContent({
     );
   };
 
+  // Round transition component
+  const RoundTransition = () => {
+    if (!showRoundTransition || !nextRoundNumber) {
+      return null;
+    }
+
+    return (
+      <div className={styles.roundTransition} role="status" aria-live="polite">
+        <div className={styles.transitionContent}>
+          <div className={styles.roundIcon}>🏆</div>
+          <h2 className={styles.roundTitle}>Round {nextRoundNumber}</h2>
+          <p className={styles.roundSubtitle}>Tournament continues...</p>
+        </div>
+      </div>
+    );
+  };
+
   const handleVolumeChange = useCallback((type, value) => {
     setVolume((prev) => {
       const newVolume = { ...prev, [type]: value };
@@ -592,6 +588,22 @@ function TournamentContent({
       };
     });
   }, [matchHistory]);
+
+  // Round transition effect
+  useEffect(() => {
+    if (roundNumber > 1) {
+      setShowRoundTransition(true);
+      setNextRoundNumber(roundNumber);
+
+      // Hide transition after 2 seconds
+      const timer = setTimeout(() => {
+        setShowRoundTransition(false);
+        setNextRoundNumber(null);
+      }, 2000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [roundNumber]);
 
   // Add error UI
   if (isError) {
@@ -645,7 +657,6 @@ function TournamentContent({
         trackInfo={musicTracks[currentTrack]}
         audioError={audioError}
         onRetryAudio={retryAudio}
-        onRandomize={handleRandomize}
         volume={volume}
         onVolumeChange={handleVolumeChange}
       />
@@ -748,6 +759,7 @@ function TournamentContent({
 
       {/* Replace name insight with match result */}
       <MatchResult />
+      <RoundTransition />
     </div>
   );
 }
