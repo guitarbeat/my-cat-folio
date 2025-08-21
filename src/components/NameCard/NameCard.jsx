@@ -47,6 +47,11 @@ import styles from "./NameCard.module.css";
  * @param {string} [props.className=''] - Additional CSS classes
  * @param {('small'|'medium')} [props.size='medium'] - Card size variant
  * @param {Object} [props.metadata] - Optional metadata to display (rating, popularity, etc.)
+ * @param {boolean} [props.isAdmin=false] - Whether to show admin controls
+ * @param {boolean} [props.isHidden=false] - Whether the name is hidden
+ * @param {Function} [props.onToggleVisibility] - Function to toggle name visibility
+ * @param {Function} [props.onDelete] - Function to delete the name
+ * @param {Function} [props.onSelectionChange] - Function to handle selection change
  */
 function NameCard({
   name,
@@ -58,6 +63,11 @@ function NameCard({
   className = "",
   size = "medium",
   metadata,
+  isAdmin = false,
+  isHidden = false,
+  onToggleVisibility,
+  onDelete,
+  onSelectionChange,
 }) {
   const [rippleStyle, setRippleStyle] = useState({});
   const [isRippling, setIsRippling] = useState(false);
@@ -154,8 +164,22 @@ function NameCard({
       });
 
       setIsRippling(true);
+
+      // Handle selection change if this is an admin card
+      if (isAdmin && onSelectionChange) {
+        onSelectionChange(!isSelected);
+      }
+
+      // Call the regular onClick if provided
       onClick?.();
     }
+  };
+
+  // Handle admin action clicks (prevent card click when clicking admin buttons)
+  const handleAdminAction = (e, action) => {
+    e.stopPropagation();
+    e.preventDefault();
+    action();
   };
 
   // Enhanced accessibility for button state
@@ -170,6 +194,9 @@ function NameCard({
     if (disabled) {
       label += " (disabled)";
     }
+    if (isHidden) {
+      label += " (hidden)";
+    }
     return label;
   };
 
@@ -183,95 +210,126 @@ function NameCard({
     styles[size],
     isSelected && styles.selected,
     disabled && styles.disabled,
+    isHidden && styles.hidden,
     className,
   ]
     .filter(Boolean)
     .join(" ");
 
   return (
-    <button
-      ref={cardRef}
-      className={cardClasses}
-      onClick={handleInteraction}
-      onKeyDown={handleInteraction}
-      disabled={disabled}
-      aria-pressed={isSelected}
-      aria-label={getAriaLabel()}
-      aria-describedby={
-        description ? `${getSafeId(name)}-description` : undefined
-      }
-      type="button"
-      style={tiltStyle}
-    >
-      {/* Background mouse follow effect */}
-      <div
-        className={styles.backgroundEffect}
-        style={{
-          background: `radial-gradient(circle at ${mousePosition.x}% ${mousePosition.y}%, rgba(var(--primary-rgb), 0.1) 0%, transparent 50%)`,
-          opacity: disabled ? 0 : 1,
-        }}
-      />
+    <div className={styles.cardContainer}>
+      {/* Main card content */}
+      <button
+        ref={cardRef}
+        className={cardClasses}
+        onClick={handleInteraction}
+        onKeyDown={handleInteraction}
+        disabled={disabled}
+        aria-pressed={isSelected}
+        aria-label={getAriaLabel()}
+        aria-describedby={
+          description ? `${getSafeId(name)}-description` : undefined
+        }
+        type="button"
+        style={tiltStyle}
+      >
+        {/* Background mouse follow effect */}
+        <div
+          className={styles.backgroundEffect}
+          style={{
+            background: `radial-gradient(circle at ${mousePosition.x}% ${mousePosition.y}%, rgba(var(--primary-rgb), 0.1) 0%, transparent 50%)`,
+            opacity: disabled ? 0 : 1,
+          }}
+        />
 
-      <h3 className={styles.name}>{name}</h3>
-      {description && (
-        <p id={`${getSafeId(name)}-description`} className={styles.description}>
-          {description}
-        </p>
-      )}
+        <h3 className={styles.name}>{name}</h3>
+        {description && (
+          <p
+            id={`${getSafeId(name)}-description`}
+            className={styles.description}
+          >
+            {description}
+          </p>
+        )}
 
-      {/* Enhanced metadata display */}
-      {metadata && (
-        <div className={styles.metadata}>
-          {metadata.rating && (
-            <span className={styles.metaItem} title="Average Rating">
-              ⭐ {metadata.rating}
-            </span>
-          )}
-          {metadata.popularity && (
-            <span className={styles.metaItem} title="Popularity Score">
-              🔥 {metadata.popularity}
-            </span>
-          )}
-          {metadata.tournaments && (
-            <span className={styles.metaItem} title="Tournament Appearances">
-              🏆 {metadata.tournaments}
-            </span>
-          )}
-          {metadata.categories && metadata.categories.length > 0 && (
-            <div className={styles.categories}>
-              {metadata.categories.slice(0, 2).map((category, index) => (
-                <span key={index} className={styles.categoryTag}>
-                  {category}
-                </span>
-              ))}
-              {metadata.categories.length > 2 && (
-                <span className={styles.categoryMore}>
-                  +{metadata.categories.length - 2}
-                </span>
-              )}
-            </div>
+        {/* Enhanced metadata display */}
+        {metadata && (
+          <div className={styles.metadata}>
+            {metadata.rating && (
+              <span className={styles.metaItem} title="Average Rating">
+                ⭐ {metadata.rating}
+              </span>
+            )}
+            {metadata.popularity && (
+              <span className={styles.metaItem} title="Popularity Score">
+                🔥 {metadata.popularity}
+              </span>
+            )}
+            {metadata.tournaments && (
+              <span className={styles.metaItem} title="Tournament Appearances">
+                🏆 {metadata.tournaments}
+              </span>
+            )}
+            {metadata.categories && metadata.categories.length > 0 && (
+              <div className={styles.categories}>
+                {metadata.categories.slice(0, 2).map((category, index) => (
+                  <span key={index} className={styles.categoryTag}>
+                    {category}
+                  </span>
+                ))}
+                {metadata.categories.length > 2 && (
+                  <span className={styles.categoryMore}>
+                    +{metadata.categories.length - 2}
+                  </span>
+                )}
+              </div>
+            )}
+          </div>
+        )}
+
+        {shortcutHint && (
+          <span className={styles.shortcutHint} aria-hidden="true">
+            {shortcutHint}
+          </span>
+        )}
+        {isSelected && (
+          <span className={styles.checkMark} aria-hidden="true">
+            ✓
+          </span>
+        )}
+        {isRippling && (
+          <span
+            className={styles.rippleEffect}
+            style={rippleStyle}
+            aria-hidden="true"
+          />
+        )}
+      </button>
+
+      {/* Admin actions overlay */}
+      {isAdmin && (
+        <div className={styles.adminActionsOverlay}>
+          <button
+            onClick={(e) => handleAdminAction(e, () => onToggleVisibility?.())}
+            className={styles.actionButton}
+            aria-label={`${isHidden ? "Show" : "Hide"} ${name}`}
+            title={`${isHidden ? "Show" : "Hide"} ${name}`}
+          >
+            {isHidden ? "🔒" : "🔓"}
+          </button>
+          {isHidden && onDelete && (
+            <button
+              onClick={(e) => handleAdminAction(e, () => onDelete?.())}
+              className={`${styles.actionButton} ${styles.deleteButton}`}
+              aria-label={`Delete ${name}`}
+              title={`Delete ${name}`}
+            >
+              🗑️
+            </button>
           )}
         </div>
       )}
-
-      {shortcutHint && (
-        <span className={styles.shortcutHint} aria-hidden="true">
-          {shortcutHint}
-        </span>
-      )}
-      {isSelected && (
-        <span className={styles.checkMark} aria-hidden="true">
-          ✓
-        </span>
-      )}
-      {isRippling && (
-        <span
-          className={styles.rippleEffect}
-          style={rippleStyle}
-          aria-hidden="true"
-        />
-      )}
-    </button>
+    </div>
   );
 }
 
@@ -290,6 +348,11 @@ NameCard.propTypes = {
     tournaments: PropTypes.number,
     categories: PropTypes.arrayOf(PropTypes.string),
   }),
+  isAdmin: PropTypes.bool,
+  isHidden: PropTypes.bool,
+  onToggleVisibility: PropTypes.func,
+  onDelete: PropTypes.func,
+  onSelectionChange: PropTypes.func,
 };
 
 export default NameCard;

@@ -50,10 +50,30 @@ import "./navbar.css";
 
 // Utility functions
 const scrollToTop = () => {
-  window.scrollTo({
-    top: 0,
-    behavior: "smooth",
-  });
+  // * Enhanced scroll behavior with fallback for older browsers
+  if ("scrollBehavior" in document.documentElement.style) {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  } else {
+    // * Fallback for browsers that don't support smooth scrolling
+    const scrollStep = -window.scrollY / (500 / 15);
+    const scrollInterval = setInterval(() => {
+      if (window.scrollY !== 0) {
+        window.scrollBy(0, scrollStep);
+      } else {
+        clearInterval(scrollInterval);
+      }
+    }, 15);
+  }
+};
+
+// * Calculate responsive scroll threshold based on viewport height
+const getScrollThreshold = () => {
+  const viewportHeight = window.innerHeight;
+  // * Show button after scrolling 1.5 viewport heights on mobile, 1 viewport height on desktop
+  return viewportHeight <= 768 ? viewportHeight * 1.5 : viewportHeight;
 };
 
 function NavBar({
@@ -68,14 +88,14 @@ function NavBar({
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   // Define nav items based on login state
-  const navItems = {};
+  const navItems = [];
 
   // Always show Tournament
-  navItems.Tournament = "#";
+  navItems.push({ key: "Tournament", label: "Tournament", href: "#" });
 
   // Show Profile if logged in
   if (isLoggedIn) {
-    navItems.Profile = "#";
+    navItems.push({ key: "Profile", label: "Profile", href: "#" });
   }
 
   // Add external project links if on login page
@@ -95,48 +115,67 @@ function NavBar({
       setView(key.toLowerCase());
       setIsMobileMenuOpen(false);
     },
-    [setView],
+    [setView]
   );
 
   useEffect(() => {
+    // * Enhanced scroll detection with intersection observer for better performance
+    let scrollTimeout = null;
+
     const checkScroll = () => {
-      setShowScrollTop(window.scrollY > 300);
+      const scrollY = window.scrollY;
+      const threshold = getScrollThreshold();
+      const shouldShow = scrollY > threshold;
+
+      // * Only update state if it actually changed
+      setShowScrollTop(shouldShow);
+
+      // * Enhanced scroll detection with responsive threshold
     };
 
+    // * Initial check
     checkScroll();
 
-    let timeoutId = null;
+    // * Improved throttling with requestAnimationFrame for better performance
     const throttledCheckScroll = () => {
-      if (timeoutId === null) {
-        timeoutId = setTimeout(() => {
-          checkScroll();
-          timeoutId = null;
-        }, 100);
-      }
+      if (scrollTimeout) return;
+
+      scrollTimeout = requestAnimationFrame(() => {
+        checkScroll();
+        scrollTimeout = null;
+      });
     };
 
-    window.addEventListener("scroll", throttledCheckScroll);
+    window.addEventListener("scroll", throttledCheckScroll, { passive: true });
+
+    // * Handle resize events to recalculate threshold
+    const handleResize = () => {
+      checkScroll();
+    };
+
+    window.addEventListener("resize", handleResize, { passive: true });
 
     return () => {
       window.removeEventListener("scroll", throttledCheckScroll);
-      if (timeoutId) {
-        clearTimeout(timeoutId);
+      window.removeEventListener("resize", handleResize);
+      if (scrollTimeout) {
+        cancelAnimationFrame(scrollTimeout);
       }
     };
   }, []);
 
   // Create nav links
-  const navLinks = Object.keys(navItems).map((key) => (
-    <li key={key} className="navbar__item">
+  const navLinks = navItems.map((item) => (
+    <li key={item.key} className="navbar__item">
       <a
         href="#"
         onClick={(event) => {
           event.preventDefault();
-          handleNavItemClick(key);
+          handleNavItemClick(item.key);
         }}
-        className={view === key.toLowerCase() ? "active" : ""}
+        className={view === item.key.toLowerCase() ? "active" : ""}
       >
-        {key}
+        {item.label}
       </a>
     </li>
   ));
@@ -154,7 +193,7 @@ function NavBar({
           >
             {link.name}
           </a>
-        </li>,
+        </li>
       );
     });
   }
@@ -173,7 +212,7 @@ function NavBar({
         >
           Logout
         </a>
-      </li>,
+      </li>
     );
   }
 
@@ -224,21 +263,98 @@ function NavBar({
     <>
       <nav className={navbarClass}>
         <div className="navbar__menu-container">
-          <ul className="navbar__menu-list" role="navigation">
+          {/* * Desktop navigation - hidden on mobile */}
+          <ul
+            className="navbar__menu-list navbar__menu-list--desktop"
+            role="navigation"
+          >
             {logoItem}
             {userInfo}
             {navLinks}
           </ul>
+
+          {/* * Mobile menu button - always visible on mobile */}
           <button
             className="navbar__mobile-menu-button"
             onClick={handleMobileMenuClick}
-            aria-label="Toggle menu"
+            aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
             aria-expanded={isMobileMenuOpen}
+            aria-controls="mobile-menu"
+            type="button"
           >
-            <span className="navbar__mobile-menu-icon"></span>
+            <span
+              className="navbar__mobile-menu-icon"
+              aria-hidden="true"
+            ></span>
           </button>
         </div>
+
+        {/* * Mobile menu overlay - slides down from top */}
+        <div
+          id="mobile-menu"
+          className={`navbar__mobile-menu ${isMobileMenuOpen ? "visible" : ""}`}
+          aria-hidden={!isMobileMenuOpen}
+        >
+          <div className="navbar__mobile-menu-header">
+            {logoItem}
+            {userInfo && (
+              <div className="navbar__mobile-user-info">{userInfo}</div>
+            )}
+          </div>
+
+          <ul className="navbar__mobile-menu-list" role="navigation">
+            {/* * Render navigation items from navItems array */}
+            {navItems.map((item) => {
+              const isActive = view === item.key.toLowerCase();
+
+              return (
+                <li key={item.key} className="navbar__mobile-item">
+                  <a
+                    href="#"
+                    onClick={(event) => {
+                      event.preventDefault();
+                      // * Close mobile menu when item is clicked
+                      setIsMobileMenuOpen(false);
+                      // * Handle navigation
+                      handleNavItemClick(item.key);
+                    }}
+                    className={`navbar__mobile-link ${isActive ? "active" : ""}`}
+                  >
+                    {item.label}
+                  </a>
+                </li>
+              );
+            })}
+
+            {/* * Add logout button separately for mobile */}
+            {isLoggedIn && (
+              <li key="logout" className="navbar__mobile-item">
+                <a
+                  href="#"
+                  onClick={(event) => {
+                    event.preventDefault();
+                    setIsMobileMenuOpen(false);
+                    onLogout();
+                  }}
+                  className="navbar__mobile-link"
+                >
+                  Logout
+                </a>
+              </li>
+            )}
+          </ul>
+        </div>
       </nav>
+
+      {/* * Mobile menu backdrop - prevents interaction with content behind */}
+      {isMobileMenuOpen && (
+        <div
+          className="navbar__mobile-backdrop"
+          onClick={() => setIsMobileMenuOpen(false)}
+          aria-hidden="true"
+        />
+      )}
+
       {isLoggedIn && (
         <button
           type="button"

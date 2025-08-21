@@ -80,6 +80,7 @@ const NameSelection = ({
   onSearchChange,
   sortBy,
   onSortChange,
+  isSwipeMode,
 }) => {
   // For non-admin users, just show all names
   const displayNames = isAdmin
@@ -122,11 +123,14 @@ const NameSelection = ({
 
   return (
     <div className={styles.nameSelection}>
-      <h2 className={styles.heading}>Pick multiple names you sorta like</h2>
-      <p className={styles.selectionGuide}>
-        You can pick as many as you want, but 2 is the minimum to start. The
-        more you pick, the longer the tournament will take.
-      </p>
+      {/* Swipe Mode Instructions */}
+      {isSwipeMode && (
+        <div className={styles.swipeModeInstructions}>
+          <span>
+            👈 Swipe left to remove • 👉 Swipe right to select for tournament
+          </span>
+        </div>
+      )}
 
       {/* Admin-only filtering and sorting controls */}
       {isAdmin && (
@@ -201,27 +205,36 @@ const NameSelection = ({
       )}
 
       <div className={styles.cardsContainer}>
-        {displayNames.map((nameObj) => (
-          <NameCard
-            key={nameObj.id}
-            name={nameObj.name}
-            description={nameObj.description || DEFAULT_DESCRIPTION}
-            isSelected={selectedNames.some((n) => n.id === nameObj.id)}
-            onClick={() => onToggleName(nameObj)}
-            size="small"
-            // Admin-only metadata display
-            metadata={
-              isAdmin
-                ? {
-                    rating: nameObj.avg_rating,
-                    popularity: nameObj.popularity_score,
-                    tournaments: nameObj.total_tournaments,
-                    categories: nameObj.categories,
-                  }
-                : undefined
-            }
+        {isSwipeMode ? (
+          <SwipeableNameCards
+            names={displayNames}
+            selectedNames={selectedNames}
+            onToggleName={onToggleName}
+            isAdmin={isAdmin}
           />
-        ))}
+        ) : (
+          displayNames.map((nameObj) => (
+            <NameCard
+              key={nameObj.id}
+              name={nameObj.name}
+              description={nameObj.description || DEFAULT_DESCRIPTION}
+              isSelected={selectedNames.some((n) => n.id === nameObj.id)}
+              onClick={() => onToggleName(nameObj)}
+              size="small"
+              // Admin-only metadata display
+              metadata={
+                isAdmin
+                  ? {
+                      rating: nameObj.avg_rating,
+                      popularity: nameObj.popularity_score,
+                      tournaments: nameObj.total_tournaments,
+                      categories: nameObj.categories,
+                    }
+                  : undefined
+              }
+            />
+          ))
+        )}
       </div>
 
       {isAdmin && displayNames.length === 0 && (
@@ -230,6 +243,213 @@ const NameSelection = ({
           <p>Try adjusting your filters or search terms</p>
         </div>
       )}
+    </div>
+  );
+};
+
+// Swipeable Name Cards Component
+const SwipeableNameCards = ({
+  names,
+  selectedNames,
+  onToggleName,
+  isAdmin,
+}) => {
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
+  const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
+  const [isDragging, setIsDragging] = useState(false);
+  const [swipeDirection, setSwipeDirection] = useState(null);
+  const [swipeProgress, setSwipeProgress] = useState(0);
+
+  const currentName = names[currentIndex];
+  const isSelected = selectedNames.some((n) => n.id === currentName?.id);
+
+  const handleDragStart = (e) => {
+    const touch = e.touches ? e.touches[0] : e;
+    setDragStart({ x: touch.clientX, y: touch.clientY });
+    setIsDragging(true);
+    setSwipeDirection(null);
+    setSwipeProgress(0);
+  };
+
+  const handleDragMove = (e) => {
+    if (!isDragging) return;
+
+    const touch = e.touches ? e.touches[0] : e;
+    const deltaX = touch.clientX - dragStart.x;
+    const deltaY = touch.clientY - dragStart.y;
+
+    setDragOffset({ x: deltaX, y: deltaY });
+
+    // Calculate swipe progress (0-1)
+    const progress = Math.min(Math.abs(deltaX) / 150, 1);
+    setSwipeProgress(progress);
+
+    // Determine swipe direction
+    if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > 50) {
+      setSwipeDirection(deltaX > 0 ? "right" : "left");
+    }
+  };
+
+  const handleDragEnd = () => {
+    if (!isDragging) return;
+
+    setIsDragging(false);
+
+    // If swiped far enough, process the swipe
+    if (swipeProgress > 0.5) {
+      if (swipeDirection === "right") {
+        // Swipe right = select/like (add to tournament)
+        if (!isSelected) {
+          onToggleName(currentName);
+        }
+      } else if (swipeDirection === "left") {
+        // Swipe left = pass (remove from tournament if selected)
+        if (isSelected) {
+          onToggleName(currentName);
+        }
+      }
+
+      // Move to next card
+      setTimeout(() => {
+        setCurrentIndex((prev) => (prev + 1) % names.length);
+        setDragOffset({ x: 0, y: 0 });
+        setSwipeDirection(null);
+        setSwipeProgress(0);
+      }, 300);
+    } else {
+      // Reset card position
+      setDragOffset({ x: 0, y: 0 });
+      setSwipeDirection(null);
+      setSwipeProgress(0);
+    }
+  };
+
+  const handleSwipeButton = (direction) => {
+    setSwipeDirection(direction);
+    setSwipeProgress(1);
+
+    setTimeout(() => {
+      if (direction === "right") {
+        // Right button = select/like (add to tournament)
+        if (!isSelected) {
+          onToggleName(currentName);
+        }
+      } else if (direction === "left") {
+        // Left button = pass (remove from tournament if selected)
+        if (isSelected) {
+          onToggleName(currentName);
+        }
+      }
+
+      setCurrentIndex((prev) => (prev + 1) % names.length);
+      setDragOffset({ x: 0, y: 0 });
+      setSwipeDirection(null);
+      setSwipeProgress(0);
+    }, 300);
+  };
+
+  if (!currentName) return null;
+
+  const cardStyle = {
+    transform: `translate(${dragOffset.x}px, ${dragOffset.y}px) rotate(${dragOffset.x * 0.1}deg)`,
+    opacity: isDragging ? 0.9 : 1,
+  };
+
+  const swipeOverlayStyle = {
+    opacity: swipeProgress,
+    transform: `scale(${0.8 + swipeProgress * 0.2})`,
+  };
+
+  return (
+    <div className={styles.swipeContainer}>
+      <div className={styles.swipeCardWrapper}>
+        <div
+          className={`${styles.swipeCard} ${isSelected ? styles.selected : ""}`}
+          style={cardStyle}
+          onMouseDown={handleDragStart}
+          onMouseMove={handleDragMove}
+          onMouseUp={handleDragEnd}
+          onMouseLeave={handleDragEnd}
+          onTouchStart={handleDragStart}
+          onTouchMove={handleDragMove}
+          onTouchEnd={handleDragEnd}
+        >
+          {/* Swipe direction overlays */}
+          <div
+            className={`${styles.swipeOverlay} ${styles.swipeRight} ${swipeDirection === "right" ? styles.active : ""}`}
+            style={swipeOverlayStyle}
+          >
+            <span className={styles.swipeText}>👍 SELECTED</span>
+          </div>
+          <div
+            className={`${styles.swipeOverlay} ${styles.swipeLeft} ${swipeDirection === "left" ? styles.active : ""}`}
+            style={swipeOverlayStyle}
+          >
+            <span className={styles.swipeText}>👎 REMOVED</span>
+          </div>
+
+          {/* Card content */}
+          <div className={styles.swipeCardContent}>
+            <h3 className={styles.swipeCardName}>{currentName.name}</h3>
+            <p className={styles.swipeCardDescription}>
+              {currentName.description || DEFAULT_DESCRIPTION}
+            </p>
+
+            {/* Admin metadata */}
+            {isAdmin && (
+              <div className={styles.swipeCardMetadata}>
+                {currentName.avg_rating && (
+                  <span className={styles.metadataItem}>
+                    ⭐ {currentName.avg_rating}
+                  </span>
+                )}
+                {currentName.popularity_score && (
+                  <span className={styles.metadataItem}>
+                    🔥 {currentName.popularity_score}
+                  </span>
+                )}
+                {currentName.categories &&
+                  currentName.categories.length > 0 && (
+                    <span className={styles.metadataItem}>
+                      🏷️ {currentName.categories.join(", ")}
+                    </span>
+                  )}
+              </div>
+            )}
+          </div>
+
+          {/* Selection indicator */}
+          <div
+            className={`${styles.selectionIndicator} ${isSelected ? styles.selected : ""}`}
+          >
+            {isSelected ? "✓ Selected" : "○ Not Selected"}
+          </div>
+        </div>
+      </div>
+
+      {/* Swipe buttons */}
+      <div className={styles.swipeButtons}>
+        <button
+          onClick={() => handleSwipeButton("left")}
+          className={`${styles.swipeButton} ${styles.swipeLeftButton}`}
+          disabled={!isSelected}
+        >
+          👎 Remove
+        </button>
+
+        <div className={styles.cardProgress}>
+          {currentIndex + 1} of {names.length}
+        </div>
+
+        <button
+          onClick={() => handleSwipeButton("right")}
+          className={`${styles.swipeButton} ${styles.swipeRightButton}`}
+          disabled={isSelected}
+        >
+          👍 Select
+        </button>
+      </div>
     </div>
   );
 };
@@ -470,6 +690,7 @@ function TournamentSetupContent({ onStart }) {
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [sortBy, setSortBy] = useState("alphabetical");
+  const [isSwipeMode, setIsSwipeMode] = useState(false);
 
   // Get categories and other enhanced data
   const { categories } = useSupabaseStorage();
@@ -720,6 +941,16 @@ function TournamentSetupContent({ onStart }) {
                     : "🎲 Select All"}
                 </button>
 
+                <button
+                  onClick={() => setIsSwipeMode(!isSwipeMode)}
+                  className={`${styles.swipeModeToggleButton} ${isSwipeMode ? styles.active : ""}`}
+                  aria-label={
+                    isSwipeMode ? "Switch to card mode" : "Switch to swipe mode"
+                  }
+                >
+                  {isSwipeMode ? "🎯 Cards" : "💫 Swipe"}
+                </button>
+
                 {selectedNames.length >= 2 && (
                   <StartButton
                     selectedNames={selectedNames}
@@ -788,6 +1019,8 @@ function TournamentSetupContent({ onStart }) {
             onSearchChange={setSearchTerm}
             sortBy={sortBy}
             onSortChange={setSortBy}
+            isSwipeMode={isSwipeMode}
+            onSwipeModeToggle={() => setIsSwipeMode(!isSwipeMode)}
           />
 
           {selectedNames.length >= 2 && (

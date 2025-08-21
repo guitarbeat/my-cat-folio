@@ -247,54 +247,21 @@ const ProfileNameCard = memo(
       `Win Rate: ${winRate}% • Matches: ${totalMatches} • Popularity: ${popularity_score || 0}`;
 
     return (
-      <div className={styles.profileNameCardWrapper}>
-        {/* Selection checkbox for admin */}
-        {isAdmin && (
-          <div className={styles.selectionContainer}>
-            <input
-              type="checkbox"
-              checked={isSelected}
-              onChange={() => onSelectionChange(id)}
-              className={styles.selectionCheckbox}
-              aria-label={`Select ${nameText}`}
-            />
-          </div>
-        )}
-
-        {/* Main NameCard with enhanced metadata */}
-        <NameCard
-          name={nameText}
-          description={enhancedDescription}
-          isSelected={false} // We handle selection separately
-          onClick={() => {}} // No click action needed in profile view
-          disabled={false}
-          size="medium"
-          metadata={metadata}
-          className={isHidden ? styles.hiddenName : ""}
-        />
-
-        {/* Admin actions overlay */}
-        {isAdmin && (
-          <div className={styles.adminActionsOverlay}>
-            <button
-              onClick={() => onToggleVisibility(id)}
-              className={styles.actionButton}
-              aria-label={`${isHidden ? "Show" : "Hide"} ${nameText}`}
-            >
-              {isHidden ? "🔒" : "🔓"}
-            </button>
-            {isHidden && (
-              <button
-                onClick={() => onDelete(name)}
-                className={`${styles.actionButton} ${styles.deleteButton}`}
-                aria-label={`Delete ${nameText}`}
-              >
-                🗑️
-              </button>
-            )}
-          </div>
-        )}
-      </div>
+      <NameCard
+        name={nameText}
+        description={enhancedDescription}
+        isSelected={isSelected}
+        onClick={() => {}} // No click action needed in profile view
+        disabled={false}
+        size="medium"
+        metadata={metadata}
+        className={isHidden ? styles.hiddenName : ""}
+        isAdmin={isAdmin}
+        isHidden={isHidden}
+        onToggleVisibility={() => onToggleVisibility(id)}
+        onDelete={() => onDelete(name)}
+        onSelectionChange={(selected) => onSelectionChange(id, selected)}
+      />
     );
   }
 );
@@ -335,8 +302,7 @@ const Profile = ({ userName, onStartNewTournament }) => {
   const [hiddenNames, setHiddenNames] = useState(new Set());
 
   // Admin state
-  const [showBulkActions, setShowBulkActions] = useState(false);
-  const [showSystemStats, setShowSystemStats] = useState(false);
+
   const [showGlobalAnalytics, setShowGlobalAnalytics] = useState(false);
   const [showUserComparison, setShowUserComparison] = useState(false);
   const [selectedNames, setSelectedNames] = useState(new Set());
@@ -896,11 +862,14 @@ const Profile = ({ userName, onStartNewTournament }) => {
           await hideName(nameId);
           setHiddenNames((prev) => new Set([...prev, nameId]));
         }
+
+        // Refresh the names to update the UI
+        fetchNames();
       } catch (error) {
         console.error("Error toggling visibility:", error);
       }
     },
-    [hiddenNames, hideName, unhideName]
+    [hiddenNames, hideName, unhideName, fetchNames]
   );
 
   const handleDeleteName = useCallback(
@@ -940,6 +909,47 @@ const Profile = ({ userName, onStartNewTournament }) => {
       console.error("Error in bulk delete:", error);
     }
   }, [selectedNames, fetchNames]);
+
+  // New bulk operations for all names
+  const handleHideAllNames = useCallback(async () => {
+    try {
+      // Get all visible names (not currently hidden)
+      const visibleNames = names.filter((name) => !hiddenNames.has(name.id));
+
+      for (const name of visibleNames) {
+        await hideName(name.id);
+        setHiddenNames((prev) => new Set([...prev, name.id]));
+      }
+
+      // Show success message
+      console.log(`Hidden ${visibleNames.length} names`);
+      fetchNames();
+    } catch (error) {
+      console.error("Error hiding all names:", error);
+    }
+  }, [names, hiddenNames, hideName, fetchNames]);
+
+  const handleUnhideAllNames = useCallback(async () => {
+    try {
+      // Get all hidden names
+      const hiddenNameIds = Array.from(hiddenNames);
+
+      for (const nameId of hiddenNameIds) {
+        await unhideName(nameId);
+        setHiddenNames((prev) => {
+          const newSet = new Set(prev);
+          newSet.delete(nameId);
+          return newSet;
+        });
+      }
+
+      // Show success message
+      console.log(`Unhidden ${hiddenNameIds.length} names`);
+      fetchNames();
+    } catch (error) {
+      console.error("Error unhiding all names:", error);
+    }
+  }, [hiddenNames, unhideName, fetchNames]);
 
   const handleNameSelection = useCallback((nameId) => {
     setSelectedNames((prev) => {
@@ -1038,8 +1048,6 @@ const Profile = ({ userName, onStartNewTournament }) => {
     console.log("Profile component state:", {
       userName,
       isAdmin,
-      showBulkActions,
-      showSystemStats,
       showGlobalAnalytics,
       showUserComparison,
       showUserAnalysis,
@@ -1047,8 +1055,6 @@ const Profile = ({ userName, onStartNewTournament }) => {
   }, [
     userName,
     isAdmin,
-    showBulkActions,
-    showSystemStats,
     showGlobalAnalytics,
     showUserComparison,
     showUserAnalysis,
@@ -1096,85 +1102,99 @@ const Profile = ({ userName, onStartNewTournament }) => {
             <div className={styles.sidebarHeader}>
               <h3>🔧 Admin Panel</h3>
             </div>
-            
+
             <div className={styles.sidebarSection}>
               <h4>📊 Quick Stats</h4>
               <div className={styles.quickStats}>
                 <div className={styles.quickStat}>
-                  <span className={styles.quickStatValue}>{systemStats.totalUsers}</span>
+                  <span className={styles.quickStatValue}>
+                    {systemStats.totalUsers}
+                  </span>
                   <span className={styles.quickStatLabel}>Users</span>
                 </div>
                 <div className={styles.quickStat}>
-                  <span className={styles.quickStatValue}>{systemStats.totalNames}</span>
+                  <span className={styles.quickStatValue}>
+                    {systemStats.totalNames}
+                  </span>
                   <span className={styles.quickStatLabel}>Names</span>
                 </div>
                 <div className={styles.quickStat}>
-                  <span className={styles.quickStatValue}>{systemStats.totalRatings}</span>
+                  <span className={styles.quickStatValue}>
+                    {systemStats.totalRatings}
+                  </span>
                   <span className={styles.quickStatLabel}>Ratings</span>
                 </div>
               </div>
             </div>
 
+            {/* Quick Bulk Operations - Always Visible */}
             <div className={styles.sidebarSection}>
-              <h4>🎯 Actions</h4>
+              <h4>🎯 Quick Actions</h4>
+              <div className={styles.quickBulkButtons}>
+                <button
+                  onClick={handleHideAllNames}
+                  className={`${styles.sidebarButton} ${styles.warningButton}`}
+                  title="Hide all visible names"
+                >
+                  🔒 Hide All Names
+                </button>
+                <button
+                  onClick={handleUnhideAllNames}
+                  className={`${styles.sidebarButton} ${styles.successButton}`}
+                  title="Unhide all hidden names"
+                >
+                  🔓 Unhide All Names
+                </button>
+              </div>
+            </div>
+
+            {/* Analytics */}
+            <div className={styles.sidebarSection}>
+              <h4>📊 Analytics</h4>
               <div className={styles.sidebarActions}>
                 <button
-                  onClick={() => setShowBulkActions(!showBulkActions)}
-                  className={`${styles.sidebarButton} ${showBulkActions ? styles.active : ''}`}
-                >
-                  📦 Bulk Actions
-                </button>
-                <button
-                  onClick={() => setShowSystemStats(!showSystemStats)}
-                  className={`${styles.sidebarButton} ${showSystemStats ? styles.active : ''}`}
-                >
-                  📊 System Stats
-                </button>
-                <button
                   onClick={() => setShowGlobalAnalytics(!showGlobalAnalytics)}
-                  className={`${styles.sidebarButton} ${showGlobalAnalytics ? styles.active : ''}`}
+                  className={`${styles.sidebarButton} ${showGlobalAnalytics ? styles.active : ""}`}
                 >
                   🌍 Global Analytics
                 </button>
                 <button
                   onClick={() => setShowUserComparison(!showUserComparison)}
-                  className={`${styles.sidebarButton} ${showUserComparison ? styles.active : ''}`}
+                  className={`${styles.sidebarButton} ${showUserComparison ? styles.active : ""}`}
                 >
-                  👥 User Comparison
+                  👥 User Rankings
                 </button>
                 <button
                   onClick={() => setShowUserAnalysis(!showUserAnalysis)}
-                  className={`${styles.sidebarButton} ${showUserAnalysis ? styles.active : ''}`}
+                  className={`${styles.sidebarButton} ${showUserAnalysis ? styles.active : ""}`}
                 >
                   🔍 User Analysis
                 </button>
               </div>
             </div>
 
-            {/* Bulk Actions - Compact */}
-            {showBulkActions && (
+            {/* Selected Names Bulk Actions - Only show when names are selected */}
+            {selectedNames.size > 0 && (
               <div className={styles.sidebarSection}>
-                <h4>📦 Bulk Operations</h4>
+                <h4>📦 Selected ({selectedNames.size})</h4>
                 <div className={styles.bulkActionsCompact}>
                   <button
                     onClick={handleBulkHide}
                     className={`${styles.sidebarButton} ${styles.dangerButton}`}
-                    disabled={selectedNames.size === 0}
                   >
-                    🔒 Hide ({selectedNames.size})
+                    🔒 Hide Selected
                   </button>
                   <button
                     onClick={handleBulkDelete}
                     className={`${styles.sidebarButton} ${styles.dangerButton}`}
-                    disabled={selectedNames.size === 0}
                   >
-                    🗑️ Delete ({selectedNames.size})
+                    🗑️ Delete Selected
                   </button>
                   <button
                     onClick={() => setSelectedNames(new Set())}
                     className={styles.sidebarButton}
                   >
-                    ✕ Clear
+                    ✕ Clear Selection
                   </button>
                 </div>
               </div>
@@ -1279,52 +1299,13 @@ const Profile = ({ userName, onStartNewTournament }) => {
           </div>
 
           {/* Analytics Panels - Collapsible */}
-          {(showSystemStats || showGlobalAnalytics || showUserComparison || showUserAnalysis) && (
+          {(showGlobalAnalytics || showUserComparison || showUserAnalysis) && (
             <div className={styles.analyticsPanels}>
-              {/* System Statistics */}
-              {showSystemStats && (
-                <div className={styles.analyticsPanel}>
-                  <h3>📊 System Statistics</h3>
-                  <div className={styles.statGrid}>
-                    <div className={styles.statCard}>
-                      <h4>Total Users</h4>
-                      <span className={styles.statValue}>
-                        {systemStats.totalUsers}
-                      </span>
-                    </div>
-                    <div className={styles.statCard}>
-                      <h4>Total Names</h4>
-                      <span className={styles.statValue}>
-                        {systemStats.totalNames}
-                      </span>
-                    </div>
-                    <div className={styles.statCard}>
-                      <h4>Hidden Names</h4>
-                      <span className={styles.statValue}>
-                        {systemStats.hiddenNames}
-                      </span>
-                    </div>
-                    <div className={styles.statCard}>
-                      <h4>Total Ratings</h4>
-                      <span className={styles.statValue}>
-                        {systemStats.totalRatings}
-                      </span>
-                    </div>
-                    <div className={styles.statCard}>
-                      <h4>Avg Popularity</h4>
-                      <span className={styles.statValue}>
-                        {systemStats.avgPopularityScore}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              )}
-
               {/* Global Analytics */}
               {showGlobalAnalytics && (
                 <div className={styles.analyticsPanel}>
                   <h3>🌍 Global System Analytics</h3>
-                  
+
                   {/* Global Rating Overview */}
                   <div className={styles.analyticsSection}>
                     <h4>📊 Global Rating Statistics</h4>
@@ -1357,14 +1338,17 @@ const Profile = ({ userName, onStartNewTournament }) => {
                   </div>
 
                   {/* Global Rating Distribution */}
-                  {Object.keys(globalAnalytics.ratingDistribution).length > 0 && (
+                  {Object.keys(globalAnalytics.ratingDistribution).length >
+                    0 && (
                     <div className={styles.analyticsSection}>
                       <h4>📈 Global Rating Distribution</h4>
                       <div className={styles.chartWrapper}>
                         <Bar
                           key="global-rating-distribution"
                           data={{
-                            labels: Object.keys(globalAnalytics.ratingDistribution),
+                            labels: Object.keys(
+                              globalAnalytics.ratingDistribution
+                            ),
                             datasets: [
                               {
                                 label: "Number of Ratings",
@@ -1392,7 +1376,9 @@ const Profile = ({ userName, onStartNewTournament }) => {
                                 beginAtZero: true,
                                 title: { display: true, text: "Count" },
                               },
-                              x: { title: { display: true, text: "Rating Range" } },
+                              x: {
+                                title: { display: true, text: "Rating Range" },
+                              },
                             },
                           }}
                         />
@@ -1423,17 +1409,24 @@ const Profile = ({ userName, onStartNewTournament }) => {
                     <div className={styles.analyticsSection}>
                       <h4>📉 Least Popular Names</h4>
                       <div className={styles.popularNamesGrid}>
-                        {globalAnalytics.leastPopularNames.map((name, index) => (
-                          <div key={name.id} className={styles.popularNameCard}>
-                            <span className={styles.rank}>
-                              #{globalAnalytics.leastPopularNames.length - index}
-                            </span>
-                            <span className={styles.name}>{name.name}</span>
-                            <span className={styles.popularity}>
-                              {name.popularity_score}
-                            </span>
-                          </div>
-                        ))}
+                        {globalAnalytics.leastPopularNames.map(
+                          (name, index) => (
+                            <div
+                              key={name.id}
+                              className={styles.popularNameCard}
+                            >
+                              <span className={styles.rank}>
+                                #
+                                {globalAnalytics.leastPopularNames.length -
+                                  index}
+                              </span>
+                              <span className={styles.name}>{name.name}</span>
+                              <span className={styles.popularity}>
+                                {name.popularity_score}
+                              </span>
+                            </div>
+                          )
+                        )}
                       </div>
                     </div>
                   )}
@@ -1444,7 +1437,7 @@ const Profile = ({ userName, onStartNewTournament }) => {
               {showUserComparison && (
                 <div className={styles.analyticsPanel}>
                   <h3>👥 User Performance Comparison</h3>
-                  
+
                   {/* Top Users */}
                   {userComparison.topUsers.length > 0 && (
                     <div className={styles.analyticsSection}>
@@ -1453,10 +1446,14 @@ const Profile = ({ userName, onStartNewTournament }) => {
                         {userComparison.topUsers.map((user, index) => (
                           <div key={user.userName} className={styles.userCard}>
                             <div className={styles.userRank}>#{index + 1}</div>
-                            <div className={styles.userName}>{user.userName}</div>
+                            <div className={styles.userName}>
+                              {user.userName}
+                            </div>
                             <div className={styles.userStats}>
                               <div className={styles.userStat}>
-                                <span className={styles.statLabel}>Win Rate:</span>
+                                <span className={styles.statLabel}>
+                                  Win Rate:
+                                </span>
                                 <span className={styles.statValue}>
                                   {user.winRate}%
                                 </span>
@@ -1470,7 +1467,9 @@ const Profile = ({ userName, onStartNewTournament }) => {
                                 </span>
                               </div>
                               <div className={styles.userStat}>
-                                <span className={styles.statLabel}>Matches:</span>
+                                <span className={styles.statLabel}>
+                                  Matches:
+                                </span>
                                 <span className={styles.statValue}>
                                   {user.totalMatches}
                                 </span>
@@ -1561,7 +1560,11 @@ const Profile = ({ userName, onStartNewTournament }) => {
                     <div className={styles.userPreferences}>
                       <h4>Preferences</h4>
                       <pre className={styles.preferencesText}>
-                        {JSON.stringify(userAnalysisData.userPreferences, null, 2)}
+                        {JSON.stringify(
+                          userAnalysisData.userPreferences,
+                          null,
+                          2
+                        )}
                       </pre>
                     </div>
 
@@ -1755,7 +1758,8 @@ const Profile = ({ userName, onStartNewTournament }) => {
                         {
                           label: "Win Rate %",
                           data: filteredRatings.slice(0, 10).map((r) => {
-                            const total = (r.user_wins || 0) + (r.user_losses || 0);
+                            const total =
+                              (r.user_wins || 0) + (r.user_losses || 0);
                             return total > 0
                               ? Math.round((r.user_wins / total) * 100)
                               : 0;
@@ -1875,64 +1879,65 @@ const Profile = ({ userName, onStartNewTournament }) => {
               )}
 
               {/* Rating vs Popularity Scatter */}
-              {chartData.popularityData && chartData.popularityData.length > 0 && (
-                <EnhancedChart
-                  title="Rating vs Popularity"
-                  description="Relationship between popularity scores and ratings"
-                  className={styles.fullWidthChart}
-                >
-                  <div className={styles.chartWrapper}>
-                    <Bar
-                      key="popularity-rating-bar"
-                      data={{
-                        labels: chartData.popularityData
-                          .slice(0, 15)
-                          .map((d) => d.name),
-                        datasets: [
-                          {
-                            label: "Popularity Score",
-                            data: chartData.popularityData
-                              .slice(0, 15)
-                              .map((d) => d.x),
-                            backgroundColor: "rgba(16, 185, 129, 0.8)",
-                            borderColor: "rgba(16, 185, 129, 1)",
-                            borderWidth: 2,
+              {chartData.popularityData &&
+                chartData.popularityData.length > 0 && (
+                  <EnhancedChart
+                    title="Rating vs Popularity"
+                    description="Relationship between popularity scores and ratings"
+                    className={styles.fullWidthChart}
+                  >
+                    <div className={styles.chartWrapper}>
+                      <Bar
+                        key="popularity-rating-bar"
+                        data={{
+                          labels: chartData.popularityData
+                            .slice(0, 15)
+                            .map((d) => d.name),
+                          datasets: [
+                            {
+                              label: "Popularity Score",
+                              data: chartData.popularityData
+                                .slice(0, 15)
+                                .map((d) => d.x),
+                              backgroundColor: "rgba(16, 185, 129, 0.8)",
+                              borderColor: "rgba(16, 185, 129, 1)",
+                              borderWidth: 2,
+                            },
+                            {
+                              label: "Rating (scaled)",
+                              data: chartData.popularityData
+                                .slice(0, 15)
+                                .map((d) => d.y / 20), // Scale down for visibility
+                              backgroundColor: "rgba(139, 92, 246, 0.8)",
+                              borderColor: "rgba(139, 92, 246, 1)",
+                              borderWidth: 2,
+                            },
+                          ],
+                        }}
+                        options={{
+                          responsive: true,
+                          maintainAspectRatio: false,
+                          plugins: {
+                            legend: { position: "top" },
+                            title: {
+                              display: true,
+                              text: "Popularity vs Rating Comparison",
+                            },
                           },
-                          {
-                            label: "Rating (scaled)",
-                            data: chartData.popularityData
-                              .slice(0, 15)
-                              .map((d) => d.y / 20), // Scale down for visibility
-                            backgroundColor: "rgba(139, 92, 246, 0.8)",
-                            borderColor: "rgba(139, 92, 246, 1)",
-                            borderWidth: 2,
+                          scales: {
+                            y: {
+                              beginAtZero: true,
+                              title: { display: true, text: "Score" },
+                            },
+                            x: {
+                              title: { display: true, text: "Cat Names" },
+                            },
                           },
-                        ],
-                      }}
-                      options={{
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                          legend: { position: "top" },
-                          title: {
-                            display: true,
-                            text: "Popularity vs Rating Comparison",
-                          },
-                        },
-                        scales: {
-                          y: {
-                            beginAtZero: true,
-                            title: { display: true, text: "Score" },
-                          },
-                          x: {
-                            title: { display: true, text: "Cat Names" },
-                          },
-                        },
-                      }}
-                    />
-                  </div>
-                </EnhancedChart>
-              )}
+                        }}
+                      />
+                    </div>
+                  </EnhancedChart>
+                )}
             </div>
           )}
 
