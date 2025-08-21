@@ -46,6 +46,7 @@ import styles from "./NameCard.module.css";
  * @param {string} [props.shortcutHint] - Keyboard shortcut hint
  * @param {string} [props.className=''] - Additional CSS classes
  * @param {('small'|'medium')} [props.size='medium'] - Card size variant
+ * @param {Object} [props.metadata] - Optional metadata to display (rating, popularity, etc.)
  */
 function NameCard({
   name,
@@ -56,6 +57,7 @@ function NameCard({
   shortcutHint,
   className = "",
   size = "medium",
+  metadata,
 }) {
   const [rippleStyle, setRippleStyle] = useState({});
   const [isRippling, setIsRippling] = useState(false);
@@ -216,6 +218,42 @@ function NameCard({
           {description}
         </p>
       )}
+
+      {/* Enhanced metadata display */}
+      {metadata && (
+        <div className={styles.metadata}>
+          {metadata.rating && (
+            <span className={styles.metaItem} title="Average Rating">
+              ⭐ {metadata.rating}
+            </span>
+          )}
+          {metadata.popularity && (
+            <span className={styles.metaItem} title="Popularity Score">
+              🔥 {metadata.popularity}
+            </span>
+          )}
+          {metadata.tournaments && (
+            <span className={styles.metaItem} title="Tournament Appearances">
+              🏆 {metadata.tournaments}
+            </span>
+          )}
+          {metadata.categories && metadata.categories.length > 0 && (
+            <div className={styles.categories}>
+              {metadata.categories.slice(0, 2).map((category, index) => (
+                <span key={index} className={styles.categoryTag}>
+                  {category}
+                </span>
+              ))}
+              {metadata.categories.length > 2 && (
+                <span className={styles.categoryMore}>
+                  +{metadata.categories.length - 2}
+                </span>
+              )}
+            </div>
+          )}
+        </div>
+      )}
+
       {shortcutHint && (
         <span className={styles.shortcutHint} aria-hidden="true">
           {shortcutHint}
@@ -246,6 +284,12 @@ NameCard.propTypes = {
   shortcutHint: PropTypes.string,
   className: PropTypes.string,
   size: PropTypes.oneOf(["small", "medium"]),
+  metadata: PropTypes.shape({
+    rating: PropTypes.number,
+    popularity: PropTypes.number,
+    tournaments: PropTypes.number,
+    categories: PropTypes.arrayOf(PropTypes.string),
+  }),
 };
 
 export default NameCard;

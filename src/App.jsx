@@ -88,10 +88,10 @@ import LoadingSpinner from "./components/LoadingSpinner/LoadingSpinner";
 const Results = React.lazy(() => import("./components/Results/Results"));
 const Profile = React.lazy(() => import("./components/Profile/Profile"));
 const TournamentSetup = React.lazy(
-  () => import("./components/TournamentSetup/TournamentSetup")
+  () => import("./components/TournamentSetup/TournamentSetup"),
 );
 const Tournament = React.lazy(
-  () => import("./components/Tournament/Tournament")
+  () => import("./components/Tournament/Tournament"),
 );
 
 function App() {
@@ -164,9 +164,9 @@ function App() {
         // For values near 0 (both/none), we don't update wins/losses
       });
 
-      // Get name_ids from name_options table
+      // Get name_ids from cat_name_options table
       const { data: nameOptions, error: nameError } = await supabase
-        .from("name_options")
+        .from("cat_name_options")
         .select("id, name")
         .in("name", Object.keys(tournamentResults));
 
@@ -226,7 +226,7 @@ function App() {
         const updatedRatings = { ...ratings };
         recordsToUpsert.forEach((record) => {
           const name = nameOptions.find(
-            (opt) => opt.id === record.name_id
+            (opt) => opt.id === record.name_id,
           )?.name;
           if (name) {
             updatedRatings[name] = {
@@ -263,7 +263,7 @@ function App() {
         name: n.name,
         description: n.description,
         rating: ratings[n.name]?.rating || 1500,
-      }))
+      })),
     );
   };
 
@@ -280,12 +280,12 @@ function App() {
           };
           return acc;
         },
-        {}
+        {},
       );
 
       // Get name_ids in a single query
       const { data: nameOptions, error: nameError } = await supabase
-        .from("name_options")
+        .from("cat_name_options")
         .select("id, name")
         .in("name", Object.keys(updatedRatings));
 

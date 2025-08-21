@@ -45,11 +45,94 @@
 /* Enhanced 3D content positioning */
 .name,
 .description,
-.checkMark {
+.checkMark,
+.metadata {
   position: relative;
   z-index: 1;
   transform: translateZ(20px);
   transition: transform var(--duration-normal) var(--ease-out);
+}
+
+/* Metadata Display */
+.metadata {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin-top: auto;
+}
+
+.metaItem {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-size: var(--text-xs);
+  font-weight: 500;
+  color: var(--text-secondary);
+  background: var(--surface-color);
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-color);
+  transition: all var(--duration-fast) var(--ease-out);
+}
+
+.metaItem:hover {
+  background: var(--surface-hover);
+  border-color: var(--accent-color);
+  color: var(--text-primary);
+}
+
+/* Categories Display */
+.categories {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1);
+  margin-top: var(--space-1);
+}
+
+.categoryTag {
+  font-size: var(--text-xs);
+  font-weight: 500;
+  color: var(--text-accent);
+  background: var(--accent-color-alpha);
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--accent-color);
+  transition: all var(--duration-fast) var(--ease-out);
+}
+
+.categoryTag:hover {
+  background: var(--accent-color);
+  color: var(--text-on-accent);
+}
+
+.categoryMore {
+  font-size: var(--text-xs);
+  font-weight: 500;
+  color: var(--text-tertiary);
+  background: var(--surface-color);
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-color);
+}
+
+/* Responsive metadata for small cards */
+.small .metadata {
+  gap: var(--space-1);
+}
+
+.small .metaItem {
+  font-size: var(--text-xs);
+  padding: var(--space-1);
+}
+
+.small .categories {
+  gap: var(--space-1);
+}
+
+.small .categoryTag,
+.small .categoryMore {
+  font-size: var(--text-xs);
+  padding: var(--space-1);
 }
 
 /* Tilt effect enhancements */

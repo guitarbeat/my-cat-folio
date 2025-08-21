@@ -95,7 +95,7 @@ function NavBar({
       setView(key.toLowerCase());
       setIsMobileMenuOpen(false);
     },
-    [setView]
+    [setView],
   );
 
   useEffect(() => {
@@ -154,7 +154,7 @@ function NavBar({
           >
             {link.name}
           </a>
-        </li>
+        </li>,
       );
     });
   }
@@ -173,7 +173,7 @@ function NavBar({
         >
           Logout
         </a>
-      </li>
+      </li>,
     );
   }
 

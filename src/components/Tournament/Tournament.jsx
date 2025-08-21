@@ -171,7 +171,7 @@ function TournamentContent({
       },
       { path: "/sounds/Main Menu 1 (Ruins).mp3", name: "Ruins" },
     ],
-    []
+    [],
   );
 
   // Sound effects configuration with updated weights
@@ -182,7 +182,7 @@ function TournamentContent({
       { path: "/sounds/surprise.mp3", weight: 0.1 },
       { path: "/sounds/level-up.mp3", weight: 0.2 },
     ],
-    []
+    [],
   );
 
   // Initialize audio only once
@@ -210,7 +210,7 @@ function TournamentContent({
   const getRandomSoundEffect = useCallback(() => {
     const totalWeight = soundEffects.reduce(
       (sum, effect) => sum + effect.weight,
-      0
+      0,
     );
     let random = Math.random() * totalWeight;
 
@@ -340,7 +340,7 @@ function TournamentContent({
       // Hide result after 2 seconds
       setTimeout(() => setShowMatchResult(false), 2500);
     },
-    [currentMatch]
+    [currentMatch],
   );
 
   const handleVoteWithAnimation = useCallback(
@@ -436,7 +436,7 @@ function TournamentContent({
       handleVote,
       onVote,
       currentMatch,
-    ]
+    ],
   );
 
   // Separate click handler for name cards
@@ -452,7 +452,7 @@ function TournamentContent({
       // Then trigger the vote
       handleVoteWithAnimation(option);
     },
-    [isProcessing, isTransitioning, handleVoteWithAnimation]
+    [isProcessing, isTransitioning, handleVoteWithAnimation],
   );
 
   const handleEndEarly = useCallback(async () => {
