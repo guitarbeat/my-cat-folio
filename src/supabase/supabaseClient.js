@@ -30,22 +30,19 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey);
  */
 export const catNamesAPI = {
   /**
-   * Get all names with descriptions and ratings for a user
+   * Get all names with descriptions and ratings (hidden names are filtered out globally)
    */
   async getNamesWithDescriptions(userName = null) {
     try {
-      // Get hidden name IDs if user is specified
+      // Get ALL hidden name IDs globally (not user-specific)
       let hiddenIds = [];
-      if (userName) {
-        const { data: hiddenData, error: hiddenError } = await supabase
-          .from("cat_name_ratings")
-          .select("name_id")
-          .eq("user_name", userName)
-          .eq("is_hidden", true);
+      const { data: hiddenData, error: hiddenError } = await supabase
+        .from("cat_name_ratings")
+        .select("name_id")
+        .eq("is_hidden", true);
 
-        if (hiddenError) throw hiddenError;
-        hiddenIds = hiddenData?.map((item) => item.name_id) || [];
-      }
+      if (hiddenError) throw hiddenError;
+      hiddenIds = hiddenData?.map((item) => item.name_id) || [];
 
       // Build query
       let query = supabase.from("cat_name_options").select(`
@@ -65,7 +62,7 @@ export const catNamesAPI = {
         )
       `);
 
-      // Filter out hidden names if user specified
+      // Filter out ALL hidden names globally
       if (hiddenIds.length > 0) {
         query = query.not("id", "in", `(${hiddenIds.join(",")})`);
       }
@@ -473,6 +470,160 @@ export const tournamentsAPI = {
       return tournaments;
     } catch (error) {
       console.error("Error fetching tournaments:", error);
+      return [];
+    }
+  },
+
+  /**
+   * Save tournament name selections for a user
+   * @param {string} userName - The username
+   * @param {Array} selectedNames - Array of name objects with id, name properties
+   * @param {string} tournamentId - Optional tournament identifier
+   * @returns {Object} Success status and selection count
+   */
+  async saveTournamentSelections(userName, selectedNames, tournamentId = null) {
+    try {
+      const now = new Date().toISOString();
+      const tournamentId = tournamentId || `tournament_${Date.now()}`;
+
+      // Prepare records for tournament selections
+      const selectionRecords = selectedNames.map(nameObj => ({
+        user_name: userName,
+        name_id: nameObj.id,
+        name: nameObj.name,
+        tournament_id: tournamentId,
+        selected_at: now,
+        selection_type: 'tournament_setup'
+      }));
+
+      // Insert tournament selections
+      const { error: selectionError } = await supabase
+        .from("tournament_selections")
+        .insert(selectionRecords);
+
+      if (selectionError) {
+        // If table doesn't exist, create it first
+        if (selectionError.code === '42P01') {
+          await this.createTournamentSelectionsTable();
+          // Retry insert
+          const { error: retryError } = await supabase
+            .from("tournament_selections")
+            .insert(selectionRecords);
+          if (retryError) throw retryError;
+        } else {
+          throw selectionError;
+        }
+      }
+
+      // Update the cat_name_ratings table to track selection count
+      const updatePromises = selectedNames.map(nameObj =>
+        supabase
+          .from("cat_name_ratings")
+          .upsert({
+            user_name: userName,
+            name_id: nameObj.id,
+            tournament_selections: supabase.sql`COALESCE(tournament_selections, 0) + 1`,
+            last_selected_at: now,
+            updated_at: now
+          }, { onConflict: "user_name,name_id" })
+      );
+
+      await Promise.all(updatePromises);
+
+      return {
+        success: true,
+        tournamentId,
+        selectionCount: selectedNames.length,
+        selectedNames: selectedNames.map(n => n.name)
+      };
+    } catch (error) {
+      console.error("Error saving tournament selections:", error);
+      throw error;
+    }
+  },
+
+  /**
+   * Create the tournament_selections table if it doesn't exist
+   */
+  async createTournamentSelectionsTable() {
+    try {
+      const { error } = await supabase.rpc('create_tournament_selections_table');
+      if (error) {
+        console.warn("Could not create table via RPC, table may already exist:", error);
+      }
+    } catch (error) {
+      console.warn("Table creation RPC not available, table may already exist:", error);
+    }
+  },
+
+  /**
+   * Get tournament selection history for a user
+   * @param {string} userName - The username
+   * @param {number} limit - Maximum number of records to return
+   * @returns {Array} Array of tournament selection records
+   */
+  async getTournamentSelectionHistory(userName, limit = 50) {
+    try {
+      const { data, error } = await supabase
+        .from("tournament_selections")
+        .select(`
+          *,
+          cat_name_options (
+            name,
+            description
+          )
+        `)
+        .eq("user_name", userName)
+        .order("selected_at", { ascending: false })
+        .limit(limit);
+
+      if (error) {
+        // If table doesn't exist, return empty array
+        if (error.code === '42P01') {
+          return [];
+        }
+        throw error;
+      }
+
+      return data || [];
+    } catch (error) {
+      console.error("Error fetching tournament selection history:", error);
+      return [];
+    }
+  },
+
+  /**
+   * Get popular names based on tournament selections
+   * @param {number} limit - Maximum number of names to return
+   * @returns {Array} Array of popular names with selection counts
+   */
+  async getPopularTournamentNames(limit = 20) {
+    try {
+      const { data, error } = await supabase
+        .from("tournament_selections")
+        .select(`
+          name_id,
+          cat_name_options (
+            name,
+            description
+          ),
+          selection_count:count
+        `)
+        .group("name_id, cat_name_options.name, cat_name_options.description")
+        .order("selection_count", { ascending: false })
+        .limit(limit);
+
+      if (error) {
+        // If table doesn't exist, return empty array
+        if (error.code === '42P01') {
+          return [];
+        }
+        throw error;
+      }
+
+      return data || [];
+    } catch (error) {
+      console.error("Error fetching popular tournament names:", error);
       return [];
     }
   },

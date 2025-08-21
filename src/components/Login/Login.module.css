@@ -99,6 +99,10 @@
   transform: translateZ(0);
   animation: appearContainer 0.6s ease-out forwards;
   -ms-overflow-style: none; /* IE and Edge */
+
+  /* * Enhanced grid alignment to ensure proper centering */
+  align-items: center;
+  justify-items: center;
 }
 
 .loginContainer::-webkit-scrollbar {
@@ -128,8 +132,38 @@
   overflow: hidden;
   text-align: center;
   background: linear-gradient(135deg, rgb(0 0 0 / 40%), rgb(0 0 0 / 10%));
+
+  /* * Simplified but effective centering approach */
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+
+  /* * Ensure the flex container is centered in its grid cell */
+  align-self: center;
+  justify-self: center;
 }
 
+/* * Ensure all direct children are properly centered */
+.imageSection > * {
+  text-align: center;
+  margin: 0 auto;
+}
+
+/* * Ensure the grid cell containing imageSection is properly aligned */
+.loginContainer > *:first-child {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+
+  /* * Additional grid alignment properties */
+  place-self: center;
+  align-self: center;
+  justify-self: center;
+}
+
+/* * Restore the gradient overlay effect */
 .imageSection::after {
   position: absolute;
   bottom: 0;
@@ -141,14 +175,22 @@
   background: linear-gradient(to top, rgb(0 0 0 / 20%), transparent);
 }
 
+/* * Specific centering for the title */
 .welcomeTitle {
   position: relative;
-  margin: 0;
+  margin: 0 auto;
   font-size: 2rem;
   font-weight: 700;
   color: white;
   text-shadow: 0 2px 8px rgb(0 0 0 / 30%);
   animation: slideDown 0.5s 0.2s ease-out both;
+
+  /* * Ensure title is centered */
+  text-align: center;
+  width: 100%;
+
+  /* * Additional centering properties */
+  display: block;
 }
 
 .welcomeTitle::after {
@@ -172,13 +214,20 @@
   }
 }
 
+/* * Specific centering for the text */
 .welcomeText {
   max-width: 95%;
-  margin: 0;
+  margin: 0 auto;
   font-size: 0.95rem;
   line-height: 1.5;
   color: rgb(255 255 255 / 90%);
   animation: fadeIn 0.5s 0.4s ease-out both;
+
+  /* * Ensure text is centered */
+  text-align: center;
+
+  /* * Additional centering properties */
+  display: block;
 }
 
 @keyframes fadeIn {
@@ -191,6 +240,7 @@
   }
 }
 
+/* * Specific centering for the image */
 .catImage {
   width: min(100%, 220px);
   aspect-ratio: 1;
@@ -200,6 +250,10 @@
   box-shadow: 0 8px 32px rgb(0 0 0 / 20%);
   transition: transform 0.3s ease;
   animation: pulseImage 1s ease-in-out infinite alternate;
+
+  /* * Ensure image is centered */
+  display: block;
+  margin: 0 auto;
 }
 
 .catImage:hover {
@@ -251,7 +305,7 @@
   margin: 0 0 0.5rem;
   font-size: 1.75rem;
   font-weight: 600;
-  color: #1f2937; /* Dark gray for better contrast on white background */
+  color: var(--charcoal); /* Using new brand color */
 }
 
 .loginTitle::after {
@@ -261,7 +315,7 @@
   width: 40%;
   height: 3px;
   content: "";
-  background: linear-gradient(to right, #ff6b6b, transparent);
+  background: linear-gradient(to right, var(--accent-color), transparent);
   border-radius: 3px;
 }
 
@@ -330,7 +384,7 @@
 }
 
 .inputLabel:focus-within {
-  color: #667eea;
+  color: var(--accent-color);
   transform: scale(1.02);
 }
 
@@ -468,13 +522,21 @@
 }
 
 .singleButton.hasName {
-  background: linear-gradient(135deg, #10b981, #059669);
-  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
+  background: linear-gradient(
+    135deg,
+    var(--accent-color),
+    var(--highlight-color)
+  );
+  box-shadow: 0 4px 15px rgba(232, 191, 118, 0.4);
 }
 
 .singleButton.hasName:hover {
-  background: linear-gradient(135deg, #059669, #047857);
-  box-shadow: 0 8px 25px rgba(16, 185, 129, 0.6);
+  background: linear-gradient(
+    135deg,
+    var(--highlight-color),
+    var(--accent-color)
+  );
+  box-shadow: 0 8px 25px rgba(232, 191, 118, 0.6);
 }
 
 .singleButton:disabled {
@@ -527,10 +589,30 @@
   margin: 0;
   font-size: 0.85rem;
   line-height: 1.4;
-  color: #6b7280; /* Medium gray for better contrast on white background */
+  color: var(--text-secondary); /* Better contrast for readability */
   text-align: center;
   transition: all 0.3s ease;
   animation: fadeIn 0.5s ease;
+}
+
+/* * Enhanced helper text with better visibility */
+.helperText.enhanced {
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+/* * Special styling for the random name generation text */
+.helperText.randomNameText {
+  color: var(--neon-cyan);
+  font-weight: 500;
+  text-shadow: 0 0 8px rgba(var(--neon-cyan-rgb), 0.3);
+  transition: all 0.3s ease;
+}
+
+.helperText.randomNameText:hover {
+  color: var(--neon-cyan-600);
+  text-shadow: 0 0 12px rgba(var(--neon-cyan-rgb), 0.5);
+  transform: translateY(-1px);
 }
 
 .typingIndicator {
@@ -539,15 +621,15 @@
   justify-content: center;
   gap: 0.5rem;
   padding: 0.5rem;
-  background: #f0f9ff;
-  border: 1px solid #bae6fd;
+  background: rgba(232, 191, 118, 0.1);
+  border: 1px solid var(--accent-color);
   border-radius: 8px;
   animation: slideIn 0.3s ease;
 }
 
 .typingText {
   font-size: 0.85rem;
-  color: #0369a1;
+  color: var(--accent-color);
   font-weight: 500;
 }
 
@@ -593,36 +675,40 @@
   margin: 0.5rem 0 0;
   font-size: 0.8rem;
   font-style: italic;
-  color: #6b7280; /* Medium gray for better contrast on white background */
+  color: var(--blue-gray); /* Using new brand color */
 }
 
 .characterCounter {
   margin-top: 0.5rem;
   padding: 0.5rem;
-  background: #f8fafc;
+  background: rgba(232, 191, 118, 0.05);
   border-radius: 8px;
-  border: 1px solid #e2e8f0;
+  border: 1px solid var(--accent-color);
 }
 
 .counterText {
   display: block;
   font-size: 0.75rem;
   font-weight: 500;
-  color: #64748b;
+  color: var(--blue-gray);
   margin-bottom: 0.25rem;
 }
 
 .counterBar {
   width: 100%;
   height: 4px;
-  background: #e2e8f0;
+  background: rgba(232, 191, 118, 0.2);
   border-radius: 2px;
   overflow: hidden;
 }
 
 .counterProgress {
   height: 100%;
-  background: linear-gradient(90deg, #667eea, #764ba2);
+  background: linear-gradient(
+    90deg,
+    var(--accent-color),
+    var(--highlight-color)
+  );
   border-radius: 2px;
   transition: width 0.3s ease;
 }
@@ -638,7 +724,7 @@
   position: relative;
   display: inline-block;
   font-weight: 600;
-  color: var(--primary-color);
+  color: var(--accent-color);
 }
 
 .nameHighlight::after {
@@ -648,7 +734,7 @@
   width: 100%;
   height: 2px;
   content: "";
-  background: rgb(var(--primary-rgb) / 30%);
+  background: rgba(232, 191, 118, 0.3);
   border-radius: 2px;
 }
 
@@ -662,9 +748,29 @@
   padding-top: 4px;
   margin: 0;
   font-size: 0.85rem;
-  color: #4b5563; /* Darker gray for better contrast on white background */
+  color: var(--text-secondary); /* Better contrast for readability */
   border-top: 1px dashed var(--border-color);
-  opacity: 0.8;
+  opacity: 0.9; /* Increased opacity for better visibility */
+}
+
+/* * Enhanced example text styling */
+.randomNameExample .exampleLabel {
+  color: var(--text-tertiary);
+  font-weight: 500;
+}
+
+.randomNameExample .exampleValue {
+  color: var(--hot-pink);
+  font-weight: 600;
+  text-shadow: 0 0 6px rgba(var(--hot-pink-rgb), 0.4);
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.randomNameExample .exampleValue:hover {
+  color: var(--hot-pink-600);
+  text-shadow: 0 0 10px rgba(var(--hot-pink-rgb), 0.6);
+  transform: scale(1.05);
 }
 
 @media only screen and (width <= 768px) {
@@ -687,6 +793,7 @@
     padding: 0.5rem;
   }
 
+  /* * Mobile-specific adjustments for imageSection */
   .imageSection {
     gap: 0.5rem;
     padding: 1rem 0.75rem;
@@ -738,7 +845,10 @@
 
   .helperText {
     font-size: 0.8rem;
-    color: #6b7280; /* Medium gray for better contrast on white background */
+    color: var(
+      --text-secondary
+    ); /* Consistent with desktop for better readability */
+    font-weight: 500; /* Slightly bolder for mobile */
   }
 
   .namePreview {

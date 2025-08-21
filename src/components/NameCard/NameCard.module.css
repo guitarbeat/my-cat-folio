@@ -376,8 +376,25 @@
 }
 
 .card:hover .name {
-  color: var(--primary-600);
+  color: var(--neon-cyan);
   transform: translateY(-1px);
+  text-shadow: 0 0 8px rgba(var(--neon-cyan-rgb), 0.6);
+  transition: all var(--duration-normal) var(--ease-out);
+}
+
+/* * Add a subtle glow animation on hover */
+.card:hover .name {
+  animation: nameGlow 2s ease-in-out infinite;
+}
+
+@keyframes nameGlow {
+  0%,
+  100% {
+    text-shadow: 0 0 8px rgba(var(--neon-cyan-rgb), 0.6);
+  }
+  50% {
+    text-shadow: 0 0 12px rgba(var(--neon-cyan-rgb), 0.8);
+  }
 }
 
 .card:hover .description {
@@ -403,8 +420,9 @@
 
 /* Enhanced 3D depth on hover */
 .card:not(.disabled):hover .name {
-  text-shadow: 0 4px 8px rgb(0 0 0 / 20%);
+  text-shadow: 0 4px 8px rgba(var(--neon-cyan-rgb), 0.4);
   transform: translateZ(30px) translateY(-2px);
+  color: var(--neon-cyan);
 }
 
 .card:not(.disabled):hover .description {
@@ -447,8 +465,16 @@
 }
 
 .selected .name {
-  color: var(--primary-700);
+  color: var(--hot-pink);
   transform: translateY(-1px);
+  text-shadow: 0 0 6px rgba(var(--hot-pink-rgb), 0.4);
+}
+
+/* * Enhanced hover effect for selected state */
+.selected:hover .name {
+  color: var(--hot-pink-600);
+  text-shadow: 0 0 8px rgba(var(--hot-pink-rgb), 0.6);
+  transform: translateY(-2px);
 }
 
 .selected .description {
@@ -461,9 +487,9 @@
   top: var(--space-3);
   right: var(--space-3);
   font-size: var(--text-2xl);
-  color: var(--primary-600);
+  color: var(--hot-pink);
   opacity: 0;
-  filter: drop-shadow(0 2px 4px rgb(0 0 0 / 10%));
+  filter: drop-shadow(0 2px 4px rgba(var(--hot-pink-rgb), 0.3));
   transform: scale(0.5) rotate(-10deg);
   transition: all var(--duration-normal) var(--ease-out);
 }

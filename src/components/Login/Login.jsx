@@ -308,12 +308,12 @@ function Login({ onLogin }) {
               </p>
             ) : (
               <div className={styles.randomPreview}>
-                <p className={styles.helperText}>
+                <p className={`${styles.helperText} ${styles.randomNameText}`}>
                   We&apos;ll generate a fun name automatically!
                 </p>
                 <p className={styles.randomNameExample}>
-                  Example:{" "}
-                  <span className={styles.nameHighlight}>
+                  <span className={styles.exampleLabel}>Example: </span>
+                  <span className={styles.exampleValue}>
                     {exampleRandomName.current}
                   </span>
                 </p>

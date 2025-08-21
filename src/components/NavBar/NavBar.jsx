@@ -233,7 +233,7 @@ function NavBar({
         aria-label="Go to home page"
       >
         <img
-          src="/images/cat.gif"
+          src="./images/cat.gif"
           alt="Cat animation"
           className="navbar__logo"
           width="30"

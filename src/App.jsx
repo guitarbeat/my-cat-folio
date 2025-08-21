@@ -83,15 +83,16 @@ import NavBar from "./components/NavBar/NavBar";
 import useUserSession from "./hooks/useUserSession";
 import { supabase } from "./supabase/supabaseClient";
 import LoadingSpinner from "./components/LoadingSpinner/LoadingSpinner";
+import FloatingKitties from "./components/FloatingKitties";
 
 // Lazy-loaded components for performance
 const Results = React.lazy(() => import("./components/Results/Results"));
 const Profile = React.lazy(() => import("./components/Profile/Profile"));
 const TournamentSetup = React.lazy(
-  () => import("./components/TournamentSetup/TournamentSetup"),
+  () => import("./components/TournamentSetup/TournamentSetup")
 );
 const Tournament = React.lazy(
-  () => import("./components/Tournament/Tournament"),
+  () => import("./components/Tournament/Tournament")
 );
 
 function App() {
@@ -226,7 +227,7 @@ function App() {
         const updatedRatings = { ...ratings };
         recordsToUpsert.forEach((record) => {
           const name = nameOptions.find(
-            (opt) => opt.id === record.name_id,
+            (opt) => opt.id === record.name_id
           )?.name;
           if (name) {
             updatedRatings[name] = {
@@ -263,7 +264,7 @@ function App() {
         name: n.name,
         description: n.description,
         rating: ratings[n.name]?.rating || 1500,
-      })),
+      }))
     );
   };
 
@@ -280,7 +281,7 @@ function App() {
           };
           return acc;
         },
-        {},
+        {}
       );
 
       // Get name_ids in a single query
@@ -414,6 +415,19 @@ function App() {
 
   return (
     <div className="app">
+      {/* * Floating kitties background */}
+      <FloatingKitties
+        kittieCount={12}
+        creationInterval={3000}
+        minSize={20}
+        maxSize={35}
+        minDuration={4}
+        maxDuration={10}
+        backgroundImage="galaxy"
+        enableGlow={true}
+        enableHover={true}
+      />
+
       <NavBar
         view={view}
         setView={setView}

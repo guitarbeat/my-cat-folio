@@ -15,3 +15,4 @@ export { default as NameCard } from "./NameCard/NameCard";
 export { default as CalendarButton } from "./CalendarButton/CalendarButton";
 export { default as BongoCat } from "./BongoCat/BongoCat";
 export { default as StatsCard } from "./StatsCard/StatsCard";
+export { default as FloatingKitties } from "./FloatingKitties";

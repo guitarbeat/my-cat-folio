@@ -15,6 +15,10 @@ export const FILTER_OPTIONS = {
     ACTIVE: "active",
     HIDDEN: "hidden",
   },
+  USER: {
+    ALL: "all_users",
+    SPECIFIC: "specific_users",
+  },
 };
 
 // Time constants

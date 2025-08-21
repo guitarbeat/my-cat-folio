@@ -207,15 +207,15 @@
 .navbar__item a:hover::after,
 .navbar__item a.active::after {
   width: 100%;
-  background-color: var(--primary-color, #4f46e5);
+  background-color: var(--accent-color);
 }
 
 .navbar__item a:hover {
-  color: var(--primary-color, #4f46e5);
+  color: var(--accent-color);
 }
 
 .navbar__item a.active {
-  color: var(--primary-color, #4f46e5);
+  color: var(--accent-color);
 }
 
 /* Logo */
@@ -433,12 +433,12 @@ body.light-theme .navbar__item--logo .navbar__logo-link:focus {
   .navbar__mobile-link:hover,
   .navbar__mobile-link:focus {
     background-color: var(--card-hover, rgba(255, 255, 255, 0.1));
-    color: var(--primary-color, #5a5cff);
+    color: var(--accent-color);
     transform: translateX(8px);
   }
 
   .navbar__mobile-link.active {
-    background-color: var(--primary-color, #5a5cff);
+    background-color: var(--accent-color);
     color: white;
   }
 

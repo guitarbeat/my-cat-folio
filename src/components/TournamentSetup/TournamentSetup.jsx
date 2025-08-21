@@ -14,57 +14,19 @@ import { LoadingSpinner, NameCard, ErrorBoundary } from "../";
 import useSupabaseStorage from "../../supabase/useSupabaseStorage";
 import styles from "./TournamentSetup.module.css";
 
+// Use relative paths for better Vite compatibility
 const CAT_IMAGES = [
-  "IMG_4844.jpg",
-  "IMG_4845.jpg",
-  "IMG_4846.jpg",
-  "IMG_4847.jpg",
-  "IMG_5044.JPEG",
-  "IMG_5071.JPG",
+  "./images/IMG_4844.jpg",
+  "./images/IMG_4845.jpg",
+  "./images/IMG_4846.jpg",
+  "./images/IMG_4847.jpg",
+  "./images/IMG_5044.JPEG",
+  "./images/IMG_5071.JPG",
 ];
 
 const DEFAULT_DESCRIPTION = "A name as unique as your future companion";
 
-// Simple welcome section - basic instructions only
-const WelcomeSection = ({ isExpanded, setIsExpanded, categories, isAdmin }) => (
-  <div className={styles.welcomeSection}>
-    <h2>yo, help me pick a name ✌️</h2>
-    <div
-      className={`${styles.welcomeText} ${isExpanded ? styles.expanded : ""}`}
-    >
-      <button
-        className={styles.expandToggle}
-        onClick={() => setIsExpanded(!isExpanded)}
-        aria-expanded={isExpanded}
-        aria-controls="welcome-instructions"
-      >
-        <span className={styles.toggleText}>
-          {isExpanded ? "Hide Instructions" : "Show Instructions"}
-        </span>
-        <span className={styles.toggleIcon}>{isExpanded ? "−" : "+"}</span>
-      </button>
-      <div id="welcome-instructions" className={styles.instructionsContent}>
-        <p>here&apos;s how it works:</p>
-        <ol className={styles.tournamentSteps}>
-          <li>pick some names you vibe with</li>
-          <li>vote on your faves in 1v1 battles</li>
-          <li>watch the best name win</li>
-          <li>that&apos;s it!</li>
-        </ol>
 
-        {/* Admin-only category tip */}
-        {isAdmin && categories && categories.length > 0 && (
-          <div className={styles.categoriesInfo}>
-            <p>
-              💡 <strong>Pro tip:</strong> Use the category filters below to
-              find names that match your style!
-            </p>
-          </div>
-        )}
-      </div>
-    </div>
-  </div>
-);
 
 // Simple name selection - names and descriptions only
 const NameSelection = ({
@@ -580,7 +542,7 @@ const NameSuggestionSection = () => {
   );
 };
 
-function useTournamentSetup() {
+function useTournamentSetup(userName) {
   const [availableNames, setAvailableNames] = useState([]);
   const [selectedNames, setSelectedNames] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -645,7 +607,7 @@ function useTournamentSetup() {
     fetchNames();
   }, []); // Empty dependency array since we only want to fetch once on mount
 
-  const toggleName = (nameObj) => {
+  const toggleName = async (nameObj) => {
     setSelectedNames((prev) => {
       const newSelectedNames = prev.some((n) => n.id === nameObj.id)
         ? prev.filter((n) => n.id !== nameObj.id)
@@ -654,8 +616,35 @@ function useTournamentSetup() {
       // Log the updated selected names
       devLog("🎮 TournamentSetup: Selected names updated", newSelectedNames);
 
+      // Save tournament selections to database
+      if (newSelectedNames.length > 0 && userName) {
+        saveTournamentSelections(newSelectedNames);
+      }
+
       return newSelectedNames;
     });
+  };
+
+  // Save tournament selections to database
+  const saveTournamentSelections = async (selectedNames) => {
+    try {
+      const { supabaseClient } = await import("../../supabase/supabaseClient");
+
+      // Create a unique tournament ID for this selection session
+      const tournamentId = `selection_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+
+      // Save selections to database
+      const result = await supabaseClient.saveTournamentSelections(
+        userName,
+        selectedNames,
+        tournamentId
+      );
+
+      devLog("🎮 TournamentSetup: Selections saved to database", result);
+    } catch (error) {
+      console.error("Error saving tournament selections:", error);
+      // Don't block the UI if saving fails
+    }
   };
 
   const handleSelectAll = () => {
@@ -674,7 +663,7 @@ function useTournamentSetup() {
   };
 }
 
-function TournamentSetupContent({ onStart }) {
+function TournamentSetupContent({ onStart, userName }) {
   const {
     availableNames,
     selectedNames,
@@ -682,10 +671,9 @@ function TournamentSetupContent({ onStart }) {
     error,
     toggleName,
     handleSelectAll,
-  } = useTournamentSetup();
+  } = useTournamentSetup(userName);
 
   // Enhanced state for new features
-  const [isExpanded, setIsExpanded] = useState(false);
   const [openImages, setOpenImages] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
@@ -1071,7 +1059,7 @@ function TournamentSetupContent({ onStart }) {
                     aria-label={`View cat photo ${index + 1}`}
                   >
                     <img
-                      src={`/images/${image}`}
+                      src={image}
                       alt={`Cat photo ${index + 1}`}
                       loading="lazy"
                       decoding="async"
@@ -1091,14 +1079,7 @@ function TournamentSetupContent({ onStart }) {
             <NameSuggestionSection />
           </div>
 
-          <div className={styles.sidebarCard}>
-            <WelcomeSection
-              isExpanded={isExpanded}
-              setIsExpanded={setIsExpanded}
-              categories={categories}
-              isAdmin={isAdmin}
-            />
-          </div>
+
         </aside>
       </div>
 
@@ -1118,7 +1099,7 @@ function TournamentSetupContent({ onStart }) {
               }}
             >
               <img
-                src={`/images/${image.src}`}
+                src={image.src}
                 alt="Enlarged cat photo"
                 className={`${styles.enlargedImage} ${image.isMinimized ? styles.minimizedImage : ""} ${image.isDragging ? styles.imageWrapperDragging : styles.imageWrapperNotDragging}`}
                 onMouseDown={(e) => {
