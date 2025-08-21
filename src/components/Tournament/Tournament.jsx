@@ -158,24 +158,30 @@ function TournamentContent({
   const [showMatchResult, setShowMatchResult] = useState(false);
   const [showBracket, setShowBracket] = useState(false);
 
-  const musicTracks = useMemo(() => [
-    { path: "/sounds/AdhesiveWombat - Night Shade.mp3", name: "Night Shade" },
-    { path: "/sounds/MiseryBusiness.mp3", name: "Misery Business" },
-    { path: "/sounds/what-is-love.mp3", name: "What is Love" },
-    {
-      path: "/sounds/Lemon Demon - The Ultimate Showdown (8-Bit Remix).mp3",
-      name: "Ultimate Showdown (8-Bit)",
-    },
-    { path: "/sounds/Main Menu 1 (Ruins).mp3", name: "Ruins" },
-  ], []);
+  const musicTracks = useMemo(
+    () => [
+      { path: "/sounds/AdhesiveWombat - Night Shade.mp3", name: "Night Shade" },
+      { path: "/sounds/MiseryBusiness.mp3", name: "Misery Business" },
+      { path: "/sounds/what-is-love.mp3", name: "What is Love" },
+      {
+        path: "/sounds/Lemon Demon - The Ultimate Showdown (8-Bit Remix).mp3",
+        name: "Ultimate Showdown (8-Bit)",
+      },
+      { path: "/sounds/Main Menu 1 (Ruins).mp3", name: "Ruins" },
+    ],
+    [],
+  );
 
   // Sound effects configuration with updated weights
-  const soundEffects = useMemo(() => [
-    { path: "/sounds/gameboy-pluck.mp3", weight: 0.5 },
-    { path: "/sounds/wow.mp3", weight: 0.2 },
-    { path: "/sounds/surprise.mp3", weight: 0.1 },
-    { path: "/sounds/level-up.mp3", weight: 0.2 },
-  ], []);
+  const soundEffects = useMemo(
+    () => [
+      { path: "/sounds/gameboy-pluck.mp3", weight: 0.5 },
+      { path: "/sounds/wow.mp3", weight: 0.2 },
+      { path: "/sounds/surprise.mp3", weight: 0.1 },
+      { path: "/sounds/level-up.mp3", weight: 0.2 },
+    ],
+    [],
+  );
 
   // Initialize audio only once
   useEffect(() => {
@@ -358,102 +364,117 @@ function TournamentContent({
     [currentMatch],
   );
 
-  const handleVoteWithAnimation = useCallback(async (option) => {
-    if (isProcessing || isTransitioning || isError) {
-      return;
-    }
-
-    try {
-      setIsProcessing(true);
-      setIsTransitioning(true);
-
-      playSound();
-      updateMatchResult(option);
-
-      const updatedRatings = await handleVote(option);
-
-      if (onVote && currentMatch) {
-        const leftName = currentMatch.left.name;
-        const rightName = currentMatch.right.name;
-
-        // Improved vote tracking logic
-        let leftOutcome = "skip";
-        let rightOutcome = "skip";
-
-        switch (option) {
-          case "left":
-            leftOutcome = "win";
-            rightOutcome = "loss";
-            break;
-          case "right":
-            leftOutcome = "loss";
-            rightOutcome = "win";
-            break;
-          case "both":
-            leftOutcome = "win";
-            rightOutcome = "win";
-            break;
-          case "neither":
-            // Both remain 'skip'
-            break;
-        }
-
-        const voteData = {
-          match: {
-            left: {
-              name: leftName,
-              id: currentMatch.left.id, // Make sure ID is included
-              description: currentMatch.left.description || "",
-              outcome: leftOutcome,
-            },
-            right: {
-              name: rightName,
-              id: currentMatch.right.id, // Make sure ID is included
-              description: currentMatch.right.description || "",
-              outcome: rightOutcome,
-            },
-          },
-          result:
-            option === "left"
-              ? -1
-              : option === "right"
-                ? 1
-                : option === "both"
-                  ? 0.5
-                  : 0,
-          ratings: updatedRatings,
-          timestamp: new Date().toISOString(), // Add timestamp for better tracking
-        };
-
-        await onVote(voteData);
+  const handleVoteWithAnimation = useCallback(
+    async (option) => {
+      if (isProcessing || isTransitioning || isError) {
+        return;
       }
 
-      setSelectedOption(null);
+      try {
+        setIsProcessing(true);
+        setIsTransitioning(true);
 
-      await new Promise((resolve) => setTimeout(resolve, 200));
-      setIsProcessing(false);
+        playSound();
+        updateMatchResult(option);
 
-      await new Promise((resolve) => setTimeout(resolve, 100));
-      setIsTransitioning(false);
-    } catch (error) {
-      console.error("Error handling vote:", error);
-      setIsProcessing(false);
-      setIsTransitioning(false);
-    }
-  }, [isProcessing, isTransitioning, isError, playSound, updateMatchResult, handleVote, onVote, currentMatch]);
+        const updatedRatings = await handleVote(option);
+
+        if (onVote && currentMatch) {
+          const leftName = currentMatch.left.name;
+          const rightName = currentMatch.right.name;
+
+          // Improved vote tracking logic
+          let leftOutcome = "skip";
+          let rightOutcome = "skip";
+
+          switch (option) {
+            case "left":
+              leftOutcome = "win";
+              rightOutcome = "loss";
+              break;
+            case "right":
+              leftOutcome = "loss";
+              rightOutcome = "win";
+              break;
+            case "both":
+              leftOutcome = "win";
+              rightOutcome = "win";
+              break;
+            case "neither":
+              // Both remain 'skip'
+              break;
+          }
+
+          const voteData = {
+            match: {
+              left: {
+                name: leftName,
+                id: currentMatch.left.id, // Make sure ID is included
+                description: currentMatch.left.description || "",
+                outcome: leftOutcome,
+              },
+              right: {
+                name: rightName,
+                id: currentMatch.right.id, // Make sure ID is included
+                description: currentMatch.right.description || "",
+                outcome: rightOutcome,
+              },
+            },
+            result:
+              option === "left"
+                ? -1
+                : option === "right"
+                  ? 1
+                  : option === "both"
+                    ? 0.5
+                    : 0,
+            ratings: updatedRatings,
+            timestamp: new Date().toISOString(), // Add timestamp for better tracking
+          };
+
+          await onVote(voteData);
+        }
+
+        setSelectedOption(null);
+
+        await new Promise((resolve) => setTimeout(resolve, 200));
+        setIsProcessing(false);
+
+        await new Promise((resolve) => setTimeout(resolve, 100));
+        setIsTransitioning(false);
+      } catch (error) {
+        console.error("Error handling vote:", error);
+        setIsProcessing(false);
+        setIsTransitioning(false);
+      }
+    },
+    [
+      isProcessing,
+      isTransitioning,
+      isError,
+      playSound,
+      updateMatchResult,
+      handleVote,
+      onVote,
+      currentMatch,
+    ],
+  );
 
   // Separate click handler for name cards
-  const handleNameCardClick = useCallback((option) => {
-    if (isProcessing || isTransitioning) {
-      return;
-    }
+  const handleNameCardClick = useCallback(
+    (option) => {
+      if (isProcessing || isTransitioning) {
+        return;
+      }
 
-    // Set the selected option first
-    setSelectedOption(option);
+      // Set the selected option first
+      setSelectedOption(option);
 
-    // Then trigger the vote
-    handleVoteWithAnimation(option);
-  }, [isProcessing, isTransitioning, handleVoteWithAnimation]);
+      // Then trigger the vote
+      handleVoteWithAnimation(option);
+    },
+    [isProcessing, isTransitioning, handleVoteWithAnimation],
+  );
 
   const handleEndEarly = useCallback(async () => {
     try {
@@ -509,7 +530,13 @@ function TournamentContent({
 
     window.addEventListener("keydown", handleKeyPress);
     return () => window.removeEventListener("keydown", handleKeyPress);
-  }, [selectedOption, isProcessing, isTransitioning, handleVoteWithAnimation, isMuted]);
+  }, [
+    selectedOption,
+    isProcessing,
+    isTransitioning,
+    handleVoteWithAnimation,
+    isMuted,
+  ]);
 
   // Match result component
   const MatchResult = () => {

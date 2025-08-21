@@ -43,4 +43,3 @@ export const formatTimestamp = (timestamp) => {
   // More than a day
   return date.toLocaleDateString();
 };
-

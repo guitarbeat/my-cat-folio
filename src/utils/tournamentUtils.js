@@ -123,7 +123,7 @@ export function getCurrentRatings(
 export function convertVoteToPreference(result) {
   let voteValue;
   let eloOutcome;
-  
+
   switch (result) {
     case "left":
       voteValue = -1;

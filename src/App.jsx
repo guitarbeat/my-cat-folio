@@ -88,10 +88,10 @@ import LoadingSpinner from "./components/LoadingSpinner/LoadingSpinner";
 const Results = React.lazy(() => import("./components/Results/Results"));
 const Profile = React.lazy(() => import("./components/Profile/Profile"));
 const TournamentSetup = React.lazy(
-  () => import("./components/TournamentSetup/TournamentSetup")
+  () => import("./components/TournamentSetup/TournamentSetup"),
 );
 const Tournament = React.lazy(
-  () => import("./components/Tournament/Tournament")
+  () => import("./components/Tournament/Tournament"),
 );
 
 // Theme Configuration
@@ -128,7 +128,7 @@ function App() {
     if (themeColorMeta) {
       themeColorMeta.setAttribute(
         "content",
-        isLightTheme ? "#eef1f6" : "#050714"
+        isLightTheme ? "#eef1f6" : "#050714",
       );
     }
   }, [isLightTheme]);
@@ -137,7 +137,7 @@ function App() {
   useEffect(() => {
     localStorage.setItem(
       THEME.STORAGE_KEY,
-      isLightTheme ? THEME.LIGHT : THEME.DARK
+      isLightTheme ? THEME.LIGHT : THEME.DARK,
     );
   }, [isLightTheme]);
 
@@ -267,7 +267,7 @@ function App() {
         const updatedRatings = { ...ratings };
         recordsToUpsert.forEach((record) => {
           const name = nameOptions.find(
-            (opt) => opt.id === record.name_id
+            (opt) => opt.id === record.name_id,
           )?.name;
           if (name) {
             updatedRatings[name] = {
@@ -304,7 +304,7 @@ function App() {
         name: n.name,
         description: n.description,
         rating: ratings[n.name]?.rating || 1500,
-      }))
+      })),
     );
   };
 
@@ -321,7 +321,7 @@ function App() {
           };
           return acc;
         },
-        {}
+        {},
       );
 
       // Get name_ids in a single query

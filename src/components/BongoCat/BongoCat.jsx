@@ -117,19 +117,8 @@ PawsContainer.propTypes = {
 
 const BongoCat = memo(
   ({ size = 0.5, color = "#000", onBongo, containerRef }) => {
-    const {
-      isPawsDown,
-      containerTop,
-      catSize,
-      isVisible,
-      containerZIndex,
-    } = useBongoCat({ containerRef, size, onBongo });
-
-
-
-
-
-
+    const { isPawsDown, containerTop, catSize, isVisible, containerZIndex } =
+      useBongoCat({ containerRef, size, onBongo });
 
     const styleVars = {
       "--cat-bg": color,

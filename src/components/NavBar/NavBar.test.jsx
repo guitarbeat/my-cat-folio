@@ -93,7 +93,7 @@ describe("NavBar Component", () => {
         {...defaultProps}
         onThemeChange={onThemeChange}
         isLightTheme={true}
-      />
+      />,
     );
 
     const themeButton = screen.getByRole("switch", {
@@ -131,7 +131,7 @@ describe("NavBar Component", () => {
   test("shows correct theme state based on current theme", () => {
     // Test light theme
     const { rerender } = render(
-      <NavBar {...defaultProps} isLightTheme={true} />
+      <NavBar {...defaultProps} isLightTheme={true} />,
     );
     const themeSwitch = screen.getByRole("switch", {
       name: /Switch to dark theme/i,

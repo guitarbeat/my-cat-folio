@@ -28,11 +28,11 @@
  * @returns {number} Relative luminance value
  */
 function getRelativeLuminance(r, g, b) {
-    const [rs, gs, bs] = [r, g, b].map(c => {
-        c = c / 255;
-        return c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
-    });
-    return 0.2126 * rs + 0.7152 * gs + 0.0722 * bs;
+  const [rs, gs, bs] = [r, g, b].map((c) => {
+    c = c / 255;
+    return c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
+  });
+  return 0.2126 * rs + 0.7152 * gs + 0.0722 * bs;
 }
 
 /**
@@ -42,43 +42,43 @@ function getRelativeLuminance(r, g, b) {
  * @returns {number} Contrast ratio
  */
 export function getContrastRatio(color1, color2) {
-    // Convert colors to RGB values
-    const getRGB = (color) => {
-        if (color.startsWith('#')) {
-            const hex = color.slice(1);
-            const r = parseInt(hex.slice(0, 2), 16);
-            const g = parseInt(hex.slice(2, 4), 16);
-            const b = parseInt(hex.slice(4, 6), 16);
-            return [r, g, b];
-        }
+  // Convert colors to RGB values
+  const getRGB = (color) => {
+    if (color.startsWith("#")) {
+      const hex = color.slice(1);
+      const r = parseInt(hex.slice(0, 2), 16);
+      const g = parseInt(hex.slice(2, 4), 16);
+      const b = parseInt(hex.slice(4, 6), 16);
+      return [r, g, b];
+    }
 
-        if (color.startsWith('rgb')) {
-            const match = color.match(/\d+/g);
-            return match ? match.map(Number) : [0, 0, 0];
-        }
+    if (color.startsWith("rgb")) {
+      const match = color.match(/\d+/g);
+      return match ? match.map(Number) : [0, 0, 0];
+    }
 
-        // Named colors - add common ones
-        const namedColors = {
-            white: [255, 255, 255],
-            black: [0, 0, 0],
-            red: [255, 0, 0],
-            green: [0, 128, 0],
-            blue: [0, 0, 255],
-        };
-
-        return namedColors[color.toLowerCase()] || [0, 0, 0];
+    // Named colors - add common ones
+    const namedColors = {
+      white: [255, 255, 255],
+      black: [0, 0, 0],
+      red: [255, 0, 0],
+      green: [0, 128, 0],
+      blue: [0, 0, 255],
     };
 
-    const [r1, g1, b1] = getRGB(color1);
-    const [r2, g2, b2] = getRGB(color2);
+    return namedColors[color.toLowerCase()] || [0, 0, 0];
+  };
 
-    const lum1 = getRelativeLuminance(r1, g1, b1);
-    const lum2 = getRelativeLuminance(r2, g2, b2);
+  const [r1, g1, b1] = getRGB(color1);
+  const [r2, g2, b2] = getRGB(color2);
 
-    const lighter = Math.max(lum1, lum2);
-    const darker = Math.min(lum1, lum2);
+  const lum1 = getRelativeLuminance(r1, g1, b1);
+  const lum2 = getRelativeLuminance(r2, g2, b2);
 
-    return (lighter + 0.05) / (darker + 0.05);
+  const lighter = Math.max(lum1, lum2);
+  const darker = Math.min(lum1, lum2);
+
+  return (lighter + 0.05) / (darker + 0.05);
 }
 
 /**
@@ -87,9 +87,9 @@ export function getContrastRatio(color1, color2) {
  * @param {string} size - Text size ('normal' or 'large')
  * @returns {boolean} True if meets WCAG AA standards
  */
-export function meetsWCAGAA(contrastRatio, size = 'normal') {
-    const threshold = size === 'large' ? 3 : 4.5;
-    return contrastRatio >= threshold;
+export function meetsWCAGAA(contrastRatio, size = "normal") {
+  const threshold = size === "large" ? 3 : 4.5;
+  return contrastRatio >= threshold;
 }
 
 /**
@@ -98,9 +98,9 @@ export function meetsWCAGAA(contrastRatio, size = 'normal') {
  * @param {string} size - Text size ('normal' or 'large')
  * @returns {boolean} True if meets WCAG AAA standards
  */
-export function meetsWCAGAAA(contrastRatio, size = 'normal') {
-    const threshold = size === 'large' ? 4.5 : 7;
-    return contrastRatio >= threshold;
+export function meetsWCAGAAA(contrastRatio, size = "normal") {
+  const threshold = size === "large" ? 4.5 : 7;
+  return contrastRatio >= threshold;
 }
 
 /**
@@ -109,12 +109,12 @@ export function meetsWCAGAAA(contrastRatio, size = 'normal') {
  * @param {string} size - Text size ('normal' or 'large')
  * @returns {string} Accessibility level description
  */
-export function getAccessibilityLevel(contrastRatio, size = 'normal') {
-    if (meetsWCAGAAA(contrastRatio, size)) {
-        return 'AAA';
-    } else if (meetsWCAGAA(contrastRatio, size)) {
-        return 'AA';
-    } else {
-        return 'Fail';
-    }
+export function getAccessibilityLevel(contrastRatio, size = "normal") {
+  if (meetsWCAGAAA(contrastRatio, size)) {
+    return "AAA";
+  } else if (meetsWCAGAA(contrastRatio, size)) {
+    return "AA";
+  } else {
+    return "Fail";
+  }
 }

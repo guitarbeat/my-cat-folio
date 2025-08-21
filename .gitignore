@@ -44,6 +44,10 @@ yarn-error.log*
 lerna-debug.log*
 .pnpm-debug.log*
 
+# Agent Enforcer logs
+.enforcer/Enforcer_last_check.log
+.enforcer/Enforcer_stats.log
+
 # Diagnostic reports (https://nodejs.org/api/report.html)
 report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
 

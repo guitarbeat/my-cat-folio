@@ -48,12 +48,15 @@
  */
 
 /* eslint-env node */
-import { createClient } from '@supabase/supabase-js';
-import devLog from '../utils/logger';
+import { createClient } from "@supabase/supabase-js";
+import devLog from "../utils/logger";
 
-
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || import.meta.env.BAG_NEXT_PUBLIC_SUPABASE_URL;
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || import.meta.env.BAG_NEXT_PUBLIC_SUPABASE_ANON_KEY;
+const supabaseUrl =
+  import.meta.env.VITE_SUPABASE_URL ||
+  import.meta.env.BAG_NEXT_PUBLIC_SUPABASE_URL;
+const supabaseAnonKey =
+  import.meta.env.VITE_SUPABASE_ANON_KEY ||
+  import.meta.env.BAG_NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
 if (!supabaseUrl || !supabaseAnonKey) {
   throw new Error(
@@ -129,9 +132,8 @@ export const ensureRatingHistoryTable = async () => {
     if (!tableExists) {
       // Create the table using SQL - this requires you to have enabled database functions
       // You may need to do this manually in the Supabase dashboard if this doesn't work
-      await supabase.rpc('create_rating_history_table');
-      devLog('Created rating_history table');
-
+      await supabase.rpc("create_rating_history_table");
+      devLog("Created rating_history table");
     }
   } catch (error) {
     console.error("Error ensuring rating_history table exists:", error);

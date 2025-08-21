@@ -217,16 +217,16 @@ function useSupabaseStorage(tableName, initialValue = [], userName = "") {
       }, {});
 
       // Prepare the data for insertion
-      const dataToInsert = (Array.isArray(newValue) ? newValue : [newValue]).map(
-        (item) => ({
-          name_id: nameToIdMap[item.name],
-          user_name: userName,
-          rating: item.rating || DEFAULT_RATING,
-          wins: item.wins || 0,
-          losses: item.losses || 0,
-          updated_at: new Date().toISOString(),
-        }),
-      );
+      const dataToInsert = (
+        Array.isArray(newValue) ? newValue : [newValue]
+      ).map((item) => ({
+        name_id: nameToIdMap[item.name],
+        user_name: userName,
+        rating: item.rating || DEFAULT_RATING,
+        wins: item.wins || 0,
+        losses: item.losses || 0,
+        updated_at: new Date().toISOString(),
+      }));
 
       // Delete existing ratings for these names
       const { error: deleteError } = await supabase
@@ -268,12 +268,10 @@ function useSupabaseStorage(tableName, initialValue = [], userName = "") {
     }
 
     try {
-      const { error } = await supabase
-        .from("hidden_names")
-        .insert({
-          name_id: nameId,
-          user_name: userName,
-        });
+      const { error } = await supabase.from("hidden_names").insert({
+        name_id: nameId,
+        user_name: userName,
+      });
 
       if (error) {
         throw error;

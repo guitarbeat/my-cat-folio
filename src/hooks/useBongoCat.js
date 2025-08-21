@@ -32,7 +32,7 @@
  * --- END AUTO-GENERATED DOCSTRING ---
  */
 
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from "react";
 
 /**
  * Custom hook for BongoCat component functionality

@@ -1,5 +1,5 @@
-import React, { memo } from 'react';
-import styles from './StatsCard.module.css';
+import React, { memo } from "react";
+import styles from "./StatsCard.module.css";
 
 /**
  * Generic stats card component used across the app.
@@ -11,10 +11,10 @@ function StatsCard({
   label,
   value,
   emoji,
-  className = '',
-  labelClassName = '',
-  valueClassName = '',
-  emojiClassName = '',
+  className = "",
+  labelClassName = "",
+  valueClassName = "",
+  emojiClassName = "",
   ...props
 }) {
   const labelText = title || label;
@@ -28,11 +28,17 @@ function StatsCard({
       {title ? (
         <h3 className={`${styles.label} ${labelClassName}`.trim()}>{title}</h3>
       ) : (
-        <span className={`${styles.label} ${labelClassName}`.trim()}>{label}</span>
+        <span className={`${styles.label} ${labelClassName}`.trim()}>
+          {label}
+        </span>
       )}
-      <span className={`${styles.value} ${valueClassName}`.trim()}>{value}</span>
+      <span className={`${styles.value} ${valueClassName}`.trim()}>
+        {value}
+      </span>
       {emoji && (
-        <span className={`${styles.emoji} ${emojiClassName}`.trim()}>{emoji}</span>
+        <span className={`${styles.emoji} ${emojiClassName}`.trim()}>
+          {emoji}
+        </span>
       )}
     </div>
   );

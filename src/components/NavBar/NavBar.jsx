@@ -108,7 +108,7 @@ function NavBar({
   const handleThemeClick = useCallback(() => {
     const now = Date.now();
     const newClicks = [...themeClicks, now].filter(
-      (click) => now - click < 2000
+      (click) => now - click < 2000,
     );
     setThemeClicks(newClicks);
 
@@ -123,7 +123,7 @@ function NavBar({
     const newTheme = !isLightTheme;
     localStorage.setItem(
       THEME.STORAGE_KEY,
-      newTheme ? THEME.LIGHT : THEME.DARK
+      newTheme ? THEME.LIGHT : THEME.DARK,
     );
 
     // Notify parent component
@@ -144,7 +144,7 @@ function NavBar({
       setView(key.toLowerCase());
       setIsMobileMenuOpen(false);
     },
-    [setView]
+    [setView],
   );
 
   useEffect(() => {
@@ -203,7 +203,7 @@ function NavBar({
           >
             {link.name}
           </a>
-        </li>
+        </li>,
       );
     });
   }
@@ -222,7 +222,7 @@ function NavBar({
         >
           Logout
         </a>
-      </li>
+      </li>,
     );
   }
 
