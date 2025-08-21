@@ -131,7 +131,7 @@ ChartJS.register(
   Title,
   RadarController,
   RadialLinearScale,
-  TimeScale
+  TimeScale,
 );
 
 const TIME_FILTERS = ["All Time", "Today", "This Week", "This Month"];
@@ -173,7 +173,7 @@ const Button = memo(
     >
       {children}
     </button>
-  )
+  ),
 );
 
 const Modal = memo(({ title, isOpen, children }) => {
@@ -217,15 +217,15 @@ const calculateStats = (ratings, filterStatus = FILTER_OPTIONS.STATUS.ALL) => {
   const totalNames = filteredRatings.length;
   const totalMatches = filteredRatings.reduce(
     (sum, r) => sum + (r.wins || 0) + (r.losses || 0),
-    0
+    0,
   );
   const averageRating =
     totalNames > 0
       ? Math.round(
           filteredRatings.reduce(
             (sum, r) => sum + (r.rating || DEFAULT_RATING),
-            0
-          ) / totalNames
+            0,
+          ) / totalNames,
         )
       : 0;
 
@@ -238,7 +238,7 @@ const calculateStats = (ratings, filterStatus = FILTER_OPTIONS.STATUS.ALL) => {
         ? Math.round(
             (filteredRatings.reduce((sum, r) => sum + (r.wins || 0), 0) /
               totalMatches) *
-              100
+              100,
           )
         : 0,
     activeNames: ratings.filter((r) => !r.isHidden).length,
@@ -292,7 +292,7 @@ const processUserRatings = (data) => {
 const ProfileStats = memo(({ ratings, filterStatus }) => {
   const stats = useMemo(
     () => calculateStats(ratings, filterStatus),
-    [ratings, filterStatus]
+    [ratings, filterStatus],
   );
 
   return (
@@ -474,7 +474,7 @@ const NameCard = memo(
         )}
       </Card>
     );
-  }
+  },
 );
 
 const UserCard = memo(({ user, onUserAction, isActive }) => (
@@ -720,10 +720,10 @@ const ChartSection = memo(({ aggregatedNames, filterStatus }) => {
           label: currentMetric.label,
           data: topNames.map((n) => n[currentMetric.field]),
           backgroundColor: topNames.map((n) =>
-            n.isHidden ? "rgba(156, 156, 156, 0.6)" : currentMetric.color
+            n.isHidden ? "rgba(156, 156, 156, 0.6)" : currentMetric.color,
           ),
           borderColor: topNames.map((n) =>
-            n.isHidden ? "rgba(156, 156, 156, 1)" : currentMetric.borderColor
+            n.isHidden ? "rgba(156, 156, 156, 1)" : currentMetric.borderColor,
           ),
           borderWidth: 1,
         },
@@ -893,7 +893,7 @@ const AggregatedStats = memo(
     refreshHiddenTrigger,
   }) => {
     const [filterStatus, setFilterStatus] = useState(
-      FILTER_OPTIONS.STATUS.ACTIVE
+      FILTER_OPTIONS.STATUS.ACTIVE,
     );
     const [sortBy, setSortBy] = useState(FILTER_OPTIONS.SORT.RATING);
     const [hiddenNames, setHiddenNames] = useState(new Set());
@@ -911,7 +911,7 @@ const AggregatedStats = memo(
           }
 
           const newHiddenNames = new Set(
-            hiddenData?.map((item) => item.name_id) || []
+            hiddenData?.map((item) => item.name_id) || [],
           );
           setHiddenNames(newHiddenNames);
         } catch (err) {
@@ -960,7 +960,7 @@ const AggregatedStats = memo(
           const nameStats = nameMap.get(rating.name);
           nameStats.totalRating += parseInt(
             rating.rating || DEFAULT_RATING,
-            10
+            10,
           );
           nameStats.wins += parseInt(rating.wins || 0, 10);
           nameStats.losses += parseInt(rating.losses || 0, 10);
@@ -1012,13 +1012,13 @@ const AggregatedStats = memo(
       const hiddenNames = aggregatedNames.filter((n) => n.isHidden).length;
       const totalMatches = aggregatedNames.reduce(
         (sum, n) => sum + n.totalMatches,
-        0
+        0,
       );
       const averageRating =
         totalNames > 0
           ? Math.round(
               aggregatedNames.reduce((sum, n) => sum + n.averageRating, 0) /
-                totalNames
+                totalNames,
             )
           : 0;
       const winRate =
@@ -1026,7 +1026,7 @@ const AggregatedStats = memo(
           ? Math.round(
               (aggregatedNames.reduce((sum, n) => sum + n.wins, 0) /
                 totalMatches) *
-                100
+                100,
             )
           : 0;
 
@@ -1152,7 +1152,7 @@ const AggregatedStats = memo(
         </div>
       </section>
     );
-  }
+  },
 );
 
 // New FilterControls component
@@ -1185,7 +1185,7 @@ const FilterControls = memo(
         </select>
       </div>
     </div>
-  )
+  ),
 );
 
 // Enhanced chart data preparation
@@ -1202,7 +1202,7 @@ const prepareChartData = (ratings, filterStatus, hiddenNames) => {
   });
 
   const sortedRatings = [...filteredRatings].sort(
-    (a, b) => b.rating - a.rating
+    (a, b) => b.rating - a.rating,
   );
 
   return {
@@ -1214,12 +1214,12 @@ const prepareChartData = (ratings, filterStatus, hiddenNames) => {
         backgroundColor: sortedRatings.map((r) =>
           hiddenNames.has(r.id)
             ? "rgba(156, 156, 156, 0.6)"
-            : "rgba(75, 192, 192, 0.6)"
+            : "rgba(75, 192, 192, 0.6)",
         ),
         borderColor: sortedRatings.map((r) =>
           hiddenNames.has(r.id)
             ? "rgba(156, 156, 156, 1)"
-            : "rgba(75, 192, 192, 1)"
+            : "rgba(75, 192, 192, 1)",
         ),
         borderWidth: 1,
       },
@@ -1278,7 +1278,7 @@ const RatingTrends = memo(({ userName, selectedName = null }) => {
     }
 
     return ratingHistory.filter(
-      (item) => new Date(item.timestamp) >= filterDate
+      (item) => new Date(item.timestamp) >= filterDate,
     );
   }, [ratingHistory, timeRange]);
 
@@ -1292,7 +1292,7 @@ const RatingTrends = memo(({ userName, selectedName = null }) => {
     if (selectedName) {
       return {
         labels: filteredHistory.map((item) =>
-          new Date(item.timestamp).toLocaleDateString()
+          new Date(item.timestamp).toLocaleDateString(),
         ),
         datasets: [
           {
@@ -1482,10 +1482,10 @@ const PerformanceInsights = memo(({ ratings }) => {
 
     const totalMatches = ratings.reduce(
       (sum, r) => sum + (r.wins || 0) + (r.losses || 0),
-      0
+      0,
     );
     const avgRating = Math.round(
-      ratings.reduce((sum, r) => sum + (r.rating || 1500), 0) / ratings.length
+      ratings.reduce((sum, r) => sum + (r.rating || 1500), 0) / ratings.length,
     );
 
     // Best performing names (highest win rate with min 5 matches)
@@ -1504,7 +1504,7 @@ const PerformanceInsights = memo(({ ratings }) => {
         (r) =>
           r.updated_at &&
           new Date(r.updated_at) >
-            new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
+            new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
       )
       .sort((a, b) => b.rating - a.rating)
       .slice(0, 3);
@@ -1514,7 +1514,7 @@ const PerformanceInsights = memo(({ ratings }) => {
       .filter(
         (r) =>
           (r.wins || 0) + (r.losses || 0) >= 5 &&
-          r.wins / (r.wins + r.losses) < 0.4
+          r.wins / (r.wins + r.losses) < 0.4,
       )
       .sort((a, b) => {
         const aRate = a.wins / (a.wins + a.losses);
@@ -1619,7 +1619,7 @@ const Profile = ({ userName, onStartNewTournament }) => {
   const [currentlyViewedUser, setCurrentlyViewedUser] = useState(userName);
   const [showAggregated, setShowAggregated] = useState(false);
   const [filterStatus, setFilterStatus] = useState(
-    FILTER_OPTIONS.STATUS.ACTIVE
+    FILTER_OPTIONS.STATUS.ACTIVE,
   );
   const [sortBy, setSortBy] = useState(FILTER_OPTIONS.SORT.RATING);
 
@@ -1642,7 +1642,7 @@ const Profile = ({ userName, onStartNewTournament }) => {
       }
 
       const newHiddenNames = new Set(
-        hiddenData?.map((item) => item.name_id) || []
+        hiddenData?.map((item) => item.name_id) || [],
       );
       setHiddenNames(newHiddenNames);
     } catch (err) {
@@ -1665,7 +1665,7 @@ const Profile = ({ userName, onStartNewTournament }) => {
             name,
             description
           )
-        `
+        `,
         )
         .eq("user_name", targetUserName);
 
@@ -1695,7 +1695,7 @@ const Profile = ({ userName, onStartNewTournament }) => {
   const fetchAllUsersRatings = useCallback(async () => {
     try {
       const { data, error: fetchError } = await supabase.from(
-        "cat_name_ratings"
+        "cat_name_ratings",
       ).select(`
           rating,
           wins,
@@ -1767,7 +1767,7 @@ const Profile = ({ userName, onStartNewTournament }) => {
         }
       }
     },
-    [fetchAllUsersRatings, fetchUserRatings]
+    [fetchAllUsersRatings, fetchUserRatings],
   );
 
   const handleToggleNameVisibility = useCallback(
@@ -1775,7 +1775,7 @@ const Profile = ({ userName, onStartNewTournament }) => {
       const isHidden = hiddenNames.has(nameId);
       if (
         !window.confirm(
-          `Are you sure you want to ${isHidden ? "show" : "hide"} this name?`
+          `Are you sure you want to ${isHidden ? "show" : "hide"} this name?`,
         )
       ) {
         return;
@@ -1796,7 +1796,7 @@ const Profile = ({ userName, onStartNewTournament }) => {
         console.error("Error toggling name visibility:", error);
       }
     },
-    [hiddenNames, fetchHiddenNames]
+    [hiddenNames, fetchHiddenNames],
   );
 
   const handleUnhideAllNames = useCallback(async () => {
@@ -1805,7 +1805,7 @@ const Profile = ({ userName, onStartNewTournament }) => {
     }
     if (
       !window.confirm(
-        "Unhide all names? This will make all names available in tournaments."
+        "Unhide all names? This will make all names available in tournaments.",
       )
     ) {
       return;
@@ -1842,7 +1842,7 @@ const Profile = ({ userName, onStartNewTournament }) => {
         setDeleteNameStatus({ loading: false, error: err.message });
       }
     },
-    [refreshRatings]
+    [refreshRatings],
   );
 
   const filteredRatings = useMemo(() => {
@@ -1891,7 +1891,7 @@ const Profile = ({ userName, onStartNewTournament }) => {
       prepareChartData(
         currentlyViewedUser !== userName ? currentUserRatings : ratingsData,
         filterStatus,
-        hiddenNames
+        hiddenNames,
       ),
     [
       ratingsData,
@@ -1900,7 +1900,7 @@ const Profile = ({ userName, onStartNewTournament }) => {
       currentUserRatings,
       currentlyViewedUser,
       userName,
-    ]
+    ],
   );
 
   if (ratingsLoading) {
@@ -2017,7 +2017,7 @@ const Profile = ({ userName, onStartNewTournament }) => {
                           const rating = context.raw;
                           const name = context.label;
                           const isHidden = ratingsData.find(
-                            (r) => r.name === name
+                            (r) => r.name === name,
                           )?.isHidden;
                           return `${name}: ${rating} ${isHidden ? "(Hidden)" : ""}`;
                         },

@@ -88,19 +88,11 @@ import LoadingSpinner from "./components/LoadingSpinner/LoadingSpinner";
 const Results = React.lazy(() => import("./components/Results/Results"));
 const Profile = React.lazy(() => import("./components/Profile/Profile"));
 const TournamentSetup = React.lazy(
-  () => import("./components/TournamentSetup/TournamentSetup"),
+  () => import("./components/TournamentSetup/TournamentSetup")
 );
 const Tournament = React.lazy(
-  () => import("./components/Tournament/Tournament"),
+  () => import("./components/Tournament/Tournament")
 );
-
-// Theme Configuration
-const THEME = {
-  LIGHT: "light",
-  DARK: "dark",
-  STORAGE_KEY: "theme",
-  CLASS_NAME: "light-theme",
-};
 
 function App() {
   const { userName, isLoggedIn, login, logout } = useUserSession();
@@ -109,41 +101,8 @@ function App() {
   const [tournamentComplete, setTournamentComplete] = useState(false);
   const [tournamentNames, setTournamentNames] = useState(null);
   const [voteHistory, setVoteHistory] = useState([]);
-  const [matrixMode, setMatrixMode] = useState(false);
+
   const [isTournamentLoading, setIsTournamentLoading] = useState(false);
-  const [isLightTheme, setIsLightTheme] = useState(() => {
-    const savedTheme = localStorage.getItem(THEME.STORAGE_KEY);
-    if (savedTheme) {
-      return savedTheme === THEME.LIGHT;
-    }
-    return true; // Default to light theme on first load
-  });
-
-  // Apply theme class on app init and when theme changes
-  useEffect(() => {
-    document.body.classList.toggle(THEME.CLASS_NAME, isLightTheme);
-
-    // Sync meta theme-color for mobile browser UI
-    const themeColorMeta = document.querySelector("meta[name='theme-color']");
-    if (themeColorMeta) {
-      themeColorMeta.setAttribute(
-        "content",
-        isLightTheme ? "#eef1f6" : "#050714",
-      );
-    }
-  }, [isLightTheme]);
-
-  // Persist theme preference to localStorage
-  useEffect(() => {
-    localStorage.setItem(
-      THEME.STORAGE_KEY,
-      isLightTheme ? THEME.LIGHT : THEME.DARK,
-    );
-  }, [isLightTheme]);
-
-  const handleThemeChange = (isLight) => {
-    setIsLightTheme(isLight);
-  };
 
   // Reset tournament state when changing views
   useEffect(() => {
@@ -267,7 +226,7 @@ function App() {
         const updatedRatings = { ...ratings };
         recordsToUpsert.forEach((record) => {
           const name = nameOptions.find(
-            (opt) => opt.id === record.name_id,
+            (opt) => opt.id === record.name_id
           )?.name;
           if (name) {
             updatedRatings[name] = {
@@ -304,7 +263,7 @@ function App() {
         name: n.name,
         description: n.description,
         rating: ratings[n.name]?.rating || 1500,
-      })),
+      }))
     );
   };
 
@@ -321,7 +280,7 @@ function App() {
           };
           return acc;
         },
-        {},
+        {}
       );
 
       // Get name_ids in a single query
@@ -371,12 +330,6 @@ function App() {
 
   const handleLogout = async () => {
     logout();
-  };
-
-  // Add matrix mode activation function
-  const handleMatrixActivate = () => {
-    setMatrixMode(true);
-    setTimeout(() => setMatrixMode(false), 5000); // Disable after 5 seconds
   };
 
   // Add effect to handle authentication state
@@ -460,16 +413,13 @@ function App() {
   };
 
   return (
-    <div className={`app ${matrixMode ? "matrix-mode" : ""}`}>
+    <div className="app">
       <NavBar
         view={view}
         setView={setView}
         isLoggedIn={isLoggedIn}
         userName={userName}
         onLogout={handleLogout}
-        onMatrixActivate={handleMatrixActivate}
-        isLightTheme={isLightTheme}
-        onThemeChange={handleThemeChange}
         onStartNewTournament={handleStartNewTournament}
       />
       <div className="main-content">

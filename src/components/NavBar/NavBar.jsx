@@ -48,14 +48,6 @@ import "./navbar.css";
  * --- END AUTO-GENERATED DOCSTRING ---
  */
 
-// Theme Configuration
-const THEME = {
-  LIGHT: "light",
-  DARK: "dark",
-  STORAGE_KEY: "theme",
-  CLASS_NAME: "light-theme",
-};
-
 // Utility functions
 const scrollToTop = () => {
   window.scrollTo({
@@ -64,26 +56,15 @@ const scrollToTop = () => {
   });
 };
 
-const updateThemeColor = (isLight) => {
-  const themeColorMeta = document.querySelector("meta[name='theme-color']");
-  if (themeColorMeta) {
-    themeColorMeta.setAttribute("content", isLight ? "#eef1f6" : "#0b1020");
-  }
-};
-
 function NavBar({
   view,
   setView,
   isLoggedIn,
   userName,
   onLogout,
-  onMatrixActivate,
-  isLightTheme,
-  onThemeChange,
   onStartNewTournament,
 }) {
   const [showScrollTop, setShowScrollTop] = useState(false);
-  const [themeClicks, setThemeClicks] = useState([]);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   // Define nav items based on login state
@@ -105,36 +86,6 @@ function NavBar({
         { name: "Personal Site", url: "https://aaronwoods.info" },
       ];
 
-  const handleThemeClick = useCallback(() => {
-    const now = Date.now();
-    const newClicks = [...themeClicks, now].filter(
-      (click) => now - click < 2000,
-    );
-    setThemeClicks(newClicks);
-
-    if (newClicks.length >= 5) {
-      setThemeClicks([]);
-      if (onMatrixActivate) {
-        onMatrixActivate();
-      }
-    }
-
-    // Toggle theme and save to localStorage
-    const newTheme = !isLightTheme;
-    localStorage.setItem(
-      THEME.STORAGE_KEY,
-      newTheme ? THEME.LIGHT : THEME.DARK,
-    );
-
-    // Notify parent component
-    if (onThemeChange) {
-      onThemeChange(newTheme);
-    }
-
-    // Update theme color meta tag
-    updateThemeColor(newTheme);
-  }, [themeClicks, onMatrixActivate, isLightTheme, onThemeChange]);
-
   const handleMobileMenuClick = useCallback(() => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
   }, [isMobileMenuOpen]);
@@ -144,7 +95,7 @@ function NavBar({
       setView(key.toLowerCase());
       setIsMobileMenuOpen(false);
     },
-    [setView],
+    [setView]
   );
 
   useEffect(() => {
@@ -203,7 +154,7 @@ function NavBar({
           >
             {link.name}
           </a>
-        </li>,
+        </li>
       );
     });
   }
@@ -222,7 +173,7 @@ function NavBar({
         >
           Logout
         </a>
-      </li>,
+      </li>
     );
   }
 
@@ -267,7 +218,7 @@ function NavBar({
   }
 
   // If not logged in (on login screen), make navbar transparent
-  const navbarClass = `navbar ${isLightTheme ? "light-theme" : ""} ${isLoggedIn ? "" : "transparent"} ${isMobileMenuOpen ? "mobile-menu-open" : ""}`;
+  const navbarClass = `navbar ${isLoggedIn ? "" : "transparent"} ${isMobileMenuOpen ? "mobile-menu-open" : ""}`;
 
   return (
     <>
@@ -285,18 +236,6 @@ function NavBar({
             aria-expanded={isMobileMenuOpen}
           >
             <span className="navbar__mobile-menu-icon"></span>
-          </button>
-          <button
-            className={`theme-switch ${isLightTheme ? "light-theme" : ""}`}
-            onClick={handleThemeClick}
-            role="switch"
-            aria-checked={isLightTheme}
-            aria-label={`Switch to ${isLightTheme ? "dark" : "light"} theme`}
-            type="button"
-          >
-            <div className="switch-handle">
-              <div className="moon-phase-container" />
-            </div>
           </button>
         </div>
       </nav>
@@ -324,9 +263,6 @@ NavBar.propTypes = {
   isLoggedIn: PropTypes.bool.isRequired,
   userName: PropTypes.string,
   onLogout: PropTypes.func.isRequired,
-  onMatrixActivate: PropTypes.func,
-  isLightTheme: PropTypes.bool.isRequired,
-  onThemeChange: PropTypes.func.isRequired,
   onStartNewTournament: PropTypes.func,
 };
 
