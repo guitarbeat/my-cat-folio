@@ -78,9 +78,10 @@
  */
 
 import React, { useState, useEffect, Suspense } from "react";
-import { ErrorBoundary, Login } from "./components";
+import { ErrorBoundary, Login, ErrorDisplay } from "./components";
 import NavBar from "./components/NavBar/NavBar";
 import useUserSession from "./hooks/useUserSession";
+import useErrorHandler from "./hooks/useErrorHandler";
 import { supabase } from "./supabase/supabaseClient";
 import LoadingSpinner from "./components/LoadingSpinner/LoadingSpinner";
 import FloatingKitties from "./components/FloatingKitties";
@@ -97,6 +98,26 @@ const Tournament = React.lazy(
 
 function App() {
   const { userName, isLoggedIn, login, logout } = useUserSession();
+  
+  // Enhanced error handling
+  const {
+    errors,
+    isError,
+    handleError,
+    clearErrors,
+    clearError,
+    executeWithErrorHandling
+  } = useErrorHandler({
+    showUserFeedback: true,
+    maxRetries: 3,
+    onError: (error) => {
+      console.error('App-level error:', error);
+    },
+    onRecovery: () => {
+      console.log('App recovered from error');
+    }
+  });
+
   const [ratings, setRatings] = useState({});
   const [view, setView] = useState("tournament");
   const [tournamentComplete, setTournamentComplete] = useState(false);
@@ -172,7 +193,11 @@ function App() {
         .in("name", Object.keys(tournamentResults));
 
       if (nameError) {
-        console.error("Error fetching name options:", nameError);
+        handleError(nameError, 'Tournament Completion - Fetch Names', {
+          isRetryable: true,
+          affectsUserData: false,
+          isCritical: false
+        });
         return;
       }
 
@@ -219,7 +244,11 @@ function App() {
           });
 
         if (upsertError) {
-          console.error("Error updating ratings:", upsertError);
+          handleError(upsertError, 'Tournament Completion - Update Ratings', {
+            isRetryable: true,
+            affectsUserData: true,
+            isCritical: false
+          });
           return;
         }
 
@@ -437,6 +466,23 @@ function App() {
         onStartNewTournament={handleStartNewTournament}
       />
       <div className="main-content">
+        {/* Global error display */}
+        {isError && (
+          <ErrorDisplay
+            errors={errors}
+            onRetry={(error) => {
+              // Implement retry logic based on error context
+              if (error.context.includes('Tournament')) {
+                window.location.reload();
+              }
+            }}
+            onDismiss={clearError}
+            onClearAll={clearErrors}
+            showDetails={process.env.NODE_ENV === 'development'}
+            className="global-error-display"
+          />
+        )}
+        
         <Suspense fallback={<LoadingSpinner size="large" text="Loading..." />}>
           {renderMainContent()}
         </Suspense>

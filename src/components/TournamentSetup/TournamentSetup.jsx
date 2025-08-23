@@ -10,8 +10,9 @@ import {
   getNamesWithDescriptions,
 } from "../../supabase/supabaseClient";
 import devLog from "../../utils/logger";
-import { LoadingSpinner, NameCard, ErrorBoundary } from "../";
+import { LoadingSpinner, NameCard, ErrorBoundary, ErrorDisplay } from "../";
 import useSupabaseStorage from "../../supabase/useSupabaseStorage";
+import useErrorHandler from "../../hooks/useErrorHandler";
 import styles from "./TournamentSetup.module.css";
 
 // Use relative paths for better Vite compatibility
@@ -546,7 +547,22 @@ function useTournamentSetup(userName) {
   const [availableNames, setAvailableNames] = useState([]);
   const [selectedNames, setSelectedNames] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(null);
+  
+  // Enhanced error handling
+  const {
+    errors,
+    isError,
+    handleError,
+    clearErrors,
+    clearError,
+    executeWithErrorHandling
+  } = useErrorHandler({
+    showUserFeedback: true,
+    maxRetries: 2,
+    onError: (error) => {
+      console.error('TournamentSetup error:', error);
+    }
+  });
 
   useEffect(() => {
     const fetchNames = async () => {
@@ -597,8 +613,11 @@ function useTournamentSetup(userName) {
           prev.filter((name) => !hiddenIds.has(name.id))
         );
       } catch (err) {
-        console.error("Error fetching names:", err);
-        setError(`Failed to load names: ${err.message}`);
+        handleError(err, 'TournamentSetup - Fetch Names', {
+          isRetryable: true,
+          affectsUserData: false,
+          isCritical: false
+        });
       } finally {
         setIsLoading(false);
       }
@@ -657,7 +676,10 @@ function useTournamentSetup(userName) {
     availableNames,
     selectedNames,
     isLoading,
-    error,
+    errors,
+    isError,
+    clearErrors,
+    clearError,
     toggleName,
     handleSelectAll,
   };
@@ -668,7 +690,10 @@ function TournamentSetupContent({ onStart, userName }) {
     availableNames,
     selectedNames,
     isLoading,
-    error,
+    errors,
+    isError,
+    clearErrors,
+    clearError,
     toggleName,
     handleSelectAll,
   } = useTournamentSetup(userName);
@@ -877,12 +902,18 @@ function TournamentSetupContent({ onStart, userName }) {
     return <LoadingSpinner />;
   }
 
-  if (error) {
+  if (isError) {
     return (
       <div className={styles.container}>
         <div className={styles.header}>
           <h2>Error Loading Names</h2>
-          <p className={styles.errorMessage}>{error}</p>
+          <ErrorDisplay
+            errors={errors}
+            onRetry={() => window.location.reload()}
+            onDismiss={clearError}
+            onClearAll={clearErrors}
+            showDetails={process.env.NODE_ENV === 'development'}
+          />
         </div>
       </div>
     );
