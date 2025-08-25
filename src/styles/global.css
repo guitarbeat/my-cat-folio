@@ -90,6 +90,36 @@ select {
   border-color: var(--border-color);
 }
 
+/* Global error display styles */
+.global-error-display {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  margin: 1rem auto;
+  max-width: 800px;
+  animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Mobile optimization for global error display */
+@media (max-width: 768px) {
+  .global-error-display {
+    margin: 0.5rem;
+    position: relative;
+    top: auto;
+  }
+}
+
 /* ===== variables.css ===== */
 :root {
   /* New Brand Color Palette */
