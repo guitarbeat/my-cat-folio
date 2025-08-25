@@ -430,6 +430,37 @@ select {
   --overlay-red-medium: rgba(var(--fire-red-rgb), 0.2);
 }
 
+/* Light Theme Overrides */
+body.light-theme {
+  --primary-color: var(--primary-600);
+  --primary-light: var(--primary-100);
+  --primary-dark: var(--primary-800);
+  --surface-color: #f4f6fa;
+  --background-color: #eef1f6;
+  --text-primary: #111827; /* Darker for better contrast */
+  --text-secondary: #1f2937; /* Darker for better contrast */
+  --text-tertiary: #374151; /* Darker for better contrast */
+  --border-color: #d1d5db;
+  --card-background: #fff;
+  --card-border: #d1d5db;
+  --card-hover: #f9fafb;
+  --header-background: #fff;
+  --header-border: #e5e7eb;
+
+  /* Synced dark-mode variables for components using legacy names */
+  --surface-dark: #f4f6fa;
+  --card-background-dark: #fff;
+  --card-hover-dark: #f9fafb;
+  --border-color-dark: #d1d5db;
+  --text-primary-dark: #111827;
+  --text-secondary-dark: #1f2937;
+  --button-primary-bg: var(--primary-600);
+  --button-primary-hover: var(--primary-700);
+  --button-secondary-bg: rgba(0, 0, 0, 0.05);
+  --button-secondary-hover: rgba(0, 0, 0, 0.1);
+  --button-text-light: white;
+}
+
 /* High Contrast Mode */
 @media (prefers-contrast: more) {
   :root {
