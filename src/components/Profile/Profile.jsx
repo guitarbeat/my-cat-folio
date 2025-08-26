@@ -811,6 +811,16 @@ const Profile = ({ userName, onStartNewTournament }) => {
           <button onClick={() => fetchNames()} className={styles.button}>
             🔄 Refresh
           </button>
+          <button 
+            onClick={() => {
+              localStorage.removeItem('catNameTournament_onboardingSeen');
+              window.location.reload();
+            }} 
+            className={styles.button}
+            title="Show onboarding tutorial again"
+          >
+            ❓ Help
+          </button>
           {isAdmin && (
             <button onClick={handleExportData} className={styles.button}>
               📊 Export Data
