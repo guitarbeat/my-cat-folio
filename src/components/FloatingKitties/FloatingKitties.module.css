@@ -4,14 +4,14 @@
   position: fixed;
   top: 0;
   left: 0;
+  z-index: -1;
   width: 100vw;
   height: 100vh;
+  overflow: hidden;
+  pointer-events: none;
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
-  overflow: hidden;
-  z-index: -1;
-  pointer-events: none;
 }
 
 /* * Space overlay for better text readability */
@@ -20,42 +20,42 @@
   inset: 0;
   background: linear-gradient(
     135deg,
-    rgba(26, 31, 46, 0.7) 0%,
-    rgba(44, 62, 64, 0.5) 50%,
-    rgba(26, 31, 46, 0.8) 100%
+    rgb(26 31 46 / 70%) 0%,
+    rgb(44 62 64 / 50%) 50%,
+    rgb(26 31 46 / 80%) 100%
   );
   backdrop-filter: blur(1px);
 }
 
 /* * Twinkling stars effect */
 .spaceOverlay::before {
-  content: "";
   position: absolute;
   inset: 0;
+  content: "";
   background-image:
     radial-gradient(
       2px 2px at 20px 30px,
-      rgba(255, 255, 255, 0.8),
+      rgb(255 255 255 / 80%),
       transparent
     ),
     radial-gradient(
       2px 2px at 40px 70px,
-      rgba(255, 255, 255, 0.6),
+      rgb(255 255 255 / 60%),
       transparent
     ),
     radial-gradient(
       1px 1px at 90px 40px,
-      rgba(255, 255, 255, 0.8),
+      rgb(255 255 255 / 80%),
       transparent
     ),
     radial-gradient(
       1px 1px at 130px 80px,
-      rgba(255, 255, 255, 0.6),
+      rgb(255 255 255 / 60%),
       transparent
     ),
     radial-gradient(
       2px 2px at 160px 30px,
-      rgba(255, 255, 255, 0.8),
+      rgb(255 255 255 / 80%),
       transparent
     );
   background-repeat: repeat;
@@ -68,6 +68,7 @@
   100% {
     opacity: 0.3;
   }
+
   50% {
     opacity: 1;
   }
@@ -76,14 +77,14 @@
 /* * Individual kittie wrapper */
 .kittieWrapper {
   position: absolute;
+  top: var(--start-y);
+  left: var(--start-x);
   width: var(--kittie-size);
   height: var(--kittie-size);
-  left: var(--start-x);
-  top: var(--start-y);
   animation: floatKittie var(--duration) ease-in-out var(--delay) forwards;
   animation-timing-function: linear;
-  animation-fill-mode: forwards;
   animation-iteration-count: 1;
+  animation-fill-mode: forwards;
 }
 
 /* * Kittie image styling */
@@ -96,40 +97,40 @@
 
 /* * Glow effects based on kittie type */
 .kittieWrapper[style*="--glow-color: 0"] .kittieImage {
-  filter: drop-shadow(0 0 8px rgba(47, 243, 224, 0.6));
+  filter: drop-shadow(0 0 8px rgb(47 243 224 / 60%));
 }
 
 .kittieWrapper[style*="--glow-color: 1"] .kittieImage {
-  filter: drop-shadow(0 0 8px rgba(250, 38, 160, 0.6));
+  filter: drop-shadow(0 0 8px rgb(250 38 160 / 60%));
 }
 
 .kittieWrapper[style*="--glow-color: 2"] .kittieImage {
-  filter: drop-shadow(0 0 8px rgba(245, 23, 32, 0.6));
+  filter: drop-shadow(0 0 8px rgb(245 23 32 / 60%));
 }
 
 /* * Conditional glow effects */
 .kittieWrapper.glowEnabled .kittieImage {
-  filter: drop-shadow(0 0 8px rgba(47, 243, 224, 0.6));
+  filter: drop-shadow(0 0 8px rgb(47 243 224 / 60%));
 }
 
 .kittieWrapper.glowEnabled[style*="--glow-color: 0"] .kittieImage {
-  filter: drop-shadow(0 0 8px rgba(47, 243, 224, 0.6));
+  filter: drop-shadow(0 0 8px rgb(47 243 224 / 60%));
 }
 
 .kittieWrapper.glowEnabled[style*="--glow-color: 1"] .kittieImage {
-  filter: drop-shadow(0 0 8px rgba(250, 38, 160, 0.6));
+  filter: drop-shadow(0 0 8px rgb(250 38 160 / 60%));
 }
 
 .kittieWrapper.glowEnabled[style*="--glow-color: 2"] .kittieImage {
-  filter: drop-shadow(0 0 8px rgba(245, 23, 32, 0.6));
+  filter: drop-shadow(0 0 8px rgb(245 23 32 / 60%));
 }
 
 /* * Floating animation keyframes */
 @keyframes floatKittie {
   0% {
+    opacity: 0;
     transform: translate(var(--start-x), var(--start-y)) rotate(var(--rotation))
       scale(0.8);
-    opacity: 0;
   }
 
   15% {
@@ -151,14 +152,14 @@
   }
 
   100% {
+    opacity: 0;
     transform: translate(var(--end-x), var(--end-y))
       rotate(calc(var(--rotation) + 360deg)) scale(0.6);
-    opacity: 0;
   }
 }
 
 /* * Responsive adjustments */
-@media (max-width: 768px) {
+@media (width <= 768px) {
   .kittiesWrapper {
     background-attachment: scroll;
   }
@@ -168,7 +169,7 @@
   }
 }
 
-@media (max-width: 480px) {
+@media (width <= 480px) {
   .kittieWrapper {
     --kittie-size: calc(var(--kittie-size) * 0.5);
   }
@@ -177,8 +178,8 @@
 /* * Reduced motion support */
 @media (prefers-reduced-motion: reduce) {
   .kittieWrapper {
-    animation: none;
     opacity: 0.3;
+    animation: none;
   }
 
   .kittieWrapper:hover .kittieImage {
@@ -191,13 +192,13 @@
   .spaceOverlay {
     background: linear-gradient(
       135deg,
-      rgba(0, 0, 0, 0.8) 0%,
-      rgba(0, 0, 0, 0.6) 50%,
-      rgba(0, 0, 0, 0.9) 100%
+      rgb(0 0 0 / 80%) 0%,
+      rgb(0 0 0 / 60%) 50%,
+      rgb(0 0 0 / 90%) 100%
     );
   }
 
   .kittieImage {
-    filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.8));
+    filter: drop-shadow(0 0 4px rgb(255 255 255 / 80%));
   }
 }

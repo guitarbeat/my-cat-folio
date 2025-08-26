@@ -22,8 +22,8 @@
   .nav-menu button,
   .navbar__mobile-link,
   .navbar__mobile-menu-button {
-    min-height: 48px !important;
     min-width: 48px !important;
+    min-height: 48px !important;
   }
 
   /* Form inputs should have minimum height for touch */
@@ -53,17 +53,17 @@
   }
 
   .form-group label {
+    display: block;
     margin-bottom: var(--space-2, 0.5rem);
     font-size: var(--text-base, 1rem);
-    display: block;
   }
 
   /* Ensure proper spacing for mobile cards */
   .card,
   .name-card,
   .tournament-card {
-    margin-bottom: var(--space-4, 1rem);
     padding: var(--space-4, 1rem);
+    margin-bottom: var(--space-4, 1rem);
   }
 
   /* Improve mobile list spacing */
@@ -80,8 +80,8 @@
 @media (width <= 768px) {
   /* Ensure main content doesn't overlap with fixed navbar */
   .main-content {
-    margin-top: 80px !important; /* Increased from 65px */
     padding-bottom: 80px !important; /* Add bottom padding for floating elements */
+    margin-top: 80px !important; /* Increased from 65px */
   }
 
   /* Improve navbar height for better touch targets */
@@ -91,8 +91,8 @@
 
   /* Ensure scroll-to-top button doesn't overlap content */
   .scroll-to-top {
-    bottom: 20px !important; /* Increased from default */
     right: 20px !important; /* Increased from default */
+    bottom: 20px !important; /* Increased from default */
   }
 
   /* Ensure floating elements respect safe areas */
@@ -114,8 +114,8 @@
   }
 
   .scroll-to-top {
-    bottom: 15px !important; /* Adjusted for small screens */
     right: 15px !important; /* Adjusted for small screens */
+    bottom: 15px !important; /* Adjusted for small screens */
   }
 }
 
@@ -124,8 +124,8 @@
   @media (width <= 768px) {
     .main-content {
       padding-right: max(var(--space-4, 1rem), env(safe-area-inset-right)) !important;
-      padding-left: max(var(--space-4, 1rem), env(safe-area-inset-left)) !important;
       padding-bottom: max(var(--space-4, 1rem), env(safe-area-inset-bottom)) !important;
+      padding-left: max(var(--space-4, 1rem), env(safe-area-inset-left)) !important;
     }
 
     .navbar {
@@ -142,8 +142,8 @@
   @media (width <= 430px) {
     .main-content {
       padding-right: max(var(--space-3, 0.75rem), env(safe-area-inset-right)) !important;
-      padding-left: max(var(--space-3, 0.75rem), env(safe-area-inset-left)) !important;
       padding-bottom: max(var(--space-3, 0.75rem), env(safe-area-inset-bottom)) !important;
+      padding-left: max(var(--space-3, 0.75rem), env(safe-area-inset-left)) !important;
     }
 
     .scroll-to-top {
@@ -185,8 +185,8 @@
   .nav-menu button,
   .navbar__mobile-link,
   .navbar__mobile-menu-button {
-    min-height: 48px !important;
     min-width: 48px !important;
+    min-height: 48px !important;
   }
 }
 
@@ -234,23 +234,23 @@
 /* Utility classes for mobile ergonomics */
 @media (width <= 768px) {
   .mobile\:touch-target {
-    min-height: 48px !important;
     min-width: 48px !important;
+    min-height: 48px !important;
   }
 
   .mobile\:touch-target-large {
-    min-height: 56px !important;
     min-width: 56px !important;
+    min-height: 56px !important;
   }
 
   .mobile\:safe-spacing {
-    margin-top: 80px !important;
     padding-bottom: 80px !important;
+    margin-top: 80px !important;
   }
 
   .mobile\:enhanced-touch {
-    min-height: 48px !important;
     min-width: 48px !important;
+    min-height: 48px !important;
     padding: var(--space-3, 0.75rem) var(--space-4, 1rem) !important;
   }
 }
@@ -266,7 +266,7 @@
   }
 
   .scroll-to-top {
-    bottom: 15px !important; /* Adjusted for landscape */
     right: 15px !important; /* Adjusted for landscape */
+    bottom: 15px !important; /* Adjusted for landscape */
   }
 }

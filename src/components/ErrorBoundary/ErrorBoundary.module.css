@@ -1,28 +1,28 @@
 .container {
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
   min-height: 100vh;
   padding: 2rem;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   font-family: var(--font-sans, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif);
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 }
 
 .content {
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(10px);
-  border-radius: 20px;
-  padding: 3rem;
-  max-width: 600px;
   width: 100%;
+  max-width: 600px;
+  padding: 3rem;
   text-align: center;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgb(255 255 255 / 95%);
+  border: 1px solid rgb(255 255 255 / 20%);
+  border-radius: 20px;
+  box-shadow: 0 20px 40px rgb(0 0 0 / 10%);
+  backdrop-filter: blur(10px);
 }
 
 .icon {
-  font-size: 4rem;
   margin-bottom: 1.5rem;
+  font-size: 4rem;
   animation: bounce 2s infinite;
 }
 
@@ -30,93 +30,95 @@
   0%, 20%, 50%, 80%, 100% {
     transform: translateY(0);
   }
+
   40% {
     transform: translateY(-10px);
   }
+
   60% {
     transform: translateY(-5px);
   }
 }
 
 .title {
+  margin-bottom: 1rem;
+  font-family: var(--font-sans, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif);
   font-size: 2rem;
   font-weight: 700;
   color: #2d3748;
-  margin-bottom: 1rem;
-  font-family: var(--font-sans, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif);
 }
 
 .message {
-  font-size: 1.1rem;
-  color: #4a5568;
-  line-height: 1.6;
   margin-bottom: 2rem;
   font-family: var(--font-sans, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif);
+  font-size: 1.1rem;
+  line-height: 1.6;
+  color: #4a5568;
 }
 
 .retryInfo {
-  font-size: 0.9rem;
-  color: #718096;
   margin-bottom: 1.5rem;
+  font-size: 0.9rem;
   font-style: italic;
+  color: #718096;
 }
 
 .actionButtons {
   display: flex;
+  flex-wrap: wrap;
   gap: 1rem;
   justify-content: center;
-  flex-wrap: wrap;
   margin-bottom: 2rem;
 }
 
 .retryButton,
 .refreshButton,
 .homeButton {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  justify-content: center;
+  min-width: 120px;
   padding: 0.75rem 1.5rem;
-  border: none;
-  border-radius: 10px;
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
+  border: none;
+  border-radius: 10px;
   transition: all 0.3s ease;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  min-width: 120px;
-  justify-content: center;
 }
 
 .retryButton {
-  background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
   color: white;
+  background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
 }
 
 .retryButton:hover {
   background: linear-gradient(135deg, #38a169 0%, #2f855a 100%);
+  box-shadow: 0 10px 20px rgb(72 187 120 / 30%);
   transform: translateY(-2px);
-  box-shadow: 0 10px 20px rgba(72, 187, 120, 0.3);
 }
 
 .refreshButton {
-  background: linear-gradient(135deg, #4299e1 0%, #3182ce 100%);
   color: white;
+  background: linear-gradient(135deg, #4299e1 0%, #3182ce 100%);
 }
 
 .refreshButton:hover {
   background: linear-gradient(135deg, #3182ce 0%, #2c5282 100%);
+  box-shadow: 0 10px 20px rgb(66 153 225 / 30%);
   transform: translateY(-2px);
-  box-shadow: 0 10px 20px rgba(66, 153, 225, 0.3);
 }
 
 .homeButton {
-  background: linear-gradient(135deg, #ed8936 0%, #dd6b20 100%);
   color: white;
+  background: linear-gradient(135deg, #ed8936 0%, #dd6b20 100%);
 }
 
 .homeButton:hover {
   background: linear-gradient(135deg, #dd6b20 0%, #c05621 100%);
+  box-shadow: 0 10px 20px rgb(237 137 54 / 30%);
   transform: translateY(-2px);
-  box-shadow: 0 10px 20px rgba(237, 137, 54, 0.3);
 }
 
 .retryIcon,
@@ -126,58 +128,58 @@
 }
 
 .errorDetails {
+  padding: 1rem;
   margin: 2rem 0;
   text-align: left;
-  background: rgba(0, 0, 0, 0.05);
+  background: rgb(0 0 0 / 5%);
   border-radius: 10px;
-  padding: 1rem;
 }
 
 .errorDetails summary {
-  cursor: pointer;
+  padding: 0.5rem;
+  margin-bottom: 1rem;
   font-weight: 600;
   color: #2d3748;
-  padding: 0.5rem;
+  cursor: pointer;
+  background: rgb(255 255 255 / 50%);
   border-radius: 5px;
-  background: rgba(255, 255, 255, 0.5);
-  margin-bottom: 1rem;
 }
 
 .errorDetails summary:hover {
-  background: rgba(255, 255, 255, 0.8);
+  background: rgb(255 255 255 / 80%);
 }
 
 .errorContent {
-  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  font-family: Monaco, Menlo, 'Ubuntu Mono', monospace;
   font-size: 0.85rem;
 }
 
 .errorContent h4 {
-  margin: 1rem 0 0.5rem 0;
-  color: #2d3748;
+  margin: 1rem 0 0.5rem;
   font-size: 1rem;
+  color: #2d3748;
 }
 
 .errorContent pre {
-  background: rgba(0, 0, 0, 0.1);
   padding: 1rem;
-  border-radius: 5px;
+  margin: 0.5rem 0 1rem;
   overflow-x: auto;
+  overflow-wrap: break-word;
   white-space: pre-wrap;
-  word-break: break-word;
-  margin: 0.5rem 0 1rem 0;
+  background: rgb(0 0 0 / 10%);
   border-left: 4px solid #e53e3e;
+  border-radius: 5px;
 }
 
 .errorContent ul {
-  list-style: none;
   padding: 0;
-  margin: 0.5rem 0 1rem 0;
+  margin: 0.5rem 0 1rem;
+  list-style: none;
 }
 
 .errorContent li {
   padding: 0.25rem 0;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  border-bottom: 1px solid rgb(0 0 0 / 10%);
 }
 
 .errorContent li:last-child {
@@ -185,30 +187,30 @@
 }
 
 .supportInfo {
-  margin-top: 2rem;
   padding: 1.5rem;
-  background: rgba(66, 153, 225, 0.1);
-  border-radius: 10px;
+  margin-top: 2rem;
+  background: rgb(66 153 225 / 10%);
   border-left: 4px solid #4299e1;
+  border-radius: 10px;
 }
 
 .supportInfo p {
   margin: 0.5rem 0;
-  color: #4a5568;
   font-size: 0.9rem;
+  color: #4a5568;
 }
 
 .errorId {
-  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
-  background: rgba(255, 255, 255, 0.5);
   padding: 0.5rem;
-  border-radius: 5px;
+  font-family: Monaco, Menlo, 'Ubuntu Mono', monospace;
   font-size: 0.8rem;
   color: #2d3748;
+  background: rgb(255 255 255 / 50%);
+  border-radius: 5px;
 }
 
 /* Mobile responsiveness */
-@media (max-width: 768px) {
+@media (width <= 768px) {
   .container {
     padding: 1rem;
   }
@@ -243,16 +245,16 @@
   }
   
   .errorContent pre {
-    font-size: 0.75rem;
     padding: 0.75rem;
+    font-size: 0.75rem;
   }
 }
 
 /* Dark theme support */
 @media (prefers-color-scheme: dark) {
   .content {
-    background: rgba(26, 32, 44, 0.95);
     color: #e2e8f0;
+    background: rgb(26 32 44 / 95%);
   }
   
   .title {
@@ -269,11 +271,11 @@
   
   .errorDetails summary {
     color: #e2e8f0;
-    background: rgba(45, 55, 72, 0.5);
+    background: rgb(45 55 72 / 50%);
   }
   
   .errorDetails summary:hover {
-    background: rgba(45, 55, 72, 0.8);
+    background: rgb(45 55 72 / 80%);
   }
   
   .errorContent h4 {
@@ -281,15 +283,15 @@
   }
   
   .errorContent pre {
-    background: rgba(45, 55, 72, 0.3);
+    background: rgb(45 55 72 / 30%);
   }
   
   .errorContent li {
-    border-bottom-color: rgba(160, 174, 192, 0.2);
+    border-bottom-color: rgb(160 174 192 / 20%);
   }
   
   .supportInfo {
-    background: rgba(66, 153, 225, 0.2);
+    background: rgb(66 153 225 / 20%);
   }
   
   .supportInfo p {
@@ -297,7 +299,7 @@
   }
   
   .errorId {
-    background: rgba(45, 55, 72, 0.5);
     color: #e2e8f0;
+    background: rgb(45 55 72 / 50%);
   }
 }

@@ -10,29 +10,29 @@
  * @returns {Object} An object containing theme state and control functions
  */
 
-import { useState, useEffect, useCallback } from "react";
-import useLocalStorage from "./useLocalStorage";
+import { useEffect, useCallback } from 'react';
+import useLocalStorage from './useLocalStorage';
 
 function useTheme() {
   // Get initial theme from localStorage or default to light theme
-  const [isLightTheme, setIsLightTheme] = useLocalStorage("theme", true);
-  
+  const [isLightTheme, setIsLightTheme] = useLocalStorage('theme', true);
+
   // Update document body class and meta tag when theme changes
   useEffect(() => {
     const body = document.body;
     const themeColorMeta = document.querySelector('meta[name="theme-color"]');
-    
+
     if (isLightTheme) {
-      body.classList.add("light-theme");
-      body.classList.remove("dark-theme");
+      body.classList.add('light-theme');
+      body.classList.remove('dark-theme');
       if (themeColorMeta) {
-        themeColorMeta.setAttribute("content", "#eef1f6"); // Light theme color
+        themeColorMeta.setAttribute('content', '#eef1f6'); // Light theme color
       }
     } else {
-      body.classList.remove("light-theme");
-      body.classList.add("dark-theme");
+      body.classList.remove('light-theme');
+      body.classList.add('dark-theme');
       if (themeColorMeta) {
-        themeColorMeta.setAttribute("content", "#1a1f2e"); // Dark theme color
+        themeColorMeta.setAttribute('content', '#1a1f2e'); // Dark theme color
       }
     }
   }, [isLightTheme]);

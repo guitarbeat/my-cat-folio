@@ -104,7 +104,7 @@ import React, {
 } from "react";
 import PropTypes from "prop-types";
 import { useTournament } from "../../hooks/useTournament";
-import { useToast } from "../../hooks/useToast";
+import useToast from "../../hooks/useToast";
 // import { useKeyboardControls } from '../../hooks/useKeyboardControls';
 import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
 import ErrorBoundary from "../ErrorBoundary/ErrorBoundary";
@@ -150,6 +150,7 @@ function TournamentContent({
   const [selectedOption, setSelectedOption] = useState(null);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [isRandomizing, setIsRandomizing] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
   const [volume, setVolume] = useState({ music: 0.2, effects: 0.3 });
   const [audioError, setAudioError] = useState(null);

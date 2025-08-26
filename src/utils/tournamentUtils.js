@@ -32,7 +32,7 @@ export function computeRating(
   position,
   totalNames,
   matchesPlayed,
-  maxMatches,
+  maxMatches
 ) {
   const ratingSpread = Math.min(1000, totalNames * 25);
   const positionValue =
@@ -40,7 +40,7 @@ export function computeRating(
   const newPositionRating = 1500 + positionValue;
   const blendFactor = Math.min(0.8, (matchesPlayed / maxMatches) * 0.9);
   const newRating = Math.round(
-    blendFactor * newPositionRating + (1 - blendFactor) * existingRating,
+    blendFactor * newPositionRating + (1 - blendFactor) * existingRating
   );
   return Math.max(1000, Math.min(2000, newRating));
 }
@@ -55,16 +55,16 @@ export function computeRating(
 export function countPlayerVotes(matchHistory, playerName, outcome) {
   return matchHistory.filter((vote) => {
     const { left, right } = vote.match;
-    if (outcome === "win") {
+    if (outcome === 'win') {
       return (
-        (left.name === playerName && vote.result === "left") ||
-        (right.name === playerName && vote.result === "right")
+        (left.name === playerName && vote.result === 'left') ||
+        (right.name === playerName && vote.result === 'right')
       );
     }
-    if (outcome === "loss") {
+    if (outcome === 'loss') {
       return (
-        (left.name === playerName && vote.result === "right") ||
-        (right.name === playerName && vote.result === "left")
+        (left.name === playerName && vote.result === 'right') ||
+        (right.name === playerName && vote.result === 'left')
       );
     }
     return false;
@@ -85,16 +85,16 @@ export function getCurrentRatings(
   currentRatings,
   matchHistory,
   currentMatchNumber,
-  totalMatches,
+  totalMatches
 ) {
   return names.map((name) => {
     const existingData =
-      typeof currentRatings[name.name] === "object"
+      typeof currentRatings[name.name] === 'object'
         ? currentRatings[name.name]
         : { rating: currentRatings[name.name] || 1500, wins: 0, losses: 0 };
 
-    const wins = countPlayerVotes(matchHistory, name.name, "win");
-    const losses = countPlayerVotes(matchHistory, name.name, "loss");
+    const wins = countPlayerVotes(matchHistory, name.name, 'win');
+    const losses = countPlayerVotes(matchHistory, name.name, 'loss');
     const position = wins; // Position is based on wins
 
     const finalRating = computeRating(
@@ -102,7 +102,7 @@ export function getCurrentRatings(
       position,
       names.length,
       currentMatchNumber,
-      totalMatches,
+      totalMatches
     );
 
     return {
@@ -110,7 +110,7 @@ export function getCurrentRatings(
       rating: finalRating,
       wins: existingData.wins + wins,
       losses: existingData.wins + losses,
-      confidence: currentMatchNumber / totalMatches,
+      confidence: currentMatchNumber / totalMatches
     };
   });
 }
@@ -125,25 +125,25 @@ export function convertVoteToPreference(result) {
   let eloOutcome;
 
   switch (result) {
-    case "left":
+    case 'left':
       voteValue = -1;
-      eloOutcome = "left";
+      eloOutcome = 'left';
       break;
-    case "right":
+    case 'right':
       voteValue = 1;
-      eloOutcome = "right";
+      eloOutcome = 'right';
       break;
-    case "both": // Both equally liked with small random variance
+    case 'both': // Both equally liked with small random variance
       voteValue = Math.random() * 0.1 - 0.05; // Small random value centered at 0
-      eloOutcome = "both";
+      eloOutcome = 'both';
       break;
-    case "none": // Neither liked with small random variance
+    case 'none': // Neither liked with small random variance
       voteValue = Math.random() * 0.06 - 0.03; // Even smaller random value centered at 0
-      eloOutcome = "none";
+      eloOutcome = 'none';
       break;
     default:
       voteValue = 0;
-      eloOutcome = "none";
+      eloOutcome = 'none';
   }
 
   return { voteValue, eloOutcome };
@@ -164,26 +164,26 @@ export function createVoteData({
   voteValue,
   userName,
   currentMatch,
-  ratings,
+  ratings
 }) {
   return {
     matchNumber: currentMatchNumber,
     result: voteValue,
     timestamp: Date.now(),
-    userName: userName || "anonymous",
+    userName: userName || 'anonymous',
     match: {
       left: {
         name: currentMatch.left.name,
-        description: currentMatch.left.description || "",
-        won: ratings.after.left > ratings.before.left,
+        description: currentMatch.left.description || '',
+        won: ratings.after.left > ratings.before.left
       },
       right: {
         name: currentMatch.right.name,
-        description: currentMatch.right.description || "",
-        won: ratings.after.right > ratings.before.right,
-      },
+        description: currentMatch.right.description || '',
+        won: ratings.after.right > ratings.before.right
+      }
     },
-    ratings,
+    ratings
   };
 }
 
@@ -223,13 +223,13 @@ export function createTournamentState({
   existingRatings,
   currentMatchNumber,
   roundNumber,
-  matchHistory,
+  matchHistory
 }) {
   return {
     names,
     existingRatings,
     currentMatchNumber,
     roundNumber,
-    matchHistory,
+    matchHistory
   };
 }

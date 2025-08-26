@@ -18,8 +18,8 @@
   /* Mobile button improvements - Updated to 48x48px minimum */
   .button-primary,
   .button-secondary {
-    min-height: 48px; /* Updated to meet mobile guidelines */
     min-width: 48px; /* Ensure minimum width for touch targets */
+    min-height: 48px; /* Updated to meet mobile guidelines */
     padding: var(--space-3) var(--space-4);
     font-size: var(--text-base);
     font-weight: 600;
@@ -41,8 +41,8 @@
 
   /* Mobile navigation improvements - Updated to 48x48px minimum */
   .nav-menu button {
-    min-height: 48px; /* Updated to meet mobile guidelines */
     min-width: 48px; /* Ensure minimum width for touch targets */
+    min-height: 48px; /* Updated to meet mobile guidelines */
     padding: var(--space-3) var(--space-4);
     font-size: var(--text-base);
     font-weight: 600;
@@ -100,8 +100,8 @@
 
   /* Ensure floating elements don't overlap content */
   .main-content {
-    margin-top: 80px; /* Increased from 65px to account for fixed navbar */
     padding-bottom: 80px; /* Add bottom padding for floating elements */
+    margin-top: 80px; /* Increased from 65px to account for fixed navbar */
   }
 
   /* Improve floating navigation spacing */
@@ -111,8 +111,8 @@
 
   /* Ensure scroll-to-top button doesn't overlap content */
   .scroll-to-top {
-    bottom: 20px; /* Increased from default to avoid overlap */
     right: 20px; /* Increased from default for better spacing */
+    bottom: 20px; /* Increased from default to avoid overlap */
   }
 }
 
@@ -127,12 +127,13 @@
 
   .button-primary,
   .button-secondary {
+    min-width: 48px;
+
+    /* Maintain 48x48px minimum even on small screens */
+    min-height: 48px;
     padding: var(--space-3) var(--space-4);
     font-size: var(--text-sm);
     border-radius: var(--radius-md);
-    /* Maintain 48x48px minimum even on small screens */
-    min-height: 48px;
-    min-width: 48px;
   }
 
   /* Small mobile text adjustments */
@@ -164,8 +165,8 @@
   }
 
   .scroll-to-top {
-    bottom: 15px; /* Adjusted for small screens */
     right: 15px; /* Adjusted for small screens */
+    bottom: 15px; /* Adjusted for small screens */
   }
 }
 
@@ -217,8 +218,8 @@
   .btn,
   .button,
   a[role="button"] {
-    min-height: 48px;
     min-width: 48px;
+    min-height: 48px;
   }
 
   /* Improve touch targets for form elements */
@@ -294,8 +295,8 @@
   @media (width <= 768px) {
     .main-content {
       padding-right: max(var(--space-4), env(safe-area-inset-right));
-      padding-left: max(var(--space-4), env(safe-area-inset-left));
       padding-bottom: max(var(--space-4), env(safe-area-inset-bottom));
+      padding-left: max(var(--space-4), env(safe-area-inset-left));
     }
 
     header {
@@ -323,8 +324,8 @@
   @media (width <= 430px) {
     .main-content {
       padding-right: max(var(--space-3), env(safe-area-inset-right));
-      padding-left: max(var(--space-3), env(safe-area-inset-left));
       padding-bottom: max(var(--space-3), env(safe-area-inset-bottom));
+      padding-left: max(var(--space-3), env(safe-area-inset-left));
     }
 
     header {
@@ -348,8 +349,8 @@
 /* Mobile-specific utility classes */
 @media (width <= 768px) {
   .mobile\:touch-friendly {
-    min-height: 48px; /* Updated to meet mobile guidelines */
     min-width: 48px; /* Ensure minimum width */
+    min-height: 48px; /* Updated to meet mobile guidelines */
     padding: var(--space-3) var(--space-4);
   }
 
@@ -365,19 +366,19 @@
 
   /* Ensure proper spacing for floating elements */
   .mobile\:safe-spacing {
-    margin-top: 80px;
     padding-bottom: 80px;
+    margin-top: 80px;
   }
 
   /* Touch target utilities */
   .mobile\:touch-target {
-    min-height: 48px;
     min-width: 48px;
+    min-height: 48px;
   }
 
   .mobile\:touch-target-large {
-    min-height: 56px;
     min-width: 56px;
+    min-height: 56px;
   }
 }
 
@@ -419,7 +420,7 @@
   /* Ensure proper spacing for mobile cards */
   .card,
   .name-card {
-    margin-bottom: var(--space-4);
     padding: var(--space-4);
+    margin-bottom: var(--space-4);
   }
 }

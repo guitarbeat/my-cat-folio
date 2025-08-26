@@ -33,26 +33,26 @@
 }
 
 .backgroundContainer::before {
-  content: "";
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
+  content: "";
   background-image:
     radial-gradient(
       circle at 20% 80%,
-      rgba(120, 119, 198, 0.1) 0%,
+      rgb(120 119 198 / 10%) 0%,
       transparent 50%
     ),
     radial-gradient(
       circle at 80% 20%,
-      rgba(255, 119, 198, 0.1) 0%,
+      rgb(255 119 198 / 10%) 0%,
       transparent 50%
     ),
     radial-gradient(
       circle at 40% 40%,
-      rgba(120, 219, 255, 0.1) 0%,
+      rgb(120 219 255 / 10%) 0%,
       transparent 50%
     );
   animation: backgroundFloat 20s ease-in-out infinite;
@@ -61,8 +61,9 @@
 @keyframes backgroundFloat {
   0%,
   100% {
-    transform: translateY(0px) rotate(0deg);
+    transform: translateY(0) rotate(0deg);
   }
+
   50% {
     transform: translateY(-20px) rotate(1deg);
   }
@@ -89,6 +90,9 @@
   display: grid;
   grid-template-columns: 0.9fr 1.1fr;
   gap: 1rem;
+
+  /* * Enhanced grid alignment to ensure proper centering */
+  place-items: center center;
   width: min(95%, 950px);
   scrollbar-width: none; /* Firefox */
   background: rgb(255 255 255 / 10%);
@@ -99,10 +103,6 @@
   transform: translateZ(0);
   animation: appearContainer 0.6s ease-out forwards;
   -ms-overflow-style: none; /* IE and Edge */
-
-  /* * Enhanced grid alignment to ensure proper centering */
-  align-items: center;
-  justify-items: center;
 }
 
 .loginContainer::-webkit-scrollbar {
@@ -123,44 +123,42 @@
 
 .imageSection {
   position: relative;
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
   gap: 1rem;
+
+  /* * Ensure the flex container is centered in its grid cell */
+  place-self: center center;
   align-items: center;
   justify-content: center;
-  padding: 1.5rem 2rem;
-  overflow: hidden;
-  text-align: center;
-  background: linear-gradient(135deg, rgb(0 0 0 / 40%), rgb(0 0 0 / 10%));
 
   /* * Simplified but effective centering approach */
   width: 100%;
   height: 100%;
-  box-sizing: border-box;
-
-  /* * Ensure the flex container is centered in its grid cell */
-  align-self: center;
-  justify-self: center;
+  padding: 1.5rem 2rem;
+  overflow: hidden;
+  text-align: center;
+  background: linear-gradient(135deg, rgb(0 0 0 / 40%), rgb(0 0 0 / 10%));
 }
 
 /* * Ensure all direct children are properly centered */
 .imageSection > * {
-  text-align: center;
   margin: 0 auto;
+  text-align: center;
 }
 
 /* * Ensure the grid cell containing imageSection is properly aligned */
 .loginContainer > *:first-child {
   display: flex;
+
+  /* * Additional grid alignment properties */
+  place-self: center;
+  place-self: center center;
   align-items: center;
   justify-content: center;
   width: 100%;
   height: 100%;
-
-  /* * Additional grid alignment properties */
-  place-self: center;
-  align-self: center;
-  justify-self: center;
 }
 
 /* * Restore the gradient overlay effect */
@@ -178,19 +176,19 @@
 /* * Specific centering for the title */
 .welcomeTitle {
   position: relative;
+
+  /* * Additional centering properties */
+  display: block;
+  width: 100%;
   margin: 0 auto;
   font-size: 2rem;
   font-weight: 700;
   color: white;
-  text-shadow: 0 2px 8px rgb(0 0 0 / 30%);
-  animation: slideDown 0.5s 0.2s ease-out both;
 
   /* * Ensure title is centered */
   text-align: center;
-  width: 100%;
-
-  /* * Additional centering properties */
-  display: block;
+  text-shadow: 0 2px 8px rgb(0 0 0 / 30%);
+  animation: slideDown 0.5s 0.2s ease-out both;
 }
 
 .welcomeTitle::after {
@@ -216,18 +214,17 @@
 
 /* * Specific centering for the text */
 .welcomeText {
+  /* * Additional centering properties */
+  display: block;
   max-width: 95%;
   margin: 0 auto;
   font-size: 0.95rem;
   line-height: 1.5;
   color: rgb(255 255 255 / 90%);
-  animation: fadeIn 0.5s 0.4s ease-out both;
 
   /* * Ensure text is centered */
   text-align: center;
-
-  /* * Additional centering properties */
-  display: block;
+  animation: fadeIn 0.5s 0.4s ease-out both;
 }
 
 @keyframes fadeIn {
@@ -242,23 +239,22 @@
 
 /* * Specific centering for the image */
 .catImage {
+  /* * Ensure image is centered */
+  display: block;
   width: min(100%, 220px);
   aspect-ratio: 1;
+  margin: 0 auto;
   object-fit: cover;
   border: 4px solid rgb(255 255 255 / 20%);
   border-radius: 50%;
   box-shadow: 0 8px 32px rgb(0 0 0 / 20%);
   transition: transform 0.3s ease;
   animation: pulseImage 1s ease-in-out infinite alternate;
-
-  /* * Ensure image is centered */
-  display: block;
-  margin: 0 auto;
 }
 
 .catImage:hover {
+  box-shadow: 0 12px 40px rgb(0 0 0 / 30%);
   transform: scale(1.05) rotate(3deg);
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
 }
 
 .catImage:active {
@@ -281,10 +277,10 @@
   gap: 1rem;
   padding: 1.5rem 2rem;
   background: rgb(255 255 255 / 95%);
-  animation: slideIn 0.5s 0.3s ease-out both;
+  border: 1px solid rgb(255 255 255 / 20%);
+  box-shadow: 0 8px 32px rgb(0 0 0 / 10%);
   backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  animation: slideIn 0.5s 0.3s ease-out both;
 }
 
 @keyframes slideIn {
@@ -320,18 +316,18 @@
 }
 
 .catFact {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
   padding: 8px 12px;
   margin: 0;
   font-size: 0.9rem;
   font-style: italic;
   line-height: 1.4;
-  color: #ffffff; /* White text for better contrast on dark background */
+  color: #fff; /* White text for better contrast on dark background */
   background: var(--card-hover);
   border-left: 3px solid var(--border-color);
   border-radius: 0 8px 8px 0;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
 }
 
 .catFactIcon {
@@ -341,8 +337,8 @@
 
 .loadingFact {
   display: flex;
-  align-items: center;
   gap: 0.25rem;
+  align-items: center;
 }
 
 .loadingDots {
@@ -358,6 +354,7 @@
   100% {
     opacity: 1;
   }
+
   50% {
     opacity: 0.5;
   }
@@ -379,8 +376,8 @@
   font-size: 0.9rem;
   font-weight: 500;
   color: #374151; /* Dark gray for better contrast on white background */
-  transition: all 0.3s ease;
   transform-origin: left center;
+  transition: all 0.3s ease;
 }
 
 .inputLabel:focus-within {
@@ -431,20 +428,20 @@
 }
 
 .loginInput {
+  position: relative;
   width: 100%;
   padding: 1rem 1.2rem;
   font-size: 1rem;
-  background: #ffffff;
+  background: #fff;
   border: 2px solid #e5e7eb;
   border-radius: 12px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 2px 6px rgb(0 0 0 / 5%);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  position: relative;
 }
 
 .loginInput:hover {
   border-color: #d1d5db;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 12px rgb(0 0 0 / 10%);
   transform: translateY(-1px);
 }
 
@@ -527,7 +524,7 @@
     var(--accent-color),
     var(--highlight-color)
   );
-  box-shadow: 0 4px 15px rgba(232, 191, 118, 0.4);
+  box-shadow: 0 4px 15px rgb(232 191 118 / 40%);
 }
 
 .singleButton.hasName:hover {
@@ -536,7 +533,7 @@
     var(--highlight-color),
     var(--accent-color)
   );
-  box-shadow: 0 8px 25px rgba(232, 191, 118, 0.6);
+  box-shadow: 0 8px 25px rgb(232 191 118 / 60%);
 }
 
 .singleButton:disabled {
@@ -597,14 +594,14 @@
 
 /* * Enhanced helper text with better visibility */
 .helperText.enhanced {
-  color: var(--text-primary);
   font-weight: 500;
+  color: var(--text-primary);
 }
 
 /* * Special styling for the random name generation text */
 .helperText.randomNameText {
-  color: var(--neon-cyan);
   font-weight: 500;
+  color: var(--neon-cyan);
   text-shadow: 0 0 8px rgba(var(--neon-cyan-rgb), 0.3);
   transition: all 0.3s ease;
 }
@@ -617,11 +614,11 @@
 
 .typingIndicator {
   display: flex;
+  gap: 0.5rem;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
   padding: 0.5rem;
-  background: rgba(232, 191, 118, 0.1);
+  background: rgb(232 191 118 / 10%);
   border: 1px solid var(--accent-color);
   border-radius: 8px;
   animation: slideIn 0.3s ease;
@@ -629,8 +626,8 @@
 
 .typingText {
   font-size: 0.85rem;
-  color: var(--accent-color);
   font-weight: 500;
+  color: var(--accent-color);
 }
 
 .typingDots {
@@ -639,17 +636,19 @@
 }
 
 .dot {
-  animation: typingBounce 1.4s infinite ease-in-out;
   font-size: 1.2em;
   color: #0369a1;
+  animation: typingBounce 1.4s infinite ease-in-out;
 }
 
 .dot:nth-child(1) {
   animation-delay: -0.32s;
 }
+
 .dot:nth-child(2) {
   animation-delay: -0.16s;
 }
+
 .dot:nth-child(3) {
   animation-delay: 0s;
 }
@@ -660,6 +659,7 @@
   100% {
     transform: scale(0);
   }
+
   40% {
     transform: scale(1);
   }
@@ -679,27 +679,27 @@
 }
 
 .characterCounter {
-  margin-top: 0.5rem;
   padding: 0.5rem;
-  background: rgba(232, 191, 118, 0.05);
-  border-radius: 8px;
+  margin-top: 0.5rem;
+  background: rgb(232 191 118 / 5%);
   border: 1px solid var(--accent-color);
+  border-radius: 8px;
 }
 
 .counterText {
   display: block;
+  margin-bottom: 0.25rem;
   font-size: 0.75rem;
   font-weight: 500;
   color: var(--blue-gray);
-  margin-bottom: 0.25rem;
 }
 
 .counterBar {
   width: 100%;
   height: 4px;
-  background: rgba(232, 191, 118, 0.2);
-  border-radius: 2px;
   overflow: hidden;
+  background: rgb(232 191 118 / 20%);
+  border-radius: 2px;
 }
 
 .counterProgress {
@@ -734,7 +734,7 @@
   width: 100%;
   height: 2px;
   content: "";
-  background: rgba(232, 191, 118, 0.3);
+  background: rgb(232 191 118 / 30%);
   border-radius: 2px;
 }
 
@@ -755,16 +755,16 @@
 
 /* * Enhanced example text styling */
 .randomNameExample .exampleLabel {
-  color: var(--text-tertiary);
   font-weight: 500;
+  color: var(--text-tertiary);
 }
 
 .randomNameExample .exampleValue {
-  color: var(--hot-pink);
   font-weight: 600;
+  color: var(--hot-pink);
   text-shadow: 0 0 6px rgba(var(--hot-pink-rgb), 0.4);
-  transition: all 0.3s ease;
   cursor: pointer;
+  transition: all 0.3s ease;
 }
 
 .randomNameExample .exampleValue:hover {
@@ -845,10 +845,10 @@
 
   .helperText {
     font-size: 0.8rem;
+    font-weight: 500; /* Slightly bolder for mobile */
     color: var(
       --text-secondary
     ); /* Consistent with desktop for better readability */
-    font-weight: 500; /* Slightly bolder for mobile */
   }
 
   .namePreview {

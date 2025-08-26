@@ -2,25 +2,25 @@
 .container {
   width: 100%;
   min-height: 100vh;
+  padding-top: var(--space-6);
   background: linear-gradient(
     135deg,
     var(--background-color) 0%,
     var(--surface-color) 100%
   );
-  padding-top: var(--space-6);
 }
 
 /* Name count display */
 .nameCount {
-  margin-bottom: var(--space-4);
   padding: var(--space-3) 0;
+  margin-bottom: var(--space-4);
   text-align: center;
 }
 
 .countAndSelect {
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
   margin-bottom: var(--space-3);
 }
 
@@ -38,12 +38,12 @@
   padding: var(--space-2) var(--space-4);
   font-size: var(--text-sm);
   font-weight: 500;
-  cursor: pointer;
-  border-radius: var(--radius-md);
-  transition: var(--transition-all);
   color: var(--button-text-light, white);
+  cursor: pointer;
   background: var(--button-primary-bg, var(--primary-color));
   border: none;
+  border-radius: var(--radius-md);
+  transition: var(--transition-all);
 }
 
 .selectAllButton:hover:not(:disabled) {
@@ -54,48 +54,48 @@
 
 .helperText {
   display: block;
+  margin-top: var(--space-2);
   font-size: var(--text-sm);
   color: var(--text-accent);
   text-align: center;
-  margin-top: var(--space-2);
 }
 
 .helpText {
-  font-size: 0.875rem;
-  color: var(--text-secondary);
   margin-top: 0.25rem;
+  font-size: 0.875rem;
   font-style: italic;
+  color: var(--text-secondary);
 }
 
 /* Enhanced Statistics */
 .nameStats {
   display: flex;
+  flex-wrap: wrap;
   gap: var(--space-4);
   justify-content: center;
-  flex-wrap: wrap;
   padding-top: var(--space-3);
   border-top: 1px solid var(--border-color);
 }
 
 .statItem {
+  padding: var(--space-2) var(--space-3);
   font-size: var(--text-sm);
   color: var(--text-secondary);
   background: var(--surface-color);
-  padding: var(--space-2) var(--space-3);
-  border-radius: var(--radius-md);
   border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
 }
 
 /* Enhanced Controls Section */
 .controlsSection {
   display: flex;
-  gap: var(--space-4);
-  margin-bottom: var(--space-4);
-  padding: var(--space-4);
-  background: var(--surface-color);
-  border-radius: var(--radius-lg);
-  border: 1px solid var(--border-color);
   flex-wrap: wrap;
+  gap: var(--space-4);
+  padding: var(--space-4);
+  margin-bottom: var(--space-4);
+  background: var(--surface-color);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
 }
 
 .filterGroup {
@@ -113,11 +113,11 @@
 
 .filterSelect {
   padding: var(--space-2);
+  font-size: var(--text-sm);
+  color: var(--text-primary);
+  background: var(--card-background);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
-  background: var(--card-background);
-  color: var(--text-primary);
-  font-size: var(--text-sm);
   transition: border-color 0.2s ease;
 }
 
@@ -128,14 +128,14 @@
 }
 
 .searchInput {
+  min-width: 200px;
   padding: var(--space-2);
+  font-size: var(--text-sm);
+  color: var(--text-primary);
+  background: var(--card-background);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
-  background: var(--card-background);
-  color: var(--text-primary);
-  font-size: var(--text-sm);
   transition: border-color 0.2s ease;
-  min-width: 200px;
 }
 
 .searchInput:focus {
@@ -155,19 +155,19 @@
 }
 
 .resultsCount {
+  padding: var(--space-2) var(--space-4);
   font-size: var(--text-sm);
   color: var(--text-secondary);
   background: var(--surface-color);
-  padding: var(--space-2) var(--space-4);
-  border-radius: var(--radius-md);
   border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
 }
 
 /* No Results */
 .noResults {
-  text-align: center;
   padding: var(--space-8);
   color: var(--text-secondary);
+  text-align: center;
 }
 
 .noResults p {
@@ -184,43 +184,42 @@
 
 /* Integrated Tournament Header in Sidebar */
 .tournamentHeader {
-  text-align: center;
-  margin-bottom: var(--space-6);
   padding-bottom: var(--space-4);
+  margin-bottom: var(--space-6);
+  text-align: center;
   border-bottom: 2px solid var(--border-color);
 }
 
 .tournamentTitle {
+  margin: 0 0 var(--space-3) 0;
   font-size: var(--text-2xl);
   font-weight: 700;
-  margin: 0 0 var(--space-3) 0;
   color: var(--text-primary);
   background: linear-gradient(135deg, #94a3b8 0%, #64748b 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
   background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .tournamentSubtitle {
-  font-size: var(--text-sm);
   margin: 0;
-  color: var(--text-secondary);
+  font-size: var(--text-sm);
   line-height: 1.5;
+  color: var(--text-secondary);
 }
 
 .progressSection {
-  margin-bottom: var(--space-6);
   padding-bottom: var(--space-4);
+  margin-bottom: var(--space-6);
   border-bottom: 1px solid var(--border-color);
 }
 
 .progressBar {
   width: 100%;
   height: 6px;
+  margin-bottom: var(--space-2);
+  overflow: hidden;
   background: var(--border-color);
   border-radius: var(--radius-full);
-  overflow: hidden;
-  margin-bottom: var(--space-2);
 }
 
 .progressFill {
@@ -231,11 +230,11 @@
 }
 
 .progressText {
+  display: block;
   font-size: var(--text-xs);
   font-weight: 500;
   color: var(--text-secondary);
   text-align: center;
-  display: block;
 }
 
 .starsSection {
@@ -243,17 +242,17 @@
 }
 
 .starsTitle {
+  margin: 0 0 var(--space-2) 0;
   font-size: var(--text-lg);
   font-weight: 600;
-  margin: 0 0 var(--space-2) 0;
   color: var(--text-primary);
 }
 
 .starsDescription {
-  font-size: var(--text-sm);
   margin: 0 0 var(--space-4) 0;
-  color: var(--text-secondary);
+  font-size: var(--text-sm);
   line-height: 1.5;
+  color: var(--text-secondary);
 }
 
 /* Main Content Layout */
@@ -262,17 +261,17 @@
   grid-template-columns: 1fr 350px;
   gap: var(--space-6);
   max-width: 1400px;
-  margin: 0 auto;
   padding: var(--space-6);
+  margin: 0 auto;
 }
 
 /* Selection Panel */
 .selectionPanel {
-  background: var(--card-background);
-  border-radius: var(--radius-xl);
-  border: 1px solid var(--border-color);
-  box-shadow: var(--shadow-lg);
   overflow: hidden;
+  background: var(--card-background);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-lg);
 }
 
 .panelHeader {
@@ -288,8 +287,8 @@
 /* Combined header layout */
 .headerRow {
   display: flex;
-  justify-content: space-between;
   align-items: flex-start;
+  justify-content: space-between;
   margin-bottom: var(--space-4);
 }
 
@@ -312,23 +311,23 @@
 }
 
 .panelTitle {
+  margin: 0 0 var(--space-2) 0;
   font-size: var(--text-2xl);
   font-weight: 700;
-  margin: 0 0 var(--space-2) 0;
   color: var(--text-primary);
 }
 
 .panelSubtitle {
-  font-size: var(--text-base);
   margin: 0;
-  color: var(--text-secondary);
+  font-size: var(--text-base);
   line-height: 1.5;
+  color: var(--text-secondary);
 }
 
 .selectionControls {
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
   padding: var(--space-4) var(--space-6);
   background: var(--surface-color);
   border-bottom: 1px solid var(--border-color);
@@ -339,30 +338,30 @@
   gap: var(--space-2);
   align-items: center;
   justify-content: center;
-  font-size: var(--text-sm);
+  min-width: fit-content;
   padding: var(--space-3) var(--space-4);
+  font-size: var(--text-sm);
   font-weight: 500;
-  cursor: pointer;
-  border-radius: var(--radius-md);
-  transition: var(--transition-all);
   color: var(--button-text-light, white);
+  white-space: nowrap;
+  cursor: pointer;
   background: var(--button-secondary-bg, #2a2a2a);
   border: 1px solid #444;
-  white-space: nowrap;
-  min-width: fit-content;
+  border-radius: var(--radius-md);
+  transition: var(--transition-all);
 }
 
 .selectAllButton:hover:not(:disabled) {
   background: var(--button-secondary-hover, #333);
   border-color: var(--border-color);
-  transform: translateY(-1px);
   box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
 }
 
 .selectionStats {
   display: flex;
-  align-items: baseline;
   gap: var(--space-1);
+  align-items: baseline;
 }
 
 .selectedCount {
@@ -373,19 +372,19 @@
 
 .selectedLabel {
   font-size: var(--text-sm);
-  color: var(--text-secondary);
   font-weight: 500;
+  color: var(--text-secondary);
 }
 
 .startSection {
   padding: var(--space-6);
+  text-align: center;
   background: linear-gradient(
     135deg,
     var(--primary-50) 0%,
     var(--primary-100) 100%
   );
   border-top: 1px solid var(--primary-200);
-  text-align: center;
 }
 
 /* Sidebar */
@@ -396,11 +395,11 @@
 }
 
 .sidebarCard {
-  background: var(--card-background);
-  border-radius: var(--radius-lg);
-  border: 1px solid var(--border-color);
-  box-shadow: var(--shadow-md);
   padding: var(--space-5);
+  background: var(--card-background);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
   transition: all var(--duration-normal) var(--ease-out);
 }
 
@@ -410,17 +409,17 @@
 }
 
 .sidebarTitle {
+  margin: 0 0 var(--space-2) 0;
   font-size: var(--text-lg);
   font-weight: 600;
-  margin: 0 0 var(--space-2) 0;
   color: var(--text-primary);
 }
 
 .sidebarDescription {
-  font-size: var(--text-sm);
   margin: 0 0 var(--space-4) 0;
-  color: var(--text-secondary);
+  font-size: var(--text-sm);
   line-height: 1.5;
+  color: var(--text-secondary);
 }
 
 
@@ -440,11 +439,11 @@
 .nameCount {
   padding: var(--space-4);
   margin: var(--space-6) 0;
+  cursor: pointer;
   background: var(--card-background);
   border: 1px solid var(--card-border);
   border-radius: var(--radius-lg);
   transition: var(--transition-all);
-  cursor: pointer;
 }
 
 .nameCount:hover {
@@ -475,12 +474,12 @@
   padding: var(--space-3) var(--space-4);
   font-size: var(--text-base);
   font-weight: 500;
-  cursor: pointer;
-  border-radius: var(--radius-md);
-  transition: var(--transition-all);
   color: var(--button-text-light, white);
+  cursor: pointer;
   background: var(--button-secondary-bg, #2a2a2a);
   border: 1px solid #444;
+  border-radius: var(--radius-md);
+  transition: var(--transition-all);
 }
 
 .selectAllButton:hover:not(:disabled) {
@@ -507,21 +506,19 @@
   flex-direction: column;
   gap: var(--space-2);
   align-items: center;
+  justify-content: center;
   width: 100%;
   max-width: 400px;
   padding: var(--space-4);
   margin: 0 auto;
-  gap: var(--space-2);
-  align-items: center;
-  justify-content: center;
   font-size: var(--text-base);
   font-weight: 500;
-  cursor: pointer;
-  border-radius: var(--radius-md);
-  transition: var(--transition-all);
   color: var(--button-text-light, white);
+  cursor: pointer;
   background: var(--button-primary-bg, var(--primary-color));
   border: none;
+  border-radius: var(--radius-md);
+  transition: var(--transition-all);
 }
 
 .startButton:hover:not(:disabled) {
@@ -536,17 +533,17 @@
   gap: var(--space-2);
   align-items: center;
   justify-content: center;
-  font-size: var(--text-sm);
+  min-width: fit-content;
   padding: var(--space-3) var(--space-4);
+  font-size: var(--text-sm);
   font-weight: 500;
-  cursor: pointer;
-  border-radius: var(--radius-md);
-  transition: var(--transition-all);
   color: var(--button-text-light, white);
+  white-space: nowrap;
+  cursor: pointer;
   background: var(--button-primary-bg, var(--primary-color));
   border: none;
-  white-space: nowrap;
-  min-width: fit-content;
+  border-radius: var(--radius-md);
+  transition: var(--transition-all);
 }
 
 .startButtonHeader:hover:not(:disabled) {
@@ -556,8 +553,8 @@
 }
 
 .startButtonHeader:disabled {
-  opacity: 0.6;
   cursor: not-allowed;
+  opacity: 0.6;
   transform: none;
 }
 
@@ -580,11 +577,11 @@
 .photoSidebarContent {
   padding: var(--space-4);
   margin-bottom: var(--space-4);
+  cursor: pointer;
   background: var(--card-background);
   border: 1px solid var(--card-border);
   border-radius: var(--radius-lg);
   transition: var(--transition-all);
-  cursor: pointer;
 }
 
 .photoSidebarContent:hover {
@@ -605,13 +602,13 @@
   overflow: hidden;
   cursor: pointer;
   border-radius: var(--radius-lg);
-  transition: all var(--duration-normal) var(--ease-out);
   box-shadow: var(--shadow-sm);
+  transition: all var(--duration-normal) var(--ease-out);
 }
 
 .photoThumbnail:hover {
-  transform: translateY(-2px);
   box-shadow: var(--shadow-lg);
+  transform: translateY(-2px);
 }
 
 .photoThumbnail:hover .photoOverlay {
@@ -635,7 +632,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(0, 0, 0, 0.6);
+  background: rgb(0 0 0 / 60%);
   opacity: 0;
   transition: opacity var(--duration-normal) var(--ease-out);
 }
@@ -643,17 +640,17 @@
 .photoIcon {
   font-size: var(--text-2xl);
   color: white;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  text-shadow: 0 2px 4px rgb(0 0 0 / 50%);
 }
 
 /* Suggestion Section */
 .suggestionSection {
   padding: var(--space-4);
+  cursor: pointer;
   background: var(--card-background);
   border: 1px solid var(--card-border);
   border-radius: var(--radius-lg);
   transition: var(--transition-all);
-  cursor: pointer;
 }
 
 .suggestionSection:hover {
@@ -710,21 +707,21 @@
 }
 
 .submitButton {
-  width: 100%;
-  margin-top: var(--space-2);
   display: inline-flex;
   gap: var(--space-2);
   align-items: center;
   justify-content: center;
+  width: 100%;
   padding: var(--space-3) var(--space-4);
+  margin-top: var(--space-2);
   font-size: var(--text-base);
   font-weight: 500;
-  cursor: pointer;
-  border-radius: var(--radius-md);
-  transition: var(--transition-all);
   color: var(--button-text-light, white);
+  cursor: pointer;
   background: var(--button-primary-bg, var(--primary-color));
   border: none;
+  border-radius: var(--radius-md);
+  transition: var(--transition-all);
 }
 
 .submitButton:hover:not(:disabled) {
@@ -866,15 +863,15 @@
   justify-content: center;
   width: 40px;
   height: 40px;
+  padding: var(--space-2);
+  font-size: var(--text-base);
+  font-weight: 500;
   color: rgb(var(--white-rgb));
   cursor: pointer;
   background: var(--overlay-medium);
   border: none;
   border-radius: var(--radius-full);
   transition: all var(--duration-normal) var(--ease-out);
-  padding: var(--space-2);
-  font-size: var(--text-base);
-  font-weight: 500;
 }
 
 .minimizeButton:hover,
@@ -1068,24 +1065,22 @@
   right: var(--space-4);
   z-index: 10;
   display: flex;
+  display: inline-flex;
+  gap: var(--space-2);
   align-items: center;
   justify-content: center;
   width: 40px;
   min-width: auto;
   height: 40px;
   padding: var(--space-2);
-  display: inline-flex;
-  gap: var(--space-2);
-  align-items: center;
-  justify-content: center;
   font-size: var(--text-base);
   font-weight: 500;
-  cursor: pointer;
-  border-radius: var(--radius-md);
-  transition: var(--transition-all);
   color: var(--button-text-light, white);
+  cursor: pointer;
   background: var(--button-secondary-bg, #2a2a2a);
   border: 1px solid #444;
+  border-radius: var(--radius-md);
+  transition: var(--transition-all);
 }
 
 .minimizeButton:hover:not(:disabled) {
@@ -1111,34 +1106,34 @@
 
 /* Swipe Mode Toggle Button */
 .swipeModeToggleButton {
-  background: var(--card-background, #0f1225);
-  color: var(--text-primary, #f8fafc);
-  border: 2px solid var(--primary-color, #5a5cff);
-  border-radius: 12px;
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
   padding: 0.75rem 1.25rem;
   font-size: 0.9rem;
   font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
+  color: var(--text-primary, #f8fafc);
   text-transform: uppercase;
   letter-spacing: 0.5px;
+  cursor: pointer;
+  background: var(--card-background, #0f1225);
+  border: 2px solid var(--primary-color, #5a5cff);
+  border-radius: 12px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .swipeModeToggleButton:hover {
-  background: var(--primary-color, #5a5cff);
   color: white;
+  background: var(--primary-color, #5a5cff);
+  box-shadow: 0 4px 12px rgb(90 92 255 / 40%);
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(90, 92, 255, 0.4);
 }
 
 .swipeModeToggleButton.active {
-  background: var(--primary-color, #5a5cff);
   color: white;
+  background: var(--primary-color, #5a5cff);
   border-color: var(--primary-color, #5a5cff);
-  box-shadow: 0 0 0 3px rgba(90, 92, 255, 0.3);
+  box-shadow: 0 0 0 3px rgb(90 92 255 / 30%);
 }
 
 .swipeModeToggleButton:active {
@@ -1149,10 +1144,10 @@
 .swipeContainer {
   display: flex;
   flex-direction: column;
-  align-items: center;
   gap: 2rem;
-  padding: 2rem 0;
+  align-items: center;
   min-height: 400px;
+  padding: 2rem 0;
 }
 
 /* Swipe Card Wrapper */
@@ -1171,16 +1166,16 @@
   left: 0;
   width: 100%;
   height: 100%;
+  padding: 2rem;
+  overflow: hidden;
+  touch-action: none;
+  cursor: grab;
+  user-select: none;
   background: var(--card-background, #0f1225);
   border: 2px solid var(--border-color, #263056);
   border-radius: 20px;
-  padding: 2rem;
-  cursor: grab;
+  box-shadow: 0 8px 32px rgb(0 0 0 / 30%);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-  overflow: hidden;
-  user-select: none;
-  touch-action: none;
 }
 
 .swipeCard:active {
@@ -1189,55 +1184,55 @@
 
 .swipeCard.selected {
   border-color: var(--primary-color, #5a5cff);
-  box-shadow: 0 8px 32px rgba(90, 92, 255, 0.3);
+  box-shadow: 0 8px 32px rgb(90 92 255 / 30%);
 }
 
 /* Swipe Card Content */
 .swipeCardContent {
-  height: 100%;
+  position: relative;
+  z-index: 2;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  position: relative;
-  z-index: 2;
+  height: 100%;
 }
 
 .swipeCardName {
+  margin: 0 0 1rem;
   font-size: 2rem;
   font-weight: 700;
   color: var(--text-primary, #f8fafc);
-  margin: 0 0 1rem 0;
   text-align: center;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  text-shadow: 0 2px 4px rgb(0 0 0 / 30%);
 }
 
 .swipeCardDescription {
-  font-size: 1.1rem;
-  color: var(--text-secondary, #cbd5e1);
-  line-height: 1.6;
-  margin: 0;
-  text-align: center;
-  flex-grow: 1;
   display: flex;
+  flex-grow: 1;
   align-items: center;
   justify-content: center;
+  margin: 0;
+  font-size: 1.1rem;
+  line-height: 1.6;
+  color: var(--text-secondary, #cbd5e1);
+  text-align: center;
 }
 
 /* Swipe Card Metadata */
 .swipeCardMetadata {
   display: flex;
+  flex-wrap: wrap;
   gap: 1rem;
   justify-content: center;
-  flex-wrap: wrap;
   margin-top: 1rem;
 }
 
 .metadataItem {
-  background: rgba(255, 255, 255, 0.1);
   padding: 0.5rem 1rem;
-  border-radius: 20px;
   font-size: 0.9rem;
   color: var(--text-primary, #f8fafc);
+  background: rgb(255 255 255 / 10%);
+  border-radius: 20px;
   backdrop-filter: blur(10px);
 }
 
@@ -1246,12 +1241,12 @@
   position: absolute;
   top: 1rem;
   right: 1rem;
-  background: rgba(0, 0, 0, 0.7);
-  color: white;
   padding: 0.5rem 1rem;
-  border-radius: 20px;
   font-size: 0.8rem;
   font-weight: 600;
+  color: white;
+  background: rgb(0 0 0 / 70%);
+  border-radius: 20px;
   backdrop-filter: blur(10px);
   transition: all 0.3s ease;
 }
@@ -1265,29 +1260,29 @@
   position: absolute;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
+  z-index: 1;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 20px;
+  width: 100%;
+  height: 100%;
   font-size: 2rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 2px;
+  border-radius: 20px;
   opacity: 0;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  z-index: 1;
 }
 
 .swipeRight {
-  background: linear-gradient(135deg, #10b981, #059669);
   color: white;
+  background: linear-gradient(135deg, #10b981, #059669);
 }
 
 .swipeLeft {
-  background: linear-gradient(135deg, #ef4444, #dc2626);
   color: white;
+  background: linear-gradient(135deg, #ef4444, #dc2626);
 }
 
 .swipeOverlay.active {
@@ -1295,7 +1290,7 @@
 }
 
 .swipeText {
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  text-shadow: 0 2px 4px rgb(0 0 0 / 50%);
   animation: pulse 0.6s ease-in-out;
 }
 
@@ -1304,6 +1299,7 @@
   100% {
     transform: scale(1);
   }
+
   50% {
     transform: scale(1.1);
   }
@@ -1312,29 +1308,29 @@
 /* Swipe Buttons */
 .swipeButtons {
   display: flex;
-  align-items: center;
   gap: 2rem;
+  align-items: center;
   margin-top: 1rem;
 }
 
 .swipeButton {
-  background: var(--card-background, #0f1225);
-  color: var(--text-primary, #f8fafc);
-  border: 2px solid var(--border-color, #263056);
-  border-radius: 50px;
+  min-width: 120px;
   padding: 1rem 2rem;
   font-size: 1.1rem;
   font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  color: var(--text-primary, #f8fafc);
   text-transform: uppercase;
   letter-spacing: 1px;
-  min-width: 120px;
+  cursor: pointer;
+  background: var(--card-background, #0f1225);
+  border: 2px solid var(--border-color, #263056);
+  border-radius: 50px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .swipeButton:hover:not(:disabled) {
+  box-shadow: 0 6px 20px rgb(0 0 0 / 30%);
   transform: translateY(-3px);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
 }
 
 .swipeButton:active:not(:disabled) {
@@ -1342,8 +1338,8 @@
 }
 
 .swipeButton:disabled {
-  opacity: 0.5;
   cursor: not-allowed;
+  opacity: 0.5;
   transform: none;
 }
 
@@ -1352,8 +1348,8 @@
 }
 
 .swipeLeftButton:hover:not(:disabled) {
-  background: #ef4444;
   color: white;
+  background: #ef4444;
   border-color: #ef4444;
 }
 
@@ -1362,32 +1358,32 @@
 }
 
 .swipeRightButton:hover:not(:disabled) {
-  background: #10b981;
   color: white;
+  background: #10b981;
   border-color: #10b981;
 }
 
 /* Card Progress */
 .cardProgress {
-  background: rgba(255, 255, 255, 0.1);
-  color: var(--text-primary, #f8fafc);
   padding: 0.75rem 1.5rem;
-  border-radius: 25px;
   font-size: 0.9rem;
   font-weight: 600;
+  color: var(--text-primary, #f8fafc);
+  background: rgb(255 255 255 / 10%);
+  border: 1px solid rgb(255 255 255 / 20%);
+  border-radius: 25px;
   backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 /* Swipe Instructions */
 .swipeInstructions {
-  text-align: center;
-  color: var(--text-secondary, #cbd5e1);
-  font-size: 0.9rem;
-  background: rgba(255, 255, 255, 0.05);
   padding: 1rem 2rem;
+  font-size: 0.9rem;
+  color: var(--text-secondary, #cbd5e1);
+  text-align: center;
+  background: rgb(255 255 255 / 5%);
+  border: 1px solid rgb(255 255 255 / 10%);
   border-radius: 15px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(10px);
 }
 
@@ -1397,19 +1393,19 @@
 
 /* Swipe Mode Instructions */
 .swipeModeInstructions {
-  text-align: center;
-  color: var(--text-secondary, #cbd5e1);
-  font-size: 0.9rem;
-  background: rgba(255, 255, 255, 0.05);
   padding: 1rem 2rem;
-  border-radius: 15px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(10px);
   margin-bottom: 2rem;
+  font-size: 0.9rem;
+  color: var(--text-secondary, #cbd5e1);
+  text-align: center;
+  background: rgb(255 255 255 / 5%);
+  border: 1px solid rgb(255 255 255 / 10%);
+  border-radius: 15px;
+  backdrop-filter: blur(10px);
 }
 
 /* Mobile Responsiveness */
-@media (max-width: 768px) {
+@media (width <= 768px) {
   .swipeCardWrapper {
     max-width: 100%;
     height: 250px;
@@ -1428,15 +1424,15 @@
   }
 
   .swipeButtons {
-    gap: 1rem;
     flex-wrap: wrap;
+    gap: 1rem;
     justify-content: center;
   }
 
   .swipeButton {
+    min-width: 100px;
     padding: 0.75rem 1.5rem;
     font-size: 1rem;
-    min-width: 100px;
   }
 
   .cardProgress {
@@ -1457,8 +1453,8 @@
   }
 
   .swipeButton {
-    min-height: 48px;
     min-width: 100px;
+    min-height: 48px;
   }
 
   .swipeModeToggleButton {

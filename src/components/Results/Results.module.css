@@ -134,7 +134,7 @@
 }
 
 .startNewButton {
-  composes: btnPrimary from "../../styles/global.css";
+  composes: btnprimary from "../../styles/global.css";
   display: inline-flex;
   gap: var(--space-2);
   align-items: center;
@@ -387,7 +387,7 @@
 }
 
 .actionButton {
-  composes: btnPrimary from "../../styles/global.css";
+  composes: btnprimary from "../../styles/global.css";
   min-width: 200px;
 }
 

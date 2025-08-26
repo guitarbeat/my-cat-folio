@@ -7,29 +7,29 @@
 
 .header {
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
   padding: 1rem 1.5rem;
-  background: rgba(0, 0, 0, 0.05);
+  background: rgb(0 0 0 / 5%);
+  border-bottom: 1px solid rgb(0 0 0 / 10%);
   border-radius: 10px 10px 0 0;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 .errorCount {
+  font-size: 0.9rem;
   font-weight: 600;
   color: #4a5568;
-  font-size: 0.9rem;
 }
 
 .clearAllButton {
-  background: #e53e3e;
-  color: white;
-  border: none;
   padding: 0.5rem 1rem;
-  border-radius: 6px;
   font-size: 0.8rem;
   font-weight: 500;
+  color: white;
   cursor: pointer;
+  background: #e53e3e;
+  border: none;
+  border-radius: 6px;
   transition: all 0.2s ease;
 }
 
@@ -45,9 +45,9 @@
 }
 
 .errorItem {
-  border-radius: 10px;
-  border: 1px solid;
   overflow: hidden;
+  border: 1px solid;
+  border-radius: 10px;
   transition: all 0.3s ease;
   animation: slideIn 0.3s ease-out;
 }
@@ -57,6 +57,7 @@
     opacity: 0;
     transform: translateY(-10px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -65,98 +66,98 @@
 
 /* Severity-based styling */
 .critical {
-  border-color: #e53e3e;
   background: linear-gradient(135deg, #fed7d7 0%, #feb2b2 100%);
-  box-shadow: 0 4px 12px rgba(229, 62, 62, 0.2);
+  border-color: #e53e3e;
+  box-shadow: 0 4px 12px rgb(229 62 62 / 20%);
 }
 
 .high {
-  border-color: #dd6b20;
   background: linear-gradient(135deg, #fed7aa 0%, #fbbf24 100%);
-  box-shadow: 0 4px 12px rgba(221, 107, 32, 0.2);
+  border-color: #dd6b20;
+  box-shadow: 0 4px 12px rgb(221 107 32 / 20%);
 }
 
 .medium {
-  border-color: #3182ce;
   background: linear-gradient(135deg, #bee3f8 0%, #90cdf4 100%);
-  box-shadow: 0 4px 12px rgba(49, 130, 206, 0.2);
+  border-color: #3182ce;
+  box-shadow: 0 4px 12px rgb(49 130 206 / 20%);
 }
 
 .low {
-  border-color: #38a169;
   background: linear-gradient(135deg, #c6f6d5 0%, #9ae6b4 100%);
-  box-shadow: 0 4px 12px rgba(56, 161, 105, 0.2);
+  border-color: #38a169;
+  box-shadow: 0 4px 12px rgb(56 161 105 / 20%);
 }
 
 .unknown {
-  border-color: #718096;
   background: linear-gradient(135deg, #e2e8f0 0%, #cbd5e0 100%);
-  box-shadow: 0 4px 12px rgba(113, 128, 150, 0.2);
+  border-color: #718096;
+  box-shadow: 0 4px 12px rgb(113 128 150 / 20%);
 }
 
 .errorHeader {
   display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  padding: 1rem 1.5rem;
   gap: 1rem;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 1rem 1.5rem;
 }
 
 .errorInfo {
   display: flex;
-  align-items: center;
-  gap: 0.75rem;
   flex: 1;
+  gap: 0.75rem;
+  align-items: center;
   min-width: 0;
 }
 
 .severityIcon {
-  font-size: 1.2rem;
   flex-shrink: 0;
+  font-size: 1.2rem;
 }
 
 .errorMessage {
-  font-weight: 500;
-  color: #2d3748;
-  line-height: 1.4;
   flex: 1;
   min-width: 0;
+  font-weight: 500;
+  line-height: 1.4;
+  color: #2d3748;
 }
 
 .errorTime {
-  font-size: 0.8rem;
-  color: #718096;
-  font-weight: 400;
   flex-shrink: 0;
+  font-size: 0.8rem;
+  font-weight: 400;
+  color: #718096;
   white-space: nowrap;
 }
 
 .errorActions {
   display: flex;
+  flex-shrink: 0;
   gap: 0.5rem;
   align-items: center;
-  flex-shrink: 0;
 }
 
 .retryButton,
 .dismissButton,
 .detailsButton {
-  border: none;
-  border-radius: 6px;
-  padding: 0.5rem 0.75rem;
-  font-size: 0.8rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s ease;
   display: flex;
   align-items: center;
   justify-content: center;
   min-width: 60px;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  border: none;
+  border-radius: 6px;
+  transition: all 0.2s ease;
 }
 
 .retryButton {
-  background: #38a169;
   color: white;
+  background: #38a169;
 }
 
 .retryButton:hover {
@@ -165,12 +166,12 @@
 }
 
 .dismissButton {
-  background: #718096;
-  color: white;
   width: 32px;
+  min-width: 32px;
   height: 32px;
   padding: 0;
-  min-width: 32px;
+  color: white;
+  background: #718096;
   border-radius: 50%;
 }
 
@@ -180,14 +181,14 @@
 }
 
 .detailsButton {
-  background: #e2e8f0;
-  color: #4a5568;
   width: 32px;
+  min-width: 32px;
   height: 32px;
   padding: 0;
-  min-width: 32px;
-  border-radius: 50%;
   font-weight: 600;
+  color: #4a5568;
+  background: #e2e8f0;
+  border-radius: 50%;
 }
 
 .detailsButton:hover {
@@ -197,19 +198,20 @@
 
 .errorDetails {
   padding: 1rem 1.5rem;
-  background: rgba(255, 255, 255, 0.5);
-  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  background: rgb(255 255 255 / 50%);
+  border-top: 1px solid rgb(0 0 0 / 10%);
   animation: expandDetails 0.3s ease-out;
 }
 
 @keyframes expandDetails {
   from {
-    opacity: 0;
     max-height: 0;
+    opacity: 0;
   }
+
   to {
-    opacity: 1;
     max-height: 500px;
+    opacity: 1;
   }
 }
 
@@ -224,35 +226,35 @@
 }
 
 .detailRow strong {
-  color: #2d3748;
-  font-weight: 600;
   margin-right: 0.5rem;
+  font-weight: 600;
+  color: #2d3748;
 }
 
 .errorStack {
-  background: rgba(0, 0, 0, 0.1);
   padding: 0.75rem;
-  border-radius: 6px;
-  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
-  font-size: 0.75rem;
-  overflow-x: auto;
-  white-space: pre-wrap;
-  word-break: break-word;
   margin-top: 0.5rem;
+  overflow-x: auto;
+  font-family: Monaco, Menlo, 'Ubuntu Mono', monospace;
+  font-size: 0.75rem;
+  overflow-wrap: break-word;
+  white-space: pre-wrap;
+  background: rgb(0 0 0 / 10%);
   border-left: 3px solid #e53e3e;
+  border-radius: 6px;
 }
 
 /* Mobile responsiveness */
-@media (max-width: 768px) {
+@media (width <= 768px) {
   .container {
     margin: 0 0.5rem;
   }
   
   .header {
-    padding: 0.75rem 1rem;
     flex-direction: column;
     gap: 0.5rem;
     align-items: stretch;
+    padding: 0.75rem 1rem;
   }
   
   .clearAllButton {
@@ -267,8 +269,8 @@
   
   .errorInfo {
     flex-direction: column;
-    align-items: flex-start;
     gap: 0.5rem;
+    align-items: flex-start;
   }
   
   .errorTime {
@@ -292,16 +294,16 @@
   }
   
   .errorStack {
-    font-size: 0.7rem;
     padding: 0.5rem;
+    font-size: 0.7rem;
   }
 }
 
 /* Dark theme support */
 @media (prefers-color-scheme: dark) {
   .header {
-    background: rgba(255, 255, 255, 0.1);
-    border-bottom-color: rgba(255, 255, 255, 0.2);
+    background: rgb(255 255 255 / 10%);
+    border-bottom-color: rgb(255 255 255 / 20%);
   }
   
   .errorCount {
@@ -321,17 +323,17 @@
   }
   
   .errorDetails {
-    background: rgba(0, 0, 0, 0.2);
-    border-top-color: rgba(255, 255, 255, 0.2);
+    background: rgb(0 0 0 / 20%);
+    border-top-color: rgb(255 255 255 / 20%);
   }
   
   .errorStack {
-    background: rgba(0, 0, 0, 0.3);
+    background: rgb(0 0 0 / 30%);
   }
   
   .detailsButton {
-    background: #4a5568;
     color: #e2e8f0;
+    background: #4a5568;
   }
   
   .detailsButton:hover {

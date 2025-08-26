@@ -54,18 +54,18 @@
  * --- END AUTO-GENERATED DOCSTRING ---
  */
 
-import { useState, useEffect, useCallback } from "react";
-import { supabase } from "../supabase/supabaseClient";
-import devLog from "../utils/logger";
+import { useState, useEffect, useCallback } from 'react';
+import { supabase } from '../supabase/supabaseClient';
+import devLog from '../utils/logger';
 
 function useUserSession() {
   // Initialize state with localStorage value immediately
   const [userName, setUserName] = useState(() => {
     try {
-      return localStorage.getItem("catNamesUser") || "";
+      return localStorage.getItem('catNamesUser') || '';
     } catch (error) {
-      console.error("Error reading from localStorage:", error);
-      return "";
+      console.error('Error reading from localStorage:', error);
+      return '';
     }
   });
   const [isLoggedIn, setIsLoggedIn] = useState(() => Boolean(userName));
@@ -76,20 +76,20 @@ function useUserSession() {
   useEffect(() => {
     const initializeSession = async () => {
       try {
-        const storedUser = localStorage.getItem("catNamesUser");
+        const storedUser = localStorage.getItem('catNamesUser');
         if (storedUser) {
-          devLog("Found stored user:", storedUser);
+          devLog('Found stored user:', storedUser);
 
           const { data, error: dbError } = await supabase
-            .from("cat_app_users")
-            .select("user_name")
-            .eq("user_name", storedUser)
+            .from('cat_app_users')
+            .select('user_name')
+            .eq('user_name', storedUser)
             .single();
 
           if (dbError || !data) {
-            console.warn("Stored user not found in database, clearing session");
-            localStorage.removeItem("catNamesUser");
-            setUserName("");
+            console.warn('Stored user not found in database, clearing session');
+            localStorage.removeItem('catNamesUser');
+            setUserName('');
             setIsLoggedIn(false);
           } else {
             setUserName(storedUser);
@@ -97,7 +97,7 @@ function useUserSession() {
           }
         }
       } catch (error) {
-        console.error("Session initialization error:", error);
+        console.error('Session initialization error:', error);
       } finally {
         setIsInitialized(true);
       }
@@ -113,38 +113,38 @@ function useUserSession() {
    */
   const login = useCallback(async (name) => {
     try {
-      devLog("Attempting to login with name:", name);
+      devLog('Attempting to login with name:', name);
 
-      if (!name || typeof name !== "string" || name.trim() === "") {
-        throw new Error("Please enter a valid name");
+      if (!name || typeof name !== 'string' || name.trim() === '') {
+        throw new Error('Please enter a valid name');
       }
 
       const trimmedName = name.trim();
 
       // Create/update user in cat_app_users table
-      const { error: upsertError } = await supabase.from("cat_app_users").upsert(
+      const { error: upsertError } = await supabase.from('cat_app_users').upsert(
         {
           user_name: trimmedName,
-          created_at: new Date().toISOString(),
+          created_at: new Date().toISOString()
         },
         {
-          onConflict: "user_name",
-          returning: "minimal",
-        },
+          onConflict: 'user_name',
+          returning: 'minimal'
+        }
       );
 
       if (upsertError) {
         throw upsertError;
       }
 
-      localStorage.setItem("catNamesUser", trimmedName);
+      localStorage.setItem('catNamesUser', trimmedName);
       setUserName(trimmedName);
       setIsLoggedIn(true);
       setError(null);
 
-      devLog("Login successful. Current user:", trimmedName);
+      devLog('Login successful. Current user:', trimmedName);
     } catch (err) {
-      console.error("Login error:", err);
+      console.error('Login error:', err);
       setError(err.message);
       throw err;
     }
@@ -155,20 +155,20 @@ function useUserSession() {
    * Clears local storage and resets session state
    */
   const logout = useCallback(async () => {
-    devLog("Logging out user:", userName);
-    localStorage.removeItem("catNamesUser");
-    setUserName("");
+    devLog('Logging out user:', userName);
+    localStorage.removeItem('catNamesUser');
+    setUserName('');
     setIsLoggedIn(false);
     setError(null);
-    devLog("Logout complete");
+    devLog('Logout complete');
   }, [userName]);
 
   // Add a debug log whenever userName changes
   useEffect(() => {
-    devLog("Current user session state:", {
+    devLog('Current user session state:', {
       userName,
       isLoggedIn,
-      error,
+      error
     });
   }, [userName, isLoggedIn, error]);
 
@@ -178,7 +178,7 @@ function useUserSession() {
     error,
     login,
     logout,
-    isInitialized,
+    isInitialized
   };
 }
 

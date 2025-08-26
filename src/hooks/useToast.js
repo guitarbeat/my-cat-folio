@@ -48,7 +48,7 @@ export const useToast = (options = {}) => {
     } = toastConfig;
 
     const toastId = generateToastId();
-    
+
     const newToast = {
       id: toastId,
       message,
@@ -152,7 +152,7 @@ export const useToast = (options = {}) => {
    * @param {Object} updates - Updates to apply
    */
   const updateToast = useCallback((toastId, updates) => {
-    setToasts(prev => prev.map(toast => 
+    setToasts(prev => prev.map(toast =>
       toast.id === toastId ? { ...toast, ...updates } : toast
     ));
   }, []);
@@ -178,7 +178,7 @@ export const useToast = (options = {}) => {
   return {
     // State
     toasts,
-    
+
     // Actions
     showToast,
     showSuccess,
@@ -189,11 +189,11 @@ export const useToast = (options = {}) => {
     clearAllToasts,
     removeToastsByType,
     updateToast,
-    
+
     // Getters
     getToastsByType,
     hasToastsOfType,
-    
+
     // Utilities
     toastCount: toasts.length,
     hasToasts: toasts.length > 0

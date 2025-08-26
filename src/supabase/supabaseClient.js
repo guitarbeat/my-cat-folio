@@ -4,8 +4,8 @@
  * Combines all database operations, real-time subscriptions, and utility functions.
  */
 
-import { createClient } from "@supabase/supabase-js";
-import devLog from "../utils/logger";
+import { createClient } from '@supabase/supabase-js';
+import devLog from '../utils/logger';
 
 // Environment configuration
 const supabaseUrl =
@@ -17,7 +17,7 @@ const supabaseAnonKey =
 
 if (!supabaseUrl || !supabaseAnonKey) {
   throw new Error(
-    "Missing Supabase environment variables. Please check your .env file. Required: VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY (or BAG_NEXT_PUBLIC_SUPABASE_URL and BAG_NEXT_PUBLIC_SUPABASE_ANON_KEY)",
+    'Missing Supabase environment variables. Please check your .env file. Required: VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY (or BAG_NEXT_PUBLIC_SUPABASE_URL and BAG_NEXT_PUBLIC_SUPABASE_ANON_KEY)'
   );
 }
 
@@ -32,20 +32,20 @@ export const catNamesAPI = {
   /**
    * Get all names with descriptions and ratings (hidden names are filtered out globally)
    */
-  async getNamesWithDescriptions(userName = null) {
+  async getNamesWithDescriptions() {
     try {
       // Get ALL hidden name IDs globally (not user-specific)
       let hiddenIds = [];
       const { data: hiddenData, error: hiddenError } = await supabase
-        .from("cat_name_ratings")
-        .select("name_id")
-        .eq("is_hidden", true);
+        .from('cat_name_ratings')
+        .select('name_id')
+        .eq('is_hidden', true);
 
       if (hiddenError) throw hiddenError;
       hiddenIds = hiddenData?.map((item) => item.name_id) || [];
 
       // Build query
-      let query = supabase.from("cat_name_options").select(`
+      let query = supabase.from('cat_name_options').select(`
         id,
         name,
         description,
@@ -64,10 +64,10 @@ export const catNamesAPI = {
 
       // Filter out ALL hidden names globally
       if (hiddenIds.length > 0) {
-        query = query.not("id", "in", `(${hiddenIds.join(",")})`);
+        query = query.not('id', 'in', `(${hiddenIds.join(',')})`);
       }
 
-      const { data, error } = await query.order("name");
+      const { data, error } = await query.order('name');
       if (error) throw error;
 
       // Process data to include latest updated_at and user-specific info
@@ -78,11 +78,11 @@ export const catNamesAPI = {
           user_rating: item.cat_name_ratings?.[0]?.rating || null,
           user_wins: item.cat_name_ratings?.[0]?.wins || 0,
           user_losses: item.cat_name_ratings?.[0]?.losses || 0,
-          has_user_rating: !!item.cat_name_ratings?.[0],
+          has_user_rating: !!item.cat_name_ratings?.[0]
         })) || []
       );
     } catch (error) {
-      console.error("Error fetching names:", error);
+      console.error('Error fetching names:', error);
       throw error;
     }
   },
@@ -90,10 +90,10 @@ export const catNamesAPI = {
   /**
    * Add a new name option
    */
-  async addName(name, description = "") {
+  async addName(name, description = '') {
     try {
       const { data, error } = await supabase
-        .from("cat_name_options")
+        .from('cat_name_options')
         .insert([{ name: name.trim(), description: description.trim() }])
         .select()
         .single();
@@ -101,7 +101,7 @@ export const catNamesAPI = {
       if (error) throw error;
       return data;
     } catch (error) {
-      console.error("Error adding name:", error);
+      console.error('Error adding name:', error);
       throw error;
     }
   },
@@ -112,14 +112,14 @@ export const catNamesAPI = {
   async removeName(name) {
     try {
       const { error } = await supabase
-        .from("cat_name_options")
+        .from('cat_name_options')
         .delete()
-        .eq("name", name);
+        .eq('name', name);
 
       if (error) throw error;
       return { success: true };
     } catch (error) {
-      console.error("Error removing name:", error);
+      console.error('Error removing name:', error);
       throw error;
     }
   },
@@ -129,19 +129,19 @@ export const catNamesAPI = {
    */
   async getLeaderboard(limit = 50, categoryId = null, minTournaments = 1) {
     try {
-      const { data, error } = await supabase.rpc("get_cat_name_leaderboard", {
+      const { data, error } = await supabase.rpc('get_cat_name_leaderboard', {
         p_limit: limit,
         p_category_id: categoryId,
-        p_min_tournaments: minTournaments,
+        p_min_tournaments: minTournaments
       });
 
       if (error) throw error;
       return data || [];
     } catch (error) {
-      console.error("Error fetching leaderboard:", error);
+      console.error('Error fetching leaderboard:', error);
       return [];
     }
-  },
+  }
 };
 
 /**
@@ -156,20 +156,20 @@ export const ratingsAPI = {
     nameId,
     newRating,
     outcome = null,
-    context = "tournament",
+    context = 'tournament'
   ) {
     const now = new Date().toISOString();
 
     try {
       // Get existing rating data
       const { data: existingData, error: fetchError } = await supabase
-        .from("cat_name_ratings")
-        .select("rating, wins, losses, updated_at")
-        .eq("user_name", userName)
-        .eq("name_id", nameId)
+        .from('cat_name_ratings')
+        .select('rating, wins, losses, updated_at')
+        .eq('user_name', userName)
+        .eq('name_id', nameId)
         .single();
 
-      if (fetchError && fetchError.code !== "PGRST116") {
+      if (fetchError && fetchError.code !== 'PGRST116') {
         throw fetchError;
       }
 
@@ -178,8 +178,8 @@ export const ratingsAPI = {
       let wins = existingData?.wins || 0;
       let losses = existingData?.losses || 0;
 
-      if (outcome === "win") wins += 1;
-      else if (outcome === "loss") losses += 1;
+      if (outcome === 'win') wins += 1;
+      else if (outcome === 'loss') losses += 1;
 
       // Record to rating history
       await this.addRatingHistory(
@@ -187,20 +187,20 @@ export const ratingsAPI = {
         nameId,
         currentRating,
         newRating,
-        context,
+        context
       );
 
       // Update rating
-      const { error } = await supabase.from("cat_name_ratings").upsert(
+      const { error } = await supabase.from('cat_name_ratings').upsert(
         {
           user_name: userName,
           name_id: nameId,
           rating: newRating,
           wins,
           losses,
-          updated_at: now,
+          updated_at: now
         },
-        { onConflict: "user_name,name_id", returning: "minimal" },
+        { onConflict: 'user_name,name_id', returning: 'minimal' }
       );
 
       if (error) throw error;
@@ -211,10 +211,10 @@ export const ratingsAPI = {
         change: newRating - currentRating,
         wins,
         losses,
-        updated_at: now,
+        updated_at: now
       };
     } catch (error) {
-      console.error("Error updating rating:", error);
+      console.error('Error updating rating:', error);
       throw error;
     }
   },
@@ -225,14 +225,14 @@ export const ratingsAPI = {
   async getRatingHistory(userName, nameId = null, limit = 20) {
     try {
       let query = supabase
-        .from("cat_rating_history")
-        .select("*")
-        .eq("user_name", userName)
-        .order("timestamp", { ascending: false })
+        .from('cat_rating_history')
+        .select('*')
+        .eq('user_name', userName)
+        .order('timestamp', { ascending: false })
         .limit(limit);
 
       if (nameId) {
-        query = query.eq("name_id", nameId);
+        query = query.eq('name_id', nameId);
       }
 
       const { data, error } = await query;
@@ -240,7 +240,7 @@ export const ratingsAPI = {
 
       return data || [];
     } catch (error) {
-      console.error("Error fetching rating history:", error);
+      console.error('Error fetching rating history:', error);
       return [];
     }
   },
@@ -253,34 +253,34 @@ export const ratingsAPI = {
     nameId,
     oldRating,
     newRating,
-    context = "manual",
+    context = 'manual'
   ) {
     try {
       // Get name from name_id
       const { data: nameData } = await supabase
-        .from("cat_name_options")
-        .select("name")
-        .eq("id", nameId)
+        .from('cat_name_options')
+        .select('name')
+        .eq('id', nameId)
         .single();
 
-      const { error } = await supabase.from("cat_rating_history").insert({
+      const { error } = await supabase.from('cat_rating_history').insert({
         user_name: userName,
         name_id: nameId,
-        name: nameData?.name || "Unknown",
+        name: nameData?.name || 'Unknown',
         old_rating: oldRating,
         new_rating: newRating,
         change: newRating - (oldRating || 0),
         context,
-        timestamp: new Date().toISOString(),
+        timestamp: new Date().toISOString()
       });
 
       if (error) throw error;
       return { success: true };
     } catch (error) {
-      console.error("Error saving rating history:", error);
+      console.error('Error saving rating history:', error);
       throw error;
     }
-  },
+  }
 };
 
 /**
@@ -294,23 +294,23 @@ export const hiddenNamesAPI = {
     try {
       // Update or insert the hidden status in cat_name_ratings
       const { error } = await supabase
-        .from("cat_name_ratings")
+        .from('cat_name_ratings')
         .upsert({
           name_id: nameId,
           user_name: userName,
           is_hidden: true,
           rating: 1500, // Default rating if none exists
           wins: 0,
-          losses: 0,
+          losses: 0
         }, {
-          onConflict: "name_id,user_name",
+          onConflict: 'name_id,user_name',
           ignoreDuplicates: false
         });
 
       if (error) throw error;
       return { success: true };
     } catch (error) {
-      console.error("Error hiding name:", error);
+      console.error('Error hiding name:', error);
       throw error;
     }
   },
@@ -322,15 +322,15 @@ export const hiddenNamesAPI = {
     try {
       // Update the hidden status to false in cat_name_ratings
       const { error } = await supabase
-        .from("cat_name_ratings")
+        .from('cat_name_ratings')
         .update({ is_hidden: false })
-        .eq("name_id", nameId)
-        .eq("user_name", userName);
+        .eq('name_id', nameId)
+        .eq('user_name', userName);
 
       if (error) throw error;
       return { success: true };
     } catch (error) {
-      console.error("Error unhiding name:", error);
+      console.error('Error unhiding name:', error);
       throw error;
     }
   },
@@ -341,7 +341,7 @@ export const hiddenNamesAPI = {
   async getHiddenNames(userName) {
     try {
       const { data, error } = await supabase
-        .from("cat_name_ratings")
+        .from('cat_name_ratings')
         .select(
           `
           name_id,
@@ -351,18 +351,18 @@ export const hiddenNamesAPI = {
             name,
             description
           )
-        `,
+        `
         )
-        .eq("user_name", userName)
-        .eq("is_hidden", true);
+        .eq('user_name', userName)
+        .eq('is_hidden', true);
 
       if (error) throw error;
       return data || [];
     } catch (error) {
-      console.error("Error fetching hidden names:", error);
+      console.error('Error fetching hidden names:', error);
       return [];
     }
-  },
+  }
 };
 
 /**
@@ -376,7 +376,7 @@ export const tournamentsAPI = {
     userName,
     tournamentName,
     participantNames,
-    tournamentData = {},
+    tournamentData = {}
   ) {
     try {
       // Create tournament in the consolidated cat_users table
@@ -386,15 +386,15 @@ export const tournamentsAPI = {
         tournament_name: tournamentName,
         participant_names: participantNames,
         tournament_data: tournamentData,
-        status: "in_progress",
-        created_at: new Date().toISOString(),
+        status: 'in_progress',
+        created_at: new Date().toISOString()
       };
 
       // Get or create user record
       const { data: userData, error: userError } = await supabase
-        .from("cat_users")
-        .select("tournament_data")
-        .eq("user_name", userName)
+        .from('cat_users')
+        .select('tournament_data')
+        .eq('user_name', userName)
         .single();
 
       if (userError && userError.code !== 'PGRST116') {
@@ -407,12 +407,12 @@ export const tournamentsAPI = {
 
       // Update user's tournament data
       const { error } = await supabase
-        .from("cat_users")
+        .from('cat_users')
         .upsert({
           user_name: userName,
-          tournament_data: tournaments,
+          tournament_data: tournaments
         }, {
-          onConflict: "user_name",
+          onConflict: 'user_name',
           ignoreDuplicates: false
         })
         .select()
@@ -421,7 +421,7 @@ export const tournamentsAPI = {
       if (error) throw error;
       return newTournament;
     } catch (error) {
-      console.error("Error creating tournament:", error);
+      console.error('Error creating tournament:', error);
       throw error;
     }
   },
@@ -435,10 +435,10 @@ export const tournamentsAPI = {
       // This function needs to be updated to work with the new schema
       // For now, we'll need to know which user owns the tournament
       // This is a limitation of the new consolidated schema
-      console.warn("updateTournamentStatus: This function needs to be updated for the new consolidated schema");
-      throw new Error("updateTournamentStatus: Function needs to be updated for new schema");
+      console.warn('updateTournamentStatus: This function needs to be updated for the new consolidated schema');
+      throw new Error('updateTournamentStatus: Function needs to be updated for new schema');
     } catch (error) {
-      console.error("Error updating tournament:", error);
+      console.error('Error updating tournament:', error);
       throw error;
     }
   },
@@ -450,9 +450,9 @@ export const tournamentsAPI = {
     try {
       // Get tournaments from the consolidated cat_users table
       const { data: userData, error } = await supabase
-        .from("cat_users")
-        .select("tournament_data")
-        .eq("user_name", userName)
+        .from('cat_users')
+        .select('tournament_data')
+        .eq('user_name', userName)
         .single();
 
       if (error) throw error;
@@ -469,7 +469,7 @@ export const tournamentsAPI = {
 
       return tournaments;
     } catch (error) {
-      console.error("Error fetching tournaments:", error);
+      console.error('Error fetching tournaments:', error);
       return [];
     }
   },
@@ -484,21 +484,21 @@ export const tournamentsAPI = {
   async saveTournamentSelections(userName, selectedNames, tournamentId = null) {
     try {
       const now = new Date().toISOString();
-      const tournamentId = tournamentId || `tournament_${Date.now()}`;
+      const finalTournamentId = tournamentId || `tournament_${Date.now()}`;
 
       // Prepare records for tournament selections
       const selectionRecords = selectedNames.map(nameObj => ({
         user_name: userName,
         name_id: nameObj.id,
         name: nameObj.name,
-        tournament_id: tournamentId,
+        tournament_id: finalTournamentId,
         selected_at: now,
         selection_type: 'tournament_setup'
       }));
 
       // Insert tournament selections
       const { error: selectionError } = await supabase
-        .from("tournament_selections")
+        .from('tournament_selections')
         .insert(selectionRecords);
 
       if (selectionError) {
@@ -507,7 +507,7 @@ export const tournamentsAPI = {
           await this.createTournamentSelectionsTable();
           // Retry insert
           const { error: retryError } = await supabase
-            .from("tournament_selections")
+            .from('tournament_selections')
             .insert(selectionRecords);
           if (retryError) throw retryError;
         } else {
@@ -518,26 +518,26 @@ export const tournamentsAPI = {
       // Update the cat_name_ratings table to track selection count
       const updatePromises = selectedNames.map(nameObj =>
         supabase
-          .from("cat_name_ratings")
+          .from('cat_name_ratings')
           .upsert({
             user_name: userName,
             name_id: nameObj.id,
             tournament_selections: supabase.sql`COALESCE(tournament_selections, 0) + 1`,
             last_selected_at: now,
             updated_at: now
-          }, { onConflict: "user_name,name_id" })
+          }, { onConflict: 'user_name,name_id' })
       );
 
       await Promise.all(updatePromises);
 
       return {
         success: true,
-        tournamentId,
+        finalTournamentId,
         selectionCount: selectedNames.length,
         selectedNames: selectedNames.map(n => n.name)
       };
     } catch (error) {
-      console.error("Error saving tournament selections:", error);
+      console.error('Error saving tournament selections:', error);
       throw error;
     }
   },
@@ -549,10 +549,10 @@ export const tournamentsAPI = {
     try {
       const { error } = await supabase.rpc('create_tournament_selections_table');
       if (error) {
-        console.warn("Could not create table via RPC, table may already exist:", error);
+        console.warn('Could not create table via RPC, table may already exist:', error);
       }
     } catch (error) {
-      console.warn("Table creation RPC not available, table may already exist:", error);
+      console.warn('Table creation RPC not available, table may already exist:', error);
     }
   },
 
@@ -565,7 +565,7 @@ export const tournamentsAPI = {
   async getTournamentSelectionHistory(userName, limit = 50) {
     try {
       const { data, error } = await supabase
-        .from("tournament_selections")
+        .from('tournament_selections')
         .select(`
           *,
           cat_name_options (
@@ -573,8 +573,8 @@ export const tournamentsAPI = {
             description
           )
         `)
-        .eq("user_name", userName)
-        .order("selected_at", { ascending: false })
+        .eq('user_name', userName)
+        .order('selected_at', { ascending: false })
         .limit(limit);
 
       if (error) {
@@ -587,7 +587,7 @@ export const tournamentsAPI = {
 
       return data || [];
     } catch (error) {
-      console.error("Error fetching tournament selection history:", error);
+      console.error('Error fetching tournament selection history:', error);
       return [];
     }
   },
@@ -600,7 +600,7 @@ export const tournamentsAPI = {
   async getPopularTournamentNames(limit = 20) {
     try {
       const { data, error } = await supabase
-        .from("tournament_selections")
+        .from('tournament_selections')
         .select(`
           name_id,
           cat_name_options (
@@ -609,8 +609,8 @@ export const tournamentsAPI = {
           ),
           selection_count:count
         `)
-        .group("name_id, cat_name_options.name, cat_name_options.description")
-        .order("selection_count", { ascending: false })
+        .group('name_id, cat_name_options.name, cat_name_options.description')
+        .order('selection_count', { ascending: false })
         .limit(limit);
 
       if (error) {
@@ -623,10 +623,10 @@ export const tournamentsAPI = {
 
       return data || [];
     } catch (error) {
-      console.error("Error fetching popular tournament names:", error);
+      console.error('Error fetching popular tournament names:', error);
       return [];
     }
-  },
+  }
 };
 
 /**
@@ -639,12 +639,12 @@ export const userPreferencesAPI = {
   async getPreferences(userName) {
     try {
       const { data, error } = await supabase
-        .from("cat_users")
-        .select("preferences")
-        .eq("user_name", userName)
+        .from('cat_users')
+        .select('preferences')
+        .eq('user_name', userName)
         .single();
 
-      if (error && error.code !== "PGRST116") throw error;
+      if (error && error.code !== 'PGRST116') throw error;
 
       // Return defaults if no preferences exist
       return (
@@ -652,13 +652,13 @@ export const userPreferencesAPI = {
           user_name: userName,
           preferred_categories: [],
           tournament_size_preference: 8,
-          rating_display_preference: "elo",
+          rating_display_preference: 'elo',
           sound_enabled: true,
-          theme_preference: "dark",
+          theme_preference: 'dark'
         }
       );
     } catch (error) {
-      console.error("Error fetching preferences:", error);
+      console.error('Error fetching preferences:', error);
       throw error;
     }
   },
@@ -670,16 +670,16 @@ export const userPreferencesAPI = {
     try {
       // Update preferences in the consolidated cat_users table
       const { data, error } = await supabase
-        .from("cat_users")
+        .from('cat_users')
         .upsert(
           {
             user_name: userName,
             preferences: {
               ...preferences,
-              updated_at: new Date().toISOString(),
-            },
+              updated_at: new Date().toISOString()
+            }
           },
-          { onConflict: "user_name" },
+          { onConflict: 'user_name' }
         )
         .select()
         .single();
@@ -687,10 +687,10 @@ export const userPreferencesAPI = {
       if (error) throw error;
       return data?.preferences;
     } catch (error) {
-      console.error("Error updating preferences:", error);
+      console.error('Error updating preferences:', error);
       throw error;
     }
-  },
+  }
 };
 
 /**
@@ -704,14 +704,14 @@ export const categoriesAPI = {
     try {
       // Get categories from the consolidated cat_name_options table
       const { data, error } = await supabase
-        .from("cat_name_options")
-        .select("categories")
-        .not("categories", "is", null);
+        .from('cat_name_options')
+        .select('categories')
+        .not('categories', 'is', null);
 
       if (error) throw error;
       return data || [];
     } catch (error) {
-      console.error("Error fetching categories:", error);
+      console.error('Error fetching categories:', error);
       return [];
     }
   },
@@ -722,7 +722,7 @@ export const categoriesAPI = {
   async getNamesByCategory(categoryId) {
     try {
       const { data, error } = await supabase
-        .from("cat_name_category_mappings")
+        .from('cat_name_category_mappings')
         .select(
           `
           cat_name_options (
@@ -732,17 +732,17 @@ export const categoriesAPI = {
             avg_rating,
             popularity_score
           )
-        `,
+        `
         )
-        .eq("category_id", categoryId);
+        .eq('category_id', categoryId);
 
       if (error) throw error;
       return data?.map((item) => item.cat_name_options).filter(Boolean) || [];
     } catch (error) {
-      console.error("Error fetching names by category:", error);
+      console.error('Error fetching names by category:', error);
       return [];
     }
-  },
+  }
 };
 
 // ===== UTILITY FUNCTIONS =====
@@ -753,17 +753,17 @@ export const categoriesAPI = {
 export const ensureRatingHistoryTable = async () => {
   try {
     const { data: tableExists } = await supabase
-      .from("information_schema.tables")
-      .select("table_name")
-      .eq("table_name", "cat_rating_history")
+      .from('information_schema.tables')
+      .select('table_name')
+      .eq('table_name', 'cat_rating_history')
       .single();
 
     if (!tableExists) {
-      await supabase.rpc("create_cat_rating_history_table");
-      devLog("Created cat_rating_history table");
+      await supabase.rpc('create_cat_rating_history_table');
+      devLog('Created cat_rating_history table');
     }
   } catch (error) {
-    console.error("Error ensuring cat_rating_history table exists:", error);
+    console.error('Error ensuring cat_rating_history table exists:', error);
   }
 };
 
@@ -774,42 +774,42 @@ export const deleteName = async (nameId) => {
   try {
     // Check if name exists
     const { data: nameData, error: nameError } = await supabase
-      .from("cat_name_options")
-      .select("name")
-      .eq("id", nameId)
+      .from('cat_name_options')
+      .select('name')
+      .eq('id', nameId)
       .single();
 
-    if (nameError?.code === "PGRST116") {
-      throw new Error("Name has already been deleted");
+    if (nameError?.code === 'PGRST116') {
+      throw new Error('Name has already been deleted');
     } else if (nameError) {
       throw nameError;
     }
 
     if (!nameData) {
-      throw new Error("Name does not exist in database");
+      throw new Error('Name does not exist in database');
     }
 
     // Check if name is hidden
     const { data: hiddenData, error: hiddenError } = await supabase
-      .from("cat_name_ratings")
-      .select("*")
-      .eq("name_id", nameId)
-      .eq("is_hidden", true);
+      .from('cat_name_ratings')
+      .select('*')
+      .eq('name_id', nameId)
+      .eq('is_hidden', true);
 
     if (hiddenError) throw hiddenError;
     if (!hiddenData || hiddenData.length === 0) {
-      throw new Error("Cannot delete name that is not hidden");
+      throw new Error('Cannot delete name that is not hidden');
     }
 
     // Use transaction to delete
-    const { error } = await supabase.rpc("delete_name_cascade", {
-      target_name_id: nameId,
+    const { error } = await supabase.rpc('delete_name_cascade', {
+      target_name_id: nameId
     });
 
     if (error) throw error;
     return { success: true };
   } catch (error) {
-    console.error("Error in deleteName function:", error);
+    console.error('Error in deleteName function:', error);
     throw error;
   }
 };

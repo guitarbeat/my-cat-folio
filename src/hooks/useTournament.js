@@ -1,8 +1,8 @@
-import { useState, useEffect, useCallback, useMemo } from "react";
-import { PreferenceSorter } from "../components/Tournament/PreferenceSorter";
-import EloRating from "../components/Tournament/EloRating";
-import useLocalStorage from "./useLocalStorage";
-import useUserSession from "./useUserSession";
+import { useState, useEffect, useCallback, useMemo } from 'react';
+import { PreferenceSorter } from '../components/Tournament/PreferenceSorter';
+import EloRating from '../components/Tournament/EloRating';
+import useLocalStorage from './useLocalStorage';
+import useUserSession from './useUserSession';
 import {
   /**
    * --- AUTO-GENERATED DOCSTRING ---
@@ -73,7 +73,7 @@ import {
    *   - if (isError) (line 528)
    * --- END AUTO-GENERATED DOCSTRING ---
    */
-  computeRating,
+  computeRating
   // countPlayerVotes,
   // getCurrentRatings,
   // convertVoteToPreference,
@@ -81,12 +81,12 @@ import {
   // calculateEstimatedMatches,
   // shouldIncrementRound,
   // createTournamentState,
-} from "../utils/tournamentUtils";
+} from '../utils/tournamentUtils';
 
 export function useTournament({
   names = [],
   existingRatings = {},
-  onComplete,
+  onComplete
 }) {
   const { userName } = useUserSession();
 
@@ -95,8 +95,8 @@ export function useTournament({
     const sortedNames = [...names]
       .map((n) => n.name)
       .sort()
-      .join("-");
-    const userPrefix = userName || "anonymous";
+      .join('-');
+    const userPrefix = userName || 'anonymous';
     return `tournament-${userPrefix}-${sortedNames}`;
   }, [names, userName]);
 
@@ -119,8 +119,8 @@ export function useTournament({
     currentRound: 1,
     currentMatch: 1,
     totalMatches: 0,
-    userName: userName || "anonymous", // Store user context with tournament
-    lastUpdated: Date.now(),
+    userName: userName || 'anonymous', // Store user context with tournament
+    lastUpdated: Date.now()
   });
 
   // Destructure match history from tournament state
@@ -133,21 +133,21 @@ export function useTournament({
         ...prev,
         ...updates,
         lastUpdated: Date.now(),
-        userName: userName || "anonymous",
+        userName: userName || 'anonymous'
       }));
     },
-    [setTournamentState, userName],
+    [setTournamentState, userName]
   );
 
   // Reset tournament state when user changes
   useEffect(() => {
-    if (tournamentState.userName !== (userName || "anonymous")) {
+    if (tournamentState.userName !== (userName || 'anonymous')) {
       updateTournamentState({
         matchHistory: [],
         currentRound: 1,
         currentMatch: 1,
         totalMatches: 0,
-        userName: userName || "anonymous",
+        userName: userName || 'anonymous'
       });
     }
   }, [userName, tournamentState.userName, updateTournamentState]);
@@ -155,7 +155,7 @@ export function useTournament({
   // Validate names array when it changes
   useEffect(() => {
     if (!Array.isArray(names) || names.length < 2) {
-      console.error("Invalid names array:", names);
+      console.error('Invalid names array:', names);
       setIsError(true);
     } else {
       setIsError(false);
@@ -171,9 +171,9 @@ export function useTournament({
           existingRatings,
           currentMatchNumber: 1,
           roundNumber: 1,
-          matchHistory: [],
+          matchHistory: []
         };
-        localStorage.setItem("tournamentState", JSON.stringify(initialState));
+        localStorage.setItem('tournamentState', JSON.stringify(initialState));
 
         // Add timeout to prevent infinite waiting
         const sortedResults = await Promise.race([
@@ -181,7 +181,7 @@ export function useTournament({
             const left = names.find((n) => n.name === leftName);
             const right = names.find((n) => n.name === rightName);
             if (!left || !right) {
-              throw new Error("Invalid match pair");
+              throw new Error('Invalid match pair');
             }
             setCurrentMatch({ left, right });
             return new Promise((resolve) => {
@@ -190,13 +190,13 @@ export function useTournament({
           }),
           new Promise(
             (_, reject) =>
-              setTimeout(() => reject(new Error("Tournament timeout")), 300000), // 5 minute timeout
-          ),
+              setTimeout(() => reject(new Error('Tournament timeout')), 300000) // 5 minute timeout
+          )
         ]);
 
         const ratingsArray = sortedResults.map((name, index) => {
           const existingData =
-            typeof existingRatings[name] === "object"
+            typeof existingRatings[name] === 'object'
               ? existingRatings[name]
               : { rating: existingRatings[name] || 1500, wins: 0, losses: 0 };
 
@@ -207,7 +207,7 @@ export function useTournament({
             position,
             totalNames,
             currentMatchNumber,
-            totalMatches,
+            totalMatches
           );
 
           return {
@@ -215,17 +215,17 @@ export function useTournament({
             rating: finalRating,
             wins: existingData.wins,
             losses: existingData.losses,
-            confidence: currentMatchNumber / totalMatches,
+            confidence: currentMatchNumber / totalMatches
           };
         });
 
-        localStorage.removeItem("tournamentState");
+        localStorage.removeItem('tournamentState');
         onComplete(ratingsArray);
       } catch (error) {
-        console.error("Tournament error:", error);
+        console.error('Tournament error:', error);
         setIsError(true);
         // Clear tournament state on error
-        localStorage.removeItem("tournamentState");
+        localStorage.removeItem('tournamentState');
         // Reset all state
         setCurrentMatch(null);
         setIsTransitioning(false);
@@ -244,8 +244,8 @@ export function useTournament({
       currentMatchNumber,
       totalMatches,
       onComplete,
-      updateTournamentState,
-    ],
+      updateTournamentState
+    ]
   );
 
   // Reset tournament state when names change
@@ -266,7 +266,7 @@ export function useTournament({
       matchHistory: [],
       currentRound: 1,
       currentMatch: 1,
-      totalMatches: estimatedMatches,
+      totalMatches: estimatedMatches
     });
 
     setTotalMatches(estimatedMatches);
@@ -283,16 +283,16 @@ export function useTournament({
     const countPlayerVotes = (playerName, outcome) => {
       return matchHistory.filter((vote) => {
         const { left, right } = vote.match;
-        if (outcome === "win") {
+        if (outcome === 'win') {
           return (
-            (left.name === playerName && vote.result === "left") ||
-            (right.name === playerName && vote.result === "right")
+            (left.name === playerName && vote.result === 'left') ||
+            (right.name === playerName && vote.result === 'right')
           );
         }
-        if (outcome === "loss") {
+        if (outcome === 'loss') {
           return (
-            (left.name === playerName && vote.result === "right") ||
-            (right.name === playerName && vote.result === "left")
+            (left.name === playerName && vote.result === 'right') ||
+            (right.name === playerName && vote.result === 'left')
           );
         }
         return false;
@@ -301,12 +301,12 @@ export function useTournament({
 
     return names.map((name) => {
       const existingData =
-        typeof currentRatings[name.name] === "object"
+        typeof currentRatings[name.name] === 'object'
           ? currentRatings[name.name]
           : { rating: currentRatings[name.name] || 1500, wins: 0, losses: 0 };
 
-      const wins = countPlayerVotes(name.name, "win");
-      const losses = countPlayerVotes(name.name, "loss");
+      const wins = countPlayerVotes(name.name, 'win');
+      const losses = countPlayerVotes(name.name, 'loss');
       const position = wins; // Position is based on wins
 
       const finalRating = computeRating(
@@ -314,7 +314,7 @@ export function useTournament({
         position,
         names.length,
         currentMatchNumber,
-        totalMatches,
+        totalMatches
       );
 
       return {
@@ -322,7 +322,7 @@ export function useTournament({
         rating: finalRating,
         wins: existingData.wins + wins,
         losses: existingData.losses + losses,
-        confidence: currentMatchNumber / totalMatches,
+        confidence: currentMatchNumber / totalMatches
       };
     });
   }, [names, currentRatings, matchHistory, currentMatchNumber, totalMatches]);
@@ -340,25 +340,25 @@ export function useTournament({
         let voteValue;
         let eloOutcome;
         switch (result) {
-          case "left":
+          case 'left':
             voteValue = -1;
-            eloOutcome = "left";
+            eloOutcome = 'left';
             break;
-          case "right":
+          case 'right':
             voteValue = 1;
-            eloOutcome = "right";
+            eloOutcome = 'right';
             break;
-          case "both": // Both equally liked with small random variance
+          case 'both': // Both equally liked with small random variance
             voteValue = Math.random() * 0.1 - 0.05; // Small random value centered at 0
-            eloOutcome = "both";
+            eloOutcome = 'both';
             break;
-          case "none": // Neither liked with small random variance
+          case 'none': // Neither liked with small random variance
             voteValue = Math.random() * 0.06 - 0.03; // Even smaller random value centered at 0
-            eloOutcome = "none";
+            eloOutcome = 'none';
             break;
           default:
             voteValue = 0;
-            eloOutcome = "none";
+            eloOutcome = 'none';
         }
 
         // Update Elo ratings
@@ -372,7 +372,7 @@ export function useTournament({
           winsA: currentRatings[leftName]?.wins || 0,
           lossesA: currentRatings[leftName]?.losses || 0,
           winsB: currentRatings[rightName]?.wins || 0,
-          lossesB: currentRatings[rightName]?.losses || 0,
+          lossesB: currentRatings[rightName]?.losses || 0
         };
 
         const {
@@ -381,12 +381,12 @@ export function useTournament({
           winsA: newLeftWins,
           lossesA: newLeftLosses,
           winsB: newRightWins,
-          lossesB: newRightLosses,
+          lossesB: newRightLosses
         } = elo.calculateNewRatings(
           leftRating,
           rightRating,
           eloOutcome,
-          leftStats,
+          leftStats
         );
 
         // Update PreferenceSorter
@@ -398,36 +398,36 @@ export function useTournament({
           matchNumber: currentMatchNumber,
           result: voteValue,
           timestamp: Date.now(),
-          userName: userName || "anonymous",
+          userName: userName || 'anonymous',
           match: {
             left: {
               name: leftName,
-              description: currentMatch.left.description || "",
-              won: eloOutcome === "left" || eloOutcome === "both",
+              description: currentMatch.left.description || '',
+              won: eloOutcome === 'left' || eloOutcome === 'both'
             },
             right: {
               name: rightName,
-              description: currentMatch.right.description || "",
-              won: eloOutcome === "right" || eloOutcome === "both",
-            },
+              description: currentMatch.right.description || '',
+              won: eloOutcome === 'right' || eloOutcome === 'both'
+            }
           },
           ratings: {
             before: {
               left: leftRating,
-              right: rightRating,
+              right: rightRating
             },
             after: {
               left: updatedLeftRating,
-              right: updatedRightRating,
-            },
-          },
+              right: updatedRightRating
+            }
+          }
         };
 
         // Update tournament state with new vote and ratings
         updateTournamentState((prev) => ({
           ...prev,
           matchHistory: [...prev.matchHistory, voteData],
-          currentMatch: currentMatchNumber + 1,
+          currentMatch: currentMatchNumber + 1
         }));
 
         // Update current ratings with new ratings and win/loss counts
@@ -437,14 +437,14 @@ export function useTournament({
             ...prev[leftName],
             rating: updatedLeftRating,
             wins: newLeftWins,
-            losses: newLeftLosses,
+            losses: newLeftLosses
           },
           [rightName]: {
             ...prev[rightName],
             rating: updatedRightRating,
             wins: newRightWins,
-            losses: newRightLosses,
-          },
+            losses: newRightLosses
+          }
         }));
 
         setCanUndo(true);
@@ -465,7 +465,7 @@ export function useTournament({
             setRoundNumber(newRound);
             updateTournamentState((prev) => ({
               ...prev,
-              currentRound: newRound,
+              currentRound: newRound
             }));
           }
         }
@@ -477,7 +477,7 @@ export function useTournament({
 
         return () => clearTimeout(timeoutId);
       } catch (error) {
-        console.error("Vote handling error:", error);
+        console.error('Vote handling error:', error);
         setIsError(true);
         setIsTransitioning(false);
       }
@@ -497,8 +497,8 @@ export function useTournament({
       userName,
       currentRatings,
       elo,
-      sorter,
-    ],
+      sorter
+    ]
   );
 
   // (runTournament defined above)
@@ -536,7 +536,7 @@ export function useTournament({
     names.length,
     sorter,
     currentMatchNumber,
-    updateTournamentState,
+    updateTournamentState
   ]);
 
   const progress = Math.round((currentMatchNumber / totalMatches) * 100);
@@ -552,7 +552,7 @@ export function useTournament({
       matchHistory: [],
       getCurrentRatings: () => [],
       isError: true,
-      userName: tournamentState.userName,
+      userName: tournamentState.userName
     };
   }
 
@@ -569,6 +569,6 @@ export function useTournament({
     getCurrentRatings,
     isError,
     matchHistory: tournamentState.matchHistory,
-    userName: tournamentState.userName,
+    userName: tournamentState.userName
   };
 }

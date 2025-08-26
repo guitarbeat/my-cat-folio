@@ -17,7 +17,7 @@
  */
 export const formatTimestamp = (timestamp) => {
   if (!timestamp) {
-    return "Never";
+    return 'Never';
   }
   const date = new Date(timestamp);
   const now = new Date();
@@ -25,7 +25,7 @@ export const formatTimestamp = (timestamp) => {
 
   // Less than a minute
   if (diff < 60000) {
-    return "Just now";
+    return 'Just now';
   }
 
   // Less than an hour

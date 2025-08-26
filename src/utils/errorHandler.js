@@ -94,7 +94,7 @@ export const getErrorType = (error) => {
  */
 export const getErrorSeverity = (errorType, context = {}) => {
   const { isRetryable = true, affectsUserData = false, isCritical = false } = context;
-  
+
   if (isCritical) return ERROR_SEVERITY.CRITICAL;
   if (affectsUserData) return ERROR_SEVERITY.HIGH;
   if (!isRetryable) return ERROR_SEVERITY.MEDIUM;
@@ -108,7 +108,7 @@ export const getErrorSeverity = (errorType, context = {}) => {
  * @returns {string} User-friendly error message
  */
 export const getUserFriendlyMessage = (errorType, errorSeverity) => {
-  return USER_FRIENDLY_MESSAGES[errorType]?.[errorSeverity] || 
+  return USER_FRIENDLY_MESSAGES[errorType]?.[errorSeverity] ||
          USER_FRIENDLY_MESSAGES[ERROR_TYPES.UNKNOWN][ERROR_SEVERITY.MEDIUM];
 };
 
@@ -122,7 +122,7 @@ export const logError = (error, context = 'Unknown', additionalInfo = {}) => {
   const errorType = getErrorType(error);
   const severity = getErrorSeverity(errorType, additionalInfo);
   const userMessage = getUserFriendlyMessage(errorType, severity);
-  
+
   const errorLog = {
     timestamp: new Date().toISOString(),
     context,
@@ -177,7 +177,7 @@ export const withRetry = async (apiCall, options = {}) => {
       return await apiCall();
     } catch (error) {
       lastError = error;
-      
+
       // Don't retry on certain error types
       if (getErrorType(error) === ERROR_TYPES.AUTHENTICATION) {
         throw error;
@@ -204,7 +204,7 @@ export const withRetry = async (apiCall, options = {}) => {
  */
 export const createStandardizedError = (error, context = 'Unknown', additionalInfo = {}) => {
   const errorInfo = logError(error, context, additionalInfo);
-  
+
   return {
     ...errorInfo,
     originalError: error,

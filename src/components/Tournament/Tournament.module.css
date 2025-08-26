@@ -168,7 +168,7 @@
 }
 
 .extraOptionsButton {
-  composes: btnSecondary from "../../styles/global.css";
+  composes: btnsecondary from "../../styles/global.css";
   min-width: 120px;
   transition: all var(--duration-normal) var(--ease-out);
 }
@@ -182,7 +182,7 @@
 }
 
 .selected {
-  composes: btnPrimary from "../../styles/global.css";
+  composes: btnprimary from "../../styles/global.css";
   background: var(--primary-color);
 }
 
@@ -209,7 +209,7 @@
 }
 
 .controlButton {
-  composes: btnPrimary from "../../styles/global.css";
+  composes: btnprimary from "../../styles/global.css";
 }
 
 .soundControls {
@@ -223,7 +223,7 @@
 }
 
 .soundToggleButton {
-  composes: btnSecondary from "../../styles/global.css";
+  composes: btnsecondary from "../../styles/global.css";
   display: flex;
   align-items: center;
   justify-content: center;
@@ -297,7 +297,7 @@
 }
 
 .bracketToggle {
-  composes: btnSecondary from "../../styles/global.css";
+  composes: btnsecondary from "../../styles/global.css";
   display: flex;
   gap: var(--space-2);
   align-items: center;
@@ -330,14 +330,14 @@
 
 .tournamentControls {
   display: flex;
+  flex-wrap: wrap;
   gap: var(--space-4);
   justify-content: center;
-  flex-wrap: wrap;
   margin-top: var(--space-4);
 }
 
 .keyboardHelpToggle {
-  composes: btnSecondary from "../../styles/global.css";
+  composes: btnsecondary from "../../styles/global.css";
   display: flex;
   gap: var(--space-2);
   align-items: center;
@@ -390,15 +390,15 @@
 }
 
 .keyboardHelp ul {
-  list-style: none;
   padding: 0;
   margin: 0;
+  list-style: none;
 }
 
 .keyboardHelp li {
   display: flex;
-  align-items: center;
   gap: var(--space-2);
+  align-items: center;
   padding: var(--space-2) 0;
   color: var(--text-secondary);
 }
@@ -475,11 +475,11 @@
 }
 
 .confirmButton {
-  composes: btnPrimary from "../../styles/global.css";
+  composes: btnprimary from "../../styles/global.css";
 }
 
 .cancelButton {
-  composes: btnSecondary from "../../styles/global.css";
+  composes: btnsecondary from "../../styles/global.css";
 }
 
 /* Animations
@@ -694,7 +694,7 @@
 }
 
 .randomizeButton {
-  composes: btnSecondary from "../../styles/global.css";
+  composes: btnsecondary from "../../styles/global.css";
   display: flex;
   gap: var(--space-2);
   align-items: center;
@@ -805,7 +805,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(0, 0, 0, 0.8);
+  background: rgb(0 0 0 / 80%);
   backdrop-filter: blur(8px);
   animation: fadeIn 0.3s ease-out;
 }
@@ -813,11 +813,11 @@
 .transitionContent {
   display: flex;
   flex-direction: column;
-  align-items: center;
   gap: var(--space-6);
+  align-items: center;
   padding: var(--space-8);
-  text-align: center;
   color: white;
+  text-align: center;
   background: linear-gradient(135deg, var(--primary-500), var(--primary-600));
   border: 3px solid var(--primary-300);
   border-radius: var(--radius-xl);
@@ -831,18 +831,18 @@
 }
 
 .roundTitle {
+  margin: 0;
   font-size: var(--text-3xl);
   font-weight: 700;
-  margin: 0;
   text-shadow: 0 2px 4px rgb(0 0 0 / 30%);
 }
 
 .roundSubtitle {
+  margin: 0;
   font-size: var(--text-lg);
   font-weight: 500;
-  margin: 0;
-  opacity: 0.9;
   color: var(--primary-100);
+  opacity: 0.9;
 }
 
 @keyframes fadeIn {

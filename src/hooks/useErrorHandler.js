@@ -5,11 +5,11 @@
  */
 
 import { useState, useCallback, useRef } from 'react';
-import { 
-  createStandardizedError, 
-  withRetry, 
-  ERROR_TYPES, 
-  ERROR_SEVERITY 
+import {
+  createStandardizedError,
+  withRetry,
+  ERROR_TYPES,
+  ERROR_SEVERITY
 } from '../utils/errorHandler';
 
 /**
@@ -44,17 +44,17 @@ export const useErrorHandler = (options = {}) => {
    */
   const handleError = useCallback((error, context = 'Component Error', additionalInfo = {}) => {
     const standardizedError = createStandardizedError(error, context, additionalInfo);
-    
+
     // Update state
     setErrors(prev => [...prev, standardizedError]);
     setIsError(true);
     lastErrorRef.current = standardizedError;
-    
+
     // Call error callback if provided
     if (onError) {
       onError(standardizedError);
     }
-    
+
     return standardizedError;
   }, [onError]);
 
@@ -92,20 +92,20 @@ export const useErrorHandler = (options = {}) => {
     }
 
     setIsRecovering(true);
-    
+
     try {
       const result = await withRetry(operation, {
         maxRetries: retryOptions.maxRetries || maxRetries,
         delay: retryOptions.delay || 1000,
         backoff: retryOptions.backoff || 2
       });
-      
+
       // Success - clear errors and call recovery callback
       clearErrors();
       if (onRecovery) {
         onRecovery(result);
       }
-      
+
       return result;
     } catch (retryError) {
       // Retry failed - handle the new error
@@ -135,12 +135,12 @@ export const useErrorHandler = (options = {}) => {
 
     try {
       const result = await operation();
-      
+
       // Clear any previous errors on success
       if (isError) {
         clearErrors();
       }
-      
+
       return result;
     } catch (error) {
       const errorInfo = handleError(error, context, {
@@ -148,11 +148,11 @@ export const useErrorHandler = (options = {}) => {
         retryOnError,
         showFeedback
       });
-      
+
       if (retryOnError && errorInfo.isRetryable) {
         return retryOperation(operation, { context, additionalInfo });
       }
-      
+
       throw error;
     }
   }, [isError, clearErrors, handleError, retryOperation, showUserFeedback]);
@@ -211,21 +211,21 @@ export const useErrorHandler = (options = {}) => {
     errors,
     isError,
     isRecovering,
-    
+
     // Actions
     handleError,
     clearErrors,
     clearError,
     retryOperation,
     executeWithErrorHandling,
-    
+
     // Getters
     getLastError,
     hasCriticalErrors,
     getErrorsByType,
     getErrorsBySeverity,
     getUserFriendlyErrors,
-    
+
     // Utilities
     ERROR_TYPES,
     ERROR_SEVERITY

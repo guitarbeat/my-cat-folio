@@ -4,21 +4,21 @@
  * Replaces useSupabaseStorage and useNameOptions with a unified interface.
  */
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback } from 'react';
 import {
   catNamesAPI,
   ratingsAPI,
   hiddenNamesAPI,
   tournamentsAPI,
   userPreferencesAPI,
-  categoriesAPI,
-} from "./supabaseClient";
-import { DEFAULT_RATING } from "../utils/constants";
+  categoriesAPI
+} from './supabaseClient';
+
 
 /**
  * Main hook for all Supabase operations
  */
-function useSupabaseStorage(userName = "") {
+function useSupabaseStorage(userName = '') {
   const [names, setNames] = useState([]);
   const [categories, setCategories] = useState([]);
   const [userPreferences, setUserPreferences] = useState(null);
@@ -35,7 +35,7 @@ function useSupabaseStorage(userName = "") {
       const data = await catNamesAPI.getNamesWithDescriptions(userName);
       setNames(data);
     } catch (err) {
-      console.error("Error fetching names:", err);
+      console.error('Error fetching names:', err);
       setError(err);
     } finally {
       setLoading(false);
@@ -43,21 +43,21 @@ function useSupabaseStorage(userName = "") {
   }, [userName]);
 
   const addName = useCallback(
-    async (name, description = "") => {
+    async (name, description = '') => {
       try {
         setLoading(true);
         const newName = await catNamesAPI.addName(name, description);
         await fetchNames(); // Refresh the list
         return newName;
       } catch (err) {
-        console.error("Error adding name:", err);
+        console.error('Error adding name:', err);
         setError(err);
         throw err;
       } finally {
         setLoading(false);
       }
     },
-    [fetchNames],
+    [fetchNames]
   );
 
   const removeName = useCallback(
@@ -67,20 +67,20 @@ function useSupabaseStorage(userName = "") {
         await catNamesAPI.removeName(name);
         await fetchNames(); // Refresh the list
       } catch (err) {
-        console.error("Error removing name:", err);
+        console.error('Error removing name:', err);
         setError(err);
         throw err;
       } finally {
         setLoading(false);
       }
     },
-    [fetchNames],
+    [fetchNames]
   );
 
   // ===== RATINGS MANAGEMENT =====
 
   const updateRating = useCallback(
-    async (nameId, newRating, outcome = null, context = "tournament") => {
+    async (nameId, newRating, outcome = null, context = 'tournament') => {
       if (!userName) return;
 
       try {
@@ -90,19 +90,19 @@ function useSupabaseStorage(userName = "") {
           nameId,
           newRating,
           outcome,
-          context,
+          context
         );
         await fetchNames(); // Refresh to get updated data
         return result;
       } catch (err) {
-        console.error("Error updating rating:", err);
+        console.error('Error updating rating:', err);
         setError(err);
         throw err;
       } finally {
         setLoading(false);
       }
     },
-    [userName, fetchNames],
+    [userName, fetchNames]
   );
 
   const getRatingHistory = useCallback(
@@ -112,12 +112,12 @@ function useSupabaseStorage(userName = "") {
       try {
         return await ratingsAPI.getRatingHistory(userName, nameId, limit);
       } catch (err) {
-        console.error("Error fetching rating history:", err);
+        console.error('Error fetching rating history:', err);
         setError(err);
         return [];
       }
     },
-    [userName],
+    [userName]
   );
 
   // ===== HIDDEN NAMES MANAGEMENT =====
@@ -131,14 +131,14 @@ function useSupabaseStorage(userName = "") {
         await hiddenNamesAPI.hideName(userName, nameId);
         await fetchNames(); // Refresh to reflect changes
       } catch (err) {
-        console.error("Error hiding name:", err);
+        console.error('Error hiding name:', err);
         setError(err);
         throw err;
       } finally {
         setLoading(false);
       }
     },
-    [userName, fetchNames],
+    [userName, fetchNames]
   );
 
   const unhideName = useCallback(
@@ -150,13 +150,13 @@ function useSupabaseStorage(userName = "") {
         await hiddenNamesAPI.unhideName(userName, nameId);
         await fetchNames(); // Refresh to reflect changes
       } catch (err) {
-        console.error("Error unhiding name:", err);
+        console.error('Error unhiding name:', err);
         throw err;
       } finally {
         setLoading(false);
       }
     },
-    [userName, fetchNames],
+    [userName, fetchNames]
   );
 
   const getHiddenNames = useCallback(async () => {
@@ -165,7 +165,7 @@ function useSupabaseStorage(userName = "") {
     try {
       return await hiddenNamesAPI.getHiddenNames(userName);
     } catch (err) {
-      console.error("Error fetching hidden names:", err);
+      console.error('Error fetching hidden names:', err);
       setError(err);
       return [];
     }
@@ -183,18 +183,18 @@ function useSupabaseStorage(userName = "") {
           userName,
           tournamentName,
           participantNames,
-          tournamentData,
+          tournamentData
         );
         return tournament;
       } catch (err) {
-        console.error("Error creating tournament:", err);
+        console.error('Error creating tournament:', err);
         setError(err);
         throw err;
       } finally {
         setLoading(false);
       }
     },
-    [userName],
+    [userName]
   );
 
   const updateTournamentStatus = useCallback(
@@ -204,18 +204,18 @@ function useSupabaseStorage(userName = "") {
         const tournament = await tournamentsAPI.updateTournamentStatus(
           tournamentId,
           status,
-          completedAt,
+          completedAt
         );
         return tournament;
       } catch (err) {
-        console.error("Error updating tournament:", err);
+        console.error('Error updating tournament:', err);
         setError(err);
         throw err;
       } finally {
         setLoading(false);
       }
     },
-    [],
+    []
   );
 
   const getUserTournaments = useCallback(
@@ -225,12 +225,12 @@ function useSupabaseStorage(userName = "") {
       try {
         return await tournamentsAPI.getUserTournaments(userName, status);
       } catch (err) {
-        console.error("Error fetching tournaments:", err);
+        console.error('Error fetching tournaments:', err);
         setError(err);
         return [];
       }
     },
-    [userName],
+    [userName]
   );
 
   // ===== USER PREFERENCES =====
@@ -243,7 +243,7 @@ function useSupabaseStorage(userName = "") {
       setUserPreferences(prefs);
       return prefs;
     } catch (err) {
-      console.error("Error fetching preferences:", err);
+      console.error('Error fetching preferences:', err);
       setError(err);
       return null;
     }
@@ -257,19 +257,19 @@ function useSupabaseStorage(userName = "") {
         setLoading(true);
         const updatedPrefs = await userPreferencesAPI.updatePreferences(
           userName,
-          preferences,
+          preferences
         );
         setUserPreferences(updatedPrefs);
         return updatedPrefs;
       } catch (err) {
-        console.error("Error updating preferences:", err);
+        console.error('Error updating preferences:', err);
         setError(err);
         throw err;
       } finally {
         setLoading(false);
       }
     },
-    [userName],
+    [userName]
   );
 
   // ===== CATEGORIES =====
@@ -280,7 +280,7 @@ function useSupabaseStorage(userName = "") {
       setCategories(cats);
       return cats;
     } catch (err) {
-      console.error("Error fetching categories:", err);
+      console.error('Error fetching categories:', err);
       setError(err);
       return [];
     }
@@ -290,7 +290,7 @@ function useSupabaseStorage(userName = "") {
     try {
       return await categoriesAPI.getNamesByCategory(categoryId);
     } catch (err) {
-      console.error("Error fetching names by category:", err);
+      console.error('Error fetching names by category:', err);
       setError(err);
       return [];
     }
@@ -304,15 +304,15 @@ function useSupabaseStorage(userName = "") {
         return await catNamesAPI.getLeaderboard(
           limit,
           categoryId,
-          minTournaments,
+          minTournaments
         );
       } catch (err) {
-        console.error("Error fetching leaderboard:", err);
+        console.error('Error fetching leaderboard:', err);
         setError(err);
         return [];
       }
     },
-    [],
+    []
   );
 
   // ===== REAL-TIME SUBSCRIPTIONS =====
@@ -327,81 +327,81 @@ function useSupabaseStorage(userName = "") {
 
     // Set up real-time subscriptions
     const setupSubscriptions = async () => {
-      const { supabase } = await import("./supabaseClient");
+      const { supabase } = await import('./supabaseClient');
 
       const subscriptions = [
         // Names changes
         supabase
-          .channel("cat_names_changes")
+          .channel('cat_names_changes')
           .on(
-            "postgres_changes",
+            'postgres_changes',
             {
-              event: "*",
-              schema: "public",
-              table: "cat_name_options",
+              event: '*',
+              schema: 'public',
+              table: 'cat_name_options'
             },
-            fetchNames,
+            fetchNames
           )
           .subscribe(),
 
         // Ratings changes for this user
         supabase
-          .channel("cat_ratings_changes")
+          .channel('cat_ratings_changes')
           .on(
-            "postgres_changes",
+            'postgres_changes',
             {
-              event: "*",
-              schema: "public",
-              table: "cat_name_ratings",
-              filter: `user_name=eq.${userName}`,
+              event: '*',
+              schema: 'public',
+              table: 'cat_name_ratings',
+              filter: `user_name=eq.${userName}`
             },
-            fetchNames,
+            fetchNames
           )
           .subscribe(),
 
         // Hidden names changes for this user (now in cat_name_ratings)
         supabase
-          .channel("cat_name_ratings_hidden_changes")
+          .channel('cat_name_ratings_hidden_changes')
           .on(
-            "postgres_changes",
+            'postgres_changes',
             {
-              event: "*",
-              schema: "public",
-              table: "cat_name_ratings",
-              filter: `user_name=eq.${userName}`,
+              event: '*',
+              schema: 'public',
+              table: 'cat_name_ratings',
+              filter: `user_name=eq.${userName}`
             },
-            fetchNames,
+            fetchNames
           )
           .subscribe(),
 
         // Categories changes (now in cat_name_options.categories)
         supabase
-          .channel("cat_name_options_categories_changes")
+          .channel('cat_name_options_categories_changes')
           .on(
-            "postgres_changes",
+            'postgres_changes',
             {
-              event: "*",
-              schema: "public",
-              table: "cat_name_options",
+              event: '*',
+              schema: 'public',
+              table: 'cat_name_options'
             },
-            fetchCategories,
+            fetchCategories
           )
           .subscribe(),
 
         // User preferences changes (now in cat_users)
         supabase
-          .channel("cat_users_preferences_changes")
+          .channel('cat_users_preferences_changes')
           .on(
-            "postgres_changes",
+            'postgres_changes',
             {
-              event: "*",
-              schema: "public",
-              table: "cat_users",
-              filter: `user_name=eq.${userName}`,
+              event: '*',
+              schema: 'public',
+              table: 'cat_users',
+              filter: `user_name=eq.${userName}`
             },
-            fetchUserPreferences,
+            fetchUserPreferences
           )
-          .subscribe(),
+          .subscribe()
       ];
 
       // Cleanup subscriptions
@@ -458,7 +458,7 @@ function useSupabaseStorage(userName = "") {
       fetchNames();
       fetchUserPreferences();
       fetchCategories();
-    },
+    }
   };
 }
 
