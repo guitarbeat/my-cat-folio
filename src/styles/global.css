@@ -831,7 +831,20 @@ body {
 }
 
 .btnDanger {
-  composes: btn;
+  display: inline-flex;
+  gap: var(--space-2);
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-3) var(--space-4);
+  font-size: var(--text-base);
+  font-weight: 500;
+  cursor: pointer;
+  border-radius: var(--radius-md);
+  transition:
+    var(--transition-all),
+    background-color var(--transition-theme),
+    color var(--transition-theme),
+    border-color var(--transition-theme);
   color: white;
   background: rgb(var(--error-rgb));
   border: 1px solid rgba(var(--error-rgb), 0.9);
@@ -852,7 +865,20 @@ body {
 }
 
 .btnGhost {
-  composes: btn;
+  display: inline-flex;
+  gap: var(--space-2);
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-3) var(--space-4);
+  font-size: var(--text-base);
+  font-weight: 500;
+  cursor: pointer;
+  border-radius: var(--radius-md);
+  transition:
+    var(--transition-all),
+    background-color var(--transition-theme),
+    color var(--transition-theme),
+    border-color var(--transition-theme);
   color: var(--text-primary);
   background: transparent;
   border: 1px solid transparent;
@@ -863,9 +889,20 @@ body {
 }
 
 .btnIcon {
-  composes: btn;
+  display: inline-flex;
+  gap: var(--space-2);
+  align-items: center;
+  justify-content: center;
   padding: var(--space-2);
+  font-size: var(--text-base);
+  font-weight: 500;
+  cursor: pointer;
   border-radius: var(--radius-full);
+  transition:
+    var(--transition-all),
+    background-color var(--transition-theme),
+    color var(--transition-theme),
+    border-color var(--transition-theme);
 }
 
 /* Card Base - Consolidated in Card System section */
@@ -1044,14 +1081,32 @@ body {
 }
 
 .toastSuccess {
-  composes: toast;
+  position: fixed;
+  right: var(--space-4);
+  bottom: var(--space-4);
+  z-index: var(--z-30);
+  padding: var(--space-3) var(--space-4);
+  font-size: var(--text-sm);
+  cursor: pointer;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  animation: slideIn 0.3s var(--ease-out);
   color: var(--success-700);
   background: var(--success-50);
   border: 1px solid var(--success-200);
 }
 
 .toastError {
-  composes: toast;
+  position: fixed;
+  right: var(--space-4);
+  bottom: var(--space-4);
+  z-index: var(--z-30);
+  padding: var(--space-3) var(--space-4);
+  font-size: var(--text-sm);
+  cursor: pointer;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  animation: slideIn 0.3s var(--ease-out);
   color: var(--error-700);
   background: var(--error-50);
   border: 1px solid var(--error-200);
@@ -2182,13 +2237,25 @@ body {
 }
 
 .badge-primary {
-  composes: badge;
+  display: inline-flex;
+  gap: var(--space-1);
+  align-items: center;
+  padding: var(--space-1) var(--space-2);
+  font-size: var(--text-xs);
+  font-weight: 500;
+  border-radius: var(--radius-full);
   color: white;
   background: var(--charcoal);
 }
 
 .badge-secondary {
-  composes: badge;
+  display: inline-flex;
+  gap: var(--space-1);
+  align-items: center;
+  padding: var(--space-1) var(--space-2);
+  font-size: var(--text-xs);
+  font-weight: 500;
+  border-radius: var(--radius-full);
   color: var(--text-primary);
   background: var(--blue-gray);
   border: 1px solid var(--border-color);
@@ -2580,7 +2647,15 @@ h1 {
 }
 
 .playerWinner {
-  composes: player;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-2) var(--space-3);
+  margin-bottom: var(--space-2);
+  background: var(--surface-color);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  transition: all var(--duration-normal) var(--ease-out);
   font-weight: 500;
   color: var(--accent-color);
   background: rgb(232 191 118 / 10%);
@@ -2588,14 +2663,12 @@ h1 {
 }
 
 .playerLoser {
-  composes: player;
   color: var(--text-secondary);
   background: var(--surface-color);
   opacity: 0.6;
 }
 
 .playerBothWin {
-  composes: player;
   font-weight: 500;
   color: var(--success-700);
   background: rgb(var(--success-rgb) / 10%);
@@ -2603,7 +2676,6 @@ h1 {
 }
 
 .playerNeither {
-  composes: player;
   font-weight: 500;
   color: var(--warning-700);
   background: rgb(var(--warning-rgb) / 5%);
@@ -2612,7 +2684,6 @@ h1 {
 }
 
 .playerBye {
-  composes: player;
   font-style: italic;
   background: var(--surface-color);
   border-style: dashed;
@@ -2801,7 +2872,6 @@ h1 {
 
 /* * New Vibrant Button Variants */
 .btnVibrantCyan {
-  composes: btn;
   font-weight: 600;
   color: var(--charcoal);
   background: var(--neon-cyan);
@@ -2817,7 +2887,6 @@ h1 {
 }
 
 .btnVibrantPink {
-  composes: btn;
   font-weight: 600;
   color: white;
   background: var(--hot-pink);
@@ -2833,7 +2902,6 @@ h1 {
 }
 
 .btnVibrantRed {
-  composes: btn;
   font-weight: 600;
   color: white;
   background: var(--fire-red);
@@ -3165,7 +3233,6 @@ h1 {
 /* Interactive cards */
 .cardInteractive,
 .card-interactive {
-  composes: card;
   cursor: pointer;
 }
 
