@@ -10,9 +10,10 @@ import {
   getNamesWithDescriptions,
 } from "../../supabase/supabaseClient";
 import devLog from "../../utils/logger";
-import { LoadingSpinner, NameCard, ErrorBoundary, ErrorDisplay } from "../";
+import { LoadingSpinner, NameCard, ErrorBoundary, ErrorDisplay, InlineError } from "../";
 import useSupabaseStorage from "../../supabase/useSupabaseStorage";
 import useErrorHandler from "../../hooks/useErrorHandler";
+import useToast from "../../hooks/useToast";
 import styles from "./TournamentSetup.module.css";
 
 // Use relative paths for better Vite compatibility
@@ -467,6 +468,7 @@ const NameSuggestionSection = () => {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const { addName, loading } = useSupabaseStorage();
+  const { showSuccess, showError } = useToast();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -486,10 +488,12 @@ const NameSuggestionSection = () => {
     try {
       await addName(name.trim(), description.trim());
       setSuccess("Thank you for your suggestion!");
+      showSuccess("Name suggestion submitted successfully!", { duration: 4000 });
       setName("");
       setDescription("");
     } catch (err) {
       setError("Failed to add name. It might already exist.");
+      showError("Failed to submit name suggestion. Please try again.", { duration: 5000 });
     }
   };
 
@@ -527,7 +531,18 @@ const NameSuggestionSection = () => {
             />
           </div>
 
-          {error && <p className={styles.errorMessage}>{error}</p>}
+          {error && (
+            <InlineError
+              error={error}
+              context="form"
+              position="below"
+              onDismiss={() => setError("")}
+              showRetry={false}
+              showDismiss={true}
+              size="medium"
+              className={styles.formError}
+            />
+          )}
           {success && <p className={styles.successMessage}>{success}</p>}
 
           <button
