@@ -5,6 +5,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import PropTypes from "prop-types";
 import devLog from "../../utils/logger";
+import { InlineError } from "../";
+import useToast from "../../hooks/useToast";
 import styles from "./Login.module.css";
 import BongoCat from "../BongoCat/BongoCat";
 /**
@@ -46,6 +48,7 @@ function Login({ onLogin }) {
   const [error, setError] = useState("");
   const [catFact, setCatFact] = useState("");
   const [isTyping, setIsTyping] = useState(false);
+  const { showSuccess, showError } = useToast();
 
   const containerRef = useRef(null);
   const typingTimeoutRef = useRef(null);
@@ -151,8 +154,10 @@ function Login({ onLogin }) {
     setIsLoading(true);
     try {
       await onLogin(finalName);
+      showSuccess(`Welcome, ${finalName}! Let's start judging cat names!`, { duration: 4000 });
     } catch (err) {
       setError(err.message || "Something went wrong. Please try again.");
+      showError("Login failed. Please try again.", { duration: 5000 });
       setIsLoading(false);
     }
   };
@@ -256,9 +261,16 @@ function Login({ onLogin }) {
                 )}
               </div>
               {error && (
-                <p id="loginError" className={styles.errorMessage} role="alert" aria-live="polite">
-                  {error}
-                </p>
+                <InlineError
+                  error={error}
+                  context="form"
+                  position="below"
+                  onDismiss={() => setError("")}
+                  showRetry={false}
+                  showDismiss={true}
+                  size="medium"
+                  className={styles.loginError}
+                />
               )}
               <p id="loginHelp" className={styles.explainerText}>
                 Type your name to save your ratings, or leave it blank for a

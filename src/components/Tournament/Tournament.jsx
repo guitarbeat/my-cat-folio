@@ -104,10 +104,12 @@ import React, {
 } from "react";
 import PropTypes from "prop-types";
 import { useTournament } from "../../hooks/useTournament";
+import { useToast } from "../../hooks/useToast";
 // import { useKeyboardControls } from '../../hooks/useKeyboardControls';
 import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
 import ErrorBoundary from "../ErrorBoundary/ErrorBoundary";
 import NameCard from "../NameCard/NameCard";
+import InlineError from "../InlineError/InlineError";
 import Bracket from "../Bracket/Bracket";
 import TournamentControls from "./TournamentControls";
 import styles from "./Tournament.module.css";
@@ -160,6 +162,10 @@ function TournamentContent({
   const [showKeyboardHelp, setShowKeyboardHelp] = useState(false);
   const [showRoundTransition, setShowRoundTransition] = useState(false);
   const [nextRoundNumber, setNextRoundNumber] = useState(null);
+  const [votingError, setVotingError] = useState(null);
+
+  // Toast notifications
+  const { showSuccess, showError } = useToast();
 
   const musicTracks = useMemo(
     () => [
@@ -340,6 +346,9 @@ function TournamentContent({
       setTimeout(() => setShowMatchResult(true), 500);
       // Hide result after 2 seconds
       setTimeout(() => setShowMatchResult(false), 2500);
+      
+      // Show success toast for voting
+      showSuccess('Vote recorded successfully!', { duration: 3000 });
     },
     [currentMatch],
   );
@@ -424,6 +433,16 @@ function TournamentContent({
         setIsTransitioning(false);
       } catch (error) {
         console.error("Error handling vote:", error);
+        setVotingError({
+          message: "Failed to submit vote. Please try again.",
+          severity: "MEDIUM",
+          isRetryable: true,
+          originalError: error
+        });
+        
+        // Show error toast
+        showError('Failed to submit vote. Please try again.', { duration: 5000 });
+        
         setIsProcessing(false);
         setIsTransitioning(false);
       }
@@ -469,6 +488,11 @@ function TournamentContent({
       setIsProcessing(false);
     }
   }, [getCurrentRatings, onComplete]);
+
+  const handleVoteRetry = useCallback(() => {
+    setVotingError(null);
+    // The user can try voting again by clicking on a name card
+  }, []);
 
   // Enhanced keyboard controls with accessibility
   useEffect(() => {
@@ -747,6 +771,21 @@ function TournamentContent({
               Skip <span className={styles.shortcutHint} aria-hidden="true">(↓ Down)</span>
             </button>
           </div>
+
+          {/* Voting error display */}
+          {votingError && (
+            <InlineError
+              error={votingError}
+              context="vote"
+              position="below"
+              onRetry={handleVoteRetry}
+              onDismiss={() => setVotingError(null)}
+              showRetry={true}
+              showDismiss={true}
+              size="medium"
+              className={styles.votingError}
+            />
+          )}
         </div>
 
         <div className={styles.tournamentControls}>

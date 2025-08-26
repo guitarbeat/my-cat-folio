@@ -78,12 +78,13 @@
  */
 
 import React, { useState, useEffect, Suspense } from "react";
-import { ErrorBoundary, Login, ErrorDisplay, OnboardingModal } from "./components";
+import { ErrorBoundary, Login, ErrorDisplay, OnboardingModal, ToastContainer } from "./components";
 import NavBar from "./components/NavBar/NavBar";
 import useUserSession from "./hooks/useUserSession";
 import useErrorHandler from "./hooks/useErrorHandler";
 import useOnboarding from "./hooks/useOnboarding";
 import useTheme from "./hooks/useTheme";
+import useToast from "./hooks/useToast";
 import { supabase } from "./supabase/supabaseClient";
 import LoadingSpinner from "./components/LoadingSpinner/LoadingSpinner";
 import FloatingKitties from "./components/FloatingKitties";
@@ -122,10 +123,29 @@ function App() {
     maxRetries: 3,
     onError: (error) => {
       console.error('App-level error:', error);
+      // Show toast for critical errors
+      if (error.severity === 'CRITICAL' || error.severity === 'HIGH') {
+        showToastError(error.userMessage || 'A critical error occurred', {
+          duration: 8000,
+          autoDismiss: false
+        });
+      }
     },
     onRecovery: () => {
       console.log('App recovered from error');
+      showSuccess('Operation completed successfully!');
     }
+  });
+
+  // Toast notifications
+  const {
+    toasts,
+    removeToast,
+    showSuccess,
+    showError: showToastError
+  } = useToast({
+    maxToasts: 5,
+    defaultDuration: 5000
   });
 
   const [ratings, setRatings] = useState({});
@@ -521,6 +541,14 @@ function App() {
         isOpen={showOnboarding}
         onClose={closeOnboarding}
         onDontShowAgain={dontShowAgain}
+      />
+
+      {/* Toast notifications */}
+      <ToastContainer
+        toasts={toasts}
+        removeToast={removeToast}
+        position="top-right"
+        maxToasts={5}
       />
     </div>
   );
