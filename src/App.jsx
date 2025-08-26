@@ -82,6 +82,7 @@ import { ErrorBoundary, Login, ErrorDisplay } from "./components";
 import NavBar from "./components/NavBar/NavBar";
 import useUserSession from "./hooks/useUserSession";
 import useErrorHandler from "./hooks/useErrorHandler";
+import useTheme from "./hooks/useTheme";
 import { supabase } from "./supabase/supabaseClient";
 import LoadingSpinner from "./components/LoadingSpinner/LoadingSpinner";
 import FloatingKitties from "./components/FloatingKitties";
@@ -98,6 +99,7 @@ const Tournament = React.lazy(
 
 function App() {
   const { userName, isLoggedIn, login, logout } = useUserSession();
+  const { isLightTheme, toggleTheme } = useTheme();
   
   // Enhanced error handling
   const {
@@ -464,6 +466,8 @@ function App() {
         userName={userName}
         onLogout={handleLogout}
         onStartNewTournament={handleStartNewTournament}
+        isLightTheme={isLightTheme}
+        onThemeChange={toggleTheme}
       />
       <div className="main-content">
         {/* Global error display */}

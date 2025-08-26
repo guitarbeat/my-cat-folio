@@ -83,6 +83,8 @@ function NavBar({
   userName,
   onLogout,
   onStartNewTournament,
+  isLightTheme,
+  onThemeChange,
 }) {
   const [showScrollTop, setShowScrollTop] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -257,7 +259,7 @@ function NavBar({
   }
 
   // If not logged in (on login screen), make navbar transparent
-  const navbarClass = `navbar ${isLoggedIn ? "" : "transparent"} ${isMobileMenuOpen ? "mobile-menu-open" : ""}`;
+  const navbarClass = `navbar ${isLoggedIn ? "" : "transparent"} ${isMobileMenuOpen ? "mobile-menu-open" : ""} ${isLightTheme ? "light-theme" : "dark-theme"}`;
 
   return (
     <>
@@ -271,6 +273,18 @@ function NavBar({
             {logoItem}
             {userInfo}
             {navLinks}
+            {/* Theme Toggle Button */}
+            <li className="navbar__item navbar__item--theme-toggle">
+              <button
+                type="button"
+                className="navbar__theme-toggle"
+                onClick={onThemeChange}
+                aria-label={isLightTheme ? "Switch to dark theme" : "Switch to light theme"}
+                title={isLightTheme ? "Switch to dark theme" : "Switch to light theme"}
+              >
+                {isLightTheme ? "🌙" : "☀️"}
+              </button>
+            </li>
           </ul>
 
           {/* * Mobile menu button - always visible on mobile */}
@@ -342,6 +356,22 @@ function NavBar({
                 </a>
               </li>
             )}
+            
+            {/* Theme Toggle Button for Mobile */}
+            <li className="navbar__mobile-item">
+              <button
+                type="button"
+                className="navbar__mobile-theme-toggle"
+                onClick={() => {
+                  onThemeChange();
+                  setIsMobileMenuOpen(false);
+                }}
+                aria-label={isLightTheme ? "Switch to dark theme" : "Switch to light theme"}
+                title={isLightTheme ? "Switch to dark theme" : "Switch to light theme"}
+              >
+                {isLightTheme ? "🌙 Switch to Dark Theme" : "☀️ Switch to Light Theme"}
+              </button>
+            </li>
           </ul>
         </div>
       </nav>
@@ -380,6 +410,8 @@ NavBar.propTypes = {
   userName: PropTypes.string,
   onLogout: PropTypes.func.isRequired,
   onStartNewTournament: PropTypes.func,
+  isLightTheme: PropTypes.bool.isRequired,
+  onThemeChange: PropTypes.func.isRequired,
 };
 
 export default NavBar;
