@@ -198,13 +198,15 @@
 }
 
 .tieBadge {
-  composes: winnerbadge;
+  /* stylelint-disable-next-line value-keyword-case */
+  composes: winnerBadge;
   color: var(--success-500);
   background: var(--success-50);
 }
 
 .skipBadge {
-  composes: winnerbadge;
+  /* stylelint-disable-next-line value-keyword-case */
+  composes: winnerBadge;
   color: var(--warning-500);
   background: var(--warning-50);
 }
