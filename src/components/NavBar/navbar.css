@@ -8,9 +8,9 @@
   --local-font-size: 0.875rem;
   --local-font-size-mobile: 1rem;
 
-  /* Scroll button sizes */
-  --scroll-button-size-desktop: 56px;
-  --scroll-button-size-mobile: 50px;
+  /* Scroll button sizes - Updated to meet mobile guidelines */
+  --scroll-button-size-desktop: 56px; /* Already meets 48px minimum */
+  --scroll-button-size-mobile: 50px; /* Already meets 48px minimum */
 
   /* Transitions */
   --transition-standard: 0.2s ease;
@@ -29,8 +29,8 @@
   --local-font-size: 1.2rem;
   --navbar-padding-mobile: 1rem 1.5rem;
   --navbar-padding-desktop: 1rem 2rem;
-  --scroll-button-size-desktop: 40px;
-  --scroll-button-size-mobile: 42px;
+  --scroll-button-size-desktop: 48px; /* Updated to meet mobile guidelines */
+  --scroll-button-size-mobile: 48px; /* Updated to meet mobile guidelines */
   --underline-height: 0.1em;
   --transition-standard: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   --z-index-navbar: 1000;
@@ -299,6 +299,9 @@
   opacity: 0;
   transform: translateY(20px);
   transition: all var(--transition-standard);
+  /* Ensure minimum touch target size */
+  min-width: 48px;
+  min-height: 48px;
 }
 
 .scroll-to-top.visible {

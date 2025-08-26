@@ -1866,10 +1866,11 @@ body {
     margin-top: 65px;
   }
 
-  /* Improve touch targets */
+  /* Improve touch targets - Updated to meet mobile guidelines */
   button,
   .nav-menu button {
-    min-height: 36px;
+    min-height: 48px; /* Updated to meet mobile guidelines */
+    min-width: 48px; /* Ensure minimum width for touch targets */
     padding: 0.5rem 0.75rem;
     font-size: 0.875rem;
   }
@@ -2251,10 +2252,11 @@ h1 {
     margin-top: 65px;
   }
 
-  /* Improve touch targets */
+  /* Improve touch targets - Updated to meet mobile guidelines */
   button,
   .nav-menu button {
-    min-height: 36px;
+    min-height: 48px; /* Updated to meet mobile guidelines */
+    min-width: 48px; /* Ensure minimum width for touch targets */
     padding: 0.5rem 0.75rem;
     font-size: 0.875rem;
   }
