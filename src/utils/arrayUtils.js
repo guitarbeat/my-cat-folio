@@ -20,9 +20,16 @@ export function shuffleArray(array) {
   }
 
   const newArray = [...array];
-  for (let i = newArray.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+  try {
+    for (let i = newArray.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+    }
+    return newArray;
+  } catch (error) {
+    if (process.env.NODE_ENV === 'development') {
+      console.error('Error in shuffleArray:', error);
+    }
+    return array;
   }
-  return newArray;
 }

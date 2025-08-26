@@ -82,7 +82,9 @@ export const catNamesAPI = {
         })) || []
       );
     } catch (error) {
-      console.error('Error fetching names:', error);
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Error fetching names:', error);
+      }
       throw error;
     }
   },
@@ -101,7 +103,9 @@ export const catNamesAPI = {
       if (error) throw error;
       return data;
     } catch (error) {
-      console.error('Error adding name:', error);
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Error adding name:', error);
+      }
       throw error;
     }
   },
@@ -119,7 +123,9 @@ export const catNamesAPI = {
       if (error) throw error;
       return { success: true };
     } catch (error) {
-      console.error('Error removing name:', error);
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Error removing name:', error);
+      }
       throw error;
     }
   },
@@ -138,7 +144,9 @@ export const catNamesAPI = {
       if (error) throw error;
       return data || [];
     } catch (error) {
-      console.error('Error fetching leaderboard:', error);
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Error fetching leaderboard:', error);
+      }
       return [];
     }
   }
@@ -214,7 +222,9 @@ export const ratingsAPI = {
         updated_at: now
       };
     } catch (error) {
-      console.error('Error updating rating:', error);
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Error updating rating:', error);
+      }
       throw error;
     }
   },
@@ -240,7 +250,9 @@ export const ratingsAPI = {
 
       return data || [];
     } catch (error) {
-      console.error('Error fetching rating history:', error);
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Error fetching rating history:', error);
+      }
       return [];
     }
   },
@@ -277,7 +289,9 @@ export const ratingsAPI = {
       if (error) throw error;
       return { success: true };
     } catch (error) {
-      console.error('Error saving rating history:', error);
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Error saving rating history:', error);
+      }
       throw error;
     }
   }
@@ -310,7 +324,9 @@ export const hiddenNamesAPI = {
       if (error) throw error;
       return { success: true };
     } catch (error) {
-      console.error('Error hiding name:', error);
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Error hiding name:', error);
+      }
       throw error;
     }
   },
@@ -330,7 +346,9 @@ export const hiddenNamesAPI = {
       if (error) throw error;
       return { success: true };
     } catch (error) {
-      console.error('Error unhiding name:', error);
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Error unhiding name:', error);
+      }
       throw error;
     }
   },
@@ -359,7 +377,9 @@ export const hiddenNamesAPI = {
       if (error) throw error;
       return data || [];
     } catch (error) {
-      console.error('Error fetching hidden names:', error);
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Error fetching hidden names:', error);
+      }
       return [];
     }
   }
@@ -421,7 +441,9 @@ export const tournamentsAPI = {
       if (error) throw error;
       return newTournament;
     } catch (error) {
-      console.error('Error creating tournament:', error);
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Error creating tournament:', error);
+      }
       throw error;
     }
   },
@@ -435,10 +457,14 @@ export const tournamentsAPI = {
       // This function needs to be updated to work with the new schema
       // For now, we'll need to know which user owns the tournament
       // This is a limitation of the new consolidated schema
-      console.warn('updateTournamentStatus: This function needs to be updated for the new consolidated schema');
+      if (process.env.NODE_ENV === 'development') {
+        console.warn('updateTournamentStatus: This function needs to be updated for the new consolidated schema');
+      }
       throw new Error('updateTournamentStatus: Function needs to be updated for new schema');
     } catch (error) {
-      console.error('Error updating tournament:', error);
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Error updating tournament:', error);
+      }
       throw error;
     }
   },
@@ -469,7 +495,9 @@ export const tournamentsAPI = {
 
       return tournaments;
     } catch (error) {
-      console.error('Error fetching tournaments:', error);
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Error fetching tournaments:', error);
+      }
       return [];
     }
   },
@@ -537,7 +565,9 @@ export const tournamentsAPI = {
         selectedNames: selectedNames.map(n => n.name)
       };
     } catch (error) {
-      console.error('Error saving tournament selections:', error);
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Error saving tournament selections:', error);
+      }
       throw error;
     }
   },
@@ -549,10 +579,14 @@ export const tournamentsAPI = {
     try {
       const { error } = await supabase.rpc('create_tournament_selections_table');
       if (error) {
-        console.warn('Could not create table via RPC, table may already exist:', error);
+        if (process.env.NODE_ENV === 'development') {
+          console.warn('Could not create table via RPC, table may already exist:', error);
+        }
       }
     } catch (error) {
-      console.warn('Table creation RPC not available, table may already exist:', error);
+      if (process.env.NODE_ENV === 'development') {
+        console.warn('Table creation RPC not available, table may already exist:', error);
+      }
     }
   },
 
@@ -587,7 +621,9 @@ export const tournamentsAPI = {
 
       return data || [];
     } catch (error) {
-      console.error('Error fetching tournament selection history:', error);
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Error fetching tournament selection history:', error);
+      }
       return [];
     }
   },
@@ -623,7 +659,9 @@ export const tournamentsAPI = {
 
       return data || [];
     } catch (error) {
-      console.error('Error fetching popular tournament names:', error);
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Error fetching popular tournament names:', error);
+      }
       return [];
     }
   }
@@ -658,7 +696,9 @@ export const userPreferencesAPI = {
         }
       );
     } catch (error) {
-      console.error('Error fetching preferences:', error);
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Error fetching preferences:', error);
+      }
       throw error;
     }
   },
@@ -687,7 +727,9 @@ export const userPreferencesAPI = {
       if (error) throw error;
       return data?.preferences;
     } catch (error) {
-      console.error('Error updating preferences:', error);
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Error updating preferences:', error);
+      }
       throw error;
     }
   }
@@ -711,7 +753,9 @@ export const categoriesAPI = {
       if (error) throw error;
       return data || [];
     } catch (error) {
-      console.error('Error fetching categories:', error);
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Error fetching categories:', error);
+      }
       return [];
     }
   },
@@ -739,7 +783,9 @@ export const categoriesAPI = {
       if (error) throw error;
       return data?.map((item) => item.cat_name_options).filter(Boolean) || [];
     } catch (error) {
-      console.error('Error fetching names by category:', error);
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Error fetching names by category:', error);
+      }
       return [];
     }
   }
@@ -763,7 +809,9 @@ export const ensureRatingHistoryTable = async () => {
       devLog('Created cat_rating_history table');
     }
   } catch (error) {
-    console.error('Error ensuring cat_rating_history table exists:', error);
+    if (process.env.NODE_ENV === 'development') {
+      console.error('Error ensuring cat_rating_history table exists:', error);
+    }
   }
 };
 
@@ -809,7 +857,9 @@ export const deleteName = async (nameId) => {
     if (error) throw error;
     return { success: true };
   } catch (error) {
-    console.error('Error in deleteName function:', error);
+    if (process.env.NODE_ENV === 'development') {
+      console.error('Error in deleteName function:', error);
+    }
     throw error;
   }
 };

@@ -222,7 +222,9 @@ export function useTournament({
         localStorage.removeItem('tournamentState');
         onComplete(ratingsArray);
       } catch (error) {
-        console.error('Tournament error:', error);
+        if (process.env.NODE_ENV === 'development') {
+          console.error('Tournament completion error:', error);
+        }
         setIsError(true);
         // Clear tournament state on error
         localStorage.removeItem('tournamentState');

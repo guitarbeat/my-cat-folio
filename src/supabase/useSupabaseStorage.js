@@ -35,7 +35,9 @@ function useSupabaseStorage(userName = '') {
       const data = await catNamesAPI.getNamesWithDescriptions(userName);
       setNames(data);
     } catch (err) {
-      console.error('Error fetching names:', err);
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Error fetching names:', err);
+      }
       setError(err);
     } finally {
       setLoading(false);
@@ -50,7 +52,9 @@ function useSupabaseStorage(userName = '') {
         await fetchNames(); // Refresh the list
         return newName;
       } catch (err) {
-        console.error('Error adding name:', err);
+        if (process.env.NODE_ENV === 'development') {
+          console.error('Error adding name:', err);
+        }
         setError(err);
         throw err;
       } finally {
@@ -67,7 +71,9 @@ function useSupabaseStorage(userName = '') {
         await catNamesAPI.removeName(name);
         await fetchNames(); // Refresh the list
       } catch (err) {
-        console.error('Error removing name:', err);
+        if (process.env.NODE_ENV === 'development') {
+          console.error('Error removing name:', err);
+        }
         setError(err);
         throw err;
       } finally {
@@ -95,7 +101,9 @@ function useSupabaseStorage(userName = '') {
         await fetchNames(); // Refresh to get updated data
         return result;
       } catch (err) {
-        console.error('Error updating rating:', err);
+        if (process.env.NODE_ENV === 'development') {
+          console.error('Error updating rating:', err);
+        }
         setError(err);
         throw err;
       } finally {
@@ -112,7 +120,9 @@ function useSupabaseStorage(userName = '') {
       try {
         return await ratingsAPI.getRatingHistory(userName, nameId, limit);
       } catch (err) {
-        console.error('Error fetching rating history:', err);
+        if (process.env.NODE_ENV === 'development') {
+          console.error('Error fetching rating history:', err);
+        }
         setError(err);
         return [];
       }
@@ -131,7 +141,9 @@ function useSupabaseStorage(userName = '') {
         await hiddenNamesAPI.hideName(userName, nameId);
         await fetchNames(); // Refresh to reflect changes
       } catch (err) {
-        console.error('Error hiding name:', err);
+        if (process.env.NODE_ENV === 'development') {
+          console.error('Error hiding name:', err);
+        }
         setError(err);
         throw err;
       } finally {
@@ -150,7 +162,9 @@ function useSupabaseStorage(userName = '') {
         await hiddenNamesAPI.unhideName(userName, nameId);
         await fetchNames(); // Refresh to reflect changes
       } catch (err) {
-        console.error('Error unhiding name:', err);
+        if (process.env.NODE_ENV === 'development') {
+          console.error('Error unhiding name:', err);
+        }
         throw err;
       } finally {
         setLoading(false);
@@ -165,7 +179,9 @@ function useSupabaseStorage(userName = '') {
     try {
       return await hiddenNamesAPI.getHiddenNames(userName);
     } catch (err) {
-      console.error('Error fetching hidden names:', err);
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Error fetching hidden names:', err);
+      }
       setError(err);
       return [];
     }
@@ -187,7 +203,9 @@ function useSupabaseStorage(userName = '') {
         );
         return tournament;
       } catch (err) {
-        console.error('Error creating tournament:', err);
+        if (process.env.NODE_ENV === 'development') {
+          console.error('Error creating tournament:', err);
+        }
         setError(err);
         throw err;
       } finally {
@@ -208,7 +226,9 @@ function useSupabaseStorage(userName = '') {
         );
         return tournament;
       } catch (err) {
-        console.error('Error updating tournament:', err);
+        if (process.env.NODE_ENV === 'development') {
+          console.error('Error updating tournament:', err);
+        }
         setError(err);
         throw err;
       } finally {
@@ -225,7 +245,9 @@ function useSupabaseStorage(userName = '') {
       try {
         return await tournamentsAPI.getUserTournaments(userName, status);
       } catch (err) {
-        console.error('Error fetching tournaments:', err);
+        if (process.env.NODE_ENV === 'development') {
+          console.error('Error fetching tournaments:', err);
+        }
         setError(err);
         return [];
       }
@@ -243,7 +265,9 @@ function useSupabaseStorage(userName = '') {
       setUserPreferences(prefs);
       return prefs;
     } catch (err) {
-      console.error('Error fetching preferences:', err);
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Error fetching preferences:', err);
+      }
       setError(err);
       return null;
     }
@@ -262,7 +286,9 @@ function useSupabaseStorage(userName = '') {
         setUserPreferences(updatedPrefs);
         return updatedPrefs;
       } catch (err) {
-        console.error('Error updating preferences:', err);
+        if (process.env.NODE_ENV === 'development') {
+          console.error('Error updating preferences:', err);
+        }
         setError(err);
         throw err;
       } finally {
@@ -280,7 +306,9 @@ function useSupabaseStorage(userName = '') {
       setCategories(cats);
       return cats;
     } catch (err) {
-      console.error('Error fetching categories:', err);
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Error fetching categories:', err);
+      }
       setError(err);
       return [];
     }
@@ -290,7 +318,9 @@ function useSupabaseStorage(userName = '') {
     try {
       return await categoriesAPI.getNamesByCategory(categoryId);
     } catch (err) {
-      console.error('Error fetching names by category:', err);
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Error fetching names by category:', err);
+      }
       setError(err);
       return [];
     }
@@ -307,7 +337,9 @@ function useSupabaseStorage(userName = '') {
           minTournaments
         );
       } catch (err) {
-        console.error('Error fetching leaderboard:', err);
+        if (process.env.NODE_ENV === 'development') {
+          console.error('Error fetching leaderboard:', err);
+        }
         setError(err);
         return [];
       }

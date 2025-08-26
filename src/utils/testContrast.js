@@ -58,7 +58,9 @@ const colorScheme = {
  * @param {string} themeName - Name of the theme for logging
  */
 function testColorScheme(scheme, themeName) {
-  console.log(`\n=== Testing ${themeName} Theme ===`);
+  if (process.env.NODE_ENV === 'development') {
+    console.log(`\n=== Testing ${themeName} Theme ===`);
+  }
 
   const tests = [
     // Text on background combinations
@@ -134,23 +136,31 @@ function testColorScheme(scheme, themeName) {
 
       if (meetsAA) {
         passCount++;
-        console.log(`✅ ${test.description}: ${ratio.toFixed(2)}:1 (${level})`);
+        if (process.env.NODE_ENV === 'development') {
+          console.log(`✅ ${test.description}: ${ratio.toFixed(2)}:1 (${level})`);
+        }
       } else {
         failCount++;
-        console.log(
-          `❌ ${test.description}: ${ratio.toFixed(2)}:1 (${level}) - FAILS WCAG AA`
-        );
+        if (process.env.NODE_ENV === 'development') {
+          console.log(
+            `❌ ${test.description}: ${ratio.toFixed(2)}:1 (${level}) - FAILS WCAG AA`
+          );
+        }
       }
     } catch (error) {
-      console.log(
-        `⚠️  ${test.description}: Error calculating contrast - ${error.message}`
-      );
+      if (process.env.NODE_ENV === 'development') {
+        console.log(
+          `⚠️  ${test.description}: Error calculating contrast - ${error.message}`
+        );
+      }
     }
   });
 
-  console.log(
-    `\n${themeName} Theme Results: ${passCount} passed, ${failCount} failed`
-  );
+  if (process.env.NODE_ENV === 'development') {
+    console.log(
+      `\n${themeName} Theme Results: ${passCount} passed, ${failCount} failed`
+    );
+  }
   return { passCount, failCount };
 }
 
@@ -158,7 +168,9 @@ function testColorScheme(scheme, themeName) {
  * Run all contrast tests
  */
 export function runContrastTests() {
-  console.log('🎨 Running Contrast Ratio Tests for Meow Namester Color Scheme');
+  if (process.env.NODE_ENV === 'development') {
+    console.log('🎨 Running Contrast Ratio Tests for Meow Namester Color Scheme');
+  }
 
   const lightResults = testColorScheme(colorScheme.light, 'Light');
   const darkResults = testColorScheme(colorScheme.dark, 'Dark');
@@ -169,22 +181,24 @@ export function runContrastTests() {
     lightResults.failCount +
     (darkResults.passCount + darkResults.failCount);
 
-  console.log('\n=== Overall Results ===');
-  console.log(`Total Tests: ${totalTests}`);
-  console.log(`Passed: ${totalPassed}`);
-  console.log(`Failed: ${totalTests - totalPassed}`);
-  console.log(
-    `Success Rate: ${((totalPassed / totalTests) * 100).toFixed(1)}%`
-  );
-
-  if (totalPassed === totalTests) {
-    console.log('🎉 All contrast ratios meet WCAG AA standards!');
-  } else {
+  if (process.env.NODE_ENV === 'development') {
+    console.log('\n=== Overall Results ===');
+    console.log(`Total Tests: ${totalTests}`);
+    console.log(`Passed: ${totalPassed}`);
+    console.log(`Failed: ${totalTests - totalPassed}`);
     console.log(
-      '⚠️  Some contrast ratios need improvement to meet WCAG AA standards.'
+      `Success Rate: ${((totalPassed / totalTests) * 100).toFixed(1)}%`
     );
+
+    if (totalPassed === totalTests) {
+      console.log('🎉 All contrast ratios meet WCAG AA standards!');
+    } else {
+      console.log(
+        '⚠️  Some contrast ratios need improvement to meet WCAG AA standards.'
+      );
+    }
   }
 }
-
 // Export for use in development
 export default runContrastTests;
+

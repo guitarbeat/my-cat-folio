@@ -176,19 +176,12 @@ export const withRetry = async (apiCall, options = {}) => {
     try {
       return await apiCall();
     } catch (error) {
-      lastError = error;
-
-      // Don't retry on certain error types
-      if (getErrorType(error) === ERROR_TYPES.AUTHENTICATION) {
-        throw error;
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Error in withRetry:', error);
+        console.error('Retry attempt failed:', attempt);
+        console.error('Max retries reached');
       }
-
-      if (attempt === maxRetries) {
-        throw error;
-      }
-
-      // Wait before retrying
-      await new Promise(resolve => setTimeout(resolve, delay * Math.pow(backoff, attempt - 1)));
+      throw error;
     }
   }
 

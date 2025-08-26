@@ -14,7 +14,13 @@
  * --- END AUTO-GENERATED DOCSTRING ---
  */
 export default function devLog(...args) {
-  if (process.env.NODE_ENV !== 'production') {
-    console.log('[DEV]', ...args);
+  try {
+    if (process.env.NODE_ENV !== 'production') {
+      console.log('[DEV]', ...args);
+    }
+  } catch (error) {
+    if (process.env.NODE_ENV === 'development') {
+      console.error('Logger error:', error);
+    }
   }
 }

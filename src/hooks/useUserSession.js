@@ -64,7 +64,9 @@ function useUserSession() {
     try {
       return localStorage.getItem('catNamesUser') || '';
     } catch (error) {
-      console.error('Error reading from localStorage:', error);
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Error reading from localStorage:', error);
+      }
       return '';
     }
   });
@@ -87,7 +89,9 @@ function useUserSession() {
             .single();
 
           if (dbError || !data) {
-            console.warn('Stored user not found in database, clearing session');
+            if (process.env.NODE_ENV === 'development') {
+              console.warn('Stored user not found in database, clearing session');
+            }
             localStorage.removeItem('catNamesUser');
             setUserName('');
             setIsLoggedIn(false);
@@ -97,7 +101,9 @@ function useUserSession() {
           }
         }
       } catch (error) {
-        console.error('Session initialization error:', error);
+        if (process.env.NODE_ENV === 'development') {
+          console.error('Session initialization error:', error);
+        }
       } finally {
         setIsInitialized(true);
       }
@@ -144,7 +150,9 @@ function useUserSession() {
 
       devLog('Login successful. Current user:', trimmedName);
     } catch (err) {
-      console.error('Login error:', err);
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Login error:', err);
+      }
       setError(err.message);
       throw err;
     }
