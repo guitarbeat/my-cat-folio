@@ -259,6 +259,23 @@ function NavBar({
   // If not logged in (on login screen), make navbar transparent
   const navbarClass = `navbar ${isLoggedIn ? "" : "transparent"} ${isMobileMenuOpen ? "mobile-menu-open" : ""}`;
 
+  // Help button to reset onboarding
+  const helpButton = (
+    <li key="help" className="navbar__item navbar__item--help">
+      <button
+        onClick={() => {
+          localStorage.removeItem('catNameTournament_onboardingSeen');
+          window.location.reload();
+        }}
+        className="navbar__help-button"
+        title="Show onboarding tutorial again"
+        aria-label="Show help tutorial"
+      >
+        ❓
+      </button>
+    </li>
+  );
+
   return (
     <>
       <nav className={navbarClass}>
@@ -271,6 +288,7 @@ function NavBar({
             {logoItem}
             {userInfo}
             {navLinks}
+            {helpButton}
           </ul>
 
           {/* * Mobile menu button - always visible on mobile */}
@@ -325,6 +343,21 @@ function NavBar({
                 </li>
               );
             })}
+
+            {/* * Add help button for mobile */}
+            <li key="help" className="navbar__mobile-item">
+              <button
+                onClick={() => {
+                  localStorage.removeItem('catNameTournament_onboardingSeen');
+                  window.location.reload();
+                  setIsMobileMenuOpen(false);
+                }}
+                className="navbar__mobile-help-button"
+                title="Show onboarding tutorial again"
+              >
+                ❓ Help
+              </button>
+            </li>
 
             {/* * Add logout button separately for mobile */}
             {isLoggedIn && (

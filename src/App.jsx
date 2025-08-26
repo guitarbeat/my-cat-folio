@@ -78,10 +78,11 @@
  */
 
 import React, { useState, useEffect, Suspense } from "react";
-import { ErrorBoundary, Login, ErrorDisplay } from "./components";
+import { ErrorBoundary, Login, ErrorDisplay, OnboardingModal } from "./components";
 import NavBar from "./components/NavBar/NavBar";
 import useUserSession from "./hooks/useUserSession";
 import useErrorHandler from "./hooks/useErrorHandler";
+import useOnboarding from "./hooks/useOnboarding";
 import { supabase } from "./supabase/supabaseClient";
 import LoadingSpinner from "./components/LoadingSpinner/LoadingSpinner";
 import FloatingKitties from "./components/FloatingKitties";
@@ -98,6 +99,13 @@ const Tournament = React.lazy(
 
 function App() {
   const { userName, isLoggedIn, login, logout } = useUserSession();
+  
+  // Onboarding management
+  const {
+    showOnboarding,
+    closeOnboarding,
+    dontShowAgain,
+  } = useOnboarding();
   
   // Enhanced error handling
   const {
@@ -498,6 +506,13 @@ function App() {
           <LoadingSpinner text="Initializing Tournament..." />
         </div>
       )}
+
+      {/* Onboarding Modal */}
+      <OnboardingModal
+        isOpen={showOnboarding}
+        onClose={closeOnboarding}
+        onDontShowAgain={dontShowAgain}
+      />
     </div>
   );
 }
