@@ -75,54 +75,67 @@ function useUserSession() {
   const [isInitialized, setIsInitialized] = useState(false);
 
   // Initialize session state
-  useEffect(() => {
-    const initializeSession = async () => {
-      try {
-        const storedUser = localStorage.getItem('catNamesUser');
-        if (storedUser) {
-          devLog('Found stored user:', storedUser);
-
-          const { data, error: dbError } = await supabase
-            .from('cat_app_users')
-            .select('user_name')
-            .eq('user_name', storedUser)
-            .single();
-
-          if (dbError || !data) {
-            if (process.env.NODE_ENV === 'development') {
-              console.warn('Stored user not found in database, clearing session');
-            }
-            localStorage.removeItem('catNamesUser');
-            setUserName('');
-            setIsLoggedIn(false);
-          } else {
-            setUserName(storedUser);
-            setIsLoggedIn(true);
+    useEffect(() => {
+      const initializeSession = async () => {
+        // If Supabase isn't configured, skip DB checks but allow the app to load
+        if (!supabase) {
+          if (process.env.NODE_ENV === 'development') {
+            console.warn('Supabase not configured; skipping session initialization');
           }
+          setIsInitialized(true);
+          return;
         }
-      } catch (error) {
-        if (process.env.NODE_ENV === 'development') {
-          console.error('Session initialization error:', error);
-        }
-      } finally {
-        setIsInitialized(true);
-      }
-    };
 
-    initializeSession();
-  }, []);
+        try {
+          const storedUser = localStorage.getItem('catNamesUser');
+          if (storedUser) {
+            devLog('Found stored user:', storedUser);
+
+            const { data, error: dbError } = await supabase
+              .from('cat_app_users')
+              .select('user_name')
+              .eq('user_name', storedUser)
+              .single();
+
+            if (dbError || !data) {
+              if (process.env.NODE_ENV === 'development') {
+                console.warn('Stored user not found in database, clearing session');
+              }
+              localStorage.removeItem('catNamesUser');
+              setUserName('');
+              setIsLoggedIn(false);
+            } else {
+              setUserName(storedUser);
+              setIsLoggedIn(true);
+            }
+          }
+        } catch (error) {
+          if (process.env.NODE_ENV === 'development') {
+            console.error('Session initialization error:', error);
+          }
+        } finally {
+          setIsInitialized(true);
+        }
+      };
+
+      initializeSession();
+    }, []);
 
   /**
    * Logs in a user with the given name
    * @param {string} name - The username to login with
    * @throws {Error} If the name is invalid or if there's a database error
    */
-  const login = useCallback(async (name) => {
+    const login = useCallback(async (name) => {
     try {
       devLog('Attempting to login with name:', name);
 
       if (!name || typeof name !== 'string' || name.trim() === '') {
         throw new Error('Please enter a valid name');
+      }
+
+      if (!supabase) {
+        throw new Error('Supabase is not configured. Login is unavailable.');
       }
 
       const trimmedName = name.trim();
