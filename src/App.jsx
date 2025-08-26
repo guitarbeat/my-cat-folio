@@ -83,6 +83,7 @@ import NavBar from "./components/NavBar/NavBar";
 import useUserSession from "./hooks/useUserSession";
 import useErrorHandler from "./hooks/useErrorHandler";
 import useOnboarding from "./hooks/useOnboarding";
+import useTheme from "./hooks/useTheme";
 import { supabase } from "./supabase/supabaseClient";
 import LoadingSpinner from "./components/LoadingSpinner/LoadingSpinner";
 import FloatingKitties from "./components/FloatingKitties";
@@ -99,6 +100,7 @@ const Tournament = React.lazy(
 
 function App() {
   const { userName, isLoggedIn, login, logout } = useUserSession();
+  const { isLightTheme, toggleTheme } = useTheme();
   
   // Onboarding management
   const {
@@ -477,6 +479,8 @@ function App() {
         userName={userName}
         onLogout={handleLogout}
         onStartNewTournament={handleStartNewTournament}
+        isLightTheme={isLightTheme}
+        onThemeChange={toggleTheme}
       />
       <div id="main-content" className="main-content" tabIndex="-1">
         {/* Global error display */}

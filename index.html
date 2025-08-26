@@ -31,8 +31,20 @@
         rel="stylesheet">
 </head>
 
-<body class="light-theme">
-    <script>try { var t = localStorage.getItem('theme'); if (t === 'dark') { document.body.classList.remove('light-theme'); } else { document.body.classList.add('light-theme'); } } catch (e) { document.body.classList.add('light-theme'); }</script>
+<body>
+    <script>
+      // Initialize theme from localStorage before React renders to prevent flash
+      try {
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'false') {
+          document.body.classList.add('dark-theme');
+        } else {
+          document.body.classList.add('light-theme');
+        }
+      } catch (e) {
+        document.body.classList.add('light-theme');
+      }
+    </script>
     <div id="root"></div>
     <script type="module" src="/src/index.jsx"></script>
 </body>
