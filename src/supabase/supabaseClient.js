@@ -15,13 +15,20 @@ const supabaseAnonKey =
   import.meta.env.VITE_SUPABASE_ANON_KEY ||
   import.meta.env.BAG_NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
+// Only create the Supabase client if the required environment variables are present
+// Otherwise export `null` so the application can still render without Supabase
+let supabase = null;
 if (!supabaseUrl || !supabaseAnonKey) {
-  throw new Error(
-    'Missing Supabase environment variables. Please check your .env file. Required: VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY (or BAG_NEXT_PUBLIC_SUPABASE_URL and BAG_NEXT_PUBLIC_SUPABASE_ANON_KEY)'
-  );
+  if (process.env.NODE_ENV === 'development') {
+    console.warn(
+      'Missing Supabase environment variables. Supabase features are disabled.'
+    );
+  }
+} else {
+  supabase = createClient(supabaseUrl, supabaseAnonKey);
 }
 
-export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+export { supabase };
 
 // ===== CORE API FUNCTIONS =====
 
