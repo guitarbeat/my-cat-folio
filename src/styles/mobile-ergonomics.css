@@ -1,0 +1,272 @@
+/* Mobile Ergonomics Improvements
+ * This file ensures consistent mobile ergonomics across all components
+ * - Touch targets meet 48x48px minimum (Google's recommended standard)
+ * - Proper spacing for floating elements
+ * - Safe area support for modern mobile devices
+ */
+
+/* Global touch target improvements */
+@media (width <= 768px) {
+  /* Ensure all interactive elements meet touch target requirements */
+  button,
+  input[type="button"],
+  input[type="submit"],
+  input[type="reset"],
+  input[type="checkbox"],
+  input[type="radio"],
+  .btn,
+  .button,
+  .button-primary,
+  .button-secondary,
+  a[role="button"],
+  .nav-menu button,
+  .navbar__mobile-link,
+  .navbar__mobile-menu-button {
+    min-height: 48px !important;
+    min-width: 48px !important;
+  }
+
+  /* Form inputs should have minimum height for touch */
+  input[type="text"],
+  input[type="email"],
+  input[type="password"],
+  input[type="search"],
+  input[type="tel"],
+  input[type="url"],
+  input[type="number"],
+  textarea,
+  select {
+    min-height: 48px !important;
+  }
+
+  /* Ensure proper spacing between interactive elements */
+  button + button,
+  .button + .button,
+  .btn + .btn,
+  input + input {
+    margin-left: var(--space-3, 0.75rem);
+  }
+
+  /* Improve form layout on mobile */
+  .form-group {
+    margin-bottom: var(--space-4, 1rem);
+  }
+
+  .form-group label {
+    margin-bottom: var(--space-2, 0.5rem);
+    font-size: var(--text-base, 1rem);
+    display: block;
+  }
+
+  /* Ensure proper spacing for mobile cards */
+  .card,
+  .name-card,
+  .tournament-card {
+    margin-bottom: var(--space-4, 1rem);
+    padding: var(--space-4, 1rem);
+  }
+
+  /* Improve mobile list spacing */
+  ul, ol {
+    padding-left: var(--space-4, 1rem);
+  }
+
+  li {
+    margin-bottom: var(--space-2, 0.5rem);
+  }
+}
+
+/* Floating element spacing improvements */
+@media (width <= 768px) {
+  /* Ensure main content doesn't overlap with fixed navbar */
+  .main-content {
+    margin-top: 80px !important; /* Increased from 65px */
+    padding-bottom: 80px !important; /* Add bottom padding for floating elements */
+  }
+
+  /* Improve navbar height for better touch targets */
+  .navbar {
+    height: 70px !important; /* Slightly increased for better touch targets */
+  }
+
+  /* Ensure scroll-to-top button doesn't overlap content */
+  .scroll-to-top {
+    bottom: 20px !important; /* Increased from default */
+    right: 20px !important; /* Increased from default */
+  }
+
+  /* Ensure floating elements respect safe areas */
+  .floating-element,
+  .fixed-bottom,
+  .sticky-bottom {
+    bottom: max(20px, env(safe-area-inset-bottom) + 20px) !important;
+  }
+}
+
+/* Small mobile devices (iPhone SE, etc.) */
+@media (width <= 430px) {
+  .main-content {
+    margin-top: 75px !important; /* Adjusted for smaller navbar */
+  }
+
+  .navbar {
+    height: 65px !important; /* Standard height for small screens */
+  }
+
+  .scroll-to-top {
+    bottom: 15px !important; /* Adjusted for small screens */
+    right: 15px !important; /* Adjusted for small screens */
+  }
+}
+
+/* Safe area insets for modern mobile devices */
+@supports (padding: max(0px)) {
+  @media (width <= 768px) {
+    .main-content {
+      padding-right: max(var(--space-4, 1rem), env(safe-area-inset-right)) !important;
+      padding-left: max(var(--space-4, 1rem), env(safe-area-inset-left)) !important;
+      padding-bottom: max(var(--space-4, 1rem), env(safe-area-inset-bottom)) !important;
+    }
+
+    .navbar {
+      padding-right: max(1rem, env(safe-area-inset-right)) !important;
+      padding-left: max(1rem, env(safe-area-inset-left)) !important;
+    }
+
+    .scroll-to-top {
+      right: max(20px, env(safe-area-inset-right) + 20px) !important;
+      bottom: max(20px, env(safe-area-inset-bottom) + 20px) !important;
+    }
+  }
+
+  @media (width <= 430px) {
+    .main-content {
+      padding-right: max(var(--space-3, 0.75rem), env(safe-area-inset-right)) !important;
+      padding-left: max(var(--space-3, 0.75rem), env(safe-area-inset-left)) !important;
+      padding-bottom: max(var(--space-3, 0.75rem), env(safe-area-inset-bottom)) !important;
+    }
+
+    .scroll-to-top {
+      right: max(15px, env(safe-area-inset-right) + 15px) !important;
+      bottom: max(15px, env(safe-area-inset-bottom) + 15px) !important;
+    }
+  }
+}
+
+/* Touch device optimizations */
+@media (hover: none) and (pointer: coarse) {
+  /* Enhanced touch feedback for all interactive elements */
+  button:active,
+  input[type="button"]:active,
+  input[type="submit"]:active,
+  input[type="reset"]:active,
+  .btn:active,
+  .button:active,
+  .button-primary:active,
+  .button-secondary:active,
+  .nav-menu button:active,
+  .navbar__mobile-link:active,
+  .navbar__mobile-menu-button:active {
+    transform: scale(0.95) !important;
+  }
+
+  /* Ensure proper touch targets for all interactive elements */
+  button,
+  input[type="button"],
+  input[type="submit"],
+  input[type="reset"],
+  input[type="checkbox"],
+  input[type="radio"],
+  .btn,
+  .button,
+  .button-primary,
+  .button-secondary,
+  a[role="button"],
+  .nav-menu button,
+  .navbar__mobile-link,
+  .navbar__mobile-menu-button {
+    min-height: 48px !important;
+    min-width: 48px !important;
+  }
+}
+
+/* High contrast mode for mobile */
+@media (prefers-contrast: more) {
+  @media (width <= 768px) {
+    /* Enhanced focus indicators for better accessibility */
+    button:focus,
+    input:focus,
+    .btn:focus,
+    .button:focus,
+    .nav-menu button:focus,
+    .navbar__mobile-link:focus {
+      outline: 3px solid var(--primary-color, #5a5cff) !important;
+      outline-offset: 2px !important;
+    }
+  }
+}
+
+/* Reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  @media (width <= 768px) {
+    /* Remove animations for users who prefer reduced motion */
+    button,
+    input,
+    .btn,
+    .button,
+    .nav-menu button,
+    .navbar__mobile-link {
+      transition: none !important;
+      animation: none !important;
+    }
+
+    button:hover,
+    input:hover,
+    .btn:hover,
+    .button:hover,
+    .nav-menu button:hover,
+    .navbar__mobile-link:hover {
+      transform: none !important;
+    }
+  }
+}
+
+/* Utility classes for mobile ergonomics */
+@media (width <= 768px) {
+  .mobile\:touch-target {
+    min-height: 48px !important;
+    min-width: 48px !important;
+  }
+
+  .mobile\:touch-target-large {
+    min-height: 56px !important;
+    min-width: 56px !important;
+  }
+
+  .mobile\:safe-spacing {
+    margin-top: 80px !important;
+    padding-bottom: 80px !important;
+  }
+
+  .mobile\:enhanced-touch {
+    min-height: 48px !important;
+    min-width: 48px !important;
+    padding: var(--space-3, 0.75rem) var(--space-4, 1rem) !important;
+  }
+}
+
+/* Landscape mobile optimizations */
+@media screen and (width <= 768px) and (orientation: landscape) {
+  .main-content {
+    margin-top: 70px !important; /* Reduced margin for landscape */
+  }
+
+  .navbar {
+    height: 65px !important; /* Standard height for landscape */
+  }
+
+  .scroll-to-top {
+    bottom: 15px !important; /* Adjusted for landscape */
+    right: 15px !important; /* Adjusted for landscape */
+  }
+}

@@ -15,10 +15,11 @@
     box-shadow: 0 4px 8px var(--shadow-color-medium);
   }
 
-  /* Mobile button improvements */
+  /* Mobile button improvements - Updated to 48x48px minimum */
   .button-primary,
   .button-secondary {
-    min-height: 44px; /* Better touch target */
+    min-height: 48px; /* Updated to meet mobile guidelines */
+    min-width: 48px; /* Ensure minimum width for touch targets */
     padding: var(--space-3) var(--space-4);
     font-size: var(--text-base);
     font-weight: 600;
@@ -38,9 +39,10 @@
     border: 2px solid var(--border-color);
   }
 
-  /* Mobile navigation improvements */
+  /* Mobile navigation improvements - Updated to 48x48px minimum */
   .nav-menu button {
-    min-height: 44px;
+    min-height: 48px; /* Updated to meet mobile guidelines */
+    min-width: 48px; /* Ensure minimum width for touch targets */
     padding: var(--space-3) var(--space-4);
     font-size: var(--text-base);
     font-weight: 600;
@@ -80,9 +82,9 @@
     color: var(--mobile-text-secondary, var(--text-secondary));
   }
 
-  /* Mobile form improvements */
+  /* Mobile form improvements - Updated to 48x48px minimum */
   .input {
-    min-height: 44px;
+    min-height: 48px; /* Updated to meet mobile guidelines */
     padding: var(--space-3) var(--space-4);
     font-size: var(--text-base);
     color: var(--text-primary);
@@ -94,6 +96,23 @@
   .input:focus {
     border-color: var(--primary-color);
     box-shadow: 0 0 0 3px var(--primary-light);
+  }
+
+  /* Ensure floating elements don't overlap content */
+  .main-content {
+    margin-top: 80px; /* Increased from 65px to account for fixed navbar */
+    padding-bottom: 80px; /* Add bottom padding for floating elements */
+  }
+
+  /* Improve floating navigation spacing */
+  .navbar {
+    height: 70px; /* Slightly increased height for better touch targets */
+  }
+
+  /* Ensure scroll-to-top button doesn't overlap content */
+  .scroll-to-top {
+    bottom: 20px; /* Increased from default to avoid overlap */
+    right: 20px; /* Increased from default for better spacing */
   }
 }
 
@@ -111,6 +130,9 @@
     padding: var(--space-3) var(--space-4);
     font-size: var(--text-sm);
     border-radius: var(--radius-md);
+    /* Maintain 48x48px minimum even on small screens */
+    min-height: 48px;
+    min-width: 48px;
   }
 
   /* Small mobile text adjustments */
@@ -133,6 +155,17 @@
 
   .main-content {
     padding: var(--space-3);
+    margin-top: 75px; /* Adjusted for smaller navbar on small screens */
+  }
+
+  /* Ensure proper spacing for floating elements on small screens */
+  .navbar {
+    height: 65px; /* Standard height for small screens */
+  }
+
+  .scroll-to-top {
+    bottom: 15px; /* Adjusted for small screens */
+    right: 15px; /* Adjusted for small screens */
   }
 }
 
@@ -174,6 +207,30 @@
   /* Touch-friendly theme switch */
   .theme-switch:active {
     transform: scale(0.9);
+  }
+
+  /* Ensure all interactive elements meet touch target requirements */
+  button,
+  input[type="button"],
+  input[type="submit"],
+  input[type="reset"],
+  .btn,
+  .button,
+  a[role="button"] {
+    min-height: 48px;
+    min-width: 48px;
+  }
+
+  /* Improve touch targets for form elements */
+  input[type="text"],
+  input[type="email"],
+  input[type="password"],
+  input[type="search"],
+  input[type="tel"],
+  input[type="url"],
+  textarea,
+  select {
+    min-height: 48px;
   }
 }
 
@@ -238,6 +295,7 @@
     .main-content {
       padding-right: max(var(--space-4), env(safe-area-inset-right));
       padding-left: max(var(--space-4), env(safe-area-inset-left));
+      padding-bottom: max(var(--space-4), env(safe-area-inset-bottom));
     }
 
     header {
@@ -248,6 +306,17 @@
     .container {
       padding-right: max(var(--space-4), env(safe-area-inset-right));
       padding-left: max(var(--space-4), env(safe-area-inset-left));
+    }
+
+    /* Ensure floating elements respect safe areas */
+    .navbar {
+      padding-right: max(1rem, env(safe-area-inset-right));
+      padding-left: max(1rem, env(safe-area-inset-left));
+    }
+
+    .scroll-to-top {
+      right: max(20px, env(safe-area-inset-right) + 20px);
+      bottom: max(20px, env(safe-area-inset-bottom) + 20px);
     }
   }
 
@@ -255,6 +324,7 @@
     .main-content {
       padding-right: max(var(--space-3), env(safe-area-inset-right));
       padding-left: max(var(--space-3), env(safe-area-inset-left));
+      padding-bottom: max(var(--space-3), env(safe-area-inset-bottom));
     }
 
     header {
@@ -266,13 +336,20 @@
       padding-right: max(var(--space-3), env(safe-area-inset-right));
       padding-left: max(var(--space-3), env(safe-area-inset-left));
     }
+
+    /* Adjust floating elements for small screens */
+    .scroll-to-top {
+      right: max(15px, env(safe-area-inset-right) + 15px);
+      bottom: max(15px, env(safe-area-inset-bottom) + 15px);
+    }
   }
 }
 
 /* Mobile-specific utility classes */
 @media (width <= 768px) {
   .mobile\:touch-friendly {
-    min-height: 44px;
+    min-height: 48px; /* Updated to meet mobile guidelines */
+    min-width: 48px; /* Ensure minimum width */
     padding: var(--space-3) var(--space-4);
   }
 
@@ -284,5 +361,65 @@
   .mobile\:text-enhanced {
     font-weight: 600;
     color: var(--mobile-text-primary, var(--text-primary));
+  }
+
+  /* Ensure proper spacing for floating elements */
+  .mobile\:safe-spacing {
+    margin-top: 80px;
+    padding-bottom: 80px;
+  }
+
+  /* Touch target utilities */
+  .mobile\:touch-target {
+    min-height: 48px;
+    min-width: 48px;
+  }
+
+  .mobile\:touch-target-large {
+    min-height: 56px;
+    min-width: 56px;
+  }
+}
+
+/* Additional mobile ergonomics improvements */
+@media (width <= 768px) {
+  /* Ensure proper spacing between interactive elements */
+  button + button,
+  .button + .button,
+  .btn + .btn {
+    margin-left: var(--space-3);
+  }
+
+  /* Improve form layout on mobile */
+  .form-group {
+    margin-bottom: var(--space-4);
+  }
+
+  .form-group label {
+    margin-bottom: var(--space-2);
+    font-size: var(--text-base);
+  }
+
+  /* Ensure checkboxes and radio buttons meet touch targets */
+  input[type="checkbox"],
+  input[type="radio"] {
+    min-width: 48px;
+    min-height: 48px;
+  }
+
+  /* Improve mobile list spacing */
+  ul, ol {
+    padding-left: var(--space-4);
+  }
+
+  li {
+    margin-bottom: var(--space-2);
+  }
+
+  /* Ensure proper spacing for mobile cards */
+  .card,
+  .name-card {
+    margin-bottom: var(--space-4);
+    padding: var(--space-4);
   }
 }
