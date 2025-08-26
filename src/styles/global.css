@@ -187,7 +187,10 @@ h6 {
 button {
   font-weight: 500; /* Ensure button text has sufficient weight */
   color: var(--text-primary);
-  transition: color var(--transition-theme), background-color var(--transition-theme), border-color var(--transition-theme);
+  transition:
+    color var(--transition-theme),
+    background-color var(--transition-theme),
+    border-color var(--transition-theme);
 }
 
 /* Ensure form elements have good contrast */
@@ -197,7 +200,10 @@ select {
   color: var(--text-primary);
   background-color: var(--card-background);
   border-color: var(--border-color);
-  transition: background-color var(--transition-theme), color var(--transition-theme), border-color var(--transition-theme);
+  transition:
+    background-color var(--transition-theme),
+    color var(--transition-theme),
+    border-color var(--transition-theme);
 }
 
 /* Help text styling for accessibility */
@@ -581,8 +587,6 @@ select:focus-visible {
   --vibrant-success: var(--neon-cyan);
   --vibrant-warning: var(--hot-pink);
   --vibrant-error: var(--fire-red);
-
-
 }
 
 /* Light Theme Overrides */
@@ -654,7 +658,7 @@ body.dark-theme {
     --error-600: #dc2626;
     --success-600: #059669;
     --warning-600: #b45309;
-    
+
     /* Enhanced contrast for high contrast mode */
     --text-primary: #fff;
     --text-secondary: #fff;
@@ -663,27 +667,27 @@ body.dark-theme {
     --border-color: #fff;
     --accent-color: #ff0;
   }
-  
+
   /* Enhanced focus indicators for high contrast */
   :focus-visible {
     outline: 4px solid var(--accent-color);
     outline-offset: 4px;
   }
-  
+
   /* Enhanced button contrast */
   button {
     color: var(--text-primary);
     background-color: var(--card-background);
     border: 3px solid var(--border-color);
   }
-  
+
   button:hover:not(:disabled) {
     color: var(--background-color);
     background-color: var(--accent-color);
   }
 }
 
-    --accent-600: #ca8a04;
+--accent-600: #ca8a04;
 
 /* Reduced Motion */
 @media (prefers-reduced-motion: reduce) {
@@ -715,7 +719,9 @@ body {
   color: var(--text-primary);
   background-color: var(--background-color);
   -webkit-font-smoothing: antialiased;
-  transition: background-color var(--transition-theme), color var(--transition-theme);
+  transition:
+    background-color var(--transition-theme),
+    color var(--transition-theme);
 }
 
 /* Layout Classes */
@@ -759,7 +765,11 @@ body {
   font-weight: 500;
   cursor: pointer;
   border-radius: var(--radius-md);
-  transition: var(--transition-all), background-color var(--transition-theme), color var(--transition-theme), border-color var(--transition-theme);
+  transition:
+    var(--transition-all),
+    background-color var(--transition-theme),
+    color var(--transition-theme),
+    border-color var(--transition-theme);
 }
 
 .btn:disabled {
@@ -770,7 +780,20 @@ body {
 
 /* Button Variants */
 .btnPrimary {
-  composes: btn;
+  display: inline-flex;
+  gap: var(--space-2);
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-3) var(--space-4);
+  font-size: var(--text-base);
+  font-weight: 500;
+  cursor: pointer;
+  border-radius: var(--radius-md);
+  transition:
+    var(--transition-all),
+    background-color var(--transition-theme),
+    color var(--transition-theme),
+    border-color var(--transition-theme);
   color: var(--button-text-light, white);
   background: var(--button-primary-bg, var(--charcoal));
   border: none;
@@ -783,7 +806,20 @@ body {
 }
 
 .btnSecondary {
-  composes: btn;
+  display: inline-flex;
+  gap: var(--space-2);
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-3) var(--space-4);
+  font-size: var(--text-base);
+  font-weight: 500;
+  cursor: pointer;
+  border-radius: var(--radius-md);
+  transition:
+    var(--transition-all),
+    background-color var(--transition-theme),
+    color var(--transition-theme),
+    border-color var(--transition-theme);
   color: var(--button-text-light, white);
   background: var(--button-secondary-bg, rgb(255 255 255 / 10%));
   border: 1px solid var(--border-color);
@@ -2814,7 +2850,19 @@ h1 {
 
 /* * Glow Button Variants */
 .btnGlowCyan {
-  composes: btnvibrantcyan;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--text-primary);
+  background: var(--neon-cyan);
+  border: 2px solid var(--neon-cyan);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all 0.2s ease;
   box-shadow: var(--glow-cyan);
 }
 
@@ -2823,7 +2871,19 @@ h1 {
 }
 
 .btnGlowPink {
-  composes: btnvibrantpink;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--text-primary);
+  background: var(--hot-pink);
+  border: 2px solid var(--hot-pink);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all 0.2s ease;
   box-shadow: var(--glow-pink);
 }
 
@@ -2832,7 +2892,19 @@ h1 {
 }
 
 .btnGlowRed {
-  composes: btnvibrantred;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--text-primary);
+  background: var(--fire-red);
+  border: 2px solid var(--fire-red);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all 0.2s ease;
   box-shadow: var(--glow-red);
 }
 
@@ -3126,7 +3198,5 @@ h1 {
   .card-base {
     padding: var(--space-2);
     border-radius: var(--radius-sm);
-  }
-}
   }
 }
