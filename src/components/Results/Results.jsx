@@ -38,21 +38,21 @@
  * --- END AUTO-GENERATED DOCSTRING ---
  */
 
-import React, { useState, useEffect, useCallback, memo } from "react";
+import React, { useState, useEffect, useCallback, memo } from 'react';
 
-import PropTypes from "prop-types";
+import PropTypes from 'prop-types';
 
-import RankingAdjustment from "../RankingAdjustment/RankingAdjustment";
-import Bracket from "../Bracket/Bracket";
-import CalendarButton from "../CalendarButton/CalendarButton";
-import styles from "./Results.module.css";
-import StatsCard from "../StatsCard/StatsCard";
+import RankingAdjustment from '../RankingAdjustment/RankingAdjustment';
+import Bracket from '../Bracket/Bracket';
+import CalendarButton from '../CalendarButton/CalendarButton';
+import styles from './Results.module.css';
+import StatsCard from '../StatsCard/StatsCard';
 
 // Toast component extracted for reusability
 const Toast = memo(({ message, type, onClose }) => (
   <div
     role="alert"
-    className={type === "success" ? styles.toastSuccess : styles.toastError}
+    className={type === 'success' ? styles.toastSuccess : styles.toastError}
     onClick={onClose}
   >
     {message}
@@ -65,14 +65,14 @@ function Results({
   userName,
   onUpdateRatings,
   currentTournamentNames,
-  voteHistory,
+  voteHistory
 }) {
   const [currentRankings, setCurrentRankings] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [toast, setToast] = useState({
     show: false,
-    message: "",
-    type: "success",
+    message: '',
+    type: 'success'
   });
   const [hiddenNames] = useState(new Set());
 
@@ -84,20 +84,20 @@ function Results({
 
     // Filter to only include matches from the current tournament
     const tournamentNameSet = new Set(
-      currentTournamentNames?.map((n) => n.name) || [],
+      currentTournamentNames?.map((n) => n.name) || []
     );
 
     return voteHistory
       .filter(
         (vote) =>
           tournamentNameSet.has(vote.match.left.name) &&
-          tournamentNameSet.has(vote.match.right.name),
+          tournamentNameSet.has(vote.match.right.name)
       )
       .map((vote, index) => ({
         id: index + 1,
         name1: vote.match.left.name,
         name2: vote.match.right.name,
-        winner: vote.result < 0 ? -1 : vote.result > 0 ? 1 : 0,
+        winner: vote.result < 0 ? -1 : vote.result > 0 ? 1 : 0
       }));
   }, [voteHistory, currentTournamentNames]);
 
@@ -106,7 +106,7 @@ function Results({
     (ratingsData) => {
       // Filter to only include names from the current tournament
       const tournamentNameSet = new Set(
-        currentTournamentNames?.map((n) => n.name) || [],
+        currentTournamentNames?.map((n) => n.name) || []
       );
 
       return Object.entries(ratingsData || {})
@@ -114,15 +114,15 @@ function Results({
         .map(([name, rating]) => ({
           name,
           rating: Math.round(
-            typeof rating === "number" ? rating : rating?.rating || 1500,
+            typeof rating === 'number' ? rating : rating?.rating || 1500
           ),
-          wins: typeof rating === "object" ? rating.wins || 0 : 0,
-          losses: typeof rating === "object" ? rating.losses || 0 : 0,
-          change: 0,
+          wins: typeof rating === 'object' ? rating.wins || 0 : 0,
+          losses: typeof rating === 'object' ? rating.losses || 0 : 0,
+          change: 0
         }))
         .sort((a, b) => b.rating - a.rating);
     },
-    [currentTournamentNames],
+    [currentTournamentNames]
   );
 
   useEffect(() => {
@@ -130,11 +130,11 @@ function Results({
       const processedRankings = processRankings(ratings);
       setCurrentRankings(processedRankings);
     } catch (error) {
-      console.error("Error processing rankings:", error);
+      console.error('Error processing rankings:', error);
       setToast({
         show: true,
-        message: "Error processing rankings data",
-        type: "error",
+        message: 'Error processing rankings data',
+        type: 'error'
       });
     } finally {
       setIsLoading(false);
@@ -148,11 +148,11 @@ function Results({
 
         const updatedRankings = adjustedRankings.map((ranking) => {
           const oldRanking = currentRankings.find(
-            (r) => r.name === ranking.name,
+            (r) => r.name === ranking.name
           );
           return {
             ...ranking,
-            change: oldRanking ? ranking.rating - oldRanking.rating : 0,
+            change: oldRanking ? ranking.rating - oldRanking.rating : 0
           };
         });
 
@@ -162,7 +162,7 @@ function Results({
             name,
             rating: Math.round(rating),
             wins: existingRating?.wins || 0,
-            losses: existingRating?.losses || 0,
+            losses: existingRating?.losses || 0
           };
         });
 
@@ -171,21 +171,21 @@ function Results({
 
         setToast({
           show: true,
-          message: "Rankings updated successfully!",
-          type: "success",
+          message: 'Rankings updated successfully!',
+          type: 'success'
         });
       } catch (error) {
-        console.error("Failed to update rankings:", error);
+        console.error('Failed to update rankings:', error);
         setToast({
           show: true,
-          message: "Failed to update rankings. Please try again.",
-          type: "error",
+          message: 'Failed to update rankings. Please try again.',
+          type: 'error'
         });
       } finally {
         setIsLoading(false);
       }
     },
-    [currentRankings, ratings, onUpdateRatings],
+    [currentRankings, ratings, onUpdateRatings]
   );
 
   const closeToast = useCallback(() => {
@@ -201,23 +201,23 @@ function Results({
 
   useEffect(() => {
     // Add cool effects to the results header
-    const header = document.querySelector(".results-header");
+    const header = document.querySelector('.results-header');
     if (header && window.vfx) {
-      window.vfx.add(header, { shader: "wave", frequency: 2, amplitude: 0.01 });
+      window.vfx.add(header, { shader: 'wave', frequency: 2, amplitude: 0.01 });
     }
 
     // Add glitch effect to stats cards
-    const statCards = document.querySelectorAll(".stat-card");
+    const statCards = document.querySelectorAll('.stat-card');
     statCards.forEach((card) => {
       if (window.vfx) {
-        window.vfx.add(card, { shader: "glitch", intensity: 0.2 });
+        window.vfx.add(card, { shader: 'glitch', intensity: 0.2 });
       }
     });
 
     // Add RGB shift to the tournament bracket
-    const bracket = document.querySelector(".tournament-bracket");
+    const bracket = document.querySelector('.tournament-bracket');
     if (bracket && window.vfx) {
-      window.vfx.add(bracket, { shader: "rgbShift", intensity: 0.3 });
+      window.vfx.add(bracket, { shader: 'rgbShift', intensity: 0.3 });
     }
 
     return () => {
@@ -245,13 +245,13 @@ function Results({
       }
     };
 
-    addVfx(".results-header", {
-      shader: "wave",
+    addVfx('.results-header', {
+      shader: 'wave',
       frequency: 2,
-      amplitude: 0.01,
+      amplitude: 0.01
     });
-    addVfx(".stat-card", { shader: "glitch", intensity: 0.2 });
-    addVfx(".tournament-bracket", { shader: "rgbShift", intensity: 0.3 });
+    addVfx('.stat-card', { shader: 'glitch', intensity: 0.2 });
+    addVfx('.tournament-bracket', { shader: 'rgbShift', intensity: 0.3 });
 
     return () => {
       vfxElements.forEach((el) => window.vfx?.remove(el));
@@ -345,7 +345,7 @@ function Results({
   );
 }
 
-Results.displayName = "Results";
+Results.displayName = 'Results';
 
 Results.propTypes = {
   ratings: PropTypes.object.isRequired,
@@ -353,7 +353,7 @@ Results.propTypes = {
   userName: PropTypes.string.isRequired,
   onUpdateRatings: PropTypes.func.isRequired,
   currentTournamentNames: PropTypes.array,
-  voteHistory: PropTypes.array,
+  voteHistory: PropTypes.array
 };
 
 export default memo(Results);

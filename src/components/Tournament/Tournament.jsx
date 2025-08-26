@@ -100,26 +100,26 @@ import React, {
   useCallback,
   useEffect,
   useRef,
-  useMemo,
-} from "react";
-import PropTypes from "prop-types";
-import { useTournament } from "../../hooks/useTournament";
-import useToast from "../../hooks/useToast";
+  useMemo
+} from 'react';
+import PropTypes from 'prop-types';
+import { useTournament } from '../../hooks/useTournament';
+import useToast from '../../hooks/useToast';
 // import { useKeyboardControls } from '../../hooks/useKeyboardControls';
-import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
-import ErrorBoundary from "../ErrorBoundary/ErrorBoundary";
-import NameCard from "../NameCard/NameCard";
-import InlineError from "../InlineError/InlineError";
-import Bracket from "../Bracket/Bracket";
-import TournamentControls from "./TournamentControls";
-import styles from "./Tournament.module.css";
-import { shuffleArray } from "../../utils/arrayUtils";
+import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
+import ErrorBoundary from '../ErrorBoundary/ErrorBoundary';
+import NameCard from '../NameCard/NameCard';
+import InlineError from '../InlineError/InlineError';
+import Bracket from '../Bracket/Bracket';
+import TournamentControls from './TournamentControls';
+import styles from './Tournament.module.css';
+import { shuffleArray } from '../../utils/arrayUtils';
 
 function TournamentContent({
   onComplete,
   existingRatings = {},
   names = [],
-  onVote,
+  onVote
 }) {
   const [randomizedNames, setRandomizedNames] = useState([]);
 
@@ -140,17 +140,16 @@ function TournamentContent({
     totalMatches,
     matchHistory = [],
     getCurrentRatings,
-    isError,
+    isError
   } = useTournament({
     names: randomizedNames.length > 0 ? randomizedNames : names,
     existingRatings,
-    onComplete,
+    onComplete
   });
 
   const [selectedOption, setSelectedOption] = useState(null);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
-  const [isRandomizing, setIsRandomizing] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
   const [volume, setVolume] = useState({ music: 0.2, effects: 0.3 });
   const [audioError, setAudioError] = useState(null);
@@ -170,27 +169,27 @@ function TournamentContent({
 
   const musicTracks = useMemo(
     () => [
-      { path: "/sounds/AdhesiveWombat - Night Shade.mp3", name: "Night Shade" },
-      { path: "/sounds/MiseryBusiness.mp3", name: "Misery Business" },
-      { path: "/sounds/what-is-love.mp3", name: "What is Love" },
+      { path: '/sounds/AdhesiveWombat - Night Shade.mp3', name: 'Night Shade' },
+      { path: '/sounds/MiseryBusiness.mp3', name: 'Misery Business' },
+      { path: '/sounds/what-is-love.mp3', name: 'What is Love' },
       {
-        path: "/sounds/Lemon Demon - The Ultimate Showdown (8-Bit Remix).mp3",
-        name: "Ultimate Showdown (8-Bit)",
+        path: '/sounds/Lemon Demon - The Ultimate Showdown (8-Bit Remix).mp3',
+        name: 'Ultimate Showdown (8-Bit)'
       },
-      { path: "/sounds/Main Menu 1 (Ruins).mp3", name: "Ruins" },
+      { path: '/sounds/Main Menu 1 (Ruins).mp3', name: 'Ruins' }
     ],
-    [],
+    []
   );
 
   // Sound effects configuration with updated weights
   const soundEffects = useMemo(
     () => [
-      { path: "/sounds/gameboy-pluck.mp3", weight: 0.5 },
-      { path: "/sounds/wow.mp3", weight: 0.2 },
-      { path: "/sounds/surprise.mp3", weight: 0.1 },
-      { path: "/sounds/level-up.mp3", weight: 0.2 },
+      { path: '/sounds/gameboy-pluck.mp3', weight: 0.5 },
+      { path: '/sounds/wow.mp3', weight: 0.2 },
+      { path: '/sounds/surprise.mp3', weight: 0.1 },
+      { path: '/sounds/level-up.mp3', weight: 0.2 }
     ],
-    [],
+    []
   );
 
   // Initialize audio only once
@@ -218,7 +217,7 @@ function TournamentContent({
   const getRandomSoundEffect = useCallback(() => {
     const totalWeight = soundEffects.reduce(
       (sum, effect) => sum + effect.weight,
-      0,
+      0
     );
     let random = Math.random() * totalWeight;
 
@@ -242,7 +241,7 @@ function TournamentContent({
         audioRef.current.play();
       }
     } catch (error) {
-      console.error("Error playing sound effect:", error);
+      console.error('Error playing sound effect:', error);
     }
   }, [isMuted, volume.effects, getRandomSoundEffect]);
 
@@ -262,8 +261,8 @@ function TournamentContent({
         }
         setAudioError(null);
       } catch (error) {
-        console.error("Error playing audio:", error);
-        setAudioError("Unable to play background music. Click to try again.");
+        console.error('Error playing audio:', error);
+        setAudioError('Unable to play background music. Click to try again.');
       }
     };
 
@@ -283,11 +282,11 @@ function TournamentContent({
           }
         } else if (musicRef.current) {
           musicRef.current.play().catch(() => {
-            setAudioError("Unable to play audio. Click to try again.");
+            setAudioError('Unable to play audio. Click to try again.');
           });
         }
       } catch (error) {
-        console.error("Error toggling mute:", error);
+        console.error('Error toggling mute:', error);
       }
       return newMuted;
     });
@@ -303,8 +302,8 @@ function TournamentContent({
         .play()
         .then(() => setAudioError(null))
         .catch((error) => {
-          console.error("Error retrying audio:", error);
-          setAudioError("Unable to play audio. Click to try again.");
+          console.error('Error retrying audio:', error);
+          setAudioError('Unable to play audio. Click to try again.');
         });
     }
   }, [audioError, isMuted]);
@@ -330,15 +329,15 @@ function TournamentContent({
   // Track match results and tournament progress
   const updateMatchResult = useCallback(
     (option) => {
-      let resultMessage = "";
-      if (option === "both") {
+      let resultMessage = '';
+      if (option === 'both') {
         resultMessage = `Both "${currentMatch.left.name}" and "${currentMatch.right.name}" advance!`;
-      } else if (option === "left") {
+      } else if (option === 'left') {
         resultMessage = `"${currentMatch.left.name}" wins this round!`;
-      } else if (option === "right") {
+      } else if (option === 'right') {
         resultMessage = `"${currentMatch.right.name}" wins this round!`;
-      } else if (option === "neither") {
-        resultMessage = "Match skipped";
+      } else if (option === 'neither') {
+        resultMessage = 'Match skipped';
       }
 
       setLastMatchResult(resultMessage);
@@ -347,11 +346,11 @@ function TournamentContent({
       setTimeout(() => setShowMatchResult(true), 500);
       // Hide result after 2 seconds
       setTimeout(() => setShowMatchResult(false), 2500);
-      
+
       // Show success toast for voting
       showSuccess('Vote recorded successfully!', { duration: 3000 });
     },
-    [currentMatch],
+    [currentMatch]
   );
 
   const handleVoteWithAnimation = useCallback(
@@ -374,23 +373,23 @@ function TournamentContent({
           const rightName = currentMatch.right.name;
 
           // Improved vote tracking logic
-          let leftOutcome = "skip";
-          let rightOutcome = "skip";
+          let leftOutcome = 'skip';
+          let rightOutcome = 'skip';
 
           switch (option) {
-            case "left":
-              leftOutcome = "win";
-              rightOutcome = "loss";
+            case 'left':
+              leftOutcome = 'win';
+              rightOutcome = 'loss';
               break;
-            case "right":
-              leftOutcome = "loss";
-              rightOutcome = "win";
+            case 'right':
+              leftOutcome = 'loss';
+              rightOutcome = 'win';
               break;
-            case "both":
-              leftOutcome = "win";
-              rightOutcome = "win";
+            case 'both':
+              leftOutcome = 'win';
+              rightOutcome = 'win';
               break;
-            case "neither":
+            case 'neither':
               // Both remain 'skip'
               break;
           }
@@ -400,26 +399,26 @@ function TournamentContent({
               left: {
                 name: leftName,
                 id: currentMatch.left.id, // Make sure ID is included
-                description: currentMatch.left.description || "",
-                outcome: leftOutcome,
+                description: currentMatch.left.description || '',
+                outcome: leftOutcome
               },
               right: {
                 name: rightName,
                 id: currentMatch.right.id, // Make sure ID is included
-                description: currentMatch.right.description || "",
-                outcome: rightOutcome,
-              },
+                description: currentMatch.right.description || '',
+                outcome: rightOutcome
+              }
             },
             result:
-              option === "left"
+              option === 'left'
                 ? -1
-                : option === "right"
+                : option === 'right'
                   ? 1
-                  : option === "both"
+                  : option === 'both'
                     ? 0.5
                     : 0,
             ratings: updatedRatings,
-            timestamp: new Date().toISOString(), // Add timestamp for better tracking
+            timestamp: new Date().toISOString() // Add timestamp for better tracking
           };
 
           await onVote(voteData);
@@ -433,17 +432,17 @@ function TournamentContent({
         await new Promise((resolve) => setTimeout(resolve, 100));
         setIsTransitioning(false);
       } catch (error) {
-        console.error("Error handling vote:", error);
+        console.error('Error handling vote:', error);
         setVotingError({
-          message: "Failed to submit vote. Please try again.",
-          severity: "MEDIUM",
+          message: 'Failed to submit vote. Please try again.',
+          severity: 'MEDIUM',
           isRetryable: true,
           originalError: error
         });
-        
+
         // Show error toast
         showError('Failed to submit vote. Please try again.', { duration: 5000 });
-        
+
         setIsProcessing(false);
         setIsTransitioning(false);
       }
@@ -456,8 +455,8 @@ function TournamentContent({
       updateMatchResult,
       handleVote,
       onVote,
-      currentMatch,
-    ],
+      currentMatch
+    ]
   );
 
   // Separate click handler for name cards
@@ -473,7 +472,7 @@ function TournamentContent({
       // Then trigger the vote
       handleVoteWithAnimation(option);
     },
-    [isProcessing, isTransitioning, handleVoteWithAnimation],
+    [isProcessing, isTransitioning, handleVoteWithAnimation]
   );
 
   const handleEndEarly = useCallback(async () => {
@@ -484,7 +483,7 @@ function TournamentContent({
         await onComplete(currentRatings);
       }
     } catch (error) {
-      console.error("Error ending tournament:", error);
+      console.error('Error ending tournament:', error);
     } finally {
       setIsProcessing(false);
     }
@@ -503,41 +502,41 @@ function TournamentContent({
       }
 
       switch (e.key) {
-        case "ArrowLeft":
+        case 'ArrowLeft':
           e.preventDefault();
-          setSelectedOption("left");
+          setSelectedOption('left');
           if (audioRef.current && !isMuted) {
             audioRef.current.currentTime = 0;
             audioRef.current.play();
           }
           break;
-        case "ArrowRight":
+        case 'ArrowRight':
           e.preventDefault();
-          setSelectedOption("right");
+          setSelectedOption('right');
           if (audioRef.current && !isMuted) {
             audioRef.current.currentTime = 0;
             audioRef.current.play();
           }
           break;
-        case " ":
-        case "Enter":
+        case ' ':
+        case 'Enter':
           e.preventDefault();
           if (selectedOption) {
             handleVoteWithAnimation(selectedOption);
           }
           break;
-        case "ArrowUp":
+        case 'ArrowUp':
           e.preventDefault();
-          handleVoteWithAnimation("both");
+          handleVoteWithAnimation('both');
           break;
-        case "ArrowDown":
+        case 'ArrowDown':
           e.preventDefault();
-          handleVoteWithAnimation("neither");
+          handleVoteWithAnimation('neither');
           break;
-        case "Tab":
+        case 'Tab':
           // Allow normal tab navigation
           break;
-        case "Escape":
+        case 'Escape':
           // Clear selection
           setSelectedOption(null);
           break;
@@ -546,14 +545,14 @@ function TournamentContent({
       }
     };
 
-    window.addEventListener("keydown", handleKeyPress);
-    return () => window.removeEventListener("keydown", handleKeyPress);
+    window.addEventListener('keydown', handleKeyPress);
+    return () => window.removeEventListener('keydown', handleKeyPress);
   }, [
     selectedOption,
     isProcessing,
     isTransitioning,
     handleVoteWithAnimation,
-    isMuted,
+    isMuted
   ]);
 
   // Match result component
@@ -594,10 +593,10 @@ function TournamentContent({
   const handleVolumeChange = useCallback((type, value) => {
     setVolume((prev) => {
       const newVolume = { ...prev, [type]: value };
-      if (audioRef.current && type === "effects") {
+      if (audioRef.current && type === 'effects') {
         audioRef.current.volume = value;
       }
-      if (musicRef.current && type === "music") {
+      if (musicRef.current && type === 'music') {
         musicRef.current.volume = value;
       }
       return newVolume;
@@ -623,7 +622,7 @@ function TournamentContent({
         id: index + 1,
         name1: vote.match.left.name,
         name2: vote.match.right.name,
-        winner,
+        winner
       };
     });
   }, [matchHistory]);
@@ -709,15 +708,15 @@ function TournamentContent({
         >
           <div className={styles.namesRow}>
             <div
-              className={`${styles.nameContainer} ${selectedOption === "left" ? styles.selected : ""}`}
+              className={`${styles.nameContainer} ${selectedOption === 'left' ? styles.selected : ''}`}
               role="group"
               aria-label="Left name option"
             >
               <NameCard
                 name={currentMatch.left.name}
                 description={currentMatch.left.description}
-                onClick={() => handleNameCardClick("left")}
-                selected={selectedOption === "left"}
+                onClick={() => handleNameCardClick('left')}
+                selected={selectedOption === 'left'}
                 disabled={isProcessing || isTransitioning}
                 shortcutHint="Press ← arrow key"
                 size="medium"
@@ -729,15 +728,15 @@ function TournamentContent({
             </div>
 
             <div
-              className={`${styles.nameContainer} ${selectedOption === "right" ? styles.selected : ""}`}
+              className={`${styles.nameContainer} ${selectedOption === 'right' ? styles.selected : ''}`}
               role="group"
               aria-label="Right name option"
             >
               <NameCard
                 name={currentMatch.right.name}
                 description={currentMatch.right.description}
-                onClick={() => handleNameCardClick("right")}
-                selected={selectedOption === "right"}
+                onClick={() => handleNameCardClick('right')}
+                selected={selectedOption === 'right'}
                 disabled={isProcessing || isTransitioning}
                 shortcutHint="Press → arrow key"
                 size="medium"
@@ -751,10 +750,10 @@ function TournamentContent({
             aria-label="Additional voting options"
           >
             <button
-              className={`${styles.extraOptionsButton} ${selectedOption === "both" ? styles.selected : ""}`}
-              onClick={() => handleVoteWithAnimation("both")}
+              className={`${styles.extraOptionsButton} ${selectedOption === 'both' ? styles.selected : ''}`}
+              onClick={() => handleVoteWithAnimation('both')}
               disabled={isProcessing || isTransitioning}
-              aria-pressed={selectedOption === "both"}
+              aria-pressed={selectedOption === 'both'}
               aria-label="Vote for both names (Press Up arrow key)"
               type="button"
             >
@@ -762,10 +761,10 @@ function TournamentContent({
             </button>
 
             <button
-              className={`${styles.extraOptionsButton} ${selectedOption === "neither" ? styles.selected : ""}`}
-              onClick={() => handleVoteWithAnimation("neither")}
+              className={`${styles.extraOptionsButton} ${selectedOption === 'neither' ? styles.selected : ''}`}
+              onClick={() => handleVoteWithAnimation('neither')}
               disabled={isProcessing || isTransitioning}
-              aria-pressed={selectedOption === "neither"}
+              aria-pressed={selectedOption === 'neither'}
               aria-label="Skip this match (Press Down arrow key)"
               type="button"
             >
@@ -796,12 +795,12 @@ function TournamentContent({
             aria-expanded={showBracket}
             aria-controls="bracketView"
           >
-            {showBracket ? "Hide Tournament History" : "Show Tournament History"}
+            {showBracket ? 'Hide Tournament History' : 'Show Tournament History'}
             <span className={styles.bracketToggleIcon}>
-              {showBracket ? "▼" : "▶"}
+              {showBracket ? '▼' : '▶'}
             </span>
           </button>
-          
+
           <button
             className={styles.keyboardHelpToggle}
             onClick={() => setShowKeyboardHelp(!showKeyboardHelp)}
@@ -812,7 +811,7 @@ function TournamentContent({
             <span className={styles.keyboardIcon}>⌨️</span>
             Keyboard Shortcuts
             <span className={styles.keyboardHelpIcon}>
-              {showKeyboardHelp ? "▼" : "▶"}
+              {showKeyboardHelp ? '▼' : '▶'}
             </span>
           </button>
         </div>
@@ -864,14 +863,14 @@ function Tournament(props) {
   );
 }
 
-Tournament.displayName = "Tournament";
+Tournament.displayName = 'Tournament';
 
 Tournament.propTypes = {
   names: PropTypes.array,
   existingRatings: PropTypes.object,
   onComplete: PropTypes.func,
   userName: PropTypes.string,
-  onVote: PropTypes.func,
+  onVote: PropTypes.func
 };
 
 export default Tournament;

@@ -32,44 +32,44 @@
  * --- END AUTO-GENERATED DOCSTRING ---
  */
 
-import React from "react";
-import { render, screen, fireEvent } from "@testing-library/react";
-import "@testing-library/jest-dom";
-import { describe, test, expect, beforeEach, vi } from "vitest";
-import NavBar from "./NavBar";
+import React from 'react';
+import { render, screen, fireEvent } from '@testing-library/react';
+import '@testing-library/jest-dom';
+import { describe, test, expect, beforeEach, vi } from 'vitest';
+import NavBar from './NavBar';
 
 // Mock localStorage
 const localStorageMock = {
   getItem: vi.fn(),
   setItem: vi.fn(),
   removeItem: vi.fn(),
-  clear: vi.fn(),
+  clear: vi.fn()
 };
-Object.defineProperty(window, "localStorage", {
+Object.defineProperty(window, 'localStorage', {
   value: localStorageMock,
-  writable: true,
+  writable: true
 });
 
 // Mock document.querySelector for meta theme-color
 const mockMetaElement = {
-  setAttribute: vi.fn(),
+  setAttribute: vi.fn()
 };
 const mockQuerySelector = vi.fn(() => mockMetaElement);
-Object.defineProperty(document, "querySelector", {
+Object.defineProperty(document, 'querySelector', {
   value: mockQuerySelector,
-  writable: true,
+  writable: true
 });
 
-describe("NavBar Component", () => {
+describe('NavBar Component', () => {
   const defaultProps = {
-    view: "tournament",
+    view: 'tournament',
     setView: vi.fn(),
     isLoggedIn: false,
-    userName: "",
+    userName: '',
     onLogout: vi.fn(),
     onMatrixActivate: vi.fn(),
     isLightTheme: true,
-    onThemeChange: vi.fn(),
+    onThemeChange: vi.fn()
   };
 
   beforeEach(() => {
@@ -78,81 +78,81 @@ describe("NavBar Component", () => {
     mockMetaElement.setAttribute.mockClear();
   });
 
-  test("renders theme toggle button", () => {
+  test('renders theme toggle button', () => {
     render(<NavBar {...defaultProps} />);
-    const themeButton = screen.getByRole("button", {
-      name: /Switch to dark theme/i,
+    const themeButton = screen.getByRole('button', {
+      name: /Switch to dark theme/i
     });
     expect(themeButton).toBeInTheDocument();
   });
 
-  test("theme toggle calls onThemeChange", () => {
+  test('theme toggle calls onThemeChange', () => {
     const onThemeChange = vi.fn();
     render(
       <NavBar
         {...defaultProps}
         onThemeChange={onThemeChange}
         isLightTheme={true}
-      />,
+      />
     );
 
-    const themeButton = screen.getByRole("button", {
-      name: /Switch to dark theme/i,
+    const themeButton = screen.getByRole('button', {
+      name: /Switch to dark theme/i
     });
     fireEvent.click(themeButton);
 
     expect(onThemeChange).toHaveBeenCalled();
   });
 
-  test("theme toggle calls onThemeChange when clicked", () => {
+  test('theme toggle calls onThemeChange when clicked', () => {
     const onThemeChange = vi.fn();
     render(<NavBar {...defaultProps} isLightTheme={true} onThemeChange={onThemeChange} />);
 
-    const themeButton = screen.getByRole("button", {
-      name: /Switch to dark theme/i,
+    const themeButton = screen.getByRole('button', {
+      name: /Switch to dark theme/i
     });
     fireEvent.click(themeButton);
 
     expect(onThemeChange).toHaveBeenCalled();
   });
 
-  test("theme toggle button has correct accessibility attributes", () => {
+  test('theme toggle button has correct accessibility attributes', () => {
     render(<NavBar {...defaultProps} isLightTheme={true} />);
 
-    const themeButton = screen.getByRole("button", {
-      name: /Switch to dark theme/i,
+    const themeButton = screen.getByRole('button', {
+      name: /Switch to dark theme/i
     });
 
-    expect(themeButton).toHaveAttribute("aria-label", "Switch to dark theme");
-    expect(themeButton).toHaveAttribute("title", "Switch to dark theme");
+    expect(themeButton).toHaveAttribute('aria-label', 'Switch to dark theme');
+    expect(themeButton).toHaveAttribute('title', 'Switch to dark theme');
   });
 
-  test("shows correct theme state based on current theme", () => {
+  test('shows correct theme state based on current theme', () => {
     // Test light theme
     const { rerender } = render(
-      <NavBar {...defaultProps} isLightTheme={true} />,
+      <NavBar {...defaultProps} isLightTheme={true} />
     );
-    const themeButton = screen.getByRole("button", {
-      name: /Switch to dark theme/i,
+    const themeButton = screen.getByRole('button', {
+      name: /Switch to dark theme/i
     });
-    expect(themeButton).toHaveTextContent("🌙");
+    expect(themeButton).toHaveTextContent('🌙');
 
     // Test dark theme
     rerender(<NavBar {...defaultProps} isLightTheme={false} />);
-    const themeButtonDark = screen.getByRole("button", {
-      name: /Switch to light theme/i,
+    const themeButtonDark = screen.getByRole('button', {
+      name: /Switch to light theme/i
     });
-    expect(themeButtonDark).toHaveTextContent("☀️");
+    expect(themeButtonDark).toHaveTextContent('☀️');
   });
 
-  test("theme toggle button shows correct icon for each theme", () => {
+  test('theme toggle button shows correct icon for each theme', () => {
     const { rerender } = render(<NavBar {...defaultProps} isLightTheme={true} />);
-    
+
     // Light theme should show moon icon
-    expect(screen.getByText("🌙")).toBeInTheDocument();
-    
+    expect(screen.getByText('🌙')).toBeInTheDocument();
+
     // Dark theme should show sun icon
     rerender(<NavBar {...defaultProps} isLightTheme={false} />);
-    expect(screen.getByText("☀️")).toBeInTheDocument();
+    expect(screen.getByText('☀️')).toBeInTheDocument();
   });
 });

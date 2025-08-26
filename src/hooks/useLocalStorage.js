@@ -4,7 +4,7 @@
  * Provides a React-friendly interface for localStorage operations.
  */
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useCallback } from 'react';
 
 /**
  * Custom hook for localStorage management

@@ -9,20 +9,20 @@ import styles from './OnboardingModal.module.css';
  */
 const OnboardingModal = ({ isOpen, onClose, onDontShowAgain }) => {
   const [currentStep, setCurrentStep] = useState(0);
-  
+
   const steps = [
     {
-      title: "Welcome to the Cat Name Tournament! 🐱",
+      title: 'Welcome to the Cat Name Tournament! 🐱',
       content: (
         <div className={styles.stepContent}>
           <p>Ready to find the purr-fect name for your feline friend?</p>
           <p>This tournament uses a special ranking system to help you discover the best cat names through fun head-to-head matchups.</p>
         </div>
       ),
-      icon: "🏆"
+      icon: '🏆'
     },
     {
-      title: "How the Tournament Works",
+      title: 'How the Tournament Works',
       content: (
         <div className={styles.stepContent}>
           <div className={styles.feature}>
@@ -48,10 +48,10 @@ const OnboardingModal = ({ isOpen, onClose, onDontShowAgain }) => {
           </div>
         </div>
       ),
-      icon: "🎮"
+      icon: '🎮'
     },
     {
-      title: "Saving & Sharing Results",
+      title: 'Saving & Sharing Results',
       content: (
         <div className={styles.stepContent}>
           <div className={styles.feature}>
@@ -77,17 +77,17 @@ const OnboardingModal = ({ isOpen, onClose, onDontShowAgain }) => {
           </div>
         </div>
       ),
-      icon: "💡"
+      icon: '💡'
     },
     {
-      title: "Ready to Start?",
+      title: 'Ready to Start?',
       content: (
         <div className={styles.stepContent}>
           <p>You're all set! The tournament will begin with name selection, then you'll vote on pairs until we find your perfect match.</p>
           <p>Remember: there are no wrong answers - just follow your heart! 💕</p>
         </div>
       ),
-      icon: "🚀"
+      icon: '🚀'
     }
   ];
 
@@ -126,7 +126,7 @@ const OnboardingModal = ({ isOpen, onClose, onDontShowAgain }) => {
             <span className={styles.stepNumber}>{currentStep + 1}</span>
             <span className={styles.totalSteps}>/ {steps.length}</span>
           </div>
-          <button 
+          <button
             className={styles.closeButton}
             onClick={handleClose}
             aria-label="Close onboarding"
@@ -144,7 +144,7 @@ const OnboardingModal = ({ isOpen, onClose, onDontShowAgain }) => {
         <div className={styles.footer}>
           <div className={styles.leftActions}>
             {!isFirstStep && (
-              <button 
+              <button
                 className={styles.secondaryButton}
                 onClick={handlePrevious}
               >
@@ -155,14 +155,14 @@ const OnboardingModal = ({ isOpen, onClose, onDontShowAgain }) => {
 
           <div className={styles.centerActions}>
             {isLastStep ? (
-              <button 
+              <button
                 className={styles.primaryButton}
                 onClick={handleClose}
               >
                 Let's Start! 🎉
               </button>
             ) : (
-              <button 
+              <button
                 className={styles.primaryButton}
                 onClick={handleNext}
               >
@@ -173,7 +173,7 @@ const OnboardingModal = ({ isOpen, onClose, onDontShowAgain }) => {
 
           <div className={styles.rightActions}>
             {isLastStep && (
-              <button 
+              <button
                 className={styles.dontShowButton}
                 onClick={handleDontShowAgain}
               >
@@ -184,7 +184,7 @@ const OnboardingModal = ({ isOpen, onClose, onDontShowAgain }) => {
         </div>
 
         <div className={styles.progressBar}>
-          <div 
+          <div
             className={styles.progressFill}
             style={{ width: `${((currentStep + 1) / steps.length) * 100}%` }}
           />
@@ -197,7 +197,7 @@ const OnboardingModal = ({ isOpen, onClose, onDontShowAgain }) => {
 OnboardingModal.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
-  onDontShowAgain: PropTypes.func.isRequired,
+  onDontShowAgain: PropTypes.func.isRequired
 };
 
 export default OnboardingModal;

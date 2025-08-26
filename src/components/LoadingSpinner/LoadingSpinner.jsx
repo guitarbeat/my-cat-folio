@@ -27,9 +27,9 @@
  * --- END AUTO-GENERATED DOCSTRING ---
  */
 
-import React from "react";
-import PropTypes from "prop-types";
-import styles from "./LoadingSpinner.module.css";
+import React from 'react';
+import PropTypes from 'prop-types';
+import styles from './LoadingSpinner.module.css';
 
 /**
  * A simple, reliable loading spinner component that provides visual feedback
@@ -40,7 +40,7 @@ import styles from "./LoadingSpinner.module.css";
  * @param {string} [props.text] - Optional loading text to display below the spinner
  * @returns {JSX.Element}
  */
-const LoadingSpinner = ({ size = "medium", text }) => {
+const LoadingSpinner = ({ size = 'medium', text }) => {
   return (
     <div className={styles.container} role="status" aria-label="Loading">
       <div className={`${styles.spinner} ${styles[size]}`}>🐈‍⬛</div>
@@ -50,11 +50,11 @@ const LoadingSpinner = ({ size = "medium", text }) => {
   );
 };
 
-LoadingSpinner.displayName = "LoadingSpinner";
+LoadingSpinner.displayName = 'LoadingSpinner';
 
 LoadingSpinner.propTypes = {
-  size: PropTypes.oneOf(["small", "medium", "large"]),
-  text: PropTypes.string,
+  size: PropTypes.oneOf(['small', 'medium', 'large']),
+  text: PropTypes.string
 };
 
 export default LoadingSpinner;

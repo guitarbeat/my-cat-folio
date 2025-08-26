@@ -6,52 +6,39 @@ const globals = require('globals');
 module.exports = [
   // Base JavaScript recommended rules
   js.configs.recommended,
-  
-  // Global environment configuration
+
+  // React recommended rules
   {
-    languageOptions: {
-      globals: {
-        ...globals.browser,
-        ...globals.es2021,
-        ...globals.node
-      },
-      parserOptions: {
-        ecmaVersion: 2022,
-        ecmaFeatures: {
-          jsx: true
-        },
-        sourceType: 'module'
-      }
-    }
-  },
-  
-  // React-specific configuration
-  {
+    files: ['**/*.{js,jsx}'],
     plugins: {
       react,
       'react-hooks': reactHooks
     },
+    languageOptions: {
+      globals: {
+        ...globals.browser,
+        ...globals.es2021,
+        process: 'readonly' // Allow process.env for environment checks
+      },
+      parserOptions: {
+        ecmaVersion: 2021,
+        sourceType: 'module',
+        ecmaFeatures: {
+          jsx: true
+        }
+      }
+    },
     rules: {
-      // React recommended rules
+      // React rules
       ...react.configs.recommended.rules,
-      
-      // React Hooks rules
       ...reactHooks.configs.recommended.rules,
-      
-      // Custom rule overrides
-      'react/prop-types': 'off',
-      'react/display-name': 'off',
-      
-      // Additional React rules
-      'react/jsx-uses-react': 'off', // Not needed in React 17+
-      'react/react-in-jsx-scope': 'off', // Not needed in React 17+
-      
+
       // General JavaScript rules
       'no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
-      'no-console': 'warn', // Allow console statements but warn about them
+      'no-console': 'off', // Allow console statements
       'prefer-const': 'error',
       'no-var': 'error',
-      
+
       // Additional useful rules
       'no-duplicate-imports': 'error',
       'no-unreachable': 'error',
@@ -72,7 +59,7 @@ module.exports = [
       }
     }
   },
-  
+
   // Files to ignore
   {
     ignores: [

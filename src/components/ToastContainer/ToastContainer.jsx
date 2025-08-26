@@ -76,7 +76,7 @@ const ToastContainer = ({
           className={styles.toast}
         />
       ))}
-      
+
       {/* Show count of hidden toasts */}
       {toasts.length > maxToasts && (
         <div className={styles.hiddenCount}>

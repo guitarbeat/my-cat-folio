@@ -122,7 +122,7 @@ const ErrorDisplay = ({
                   {formatTimestamp(error.timestamp)}
                 </span>
               </div>
-              
+
               <div className={styles.errorActions}>
                 {error.isRetryable && onRetry && (
                   <button
@@ -133,7 +133,7 @@ const ErrorDisplay = ({
                     ↻ Retry
                   </button>
                 )}
-                
+
                 {onDismiss && (
                   <button
                     onClick={() => onDismiss(index)}
@@ -143,7 +143,7 @@ const ErrorDisplay = ({
                     ×
                   </button>
                 )}
-                
+
                 {showDetails && (
                   <button
                     onClick={() => toggleErrorExpansion(`${error.timestamp}-${index}`)}

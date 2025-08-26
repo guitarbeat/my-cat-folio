@@ -43,17 +43,17 @@
  * --- END AUTO-GENERATED DOCSTRING ---
  */
 
-import React, { useMemo } from "react";
-import PropTypes from "prop-types";
-import styles from "./Bracket.module.css";
+import React, { useMemo } from 'react';
+import PropTypes from 'prop-types';
+import styles from './Bracket.module.css';
 
 const MatchResult = {
-  PENDING: "pending",
-  FIRST_WIN: "first",
-  SECOND_WIN: "second",
-  BOTH_ADVANCE: "both",
-  SKIPPED: "skip",
-  NEITHER: "neither",
+  PENDING: 'pending',
+  FIRST_WIN: 'first',
+  SECOND_WIN: 'second',
+  BOTH_ADVANCE: 'both',
+  SKIPPED: 'skip',
+  NEITHER: 'neither'
 };
 
 function Match({ match, isLastRound }) {
@@ -159,7 +159,7 @@ function Round({ matches, roundNumber, isLastRound }) {
       <div className={styles.roundHeader}>
         <span className={styles.roundTitle}>Round {roundNumber}</span>
         <span className={styles.roundMatches}>
-          {matches.length} {matches.length === 1 ? "match" : "matches"}
+          {matches.length} {matches.length === 1 ? 'match' : 'matches'}
         </span>
       </div>
       <div className={styles.matches}>
@@ -215,7 +215,7 @@ function Bracket({ matches }) {
   );
 }
 
-Bracket.displayName = "Bracket";
+Bracket.displayName = 'Bracket';
 
 Bracket.propTypes = {
   matches: PropTypes.arrayOf(
@@ -223,9 +223,9 @@ Bracket.propTypes = {
       id: PropTypes.number.isRequired,
       name1: PropTypes.string.isRequired,
       name2: PropTypes.string,
-      winner: PropTypes.number,
-    }),
-  ).isRequired,
+      winner: PropTypes.number
+    })
+  ).isRequired
 };
 
 export default React.memo(Bracket);

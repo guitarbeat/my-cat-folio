@@ -77,79 +77,54 @@
  * --- END AUTO-GENERATED DOCSTRING ---
  */
 
-import React, { useState, useEffect, Suspense } from "react";
-import { ErrorBoundary, Login, ErrorDisplay, OnboardingModal, ToastContainer } from "./components";
-import NavBar from "./components/NavBar/NavBar";
-import useUserSession from "./hooks/useUserSession";
-import useErrorHandler from "./hooks/useErrorHandler";
-import useOnboarding from "./hooks/useOnboarding";
-import useTheme from "./hooks/useTheme";
-import useToast from "./hooks/useToast";
-import { supabase } from "./supabase/supabaseClient";
-import LoadingSpinner from "./components/LoadingSpinner/LoadingSpinner";
-import FloatingKitties from "./components/FloatingKitties";
+import React, { useState, useEffect, Suspense } from 'react';
+import { ErrorBoundary, Login, ErrorDisplay, OnboardingModal, ToastContainer } from './components';
+import NavBar from './components/NavBar/NavBar';
+import useUserSession from './hooks/useUserSession';
+import useErrorHandler from './hooks/useErrorHandler';
+import useOnboarding from './hooks/useOnboarding';
+import useTheme from './hooks/useTheme';
+import useToast from './hooks/useToast';
+import { supabase } from './supabase/supabaseClient';
+import LoadingSpinner from './components/LoadingSpinner/LoadingSpinner';
+import FloatingKitties from './components/FloatingKitties';
 
 // Lazy-loaded components for performance
-const Results = React.lazy(() => import("./components/Results/Results"));
-const Profile = React.lazy(() => import("./components/Profile/Profile"));
+const Results = React.lazy(() => import('./components/Results/Results'));
+const Profile = React.lazy(() => import('./components/Profile/Profile'));
 const TournamentSetup = React.lazy(
-  () => import("./components/TournamentSetup/TournamentSetup")
+  () => import('./components/TournamentSetup/TournamentSetup')
 );
 const Tournament = React.lazy(
-  () => import("./components/Tournament/Tournament")
+  () => import('./components/Tournament/Tournament')
 );
 
 function App() {
   const { userName, isLoggedIn, login, logout } = useUserSession();
   const { isLightTheme, toggleTheme } = useTheme();
-  
+
   // Onboarding management
   const {
     showOnboarding,
     closeOnboarding,
-    dontShowAgain,
+    dontShowAgain
   } = useOnboarding();
-  
+
   // Enhanced error handling
   const {
-    errors,
-    isError,
-    handleError,
-    clearErrors,
+    error,
     clearError,
-    executeWithErrorHandling
-  } = useErrorHandler({
-    showUserFeedback: true,
-    maxRetries: 3,
-    onError: (error) => {
-      console.error('App-level error:', error);
-      // Show toast for critical errors
-      if (error.severity === 'CRITICAL' || error.severity === 'HIGH') {
-        showToastError(error.userMessage || 'A critical error occurred', {
-          duration: 8000,
-          autoDismiss: false
-        });
-      }
-    },
-    onRecovery: () => {
-      console.log('App recovered from error');
-      showSuccess('Operation completed successfully!');
-    }
-  });
+    logError
+  } = useErrorHandler();
 
   // Toast notifications
   const {
     toasts,
-    removeToast,
-    showSuccess,
-    showError: showToastError
-  } = useToast({
-    maxToasts: 5,
-    defaultDuration: 5000
-  });
+    removeToast
+  } = useToast();
 
   const [ratings, setRatings] = useState({});
-  const [view, setView] = useState("tournament");
+  const [view, setView] = useState('tournament');
   const [tournamentComplete, setTournamentComplete] = useState(false);
   const [tournamentNames, setTournamentNames] = useState(null);
   const [voteHistory, setVoteHistory] = useState([]);
@@ -158,7 +133,7 @@ function App() {
 
   // Reset tournament state when changing views
   useEffect(() => {
-    if (view !== "tournament") {
+    if (view !== 'tournament') {
       setTournamentNames(null);
       setTournamentComplete(false);
     }
@@ -172,7 +147,7 @@ function App() {
   const handleTournamentComplete = async (finalRatings) => {
     try {
       if (!userName) {
-        console.error("No user name available");
+        console.error('No user name available');
         return;
       }
 
@@ -181,7 +156,7 @@ function App() {
         ? finalRatings
         : Object.entries(finalRatings).map(([name, rating]) => ({
             name,
-            rating,
+            rating
           }));
 
       // Initialize tournament results for all names
@@ -218,12 +193,12 @@ function App() {
 
       // Get name_ids from cat_name_options table
       const { data: nameOptions, error: nameError } = await supabase
-        .from("cat_name_options")
-        .select("id, name")
-        .in("name", Object.keys(tournamentResults));
+        .from('cat_name_options')
+        .select('id, name')
+        .in('name', Object.keys(tournamentResults));
 
       if (nameError) {
-        handleError(nameError, 'Tournament Completion - Fetch Names', {
+        logError(nameError, 'Tournament Completion - Fetch Names', {
           isRetryable: true,
           affectsUserData: false,
           isCritical: false
@@ -260,21 +235,21 @@ function App() {
             // Add new wins/losses to existing totals
             wins: (existingRating.wins || 0) + results.wins,
             losses: (existingRating.losses || 0) + results.losses,
-            updated_at: new Date().toISOString(),
+            updated_at: new Date().toISOString()
           };
         })
         .filter(Boolean);
 
       if (recordsToUpsert.length > 0) {
         const { error: upsertError } = await supabase
-          .from("cat_name_ratings")
+          .from('cat_name_ratings')
           .upsert(recordsToUpsert, {
-            onConflict: "user_name,name_id",
-            returning: "minimal",
+            onConflict: 'user_name,name_id',
+            returning: 'minimal'
           });
 
         if (upsertError) {
-          handleError(upsertError, 'Tournament Completion - Update Ratings', {
+          logError(upsertError, 'Tournament Completion - Update Ratings', {
             isRetryable: true,
             affectsUserData: true,
             isCritical: false
@@ -292,7 +267,7 @@ function App() {
             updatedRatings[name] = {
               rating: record.rating,
               wins: record.wins,
-              losses: record.losses,
+              losses: record.losses
             };
           }
         });
@@ -303,14 +278,14 @@ function App() {
       // Set tournament as complete
       setTournamentComplete(true);
     } catch (error) {
-      console.error("Error in tournament completion:", error);
+      console.error('Error in tournament completion:', error);
     }
   };
 
   const handleStartNewTournament = () => {
     setTournamentComplete(false);
     setTournamentNames(null);
-    setView("tournament");
+    setView('tournament');
   };
 
   const handleTournamentSetup = (names) => {
@@ -322,7 +297,7 @@ function App() {
         id: n.id,
         name: n.name,
         description: n.description,
-        rating: ratings[n.name]?.rating || 1500,
+        rating: ratings[n.name]?.rating || 1500
       }))
     );
   };
@@ -336,7 +311,7 @@ function App() {
           acc[name] = {
             rating: Math.round(rating),
             wins: wins,
-            losses: losses,
+            losses: losses
           };
           return acc;
         },
@@ -345,9 +320,9 @@ function App() {
 
       // Get name_ids in a single query
       const { data: nameOptions, error: nameError } = await supabase
-        .from("cat_name_options")
-        .select("id, name")
-        .in("name", Object.keys(updatedRatings));
+        .from('cat_name_options')
+        .select('id, name')
+        .in('name', Object.keys(updatedRatings));
 
       if (nameError) {
         throw nameError;
@@ -360,19 +335,19 @@ function App() {
         rating: updatedRatings[name].rating,
         wins: updatedRatings[name].wins,
         losses: updatedRatings[name].losses,
-        updated_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
       }));
 
       if (recordsToUpsert.length === 0) {
-        throw new Error("No valid records to update");
+        throw new Error('No valid records to update');
       }
 
       // Update database
       const { error: upsertError } = await supabase
-        .from("cat_name_ratings")
+        .from('cat_name_ratings')
         .upsert(recordsToUpsert, {
-          onConflict: "user_name,name_id",
-          returning: "minimal",
+          onConflict: 'user_name,name_id',
+          returning: 'minimal'
         });
 
       if (upsertError) {
@@ -383,7 +358,7 @@ function App() {
       setRatings(updatedRatings);
       return true;
     } catch (error) {
-      console.error("Error updating ratings:", error);
+      console.error('Error updating ratings:', error);
       throw error;
     }
   };
@@ -395,7 +370,7 @@ function App() {
   // Add effect to handle authentication state
   useEffect(() => {
     if (!isLoggedIn) {
-      setView("tournament");
+      setView('tournament');
       setTournamentComplete(false);
       setTournamentNames(null);
       setVoteHistory([]);
@@ -417,7 +392,7 @@ function App() {
     }
 
     switch (view) {
-      case "profile":
+      case 'profile':
         return (
           <Profile
             userName={userName}
@@ -426,13 +401,13 @@ function App() {
             onUpdateRatings={handleUpdateRatings}
           />
         );
-      case "loading":
+      case 'loading':
         return (
           <div className="fullScreenCenter">
             <LoadingSpinner size="large" text="Testing Loading Spinner..." />
           </div>
         );
-      case "tournament":
+      case 'tournament':
         if (tournamentComplete) {
           return (
             <Results
@@ -478,7 +453,7 @@ function App() {
       <a href="#main-content" className="skip-link">
         Skip to main content
       </a>
-      
+
       {/* * Floating kitties background */}
       <FloatingKitties
         kittieCount={12}
@@ -504,9 +479,9 @@ function App() {
       />
       <div id="main-content" className="main-content" tabIndex="-1">
         {/* Global error display */}
-        {isError && (
+        {error && (
           <ErrorDisplay
-            errors={errors}
+            errors={error}
             onRetry={(error) => {
               // Implement retry logic based on error context
               if (error.context.includes('Tournament')) {
@@ -514,12 +489,12 @@ function App() {
               }
             }}
             onDismiss={clearError}
-            onClearAll={clearErrors}
+            onClearAll={() => {}} // No clearAll for single error
             showDetails={process.env.NODE_ENV === 'development'}
             className="global-error-display"
           />
         )}
-        
+
         <Suspense fallback={<LoadingSpinner size="large" text="Loading..." />}>
           {renderMainContent()}
         </Suspense>

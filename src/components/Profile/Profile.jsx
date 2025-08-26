@@ -2,16 +2,16 @@
  * @module Profile
  * @description Displays user statistics and saved tournament data with enhanced analytics.
  */
-import React, { useState, useCallback, useMemo, memo, useEffect } from "react";
-import PropTypes from "prop-types";
-import useSupabaseStorage from "../../supabase/useSupabaseStorage";
-import { supabase, deleteName } from "../../supabase/supabaseClient";
+import React, { useState, useCallback, useMemo, memo, useEffect } from 'react';
+import PropTypes from 'prop-types';
+import useSupabaseStorage from '../../supabase/useSupabaseStorage';
+import { supabase, deleteName } from '../../supabase/supabaseClient';
 
-import StatsCard from "../StatsCard/StatsCard";
-import NameCard from "../NameCard/NameCard";
-import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
-import styles from "./Profile.module.css";
-import { DEFAULT_RATING, FILTER_OPTIONS } from "../../utils/constants";
+import StatsCard from '../StatsCard/StatsCard';
+import NameCard from '../NameCard/NameCard';
+import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
+import styles from './Profile.module.css';
+import { DEFAULT_RATING, FILTER_OPTIONS } from '../../utils/constants';
 
 // Enhanced utility functions for better statistics
 const calculateEnhancedStats = (
@@ -28,7 +28,7 @@ const calculateEnhancedStats = (
       ratingSpread: 0,
       totalMatches: 0,
       activeNames: 0,
-      popularNames: 0,
+      popularNames: 0
     };
 
   const filtered =
@@ -74,7 +74,7 @@ const calculateEnhancedStats = (
     ratingSpread,
     totalMatches,
     activeNames,
-    popularNames,
+    popularNames
   };
 };
 
@@ -87,7 +87,7 @@ const ProfileNameCard = memo(
     onDelete,
     isAdmin,
     isSelected,
-    onSelectionChange,
+    onSelectionChange
   }) => {
     const {
       id,
@@ -100,7 +100,7 @@ const ProfileNameCard = memo(
       popularity_score,
       total_tournaments,
       categories,
-      created_at,
+      created_at
     } = name;
 
     const totalMatches = wins + losses;
@@ -115,7 +115,7 @@ const ProfileNameCard = memo(
       categories: categories,
       winRate: winRate,
       totalMatches: totalMatches,
-      created: created_at,
+      created: created_at
     };
 
     // Create enhanced description that includes comprehensive stats
@@ -132,7 +132,7 @@ const ProfileNameCard = memo(
         disabled={false}
         size="medium"
         metadata={metadata}
-        className={isHidden ? styles.hiddenName : ""}
+        className={isHidden ? styles.hiddenName : ''}
         isAdmin={isAdmin}
         isHidden={isHidden}
         onToggleVisibility={isAdmin ? () => onToggleVisibility(id) : undefined}
@@ -153,7 +153,7 @@ ProfileNameCard.propTypes = {
   onDelete: PropTypes.func.isRequired,
   isAdmin: PropTypes.bool.isRequired,
   isSelected: PropTypes.bool.isRequired,
-  onSelectionChange: PropTypes.func.isRequired,
+  onSelectionChange: PropTypes.func.isRequired
 };
 
 // Main Profile Component
@@ -162,11 +162,11 @@ const Profile = ({ userName, onStartNewTournament }) => {
   const [filterStatus, setFilterStatus] = useState(FILTER_OPTIONS.STATUS.ALL);
   const [userFilter, setUserFilter] = useState(FILTER_OPTIONS.USER.ALL);
   const [selectedUsers, setSelectedUsers] = useState(new Set());
-  const [sortBy, setSortBy] = useState("rating");
-  const [sortOrder, setSortOrder] = useState("desc");
+  const [sortBy, setSortBy] = useState('rating');
+  const [sortOrder, setSortOrder] = useState('desc');
   const [isAdmin, setIsAdmin] = useState(false);
   const [hiddenNames, setHiddenNames] = useState(new Set());
-  
+
   // System stats state
   const [systemStats, setSystemStats] = useState({
     totalUsers: 0,
@@ -176,9 +176,9 @@ const Profile = ({ userName, onStartNewTournament }) => {
     totalTournaments: 0,
     avgTournamentSize: 0,
     totalRatings: 0,
-    avgPopularityScore: 0,
+    avgPopularityScore: 0
   });
-  
+
   // Global analytics state
   const [globalAnalytics, setGlobalAnalytics] = useState({
     globalAvgRating: 0,
@@ -187,26 +187,24 @@ const Profile = ({ userName, onStartNewTournament }) => {
     avgPopularity: 0,
     ratingDistribution: {},
     topPopularNames: [],
-    leastPopularNames: [],
+    leastPopularNames: []
   });
 
   // UI state for showing/hiding sections
-  const [showGlobalAnalytics, setShowGlobalAnalytics] = useState(false);
-  const [showUserComparison, setShowUserComparison] = useState(false);
-  
-  // Current user being viewed
-  const [currentlyViewedUser, setCurrentlyViewedUser] = useState(userName);
+  const [showGlobalAnalytics] = useState(false);
+  const [showUserComparison] = useState(false);
+  const [currentlyViewedUser] = useState(userName);
 
   // Admin state
-  const [selectedNames, setSelectedNames] = useState(new Set());
-  const [availableUsers, setAvailableUsers] = useState([]);
+  const [isAdminUser, setIsAdminUser] = useState(false);
+  const [showAdminPanel, setShowAdminPanel] = useState(false);
 
   // Hooks
   const {
     names: allNames,
     loading: ratingsLoading,
     error: ratingsError,
-    fetchNames,
+    fetchNames
   } = useSupabaseStorage(userName);
 
   // State for hidden names data
@@ -225,11 +223,11 @@ const Profile = ({ userName, onStartNewTournament }) => {
         combinedNames.push(...hiddenNamesData);
       }
 
-      console.log("Admin names:", {
+      console.log('Admin names:', {
         regularNames: allNames.length,
         hiddenNames: hiddenNamesData.length,
         combined: combinedNames.length,
-        filterStatus,
+        filterStatus
       });
 
       return combinedNames;
@@ -248,24 +246,24 @@ const Profile = ({ userName, onStartNewTournament }) => {
     // First filter by status
     if (filterStatus === FILTER_OPTIONS.STATUS.ACTIVE) {
       filtered = names.filter((r) => !hiddenNames.has(r.id));
-      console.log("Filtering for ACTIVE names:", {
+      console.log('Filtering for ACTIVE names:', {
         total: names.length,
         filtered: filtered.length,
-        hiddenCount: hiddenNames.size,
+        hiddenCount: hiddenNames.size
       });
     } else if (filterStatus === FILTER_OPTIONS.STATUS.HIDDEN) {
       filtered = names.filter((r) => hiddenNames.has(r.id));
-      console.log("Filtering for HIDDEN names:", {
+      console.log('Filtering for HIDDEN names:', {
         total: names.length,
         filtered: filtered.length,
         hiddenCount: hiddenNames.size,
-        hiddenIds: Array.from(hiddenNames),
+        hiddenIds: Array.from(hiddenNames)
       });
     } else {
-      console.log("Showing ALL names:", {
+      console.log('Showing ALL names:', {
         total: names.length,
         filtered: filtered.length,
-        hiddenCount: hiddenNames.size,
+        hiddenCount: hiddenNames.size
       });
     }
 
@@ -289,29 +287,29 @@ const Profile = ({ userName, onStartNewTournament }) => {
         return false;
       });
 
-      console.log("Filtering by selected users:", {
+      console.log('Filtering by selected users:', {
         selectedUsers: Array.from(selectedUsers),
         filteredAfterUserFilter: filtered.length,
-        originalCount: names.length,
+        originalCount: names.length
       });
     }
 
     return [...filtered].sort((a, b) => {
       let aVal, bVal;
       switch (sortBy) {
-        case "rating":
+        case 'rating':
           aVal = a.user_rating || a.avg_rating || 0;
           bVal = b.user_rating || b.avg_rating || 0;
           break;
-        case "matches":
+        case 'matches':
           aVal = (a.user_wins || 0) + (a.user_losses || 0);
           bVal = (b.user_wins || 0) + (b.user_losses || 0);
           break;
-        case "popularity":
+        case 'popularity':
           aVal = a.popularity_score || 0;
           bVal = b.popularity_score || 0;
           break;
-        case "tournaments":
+        case 'tournaments':
           aVal = a.total_tournaments || 0;
           bVal = b.total_tournaments || 0;
           break;
@@ -319,7 +317,7 @@ const Profile = ({ userName, onStartNewTournament }) => {
           aVal = a.user_rating || a.avg_rating || 0;
           bVal = b.user_rating || b.avg_rating || 0;
       }
-      return sortOrder === "desc" ? bVal - aVal : aVal - bVal;
+      return sortOrder === 'desc' ? bVal - aVal : aVal - bVal;
     });
   }, [
     names,
@@ -328,7 +326,7 @@ const Profile = ({ userName, onStartNewTournament }) => {
     selectedUsers,
     hiddenNames,
     sortBy,
-    sortOrder,
+    sortOrder
   ]);
 
   const enhancedStats = useMemo(
@@ -342,19 +340,19 @@ const Profile = ({ userName, onStartNewTournament }) => {
       try {
         // Simple admin check: if user is "Aaron" or "aaron", they're admin
         // This is a temporary solution until we have proper role-based auth
-        const isAdminUser = userName === "Aaron" || userName === "aaron";
+        const isAdminUser = userName === 'Aaron' || userName === 'aaron';
         setIsAdmin(isAdminUser);
 
         // Log for debugging
-        console.log("Admin check:", { userName, isAdminUser });
+        console.log('Admin check:', { userName, isAdminUser });
 
         // Note: cat_app_users table might not exist yet, so we're using username-based admin detection
         // TODO: Implement proper role-based auth when the database schema is set up
-        console.log("Admin status set to:", isAdminUser);
+        console.log('Admin status set to:', isAdminUser);
       } catch (error) {
-        console.error("Error checking admin status:", error);
+        console.error('Error checking admin status:', error);
         // Fallback: if user is Aaron, they're admin
-        setIsAdmin(userName === "Aaron" || userName === "aaron");
+        setIsAdmin(userName === 'Aaron' || userName === 'aaron');
       }
     };
     checkAdminStatus();
@@ -364,19 +362,19 @@ const Profile = ({ userName, onStartNewTournament }) => {
     try {
       // Get total users from consolidated cat_app_users table
       const { count: userCount } = await supabase
-        .from("cat_app_users")
-        .select("*", { count: "exact", head: true });
+        .from('cat_app_users')
+        .select('*', { count: 'exact', head: true });
 
       // Get total names
       const { count: nameCount } = await supabase
-        .from("cat_name_options")
-        .select("*", { count: "exact", head: true });
+        .from('cat_name_options')
+        .select('*', { count: 'exact', head: true });
 
       // Get hidden names count from consolidated cat_name_ratings table
       const { count: hiddenCount } = await supabase
-        .from("cat_name_ratings")
-        .select("*", { count: "exact", head: true })
-        .eq("is_hidden", true);
+        .from('cat_name_ratings')
+        .select('*', { count: 'exact', head: true })
+        .eq('is_hidden', true);
 
       // Get tournament statistics from cat_name_ratings (since cat_users might not exist)
       // We'll calculate tournament stats from the ratings data instead
@@ -390,14 +388,14 @@ const Profile = ({ userName, onStartNewTournament }) => {
 
       // Get rating statistics
       const { count: ratingCount } = await supabase
-        .from("cat_name_ratings")
-        .select("*", { count: "exact", head: true });
+        .from('cat_name_ratings')
+        .select('*', { count: 'exact', head: true });
 
       // Get average popularity score
       const { data: popularityData } = await supabase
-        .from("cat_name_options")
-        .select("popularity_score")
-        .not("popularity_score", "is", null);
+        .from('cat_name_options')
+        .select('popularity_score')
+        .not('popularity_score', 'is', null);
 
       const avgPopularityScore =
         popularityData?.length > 0
@@ -417,10 +415,10 @@ const Profile = ({ userName, onStartNewTournament }) => {
         totalTournaments: tournamentCount || 0,
         avgTournamentSize: 0, // Will be calculated separately
         totalRatings: ratingCount || 0,
-        avgPopularityScore,
+        avgPopularityScore
       });
     } catch (error) {
-      console.error("Error fetching system stats:", error);
+      console.error('Error fetching system stats:', error);
     }
   }, []);
 
@@ -429,7 +427,7 @@ const Profile = ({ userName, onStartNewTournament }) => {
       try {
         // Fetch ALL hidden names globally (not user-specific)
         const { data, error } = await supabase
-          .from("cat_name_ratings")
+          .from('cat_name_ratings')
           .select(
             `
             name_id,
@@ -440,14 +438,14 @@ const Profile = ({ userName, onStartNewTournament }) => {
             )
           `
           )
-          .eq("is_hidden", true);
+          .eq('is_hidden', true);
 
         if (!error && data) {
           setHiddenNames(new Set(data.map((item) => item.name_id)));
-          console.log("Fetched hidden names:", data);
+          console.log('Fetched hidden names:', data);
         }
       } catch (error) {
-        console.error("Error fetching hidden names:", error);
+        console.error('Error fetching hidden names:', error);
       }
     };
 
@@ -463,7 +461,7 @@ const Profile = ({ userName, onStartNewTournament }) => {
       try {
         // Fetch the actual hidden names with full data for display
         const { data, error } = await supabase
-          .from("cat_name_options")
+          .from('cat_name_options')
           .select(
             `
             id,
@@ -477,7 +475,7 @@ const Profile = ({ userName, onStartNewTournament }) => {
             categories
           `
           )
-          .in("id", Array.from(hiddenNames));
+          .in('id', Array.from(hiddenNames));
 
         if (!error && data) {
           // Transform the data to match the expected format
@@ -487,17 +485,17 @@ const Profile = ({ userName, onStartNewTournament }) => {
             user_wins: 0,
             user_losses: 0,
             has_user_rating: false,
-            updated_at: null,
+            updated_at: null
           }));
 
           setHiddenNamesData(transformedData);
           console.log(
-            "Fetched hidden names data for display:",
+            'Fetched hidden names data for display:',
             transformedData
           );
         }
       } catch (error) {
-        console.error("Error fetching hidden names data:", error);
+        console.error('Error fetching hidden names data:', error);
       }
     };
 
@@ -513,18 +511,18 @@ const Profile = ({ userName, onStartNewTournament }) => {
     const fetchAvailableUsers = async () => {
       try {
         const { data: usersWithRatings, error } = await supabase
-          .from("cat_name_ratings")
-          .select("user_name")
-          .order("user_name");
+          .from('cat_name_ratings')
+          .select('user_name')
+          .order('user_name');
 
         if (error) throw error;
 
         const uniqueUsers = [
-          ...new Set(usersWithRatings.map((u) => u.user_name)),
+          ...new Set(usersWithRatings.map((u) => u.user_name))
         ];
         setAvailableUsers(uniqueUsers);
       } catch (error) {
-        console.error("Error fetching available users:", error);
+        console.error('Error fetching available users:', error);
       }
     };
 
@@ -535,7 +533,7 @@ const Profile = ({ userName, onStartNewTournament }) => {
   const handleToggleVisibility = useCallback(
     async (nameId) => {
       if (!isAdmin) {
-        console.warn("Only admins can toggle name visibility");
+        console.warn('Only admins can toggle name visibility');
         return;
       }
 
@@ -543,9 +541,9 @@ const Profile = ({ userName, onStartNewTournament }) => {
         if (hiddenNames.has(nameId)) {
           // Unhide the name globally
           const { error } = await supabase
-            .from("cat_name_ratings")
+            .from('cat_name_ratings')
             .update({ is_hidden: false })
-            .eq("name_id", nameId);
+            .eq('name_id', nameId);
 
           if (error) throw error;
 
@@ -556,9 +554,9 @@ const Profile = ({ userName, onStartNewTournament }) => {
         } else {
           // Hide the name globally
           const { error } = await supabase
-            .from("cat_name_ratings")
+            .from('cat_name_ratings')
             .update({ is_hidden: true })
-            .eq("name_id", nameId);
+            .eq('name_id', nameId);
 
           if (error) throw error;
 
@@ -569,7 +567,7 @@ const Profile = ({ userName, onStartNewTournament }) => {
         // Refresh the names to update the UI
         fetchNames();
       } catch (error) {
-        console.error("Error toggling visibility:", error);
+        console.error('Error toggling visibility:', error);
       }
     },
     [hiddenNames, isAdmin, fetchNames]
@@ -581,7 +579,7 @@ const Profile = ({ userName, onStartNewTournament }) => {
         await deleteName(name.id);
         fetchNames();
       } catch (error) {
-        console.error("Error deleting name:", error);
+        console.error('Error deleting name:', error);
       }
     },
     [fetchNames]
@@ -590,7 +588,7 @@ const Profile = ({ userName, onStartNewTournament }) => {
   // Admin handlers
   const handleBulkHide = useCallback(async () => {
     if (!isAdmin) {
-      console.warn("Only admins can perform bulk operations");
+      console.warn('Only admins can perform bulk operations');
       return;
     }
 
@@ -598,9 +596,9 @@ const Profile = ({ userName, onStartNewTournament }) => {
       for (const nameId of selectedNames) {
         // Hide the name globally
         const { error } = await supabase
-          .from("cat_name_ratings")
+          .from('cat_name_ratings')
           .update({ is_hidden: true })
-          .eq("name_id", nameId);
+          .eq('name_id', nameId);
 
         if (error) throw error;
 
@@ -610,7 +608,7 @@ const Profile = ({ userName, onStartNewTournament }) => {
       fetchNames();
       console.log(`Bulk hidden ${selectedNames.size} names globally`);
     } catch (error) {
-      console.error("Error in bulk hide:", error);
+      console.error('Error in bulk hide:', error);
     }
   }, [selectedNames, isAdmin, fetchNames]);
 
@@ -622,14 +620,14 @@ const Profile = ({ userName, onStartNewTournament }) => {
       setSelectedNames(new Set());
       fetchNames();
     } catch (error) {
-      console.error("Error in bulk delete:", error);
+      console.error('Error in bulk delete:', error);
     }
   }, [selectedNames, fetchNames]);
 
   // New bulk operations for all names - Admin only
   const handleHideAllNames = useCallback(async () => {
     if (!isAdmin) {
-      console.warn("Only admins can perform bulk operations");
+      console.warn('Only admins can perform bulk operations');
       return;
     }
 
@@ -640,9 +638,9 @@ const Profile = ({ userName, onStartNewTournament }) => {
       for (const name of visibleNames) {
         // Hide the name globally
         const { error } = await supabase
-          .from("cat_name_ratings")
+          .from('cat_name_ratings')
           .update({ is_hidden: true })
-          .eq("name_id", name.id);
+          .eq('name_id', name.id);
 
         if (error) throw error;
 
@@ -653,13 +651,13 @@ const Profile = ({ userName, onStartNewTournament }) => {
       console.log(`Hidden ${visibleNames.length} names globally`);
       fetchNames();
     } catch (error) {
-      console.error("Error hiding all names:", error);
+      console.error('Error hiding all names:', error);
     }
   }, [names, hiddenNames, isAdmin, fetchNames]);
 
   const handleUnhideAllNames = useCallback(async () => {
     if (!isAdmin) {
-      console.warn("Only admins can perform bulk operations");
+      console.warn('Only admins can perform bulk operations');
       return;
     }
 
@@ -670,9 +668,9 @@ const Profile = ({ userName, onStartNewTournament }) => {
       for (const nameId of hiddenNameIds) {
         // Unhide the name globally
         const { error } = await supabase
-          .from("cat_name_ratings")
+          .from('cat_name_ratings')
           .update({ is_hidden: false })
-          .eq("name_id", nameId);
+          .eq('name_id', nameId);
 
         if (error) throw error;
 
@@ -687,7 +685,7 @@ const Profile = ({ userName, onStartNewTournament }) => {
       console.log(`Unhidden ${hiddenNameIds.length} names globally`);
       fetchNames();
     } catch (error) {
-      console.error("Error unhiding all names:", error);
+      console.error('Error unhiding all names:', error);
     }
   }, [hiddenNames, isAdmin, fetchNames]);
 
@@ -707,7 +705,7 @@ const Profile = ({ userName, onStartNewTournament }) => {
   const handleExportData = useCallback(async () => {
     try {
       // Get comprehensive data for export
-      const { data: allRatings } = await supabase.from("cat_name_ratings")
+      const { data: allRatings } = await supabase.from('cat_name_ratings')
         .select(`
           *,
           cat_name_options (
@@ -720,8 +718,8 @@ const Profile = ({ userName, onStartNewTournament }) => {
 
       // Since cat_users table might not exist, we'll use cat_name_ratings instead
       const { data: allUsers } = await supabase
-        .from("cat_name_ratings")
-        .select("user_name")
+        .from('cat_name_ratings')
+        .select('user_name')
         .limit(100);
 
       const exportData = {
@@ -729,48 +727,48 @@ const Profile = ({ userName, onStartNewTournament }) => {
         ratings: allRatings || [],
         users: allUsers || [],
         systemStats,
-        globalAnalytics,
+        globalAnalytics
       };
 
       // Create and download CSV
       const csvContent = convertToCSV(exportData);
-      const blob = new Blob([csvContent], { type: "text/csv" });
+      const blob = new Blob([csvContent], { type: 'text/csv' });
       const url = window.URL.createObjectURL(blob);
-      const a = document.createElement("a");
+      const a = document.createElement('a');
       a.href = url;
-      a.download = `cat_names_analytics_${new Date().toISOString().split("T")[0]}.csv`;
+      a.download = `cat_names_analytics_${new Date().toISOString().split('T')[0]}.csv`;
       a.click();
       window.URL.revokeObjectURL(url);
     } catch (error) {
-      console.error("Error exporting data:", error);
+      console.error('Error exporting data:', error);
     }
   }, [systemStats, globalAnalytics]);
 
   // Utility function to convert data to CSV
   const convertToCSV = (data) => {
     // Simple CSV conversion - you can enhance this as needed
-    const headers = ["Data Type", "Timestamp", "Details"];
+    const headers = ['Data Type', 'Timestamp', 'Details'];
     const rows = [
-      ["System Stats", data.timestamp, JSON.stringify(data.systemStats)],
+      ['System Stats', data.timestamp, JSON.stringify(data.systemStats)],
       [
-        "Global Analytics",
+        'Global Analytics',
         data.timestamp,
-        JSON.stringify(data.globalAnalytics),
+        JSON.stringify(data.globalAnalytics)
       ],
-      ["Total Ratings", data.timestamp, data.ratings.length],
-      ["Total Users", data.timestamp, data.users.length],
+      ['Total Ratings', data.timestamp, data.ratings.length],
+      ['Total Users', data.timestamp, data.users.length]
     ];
 
-    return [headers, ...rows].map((row) => row.join(",")).join("\n");
+    return [headers, ...rows].map((row) => row.join(',')).join('\n');
   };
 
   // Debug logging for admin status
   useEffect(() => {
-    console.log("Profile component state:", {
+    console.log('Profile component state:', {
       userName,
       isAdmin,
       showGlobalAnalytics,
-      showUserComparison,
+      showUserComparison
     });
   }, [userName, isAdmin, showGlobalAnalytics, showUserComparison]);
 
@@ -798,7 +796,7 @@ const Profile = ({ userName, onStartNewTournament }) => {
       <div className={styles.profileHeader}>
         <h1 className={styles.profileTitle}>
           {currentlyViewedUser === userName
-            ? "Your Profile"
+            ? 'Your Profile'
             : `${currentlyViewedUser}'s Profile`}
         </h1>
         <div className={styles.headerActions}>
@@ -811,11 +809,11 @@ const Profile = ({ userName, onStartNewTournament }) => {
           <button onClick={() => fetchNames()} className={styles.button}>
             🔄 Refresh
           </button>
-          <button 
+          <button
             onClick={() => {
               localStorage.removeItem('catNameTournament_onboardingSeen');
               window.location.reload();
-            }} 
+            }}
             className={styles.button}
             title="Show onboarding tutorial again"
           >
@@ -1021,7 +1019,7 @@ const Profile = ({ userName, onStartNewTournament }) => {
                       <div className={styles.userFilterSummary}>
                         <span className={styles.userFilterCount}>
                           {selectedUsers.size} user
-                          {selectedUsers.size !== 1 ? "s" : ""} selected
+                          {selectedUsers.size !== 1 ? 's' : ''} selected
                         </span>
                       </div>
                     )}
@@ -1068,11 +1066,11 @@ const Profile = ({ userName, onStartNewTournament }) => {
               </select>
               <button
                 onClick={() =>
-                  setSortOrder((order) => (order === "asc" ? "desc" : "asc"))
+                  setSortOrder((order) => (order === 'asc' ? 'desc' : 'asc'))
                 }
                 className={styles.sortButton}
               >
-                {sortOrder === "asc" ? "↑" : "↓"}
+                {sortOrder === 'asc' ? '↑' : '↓'}
               </button>
             </div>
           </div>
@@ -1106,7 +1104,7 @@ const Profile = ({ userName, onStartNewTournament }) => {
 
 Profile.propTypes = {
   userName: PropTypes.string.isRequired,
-  onStartNewTournament: PropTypes.func.isRequired,
+  onStartNewTournament: PropTypes.func.isRequired
 };
 
 export default Profile;

@@ -94,11 +94,11 @@ const Toast = ({
         <span className={styles.icon}>
           {getTypeIcon()}
         </span>
-        
+
         <span className={styles.message}>
           {message}
         </span>
-        
+
         <button
           onClick={handleDismiss}
           className={styles.dismissButton}
@@ -108,13 +108,13 @@ const Toast = ({
           ×
         </button>
       </div>
-      
+
       {/* Progress bar for auto-dismiss */}
       {autoDismiss && (
         <div className={styles.progressBar}>
-          <div 
+          <div
             className={styles.progressFill}
-            style={{ 
+            style={{
               animationDuration: `${duration}ms`,
               animationPlayState: isExiting ? 'paused' : 'running'
             }}

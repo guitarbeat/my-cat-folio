@@ -40,13 +40,13 @@ const InlineError = ({
 
   // Extract error message
   const errorMessage = typeof error === 'string' ? error : error.message || 'An error occurred';
-  
+
   // Determine if error is retryable
   const isRetryable = error?.isRetryable !== false && onRetry;
-  
+
   // Determine severity for styling
   const severity = error?.severity || ERROR_SEVERITY.MEDIUM;
-  
+
   // Get context-specific styling
   const getContextClass = () => {
     switch (context) {
@@ -101,7 +101,7 @@ const InlineError = ({
   };
 
   return (
-    <div 
+    <div
       className={`
         ${styles.container} 
         ${getContextClass()} 
@@ -115,15 +115,15 @@ const InlineError = ({
     >
       <div className={styles.errorContent}>
         <span className={styles.errorIcon}>
-          {severity === ERROR_SEVERITY.CRITICAL ? '🚨' : 
-           severity === ERROR_SEVERITY.HIGH ? '⚠️' : 
+          {severity === ERROR_SEVERITY.CRITICAL ? '🚨' :
+           severity === ERROR_SEVERITY.HIGH ? '⚠️' :
            severity === ERROR_SEVERITY.MEDIUM ? '⚠️' : 'ℹ️'}
         </span>
-        
+
         <span className={styles.errorMessage}>
           {errorMessage}
         </span>
-        
+
         <div className={styles.errorActions}>
           {isRetryable && showRetry && (
             <button
@@ -136,7 +136,7 @@ const InlineError = ({
               Retry
             </button>
           )}
-          
+
           {onDismiss && showDismiss && (
             <button
               onClick={onDismiss}
@@ -149,7 +149,7 @@ const InlineError = ({
           )}
         </div>
       </div>
-      
+
       {/* Additional error details for development */}
       {process.env.NODE_ENV === 'development' && error?.stack && (
         <details className={styles.errorDetails}>
