@@ -167,20 +167,9 @@ const Profile = ({ userName, onStartNewTournament }) => {
   const [isAdmin, setIsAdmin] = useState(false);
   const [hiddenNames, setHiddenNames] = useState(new Set());
 
-  // System stats state
-  const [systemStats, setSystemStats] = useState({
-    totalUsers: 0,
-    totalNames: 0,
-    hiddenNames: 0,
-    activeTournaments: 0,
-    totalTournaments: 0,
-    avgTournamentSize: 0,
-    totalRatings: 0,
-    avgPopularityScore: 0
-  });
 
   // Global analytics state
-  const [globalAnalytics, setGlobalAnalytics] = useState({
+  const [globalAnalytics] = useState({
     globalAvgRating: 0,
     totalGlobalRatings: 0,
     totalNamesWithRatings: 0,
@@ -195,9 +184,6 @@ const Profile = ({ userName, onStartNewTournament }) => {
   const [showUserComparison] = useState(false);
   const [currentlyViewedUser] = useState(userName);
 
-  // Admin state
-  const [isAdminUser, setIsAdminUser] = useState(false);
-  const [showAdminPanel, setShowAdminPanel] = useState(false);
 
   // Hooks
   const {
@@ -209,6 +195,10 @@ const Profile = ({ userName, onStartNewTournament }) => {
 
   // State for hidden names data
   const [hiddenNamesData, setHiddenNamesData] = useState([]);
+
+  // State for selected names and available users
+  const [selectedNames, setSelectedNames] = useState(new Set());
+  const [availableUsers, setAvailableUsers] = useState([]);
 
   // Get names based on admin status and filter
   const names = useMemo(() => {
@@ -358,69 +348,6 @@ const Profile = ({ userName, onStartNewTournament }) => {
     checkAdminStatus();
   }, [userName]);
 
-  const fetchSystemStats = useCallback(async () => {
-    try {
-      // Get total users from consolidated cat_app_users table
-      const { count: userCount } = await supabase
-        .from('cat_app_users')
-        .select('*', { count: 'exact', head: true });
-
-      // Get total names
-      const { count: nameCount } = await supabase
-        .from('cat_name_options')
-        .select('*', { count: 'exact', head: true });
-
-      // Get hidden names count from consolidated cat_name_ratings table
-      const { count: hiddenCount } = await supabase
-        .from('cat_name_ratings')
-        .select('*', { count: 'exact', head: true })
-        .eq('is_hidden', true);
-
-      // Get tournament statistics from cat_name_ratings (since cat_users might not exist)
-      // We'll calculate tournament stats from the ratings data instead
-      let tournamentCount = 0;
-      let activeTournamentCount = 0;
-
-      // For now, we'll set these to 0 since we don't have tournament data in the current schema
-      // TODO: Implement tournament tracking when the database schema is properly set up
-      tournamentCount = 0;
-      activeTournamentCount = 0;
-
-      // Get rating statistics
-      const { count: ratingCount } = await supabase
-        .from('cat_name_ratings')
-        .select('*', { count: 'exact', head: true });
-
-      // Get average popularity score
-      const { data: popularityData } = await supabase
-        .from('cat_name_options')
-        .select('popularity_score')
-        .not('popularity_score', 'is', null);
-
-      const avgPopularityScore =
-        popularityData?.length > 0
-          ? Math.round(
-              popularityData.reduce(
-                (sum, item) => sum + (item.popularity_score || 0),
-                0
-              ) / popularityData.length
-            )
-          : 0;
-
-      setSystemStats({
-        totalUsers: userCount || 0,
-        totalNames: nameCount || 0,
-        hiddenNames: hiddenCount || 0,
-        activeTournaments: activeTournamentCount || 0,
-        totalTournaments: tournamentCount || 0,
-        avgTournamentSize: 0, // Will be calculated separately
-        totalRatings: ratingCount || 0,
-        avgPopularityScore
-      });
-    } catch (error) {
-      console.error('Error fetching system stats:', error);
-    }
-  }, []);
 
   useEffect(() => {
     const fetchHiddenNames = async () => {
@@ -726,7 +653,6 @@ const Profile = ({ userName, onStartNewTournament }) => {
         timestamp: new Date().toISOString(),
         ratings: allRatings || [],
         users: allUsers || [],
-        systemStats,
         globalAnalytics
       };
 
@@ -742,14 +668,14 @@ const Profile = ({ userName, onStartNewTournament }) => {
     } catch (error) {
       console.error('Error exporting data:', error);
     }
-  }, [systemStats, globalAnalytics]);
+  }, [globalAnalytics]);
 
   // Utility function to convert data to CSV
   const convertToCSV = (data) => {
     // Simple CSV conversion - you can enhance this as needed
     const headers = ['Data Type', 'Timestamp', 'Details'];
     const rows = [
-      ['System Stats', data.timestamp, JSON.stringify(data.systemStats)],
+
       [
         'Global Analytics',
         data.timestamp,
@@ -836,29 +762,6 @@ const Profile = ({ userName, onStartNewTournament }) => {
               <h3>🔧 Admin Panel</h3>
             </div>
 
-            <div className={styles.sidebarSection}>
-              <h4>📊 Quick Stats</h4>
-              <div className={styles.quickStats}>
-                <div className={styles.quickStat}>
-                  <span className={styles.quickStatValue}>
-                    {systemStats.totalUsers}
-                  </span>
-                  <span className={styles.quickStatLabel}>Users</span>
-                </div>
-                <div className={styles.quickStat}>
-                  <span className={styles.quickStatValue}>
-                    {systemStats.totalNames}
-                  </span>
-                  <span className={styles.quickStatLabel}>Names</span>
-                </div>
-                <div className={styles.quickStat}>
-                  <span className={styles.quickStatValue}>
-                    {systemStats.totalRatings}
-                  </span>
-                  <span className={styles.quickStatLabel}>Ratings</span>
-                </div>
-              </div>
-            </div>
 
             {/* Quick Bulk Operations */}
             <div className={styles.sidebarSection}>

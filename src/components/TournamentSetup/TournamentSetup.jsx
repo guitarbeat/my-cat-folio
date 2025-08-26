@@ -529,14 +529,14 @@ const NameSuggestionSection = () => {
               id="suggestion-description"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              placeholder="Tell us about this name's meaning or origin"
+              placeholder="Tell us about this name&apos;s meaning or origin"
               maxLength={500}
               disabled={loading}
               aria-required="false"
               aria-describedby="description-help"
             />
             <div id="description-help" className={styles.helpText}>
-              Optional: Describe the name's meaning or origin (maximum 500 characters)
+              Optional: Describe the name&apos;s meaning or origin (maximum 500 characters)
             </div>
           </div>
 
@@ -579,8 +579,7 @@ function useTournamentSetup(userName) {
     isError,
     handleError,
     clearErrors,
-    clearError,
-    executeWithErrorHandling
+    clearError
   } = useErrorHandler({
     showUserFeedback: true,
     maxRetries: 2,
@@ -593,7 +592,6 @@ function useTournamentSetup(userName) {
     const fetchNames = async () => {
       try {
         setIsLoading(true);
-        setError(null);
 
         // Get all names and hidden names in parallel for efficiency
         const [namesData, { data: hiddenData, error: hiddenError }] =
@@ -649,7 +647,7 @@ function useTournamentSetup(userName) {
     };
 
     fetchNames();
-  }, []); // Empty dependency array since we only want to fetch once on mount
+  }, [handleError]); // Include handleError in dependencies
 
   const toggleName = async (nameObj) => {
     setSelectedNames((prev) => {

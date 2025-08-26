@@ -350,7 +350,7 @@ function TournamentContent({
       // Show success toast for voting
       showSuccess('Vote recorded successfully!', { duration: 3000 });
     },
-    [currentMatch]
+    [currentMatch, showSuccess]
   );
 
   const handleVoteWithAnimation = useCallback(
@@ -455,7 +455,8 @@ function TournamentContent({
       updateMatchResult,
       handleVote,
       onVote,
-      currentMatch
+      currentMatch,
+      showError
     ]
   );
 

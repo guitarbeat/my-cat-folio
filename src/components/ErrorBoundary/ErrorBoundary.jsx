@@ -5,10 +5,10 @@
  * enhanced error handling and recovery options.
  */
 
-import React from "react";
-import PropTypes from "prop-types";
-import { createStandardizedError } from "../../utils/errorHandler";
-import styles from "./ErrorBoundary.module.css";
+import React from 'react';
+import PropTypes from 'prop-types';
+import { createStandardizedError } from '../../utils/errorHandler';
+import styles from './ErrorBoundary.module.css';
 
 class ErrorBoundary extends React.Component {
   constructor(props) {
@@ -43,12 +43,12 @@ class ErrorBoundary extends React.Component {
     });
 
     // Log the error to your error reporting service
-    console.error("ErrorBoundary caught an error:", error, errorInfo);
+    console.error('ErrorBoundary caught an error:', error, errorInfo);
   }
 
-  handleRetry = () => {
+  handleRetry() {
     const { retryCount, maxRetries } = this.state;
-    
+
     if (retryCount < maxRetries) {
       this.setState(prevState => ({
         retryCount: prevState.retryCount + 1,
@@ -61,29 +61,29 @@ class ErrorBoundary extends React.Component {
       // If max retries reached, reload the page
       window.location.reload();
     }
-  };
+  }
 
-  handleRefresh = () => {
+  handleRefresh() {
     window.location.reload();
-  };
+  }
 
-  handleGoHome = () => {
+  handleGoHome() {
     window.location.href = '/';
-  };
+  }
 
   render() {
-    const { 
-      hasError, 
-      error, 
-      errorInfo, 
-      standardizedError, 
-      retryCount, 
-      maxRetries 
+    const {
+      hasError,
+      error,
+      errorInfo,
+      standardizedError,
+      retryCount,
+      maxRetries
     } = this.state;
 
     if (hasError) {
       const canRetry = retryCount < maxRetries;
-      const errorMessage = standardizedError?.userMessage || 
+      const errorMessage = standardizedError?.userMessage ||
         "We're sorry, but something unexpected happened. You can try refreshing the page or contact support if the problem persists.";
 
       return (
@@ -91,7 +91,7 @@ class ErrorBoundary extends React.Component {
           <div className={styles.content}>
             <div className={styles.icon}>⚠️</div>
             <h2 className={styles.title}>Something went wrong</h2>
-            
+
             <p className={styles.message}>
               {errorMessage}
             </p>
@@ -131,13 +131,13 @@ class ErrorBoundary extends React.Component {
             </div>
 
             {/* Development error details */}
-            {process.env.NODE_ENV === "development" && error && (
+            {process.env.NODE_ENV === 'development' && error && (
               <details className={styles.errorDetails}>
                 <summary>Error Details (Development)</summary>
                 <div className={styles.errorContent}>
                   <h4>Error:</h4>
                   <pre>{error.toString()}</pre>
-                  
+
                   {errorInfo && (
                     <>
                       <h4>Component Stack:</h4>
@@ -179,10 +179,10 @@ class ErrorBoundary extends React.Component {
   }
 }
 
-ErrorBoundary.displayName = "ErrorBoundary";
+ErrorBoundary.displayName = 'ErrorBoundary';
 
 ErrorBoundary.propTypes = {
-  children: PropTypes.node,
+  children: PropTypes.node
 };
 
 export default ErrorBoundary;

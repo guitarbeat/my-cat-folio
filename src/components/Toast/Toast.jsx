@@ -4,7 +4,7 @@
  * Provides different types (success, error, info, warning) with auto-dismiss functionality.
  */
 
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import styles from './Toast.module.css';
 
@@ -30,23 +30,23 @@ const Toast = ({
   const [isVisible, setIsVisible] = useState(true);
   const [isExiting, setIsExiting] = useState(false);
 
-  useEffect(() => {
-    if (!autoDismiss) return;
-
-    const timer = setTimeout(() => {
-      handleDismiss();
-    }, duration);
-
-    return () => clearTimeout(timer);
-  }, [duration, autoDismiss]);
-
-  const handleDismiss = () => {
+  const handleDismiss = useCallback(() => {
     setIsExiting(true);
     setTimeout(() => {
       setIsVisible(false);
       onDismiss?.();
     }, 300); // Match CSS transition duration
-  };
+  }, [onDismiss]);
+
+  useEffect(() => {
+    if (autoDismiss && duration > 0) {
+      const timer = setTimeout(() => {
+        handleDismiss();
+      }, duration);
+
+      return () => clearTimeout(timer);
+    }
+  }, [autoDismiss, duration, handleDismiss]);
 
   if (!isVisible) return null;
 

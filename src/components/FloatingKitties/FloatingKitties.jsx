@@ -2,7 +2,7 @@
  * @module FloatingKitties
  * @description Animated floating cat images background with space/galaxy theme
  */
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import styles from './FloatingKitties.module.css';
 
@@ -31,7 +31,6 @@ const FloatingKitties = ({
 }) => {
   const [kitties, setKitties] = useState([]);
   const containerRef = useRef(null);
-  const intervalRef = useRef(null);
 
   // * Get the actual background URL
   const getBackgroundUrl = () => {
@@ -42,7 +41,7 @@ const FloatingKitties = ({
   };
 
   // * Generate a new floating kittie
-  const createKittie = () => {
+  const createKittie = useCallback(() => {
     const newKittie = {
       id: Date.now() + Math.random(),
       size: Math.random() * (maxSize - minSize) + minSize,
@@ -65,39 +64,19 @@ const FloatingKitties = ({
       },
       (newKittie.duration + newKittie.delay) * 1000
     );
-  };
+  }, [maxSize, minSize, maxDuration, minDuration]);
 
   // * Start the kittie creation interval
   useEffect(() => {
-    intervalRef.current = setInterval(createKittie, creationInterval);
-
-    // * Create initial kitties
-    for (let i = 0; i < Math.min(kittieCount / 2, 5); i++) {
-      setTimeout(createKittie, i * 500);
-    }
-
-    return () => {
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current);
+    const interval = setInterval(() => {
+      if (kitties.length < kittieCount) {
+        createKittie();
       }
-    };
-  }, [
-    kittieCount,
-    creationInterval,
-    minSize,
-    maxSize,
-    minDuration,
-    maxDuration
-  ]);
+    }, creationInterval);
 
-  // * Cleanup on unmount
-  useEffect(() => {
-    return () => {
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current);
-      }
-    };
-  }, []);
+    return () => clearInterval(interval);
+  }, [kitties.length, kittieCount, createKittie, creationInterval]);
+
 
   return (
     <div

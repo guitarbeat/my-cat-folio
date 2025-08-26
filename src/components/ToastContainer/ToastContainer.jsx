@@ -4,7 +4,7 @@
  * Provides a queue system and handles positioning of multiple toasts.
  */
 
-import React, { useState, useCallback, useRef } from 'react';
+import React, { useRef, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import Toast from '../Toast/Toast';
 import styles from './ToastContainer.module.css';

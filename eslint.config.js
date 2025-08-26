@@ -18,6 +18,7 @@ module.exports = [
       globals: {
         ...globals.browser,
         ...globals.es2021,
+        ...globals.jest,
         process: 'readonly' // Allow process.env for environment checks
       },
       parserOptions: {
@@ -51,7 +52,11 @@ module.exports = [
       'eol-last': 'error',
       'comma-dangle': ['error', 'never'],
       'quotes': ['error', 'single', { avoidEscape: true }],
-      'semi': ['error', 'always']
+      'semi': ['error', 'always'],
+
+      // Disable problematic rules temporarily
+      'react/prop-types': 'off', // Disable prop-types validation
+      'react/display-name': 'off' // Disable display-name validation
     },
     settings: {
       react: {

@@ -83,7 +83,7 @@ const OnboardingModal = ({ isOpen, onClose, onDontShowAgain }) => {
       title: 'Ready to Start?',
       content: (
         <div className={styles.stepContent}>
-          <p>You're all set! The tournament will begin with name selection, then you'll vote on pairs until we find your perfect match.</p>
+          <p>You&apos;re all set! The tournament will begin with name selection, then you&apos;ll vote on pairs until we find your perfect match.</p>
           <p>Remember: there are no wrong answers - just follow your heart! 💕</p>
         </div>
       ),
@@ -159,7 +159,7 @@ const OnboardingModal = ({ isOpen, onClose, onDontShowAgain }) => {
                 className={styles.primaryButton}
                 onClick={handleClose}
               >
-                Let's Start! 🎉
+                Let&apos;s Start! 🎉
               </button>
             ) : (
               <button
@@ -177,7 +177,7 @@ const OnboardingModal = ({ isOpen, onClose, onDontShowAgain }) => {
                 className={styles.dontShowButton}
                 onClick={handleDontShowAgain}
               >
-                Don't show again
+                Don&apos;t show again
               </button>
             )}
           </div>
