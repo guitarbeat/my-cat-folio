@@ -452,6 +452,11 @@ function App() {
 
   return (
     <div className="app">
+      {/* Skip link for keyboard navigation */}
+      <a href="#main-content" className="skip-link">
+        Skip to main content
+      </a>
+      
       {/* * Floating kitties background */}
       <FloatingKitties
         kittieCount={12}
@@ -473,7 +478,7 @@ function App() {
         onLogout={handleLogout}
         onStartNewTournament={handleStartNewTournament}
       />
-      <div className="main-content">
+      <div id="main-content" className="main-content" tabIndex="-1">
         {/* Global error display */}
         {isError && (
           <ErrorDisplay

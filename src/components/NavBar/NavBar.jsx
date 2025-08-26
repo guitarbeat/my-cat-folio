@@ -86,6 +86,7 @@ function NavBar({
 }) {
   const [showScrollTop, setShowScrollTop] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isHighContrast, setIsHighContrast] = useState(false);
 
   // Define nav items based on login state
   const navItems = [];
@@ -284,6 +285,7 @@ function NavBar({
           <ul
             className="navbar__menu-list navbar__menu-list--desktop"
             role="navigation"
+            aria-label="Main navigation"
           >
             {logoItem}
             {userInfo}
@@ -320,7 +322,7 @@ function NavBar({
             )}
           </div>
 
-          <ul className="navbar__mobile-menu-list" role="navigation">
+          <ul className="navbar__mobile-menu-list" role="navigation" aria-label="Mobile navigation">
             {/* * Render navigation items from navItems array */}
             {navItems.map((item) => {
               const isActive = view === item.key.toLowerCase();
@@ -337,6 +339,8 @@ function NavBar({
                       handleNavItemClick(item.key);
                     }}
                     className={`navbar__mobile-link ${isActive ? "active" : ""}`}
+                    aria-current={isActive ? "page" : undefined}
+                    aria-label={`${item.label}${isActive ? " (current page)" : ""}`}
                   >
                     {item.label}
                   </a>
@@ -387,6 +391,22 @@ function NavBar({
           aria-hidden="true"
         />
       )}
+
+      {/* High Contrast Toggle */}
+      <button
+        type="button"
+        className={`high-contrast-toggle ${isHighContrast ? "active" : ""}`}
+        onClick={handleHighContrastToggle}
+        aria-label={`${isHighContrast ? "Disable" : "Enable"} high contrast mode`}
+        aria-pressed={isHighContrast}
+      >
+        <span className="high-contrast-icon" aria-hidden="true">
+          {isHighContrast ? "🔍" : "👁️"}
+        </span>
+        <span className="high-contrast-text">
+          {isHighContrast ? "High Contrast" : "Normal"}
+        </span>
+      </button>
 
       {isLoggedIn && (
         <button

@@ -157,6 +157,7 @@ function TournamentContent({
   const [lastMatchResult, setLastMatchResult] = useState(null);
   const [showMatchResult, setShowMatchResult] = useState(false);
   const [showBracket, setShowBracket] = useState(false);
+  const [showKeyboardHelp, setShowKeyboardHelp] = useState(false);
   const [showRoundTransition, setShowRoundTransition] = useState(false);
   const [nextRoundNumber, setNextRoundNumber] = useState(null);
 
@@ -469,7 +470,7 @@ function TournamentContent({
     }
   }, [getCurrentRatings, onComplete]);
 
-  // Add keyboard controls
+  // Enhanced keyboard controls with accessibility
   useEffect(() => {
     const handleKeyPress = (e) => {
       if (isProcessing || isTransitioning) {
@@ -478,6 +479,7 @@ function TournamentContent({
 
       switch (e.key) {
         case "ArrowLeft":
+          e.preventDefault();
           setSelectedOption("left");
           if (audioRef.current && !isMuted) {
             audioRef.current.currentTime = 0;
@@ -485,6 +487,7 @@ function TournamentContent({
           }
           break;
         case "ArrowRight":
+          e.preventDefault();
           setSelectedOption("right");
           if (audioRef.current && !isMuted) {
             audioRef.current.currentTime = 0;
@@ -492,15 +495,26 @@ function TournamentContent({
           }
           break;
         case " ":
+        case "Enter":
+          e.preventDefault();
           if (selectedOption) {
             handleVoteWithAnimation(selectedOption);
           }
           break;
         case "ArrowUp":
+          e.preventDefault();
           handleVoteWithAnimation("both");
           break;
         case "ArrowDown":
+          e.preventDefault();
           handleVoteWithAnimation("neither");
+          break;
+        case "Tab":
+          // Allow normal tab navigation
+          break;
+        case "Escape":
+          // Clear selection
+          setSelectedOption(null);
           break;
         default:
           break;
@@ -661,7 +675,7 @@ function TournamentContent({
         onVolumeChange={handleVolumeChange}
       />
 
-      <div className={styles.tournamentLayout}>
+      <div className={styles.tournamentLayout} role="main" aria-label="Tournament voting interface">
         <div
           className={styles.matchup}
           role="region"
@@ -716,9 +730,10 @@ function TournamentContent({
               onClick={() => handleVoteWithAnimation("both")}
               disabled={isProcessing || isTransitioning}
               aria-pressed={selectedOption === "both"}
+              aria-label="Vote for both names (Press Up arrow key)"
               type="button"
             >
-              I Like Both! <span className={styles.shortcutHint}>(↑ Up)</span>
+              I Like Both! <span className={styles.shortcutHint} aria-hidden="true">(↑ Up)</span>
             </button>
 
             <button
@@ -726,24 +741,61 @@ function TournamentContent({
               onClick={() => handleVoteWithAnimation("neither")}
               disabled={isProcessing || isTransitioning}
               aria-pressed={selectedOption === "neither"}
+              aria-label="Skip this match (Press Down arrow key)"
               type="button"
             >
-              Skip <span className={styles.shortcutHint}>(↓ Down)</span>
+              Skip <span className={styles.shortcutHint} aria-hidden="true">(↓ Down)</span>
             </button>
           </div>
         </div>
 
-        <button
-          className={styles.bracketToggle}
-          onClick={() => setShowBracket(!showBracket)}
-          aria-expanded={showBracket}
-          aria-controls="bracketView"
-        >
-          {showBracket ? "Hide Tournament History" : "Show Tournament History"}
-          <span className={styles.bracketToggleIcon}>
-            {showBracket ? "▼" : "▶"}
-          </span>
-        </button>
+        <div className={styles.tournamentControls}>
+          <button
+            className={styles.bracketToggle}
+            onClick={() => setShowBracket(!showBracket)}
+            aria-expanded={showBracket}
+            aria-controls="bracketView"
+          >
+            {showBracket ? "Hide Tournament History" : "Show Tournament History"}
+            <span className={styles.bracketToggleIcon}>
+              {showBracket ? "▼" : "▶"}
+            </span>
+          </button>
+          
+          <button
+            className={styles.keyboardHelpToggle}
+            onClick={() => setShowKeyboardHelp(!showKeyboardHelp)}
+            aria-expanded={showKeyboardHelp}
+            aria-controls="keyboardHelp"
+            type="button"
+          >
+            <span className={styles.keyboardIcon}>⌨️</span>
+            Keyboard Shortcuts
+            <span className={styles.keyboardHelpIcon}>
+              {showKeyboardHelp ? "▼" : "▶"}
+            </span>
+          </button>
+        </div>
+
+        {showKeyboardHelp && (
+          <div
+            id="keyboardHelp"
+            className={styles.keyboardHelp}
+            role="complementary"
+            aria-label="Keyboard shortcuts help"
+          >
+            <h3>Keyboard Shortcuts</h3>
+            <ul>
+              <li><kbd>←</kbd> Select left name</li>
+              <li><kbd>→</kbd> Select right name</li>
+              <li><kbd>↑</kbd> Vote for both names</li>
+              <li><kbd>↓</kbd> Skip this match</li>
+              <li><kbd>Space</kbd> or <kbd>Enter</kbd> Vote for selected name</li>
+              <li><kbd>Escape</kbd> Clear selection</li>
+              <li><kbd>Tab</kbd> Navigate between elements</li>
+            </ul>
+          </div>
+        )}
 
         {showBracket && (
           <div

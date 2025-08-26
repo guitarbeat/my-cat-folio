@@ -58,10 +58,116 @@ img {
   outline: none;
 }
 
-/* Add focus styles for accessibility */
+/* Enhanced focus styles for accessibility */
 :focus-visible {
-  outline: 2px solid var(--accent-color);
-  outline-offset: 2px;
+  outline: 3px solid var(--accent-color);
+  outline-offset: 3px;
+  border-radius: 4px;
+  box-shadow: 0 0 0 3px rgba(232, 191, 118, 0.3);
+}
+
+/* Focus styles for interactive elements */
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+a:focus-visible {
+  outline: 3px solid var(--accent-color);
+  outline-offset: 3px;
+  border-radius: 4px;
+  box-shadow: 0 0 0 3px rgba(232, 191, 118, 0.3);
+}
+
+/* Skip link for keyboard navigation */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 6px;
+  background: var(--accent-color);
+  color: var(--text-primary);
+  padding: 8px;
+  text-decoration: none;
+  border-radius: 4px;
+  z-index: 10000;
+  font-weight: 600;
+}
+
+.skip-link:focus {
+  top: 6px;
+}
+
+/* High Contrast Toggle Button */
+.high-contrast-toggle {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  background: var(--card-background);
+  color: var(--text-primary);
+  border: 2px solid var(--border-color);
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  z-index: 1000;
+  transition: all 0.2s ease;
+  box-shadow: var(--shadow-md);
+}
+
+.high-contrast-toggle:hover {
+  background: var(--card-hover);
+  border-color: var(--accent-color);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+.high-contrast-toggle.active {
+  background: var(--accent-color);
+  color: var(--background-color);
+  border-color: var(--accent-color);
+}
+
+.high-contrast-toggle:focus-visible {
+  outline: 3px solid var(--accent-color);
+  outline-offset: 3px;
+}
+
+.high-contrast-icon {
+  font-size: 16px;
+}
+
+.high-contrast-text {
+  font-weight: 600;
+}
+
+/* High Contrast Mode Styles */
+.high-contrast {
+  --text-primary: #ffffff;
+  --text-secondary: #ffffff;
+  --background-color: #000000;
+  --card-background: #1a1a1a;
+  --border-color: #ffffff;
+  --accent-color: #ffff00;
+  --card-hover: #333333;
+}
+
+.high-contrast :focus-visible {
+  outline: 4px solid var(--accent-color);
+  outline-offset: 4px;
+}
+
+.high-contrast button {
+  border: 3px solid var(--border-color);
+  background-color: var(--card-background);
+  color: var(--text-primary);
+}
+
+.high-contrast button:hover:not(:disabled) {
+  background-color: var(--accent-color);
+  color: var(--background-color);
 }
 
 /* Ensure sufficient contrast for all text elements */
@@ -88,6 +194,44 @@ select {
   color: var(--text-primary);
   background-color: var(--card-background);
   border-color: var(--border-color);
+}
+
+/* Help text styling for accessibility */
+.helpText {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  margin-top: 0.25rem;
+  font-style: italic;
+}
+
+/* Enhanced button contrast */
+button {
+  font-weight: 500;
+  color: var(--text-primary);
+  background-color: var(--card-background);
+  border: 2px solid var(--border-color);
+  transition: all 0.2s ease;
+}
+
+button:hover:not(:disabled) {
+  background-color: var(--card-hover);
+  border-color: var(--accent-color);
+  transform: translateY(-1px);
+}
+
+button:focus-visible {
+  outline: 3px solid var(--accent-color);
+  outline-offset: 3px;
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 3px rgba(232, 191, 118, 0.3);
+}
+
+/* Enhanced input focus styles */
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 3px rgba(232, 191, 118, 0.3);
 }
 
 /* Global error display styles */
@@ -399,26 +543,26 @@ select {
   --accent-color: var(--mimosa); /* #e8bf76 */
   --highlight-color: var(--gold); /* #f1a438 */
 
-  /* Text colors - Optimized for new background */
+  /* Text colors - WCAG AA compliant contrast ratios */
   --text-primary: #ffffff; /* Pure white for maximum contrast */
-  --text-secondary: #f1f5f9; /* Bright for better contrast */
+  --text-secondary: #f8fafc; /* Enhanced brightness for better contrast */
   --text-tertiary: #e2e8f0; /* Bright for better contrast */
 
-  /* Background colors - Improved contrast */
-  --background-color: #1a1f2e; /* Keep main background dark */
-  --card-background: #34495e; /* Lighter charcoal for better contrast */
-  --card-border: #4a6b7a; /* Even lighter for borders */
-  --card-hover: #5a7b8a; /* Much lighter hover state for better contrast */
-  --border-color: #4a6b7a; /* Consistent border color */
-  --surface-color: #34495e; /* Lighter surface */
-  --header-background: #2c3e40; /* Keep header slightly darker */
-  --header-border: #34495e; /* Lighter header border */
+  /* Background colors - Improved contrast for WCAG compliance */
+  --background-color: #0f1419; /* Darker background for better contrast */
+  --card-background: #1e293b; /* Darker card background for better contrast */
+  --card-border: #334155; /* Darker border for better contrast */
+  --card-hover: #475569; /* Enhanced hover state for better contrast */
+  --border-color: #334155; /* Consistent border color */
+  --surface-color: #1e293b; /* Darker surface */
+  --header-background: #1e293b; /* Darker header for better contrast */
+  --header-border: #334155; /* Darker header border */
 
   /* Legacy dark-mode variables for backward compatibility */
-  --surface-dark: #34495e; /* Lighter charcoal for better contrast */
-  --card-background-dark: #34495e; /* Lighter charcoal for better contrast */
-  --card-hover-dark: #5a7b8a; /* Much lighter hover state for better contrast */
-  --border-color-dark: #4a6b7a; /* Even lighter for borders */
+  --surface-dark: #1e293b; /* Darker charcoal for better contrast */
+  --card-background-dark: #1e293b; /* Darker charcoal for better contrast */
+  --card-hover-dark: #475569; /* Enhanced hover state for better contrast */
+  --border-color-dark: #334155; /* Darker borders for better contrast */
   --text-primary-dark: #fff;
   --text-secondary-dark: #e2e8f0;
   --button-primary-bg: var(--charcoal);
@@ -465,25 +609,25 @@ body.light-theme {
   --primary-color: var(--primary-600);
   --primary-light: var(--primary-100);
   --primary-dark: var(--primary-800);
-  --surface-color: #f4f6fa;
-  --background-color: #eef1f6;
-  --text-primary: #111827; /* Darker for better contrast */
-  --text-secondary: #1f2937; /* Darker for better contrast */
-  --text-tertiary: #374151; /* Darker for better contrast */
-  --border-color: #d1d5db;
-  --card-background: #fff;
-  --card-border: #d1d5db;
-  --card-hover: #f9fafb;
-  --header-background: #fff;
-  --header-border: #e5e7eb;
+  --surface-color: #f8fafc;
+  --background-color: #ffffff;
+  --text-primary: #0f172a; /* Enhanced contrast for WCAG compliance */
+  --text-secondary: #1e293b; /* Enhanced contrast for WCAG compliance */
+  --text-tertiary: #334155; /* Enhanced contrast for WCAG compliance */
+  --border-color: #cbd5e1;
+  --card-background: #ffffff;
+  --card-border: #cbd5e1;
+  --card-hover: #f1f5f9;
+  --header-background: #ffffff;
+  --header-border: #e2e8f0;
 
   /* Synced dark-mode variables for components using legacy names */
-  --surface-dark: #f4f6fa;
-  --card-background-dark: #fff;
-  --card-hover-dark: #f9fafb;
-  --border-color-dark: #d1d5db;
-  --text-primary-dark: #111827;
-  --text-secondary-dark: #1f2937;
+  --surface-dark: #f8fafc;
+  --card-background-dark: #ffffff;
+  --card-hover-dark: #f1f5f9;
+  --border-color-dark: #cbd5e1;
+  --text-primary-dark: #0f172a;
+  --text-secondary-dark: #1e293b;
   --button-primary-bg: var(--primary-600);
   --button-primary-hover: var(--primary-700);
   --button-secondary-bg: rgba(0, 0, 0, 0.05);
@@ -498,6 +642,34 @@ body.light-theme {
     --error-600: #dc2626;
     --success-600: #059669;
     --warning-600: #b45309;
+    
+    /* Enhanced contrast for high contrast mode */
+    --text-primary: #ffffff;
+    --text-secondary: #ffffff;
+    --background-color: #000000;
+    --card-background: #1a1a1a;
+    --border-color: #ffffff;
+    --accent-color: #ffff00;
+  }
+  
+  /* Enhanced focus indicators for high contrast */
+  :focus-visible {
+    outline: 4px solid var(--accent-color);
+    outline-offset: 4px;
+  }
+  
+  /* Enhanced button contrast */
+  button {
+    border: 3px solid var(--border-color);
+    background-color: var(--card-background);
+    color: var(--text-primary);
+  }
+  
+  button:hover:not(:disabled) {
+    background-color: var(--accent-color);
+    color: var(--background-color);
+  }
+}
     --accent-600: #ca8a04;
   }
 }

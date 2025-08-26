@@ -501,7 +501,7 @@ const NameSuggestionSection = () => {
           Have a great cat name in mind? Share it with the community!
         </p>
 
-        <form onSubmit={handleSubmit} className={styles.suggestionForm}>
+        <form onSubmit={handleSubmit} className={styles.suggestionForm} role="form" aria-label="Name suggestion form">
           <div className={styles.formGroup}>
             <label htmlFor="suggestion-name">Name</label>
             <input
@@ -512,7 +512,12 @@ const NameSuggestionSection = () => {
               placeholder="Enter a cat name"
               maxLength={50}
               disabled={loading}
+              aria-required="true"
+              aria-describedby="name-help"
             />
+            <div id="name-help" className={styles.helpText}>
+              Enter a unique cat name (maximum 50 characters)
+            </div>
           </div>
 
           <div className={styles.formGroup}>
@@ -524,16 +529,22 @@ const NameSuggestionSection = () => {
               placeholder="Tell us about this name's meaning or origin"
               maxLength={500}
               disabled={loading}
+              aria-required="false"
+              aria-describedby="description-help"
             />
+            <div id="description-help" className={styles.helpText}>
+              Optional: Describe the name's meaning or origin (maximum 500 characters)
+            </div>
           </div>
 
-          {error && <p className={styles.errorMessage}>{error}</p>}
-          {success && <p className={styles.successMessage}>{success}</p>}
+          {error && <p className={styles.errorMessage} role="alert" aria-live="polite">{error}</p>}
+          {success && <p className={styles.successMessage} role="status" aria-live="polite">{success}</p>}
 
           <button
             type="submit"
             className={styles.submitButton}
             disabled={loading}
+            aria-label={loading ? "Submitting name suggestion..." : "Submit name suggestion"}
           >
             {loading ? "Submitting..." : "Submit Name"}
           </button>
