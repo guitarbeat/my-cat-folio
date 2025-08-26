@@ -60,6 +60,13 @@
   margin-top: var(--space-2);
 }
 
+.helpText {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  margin-top: 0.25rem;
+  font-style: italic;
+}
+
 /* Enhanced Statistics */
 .nameStats {
   display: flex;

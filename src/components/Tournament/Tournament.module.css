@@ -328,6 +328,94 @@
   transition: transform var(--duration-normal) var(--ease-out);
 }
 
+.tournamentControls {
+  display: flex;
+  gap: var(--space-4);
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: var(--space-4);
+}
+
+.keyboardHelpToggle {
+  composes: btnSecondary from "../../styles/global.css";
+  display: flex;
+  gap: var(--space-2);
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-2) var(--space-4);
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  background: var(--surface-color);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  transition: all var(--duration-normal) var(--ease-out);
+}
+
+.keyboardHelpToggle:hover {
+  background: var(--card-hover);
+  transform: translateY(-1px);
+}
+
+.keyboardHelpToggle:active {
+  transform: translateY(0);
+}
+
+.keyboardIcon {
+  font-size: var(--text-base);
+}
+
+.keyboardHelpIcon {
+  font-size: var(--text-sm);
+  transition: transform var(--duration-normal) var(--ease-out);
+}
+
+.keyboardHelpToggle[aria-expanded="true"] .keyboardHelpIcon {
+  transform: rotate(90deg);
+}
+
+.keyboardHelp {
+  padding: var(--space-4);
+  margin-top: var(--space-4);
+  background: var(--surface-color);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  animation: slideDown 0.3s var(--ease-out);
+}
+
+.keyboardHelp h3 {
+  margin: 0 0 var(--space-3) 0;
+  font-size: var(--text-lg);
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.keyboardHelp ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.keyboardHelp li {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) 0;
+  color: var(--text-secondary);
+}
+
+.keyboardHelp kbd {
+  display: inline-block;
+  padding: var(--space-1) var(--space-2);
+  font-family: monospace;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--text-primary);
+  background: var(--card-background);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-sm);
+}
+
 .bracketView {
   padding: var(--space-4);
   margin-top: var(--space-4);

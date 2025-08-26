@@ -226,7 +226,7 @@ function Login({ onLogin }) {
             ) : null}
           </div>
 
-          <form onSubmit={handleSubmit} className={styles.loginForm}>
+          <form onSubmit={handleSubmit} className={styles.loginForm} role="form" aria-label="Login form">
             <div className={styles.inputWrapper}>
               <label htmlFor="loginName" className={styles.inputLabel}>
                 Your Judge Name:
@@ -242,6 +242,8 @@ function Login({ onLogin }) {
                   autoFocus
                   disabled={isLoading}
                   aria-label="Your name"
+                  aria-describedby={error ? "loginError" : "loginHelp"}
+                  aria-required="false"
                   maxLength={30}
                 />
                 {!name.trim() && (
@@ -254,11 +256,11 @@ function Login({ onLogin }) {
                 )}
               </div>
               {error && (
-                <p className={styles.errorMessage} role="alert">
+                <p id="loginError" className={styles.errorMessage} role="alert" aria-live="polite">
                   {error}
                 </p>
               )}
-              <p className={styles.explainerText}>
+              <p id="loginHelp" className={styles.explainerText}>
                 Type your name to save your ratings, or leave it blank for a
                 surprise name!
               </p>
