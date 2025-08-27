@@ -1201,7 +1201,10 @@
 }
 
 /* Cat Pictures Toggle Button */
-.catPicturesToggleButton { composes: btn btn--secondary from "../../styles/global.css"; min-height: 44px; }
+.catPicturesToggleButton {
+  composes: btn btn--secondary from "../../styles/global.css";
+  min-height: 44px;
+}
 
 .catPicturesToggleButton:hover:not(:disabled) {
   background: var(--button-secondary-hover, var(--secondary-dark, #475569));

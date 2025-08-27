@@ -9,7 +9,7 @@
 
 :global(body.login-page::-webkit-scrollbar) {
   /* Allow webkit scrollbars */
-  display: auto;
+  display: block;
 }
 
 /* Ensure html element can also scroll */

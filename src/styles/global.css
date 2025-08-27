@@ -1,4 +1,5 @@
 /* Consolidated global stylesheet: reset → variables → theme → base → utilities → components → app rules */
+@import url("./theme.css");
 
 /* ===== reset.css ===== */
 
@@ -183,14 +184,27 @@ h6 {
   transition: color var(--transition-theme);
 }
 
-/* Improve button text contrast */
+/* Button styling */
 button {
   font-weight: 500; /* Ensure button text has sufficient weight */
   color: var(--text-primary);
+  background-color: var(--card-background);
+  border: 2px solid var(--border-color);
   transition:
     color var(--transition-theme),
     background-color var(--transition-theme),
-    border-color var(--transition-theme);
+    border-color var(--transition-theme),
+    transform 0.2s ease;
+}
+
+button:hover:not(:disabled) {
+  background-color: var(--card-hover);
+  border-color: var(--accent-color);
+  transform: translateY(-1px);
+}
+
+button:focus-visible {
+  border-color: var(--accent-color);
 }
 
 /* Ensure form elements have good contrast */
@@ -214,34 +228,11 @@ select {
   color: var(--text-secondary);
 }
 
-/* Enhanced button contrast */
-button {
-  font-weight: 500;
-  color: var(--text-primary);
-  background-color: var(--card-background);
-  border: 2px solid var(--border-color);
-  transition: all 0.2s ease;
-}
-
-button:hover:not(:disabled) {
-  background-color: var(--card-hover);
-  border-color: var(--accent-color);
-  transform: translateY(-1px);
-}
-
-button:focus-visible {
-  outline: 3px solid var(--accent-color);
-  outline-offset: 3px;
-  border-color: var(--accent-color);
-  box-shadow: 0 0 0 3px rgb(232 191 118 / 30%);
-}
-
-/* Enhanced input focus styles */
+/* Input focus styles */
 input:focus-visible,
 textarea:focus-visible,
 select:focus-visible {
   border-color: var(--accent-color);
-  box-shadow: 0 0 0 3px rgb(232 191 118 / 30%);
 }
 
 /* Global error display styles */
@@ -274,451 +265,6 @@ select:focus-visible {
     margin: 0.5rem;
   }
 }
-
-/* ===== variables.css ===== */
-:root {
-  /* New Brand Color Palette */
-  --charcoal: #2c3e40;
-  --blue-gray: #809fb0;
-  --mimosa: #e8bf76;
-  --gold: #f1a438;
-
-  /* * New Vibrant Colors */
-  --neon-cyan: #2ff3e0;
-  --hot-pink: #fa26a0;
-  --fire-red: #f51720;
-
-  /* * Vibrant Color Variations */
-  --neon-cyan-50: rgb(47 243 224 / 10%);
-  --neon-cyan-100: rgb(47 243 224 / 20%);
-  --neon-cyan-200: rgb(47 243 224 / 30%);
-  --neon-cyan-300: rgb(47 243 224 / 40%);
-  --neon-cyan-400: rgb(47 243 224 / 60%);
-  --neon-cyan-500: #2ff3e0;
-  --neon-cyan-600: #26d4c7;
-  --neon-cyan-700: #1fb5aa;
-  --neon-cyan-800: #18968d;
-  --neon-cyan-900: #117770;
-  --hot-pink-50: rgb(250 38 160 / 10%);
-  --hot-pink-100: rgb(250 38 160 / 20%);
-  --hot-pink-200: rgb(250 38 160 / 30%);
-  --hot-pink-300: rgb(250 38 160 / 40%);
-  --hot-pink-400: rgb(250 38 160 / 60%);
-  --hot-pink-500: #fa26a0;
-  --hot-pink-600: #e61f8f;
-  --hot-pink-700: #d21a7e;
-  --hot-pink-800: #be156d;
-  --hot-pink-900: #aa105c;
-  --fire-red-50: rgb(245 23 32 / 10%);
-  --fire-red-100: rgb(245 23 32 / 20%);
-  --fire-red-200: rgb(245 23 32 / 30%);
-  --fire-red-300: rgb(245 23 32 / 40%);
-  --fire-red-400: rgb(245 23 32 / 60%);
-  --fire-red-500: #f51720;
-  --fire-red-600: #dc141c;
-  --fire-red-700: #c31218;
-  --fire-red-800: #aa0f14;
-  --fire-red-900: #910c10;
-
-  /* Primary Color Scale - Based on Charcoal */
-  --primary-50: #f8f9fa;
-  --primary-100: #e9ecef;
-  --primary-200: #dee2e6;
-  --primary-300: #ced4da;
-  --primary-400: #adb5bd;
-  --primary-500: #6c757d;
-  --primary-600: #495057;
-  --primary-700: #343a40;
-  --primary-800: #2c3e40; /* Charcoal - main brand color */
-  --primary-900: #212529;
-
-  /* Secondary Color Scale - Based on Blue Gray */
-  --secondary-50: #f8fafc;
-  --secondary-100: #f1f5f9;
-  --secondary-200: #e2e8f0;
-  --secondary-300: #cbd5e1;
-  --secondary-400: #94a3b8;
-  --secondary-500: #64748b;
-  --secondary-600: #475569;
-  --secondary-700: #334155;
-  --secondary-800: #1e293b;
-  --secondary-900: #0f172a;
-
-  /* Accent Color Scale - Based on Mimosa */
-  --accent-50: #fefce8;
-  --accent-100: #fef9c3;
-  --accent-200: #fef08a;
-  --accent-300: #fde047;
-  --accent-400: #facc15;
-  --accent-500: #e8bf76; /* Mimosa - accent color */
-  --accent-600: #ca8a04;
-  --accent-700: #a16207;
-  --accent-800: #854d0e;
-  --accent-900: #713f12;
-
-  /* Highlight Color Scale - Based on Gold */
-  --highlight-50: #fffbeb;
-  --highlight-100: #fef3c7;
-  --highlight-200: #fde68a;
-  --highlight-300: #fcd34d;
-  --highlight-400: #fbbf24;
-  --highlight-500: #f1a438; /* Gold - highlight color */
-  --highlight-600: #d97706;
-  --highlight-700: #b45309;
-  --highlight-800: #92400e;
-  --highlight-900: #78350f;
-
-  /* Modern Grays - Updated to complement new palette */
-  --gray-50: #f8fafc;
-  --gray-100: #f1f5f9;
-  --gray-200: #e2e8f0;
-  --gray-300: #cbd5e1;
-  --gray-400: #94a3b8;
-  --gray-500: #64748b;
-  --gray-600: #475569;
-  --gray-700: #334155;
-  --gray-800: #1e293b;
-  --gray-900: #0f172a;
-
-  /* Semantic Colors - Updated to use new palette */
-  --success-50: #ecfdf5;
-  --success-100: #d1fae5;
-  --success-200: #a7f3d0;
-  --success-300: #6ee7b7;
-  --success-400: #34d399;
-  --success-500: #10b981;
-  --success-600: #059669;
-  --success-700: #047857;
-  --success-800: #065f46;
-  --success-900: #064e3b;
-  --error-50: #fef2f2;
-  --error-100: #fee2e2;
-  --error-200: #fecaca;
-  --error-300: #fca5a5;
-  --error-400: #f87171;
-  --error-500: #ef4444;
-  --error-600: #dc2626;
-  --error-700: #b91c1c;
-  --error-800: #991b1b;
-  --error-900: #7f1d1d;
-  --warning-50: #fffbeb;
-  --warning-100: #fef3c7;
-  --warning-200: #fde68a;
-  --warning-300: #fcd34d;
-  --warning-400: #fbbf24;
-  --warning-500: #f59e0b;
-  --warning-600: #d97706;
-  --warning-700: #b45309;
-  --warning-800: #92400e;
-  --warning-900: #78350f;
-
-  /* RGB Values for Opacity - Updated to new colors */
-  --primary-rgb: 44, 62, 64; /* Charcoal */
-  --secondary-rgb: 128, 159, 176; /* Blue Gray */
-  --accent-rgb: 232, 191, 118; /* Mimosa */
-  --highlight-rgb: 241, 164, 56; /* Gold */
-
-  /* * New Vibrant Color RGB Values */
-  --neon-cyan-rgb: 47, 243, 224; /* Neon Cyan */
-  --hot-pink-rgb: 250, 38, 160; /* Hot Pink */
-  --fire-red-rgb: 245, 23, 32; /* Fire Red */
-  --error-rgb: 239, 68, 68;
-  --success-rgb: 16, 185, 129;
-  --warning-rgb: 245, 158, 11;
-  --black-rgb: 0, 0, 0;
-  --white-rgb: 255, 255, 255;
-
-  /* Effects */
-  --shadow-sm: 0 1px 2px var(--shadow-color);
-  --shadow-md:
-    0 4px 6px -1px var(--shadow-color), 0 2px 4px -2px var(--shadow-color);
-  --shadow-lg:
-    0 10px 15px -3px var(--shadow-color), 0 4px 6px -4px var(--shadow-color);
-  --shadow-xl:
-    0 20px 25px -5px var(--shadow-color), 0 8px 10px -6px var(--shadow-color);
-  --text-shadow-sm: 0 2px 8px rgba(var(--black-rgb), 0.2);
-  --text-shadow-lg: 0 2px 12px rgba(var(--black-rgb), 0.4);
-  --shadow-color: rgb(0 0 0 / 40%);
-  --shadow-color-light: rgb(0 0 0 / 15%);
-  --shadow-color-medium: rgb(0 0 0 / 25%);
-  --shadow-color-strong: rgb(0 0 0 / 35%);
-
-  /* * Overlay Colors */
-  --overlay-light: rgb(0 0 0 / 25%);
-  --overlay-medium: rgb(0 0 0 / 40%);
-  --overlay-dark: rgb(0 0 0 / 55%);
-  --overlay-darker: rgb(0 0 0 / 65%);
-
-  /* * Vibrant Overlay Options */
-  --overlay-cyan: rgba(var(--neon-cyan-rgb), 0.1);
-  --overlay-pink: rgba(var(--hot-pink-rgb), 0.1);
-  --overlay-red: rgba(var(--fire-red-rgb), 0.1);
-  --overlay-cyan-medium: rgba(var(--neon-cyan-rgb), 0.2);
-  --overlay-pink-medium: rgba(var(--hot-pink-rgb), 0.2);
-  --overlay-red-medium: rgba(var(--fire-red-rgb), 0.2);
-
-  /* Typography */
-  --font-sans: "Inter", system-ui, -apple-system, sans-serif;
-  --font-serif: "Playfair Display", georgia, serif;
-  --font-mono: "JetBrains Mono", monospace;
-  --text-xs: 0.75rem;
-  --text-sm: 0.875rem;
-  --text-base: 1rem;
-  --text-lg: 1.125rem;
-  --text-xl: 1.25rem;
-  --text-2xl: 1.5rem;
-  --text-3xl: 1.875rem;
-  --text-4xl: 2.25rem;
-  --text-5xl: 3rem;
-  --text-responsive-xs: clamp(0.75rem, 1.5vw, 0.875rem);
-  --text-responsive-sm: clamp(0.875rem, 1.75vw, 1rem);
-  --text-responsive-base: clamp(1rem, 2vw, 1.125rem);
-  --text-responsive-lg: clamp(1.125rem, 2.25vw, 1.25rem);
-  --text-responsive-xl: clamp(1.25rem, 2.5vw, 1.5rem);
-  --text-responsive-2xl: clamp(1.5rem, 3vw, 2rem);
-
-  /* Spacing */
-  --space-1: 0.25rem;
-  --space-2: 0.5rem;
-  --space-3: 0.75rem;
-  --space-4: 1rem;
-  --space-5: 1.25rem;
-  --space-6: 1.5rem;
-  --space-8: 2rem;
-  --space-10: 2.5rem;
-  --space-12: 3rem;
-  --space-16: 4rem;
-  --space-20: 5rem;
-  --space-24: 6rem;
-
-  /* Layout */
-  --container-max-width: 1400px;
-
-  /* Border Radius */
-  --radius-sm: 0.375rem;
-  --radius-md: 0.5rem;
-  --radius-lg: 0.75rem;
-  --radius-xl: 1rem;
-  --radius-2xl: 1.5rem;
-  --radius-full: 9999px;
-
-  /* Transitions */
-  --transition-all: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  --transition-transform: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  --transition-opacity: opacity 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  --transition-smooth: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  --transition-bounce: 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-  --transition-theme: 0.3s ease;
-
-  /* Easing */
-  --ease-out: cubic-bezier(0.4, 0, 0.2, 1);
-  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
-  --ease-in-out-expo: cubic-bezier(0.87, 0, 0.13, 1);
-  --ease-elastic: cubic-bezier(0.68, -0.6, 0.32, 1.6);
-
-  /* Animation Duration */
-  --duration-fast: 150ms;
-  --duration-normal: 250ms;
-  --duration-slow: 350ms;
-
-  /* Z-Index */
-  --z-negative: -1;
-  --z-0: 0;
-  --z-10: 10;
-  --z-20: 20;
-  --z-30: 30;
-  --z-40: 40;
-  --z-50: 50;
-  --z-elevate: 1;
-  --z-sticky: 100;
-  --z-drawer: 200;
-  --z-modal: 300;
-  --z-popover: 400;
-  --z-toast: 500;
-
-  /* Mobile-specific spacing and sizing */
-  --mobile-padding: 1rem;
-  --mobile-margin: 0.75rem;
-  --mobile-border-radius: 0.5rem;
-  --mobile-card-padding: 1rem;
-  --mobile-button-height: 44px; /* Touch-friendly button height */
-  --mobile-input-height: 48px; /* Touch-friendly input height */
-
-  /* Theme colors - Updated with new brand colors */
-  --primary-color: var(--charcoal); /* #2c3e40 */
-  --primary-light: rgb(44 62 64 / 10%); /* Charcoal with opacity */
-  --primary-dark: var(--primary-900);
-  --secondary-color: var(--blue-gray); /* #809fb0 */
-  --accent-color: var(--mimosa); /* #e8bf76 */
-  --highlight-color: var(--gold); /* #f1a438 */
-
-  /* Text colors - WCAG AA compliant contrast ratios */
-  --text-primary: #fff; /* Pure white for maximum contrast */
-  --text-secondary: #f8fafc; /* Enhanced brightness for better contrast */
-  --text-tertiary: #e2e8f0; /* Bright for better contrast */
-
-  /* Background colors - Improved contrast for WCAG compliance */
-  --background-color: #0f1419; /* Darker background for better contrast */
-  --card-background: #1e293b; /* Darker card background for better contrast */
-  --card-border: #334155; /* Darker border for better contrast */
-  --card-hover: #475569; /* Enhanced hover state for better contrast */
-  --border-color: #334155; /* Consistent border color */
-  --surface-color: #1e293b; /* Darker surface */
-  --header-background: #1e293b; /* Darker header for better contrast */
-  --header-border: #334155; /* Darker header border */
-
-  /* Legacy dark-mode variables for backward compatibility */
-  --surface-dark: #1e293b; /* Darker charcoal for better contrast */
-  --card-background-dark: #1e293b; /* Darker charcoal for better contrast */
-  --card-hover-dark: #475569; /* Enhanced hover state for better contrast */
-  --border-color-dark: #334155; /* Darker borders for better contrast */
-  --text-primary-dark: #fff;
-  --text-secondary-dark: #e2e8f0;
-  --button-primary-bg: var(--charcoal);
-  --button-primary-hover: var(--primary-700);
-  --button-secondary-bg: rgb(255 255 255 / 10%);
-  --button-secondary-hover: rgb(255 255 255 / 18%);
-  --button-text-light: white;
-
-  /* * New Vibrant Semantic Colors */
-  --vibrant-accent: var(--neon-cyan);
-  --vibrant-highlight: var(--hot-pink);
-  --vibrant-alert: var(--fire-red);
-  --vibrant-success: var(--neon-cyan);
-  --vibrant-warning: var(--hot-pink);
-  --vibrant-error: var(--fire-red);
-}
-
-/* Light Theme Overrides */
-body.light-theme {
-  --primary-color: var(--primary-600);
-  --primary-light: var(--primary-100);
-  --primary-dark: var(--primary-800);
-  --surface-color: #f1f5f9; /* * Darker surface color */
-  --background-color: #f8fafc; /* * Darker background color */
-  --text-primary: #0f172a; /* Enhanced contrast for WCAG compliance */
-  --text-secondary: #1e293b; /* Enhanced contrast for WCAG compliance */
-  --text-tertiary: #334155; /* Enhanced contrast for WCAG compliance */
-  --border-color: #cbd5e1;
-  --card-background: #fff; /* * Keep cards white for contrast */
-  --card-border: #cbd5e1;
-  --card-hover: #e2e8f0; /* * Darker hover state */
-  --header-background: #fff; /* * Keep header white for contrast */
-  --header-border: #cbd5e1; /* * Darker border */
-  --shadow-subtle: 0 1px 3px rgb(0 0 0 / 8%); /* * Subtle shadow for light theme */
-  --shadow-medium: 0 4px 12px rgb(0 0 0 / 12%); /* * Medium shadow for light theme */
-
-  /* Synced dark-mode variables for components using legacy names */
-  --surface-dark: #f1f5f9; /* * Updated to match new surface color */
-  --card-background-dark: #fff; /* * Keep cards white */
-  --card-hover-dark: #e2e8f0; /* * Updated to match new hover color */
-  --border-color-dark: #cbd5e1;
-  --text-primary-dark: #0f172a;
-  --text-secondary-dark: #1e293b;
-  --button-primary-bg: var(--primary-600);
-  --button-primary-hover: var(--primary-700);
-  --button-secondary-bg: rgb(
-    0 0 0 / 8%
-  ); /* * Slightly more visible secondary button */
-  --button-secondary-hover: rgb(0 0 0 / 15%); /* * More visible hover state */
-  --button-text-light: white;
-
-  /* * Start section colors for light theme */
-  --start-section-bg-start: #e2e8f0; /* * Darker start color */
-  --start-section-bg-end: #cbd5e1; /* * Darker end color */
-  --start-section-border: #94a3b8; /* * Darker border */
-  --start-section-pattern: #64748b; /* * Subtle pattern color */
-  --accent-subtle: rgb(100 116 139 / 15%); /* * Subtle accent for light theme */
-  --accent-medium: rgb(100 116 139 / 25%); /* * Medium accent for light theme */
-
-  /* NameCard selected state variables */
-  --namecard-selected-bg: linear-gradient(135deg, var(--primary-50), var(--primary-100));
-  --namecard-selected-border: var(--primary-500);
-  --namecard-selected-description: var(--primary-600);
-}
-
-/* Dark Theme Overrides */
-body.dark-theme {
-  --primary-color: var(--primary-400);
-  --primary-light: var(--primary-700);
-  --primary-dark: var(--primary-200);
-  --surface-color: #0f172a; /* * Darker surface for better contrast */
-  --background-color: #020617; /* * Darker background for better contrast */
-  --text-primary: #f8fafc;
-  --text-secondary: #e2e8f0;
-  --text-tertiary: #cbd5e1;
-  --border-color: #1e293b; /* * Darker border for better contrast */
-  --card-background: #0f172a; /* * Darker card background */
-  --card-border: #1e293b; /* * Darker card border */
-  --card-hover: #1e293b; /* * Darker hover state */
-  --header-background: #0f172a; /* * Darker header background */
-  --header-border: #1e293b; /* * Darker header border */
-
-  /* Synced light-mode variables for components using legacy names */
-  --surface-dark: #0f172a; /* * Updated to match new surface color */
-  --card-background-dark: #0f172a; /* * Updated to match new card background */
-  --card-hover-dark: #1e293b; /* * Updated to match new hover color */
-  --border-color-dark: #1e293b; /* * Updated to match new border color */
-  --text-primary-dark: #f8fafc;
-  --text-secondary-dark: #e2e8f0;
-  --button-primary-bg: var(--primary-500);
-  --button-primary-hover: var(--primary-400);
-  --button-secondary-bg: rgb(255 255 255 / 12%); /* * Slightly more visible */
-  --button-secondary-hover: rgb(255 255 255 / 25%); /* * More visible hover */
-  --button-text-light: #0f1419;
-  --shadow-subtle: 0 1px 3px rgb(0 0 0 / 25%); /* * Subtle shadow for dark theme */
-  --shadow-medium: 0 4px 12px rgb(0 0 0 / 35%); /* * Medium shadow for dark theme */
-
-  /* * Start section colors for dark theme */
-  --start-section-bg-start: #1e293b; /* * Darker start color for better contrast */
-  --start-section-bg-end: #334155; /* * Darker end color for better contrast */
-  --start-section-border: #475569; /* * Darker border for better contrast */
-  --start-section-pattern: #64748b; /* * Subtle pattern color */
-  --accent-subtle: rgb(255 255 255 / 8%); /* * Subtle accent for dark theme */
-  --accent-medium: rgb(255 255 255 / 15%); /* * Medium accent for dark theme */
-
-  /* NameCard selected state variables */
-  --namecard-selected-bg: linear-gradient(135deg, var(--primary-700), var(--primary-800));
-  --namecard-selected-border: var(--primary-400);
-  --namecard-selected-description: var(--primary-300);
-}
-
-/* High Contrast Mode */
-@media (prefers-contrast: more) {
-  :root {
-    --primary-600: #1a1f2e;
-    --error-600: #dc2626;
-    --success-600: #059669;
-    --warning-600: #b45309;
-
-    /* Enhanced contrast for high contrast mode */
-    --text-primary: #fff;
-    --text-secondary: #fff;
-    --background-color: #000;
-    --card-background: #1a1a1a;
-    --border-color: #fff;
-    --accent-color: #ff0;
-  }
-
-  /* Enhanced focus indicators for high contrast */
-  :focus-visible {
-    outline: 4px solid var(--accent-color);
-    outline-offset: 4px;
-  }
-
-  /* Enhanced button contrast */
-  button {
-    color: var(--text-primary);
-    background-color: var(--card-background);
-    border: 3px solid var(--border-color);
-  }
-
-  button:hover:not(:disabled) {
-    color: var(--background-color);
-    background-color: var(--accent-color);
-  }
-}
-
 /* =====================
    Global UI Utilities
    Reusable primitives for buttons, cards, text, spacing
@@ -3584,18 +3130,22 @@ h1 {
     width: 30px;
     height: 30px;
   }
+
   .cat-background__cat--1 {
     top: 10%;
     left: 5%;
   }
+
   .cat-background__cat--2 {
     top: 20%;
     right: 10%;
   }
+
   .cat-background__cat--3 {
     bottom: 15%;
     left: 15%;
   }
+
   .cat-background__cat--4 {
     right: 5%;
     bottom: 25%;
@@ -3607,21 +3157,29 @@ h1 {
     width: 25px;
     height: 25px;
   }
-
   .cat-background__cat--1 {
     top: 8%;
     left: 3%;
   }
+
   .cat-background__cat--2 {
     top: 18%;
     right: 8%;
   }
+
   .cat-background__cat--3 {
     bottom: 12%;
     left: 12%;
   }
+
   .cat-background__cat--4 {
     right: 3%;
     bottom: 22%;
   }
+
+/* Limit global button resets to layout regions to avoid module collisions */
+.layout button,
+.main-content button {
+  /* move previous global button declarations here if needed */
+
 }
