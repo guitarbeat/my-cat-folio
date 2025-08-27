@@ -296,7 +296,8 @@ export class ErrorService {
       maxRetries = 3,
       delay = 1000,
       backoff = 2,
-      shouldRetry = (error) => this.isRetryable(error, {})
+      // Ensure we classify errors before deciding retryability
+      shouldRetry = (error) => this.isRetryable(this.parseError(error), {})
     } = options;
 
     return async (...args) => {

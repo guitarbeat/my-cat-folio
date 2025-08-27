@@ -1,9 +1,16 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
+import viteCompression from 'vite-plugin-compression';
 import { resolve } from 'path';
 
 export default defineConfig({
-    plugins: [react()],
+    plugins: [
+        react(),
+        // Gzip compression for broader CDN compatibility
+        viteCompression({ algorithm: 'gzip' }),
+        // Brotli compression for modern clients
+        viteCompression({ algorithm: 'brotliCompress' }),
+    ],
     root: '.',
     publicDir: 'public',
     resolve: {

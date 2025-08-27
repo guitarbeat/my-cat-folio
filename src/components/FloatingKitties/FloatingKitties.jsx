@@ -138,15 +138,25 @@ const FloatingKitties = ({
             '--glow-color': kittie.glowColor
           }}
         >
-          <img
-            src="/images/cat.gif"
-            alt="Floating cat"
+          <video
             className={styles.kittieImage}
-            draggable={false}
-            loading="lazy"
-            decoding="async"
-            fetchpriority="low"
-          />
+            muted
+            loop
+            autoPlay
+            playsInline
+            preload="none"
+            aria-label="Floating cat"
+          >
+            <source src="/images/cat.webm" type="video/webm" />
+            <img
+              src="/images/cat.gif"
+              alt="Floating cat"
+              draggable={false}
+              loading="lazy"
+              decoding="async"
+              fetchpriority="low"
+            />
+          </video>
         </div>
       ))}
     </div>

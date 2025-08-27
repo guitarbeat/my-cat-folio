@@ -137,14 +137,18 @@ function Login({ onLogin }) {
     <div className={styles.loginWrapper}>
       {/* Background with overlay */}
       <div className={styles.backgroundContainer}>
-        <img
-          src="/images/IMG_5071.JPG"
-          alt="Cat background"
-          className={styles.backgroundImage}
-          loading="lazy"
-          decoding="async"
-          fetchpriority="low"
-        />
+        <picture>
+          <source type="image/avif" srcSet="/images/IMG_5071.avif" />
+          <source type="image/webp" srcSet="/images/IMG_5071.webp" />
+          <img
+            src="/images/IMG_5071.JPG"
+            alt="Cat background"
+            className={styles.backgroundImage}
+            loading="lazy"
+            decoding="async"
+            fetchpriority="low"
+          />
+        </picture>
         <div className={styles.overlay} />
       </div>
 
@@ -155,14 +159,18 @@ function Login({ onLogin }) {
           <h1 className={styles.welcomeTitle}>
             Welcome to the Cat Name Tournament!
           </h1>
-          <img
-            src="/images/IMG_5071.JPG"
-            alt="Cute cat avatar"
-            className={styles.catImage}
-            loading="lazy"
-            decoding="async"
-            fetchpriority="low"
-          />
+          <picture>
+            <source type="image/avif" srcSet="/images/IMG_5071.avif" />
+            <source type="image/webp" srcSet="/images/IMG_5071.webp" />
+            <img
+              src="/images/IMG_5071.JPG"
+              alt="Cute cat avatar"
+              className={styles.catImage}
+              loading="lazy"
+              decoding="async"
+              fetchpriority="low"
+            />
+          </picture>
           <p className={styles.welcomeText}>
             Join Aaron&apos;s quest to find the perfect cat name through science
             and democracy!

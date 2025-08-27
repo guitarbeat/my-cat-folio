@@ -159,16 +159,28 @@ function NavBar({
         className="navbar__logo-link"
         aria-label="Go to home page"
       >
-        <img
-          src="./images/cat.gif"
-          alt="Cat animation"
+        <video
           className="navbar__logo"
           width="32"
           height="32"
-          loading="lazy"
-          decoding="async"
-          fetchpriority="low"
-        />
+          muted
+          loop
+          autoPlay
+          playsInline
+          preload="none"
+          aria-label="Cat animation"
+        >
+          <source src="/images/cat.webm" type="video/webm" />
+          <img
+            src="/images/cat.gif"
+            alt="Cat animation"
+            width="32"
+            height="32"
+            loading="lazy"
+            decoding="async"
+            fetchpriority="low"
+          />
+        </video>
         <span className="navbar__title">Aaron&apos;s Folly</span>
       </a>
     </li>

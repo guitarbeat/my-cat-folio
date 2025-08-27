@@ -277,38 +277,74 @@ function App() {
             if (prefersReducedMotion || saveData) return null;
             return (
               <>
-                <img
-                  src="/images/cat.gif"
-                  alt=""
+                <video
                   className="cat-background__cat cat-background__cat--1"
-                  loading="lazy"
-                  decoding="async"
-                  fetchpriority="low"
-                />
-                <img
-                  src="/images/cat.gif"
-                  alt=""
+                  muted
+                  loop
+                  autoPlay
+                  playsInline
+                  preload="none"
+                >
+                  <source src="/images/cat.webm" type="video/webm" />
+                  <img
+                    src="/images/cat.gif"
+                    alt=""
+                    loading="lazy"
+                    decoding="async"
+                    fetchpriority="low"
+                  />
+                </video>
+                <video
                   className="cat-background__cat cat-background__cat--2"
-                  loading="lazy"
-                  decoding="async"
-                  fetchpriority="low"
-                />
-                <img
-                  src="/images/cat.gif"
-                  alt=""
+                  muted
+                  loop
+                  autoPlay
+                  playsInline
+                  preload="none"
+                >
+                  <source src="/images/cat.webm" type="video/webm" />
+                  <img
+                    src="/images/cat.gif"
+                    alt=""
+                    loading="lazy"
+                    decoding="async"
+                    fetchpriority="low"
+                  />
+                </video>
+                <video
                   className="cat-background__cat cat-background__cat--3"
-                  loading="lazy"
-                  decoding="async"
-                  fetchpriority="low"
-                />
-                <img
-                  src="/images/cat.gif"
-                  alt=""
+                  muted
+                  loop
+                  autoPlay
+                  playsInline
+                  preload="none"
+                >
+                  <source src="/images/cat.webm" type="video/webm" />
+                  <img
+                    src="/images/cat.gif"
+                    alt=""
+                    loading="lazy"
+                    decoding="async"
+                    fetchpriority="low"
+                  />
+                </video>
+                <video
                   className="cat-background__cat cat-background__cat--4"
-                  loading="lazy"
-                  decoding="async"
-                  fetchpriority="low"
-                />
+                  muted
+                  loop
+                  autoPlay
+                  playsInline
+                  preload="none"
+                >
+                  <source src="/images/cat.webm" type="video/webm" />
+                  <img
+                    src="/images/cat.gif"
+                    alt=""
+                    loading="lazy"
+                    decoding="async"
+                    fetchpriority="low"
+                  />
+                </video>
               </>
             );
           })()}

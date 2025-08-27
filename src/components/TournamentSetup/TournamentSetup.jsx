@@ -8,7 +8,8 @@ import PropTypes from 'prop-types';
 import {
   supabase,
   getNamesWithDescriptions,
-  tournamentsAPI
+  tournamentsAPI,
+  catNamesAPI
 } from '../../supabase/supabaseClient';
 import devLog from '../../utils/logger';
 import {
@@ -18,7 +19,6 @@ import {
   ErrorDisplay,
   InlineError
 } from '../';
-import useSupabaseStorage from '../../supabase/useSupabaseStorage';
 import useErrorHandler from '../../hooks/useErrorHandler';
 import useToast from '../../hooks/useToast';
 import { validateCatName, validateDescription } from '../../utils/validation';
@@ -560,7 +560,7 @@ const NameSuggestionSection = () => {
   const [description, setDescription] = useState('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
-  const { addName, loading } = useSupabaseStorage();
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const { showSuccess, showError } = useToast();
 
   const handleSubmit = async (e) => {
@@ -568,14 +568,12 @@ const NameSuggestionSection = () => {
     setError('');
     setSuccess('');
 
-    // Validate the name
     const nameValidation = validateCatName(name.trim());
     if (!nameValidation.success) {
       setError(nameValidation.error);
       return;
     }
 
-    // Validate the description
     const descriptionValidation = validateDescription(description.trim());
     if (!descriptionValidation.success) {
       setError(descriptionValidation.error);
@@ -583,7 +581,111 @@ const NameSuggestionSection = () => {
     }
 
     try {
-      await addName(nameValidation.value, descriptionValidation.value);
+      setIsSubmitting(true);
+      const res = await catNamesAPI.addName(
+        nameValidation.value,
+        descriptionValidation.value
+      );
+      if (res?.success === false) {
+        throw new Error(res.error || 'Failed to add name');
+      }
+      setSuccess('Thank you for your suggestion!');
+      showSuccess('Name suggestion submitted successfully!', { duration: 4000 });
+      setName('');
+      setDescription('');
+    } catch (err) {
+      setError('Failed to add name. It might already exist.');
+      showError('Failed to submit name suggestion. Please try again.', {
+        duration: 5000
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  return (
+    <div className={styles.suggestionSection}>
+      <div className={styles.suggestionCard}>
+        <h2>Suggest a Cat Name</h2>
+        <p className={styles.suggestionIntro}>
+          Have a great cat name in mind? Share it with the community!
+        </p>
+
+        <form
+          onSubmit={handleSubmit}
+          className={styles.suggestionForm}
+          role="form"
+          aria-label="Name suggestion form"
+        >
+          <div className={styles.formGroup}>
+            <label htmlFor="suggestion-name">Name</label>
+            <input
+              type="text"
+              id="suggestion-name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder="Enter a cat name"
+              maxLength={50}
+              disabled={isSubmitting}
+              aria-required="true"
+              aria-describedby="name-help"
+            />
+            <div id="name-help" className={styles.helpText}>
+              Enter a unique cat name (maximum 50 characters)
+            </div>
+          </div>
+
+          <div className={styles.formGroup}>
+            <label htmlFor="suggestion-description">Description</label>
+            <textarea
+              id="suggestion-description"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              placeholder="Tell us about this name's meaning or origin"
+              maxLength={500}
+              disabled={isSubmitting}
+              aria-required="false"
+              aria-describedby="description-help"
+            />
+            <div id="description-help" className={styles.helpText}>
+              Optional: Describe the name&apos;s meaning or origin (maximum 500
+              characters)
+            </div>
+          </div>
+
+          {error && (
+            <InlineError
+              error={error}
+              context="form"
+              position="below"
+              onDismiss={() => setError('')}
+              showRetry={false}
+              showDismiss={true}
+              size="medium"
+              className={styles.loginError}
+            />
+          )}
+          {success && <p className={styles.successMessage}>{success}</p>}
+
+          <button
+            type="submit"
+            className={styles.submitButton}
+            disabled={isSubmitting}
+            aria-label={
+              isSubmitting
+                ? 'Submitting name suggestion...'
+                : 'Submit name suggestion'
+            }
+          >
+            {isSubmitting ? 'Submitting...' : 'Submit Name'}
+          </button>
+        </form>
+      </div>
+    </div>
+  );
+};
+
+// Replace the placeholder with actual implementation (separate hunk to avoid diff confusion)
       setSuccess('Thank you for your suggestion!');
       showSuccess('Name suggestion submitted successfully!', {
         duration: 4000
@@ -847,7 +949,19 @@ function TournamentSetupContent({ onStart, userName }) {
   const [showCatPictures, setShowCatPictures] = useState(false);
 
   // Get categories and other enhanced data
-  const { categories } = useSupabaseStorage();
+  const [categories, setCategories] = useState([]);
+
+  // Derive categories from available names to avoid schema coupling
+  useEffect(() => {
+    const unique = new Set();
+    (availableNames || []).forEach((n) => {
+      (n.categories || []).forEach((c) => unique.add(c));
+    });
+    const list = Array.from(unique)
+      .sort((a, b) => a.localeCompare(b))
+      .map((name) => ({ id: name, name }));
+    setCategories(list);
+  }, [availableNames]);
 
   // Simple admin detection - user "aaron" gets admin features
   // TODO: Replace with actual user authentication check
@@ -1244,14 +1358,23 @@ function TournamentSetupContent({ onStart, userName }) {
                     tabIndex={0}
                     aria-label={`View cat photo ${index + 1}`}
                   >
-                    <img
-                      src={image}
-                      alt={`Cat photo ${index + 1}`}
-                      loading="lazy"
-                      decoding="async"
-                      width="200"
-                      height="200"
-                    />
+                    {(() => {
+                      const base = image.replace(/\.[^.]+$/, '');
+                      return (
+                        <picture>
+                          <source type="image/avif" srcSet={`${base}.avif`} />
+                          <source type="image/webp" srcSet={`${base}.webp`} />
+                          <img
+                            src={image}
+                            alt={`Cat photo ${index + 1}`}
+                            loading="lazy"
+                            decoding="async"
+                            width="200"
+                            height="200"
+                          />
+                        </picture>
+                      );
+                    })()}
                     <div className={styles.photoOverlay}>
                       <span className={styles.photoIcon}>👁️</span>
                     </div>

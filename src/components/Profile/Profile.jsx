@@ -5,8 +5,7 @@
  */
 import React, { useState, useCallback, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import useSupabaseStorage from '../../supabase/useSupabaseStorage';
-import { supabase, deleteName } from '../../supabase/supabaseClient';
+import { supabase, deleteName, catNamesAPI } from '../../supabase/supabaseClient';
 import { FILTER_OPTIONS } from '../../constants';
 import { ErrorService } from '../../services/errorService';
 
@@ -276,12 +275,26 @@ const Profile = ({ userName, onStartNewTournament }) => {
   const [selectionFilter, setSelectionFilter] = useState('all');
 
   // * Hooks
-  const {
-    names: allNames,
-    loading: ratingsLoading,
-    error: ratingsError,
-    fetchNames
-  } = useSupabaseStorage(userName);
+  const [allNames, setAllNames] = useState([]);
+  const [ratingsLoading, setRatingsLoading] = useState(true);
+  const [ratingsError, setRatingsError] = useState(null);
+
+  const fetchNames = useCallback(async () => {
+    try {
+      setRatingsLoading(true);
+      setRatingsError(null);
+      if (!supabase) {
+        setAllNames([]);
+        return;
+      }
+      const names = await catNamesAPI.getNamesWithDescriptions();
+      setAllNames(names);
+    } catch (err) {
+      setRatingsError(err);
+    } finally {
+      setRatingsLoading(false);
+    }
+  }, []);
 
   // * State for selected names
   const [selectedNames, setSelectedNames] = useState(new Set());

@@ -45,6 +45,9 @@ export class TournamentService {
             rating
           }));
 
+      // Build a quick lookup map for final ratings to avoid repeated .find calls
+      const ratingMap = new Map(ratingsArray.map((r) => [r.name, r.rating]));
+
       // * Initialize tournament results for all names
       const tournamentResults = {};
       ratingsArray.forEach((rating) => {
@@ -80,8 +83,7 @@ export class TournamentService {
       if (!supabase) {
         const updatedRatings = { ...existingRatings };
         Object.entries(tournamentResults).forEach(([name, results]) => {
-          const finalRating =
-            ratingsArray.find((r) => r.name === name)?.rating || 1500;
+          const finalRating = ratingMap.get(name) ?? 1500;
           const existing = updatedRatings[name] || { wins: 0, losses: 0 };
           updatedRatings[name] = {
             rating: Math.round(finalRating),
@@ -118,8 +120,7 @@ export class TournamentService {
           }
 
           // * Get the final rating for this name
-          const finalRating =
-            ratingsArray.find((r) => r.name === name)?.rating || 1500;
+          const finalRating = ratingMap.get(name) ?? 1500;
 
           // * Get existing rating data
           const existingRating = existingRatings[name] || {
@@ -143,8 +144,11 @@ export class TournamentService {
 
       // * Return updated ratings for local state
       const updatedRatings = { ...existingRatings };
+      const idToNameMap = new Map(
+        nameOptions.map(({ id, name }) => [id, name])
+      );
       recordsToUpsert.forEach((record) => {
-        const name = nameOptions.find((opt) => opt.id === record.name_id)?.name;
+        const name = idToNameMap.get(record.name_id);
         if (name) {
           updatedRatings[name] = {
             rating: record.rating,

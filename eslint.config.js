@@ -1,9 +1,9 @@
-const js = require('@eslint/js');
-const react = require('eslint-plugin-react');
-const reactHooks = require('eslint-plugin-react-hooks');
-const globals = require('globals');
+import js from '@eslint/js';
+import react from 'eslint-plugin-react';
+import reactHooks from 'eslint-plugin-react-hooks';
+import globals from 'globals';
 
-module.exports = [
+export default [
   // Base JavaScript recommended rules
   js.configs.recommended,
 

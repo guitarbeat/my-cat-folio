@@ -400,23 +400,36 @@ export const hiddenNamesAPI = {
    */
   async hideName(userName, nameId) {
     try {
-      // Update or insert the hidden status in cat_name_ratings
-      const { error } = await supabase.from('cat_name_ratings').upsert(
-        {
-          name_id: nameId,
-          user_name: userName,
-          is_hidden: true,
-          // * FIXED: Don't overwrite existing rating - only set if record is new
-          wins: 0,
-          losses: 0
-        },
-        {
-          onConflict: 'name_id,user_name',
-          ignoreDuplicates: false
-        }
-      );
+      // First check if a record exists to avoid overwriting wins/losses
+      const { data: existing, error: fetchError } = await supabase
+        .from('cat_name_ratings')
+        .select('user_name, name_id')
+        .eq('user_name', userName)
+        .eq('name_id', nameId)
+        .single();
 
-      if (error) throw error;
+      if (!fetchError && existing) {
+        // Existing record: update only the hidden flag
+        const { error: updateError } = await supabase
+          .from('cat_name_ratings')
+          .update({ is_hidden: true })
+          .eq('user_name', userName)
+          .eq('name_id', nameId);
+        if (updateError) throw updateError;
+      } else if (fetchError?.code === 'PGRST116') {
+        // No existing record: insert minimal new record with hidden flag
+        const { error: insertError } = await supabase
+          .from('cat_name_ratings')
+          .insert({
+            user_name: userName,
+            name_id: nameId,
+            is_hidden: true
+          });
+        if (insertError) throw insertError;
+      } else if (fetchError) {
+        throw fetchError;
+      }
+
       return { success: true };
     } catch (error) {
       if (process.env.NODE_ENV === 'development') {
