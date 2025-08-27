@@ -674,25 +674,61 @@ export const tournamentsAPI = {
       // This approach is simpler and avoids RLS policy complications
 
       // Update the cat_name_ratings table to track selection count and tournament data
-      const updatePromises = selectedNames.map(nameObj =>
-        supabase
-          .from('cat_name_ratings')
-          .upsert({
-            user_name: userName,
-            name_id: nameObj.id,
-            tournament_selections: supabase.sql`COALESCE(tournament_selections, 0) + 1`,
-            last_selected_at: now,
-            tournament_data: supabase.sql`COALESCE(tournament_data, '[]'::jsonb) || ${JSON.stringify([{
-              tournament_id: finalTournamentId,
-              selected_at: now,
-              selection_type: 'tournament_setup'
-            }])}`,
-            updated_at: now
-          }, { onConflict: 'user_name,name_id' })
-      );
+      const updatePromises = selectedNames.map(async (nameObj) => {
+        try {
+          // First, get the current data for this user/name combination
+          const { data: currentData, error: selectError } = await supabase
+            .from('cat_name_ratings')
+            .select('tournament_selections, last_selected_at')
+            .eq('user_name', userName)
+            .eq('name_id', nameObj.id)
+            .single();
+
+          // If no existing record, create a new one with default values
+          if (selectError && selectError.code === 'PGRST116') {
+            // No existing record, create new one
+            const { error } = await supabase
+              .from('cat_name_ratings')
+              .insert({
+                user_name: userName,
+                name_id: nameObj.id,
+                rating: 1500, // Default rating
+                wins: 0,
+                losses: 0,
+                tournament_selections: 1,
+                last_selected_at: now,
+                first_selected_at: now,
+                selection_frequency: 1,
+                updated_at: now
+              });
+            return { error };
+          }
+
+          // Prepare the updated data
+          const currentTournamentSelections = currentData?.tournament_selections || 0;
+          const currentLastSelectedAt = currentData?.last_selected_at;
+
+          // Update the record
+          const { error } = await supabase
+            .from('cat_name_ratings')
+            .upsert({
+              user_name: userName,
+              name_id: nameObj.id,
+              tournament_selections: currentTournamentSelections + 1,
+              last_selected_at: now,
+              first_selected_at: currentLastSelectedAt || now,
+              selection_frequency: currentTournamentSelections + 1,
+              updated_at: now
+            }, { onConflict: 'user_name,name_id' });
+
+          return { error };
+        } catch (error) {
+          return { error };
+        }
+      });
 
       const results = await Promise.all(updatePromises);
-      
+
       // Check for any errors
       const errors = results.filter(result => result.error);
       if (errors.length > 0) {
