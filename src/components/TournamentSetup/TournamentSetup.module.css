@@ -960,17 +960,7 @@
   color: var(--success-500);
 }
 
-/* Animations */
-@keyframes pulse {
-  0%,
-  100% {
-    opacity: 1;
-  }
-
-  50% {
-    opacity: 0.6;
-  }
-}
+/* Animations - pulse animation defined later in file */
 
 /* Dark Mode - removed in favor of global theme tokens */
 
@@ -1298,10 +1288,7 @@
   cursor: grabbing;
 }
 
-.swipeCard.selected {
-  border-color: var(--primary-color, #5a5cff);
-  box-shadow: 0 8px 32px rgb(90 92 255 / 30%);
-}
+/* Basic selected state - will be enhanced below */
 
 /* Swipe Card Content */
 .swipeCardContent {
@@ -1387,6 +1374,7 @@
   border-radius: 20px;
   backdrop-filter: blur(10px);
   transition: all 0.3s ease;
+  z-index: 10;
 }
 
 .selectionIndicator.selected {
@@ -1755,14 +1743,14 @@
 .swipeCard.selected {
   border-color: var(--primary-color, #5a5cff);
   box-shadow: 
-    0 8px 32px rgba(90, 92, 255, 0.3),
-    0 0 0 3px rgba(90, 92, 255, 0.2),
-    inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+    0 8px 32px rgba(90, 92, 255, 0.15),
+    0 0 0 2px rgba(90, 92, 255, 0.1),
+    inset 0 0 0 1px rgba(90, 92, 255, 0.05);
   transform: translateY(-4px) scale(1.02);
   background: linear-gradient(
     135deg,
-    rgba(90, 92, 255, 0.05) 0%,
-    rgba(124, 58, 237, 0.05) 100%
+    rgba(90, 92, 255, 0.02) 0%,
+    rgba(124, 58, 237, 0.02) 100%
   );
   position: relative;
   overflow: hidden;
@@ -1778,7 +1766,7 @@
   background: linear-gradient(
     45deg,
     transparent 30%,
-    rgba(90, 92, 255, 0.1) 50%,
+    rgba(90, 92, 255, 0.03) 50%,
     transparent 70%
   );
   animation: shimmer 3s ease-in-out infinite;
@@ -1798,8 +1786,8 @@
 .swipeCard.selected .swipeCardName {
   color: var(--primary-color, #5a5cff);
   text-shadow: 
-    0 0 10px rgba(90, 92, 255, 0.5),
-    0 2px 4px rgba(0, 0, 0, 0.3);
+    0 0 8px rgba(90, 92, 255, 0.3),
+    0 2px 4px rgba(0, 0, 0, 0.5);
   transform: scale(1.05);
   transition: all 0.3s ease;
 }
@@ -1912,4 +1900,16 @@
 
 .swipeCard.selected {
   animation: cardSelect 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+@keyframes cardSelect {
+  0% {
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    transform: translateY(-8px) scale(1.05);
+  }
+  100% {
+    transform: translateY(-4px) scale(1.02);
+  }
 }

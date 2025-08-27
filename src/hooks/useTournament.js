@@ -88,6 +88,8 @@ export function useTournament({
   existingRatings = {},
   onComplete
 }) {
+  console.log('[DEV] 🎮 useTournament: Hook called with names:', names);
+  console.log('[DEV] 🎮 useTournament: Hook called with existingRatings:', existingRatings);
   const { userName } = useUserSession();
 
   // Create a stable storage key using the names array and user name
@@ -183,6 +185,19 @@ export function useTournament({
   const runTournament = useCallback(
     async (tournamentSorter) => {
       try {
+        console.log('[DEV] 🎮 runTournament: Starting tournament with', names.length, 'names');
+        
+        // * FIXED: Handle 2-name tournaments differently
+        if (names.length === 2) {
+          console.log('[DEV] 🎮 runTournament: 2-name tournament, setting up single match');
+          const left = names[0];
+          const right = names[1];
+          setCurrentMatch({ left, right });
+          setTotalMatches(1);
+          setCurrentMatchNumber(1);
+          return; // Don't run the sorter for 2 names
+        }
+
         const initialState = {
           names,
           existingRatings,
@@ -287,7 +302,7 @@ export function useTournament({
       setSorter(newSorter);
 
       const n = names.length;
-      const estimatedMatches = n <= 2 ? 1 : Math.ceil(n * Math.log2(n));
+      const estimatedMatches = n === 2 ? 1 : (n <= 2 ? 1 : Math.ceil(n * Math.log2(n)));
 
       // Reset tournament state
       updateTournamentState({

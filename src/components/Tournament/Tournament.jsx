@@ -724,8 +724,15 @@ function TournamentContent({
     );
   }
 
-  if (!currentMatch) {
-    return <LoadingSpinner />;
+  if (!randomizedNames.length || !currentMatch) {
+    return (
+      <div className={styles.tournamentContainer}>
+        <LoadingSpinner />
+        <p style={{ textAlign: 'center', marginTop: '1rem' }}>
+          {!randomizedNames.length ? 'Setting up tournament...' : 'Preparing tournament...'}
+        </p>
+      </div>
+    );
   }
 
   return (
