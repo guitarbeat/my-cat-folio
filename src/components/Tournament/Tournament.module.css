@@ -373,6 +373,29 @@
   transform: rotate(90deg);
 }
 
+/* === Scoped overrides to out-specify global styles (buttons/headings) === */
+.tournament button {
+  font: inherit;
+  line-height: inherit;
+  color: inherit;
+}
+
+.tournament .extraOptionsButton.extraOptionsButton,
+.tournament .bracketToggle.bracketToggle,
+.tournament .keyboardHelpToggle.keyboardHelpToggle,
+.tournament .controlButton.controlButton {
+  color: var(--text-secondary);
+  background: var(--surface-color);
+  border: 1px solid var(--border-color);
+}
+
+.tournament h1,
+.tournament h2,
+.tournament h3 {
+  margin: 0.25rem 0;
+  line-height: 1.2;
+}
+
 .keyboardHelp {
   padding: var(--space-4);
   margin-top: var(--space-4);

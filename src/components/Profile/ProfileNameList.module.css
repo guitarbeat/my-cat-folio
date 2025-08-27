@@ -5,28 +5,28 @@
 
 .header {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1.5rem;
   flex-wrap: wrap;
   gap: 1rem;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
 }
 
 .sectionTitle {
+  margin: 0;
   font-size: 1.5rem;
   font-weight: 600;
   color: var(--text-primary, #111827);
-  margin: 0;
 }
 
 .selectionInfo {
-  background: var(--selection-bg, #eff6ff);
-  color: var(--selection-text, #1e40af);
   padding: 0.5rem 1rem;
-  border-radius: 20px;
   font-size: 0.875rem;
   font-weight: 500;
+  color: var(--selection-text, #1e40af);
+  background: var(--selection-bg, #eff6ff);
   border: 1px solid var(--selection-border, #bfdbfe);
+  border-radius: 20px;
 }
 
 /* * Names Grid Layout - Increased card sizes for better description visibility */
@@ -37,19 +37,19 @@
 }
 
 .nameWrapper {
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  border-radius: 16px;
-  overflow: hidden;
-  background: linear-gradient(135deg, var(--card-bg-start, #ffffff) 0%, var(--card-bg-end, #f8fafc) 100%);
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
-  border: 1px solid var(--card-border, #e2e8f0);
   min-height: 280px; /* Increased minimum height for better description space */
+  overflow: hidden;
+  background: linear-gradient(135deg, var(--card-bg-start, #fff) 0%, var(--card-bg-end, #f8fafc) 100%);
+  border: 1px solid var(--card-border, #e2e8f0);
+  border-radius: 16px;
+  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 10%), 0 1px 2px 0 rgb(0 0 0 / 6%);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .nameWrapper:hover {
-  transform: translateY(-4px) scale(1.02);
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
   border-color: var(--card-border-hover, #cbd5e1);
+  box-shadow: 0 20px 25px -5px rgb(0 0 0 / 10%), 0 10px 10px -5px rgb(0 0 0 / 4%);
+  transform: translateY(-4px) scale(1.02);
 }
 
 .nameWrapper:active {
@@ -58,12 +58,12 @@
 
 /* * Enhanced Card Styling */
 .nameWrapper::before {
-  content: '';
   position: absolute;
   top: 0;
-  left: 0;
   right: 0;
+  left: 0;
   height: 4px;
+  content: '';
   background: linear-gradient(90deg, var(--accent-color-1, #3b82f6), var(--accent-color-2, #8b5cf6), var(--accent-color-3, #ec4899));
   opacity: 0;
   transition: opacity 0.3s ease;
@@ -75,11 +75,11 @@
 
 /* * Card Content Enhancement - More padding for better content spacing */
 .nameWrapper .nameCard {
-  padding: 2rem;
   position: relative;
-  height: 100%;
   display: flex;
   flex-direction: column;
+  height: 100%;
+  padding: 2rem;
 }
 
 /* * Floating Action Buttons */
@@ -104,9 +104,9 @@
   left: 1rem;
   width: 12px;
   height: 12px;
-  border-radius: 50%;
   background: var(--status-active, #10b981);
-  border: 2px solid var(--status-border, #ffffff);
+  border: 2px solid var(--status-border, #fff);
+  border-radius: 50%;
   box-shadow: 0 0 0 2px var(--status-shadow, #d1fae5);
 }
 
@@ -121,8 +121,8 @@
 }
 
 .hiddenNameCard {
-  border: 2px dashed var(--hidden-border, #d1d5db);
   background: var(--hidden-bg, #f9fafb);
+  border: 2px dashed var(--hidden-border, #d1d5db);
 }
 
 /* * Loading States - Updated to match new card sizes */
@@ -134,29 +134,29 @@
 
 /* * Empty State */
 .emptyState {
-  text-align: center;
   padding: 3rem 2rem;
+  text-align: center;
   background: var(--empty-bg, #f9fafb);
-  border-radius: 8px;
   border: 2px dashed var(--empty-border, #d1d5db);
+  border-radius: 8px;
 }
 
 .emptyTitle {
+  margin: 0 0 0.75rem;
   font-size: 1.25rem;
   font-weight: 600;
   color: var(--text-primary, #111827);
-  margin: 0 0 0.75rem 0;
 }
 
 .emptyMessage {
-  font-size: 1rem;
-  color: var(--text-secondary, #6b7280);
   margin: 0;
+  font-size: 1rem;
   line-height: 1.5;
+  color: var(--text-secondary, #6b7280);
 }
 
 /* * Responsive Design - Updated breakpoints for better mobile experience */
-@media (max-width: 1200px) {
+@media (width <= 1200px) {
   .namesGrid {
     grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
     gap: 1.5rem;
@@ -168,11 +168,11 @@
   }
 }
 
-@media (max-width: 768px) {
+@media (width <= 768px) {
   .header {
     flex-direction: column;
-    align-items: flex-start;
     gap: 0.75rem;
+    align-items: flex-start;
   }
 
   .sectionTitle {
@@ -206,7 +206,7 @@
   }
 }
 
-@media (max-width: 480px) {
+@media (width <= 480px) {
   .container {
     margin-bottom: 1.5rem;
   }
@@ -224,8 +224,8 @@
   }
 
   .selectionInfo {
-    font-size: 0.8125rem;
     padding: 0.375rem 0.75rem;
+    font-size: 0.8125rem;
   }
   
   .nameWrapper {
@@ -315,7 +315,7 @@
 
 /* * Enhanced Card Variables */
 .nameWrapper {
-  --card-bg-start: #ffffff;
+  --card-bg-start: #fff;
   --card-bg-end: #f8fafc;
   --card-border: #e2e8f0;
   --card-border-hover: #cbd5e1;
@@ -324,7 +324,7 @@
   --accent-color-3: #ec4899;
   --status-active: #10b981;
   --status-hidden: #6b7280;
-  --status-border: #ffffff;
+  --status-border: #fff;
   --status-shadow: #d1fae5;
   --status-shadow-hidden: #e5e7eb;
 }
