@@ -61,7 +61,7 @@ import devLog from '../utils/logger';
 function useUserSession() {
   // * Use ref to track if we've already initialized to prevent double initialization
   const initializedRef = useRef(false);
-  
+
   // Initialize state with localStorage value immediately
   const [userName, setUserName] = useState(() => {
     try {

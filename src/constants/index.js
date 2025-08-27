@@ -120,7 +120,7 @@ export const API = {
 // * Local Storage Keys
 export const STORAGE_KEYS = {
   THEME: 'meow-namester-theme',
-  ONBOARDING: 'meow-namester-onboarding',
+
   USER_PREFERENCES: 'meow-namester-preferences',
   TOURNAMENT_STATE: 'meow-namester-tournament-state'
 };

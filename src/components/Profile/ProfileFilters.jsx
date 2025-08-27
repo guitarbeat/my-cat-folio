@@ -28,7 +28,7 @@ const ProfileFilters = ({
   return (
     <div className={`${styles.container} ${className}`}>
       <h3 className={styles.sectionTitle}>Filters & Sorting</h3>
-      
+
       <div className={styles.filtersGrid}>
         {/* * Status Filter */}
         <div className={styles.filterGroup}>

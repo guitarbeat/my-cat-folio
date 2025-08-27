@@ -30,7 +30,7 @@ describe('NavBar Component', () => {
     userName: '',
     onLogout: vi.fn(),
     isLightTheme: true,
-    onThemeChange: vi.fn(),
+    onThemeChange: vi.fn()
 
   };
 
@@ -104,7 +104,6 @@ describe('NavBar Component', () => {
     rerender(<NavBar {...defaultProps} isLightTheme={false} />);
     expect(screen.getByText('☀️')).toBeInTheDocument();
   });
-
 
 
   test('renders logo with correct title', () => {

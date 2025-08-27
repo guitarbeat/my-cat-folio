@@ -173,7 +173,7 @@ const ProfileNameList = ({
                   popularity: name.popularity_score,
                   tournaments: name.total_tournaments,
                   categories: name.categories,
-                  winRate: name.user_wins && name.user_losses 
+                  winRate: name.user_wins && name.user_losses
                     ? Math.round((name.user_wins / (name.user_wins + name.user_losses)) * 100)
                     : 0,
                   totalMatches: (name.user_wins || 0) + (name.user_losses || 0),

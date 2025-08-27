@@ -819,6 +819,87 @@ export const tournamentsAPI = {
       }
       return [];
     }
+  },
+
+  /**
+   * Get personalized name recommendations for a user
+   * @param {string} userName - The username
+   * @param {number} limit - Maximum number of recommendations to return
+   * @returns {Array} Array of recommended names with scores and reasoning
+   */
+  async getPersonalizedRecommendations(userName, limit = 10) {
+    try {
+      const { data, error } = await supabase.rpc(
+        'get_personalized_recommendations',
+        {
+          p_user_name: userName,
+          p_limit: limit
+        }
+      );
+
+      if (error) {
+        console.error('Error getting personalized recommendations:', error);
+        return [];
+      }
+
+      return data || [];
+    } catch (error) {
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Error getting personalized recommendations:', error);
+      }
+      return [];
+    }
+  },
+
+  /**
+   * Get selection analytics dashboard data
+   * @returns {Object} Dashboard statistics and metrics
+   */
+  async getSelectionDashboard() {
+    try {
+      const { data, error } = await supabase
+        .from('selection_summary')
+        .select('*')
+        .single();
+
+      if (error) {
+        console.error('Error getting selection dashboard:', error);
+        return null;
+      }
+
+      return data;
+    } catch (error) {
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Error getting selection dashboard:', error);
+      }
+      return null;
+    }
+  },
+
+  /**
+   * Get popular names based on selections
+   * @param {number} limit - Maximum number of names to return
+   * @returns {Array} Array of popular names with selection metrics
+   */
+  async getPopularNamesBySelections(limit = 20) {
+    try {
+      const { data, error } = await supabase
+        .from('popular_names_by_selections')
+        .select('*')
+        .limit(limit);
+
+      if (error) {
+        console.error('Error getting popular names:', error);
+        return [];
+      }
+
+      return data || [];
+    } catch (error) {
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Error getting popular names:', error);
+      }
+      return [];
+    }
   }
 };
 

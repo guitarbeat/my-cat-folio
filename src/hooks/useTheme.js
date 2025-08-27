@@ -42,7 +42,7 @@ function useTheme() {
     requestAnimationFrame(() => {
       body.classList.add(bodyClass);
       body.classList.remove(darkBodyClass);
-      
+
       if (themeColorMeta) {
         themeColorMeta.setAttribute('content', metaColor);
       }

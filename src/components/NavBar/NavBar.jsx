@@ -15,7 +15,7 @@ function NavBar({
   onLogout,
   onStartNewTournament,
   isLightTheme,
-  onThemeChange,
+  onThemeChange
 
 }) {
   const [showScrollTop, setShowScrollTop] = useState(false);
@@ -204,7 +204,6 @@ function NavBar({
             </li>
 
 
-
             {/* Right Side Elements */}
             {logoItem}
             {userInfo}
@@ -259,7 +258,6 @@ function NavBar({
                 </li>
               );
             })}
-
 
 
             {/* Logout Button for Mobile */}
@@ -334,9 +332,9 @@ NavBar.propTypes = {
   onLogout: PropTypes.func.isRequired,
   onStartNewTournament: PropTypes.func,
   isLightTheme: PropTypes.bool.isRequired,
-  onThemeChange: PropTypes.func.isRequired,
+  onThemeChange: PropTypes.func.isRequired
 
-  
+
 };
 
 export default NavBar;
