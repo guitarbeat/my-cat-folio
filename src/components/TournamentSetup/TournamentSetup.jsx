@@ -289,7 +289,9 @@ const SwipeableNameCards = ({
   };
 
   const handleDragEnd = () => {
-    if (!isDragging) return;
+    if (!isDragging) {
+      return;
+    }
 
     setIsDragging(false);
 
