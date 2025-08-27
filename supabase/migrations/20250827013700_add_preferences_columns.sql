@@ -1,5 +1,5 @@
--- Migration: Add preferences column to cat_app_users table
--- This migration adds the missing preferences column that the application expects
+-- Migration: Add preferences and tournament_data columns to cat_app_users table
+-- This migration adds the missing columns that the application expects
 
 -- Add preferences column as JSONB with default value
 ALTER TABLE cat_app_users 
@@ -11,7 +11,7 @@ ADD COLUMN IF NOT EXISTS preferences JSONB DEFAULT '{
   "theme_preference": "dark"
 }'::jsonb;
 
--- Add tournament_data column as JSONB with default value (also mentioned in docs)
+-- Add tournament_data column as JSONB with default value
 ALTER TABLE cat_app_users 
 ADD COLUMN IF NOT EXISTS tournament_data JSONB DEFAULT '[]'::jsonb;
 

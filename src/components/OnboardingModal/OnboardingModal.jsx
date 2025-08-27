@@ -22,19 +22,38 @@ const OnboardingModal = ({ isOpen, onClose, onDontShowAgain, isLightTheme = fals
       setCompletedSteps(new Set());
       setExpandedBubble(null);
       setDraggedBubble(null);
+      setDragOffset({ x: 0, y: 0 });
 
-      // Initialize first bubble position
+      // Initialize first bubble position - more subtle positioning
       const firstBubble = {
-        x: 50, // Center of screen
-        y: 50,
+        x: 75, // Right side, less intrusive
+        y: 30, // Upper area, not center
         delay: 0,
-        speed: 0.1 + Math.random() * 0.2,
+        speed: 0.05 + Math.random() * 0.1, // Much slower movement
         directionX: Math.random() > 0.5 ? 1 : -1,
         directionY: Math.random() > 0.5 ? 1 : -1
       };
       setBubblePositions([firstBubble]);
+    } else {
+      // Clean up when modal closes
+      setCurrentStep(0);
+      setCompletedSteps(new Set());
+      setExpandedBubble(null);
+      setDraggedBubble(null);
+      setDragOffset({ x: 0, y: 0 });
+      setBubblePositions([]);
     }
   }, [isOpen]);
+
+  // Cleanup event listeners on unmount
+  useEffect(() => {
+    return () => {
+      document.removeEventListener('mousemove', handleMouseMove);
+      document.removeEventListener('mouseup', handleMouseUp);
+      document.removeEventListener('touchmove', handleTouchMove);
+      document.removeEventListener('touchend', handleTouchEnd);
+    };
+  }, []);
 
   // Animate bubbles with proper boundary checking (only when not dragging)
   useEffect(() => {
@@ -45,12 +64,12 @@ const OnboardingModal = ({ isOpen, onClose, onDontShowAgain, isLightTheme = fals
         // Only animate if bubble is visible (step is active)
         if (index > currentStep) return bubble;
 
-        // Calculate new positions with slower movement
-        let newX = bubble.x + (bubble.speed * 0.02) * bubble.directionX;
-        let newY = bubble.y + (bubble.speed * 0.015) * bubble.directionY;
+        // Calculate new positions with much slower movement
+        let newX = bubble.x + (bubble.speed * 0.01) * bubble.directionX;
+        let newY = bubble.y + (bubble.speed * 0.008) * bubble.directionY;
 
-        // Bounce off edges with proper boundary checking
-        if (newX <= 20 || newX >= 80) {
+        // Bounce off edges with proper boundary checking - keep bubbles in less intrusive areas
+        if (newX <= 70 || newX >= 95) {
           newX = bubble.x;
           bubble.directionX = -bubble.directionX;
         }
@@ -59,8 +78,8 @@ const OnboardingModal = ({ isOpen, onClose, onDontShowAgain, isLightTheme = fals
           bubble.directionY = -bubble.directionY;
         }
 
-        // Ensure bubbles stay within safe bounds
-        newX = Math.max(20, Math.min(80, newX));
+        // Ensure bubbles stay within safe bounds - right side, upper area
+        newX = Math.max(70, Math.min(95, newX));
         newY = Math.max(20, Math.min(80, newY));
 
         return {
@@ -71,7 +90,7 @@ const OnboardingModal = ({ isOpen, onClose, onDontShowAgain, isLightTheme = fals
           directionY: bubble.directionY
         };
       }));
-    }, 150);
+    }, 200); // Slower update interval for less obtrusive movement
 
     return () => clearInterval(interval);
   }, [isOpen, currentStep, draggedBubble]);
@@ -107,14 +126,20 @@ const OnboardingModal = ({ isOpen, onClose, onDontShowAgain, isLightTheme = fals
   ];
 
   const handleBubbleClick = (index) => {
-    if (index === currentStep && !draggedBubble) {
+    // Don't handle clicks if we're dragging or if it's not the current step
+    if (draggedBubble !== null || index !== currentStep) return;
+    
+    // Toggle expansion state
+    if (expandedBubble === index) {
+      setExpandedBubble(null);
+    } else {
       setExpandedBubble(index);
     }
   };
 
   const handleBubbleClose = () => {
     setExpandedBubble(null);
-
+    
     // Mark current step as completed
     const newCompletedSteps = new Set(completedSteps);
     newCompletedSteps.add(currentStep);
@@ -123,13 +148,13 @@ const OnboardingModal = ({ isOpen, onClose, onDontShowAgain, isLightTheme = fals
     // Move to next step or complete onboarding
     if (currentStep < steps.length - 1) {
       setCurrentStep(currentStep + 1);
-
-      // Add new bubble for next step
+      
+      // Add new bubble for next step - positioned in less intrusive area
       const newBubble = {
-        x: Math.random() * 60 + 20,
-        y: Math.random() * 60 + 20,
+        x: Math.random() * 20 + 70, // 70-90% (right side)
+        y: Math.random() * 40 + 20, // 20-60% (upper area)
         delay: 0,
-        speed: 0.1 + Math.random() * 0.2,
+        speed: 0.05 + Math.random() * 0.1, // Much slower movement
         directionX: Math.random() > 0.5 ? 1 : -1,
         directionY: Math.random() > 0.5 ? 1 : -1
       };
@@ -145,10 +170,13 @@ const OnboardingModal = ({ isOpen, onClose, onDontShowAgain, isLightTheme = fals
     onClose();
   };
 
-  // Drag and Drop Handlers
+    // Drag and Drop Handlers
   const handleMouseDown = (e, index) => {
     e.preventDefault();
     e.stopPropagation();
+    
+    // Only allow dragging of current step
+    if (index !== currentStep) return;
 
     const rect = e.currentTarget.getBoundingClientRect();
     const offsetX = e.clientX - rect.left;
@@ -164,18 +192,18 @@ const OnboardingModal = ({ isOpen, onClose, onDontShowAgain, isLightTheme = fals
 
   const handleMouseMove = (e) => {
     if (draggedBubble === null) return;
-    
+
     const viewportWidth = window.innerWidth;
     const viewportHeight = window.innerHeight;
-    
+
     // Calculate new position based on mouse position and offset
     let newX = ((e.clientX - dragOffset.x) / viewportWidth) * 100;
     let newY = ((e.clientY - dragOffset.y) / viewportHeight) * 100;
-    
-    // Keep bubbles within safe bounds (5% to 95% of viewport)
-    newX = Math.max(5, Math.min(95, newX));
-    newY = Math.max(5, Math.min(95, newY));
-    
+
+    // Keep bubbles within safe bounds - right side, upper area
+    newX = Math.max(70, Math.min(95, newX));
+    newY = Math.max(20, Math.min(80, newY));
+
     setBubblePositions(prev => prev.map((bubble, index) => 
       index === draggedBubble 
         ? { ...bubble, x: newX, y: newY }
@@ -184,9 +212,11 @@ const OnboardingModal = ({ isOpen, onClose, onDontShowAgain, isLightTheme = fals
   };
 
   const handleMouseUp = () => {
+    if (draggedBubble === null) return;
+    
     setDraggedBubble(null);
     setDragOffset({ x: 0, y: 0 });
-    
+
     // Remove global event listeners
     document.removeEventListener('mousemove', handleMouseMove);
     document.removeEventListener('mouseup', handleMouseUp);
@@ -194,14 +224,17 @@ const OnboardingModal = ({ isOpen, onClose, onDontShowAgain, isLightTheme = fals
 
   // Touch handlers for mobile
   const handleTouchStart = (e, index) => {
+    // Only allow dragging of current step
+    if (index !== currentStep) return;
+
     const touch = e.touches[0];
     const rect = e.currentTarget.getBoundingClientRect();
     const offsetX = touch.clientX - rect.left;
     const offsetY = touch.clientY - rect.top;
-    
+
     setDraggedBubble(index);
     setDragOffset({ x: offsetX, y: offsetY });
-    
+
     // Add global touch event listeners
     document.addEventListener('touchmove', handleTouchMove, { passive: false });
     document.addEventListener('touchend', handleTouchEnd);
@@ -210,17 +243,18 @@ const OnboardingModal = ({ isOpen, onClose, onDontShowAgain, isLightTheme = fals
   const handleTouchMove = (e) => {
     if (draggedBubble === null) return;
     e.preventDefault(); // Prevent scrolling while dragging
-    
+
     const touch = e.touches[0];
     const viewportWidth = window.innerWidth;
     const viewportHeight = window.innerHeight;
-    
+
     let newX = ((touch.clientX - dragOffset.x) / viewportWidth) * 100;
     let newY = ((touch.clientY - dragOffset.y) / viewportHeight) * 100;
-    
-    newX = Math.max(5, Math.min(95, newX));
-    newY = Math.max(5, Math.min(95, newY));
-    
+
+    // Keep bubbles within safe bounds - right side, upper area
+    newX = Math.max(70, Math.min(95, newX));
+    newY = Math.max(20, Math.min(80, newY));
+
     setBubblePositions(prev => prev.map((bubble, index) => 
       index === draggedBubble 
         ? { ...bubble, x: newX, y: newY }
@@ -229,9 +263,11 @@ const OnboardingModal = ({ isOpen, onClose, onDontShowAgain, isLightTheme = fals
   };
 
   const handleTouchEnd = () => {
+    if (draggedBubble === null) return;
+    
     setDraggedBubble(null);
     setDragOffset({ x: 0, y: 0 });
-    
+
     document.removeEventListener('touchmove', handleTouchMove);
     document.removeEventListener('touchend', handleTouchEnd);
   };
