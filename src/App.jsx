@@ -77,7 +77,7 @@
  * --- END AUTO-GENERATED DOCSTRING ---
  */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import { ErrorBoundary, Login, ErrorDisplay, OnboardingModal, ToastContainer } from './components';
 import NavBar from './components/NavBar/NavBar';
 import useUserSession from './hooks/useUserSession';
@@ -114,6 +114,7 @@ function App() {
   // Enhanced error handling
   const {
     error,
+    clearError,
     logError
   } = useErrorHandler();
 
@@ -488,7 +489,7 @@ function App() {
         {error && (
           <ErrorDisplay
             errors={error}
-            onDismiss={() => setError(null)}
+            onDismiss={() => logError(null, 'User dismissed error')}
             onRetry={() => window.location.reload()}
           />
         )}
