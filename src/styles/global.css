@@ -1,5 +1,4 @@
-/* Consolidated global stylesheet: reset → variables → theme → base → utilities → components → app rules */
-@import url("./theme.css");
+/* Consolidated global stylesheet: reset → variables → base → utilities → components → app rules */
 
 /* ===== reset.css ===== */
 

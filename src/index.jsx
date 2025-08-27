@@ -11,6 +11,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { setupGlobalErrorHandling } from './utils/errorHandler';
+import './styles/theme.css';
 import './styles/global.css';
 import './styles/mobile.css';
 import './styles/mobile-ergonomics.css';

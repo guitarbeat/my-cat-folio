@@ -78,6 +78,11 @@ function useAudioManager() {
     };
   }, [soundEffects, volume.effects, musicTracks, volume.music]);
 
+  // * Pick a random starting track on mount
+  useEffect(() => {
+    setCurrentTrack(Math.floor(Math.random() * musicTracks.length));
+  }, [musicTracks.length]);
+
   // * Get random sound effect based on weights
   const getRandomSoundEffect = useCallback(() => {
     const totalWeight = soundEffects.reduce(

@@ -18,6 +18,8 @@ export function useTournament({
   existingRatings = {},
   onComplete
 }) {
+  // Single Elo instance
+  const elo = useMemo(() => new EloRating(), []);
   const didLogMountRef = useRef(false);
   if (process.env.NODE_ENV === 'development' && !didLogMountRef.current) {
     // * Log once per component instance, even under StrictMode double-invoke
@@ -273,7 +275,7 @@ export function useTournament({
           lossesA: newLeftLosses,
           winsB: newRightWins,
           lossesB: newRightLosses
-        } = EloRating.calculateNewRatings(
+        } = elo.calculateNewRatings(
           leftRating,
           rightRating,
           eloOutcome,
