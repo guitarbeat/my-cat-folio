@@ -1303,179 +1303,94 @@
   box-shadow: 0 8px 32px rgb(90 92 255 / 30%);
 }
 
-/* Enhanced Selected Card Styling */
-.swipeCard.selected {
-  border-color: var(--primary-color, #5a5cff);
-  box-shadow: 
-    0 8px 32px rgba(90, 92, 255, 0.3),
-    0 0 0 3px rgba(90, 92, 255, 0.2),
-    inset 0 0 0 1px rgba(255, 255, 255, 0.1);
-  transform: translateY(-4px) scale(1.02);
-  background: linear-gradient(
-    135deg,
-    rgba(90, 92, 255, 0.05) 0%,
-    rgba(124, 58, 237, 0.05) 100%
-  );
+/* Swipe Card Content */
+.swipeCardContent {
   position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+}
+
+/* Cat Picture Container */
+.swipeCardImageContainer {
+  position: relative;
+  width: 100%;
+  height: 200px;
+  margin-bottom: 1rem;
+  border-radius: 15px;
   overflow: hidden;
+  box-shadow: 0 4px 20px rgb(0 0 0 / 20%);
 }
 
-.swipeCard.selected::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(
-    45deg,
-    transparent 30%,
-    rgba(90, 92, 255, 0.1) 50%,
-    transparent 70%
-  );
-  animation: shimmer 3s ease-in-out infinite;
-  pointer-events: none;
+.swipeCardImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
 }
 
-@keyframes shimmer {
-  0% {
-    transform: translateX(-100%);
-  }
-  100% {
-    transform: translateX(100%);
-  }
-}
-
-/* Enhanced Selected Card Content */
-.swipeCard.selected .swipeCardName {
-  color: var(--primary-color, #5a5cff);
-  text-shadow: 
-    0 0 10px rgba(90, 92, 255, 0.5),
-    0 2px 4px rgba(0, 0, 0, 0.3);
+.swipeCardImage:hover {
   transform: scale(1.05);
+}
+
+.swipeCardName {
+  margin: 0 0 1rem;
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--text-primary, #f8fafc);
+  text-align: center;
+  text-shadow: 0 2px 4px rgb(0 0 0 / 30%);
+}
+
+.swipeCardDescription {
+  display: flex;
+  flex-grow: 1;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  font-size: 1.1rem;
+  line-height: 1.6;
+  color: var(--text-secondary, #cbd5e1);
+  text-align: center;
+}
+
+/* Swipe Card Metadata */
+.swipeCardMetadata {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+.metadataItem {
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+  color: var(--text-primary, #f8fafc);
+  background: rgb(255 255 255 / 10%);
+  border-radius: 20px;
+  backdrop-filter: blur(10px);
+}
+
+/* Selection Indicator */
+.selectionIndicator {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  padding: 0.5rem 1rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: white;
+  background: rgb(0 0 0 / 70%);
+  border-radius: 20px;
+  backdrop-filter: blur(10px);
   transition: all 0.3s ease;
 }
 
-.swipeCard.selected .swipeCardDescription {
-  color: var(--text-primary, #f8fafc);
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
-}
-
-.swipeCard.selected .swipeCardImage {
-  transform: scale(1.1);
-  filter: brightness(1.1) contrast(1.1);
-  box-shadow: 0 8px 25px rgba(90, 92, 255, 0.3);
-}
-
-/* Enhanced Selected Card Content Background */
-.swipeCard.selected .swipeCardContent {
-  position: relative;
-}
-
-.swipeCard.selected .swipeCardContent::after {
-  content: '';
-  position: absolute;
-  top: -10px;
-  left: -10px;
-  right: -10px;
-  bottom: -10px;
-  background: linear-gradient(
-    45deg,
-    rgba(90, 92, 255, 0.1),
-    rgba(124, 58, 237, 0.1),
-    rgba(90, 92, 255, 0.1)
-  );
-  border-radius: 25px;
-  z-index: -1;
-  animation: borderGlow 2s ease-in-out infinite;
-}
-
-@keyframes borderGlow {
-  0%, 100% {
-    opacity: 0.3;
-  }
-  50% {
-    opacity: 0.6;
-  }
-}
-
-/* Enhanced Metadata for Selected Cards */
-.swipeCard.selected .metadataItem {
-  background: linear-gradient(
-    135deg,
-    rgba(90, 92, 255, 0.2),
-    rgba(124, 58, 237, 0.2)
-  );
-  border: 1px solid rgba(90, 92, 255, 0.3);
-  box-shadow: 0 2px 8px rgba(90, 92, 255, 0.2);
-  transform: scale(1.05);
-}
-
-/* Enhanced Selection Indicator Styling */
 .selectionIndicator.selected {
-  background: linear-gradient(135deg, var(--primary-color, #5a5cff), #7c3aed);
-  box-shadow: 
-    0 4px 20px rgba(90, 92, 255, 0.4),
-    0 0 0 2px rgba(255, 255, 255, 0.1);
-  transform: scale(1.05);
-  animation: selectionPulse 2s ease-in-out infinite;
-}
-
-@keyframes selectionPulse {
-  0%, 100% {
-    box-shadow: 
-      0 4px 20px rgba(90, 92, 255, 0.4),
-      0 0 0 2px rgba(255, 255, 255, 0.1);
-  }
-  50% {
-    box-shadow: 
-      0 6px 30px rgba(90, 92, 255, 0.6),
-      0 0 0 3px rgba(255, 255, 255, 0.2);
-  }
-}
-
-/* Enhanced Selection Indicator with Icon */
-.selectionIndicator.selected::before {
-  content: '✓';
-  display: inline-block;
-  margin-right: 0.5rem;
-  font-size: 1rem;
-  animation: checkmarkBounce 0.6s ease-out;
-}
-
-@keyframes checkmarkBounce {
-  0% {
-    transform: scale(0) rotate(-10deg);
-    opacity: 0;
-  }
-  50% {
-    transform: scale(1.2) rotate(5deg);
-  }
-  100% {
-    transform: scale(1) rotate(0deg);
-    opacity: 1;
-  }
-}
-
-/* Enhanced Card Animation */
-.swipeCard {
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.swipeCard.selected {
-  animation: cardSelect 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-}
-
-@keyframes cardSelect {
-  0% {
-    transform: translateY(0) scale(1);
-  }
-  50% {
-    transform: translateY(-8px) scale(1.05);
-  }
-  100% {
-    transform: translateY(-4px) scale(1.02);
-  }
+  background: var(--primary-color, #5a5cff);
 }
 
 /* Swipe Overlays */
@@ -1834,4 +1749,167 @@
   .swipeButton:active {
     transform: scale(0.95); /* Provide touch feedback */
   }
+}
+
+/* Enhanced Selected Card Styling */
+.swipeCard.selected {
+  border-color: var(--primary-color, #5a5cff);
+  box-shadow: 
+    0 8px 32px rgba(90, 92, 255, 0.3),
+    0 0 0 3px rgba(90, 92, 255, 0.2),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+  transform: translateY(-4px) scale(1.02);
+  background: linear-gradient(
+    135deg,
+    rgba(90, 92, 255, 0.05) 0%,
+    rgba(124, 58, 237, 0.05) 100%
+  );
+  position: relative;
+  overflow: hidden;
+}
+
+.swipeCard.selected::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    45deg,
+    transparent 30%,
+    rgba(90, 92, 255, 0.1) 50%,
+    transparent 70%
+  );
+  animation: shimmer 3s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* Enhanced Selected Card Content */
+.swipeCard.selected .swipeCardName {
+  color: var(--primary-color, #5a5cff);
+  text-shadow: 
+    0 0 10px rgba(90, 92, 255, 0.5),
+    0 2px 4px rgba(0, 0, 0, 0.3);
+  transform: scale(1.05);
+  transition: all 0.3s ease;
+}
+
+.swipeCard.selected .swipeCardDescription {
+  color: var(--text-primary, #f8fafc);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.swipeCard.selected .swipeCardImage {
+  transform: scale(1.1);
+  filter: brightness(1.1) contrast(1.1);
+  box-shadow: 0 8px 25px rgba(90, 92, 255, 0.3);
+}
+
+/* Enhanced Selected Card Content Background */
+.swipeCard.selected .swipeCardContent {
+  position: relative;
+}
+
+.swipeCard.selected .swipeCardContent::after {
+  content: '';
+  position: absolute;
+  top: -10px;
+  left: -10px;
+  right: -10px;
+  bottom: -10px;
+  background: linear-gradient(
+    45deg,
+    rgba(90, 92, 255, 0.1),
+    rgba(124, 58, 237, 0.1),
+    rgba(90, 92, 255, 0.1)
+  );
+  border-radius: 25px;
+  z-index: -1;
+  animation: borderGlow 2s ease-in-out infinite;
+}
+
+@keyframes borderGlow {
+  0%, 100% {
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 0.6;
+  }
+}
+
+/* Enhanced Metadata for Selected Cards */
+.swipeCard.selected .metadataItem {
+  background: linear-gradient(
+    135deg,
+    rgba(90, 92, 255, 0.2),
+    rgba(124, 58, 237, 0.2)
+  );
+  border: 1px solid rgba(90, 92, 255, 0.3);
+  box-shadow: 0 2px 8px rgba(90, 92, 255, 0.2);
+  transform: scale(1.05);
+}
+
+/* Enhanced Selection Indicator Styling */
+.selectionIndicator.selected {
+  background: linear-gradient(135deg, var(--primary-color, #5a5cff), #7c3aed);
+  box-shadow: 
+    0 4px 20px rgba(90, 92, 255, 0.4),
+    0 0 0 2px rgba(255, 255, 255, 0.1);
+  transform: scale(1.05);
+  animation: selectionPulse 2s ease-in-out infinite;
+}
+
+@keyframes selectionPulse {
+  0%, 100% {
+    box-shadow: 
+      0 4px 20px rgba(90, 92, 255, 0.4),
+      0 0 0 2px rgba(255, 255, 255, 0.1);
+  }
+  50% {
+    box-shadow: 
+      0 6px 30px rgba(90, 92, 255, 0.6),
+      0 0 0 3px rgba(255, 255, 255, 0.2);
+  }
+}
+
+/* Enhanced Selection Indicator with Icon */
+.selectionIndicator.selected::before {
+  content: '✓';
+  display: inline-block;
+  margin-right: 0.5rem;
+  font-size: 1rem;
+  animation: checkmarkBounce 0.6s ease-out;
+}
+
+@keyframes checkmarkBounce {
+  0% {
+    transform: scale(0) rotate(-10deg);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.2) rotate(5deg);
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+  }
+}
+
+/* Enhanced Card Animation */
+.swipeCard {
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.swipeCard.selected {
+  animation: cardSelect 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }

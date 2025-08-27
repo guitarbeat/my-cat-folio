@@ -132,6 +132,7 @@ function TournamentContent({
 
   useEffect(() => {
     if (Array.isArray(names) && names.length > 0) {
+      console.log('[DEV] 🎮 Tournament: Setting randomized names from:', names);
       setRandomizedNames(shuffleArray([...names]));
     }
   }, [names]);
@@ -147,7 +148,7 @@ function TournamentContent({
     getCurrentRatings,
     isError
   } = useTournament({
-    names: randomizedNames.length > 0 ? randomizedNames : names,
+    names: randomizedNames, // * FIXED: Only pass randomizedNames, not fallback to names
     existingRatings,
     onComplete
   });
@@ -155,8 +156,9 @@ function TournamentContent({
   // * Debug logging to see what names are being received
   console.log('[DEV] 🎮 Tournament: Received names prop:', names);
   console.log('[DEV] 🎮 Tournament: Randomized names:', randomizedNames);
-  console.log('[DEV] 🎮 Tournament: Names passed to useTournament:', randomizedNames.length > 0 ? randomizedNames : names);
+  console.log('[DEV] 🎮 Tournament: Names passed to useTournament:', randomizedNames);
   console.log('[DEV] 🎮 Tournament: Current match:', currentMatch);
+  console.log('[DEV] 🎮 Tournament: Should show tournament:', randomizedNames.length > 0);
 
   const [selectedOption, setSelectedOption] = useState(null);
   const [isTransitioning, setIsTransitioning] = useState(false);
