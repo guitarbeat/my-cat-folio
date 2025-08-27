@@ -12,7 +12,7 @@
   top: 0;
   right: 0;
   left: 0;
-  z-index: 9999;
+  z-index: var(--z-sticky); /* Use CSS custom property for sticky navigation */
   height: 70px;
   background: rgb(255 255 255 / 12%);
   border-bottom: 1px solid rgb(255 255 255 / 20%);
@@ -237,20 +237,28 @@
   gap: 4px;
   align-items: center;
   justify-content: center;
-  width: 44px;
-  height: 44px;
+  width: 48px; /* Increased for better touch target */
+  height: 48px; /* Increased for better touch target */
   padding: 12px 8px;
   cursor: pointer;
   background: rgb(255 255 255 / 10%);
   border: none;
-  border-radius: 8px;
+  border-radius: 12px; /* Increased for modern look */
   backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
   transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgb(0 0 0 / 20%);
 }
 
 .navbar__mobile-menu-button:hover {
   background: rgb(255 255 255 / 20%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgb(0 0 0 / 30%);
+}
+
+.navbar__mobile-menu-button:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 8px rgb(0 0 0 / 20%);
 }
 
 .navbar__mobile-menu-icon {
@@ -258,6 +266,7 @@
   height: 2px;
   background: #fff;
   transition: all 0.3s ease;
+  border-radius: 1px;
 }
 
 .navbar__mobile-menu-icon::before,
@@ -268,6 +277,7 @@
   content: '';
   background: #fff;
   transition: all 0.3s ease;
+  border-radius: 1px;
 }
 
 .navbar__mobile-menu-icon::before {
@@ -295,7 +305,7 @@
 .navbar__mobile-menu {
   position: fixed;
   inset: 70px 0 0;
-  z-index: 9998;
+  z-index: var(--z-drawer); /* Use CSS custom property for drawer/menu layer */
   display: none;
   background: rgb(0 0 0 / 95%);
   opacity: 0;
@@ -315,6 +325,7 @@
 .navbar__mobile-menu-header {
   padding: 2rem 2rem 1rem;
   border-bottom: 1px solid rgb(255 255 255 / 10%);
+  background: rgb(255 255 255 / 5%);
 }
 
 .navbar__mobile-menu-header .navbar__item--logo {
@@ -343,67 +354,81 @@
 
 .navbar__mobile-link {
   display: block;
-  padding: 1rem 2rem;
+  padding: 1.25rem 2rem; /* Increased padding for better touch targets */
   font-weight: 500;
   color: rgb(255 255 255 / 90%);
   text-transform: uppercase;
   letter-spacing: 0.5px;
   text-decoration: none;
   transition: all 0.2s ease;
+  min-height: 56px; /* Ensure minimum touch target size */
+  display: flex;
+  align-items: center;
 }
 
 .navbar__mobile-link:hover,
 .navbar__mobile-link:focus {
   padding-left: 2.5rem;
   color: #fff;
-  background: rgb(255 255 255 / 10%);
+  background: rgb(255 255 255 / 15%);
 }
 
 .navbar__mobile-link.active {
   color: #fff;
-  background: rgb(255 255 255 / 15%);
+  background: rgb(255 255 255 / 20%);
+  border-left: 4px solid var(--accent-color, #e8bf76);
 }
 
 /* Mobile Theme Toggle */
 .navbar__mobile-theme-toggle {
   width: 100%;
-  padding: 1rem 2rem;
+  padding: 1.25rem 2rem; /* Increased padding */
   margin: 0.5rem 0;
   font-weight: 500;
   color: #fff;
   text-transform: uppercase;
   letter-spacing: 0.5px;
   cursor: pointer;
-  background: rgb(255 255 255 / 10%);
+  background: rgb(255 255 255 / 15%);
   border: none;
   transition: all 0.2s ease;
+  min-height: 56px; /* Ensure minimum touch target size */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
 }
 
 .navbar__mobile-theme-toggle:hover {
-  background: rgb(255 255 255 / 20%);
+  background: rgb(255 255 255 / 25%);
 }
 
 /* Mobile Help Button */
 .navbar__mobile-help-button {
   width: 100%;
-  padding: 1rem 2rem;
+  padding: 1.25rem 2rem; /* Increased padding */
   font-weight: 500;
   color: #fff;
   cursor: pointer;
-  background: rgb(255 255 255 / 10%);
+  background: rgb(255 255 255 / 15%);
   border: none;
   transition: all 0.2s ease;
+  min-height: 56px; /* Ensure minimum touch target size */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
 }
 
 .navbar__mobile-help-button:hover {
-  background: rgb(255 255 255 / 20%);
+  background: rgb(255 255 255 / 25%);
 }
 
 /* Mobile Backdrop */
 .navbar__mobile-backdrop {
   position: fixed;
   inset: 0;
-  z-index: 9997;
+  z-index: calc(var(--z-drawer) - 1); /* Just below the mobile menu */
   background: rgb(0 0 0 / 50%);
   opacity: 0;
   animation: fadeIn 0.2s ease forwards;
@@ -412,6 +437,25 @@
 @keyframes fadeIn {
   to {
     opacity: 1;
+  }
+}
+
+/* Enhanced mobile touch feedback */
+@media (hover: none) and (pointer: coarse) {
+  .navbar__mobile-menu-button:active {
+    transform: scale(0.95);
+    background: rgb(255 255 255 / 25%);
+  }
+
+  .navbar__mobile-link:active {
+    background: rgb(255 255 255 / 25%);
+    transform: scale(0.98);
+  }
+
+  .navbar__mobile-theme-toggle:active,
+  .navbar__mobile-help-button:active {
+    background: rgb(255 255 255 / 35%);
+    transform: scale(0.98);
   }
 }
 
@@ -574,7 +618,7 @@
   position: fixed;
   right: 25px;
   bottom: 25px;
-  z-index: 10000;
+  z-index: var(--z-elevate); /* Use CSS custom property for elevated elements */
   width: 50px;
   height: 50px;
   font-size: 1.2rem;

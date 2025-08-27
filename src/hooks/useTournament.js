@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useMemo } from 'react';
+import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { PreferenceSorter } from '../components/Tournament/PreferenceSorter';
 import EloRating from '../components/Tournament/EloRating';
 import useLocalStorage from './useLocalStorage';
@@ -137,7 +137,7 @@ export function useTournament({
         userName: userName || 'anonymous'
       }));
     },
-    [setTournamentState, userName]
+    [userName] // Remove setTournamentState as it's stable
   );
 
   // Reset tournament state when user changes
@@ -257,21 +257,26 @@ export function useTournament({
         throw error; // Propagate error to parent
       }
     },
-    [
-      names,
-      existingRatings,
-      currentMatchNumber,
-      totalMatches,
-      onComplete,
-      updateTournamentState
-    ]
+    [names, existingRatings, onComplete] // Remove unstable dependencies
   );
+
+  // Use ref to track if we've already initialized for current names
+  const initializedNamesRef = useRef('');
 
   // Reset tournament state when names change
   useEffect(() => {
     if (!names || names.length === 0) {
       return;
     }
+
+    const namesKey = names.map(n => n.id || n.name).join(',');
+    
+    // Only run if names actually changed
+    if (namesKey === initializedNamesRef.current) {
+      return;
+    }
+
+    initializedNamesRef.current = namesKey;
 
     const nameStrings = names.map((n) => n.name);
     const newSorter = new PreferenceSorter(nameStrings);
@@ -285,7 +290,8 @@ export function useTournament({
       matchHistory: [],
       currentRound: 1,
       currentMatch: 1,
-      totalMatches: estimatedMatches
+      totalMatches: estimatedMatches,
+      namesKey
     });
 
     setTotalMatches(estimatedMatches);
@@ -294,13 +300,9 @@ export function useTournament({
     setCanUndo(false);
     setCurrentRatings(existingRatings);
 
-    // Only run tournament if names actually changed (not on every render)
-    const namesKey = names.map(n => n.id || n.name).join(',');
-    if (namesKey !== tournamentState.namesKey) {
-      updateTournamentState({ namesKey });
-      runTournament(newSorter);
-    }
-  }, [names, updateTournamentState, existingRatings, runTournament, tournamentState.namesKey]);
+    // Run tournament with new sorter
+    runTournament(newSorter);
+  }, [names, existingRatings, updateTournamentState, runTournament]);
 
   // Define getCurrentRatings first since it's used in handleVote
   const getCurrentRatings = useCallback(() => {

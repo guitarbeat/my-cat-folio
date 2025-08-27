@@ -211,7 +211,7 @@ function TournamentContent({
         audioRef.current = null;
       }
     };
-  }, [musicTracks, soundEffects, volume.effects, volume.music]);
+  }, []); // Remove dependencies to prevent recreation
 
   // Function to pick a random sound effect based on weights
   const getRandomSoundEffect = useCallback(() => {
@@ -238,7 +238,12 @@ function TournamentContent({
         audioRef.current.src = soundEffect;
         audioRef.current.currentTime = 0;
         audioRef.current.volume = volume.effects;
-        audioRef.current.play();
+        audioRef.current.play().catch(error => {
+          // Ignore AbortError as it's expected when rapidly changing audio
+          if (error.name !== 'AbortError') {
+            console.error('Error playing sound effect:', error);
+          }
+        });
       }
     } catch (error) {
       console.error('Error playing sound effect:', error);
@@ -250,7 +255,12 @@ function TournamentContent({
     const playNewTrack = async () => {
       try {
         if (musicRef.current) {
+          // Pause current track first
           musicRef.current.pause();
+
+          // Small delay to prevent AbortError
+          await new Promise(resolve => setTimeout(resolve, 50));
+
           musicRef.current.src = musicTracks[currentTrack].path;
           musicRef.current.volume = volume.music;
           musicRef.current.loop = true;
@@ -261,8 +271,11 @@ function TournamentContent({
         }
         setAudioError(null);
       } catch (error) {
-        console.error('Error playing audio:', error);
-        setAudioError('Unable to play background music. Click to try again.');
+        // Ignore AbortError as it's expected when rapidly changing tracks
+        if (error.name !== 'AbortError') {
+          console.error('Error playing audio:', error);
+          setAudioError('Unable to play background music. Click to try again.');
+        }
       }
     };
 
@@ -281,9 +294,16 @@ function TournamentContent({
             audioRef.current.pause();
           }
         } else if (musicRef.current) {
-          musicRef.current.play().catch(() => {
-            setAudioError('Unable to play audio. Click to try again.');
-          });
+          // Small delay to prevent AbortError
+          setTimeout(() => {
+            if (musicRef.current && !newMuted) {
+              musicRef.current.play().catch((error) => {
+                if (error.name !== 'AbortError') {
+                  setAudioError('Unable to play audio. Click to try again.');
+                }
+              });
+            }
+          }, 50);
         }
       } catch (error) {
         console.error('Error toggling mute:', error);
@@ -298,13 +318,20 @@ function TournamentContent({
 
   const retryAudio = useCallback(() => {
     if (audioError && !isMuted && musicRef.current) {
-      musicRef.current
-        .play()
-        .then(() => setAudioError(null))
-        .catch((error) => {
-          console.error('Error retrying audio:', error);
-          setAudioError('Unable to play audio. Click to try again.');
-        });
+      // Small delay to prevent AbortError
+      setTimeout(() => {
+        if (musicRef.current && !isMuted) {
+          musicRef.current
+            .play()
+            .then(() => setAudioError(null))
+            .catch((error) => {
+              if (error.name !== 'AbortError') {
+                console.error('Error retrying audio:', error);
+                setAudioError('Unable to play audio. Click to try again.');
+              }
+            });
+        }
+      }, 50);
     }
   }, [audioError, isMuted]);
 

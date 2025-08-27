@@ -2,7 +2,7 @@
 .container {
   width: 100%;
   min-height: 100vh;
-  padding-top: var(--space-6);
+  padding-top: calc(var(--space-6) + 70px); /* Add navbar height to prevent content cutoff */
   background: linear-gradient(
     135deg,
     var(--background-color) 0%,
@@ -290,6 +290,8 @@
   align-items: flex-start;
   justify-content: space-between;
   margin-bottom: var(--space-4);
+  flex-wrap: wrap; /* * Allow wrapping on small screens */
+  gap: var(--space-3); /* * Add gap between wrapped items */
 }
 
 .headerContent {
@@ -308,6 +310,9 @@
   display: flex;
   gap: var(--space-3);
   align-items: center;
+  min-height: 50px; /* * Ensure minimum height to accommodate button */
+  height: auto; /* * Allow height to grow as needed */
+  flex-wrap: wrap; /* * Allow wrapping on very small screens */
 }
 
 .panelTitle {
@@ -381,10 +386,49 @@
   text-align: center;
   background: linear-gradient(
     135deg,
-    var(--primary-50) 0%,
-    var(--primary-100) 100%
+    var(--start-section-bg-start, var(--primary-50)) 0%,
+    var(--start-section-bg-end, var(--primary-100)) 100%
   );
-  border-top: 1px solid var(--primary-200);
+  border-top: 1px solid var(--start-section-border, var(--primary-200));
+  position: relative;
+  overflow: hidden;
+}
+
+/* * Add subtle pattern overlay for visual interest */
+.startSection::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: 
+    radial-gradient(circle at 20% 80%, var(--start-section-pattern, transparent) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, var(--start-section-pattern, transparent) 0%, transparent 50%);
+  opacity: 0.1;
+  pointer-events: none;
+}
+
+/* * Ensure text has proper contrast in start section */
+.startSection * {
+  position: relative;
+  z-index: 1;
+}
+
+/* * Add subtle glow effect for better visual appeal */
+.startSection {
+  box-shadow: 
+    inset 0 1px 0 var(--start-section-border, var(--primary-200)),
+    0 4px 20px rgb(0 0 0 / 5%);
+  transition: all var(--transition-all, 0.3s ease);
+}
+
+/* * Add hover effect for better interactivity */
+.startSection:hover {
+  box-shadow: 
+    inset 0 1px 0 var(--start-section-border, var(--primary-200)),
+    0 6px 25px rgb(0 0 0 / 8%);
+  transform: translateY(-1px);
 }
 
 /* Sidebar */
@@ -737,7 +781,7 @@
 .overlayBackdrop {
   position: fixed;
   inset: 0;
-  z-index: 1000;
+  z-index: var(--z-modal); /* Use CSS custom property for modal backdrop */
   background: var(--overlay-dark);
   backdrop-filter: blur(8px);
 }
@@ -750,7 +794,7 @@
 .overlayContent {
   position: fixed;
   inset: 0;
-  z-index: 1001;
+  z-index: var(--z-modal); /* Use CSS custom property for modal content */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -804,7 +848,7 @@
 
 .resizeHandle {
   position: absolute;
-  z-index: 1003;
+  z-index: calc(var(--z-modal) + 3); /* Use CSS custom property for resize handles */
   width: 12px;
   height: 12px;
   cursor: pointer;
@@ -853,7 +897,7 @@
   position: absolute;
   top: var(--space-4);
   right: var(--space-4);
-  z-index: 1002;
+  z-index: calc(var(--z-modal) + 2); /* Use CSS custom property for image controls */
   display: flex;
   gap: var(--space-2);
 }
@@ -989,6 +1033,27 @@
     padding: var(--space-4);
   }
 
+  /* * Mobile optimizations for start section */
+  .startSection {
+    background: linear-gradient(
+      135deg,
+      var(--start-section-bg-start, var(--primary-100)) 0%,
+      var(--start-section-bg-end, var(--primary-200)) 100%
+    );
+    border-top-color: var(--start-section-border, var(--primary-300));
+  }
+
+  .headerActions {
+    min-height: 60px; /* * Ensure adequate height for mobile */
+    flex-wrap: wrap; /* * Allow wrapping if needed */
+  }
+
+  .headerRow {
+    flex-direction: column; /* * Stack content vertically on mobile */
+    align-items: stretch; /* * Stretch items to full width */
+    gap: var(--space-3); /* * Add consistent spacing */
+  }
+
   .selectAllButton {
     width: 100%;
   }
@@ -1000,6 +1065,8 @@
   .catPicturesToggleButton {
     width: 100%;
     margin-top: var(--space-2);
+    padding: var(--space-1) var(--space-3); /* * Reduce vertical padding on mobile */
+    min-height: 44px; /* * Ensure minimum touch target size */
   }
 }
 
@@ -1157,12 +1224,15 @@
   padding: var(--space-2) var(--space-4);
   font-size: var(--text-sm);
   font-weight: 500;
+  line-height: 1.2; /* * Ensure consistent line height for height calculation */
   color: var(--button-text-light, white);
   cursor: pointer;
   background: var(--button-secondary-bg, var(--secondary-color, #64748b));
   border: none;
   border-radius: var(--radius-md);
   transition: var(--transition-all);
+  min-height: 44px; /* * Ensure minimum height for proper display */
+  box-sizing: border-box; /* * Ensure padding is included in height calculation */
 }
 
 .catPicturesToggleButton:hover:not(:disabled) {
@@ -1328,7 +1398,7 @@
   position: absolute;
   top: 0;
   left: 0;
-  z-index: 1;
+  z-index: var(--z-10); /* Use CSS custom property for overlay layer */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1474,6 +1544,10 @@
 
 /* Mobile Responsiveness */
 @media (width <= 768px) {
+  .container {
+    padding-top: calc(var(--space-4) + 70px); /* Adjust for mobile */
+  }
+
   .mainContent {
     grid-template-columns: 1fr;
     padding: var(--space-4);
@@ -1487,23 +1561,28 @@
   .swipeContainer {
     padding: 1rem 0;
     gap: 1.5rem;
+    margin-top: 1rem; /* Add margin to prevent navbar overlap */
   }
   
   .swipeCardWrapper {
     max-width: 100%;
-    height: 250px;
+    height: 280px; /* Increased height for better mobile experience */
+    margin: 0 1rem; /* Add horizontal margin */
   }
 
   .swipeCard {
     padding: 1.5rem;
+    min-height: 280px; /* Ensure consistent height */
   }
 
   .swipeCardName {
     font-size: 1.5rem;
+    margin-bottom: 0.5rem; /* Add spacing */
   }
 
   .swipeCardDescription {
     font-size: 1rem;
+    margin-bottom: 1rem; /* Add spacing */
   }
 
   .swipeCardImageContainer {
@@ -1516,10 +1595,12 @@
     gap: 1rem;
     justify-content: center;
     width: 100%;
+    padding: 0 1rem; /* Add horizontal padding */
   }
 
   .swipeButton {
-    min-width: 100px;
+    min-width: 120px; /* Increased for better touch targets */
+    min-height: 48px; /* Ensure minimum touch target size */
     padding: 0.75rem 1.5rem;
     font-size: 1rem;
   }
@@ -1532,6 +1613,81 @@
   .swipeModeToggleButton {
     padding: 0.75rem 1.5rem;
     font-size: 0.9rem;
+    min-height: 48px; /* Ensure minimum touch target size */
+  }
+
+  /* Ensure swipe overlays are properly positioned on mobile */
+  .swipeOverlay {
+    font-size: 1.5rem; /* Smaller font for mobile */
+    letter-spacing: 1px; /* Reduce letter spacing for mobile */
+  }
+
+  .swipeText {
+    font-size: 1.2rem; /* Adjust text size for mobile */
+  }
+}
+
+/* Extra small mobile devices */
+@media (width <= 480px) {
+  .container {
+    padding-top: calc(var(--space-3) + 60px); /* Adjust for smaller navbar */
+  }
+
+  .headerActions {
+    min-height: 60px; /* * Increase minimum height for very small screens */
+    gap: var(--space-2); /* * Reduce gap on very small screens */
+  }
+
+  .headerRow {
+    gap: var(--space-2); /* * Reduce gap on very small screens */
+  }
+
+  .swipeContainer {
+    padding: 0.5rem 0;
+    gap: 1rem;
+  }
+
+  .swipeCardWrapper {
+    height: 250px;
+    margin: 0 0.5rem;
+  }
+
+  .swipeCard {
+    padding: 1rem;
+    min-height: 250px;
+  }
+
+  .swipeCardName {
+    font-size: 1.3rem;
+  }
+
+  .swipeCardDescription {
+    font-size: 0.9rem;
+  }
+
+  .swipeCardImageContainer {
+    height: 100px;
+  }
+
+  .swipeButtons {
+    gap: 0.75rem;
+    padding: 0 0.5rem;
+  }
+
+  .swipeButton {
+    min-width: 100px;
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+  }
+
+  .catPicturesToggleButton {
+    padding: var(--space-1) var(--space-2); /* * Further reduce padding on very small screens */
+    font-size: var(--text-xs); /* * Reduce font size for better fit */
+    min-height: 40px; /* * Ensure minimum height on very small screens */
+    white-space: nowrap; /* * Prevent text wrapping */
+    max-width: 100%; /* * Ensure button doesn't overflow container */
+    overflow: hidden; /* * Hide any overflow */
+    text-overflow: ellipsis; /* * Show ellipsis for very long text */
   }
 }
 
@@ -1539,14 +1695,58 @@
 @media (hover: none) and (pointer: coarse) {
   .swipeCard {
     cursor: default;
+    touch-action: pan-y pinch-zoom; /* Optimize touch behavior */
   }
 
   .swipeButton {
-    min-width: 100px;
-    min-height: 48px;
+    min-width: 140px; /* Increased for better touch targets */
+    min-height: 56px; /* Ensure minimum touch target size */
+    touch-action: manipulation; /* Optimize touch behavior */
   }
 
   .swipeModeToggleButton {
-    min-height: 48px;
+    min-height: 56px; /* Ensure minimum touch target size */
+    touch-action: manipulation; /* Optimize touch behavior */
+  }
+
+  .catPicturesToggleButton {
+    min-height: 44px; /* * Ensure minimum touch target size on touch devices */
+    touch-action: manipulation; /* * Optimize touch behavior */
+  }
+
+  /* Ensure swipe overlays are touch-friendly */
+  .swipeOverlay {
+    pointer-events: none; /* Prevent interference with touch events */
+  }
+
+  /* Optimize touch targets for mobile */
+  .swipeContainer {
+    touch-action: pan-y; /* Allow vertical scrolling */
+  }
+}
+
+/* Additional mobile optimizations */
+@media (width <= 768px) {
+  /* Ensure swipe cards are properly sized for mobile */
+  .swipeCardWrapper {
+    touch-action: pan-y; /* Allow vertical scrolling */
+  }
+
+  /* Optimize swipe overlay positioning for mobile */
+  .swipeOverlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: var(--z-10); /* Use CSS custom property for overlay layer */
+    pointer-events: none; /* Prevent interference with touch events */
+  }
+
+  /* Ensure proper touch feedback */
+  .swipeCard:active {
+    transform: scale(0.98); /* Provide touch feedback */
+  }
+
+  .swipeButton:active {
+    transform: scale(0.95); /* Provide touch feedback */
   }
 }

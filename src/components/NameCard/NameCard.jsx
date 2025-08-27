@@ -212,6 +212,7 @@ function NameCard({
     isSelected && styles.selected,
     disabled && styles.disabled,
     isHidden && styles.hidden,
+    image && styles.hasImage, // * Add special class for cards with images
     className
   ]
     .filter(Boolean)
@@ -252,6 +253,9 @@ function NameCard({
               alt="Cat picture"
               className={styles.cardImage}
               loading="lazy"
+              onError={(e) => {
+                console.error('Image failed to load:', e.target.src);
+              }}
             />
           </div>
         )}

@@ -39,9 +39,22 @@ const DEFAULT_DESCRIPTION = 'A name as unique as your future companion';
 
 // Helper function to get random cat images
 const getRandomCatImage = (nameId) => {
-  // Use the name ID to consistently get the same image for the same name
-  const index = nameId % CAT_IMAGES.length;
-  return CAT_IMAGES[index];
+  // Convert UUID string to a number for consistent image selection
+  let numericId;
+  if (typeof nameId === 'string') {
+    // Use a simple hash of the UUID string to get a consistent number
+    numericId = nameId.split('').reduce((hash, char) => {
+      return char.charCodeAt(0) + ((hash << 5) - hash);
+    }, 0);
+  } else {
+    numericId = nameId;
+  }
+
+  // Use the numeric ID to consistently get the same image for the same name
+  const index = Math.abs(numericId) % CAT_IMAGES.length;
+  const result = CAT_IMAGES[index];
+  console.log('getRandomCatImage:', { nameId, numericId, index, totalImages: CAT_IMAGES.length, result });
+  return result;
 };
 
 // Simple name selection - names and descriptions only
@@ -345,10 +358,10 @@ const SwipeableNameCards = ({
   };
 
   return (
-          <div className={styles.swipeContainer}>
-        <div className={`${styles.swipeCardWrapper} ${showCatPictures ? styles.withCatPictures : ''}`}>
-          <div
-            className={`${styles.swipeCard} ${isSelected ? styles.selected : ''} ${showCatPictures ? styles.withCatPictures : ''}`}
+    <div className={styles.swipeContainer}>
+      <div className={`${styles.swipeCardWrapper} ${showCatPictures ? styles.withCatPictures : ''}`}>
+        <div
+          className={`${styles.swipeCard} ${isSelected ? styles.selected : ''} ${showCatPictures ? styles.withCatPictures : ''}`}
           style={cardStyle}
           onMouseDown={handleDragStart}
           onMouseMove={handleDragMove}
@@ -358,18 +371,18 @@ const SwipeableNameCards = ({
           onTouchMove={handleDragMove}
           onTouchEnd={handleDragEnd}
         >
-          {/* Swipe direction overlays */}
+          {/* Swipe direction overlays - Fixed to show correct overlay */}
           <div
             className={`${styles.swipeOverlay} ${styles.swipeRight} ${swipeDirection === 'right' ? styles.active : ''}`}
-            style={swipeOverlayStyle}
+            style={swipeDirection === 'right' ? swipeOverlayStyle : { opacity: 0 }}
           >
             <span className={styles.swipeText}>👍 SELECTED</span>
           </div>
           <div
             className={`${styles.swipeOverlay} ${styles.swipeLeft} ${swipeDirection === 'left' ? styles.active : ''}`}
-            style={swipeOverlayStyle}
+            style={swipeDirection === 'left' ? swipeOverlayStyle : { opacity: 0 }}
           >
-            <span className={styles.swipeText}>👎 REMOVED</span>
+            <span className={styles.swipeText}>👎 SKIPPED</span>
           </div>
 
           {/* Card content */}
@@ -417,12 +430,14 @@ const SwipeableNameCards = ({
             )}
           </div>
 
-          {/* Selection indicator */}
-          <div
-            className={`${styles.selectionIndicator} ${isSelected ? styles.selected : ''}`}
-          >
-            {isSelected ? '✓ Selected' : '○ Not Selected'}
-          </div>
+          {/* Selection indicator - Only show when selected */}
+          {isSelected && (
+            <div
+              className={`${styles.selectionIndicator} ${styles.selected}`}
+            >
+              ✓ Selected
+            </div>
+          )}
         </div>
       </div>
 

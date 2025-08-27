@@ -1,17 +1,14 @@
 /* Simple loading spinner with cat emoji */
 
-.container {
+.spinnerOverlay {
   position: fixed;
   inset: 0;
-  z-index: 1000;
+  z-index: var(--z-modal); /* Use CSS custom property for modal layer */
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 100%;
-  min-height: 100vh;
-  background: var(--overlay-light);
-  backdrop-filter: saturate(150%) blur(4px);
+  background: rgb(0 0 0 / 50%);
+  backdrop-filter: blur(4px);
 }
 
 /* Spinner styles */

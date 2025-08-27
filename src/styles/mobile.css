@@ -1,8 +1,25 @@
 /* Mobile-specific color scheme improvements */
 
-/* Mobile color overrides for better visibility */
+/* Global mobile spacing to prevent navbar cutoff */
 @media (width <= 768px) {
-  /* Enhanced mobile card colors */
+  /* Ensure main content doesn't get cut off by fixed navbar */
+  body {
+    padding-top: 70px; /* Match navbar height */
+  }
+
+  /* Adjust main containers to account for navbar */
+  .container,
+  .main-container,
+  .app-container {
+    padding-top: calc(var(--space-4) + 70px);
+  }
+
+  /* Ensure proper spacing for tournament setup */
+  .tournament-setup {
+    margin-top: 1rem;
+  }
+
+  /* Mobile color overrides for better visibility */
   .name-card {
     background: var(--mobile-card-background, var(--card-background));
     border-color: var(--mobile-card-border, var(--card-border));

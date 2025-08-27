@@ -4,7 +4,7 @@
   position: fixed;
   top: 0;
   left: 0;
-  z-index: -1;
+  z-index: var(--z-0); /* Use CSS custom property for background layer */
   width: 100vw;
   height: 100vh;
   overflow: hidden;
@@ -20,11 +20,11 @@
   inset: 0;
   background: linear-gradient(
     135deg,
-    rgb(26 31 46 / 70%) 0%,
-    rgb(44 62 64 / 50%) 50%,
-    rgb(26 31 46 / 80%) 100%
+    rgb(26 31 46 / 40%) 0%,
+    rgb(44 62 64 / 30%) 50%,
+    rgb(26 31 46 / 50%) 100%
   );
-  backdrop-filter: blur(1px);
+  backdrop-filter: blur(0.5px);
 }
 
 /* * Twinkling stars effect */
@@ -167,11 +167,31 @@
   .kittieWrapper {
     --kittie-size: calc(var(--kittie-size) * 0.7);
   }
+
+  /* Make background more visible on mobile */
+  .spaceOverlay {
+    background: linear-gradient(
+      135deg,
+      rgb(26 31 46 / 30%) 0%,
+      rgb(44 62 64 / 20%) 50%,
+      rgb(26 31 46 / 40%) 100%
+    );
+  }
 }
 
 @media (width <= 480px) {
   .kittieWrapper {
     --kittie-size: calc(var(--kittie-size) * 0.5);
+  }
+
+  /* Even more transparent on small mobile */
+  .spaceOverlay {
+    background: linear-gradient(
+      135deg,
+      rgb(26 31 46 / 25%) 0%,
+      rgb(44 62 64 / 15%) 50%,
+      rgb(26 31 46 / 35%) 100%
+    );
   }
 }
 

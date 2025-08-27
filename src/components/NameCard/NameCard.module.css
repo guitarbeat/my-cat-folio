@@ -688,12 +688,79 @@
 /* Enhanced card styling when image is present */
 .card:has(.cardImageContainer) {
   padding-top: var(--space-4);
+  /* * Make cards taller when images are present */
+  min-height: 300px;
+}
+
+/* * Special styling for cards with images - Tinder-style layout */
+.hasImage {
+  /* * Disable complex 3D transforms when images are present */
+  transform-style: flat !important;
+  perspective: none !important;
+  /* * Increase card height for better image display */
+  min-height: 320px !important;
+  /* * Enhanced Tinder-style appearance */
+  border: 2px solid var(--border-color) !important;
+  border-radius: 20px !important;
+  box-shadow: 0 10px 40px rgb(0 0 0 / 20%) !important;
+  overflow: hidden !important;
+}
+
+.hasImage:hover {
+  /* * Simpler hover effect for cards with images */
+  transform: translateY(-4px) scale(1.02) !important;
+  box-shadow: 0 15px 50px rgb(0 0 0 / 30%) !important;
+}
+
+.hasImage .backgroundEffect {
+  /* * Disable tilt effect for cards with images */
+  display: none !important;
+}
+
+/* * Ensure images are properly positioned */
+.hasImage .cardImageContainer {
+  position: relative;
+  z-index: 1;
+  /* * Match swipe card image height */
+  height: 200px;
+  margin-bottom: var(--space-4);
+}
+
+.hasImage .name,
+.hasImage .description,
+.hasImage .metadata {
+  position: relative;
+  z-index: 2;
+}
+
+/* * Enhanced spacing for cards with images */
+.hasImage .name {
+  margin-top: var(--space-2);
+  font-size: var(--text-xl);
+  font-weight: 700;
+}
+
+.hasImage .description {
+  margin-top: var(--space-3);
+  line-height: 1.5;
 }
 
 /* Mobile responsive styles for card images */
 @media (max-width: 768px) {
   .cardImageContainer {
-    height: 100px;
+    height: 150px;
     margin-bottom: var(--space-2);
+  }
+  
+  .hasImage .cardImageContainer {
+    height: 150px;
+  }
+  
+  .hasImage {
+    min-height: 280px !important;
+  }
+  
+  .card:has(.cardImageContainer) {
+    min-height: 280px;
   }
 }
