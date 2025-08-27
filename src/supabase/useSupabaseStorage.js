@@ -50,11 +50,12 @@ function useSupabaseStorage(userName = '') {
 
     try {
       setLoading(true);
-      const data = await supabase
+      const { data, error } = await supabase
         .from('cat_name_options')
         .select('*')
         .eq('user_name', userName);
-      setNames(data);
+      if (error) throw error;
+      setNames(data || []);
     } catch (err) {
       if (process.env.NODE_ENV === 'development') {
         console.error('Error fetching names:', err);
@@ -69,13 +70,14 @@ function useSupabaseStorage(userName = '') {
     async (name, description = '') => {
       try {
         setLoading(true);
-        const newName = await supabase
+        const { data, error } = await supabase
           .from('cat_name_options')
           .insert({ user_name: userName, name: name, description: description })
           .select()
           .single();
+        if (error) throw error;
         await fetchNames(); // Refresh the list
-        return newName;
+        return data;
       } catch (err) {
         if (process.env.NODE_ENV === 'development') {
           console.error('Error adding name:', err);
@@ -120,7 +122,7 @@ function useSupabaseStorage(userName = '') {
 
       try {
         setLoading(true);
-        const result = await supabase
+        const { data, error } = await supabase
           .from('cat_name_ratings')
           .upsert({
             user_name: userName,
@@ -131,8 +133,9 @@ function useSupabaseStorage(userName = '') {
           })
           .select()
           .single();
+        if (error) throw error;
         await fetchNames(); // Refresh to get updated data
-        return result;
+        return data;
       } catch (err) {
         if (process.env.NODE_ENV === 'development') {
           console.error('Error updating rating:', err);
@@ -151,15 +154,15 @@ function useSupabaseStorage(userName = '') {
       if (!userName) return [];
 
       try {
-        const { data, error } = await supabase
-          .from('cat_name_ratings')
-          .select('*')
-          .eq('user_name', userName)
-          .eq('name_id', nameId)
-          .order('timestamp', { ascending: false })
-          .limit(limit);
-        if (error) throw error;
-        return data;
+      const { data, error } = await supabase
+        .from('cat_name_ratings')
+        .select('*')
+        .eq('user_name', userName)
+        .eq('name_id', nameId)
+        .order('timestamp', { ascending: false })
+        .limit(limit);
+      if (error) throw error;
+      return data;
       } catch (err) {
         if (process.env.NODE_ENV === 'development') {
           console.error('Error fetching rating history:', err);
@@ -184,7 +187,7 @@ function useSupabaseStorage(userName = '') {
           .upsert({
             user_name: userName,
             name_id: nameId,
-            hidden: true
+            is_hidden: true
           })
           .select()
           .single();
@@ -213,7 +216,7 @@ function useSupabaseStorage(userName = '') {
           .upsert({
             user_name: userName,
             name_id: nameId,
-            hidden: false
+            is_hidden: false
           })
           .select()
           .single();
@@ -238,7 +241,7 @@ function useSupabaseStorage(userName = '') {
         .from('cat_name_ratings')
         .select('name_id')
         .eq('user_name', userName)
-        .eq('hidden', true);
+        .eq('is_hidden', true);
       if (error) throw error;
       return data.map((item) => item.name_id);
     } catch (err) {
@@ -258,7 +261,7 @@ function useSupabaseStorage(userName = '') {
 
       try {
         setLoading(true);
-        const tournament = await supabase
+        const { data, error } = await supabase
           .from('tournaments')
           .insert({
             user_name: userName,
@@ -268,7 +271,8 @@ function useSupabaseStorage(userName = '') {
           })
           .select()
           .single();
-        return tournament;
+        if (error) throw error;
+        return data;
       } catch (err) {
         if (process.env.NODE_ENV === 'development') {
           console.error('Error creating tournament:', err);
@@ -286,13 +290,14 @@ function useSupabaseStorage(userName = '') {
     async (tournamentId, _status, completedAt = null) => {
       try {
         setLoading(true);
-        const tournament = await supabase
+        const { data, error } = await supabase
           .from('tournaments')
           .update({ status: _status, completed_at: completedAt })
           .eq('id', tournamentId)
           .select()
           .single();
-        return tournament;
+        if (error) throw error;
+        return data;
       } catch (err) {
         if (process.env.NODE_ENV === 'development') {
           console.error('Error updating tournament:', err);
@@ -339,8 +344,9 @@ function useSupabaseStorage(userName = '') {
         .select('*')
         .eq('user_name', userName);
       if (error) throw error;
-      setUserPreferences(data[0]);
-      return data[0];
+      const prefs = Array.isArray(data) ? data[0] : data;
+      setUserPreferences(prefs || null);
+      return prefs || null;
     } catch (err) {
       if (process.env.NODE_ENV === 'development') {
         console.error('Error fetching preferences:', err);
@@ -356,7 +362,7 @@ function useSupabaseStorage(userName = '') {
 
       try {
         setLoading(true);
-        const updatedPrefs = await supabase
+        const { data, error } = await supabase
           .from('cat_app_users')
           .upsert({
             user_name: userName,
@@ -364,8 +370,9 @@ function useSupabaseStorage(userName = '') {
           })
           .select()
           .single();
-        setUserPreferences(updatedPrefs);
-        return updatedPrefs;
+        if (error) throw error;
+        setUserPreferences(data);
+        return data;
       } catch (err) {
         if (process.env.NODE_ENV === 'development') {
           console.error('Error updating preferences:', err);
@@ -388,8 +395,9 @@ function useSupabaseStorage(userName = '') {
         .select('categories')
         .eq('user_name', userName);
       if (error) throw error;
-      setCategories(data[0].categories);
-      return data[0].categories;
+      const categoriesValue = Array.isArray(data) && data[0] ? data[0].categories : [];
+      setCategories(categoriesValue || []);
+      return categoriesValue || [];
     } catch (err) {
       if (process.env.NODE_ENV === 'development') {
         console.error('Error fetching categories:', err);
@@ -408,7 +416,7 @@ function useSupabaseStorage(userName = '') {
           .eq('user_name', userName)
           .eq('category_id', categoryId);
         if (error) throw error;
-        return data.map((item) => item.names);
+        return (data || []).map((item) => item.names);
       } catch (err) {
         if (process.env.NODE_ENV === 'development') {
           console.error('Error fetching names by category:', err);
@@ -431,7 +439,7 @@ function useSupabaseStorage(userName = '') {
           .eq('user_name', userName);
         if (error) throw error;
 
-        let leaderboard = data.map((item) => ({
+        let leaderboard = (data || []).map((item) => ({
           name: item.names,
           rating: item.ratings,
           tournamentCount: item.tournament_count
@@ -462,6 +470,7 @@ function useSupabaseStorage(userName = '') {
   const namesTimeoutRef = useRef(null);
   const categoriesTimeoutRef = useRef(null);
   const preferencesTimeoutRef = useRef(null);
+  const channelsRef = useRef([]);
 
   const debouncedFetchNames = useCallback(() => {
     if (namesTimeoutRef.current) {
@@ -490,115 +499,117 @@ function useSupabaseStorage(userName = '') {
     }, 1000); // 1 second debounce
   }, [fetchUserPreferences]);
 
-    useEffect(() => {
-      if (!userName) return;
+  useEffect(() => {
+    if (!userName) return;
 
-      // Fetch initial data
-      fetchNames();
-      fetchUserPreferences();
-      fetchCategories();
+    // Fetch initial data
+    fetchNames();
+    fetchUserPreferences();
+    fetchCategories();
 
-      // Set up real-time subscriptions
-      const setupSubscriptions = async () => {
-      const { supabase } = await import('./supabaseClient');
+    // Tear down any existing channels before creating new ones
+    if (channelsRef.current.length) {
+      channelsRef.current.forEach((ch) => ch.unsubscribe());
+      channelsRef.current = [];
+    }
 
-      const subscriptions = [
-        // Names changes
-        supabase
-          .channel('cat_names_changes')
-          .on(
-            'postgres_changes',
-            {
-              event: '*',
-              schema: 'public',
-              table: 'cat_name_options'
-            },
-            debouncedFetchNames
-          )
-          .subscribe(),
+    // Set up real-time subscriptions
+    const newChannels = [
+      // Names changes
+      supabase
+        .channel('cat_names_changes')
+        .on(
+          'postgres_changes',
+          {
+            event: '*',
+            schema: 'public',
+            table: 'cat_name_options'
+          },
+          debouncedFetchNames
+        )
+        .subscribe(),
 
-        // Ratings changes for this user
-        supabase
-          .channel('cat_ratings_changes')
-          .on(
-            'postgres_changes',
-            {
-              event: '*',
-              schema: 'public',
-              table: 'cat_name_ratings',
-              filter: `user_name=eq.${userName}`
-            },
-            debouncedFetchNames
-          )
-          .subscribe(),
+      // Ratings changes for this user
+      supabase
+        .channel('cat_ratings_changes')
+        .on(
+          'postgres_changes',
+          {
+            event: '*',
+            schema: 'public',
+            table: 'cat_name_ratings',
+            filter: `user_name=eq.${userName}`
+          },
+          debouncedFetchNames
+        )
+        .subscribe(),
 
-        // Hidden names changes for this user (now in cat_name_ratings)
-        supabase
-          .channel('cat_name_ratings_hidden_changes')
-          .on(
-            'postgres_changes',
-            {
-              event: '*',
-              schema: 'public',
-              table: 'cat_name_ratings',
-              filter: `user_name=eq.${userName}`
-            },
-            debouncedFetchNames
-          )
-          .subscribe(),
+      // Hidden names changes for this user (now in cat_name_ratings)
+      supabase
+        .channel('cat_name_ratings_hidden_changes')
+        .on(
+          'postgres_changes',
+          {
+            event: '*',
+            schema: 'public',
+            table: 'cat_name_ratings',
+            filter: `user_name=eq.${userName}`
+          },
+          debouncedFetchNames
+        )
+        .subscribe(),
 
-        // Categories changes (now in cat_name_options.categories)
-        supabase
-          .channel('cat_name_options_categories_changes')
-          .on(
-            'postgres_changes',
-            {
-              event: '*',
-              schema: 'public',
-              table: 'cat_name_options'
-            },
-            debouncedFetchCategories
-          )
-          .subscribe(),
+      // Categories changes (now in cat_name_options.categories)
+      supabase
+        .channel('cat_name_options_categories_changes')
+        .on(
+          'postgres_changes',
+          {
+            event: '*',
+            schema: 'public',
+            table: 'cat_name_options'
+          },
+          debouncedFetchCategories
+        )
+        .subscribe(),
 
-        // User preferences changes (now in cat_app_users)
-        supabase
-          .channel('cat_app_users_preferences_changes')
-          .on(
-            'postgres_changes',
-            {
-              event: '*',
-              schema: 'public',
-              table: 'cat_app_users',
-              filter: `user_name=eq.${userName}`
-            },
-            debouncedFetchUserPreferences
-          )
-          .subscribe()
-      ];
+      // User preferences changes (now in cat_app_users)
+      supabase
+        .channel('cat_app_users_preferences_changes')
+        .on(
+          'postgres_changes',
+          {
+            event: '*',
+            schema: 'public',
+            table: 'cat_app_users',
+            filter: `user_name=eq.${userName}`
+          },
+          debouncedFetchUserPreferences
+        )
+        .subscribe()
+    ];
 
-      // Cleanup subscriptions
-      return () => {
-        subscriptions.forEach((sub) => sub.unsubscribe());
-        // Cleanup any pending timeouts
-        if (namesTimeoutRef.current) clearTimeout(namesTimeoutRef.current);
-        if (categoriesTimeoutRef.current)
-          clearTimeout(categoriesTimeoutRef.current);
-        if (preferencesTimeoutRef.current)
-          clearTimeout(preferencesTimeoutRef.current);
-      };
+    channelsRef.current = newChannels;
+
+    return () => {
+      // Cleanup subscriptions and any pending timeouts
+      if (channelsRef.current.length) {
+        channelsRef.current.forEach((ch) => ch.unsubscribe());
+        channelsRef.current = [];
+      }
+      if (namesTimeoutRef.current) clearTimeout(namesTimeoutRef.current);
+      if (categoriesTimeoutRef.current) clearTimeout(categoriesTimeoutRef.current);
+      if (preferencesTimeoutRef.current) clearTimeout(preferencesTimeoutRef.current);
     };
-
-      setupSubscriptions();
-    }, [
-      userName,
-      fetchNames,
-      fetchUserPreferences,
-      fetchCategories,
-      debouncedFetchNames,
-      debouncedFetchCategories,
-      debouncedFetchUserPreferences
-    ]);
+  }, [
+    userName,
+    fetchNames,
+    fetchUserPreferences,
+    fetchCategories,
+    debouncedFetchNames,
+    debouncedFetchCategories,
+    debouncedFetchUserPreferences
+  ]);
 
   // ===== RETURN OBJECT =====
 

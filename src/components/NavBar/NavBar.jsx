@@ -165,6 +165,9 @@ function NavBar({
           className="navbar__logo"
           width="32"
           height="32"
+          loading="lazy"
+          decoding="async"
+          fetchpriority="low"
         />
         <span className="navbar__title">Aaron&apos;s Folly</span>
       </a>

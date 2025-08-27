@@ -264,26 +264,54 @@ function App() {
         <div className="cat-background__stars"></div>
         <div className="cat-background__nebula"></div>
         <div className="cat-background__floating-cats">
-          <img
-            src="/images/cat.gif"
-            alt=""
-            className="cat-background__cat cat-background__cat--1"
-          />
-          <img
-            src="/images/cat.gif"
-            alt=""
-            className="cat-background__cat cat-background__cat--2"
-          />
-          <img
-            src="/images/cat.gif"
-            alt=""
-            className="cat-background__cat cat-background__cat--3"
-          />
-          <img
-            src="/images/cat.gif"
-            alt=""
-            className="cat-background__cat cat-background__cat--4"
-          />
+          {(() => {
+            // Respect user preferences: avoid heavy GIFs for reduced motion or data-saver
+            const prefersReducedMotion =
+              typeof window !== 'undefined' &&
+              window.matchMedia &&
+              window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            const saveData =
+              typeof navigator !== 'undefined' &&
+              navigator.connection &&
+              navigator.connection.saveData;
+            if (prefersReducedMotion || saveData) return null;
+            return (
+              <>
+                <img
+                  src="/images/cat.gif"
+                  alt=""
+                  className="cat-background__cat cat-background__cat--1"
+                  loading="lazy"
+                  decoding="async"
+                  fetchpriority="low"
+                />
+                <img
+                  src="/images/cat.gif"
+                  alt=""
+                  className="cat-background__cat cat-background__cat--2"
+                  loading="lazy"
+                  decoding="async"
+                  fetchpriority="low"
+                />
+                <img
+                  src="/images/cat.gif"
+                  alt=""
+                  className="cat-background__cat cat-background__cat--3"
+                  loading="lazy"
+                  decoding="async"
+                  fetchpriority="low"
+                />
+                <img
+                  src="/images/cat.gif"
+                  alt=""
+                  className="cat-background__cat cat-background__cat--4"
+                  loading="lazy"
+                  decoding="async"
+                  fetchpriority="low"
+                />
+              </>
+            );
+          })()}
         </div>
       </div>
 

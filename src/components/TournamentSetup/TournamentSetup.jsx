@@ -3,7 +3,7 @@
  * @description Simple wizard for selecting cat names and starting a tournament.
  * Shows names and descriptions by default. Admin users get advanced filtering options.
  */
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import {
   supabase,
@@ -686,13 +686,15 @@ function useTournamentSetup(userName) {
   const [isLoading, setIsLoading] = useState(true);
 
   // Enhanced error handling
+  const onErrorCb = useCallback((error) => {
+    console.error('TournamentSetup error:', error);
+  }, []);
+
   const { errors, isError, handleError, clearErrors, clearError } =
     useErrorHandler({
       showUserFeedback: true,
       maxRetries: 2,
-      onError: (error) => {
-        console.error('TournamentSetup error:', error);
-      }
+      onError: onErrorCb
     });
 
   useEffect(() => {

@@ -143,6 +143,9 @@ const FloatingKitties = ({
             alt="Floating cat"
             className={styles.kittieImage}
             draggable={false}
+            loading="lazy"
+            decoding="async"
+            fetchpriority="low"
           />
         </div>
       ))}

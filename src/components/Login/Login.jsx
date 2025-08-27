@@ -141,6 +141,9 @@ function Login({ onLogin }) {
           src="/images/IMG_5071.JPG"
           alt="Cat background"
           className={styles.backgroundImage}
+          loading="lazy"
+          decoding="async"
+          fetchpriority="low"
         />
         <div className={styles.overlay} />
       </div>
@@ -156,7 +159,9 @@ function Login({ onLogin }) {
             src="/images/IMG_5071.JPG"
             alt="Cute cat avatar"
             className={styles.catImage}
-            loading="eager"
+            loading="lazy"
+            decoding="async"
+            fetchpriority="low"
           />
           <p className={styles.welcomeText}>
             Join Aaron&apos;s quest to find the perfect cat name through science
