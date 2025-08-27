@@ -318,7 +318,7 @@ export const ratingsAPI = {
         .upsert({
           user_name: userName,
           name_id: nameId,
-          rating_history: existingRating?.rating_history 
+          rating_history: existingRating?.rating_history
             ? [...existingRating.rating_history, newHistoryEntry]
             : [newHistoryEntry]
         }, {
@@ -461,7 +461,7 @@ export const tournamentsAPI = {
         if (userError.code === '42703') {
           console.warn('Tournament data column not found, initializing with empty array. Run the migration to add the column.');
           const tournaments = [newTournament];
-          
+
           // Try to create the column and insert the tournament
           const { error: upsertError } = await supabase
             .from('cat_app_users')

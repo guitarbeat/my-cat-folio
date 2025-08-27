@@ -91,11 +91,13 @@
   margin-bottom: 0.5rem;
   filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.5));
   animation: bounce 2s ease-in-out infinite;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 .expandedBubble .bubbleIcon {
   font-size: 3rem;
   margin-bottom: 1rem;
+  filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.6));
 }
 
 .bubbleTitle {
@@ -107,6 +109,7 @@
   opacity: 0;
   transform: translateY(10px);
   transition: all 0.3s ease 0.1s;
+  color: #f8fafc;
 }
 
 .expandedBubble .bubbleTitle {
@@ -114,6 +117,7 @@
   margin: 0 0 0.75rem 0;
   opacity: 1;
   transform: translateY(0);
+  color: #f8fafc;
 }
 
 .bubbleText {
@@ -170,6 +174,7 @@
   font-size: 0.75rem;
   font-weight: 600;
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.7);
+  color: #f8fafc;
 }
 
 .bubbleCloseButton {
@@ -198,11 +203,6 @@
   transform: scale(1);
 }
 
-.bubbleCloseButton:hover {
-  background: rgba(239, 68, 68, 1);
-  transform: scale(1.1);
-}
-
 /* Mobile responsive positioning for bubbles */
 @media (max-width: 768px) {
   /* Enhanced mobile bubble positioning */
@@ -220,42 +220,6 @@
   }
 }
 
-
-
-
-
-
-
-
-
-/* Floating bubbles */
-.floatingBubble {
-  position: fixed;
-  width: 60px;
-  height: 60px;
-  background: linear-gradient(135deg, rgba(59, 130, 246, 0.5), rgba(147, 51, 234, 0.5));
-  backdrop-filter: blur(8px);
-  border: 2px solid rgba(255, 255, 255, 0.4);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 999;
-  animation: float 6s ease-in-out infinite;
-  box-shadow: 
-    0 8px 25px rgba(59, 130, 246, 0.4),
-    0 0 0 1px rgba(255, 255, 255, 0.2),
-    inset 0 2px 4px rgba(0, 0, 0, 0.2);
-}
-
-.bubbleInner {
-  width: 40px;
-  height: 40px;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.1));
-  border-radius: 50%;
-  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
 @keyframes float {
   0%, 100% {
     transform: translateY(0px) rotate(0deg);
@@ -268,12 +232,17 @@
   }
 }
 
-.bubbleCloseButton:hover {
-  background: rgba(239, 68, 68, 1);
-  transform: scale(1.1);
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-8px);
+  }
+  60% {
+    transform: translateY(-4px);
+  }
 }
-
-
 
 /* Enhanced mobile responsiveness */
 @media (max-width: 480px) {
@@ -323,6 +292,7 @@
   transition: all 0.2s ease;
   text-align: center;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
 }
 
 .bubbleNextButton {
@@ -391,8 +361,9 @@
   font-size: 0.9rem;
   line-height: 1.6;
   margin-bottom: 1rem;
-  color: #1f2937;
-  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+  color: #111827;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+  font-weight: 500;
 }
 
 .expandedBubble .bubbleFeatures {
@@ -404,28 +375,32 @@
   position: absolute;
   top: 0.5rem;
   right: 0.5rem;
-  width: 24px;
-  height: 24px;
+  width: 28px;
+  height: 28px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.25);
   border-radius: 50%;
   cursor: grab;
   transition: all 0.2s ease;
   z-index: 10;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .dragHandle:hover {
-  background: rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.35);
   transform: scale(1.1);
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
 }
 
 .dragIcon {
-  font-size: 0.75rem;
-  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.875rem;
+  color: rgba(255, 255, 255, 0.9);
   font-weight: bold;
   line-height: 1;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
 }
 
 /* Dragging State */
@@ -433,12 +408,15 @@
   cursor: grabbing !important;
   transform: scale(1.05);
   z-index: 1000;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+  transition: none;
 }
 
 .floatingBubble.draggingBubble .dragHandle {
   cursor: grabbing;
-  background: rgba(255, 255, 255, 0.4);
+  background: rgba(255, 255, 255, 0.5);
+  transform: scale(1.1);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
 }
 
 /* Close Button */
@@ -449,8 +427,8 @@
   width: 28px;
   height: 28px;
   border: none;
-  background: rgba(255, 255, 255, 0.2);
-  color: rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.25);
+  color: rgba(255, 255, 255, 0.9);
   border-radius: 50%;
   font-size: 1rem;
   cursor: pointer;
@@ -459,12 +437,15 @@
   align-items: center;
   justify-content: center;
   z-index: 10;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .bubbleCloseButton:hover {
-  background: rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.35);
   color: rgba(255, 255, 255, 1);
   transform: scale(1.1);
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
 }
 
 /* Hide drag handle when expanded (close button takes its place) */
@@ -529,4 +510,12 @@
     right: 0.75rem;
     font-size: 1.1rem;
   }
-}s
+
+  .floatingBubble.contentBubble {
+    cursor: grab;
+  }
+
+  .floatingBubble.contentBubble:active {
+    cursor: grabbing;
+  }
+}

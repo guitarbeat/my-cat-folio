@@ -119,7 +119,7 @@ describe('NavBar Component', () => {
     });
 
     render(<NavBar {...defaultProps} />);
-    
+
     const helpButton = screen.getByRole('button', {
       name: /Show help tutorial/i
     });
@@ -160,13 +160,13 @@ describe('NavBar Component', () => {
 
   test('mobile menu button toggles mobile menu', () => {
     render(<NavBar {...defaultProps} />);
-    
+
     const mobileMenuButton = screen.getByRole('button', {
       name: /Open menu/i
     });
-    
+
     fireEvent.click(mobileMenuButton);
-    
+
     expect(mobileMenuButton).toHaveAttribute('aria-expanded', 'true');
     expect(mobileMenuButton).toHaveAttribute('aria-label', 'Close menu');
   });

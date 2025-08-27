@@ -82,12 +82,12 @@ function Login({ onLogin }) {
 
   // Fetch cat fact on component mount
   useEffect(() => {
-    fetch("https://catfact.ninja/fact")
+    fetch('https://catfact.ninja/fact')
       .then((response) => response.json())
       .then((data) => setCatFact(data.fact))
       .catch((error) => {
-        console.error("Error fetching cat fact:", error);
-        setCatFact("Cats are amazing creatures with unique personalities!");
+        console.error('Error fetching cat fact:', error);
+        setCatFact('Cats are amazing creatures with unique personalities!');
       });
 
     return () => {
@@ -102,7 +102,7 @@ function Login({ onLogin }) {
     setIsTyping(true);
     resetTypingTimer();
     if (error) {
-      setError("");
+      setError('');
     }
   };
 
@@ -115,13 +115,12 @@ function Login({ onLogin }) {
       await onLogin(finalName);
       showSuccess(`Welcome, ${finalName}! 🎉`);
     } catch (err) {
-      setError(err.message || "Something went wrong. Please try again.");
-      showError("Login failed. Please try again.");
+      setError(err.message || 'Something went wrong. Please try again.');
+      showError('Login failed. Please try again.');
     } finally {
       setIsLoading(false);
     }
   };
-
 
 
   return (

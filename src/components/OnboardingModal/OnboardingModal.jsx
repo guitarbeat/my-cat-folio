@@ -26,10 +26,10 @@ const OnboardingModal = ({ isOpen, onClose, onDontShowAgain, isLightTheme = fals
 
       // Initialize first bubble position - more subtle positioning
       const firstBubble = {
-        x: 75, // Right side, less intrusive
-        y: 30, // Upper area, not center
+        x: 80, // Right side, less intrusive
+        y: 25, // Upper area, not center
         delay: 0,
-        speed: 0.05 + Math.random() * 0.1, // Much slower movement
+        speed: 0.03 + Math.random() * 0.05, // Much slower movement
         directionX: Math.random() > 0.5 ? 1 : -1,
         directionY: Math.random() > 0.5 ? 1 : -1
       };
@@ -69,18 +69,18 @@ const OnboardingModal = ({ isOpen, onClose, onDontShowAgain, isLightTheme = fals
         let newY = bubble.y + (bubble.speed * 0.008) * bubble.directionY;
 
         // Bounce off edges with proper boundary checking - keep bubbles in less intrusive areas
-        if (newX <= 70 || newX >= 95) {
+        if (newX <= 75 || newX >= 92) {
           newX = bubble.x;
           bubble.directionX = -bubble.directionX;
         }
-        if (newY <= 20 || newY >= 80) {
+        if (newY <= 15 || newY >= 75) {
           newY = bubble.y;
           bubble.directionY = -bubble.directionY;
         }
 
         // Ensure bubbles stay within safe bounds - right side, upper area
-        newX = Math.max(70, Math.min(95, newX));
-        newY = Math.max(20, Math.min(80, newY));
+        newX = Math.max(75, Math.min(92, newX));
+        newY = Math.max(15, Math.min(75, newY));
 
         return {
           ...bubble,
@@ -90,7 +90,7 @@ const OnboardingModal = ({ isOpen, onClose, onDontShowAgain, isLightTheme = fals
           directionY: bubble.directionY
         };
       }));
-    }, 200); // Slower update interval for less obtrusive movement
+    }, 300); // Slower update interval for less obtrusive movement
 
     return () => clearInterval(interval);
   }, [isOpen, currentStep, draggedBubble]);
@@ -128,7 +128,7 @@ const OnboardingModal = ({ isOpen, onClose, onDontShowAgain, isLightTheme = fals
   const handleBubbleClick = (index) => {
     // Don't handle clicks if we're dragging or if it's not the current step
     if (draggedBubble !== null || index !== currentStep) return;
-    
+
     // Toggle expansion state
     if (expandedBubble === index) {
       setExpandedBubble(null);
@@ -139,7 +139,7 @@ const OnboardingModal = ({ isOpen, onClose, onDontShowAgain, isLightTheme = fals
 
   const handleBubbleClose = () => {
     setExpandedBubble(null);
-    
+
     // Mark current step as completed
     const newCompletedSteps = new Set(completedSteps);
     newCompletedSteps.add(currentStep);
@@ -148,13 +148,13 @@ const OnboardingModal = ({ isOpen, onClose, onDontShowAgain, isLightTheme = fals
     // Move to next step or complete onboarding
     if (currentStep < steps.length - 1) {
       setCurrentStep(currentStep + 1);
-      
+
       // Add new bubble for next step - positioned in less intrusive area
       const newBubble = {
-        x: Math.random() * 20 + 70, // 70-90% (right side)
-        y: Math.random() * 40 + 20, // 20-60% (upper area)
+        x: Math.random() * 17 + 75, // 75-92% (right side)
+        y: Math.random() * 60 + 15, // 15-75% (upper area)
         delay: 0,
-        speed: 0.05 + Math.random() * 0.1, // Much slower movement
+        speed: 0.03 + Math.random() * 0.05, // Much slower movement
         directionX: Math.random() > 0.5 ? 1 : -1,
         directionY: Math.random() > 0.5 ? 1 : -1
       };
@@ -174,7 +174,7 @@ const OnboardingModal = ({ isOpen, onClose, onDontShowAgain, isLightTheme = fals
   const handleMouseDown = (e, index) => {
     e.preventDefault();
     e.stopPropagation();
-    
+
     // Only allow dragging of current step
     if (index !== currentStep) return;
 
@@ -201,11 +201,11 @@ const OnboardingModal = ({ isOpen, onClose, onDontShowAgain, isLightTheme = fals
     let newY = ((e.clientY - dragOffset.y) / viewportHeight) * 100;
 
     // Keep bubbles within safe bounds - right side, upper area
-    newX = Math.max(70, Math.min(95, newX));
-    newY = Math.max(20, Math.min(80, newY));
+    newX = Math.max(75, Math.min(92, newX));
+    newY = Math.max(15, Math.min(75, newY));
 
-    setBubblePositions(prev => prev.map((bubble, index) => 
-      index === draggedBubble 
+    setBubblePositions(prev => prev.map((bubble, index) =>
+      index === draggedBubble
         ? { ...bubble, x: newX, y: newY }
         : bubble
     ));
@@ -213,7 +213,7 @@ const OnboardingModal = ({ isOpen, onClose, onDontShowAgain, isLightTheme = fals
 
   const handleMouseUp = () => {
     if (draggedBubble === null) return;
-    
+
     setDraggedBubble(null);
     setDragOffset({ x: 0, y: 0 });
 
@@ -252,11 +252,11 @@ const OnboardingModal = ({ isOpen, onClose, onDontShowAgain, isLightTheme = fals
     let newY = ((touch.clientY - dragOffset.y) / viewportHeight) * 100;
 
     // Keep bubbles within safe bounds - right side, upper area
-    newX = Math.max(70, Math.min(95, newX));
-    newY = Math.max(20, Math.min(80, newY));
+    newX = Math.max(75, Math.min(92, newX));
+    newY = Math.max(15, Math.min(75, newY));
 
-    setBubblePositions(prev => prev.map((bubble, index) => 
-      index === draggedBubble 
+    setBubblePositions(prev => prev.map((bubble, index) =>
+      index === draggedBubble
         ? { ...bubble, x: newX, y: newY }
         : bubble
     ));
@@ -264,7 +264,7 @@ const OnboardingModal = ({ isOpen, onClose, onDontShowAgain, isLightTheme = fals
 
   const handleTouchEnd = () => {
     if (draggedBubble === null) return;
-    
+
     setDraggedBubble(null);
     setDragOffset({ x: 0, y: 0 });
 
@@ -273,6 +273,14 @@ const OnboardingModal = ({ isOpen, onClose, onDontShowAgain, isLightTheme = fals
   };
 
   if (!isOpen) return null;
+
+  console.log('🎯 Rendering OnboardingModal:', {
+    isOpen,
+    currentStep,
+    bubblePositions: bubblePositions.length,
+    expandedBubble,
+    completedSteps: completedSteps.size
+  });
 
   return (
     <div className={`${styles.overlay} ${isLightTheme ? styles.lightTheme : styles.darkTheme}`}>
@@ -320,7 +328,7 @@ const OnboardingModal = ({ isOpen, onClose, onDontShowAgain, isLightTheme = fals
             <div className={styles.bubbleContent}>
               <div className={styles.bubbleIcon}>{step.icon}</div>
               <h3 className={styles.bubbleTitle}>{step.title}</h3>
-              
+
               {isExpanded && (
                 <>
                   <p className={styles.bubbleText}>{step.content}</p>
@@ -332,7 +340,7 @@ const OnboardingModal = ({ isOpen, onClose, onDontShowAgain, isLightTheme = fals
                       </div>
                     ))}
                   </div>
-                  
+
                   {/* Action buttons */}
                   <div className={styles.bubbleActions}>
                     {currentStep < steps.length - 1 ? (
@@ -358,7 +366,7 @@ const OnboardingModal = ({ isOpen, onClose, onDontShowAgain, isLightTheme = fals
                         Get Started! 🎉
                       </button>
                     )}
-                    
+
                     <button
                       className={styles.bubbleDontShowButton}
                       onClick={(e) => {

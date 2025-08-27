@@ -713,7 +713,7 @@ const Profile = ({ userName, onStartNewTournament }) => {
   if (ratingsLoading) return <LoadingSpinner />;
   if (ratingsError) {
     // Handle error object properly - extract message or convert to string
-    const errorMessage = ratingsError?.message || ratingsError?.details || 
+    const errorMessage = ratingsError?.message || ratingsError?.details ||
                         (typeof ratingsError === 'string' ? ratingsError : 'Unknown error occurred');
     return (
       <div className={styles.error}>Error loading ratings: {errorMessage}</div>
