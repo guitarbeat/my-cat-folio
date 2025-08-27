@@ -722,8 +722,11 @@ function useTournamentSetup(userName) {
         ? prev.filter((n) => n.id !== nameObj.id)
         : [...prev, nameObj];
 
-      // Log the updated selected names
-      devLog('🎮 TournamentSetup: Selected names updated', newSelectedNames);
+      // Log the updated selected names (throttled to avoid spam)
+      if (!toggleName.lastLogTs || Date.now() - toggleName.lastLogTs > 1000) {
+        devLog('🎮 TournamentSetup: Selected names updated', newSelectedNames);
+        toggleName.lastLogTs = Date.now();
+      }
 
       // Save tournament selections to database
       if (newSelectedNames.length > 0 && userName) {

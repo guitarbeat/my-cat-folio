@@ -18,10 +18,12 @@ export function useTournament({
   existingRatings = {},
   onComplete
 }) {
-  if (process.env.NODE_ENV === 'development') {
-    // * Log once per mount for sanity; avoid flooding on every render
+  const didLogMountRef = useRef(false);
+  if (process.env.NODE_ENV === 'development' && !didLogMountRef.current) {
+    // * Log once per component instance, even under StrictMode double-invoke
     // eslint-disable-next-line no-console
     console.debug('[DEV] 🎮 useTournament: mount');
+    didLogMountRef.current = true;
   }
 
   const { userName } = useUserSession();

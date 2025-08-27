@@ -168,7 +168,7 @@
 
 /* Ensure card takes remaining space */
 .card {
-  composes: cardinteractive from "../../styles/global.css";
+  composes: card--interactive from "../../styles/global.css";
   position: relative;
   display: flex;
   flex: 1;

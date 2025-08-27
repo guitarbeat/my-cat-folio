@@ -707,6 +707,98 @@ body.dark-theme {
   }
 }
 
+/* =====================
+   Global UI Utilities
+   Reusable primitives for buttons, cards, text, spacing
+   ===================== */
+
+/* Buttons */
+.btn {
+  display: inline-flex;
+  gap: var(--space-2);
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-2) var(--space-4);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--text-secondary);
+  cursor: pointer;
+  background: var(--surface-color);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  transition: var(--transition-all);
+}
+
+.btn:hover:not(:disabled) {
+  background: var(--card-hover);
+  transform: translateY(-1px);
+}
+
+.btn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.btn--primary {
+  color: #fff;
+  background: var(--primary-600, var(--primary-color));
+  border-color: var(--primary-500, var(--primary-color));
+}
+
+.btn--primary:hover:not(:disabled) {
+  background: var(--primary-500);
+}
+
+.btn--secondary {
+  color: var(--text-secondary);
+  background: var(--surface-color);
+  border-color: var(--border-color);
+}
+
+.btn--pill {
+  border-radius: var(--radius-full);
+}
+
+.btn--icon {
+  width: 40px;
+  height: 40px;
+  padding: 0;
+}
+
+/* Cards */
+.card {
+  background: var(--card-background);
+  border: 1px solid var(--card-border, var(--border-color));
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+.card--interactive {
+  composes: card;
+  transition: var(--transition-all);
+}
+
+.card--interactive:hover {
+  background: var(--card-hover);
+  box-shadow: var(--shadow-md);
+}
+
+/* Typography */
+.heading {
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.text-sm { font-size: var(--text-sm); }
+.text-base { font-size: var(--text-base); }
+.text-lg { font-size: var(--text-lg); }
+
+/* Spacing (limited set) */
+.mt-2 { margin-top: var(--space-2); }
+.mt-4 { margin-top: var(--space-4); }
+.mb-2 { margin-bottom: var(--space-2); }
+.mb-4 { margin-bottom: var(--space-4); }
+
 --accent-600: #ca8a04;
 
 /* Reduced Motion */

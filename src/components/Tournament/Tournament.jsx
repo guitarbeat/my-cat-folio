@@ -413,14 +413,19 @@ function TournamentContent({ onComplete, existingRatings = {}, names = [], onVot
     isError
   } = tournament;
 
-  // * Debug logging (development only, less frequent)
+  // * Debug logging (development only, throttled)
+  const lastRenderLogRef = useRef(0);
   if (process.env.NODE_ENV === 'development') {
-    // eslint-disable-next-line no-console
-    console.debug('[DEV] 🎮 Tournament: render', {
-      namesCount: names?.length || 0,
-      randomizedCount: randomizedNames?.length || 0,
-      hasMatch: !!currentMatch
-    });
+    const now = Date.now();
+    if (now - lastRenderLogRef.current > 500) {
+      // eslint-disable-next-line no-console
+      console.debug('[DEV] 🎮 Tournament: render', {
+        namesCount: names?.length || 0,
+        randomizedCount: randomizedNames?.length || 0,
+        hasMatch: !!currentMatch
+      });
+      lastRenderLogRef.current = now;
+    }
   }
 
   // * Rate limiting for voting
