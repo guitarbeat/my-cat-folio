@@ -26,7 +26,15 @@ if (!supabaseUrl || !supabaseAnonKey) {
     );
   }
 } else {
-  supabase = createClient(supabaseUrl, supabaseAnonKey);
+  // Ensure a single Supabase client instance in browser (avoids multiple GoTrueClient warnings)
+  if (typeof window !== 'undefined') {
+    if (!window.__supabaseClient) {
+      window.__supabaseClient = createClient(supabaseUrl, supabaseAnonKey);
+    }
+    supabase = window.__supabaseClient;
+  } else {
+    supabase = createClient(supabaseUrl, supabaseAnonKey);
+  }
 }
 
 export { supabase };
@@ -676,57 +684,46 @@ export const tournamentsAPI = {
       // Update the cat_name_ratings table to track selection count and tournament data
       const updatePromises = selectedNames.map(async (nameObj) => {
         try {
-          // First, get the current data for this user/name combination
-          const { data: currentData, error: selectError } = await supabase
+          // * First try to update existing row without reading (avoids 406 selects)
+          const { data: updatedRows, error: updateError } = await supabase
             .from('cat_name_ratings')
-            .select('tournament_selections, last_selected_at')
+            .update({
+              last_selected_at: now,
+              updated_at: now
+            })
             .eq('user_name', userName)
             .eq('name_id', nameObj.id)
-            .single();
+            .select('name_id');
 
-          // If no existing record, create a new one with default values
-          if (selectError && selectError.code === 'PGRST116') {
-            // No existing record, create new one with default rating
-            const { error } = await supabase
+          if (updateError) {
+            console.error('Update error for', userName, nameObj.id, ':', updateError);
+            // Fall through to insert attempt
+          }
+
+          // If no existing row was updated, insert a new one
+          if (!updatedRows || updatedRows.length === 0) {
+            const { error: insertError } = await supabase
               .from('cat_name_ratings')
               .insert({
                 user_name: userName,
                 name_id: nameObj.id,
-                rating: 1500, // Default rating for new records only
+                rating: 1500,
                 wins: 0,
                 losses: 0,
                 tournament_selections: 1,
-                last_selected_at: now,
-                first_selected_at: now,
                 selection_frequency: 1,
+                first_selected_at: now,
+                last_selected_at: now,
                 updated_at: now
               });
-            return { error };
+
+            if (insertError) {
+              console.error('Insert error for', userName, nameObj.id, ':', insertError);
+              return { error: insertError };
+            }
           }
 
-          // Prepare the updated data
-          const currentTournamentSelections = currentData?.tournament_selections || 0;
-          const currentLastSelectedAt = currentData?.last_selected_at;
-
-          // Update existing record - only update fields that should change, preserve rating
-          const { error } = await supabase
-            .from('cat_name_ratings')
-            .update({
-              // * FIXED: Don't include rating field - preserve existing rating
-              tournament_selections: currentTournamentSelections + 1,
-              last_selected_at: now,
-              first_selected_at: currentLastSelectedAt || now,
-              selection_frequency: currentTournamentSelections + 1,
-              updated_at: now
-            })
-            .eq('user_name', userName)
-            .eq('name_id', nameObj.id);
-
-          if (error) {
-            console.error('Upsert error for', userName, nameObj.id, ':', error);
-          }
-
-          return { error };
+          return { error: null };
         } catch (error) {
           return { error };
         }
