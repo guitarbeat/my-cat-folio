@@ -218,12 +218,17 @@ function useTournamentState(names, existingRatings, onComplete, onVote) {
   const tournamentStateRef = useRef({ isActive: false });
 
   // * Set up randomized names
+  // Shuffle only when the identity set (ids) changes, not on shallow changes
+  const namesIdentity = useMemo(() => (Array.isArray(names) ? names.map(n => n.id || n.name).join(',') : ''), [names]);
   useEffect(() => {
     if (Array.isArray(names) && names.length > 0) {
-      console.log('[DEV] 🎮 Tournament: Setting randomized names from:', names);
-      setRandomizedNames(shuffleArray([...names]));
+      setRandomizedNames(prev => {
+        const prevIds = Array.isArray(prev) ? prev.map(n => n.id || n.name).join(',') : '';
+        if (prevIds === namesIdentity) return prev; // no reshuffle
+        return shuffleArray([...names]);
+      });
     }
-  }, [names]);
+  }, [names, namesIdentity]);
 
   // * Tournament hook
   const tournament = useTournament({

@@ -88,15 +88,16 @@ export function useTournament({
   }, [userName, setPersistentState]);
 
   // * Tournament initialization logic
+  const lastInitKeyRef = useRef('');
   const initializeTournament = useCallback(async () => {
-    console.log('[DEV] 🎮 useTournament: Initializing tournament with names:', names);
-
-    if (!names || names.length === 0) {
-      console.log('[DEV] 🎮 useTournament: No names provided, returning early');
-      return;
-    }
+    // Guard invalid input
+    if (!Array.isArray(names) || names.length < 2) return;
 
     const namesKey = names.map(n => n.id || n.name).join(',');
+
+    // Skip re-init when names set is unchanged
+    if (lastInitKeyRef.current === namesKey) return;
+    lastInitKeyRef.current = namesKey;
     const nameStrings = names.map((n) => n.name);
     const newSorter = new PreferenceSorter(nameStrings);
     
@@ -128,10 +129,7 @@ export function useTournament({
       const left = names[0];
       const right = names[1];
       updateTournamentState({ currentMatch: { left, right } });
-      console.log('[DEV] 🎮 useTournament: First match set:', { left: left.name, right: right.name });
     }
-
-    console.log('[DEV] 🎮 useTournament: Tournament initialized successfully');
   }, [names, existingRatings, updateTournamentState, updatePersistentState]);
 
   // * Reset tournament state when user changes
