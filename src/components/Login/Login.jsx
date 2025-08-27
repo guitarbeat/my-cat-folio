@@ -126,20 +126,20 @@ function Login({ onLogin }) {
 
   return (
     <div className={styles.loginWrapper}>
-              {/* Background with overlay */}
-        <div className={styles.backgroundContainer}>
-          <img
-            src="/images/IMG_5071.JPG"
-            alt="Cat background"
-            className={styles.backgroundImage}
-          />
-          <div className={styles.overlay} />
-        </div>
+      {/* Background with overlay */}
+      <div className={styles.backgroundContainer}>
+        <img
+          src="/images/IMG_5071.JPG"
+          alt="Cat background"
+          className={styles.backgroundImage}
+        />
+        <div className={styles.overlay} />
+      </div>
 
-      {/* Main Login Container */}
-      <div className={styles.loginContainer} ref={containerRef}>
-        {/* Header Section */}
-        <section className={styles.imageSection}>
+      {/* Centered Hero Container */}
+      <div className={styles.heroContainer} ref={containerRef}>
+        {/* Hero Content Section */}
+        <div className={styles.heroContent}>
           <h1 className={styles.welcomeTitle}>
             Welcome to the Cat Name Tournament!
           </h1>
@@ -153,40 +153,38 @@ function Login({ onLogin }) {
             Join Aaron&apos;s quest to find the perfect cat name through science
             and democracy!
           </p>
-        </section>
+        </div>
 
-        {/* Login Form Section */}
-        <div className={styles.loginContent}>
-          <div>
-            <h2 className={styles.loginTitle}>Cat Name Olympics</h2>
-            <p className={styles.catFact}>
-              {catFact ? (
-                <>
-                  <span className={styles.catFactIcon}>🐱</span>
-                  {catFact}
-                </>
-              ) : (
-                <span className={styles.loadingFact}>
-                  <span className={styles.loadingDots}>
-                    Loading a fun cat fact
-                  </span>
-                  <span className={styles.loadingDots}>...</span>
+        {/* Form Section */}
+        <div className={styles.formSection}>
+          <h2 className={styles.loginTitle}>Cat Name Olympics</h2>
+          <p className={styles.catFact}>
+            {catFact ? (
+              <>
+                <span className={styles.catFactIcon}>🐱</span>
+                {catFact}
+              </>
+            ) : (
+              <span className={styles.loadingFact}>
+                <span className={styles.loadingDots}>
+                  Loading a fun cat fact
                 </span>
-              )}
-            </p>
-            {isTyping ? (
-              <div className={styles.typingIndicator}>
-                <span className={styles.typingText}>
-                  The cat is watching you type!
-                </span>
-                <span className={styles.typingDots}>
-                  <span className={styles.dot}>.</span>
-                  <span className={styles.dot}>.</span>
-                  <span className={styles.dot}>.</span>
-                </span>
-              </div>
-            ) : null}
-          </div>
+                <span className={styles.loadingDots}>...</span>
+              </span>
+            )}
+          </p>
+          {isTyping ? (
+            <div className={styles.typingIndicator}>
+              <span className={styles.typingText}>
+                The cat is watching you type!
+              </span>
+              <span className={styles.typingDots}>
+                <span className={styles.dot}>.</span>
+                <span className={styles.dot}>.</span>
+                <span className={styles.dot}>.</span>
+              </span>
+            </div>
+          ) : null}
 
           <form onSubmit={handleSubmit} className={styles.loginForm} role="form" aria-label="Login form">
             <div className={styles.inputWrapper}>

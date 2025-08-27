@@ -1,20 +1,213 @@
-/* Onboarding Modal - Side Panel Design */
+/* Onboarding Modal - Enhanced Integration Design */
 
 .overlay {
   position: fixed;
   top: 0;
   left: 0;
-  right: 0;
-  bottom: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(5px);
   z-index: 1000;
-  pointer-events: none;
+  pointer-events: all;
+  transition: all 0.3s ease;
+}
+
+/* Theme Integration */
+.overlay.lightTheme {
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.overlay.darkTheme {
+  background: rgba(0, 0, 0, 0.4);
+}
+
+/* Content bubbles - expandable with content */
+.floatingBubble.contentBubble {
+  width: 120px;
+  height: 120px;
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.8), rgba(147, 51, 234, 0.8));
+  backdrop-filter: blur(15px);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+  animation: float 8s ease-in-out infinite;
+  box-shadow: 
+    0 15px 35px rgba(59, 130, 246, 0.4),
+    0 0 0 1px rgba(255, 255, 255, 0.2),
+    inset 0 2px 4px rgba(255, 255, 255, 0.3);
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  overflow: hidden;
+}
+
+.floatingBubble.contentBubble:hover {
+  transform: scale(1.05);
+  box-shadow: 
+    0 20px 40px rgba(59, 130, 246, 0.5),
+    0 0 0 2px rgba(255, 255, 255, 0.4);
+}
+
+.floatingBubble.contentBubble.activeBubble {
+  border-color: rgba(255, 255, 255, 0.8);
+  box-shadow: 
+    0 20px 40px rgba(59, 130, 246, 0.6),
+    0 0 0 3px rgba(255, 255, 255, 0.5),
+    inset 0 2px 4px rgba(255, 255, 255, 0.4);
+}
+
+/* Expanded bubble state */
+.floatingBubble.contentBubble.expandedBubble {
+  width: 320px;
+  height: 400px;
+  border-radius: 24px;
+  z-index: 1001;
+  animation: none;
+  transform: scale(1.1);
+  box-shadow: 
+    0 25px 50px rgba(59, 130, 246, 0.6),
+    0 0 0 3px rgba(255, 255, 255, 0.5),
+    inset 0 2px 4px rgba(255, 255, 255, 0.4);
+}
+
+.bubbleContent {
+  width: 100%;
+  height: 100%;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: white;
+  transition: all 0.3s ease;
+}
+
+.bubbleIcon {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+  animation: bounce 2s ease-in-out infinite;
+}
+
+.expandedBubble .bubbleIcon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.bubbleTitle {
+  font-size: 0.9rem;
+  font-weight: 700;
+  margin: 0 0 0.25rem 0;
+  line-height: 1.2;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  transform: translateY(10px);
+  transition: all 0.3s ease 0.1s;
+}
+
+.expandedBubble .bubbleTitle {
+  font-size: 1.2rem;
+  margin: 0 0 0.75rem 0;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.bubbleText {
+  font-size: 0.8rem;
+  line-height: 1.4;
+  margin: 0 0 0.75rem 0;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: all 0.3s ease 0.2s;
+  max-height: 0;
+  overflow: hidden;
+}
+
+.expandedBubble .bubbleText {
+  opacity: 1;
+  transform: translateY(0);
+  max-height: 100px;
+}
+
+.bubbleFeatures {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  width: 100%;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: all 0.3s ease 0.3s;
+  max-height: 0;
+  overflow: hidden;
+}
+
+.expandedBubble .bubbleFeatures {
+  opacity: 1;
+  transform: translateY(0);
+  max-height: 200px;
+}
+
+.bubbleFeature {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.bubbleFeatureIcon {
+  font-size: 0.9rem;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+}
+
+.bubbleFeatureText {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.bubbleCloseButton {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  width: 24px;
+  height: 24px;
+  border: none;
+  background: rgba(239, 68, 68, 0.8);
+  border-radius: 50%;
+  color: white;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transform: scale(0.8);
+  transition: all 0.3s ease 0.4s;
+}
+
+.expandedBubble .bubbleCloseButton {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.bubbleCloseButton:hover {
+  background: rgba(239, 68, 68, 1);
+  transform: scale(1.1);
 }
 
 .modal {
   position: fixed;
   top: 50%;
-  left: 2rem;
-  transform: translateY(-50%) translateX(-100%);
+  right: 2rem;
+  transform: translateY(-50%) translateX(100%);
   width: min(500px, calc(100vw - 4rem));
   max-height: 90vh;
   background: rgba(255, 255, 255, 0.95);
@@ -24,8 +217,21 @@
   box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
   overflow: visible;
   pointer-events: all;
-  animation: slideInLeft 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+  animation: slideInRight 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
   transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+/* Enhanced Theme Integration */
+.modal.lightTheme {
+  background: rgba(255, 255, 255, 0.95);
+  border-color: rgba(0, 0, 0, 0.1);
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.1);
+}
+
+.modal.darkTheme {
+  background: rgba(30, 41, 59, 0.95);
+  border-color: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
 }
 
 /* Step-specific animations */
@@ -45,14 +251,14 @@
   animation-delay: 0.4s;
 }
 
-/* Bouncy slide-in animation from left */
-@keyframes slideInLeft {
+/* Bouncy slide-in animation from right */
+@keyframes slideInRight {
   0% {
-    transform: translateY(-50%) translateX(-100%);
+    transform: translateY(-50%) translateX(100%);
     opacity: 0;
   }
   50% {
-    transform: translateY(-50%) translateX(10%);
+    transform: translateY(-50%) translateX(-10%);
     opacity: 1;
   }
   100% {
@@ -61,18 +267,18 @@
   }
 }
 
-/* Slide-out animation to left */
+/* Slide-out animation to right */
 .modal.closing {
-  animation: slideOutLeft 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+  animation: slideOutRight 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
 }
 
-@keyframes slideOutLeft {
+@keyframes slideOutRight {
   0% {
     transform: translateY(-50%) translateX(0);
     opacity: 1;
   }
   100% {
-    transform: translateY(-50%) translateX(-100%);
+    transform: translateY(-50%) translateX(100%);
     opacity: 0;
   }
 }
@@ -114,9 +320,21 @@
       opacity: 0;
     }
   }
+
+  /* Enhanced mobile bubble positioning */
+  .floatingBubble.contentBubble {
+    width: 100px;
+    height: 100px;
+  }
+
+  .floatingBubble.contentBubble.expandedBubble {
+    width: 280px;
+    height: 350px;
+    left: 50% !important;
+    top: 50% !important;
+    transform: translate(-50%, -50%) scale(1.1);
+  }
 }
-
-
 
 /* Header styling */
 .header {
@@ -126,6 +344,18 @@
   padding: clamp(1rem, 3vw, 1.5rem);
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
   background: rgba(255, 255, 255, 0.8);
+  transition: all 0.3s ease;
+}
+
+/* Theme-aware header */
+.modal.lightTheme .header {
+  background: rgba(255, 255, 255, 0.9);
+  border-bottom-color: rgba(0, 0, 0, 0.1);
+}
+
+.modal.darkTheme .header {
+  background: rgba(30, 41, 59, 0.9);
+  border-bottom-color: rgba(255, 255, 255, 0.1);
 }
 
 .stepIndicator {
@@ -134,6 +364,11 @@
   gap: 0.25rem;
   font-size: 0.875rem;
   color: #666;
+  transition: color 0.3s ease;
+}
+
+.modal.darkTheme .stepIndicator {
+  color: #cbd5e1;
 }
 
 .stepNumber {
@@ -143,6 +378,11 @@
 
 .totalSteps {
   color: #999;
+  transition: color 0.3s ease;
+}
+
+.modal.darkTheme .totalSteps {
+  color: #64748b;
 }
 
 .closeButton {
@@ -160,10 +400,20 @@
   justify-content: center;
 }
 
+.modal.darkTheme .closeButton {
+  background: rgba(255, 255, 255, 0.1);
+  color: #cbd5e1;
+}
+
 .closeButton:hover {
   background: rgba(0, 0, 0, 0.2);
   color: #333;
   transform: scale(1.1);
+}
+
+.modal.darkTheme .closeButton:hover {
+  background: rgba(255, 255, 255, 0.2);
+  color: #f1f5f9;
 }
 
 /* Content styling */
@@ -171,6 +421,7 @@
   padding: 1.5rem;
   overflow: hidden;
   max-height: calc(80vh - 200px);
+  transition: all 0.3s ease;
 }
 
 .stepIcon {
@@ -204,6 +455,11 @@
   margin: 0 0 1.5rem 0;
   text-align: center;
   animation: slideInUp 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55) 0.4s both;
+  transition: color 0.3s ease;
+}
+
+.modal.darkTheme .stepTitle {
+  color: #f1f5f9;
 }
 
 @keyframes slideInUp {
@@ -237,6 +493,11 @@
   line-height: 1.6;
   color: #4b5563;
   font-size: clamp(0.875rem, 3vw, 1rem);
+  transition: color 0.3s ease;
+}
+
+.modal.darkTheme .stepContent p {
+  color: #cbd5e1;
 }
 
 .stepContent p:last-child {
@@ -252,6 +513,12 @@
   background: rgba(59, 130, 246, 0.05);
   border-radius: 12px;
   border: 1px solid rgba(59, 130, 246, 0.1);
+  transition: all 0.3s ease;
+}
+
+.modal.darkTheme .feature {
+  background: rgba(59, 130, 246, 0.1);
+  border-color: rgba(59, 130, 246, 0.2);
 }
 
 .feature:last-child {
@@ -269,12 +536,22 @@
   font-size: clamp(1rem, 3.5vw, 1.1rem);
   font-weight: 600;
   color: #1f2937;
+  transition: color 0.3s ease;
+}
+
+.modal.darkTheme .feature h4 {
+  color: #f1f5f9;
 }
 
 .feature p {
   margin: 0;
   font-size: clamp(0.8rem, 2.5vw, 0.9rem);
   color: #6b7280;
+  transition: color 0.3s ease;
+}
+
+.modal.darkTheme .feature p {
+  color: #94a3b8;
 }
 
 /* Footer styling */
@@ -286,6 +563,17 @@
   border-top: 1px solid rgba(0, 0, 0, 0.1);
   background: rgba(255, 255, 255, 0.8);
   gap: clamp(0.5rem, 2vw, 1rem);
+  transition: all 0.3s ease;
+}
+
+.modal.lightTheme .footer {
+  background: rgba(255, 255, 255, 0.9);
+  border-top-color: rgba(0, 0, 0, 0.1);
+}
+
+.modal.darkTheme .footer {
+  background: rgba(30, 41, 59, 0.9);
+  border-top-color: rgba(255, 255, 255, 0.1);
 }
 
 .leftActions,
@@ -327,11 +615,21 @@
 .secondaryButton {
   background: rgba(0, 0, 0, 0.1);
   color: #4b5563;
+  transition: all 0.2s ease;
+}
+
+.modal.darkTheme .secondaryButton {
+  background: rgba(255, 255, 255, 0.1);
+  color: #cbd5e1;
 }
 
 .secondaryButton:hover {
   background: rgba(0, 0, 0, 0.15);
   transform: translateY(-1px);
+}
+
+.modal.darkTheme .secondaryButton:hover {
+  background: rgba(255, 255, 255, 0.2);
 }
 
 .dontShowButton {
@@ -340,11 +638,22 @@
   border: 1px solid rgba(0, 0, 0, 0.1);
   padding: 0.5rem 1rem;
   font-size: 0.8rem;
+  transition: all 0.2s ease;
+}
+
+.modal.darkTheme .dontShowButton {
+  color: #94a3b8;
+  border-color: rgba(255, 255, 255, 0.1);
 }
 
 .dontShowButton:hover {
   background: rgba(0, 0, 0, 0.05);
   color: #4b5563;
+}
+
+.modal.darkTheme .dontShowButton:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: #cbd5e1;
 }
 
 /* Progress bar */
@@ -356,6 +665,11 @@
   height: 4px;
   background: rgba(0, 0, 0, 0.1);
   overflow: hidden;
+  transition: background 0.3s ease;
+}
+
+.modal.darkTheme .progressBar {
+  background: rgba(255, 255, 255, 0.1);
 }
 
 .progressFill {
@@ -365,47 +679,191 @@
   border-radius: 0 0 20px 20px;
 }
 
-/* Dark theme adjustments */
-@media (prefers-color-scheme: dark) {
+/* Floating bubbles */
+.floatingBubble {
+  position: fixed;
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.3), rgba(147, 51, 234, 0.3));
+  backdrop-filter: blur(10px);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+  animation: float 6s ease-in-out infinite;
+  box-shadow: 
+    0 8px 25px rgba(59, 130, 246, 0.3),
+    0 0 0 1px rgba(255, 255, 255, 0.1),
+    inset 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.bubbleInner {
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.1));
+  border-radius: 50%;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  33% {
+    transform: translateY(-10px) rotate(5deg);
+  }
+  66% {
+    transform: translateY(5px) rotate(-3deg);
+  }
+}
+
+.bubbleCloseButton:hover {
+  background: rgba(239, 68, 68, 1);
+  transform: scale(1.1);
+}
+
+/* Navigation content styling */
+.navigationContent {
+  text-align: center;
+  padding: 2rem;
+}
+
+.navigationTitle {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1f2937;
+  margin: 0 0 1rem 0;
+  transition: color 0.3s ease;
+}
+
+.modal.darkTheme .navigationTitle {
+  color: #f1f5f9;
+}
+
+.navigationText {
+  font-size: 1rem;
+  color: #6b7280;
+  margin: 0 0 2rem 0;
+  line-height: 1.5;
+  transition: color 0.3s ease;
+}
+
+.modal.darkTheme .navigationText {
+  color: #94a3b8;
+}
+
+.bubbleNavigation {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.bubbleNavButton {
+  width: 50px;
+  height: 50px;
+  border: none;
+  background: rgba(59, 130, 246, 0.1);
+  border-radius: 50%;
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 2px solid rgba(59, 130, 246, 0.2);
+}
+
+.modal.darkTheme .bubbleNavButton {
+  background: rgba(59, 130, 246, 0.15);
+  border-color: rgba(59, 130, 246, 0.3);
+}
+
+.bubbleNavButton:hover {
+  background: rgba(59, 130, 246, 0.2);
+  border-color: rgba(59, 130, 246, 0.4);
+  transform: scale(1.1);
+}
+
+.modal.darkTheme .bubbleNavButton:hover {
+  background: rgba(59, 130, 246, 0.25);
+  border-color: rgba(59, 130, 246, 0.5);
+}
+
+.bubbleNavButton.activeNavButton {
+  background: rgba(59, 130, 246, 0.3);
+  border-color: rgba(59, 130, 246, 0.6);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+.modal.darkTheme .bubbleNavButton.activeNavButton {
+  background: rgba(59, 130, 246, 0.4);
+  border-color: rgba(59, 130, 246, 0.7);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+}
+
+/* Enhanced mobile responsiveness */
+@media (max-width: 480px) {
   .modal {
-    background: rgba(30, 41, 59, 0.95);
-    border-color: rgba(255, 255, 255, 0.1);
+    left: 0.5rem;
+    right: 0.5rem;
+    bottom: 1rem;
+    max-height: 70vh;
   }
-  
-  .header,
-  .footer {
-    background: rgba(30, 41, 59, 0.8);
-    border-color: rgba(255, 255, 255, 0.1);
+
+  .floatingBubble.contentBubble {
+    width: 80px;
+    height: 80px;
   }
-  
-  .stepTitle {
-    color: #f1f5f9;
+
+  .floatingBubble.contentBubble.expandedBubble {
+    width: 260px;
+    height: 320px;
   }
-  
-  .stepContent p {
-    color: #cbd5e1;
+
+  .bubbleNavigation {
+    gap: 0.5rem;
   }
-  
-  .feature {
-    background: rgba(59, 130, 246, 0.1);
-    border-color: rgba(59, 130, 246, 0.2);
+
+  .bubbleNavButton {
+    width: 40px;
+    height: 40px;
+    font-size: 1.2rem;
   }
-  
-  .feature h4 {
-    color: #f1f5f9;
+
+  .navigationContent {
+    padding: 1rem;
   }
-  
-  .feature p {
-    color: #94a3b8;
+
+  .navigationTitle {
+    font-size: 1.25rem;
   }
-  
-  .closeButton {
-    background: rgba(255, 255, 255, 0.1);
-    color: #cbd5e1;
+
+  .navigationText {
+    font-size: 0.9rem;
   }
-  
-  .closeButton:hover {
-    background: rgba(255, 255, 255, 0.2);
-    color: #f1f5f9;
+}
+
+/* Focus states for accessibility */
+.floatingBubble:focus-visible,
+.bubbleNavButton:focus-visible,
+.closeButton:focus-visible,
+.primaryButton:focus-visible,
+.secondaryButton:focus-visible,
+.dontShowButton:focus-visible {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .floatingBubble,
+  .modal,
+  .bubbleNavButton,
+  .closeButton,
+  .primaryButton,
+  .secondaryButton,
+  .dontShowButton {
+    animation: none !important;
+    transition: none !important;
   }
 }

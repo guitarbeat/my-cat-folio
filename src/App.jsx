@@ -107,7 +107,8 @@ function App() {
   const {
     showOnboarding,
     closeOnboarding,
-    dontShowAgain
+    dontShowAgain,
+    setShowOnboarding
   } = useOnboarding();
 
   // Enhanced error handling
@@ -479,6 +480,7 @@ function App() {
         onStartNewTournament={handleStartNewTournament}
         isLightTheme={isLightTheme}
         onThemeChange={toggleTheme}
+        onShowOnboarding={() => setShowOnboarding(true)}
       />
       <div id="main-content" className="main-content" tabIndex="-1">
         {/* Global error display */}
@@ -516,6 +518,7 @@ function App() {
         isOpen={showOnboarding}
         onClose={closeOnboarding}
         onDontShowAgain={dontShowAgain}
+        isLightTheme={isLightTheme}
       />
 
       {/* Toast notifications */}

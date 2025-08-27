@@ -40,7 +40,8 @@ const useOnboarding = () => {
     hasSeenOnboarding,
     closeOnboarding,
     dontShowAgain,
-    resetOnboarding
+    resetOnboarding,
+    setShowOnboarding
   };
 };
 
