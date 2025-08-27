@@ -116,21 +116,7 @@ export class TournamentService {
         })
         .filter(Boolean);
 
-      if (recordsToUpsert.length === 0) {
-        throw new Error('No valid records to update');
-      }
-
-      // * Update database
-      const { error: upsertError } = await supabase
-        .from('cat_name_ratings')
-        .upsert(recordsToUpsert, {
-          onConflict: 'user_name,name_id',
-          returning: 'minimal'
-        });
-
-      if (upsertError) {
-        throw new Error(`Failed to update ratings: ${upsertError.message}`);
-      }
+      await TournamentService.upsertRatingRecords(recordsToUpsert);
 
       // * Return updated ratings for local state
       const updatedRatings = { ...existingRatings };
@@ -195,26 +181,34 @@ export class TournamentService {
         updated_at: new Date().toISOString()
       }));
 
-      if (recordsToUpsert.length === 0) {
-        throw new Error('No valid records to update');
-      }
-
-      // * Update database
-      const { error: upsertError } = await supabase
-        .from('cat_name_ratings')
-        .upsert(recordsToUpsert, {
-          onConflict: 'user_name,name_id',
-          returning: 'minimal'
-        });
-
-      if (upsertError) {
-        throw upsertError;
-      }
+      await TournamentService.upsertRatingRecords(recordsToUpsert);
 
       return updatedRatings;
     } catch (error) {
       console.error('Error updating ratings:', error);
       throw error;
+    }
+  }
+
+  /**
+   * * Helper to upsert rating records into the database
+   * @param {Array} recordsToUpsert - Records ready for database upsert
+   * @throws {Error} If no records provided or database operation fails
+   */
+  static async upsertRatingRecords(recordsToUpsert) {
+    if (recordsToUpsert.length === 0) {
+      throw new Error('No valid records to update');
+    }
+
+    const { error: upsertError } = await supabase
+      .from('cat_name_ratings')
+      .upsert(recordsToUpsert, {
+        onConflict: 'user_name,name_id',
+        returning: 'minimal'
+      });
+
+    if (upsertError) {
+      throw new Error(`Failed to update ratings: ${upsertError.message}`);
     }
   }
 
