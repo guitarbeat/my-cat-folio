@@ -18,10 +18,13 @@ export function useTournament({
   existingRatings = {},
   onComplete,
 }) {
-  if (process.env.NODE_ENV === "development") {
-    // * Log once per mount for sanity; avoid flooding on every render
+  const didLogMountRef = useRef(false);
+  if (process.env.NODE_ENV === "development" && !didLogMountRef.current) {
+    // * Log once per component instance, even under StrictMode double-invoke
     // eslint-disable-next-line no-console
     console.debug("[DEV] 🎮 useTournament: mount");
+    didLogMountRef.current = true;
+  }
   }
 
   const { userName } = useUserSession();
@@ -158,8 +161,9 @@ export function useTournament({
   }, [initializeTournament]);
 
   // * Validate names array
+  // * Treat empty arrays as a loading state (not an error) to avoid noisy logs during initialization
   useEffect(() => {
-    const invalid = !Array.isArray(names) || names.length < 2;
+    const invalid = !Array.isArray(names) || (names.length > 0 && names.length < 2);
     if (invalid !== isError) {
       if (invalid && process.env.NODE_ENV === "development") {
         // eslint-disable-next-line no-console

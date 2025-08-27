@@ -1180,22 +1180,7 @@
 }
 
 /* Swipe Mode Toggle Button */
-.swipeModeToggleButton {
-  display: flex;
-  gap: 0.5rem;
-  align-items: center;
-  padding: 0.75rem 1.25rem;
-  font-size: 0.9rem;
-  font-weight: 600;
-  color: var(--text-primary, #f8fafc);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  cursor: pointer;
-  background: var(--card-background, #0f1225);
-  border: 2px solid var(--primary-color, #5a5cff);
-  border-radius: 12px;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
+.swipeModeToggleButton { composes: btn btn--secondary from "../../styles/global.css"; }
 
 .swipeModeToggleButton:hover {
   color: white;
@@ -1216,24 +1201,7 @@
 }
 
 /* Cat Pictures Toggle Button */
-.catPicturesToggleButton {
-  box-sizing: border-box; /* * Ensure padding is included in height calculation */
-  display: inline-flex;
-  gap: var(--space-2);
-  align-items: center;
-  justify-content: center;
-  min-height: 44px; /* * Ensure minimum height for proper display */
-  padding: var(--space-2) var(--space-4);
-  font-size: var(--text-sm);
-  font-weight: 500;
-  line-height: 1.2; /* * Ensure consistent line height for height calculation */
-  color: var(--button-text-light, white);
-  cursor: pointer;
-  background: var(--button-secondary-bg, var(--secondary-color, #64748b));
-  border: none;
-  border-radius: var(--radius-md);
-  transition: var(--transition-all);
-}
+.catPicturesToggleButton { composes: btn btn--secondary from "../../styles/global.css"; min-height: 44px; }
 
 .catPicturesToggleButton:hover:not(:disabled) {
   background: var(--button-secondary-hover, var(--secondary-dark, #475569));
