@@ -97,21 +97,25 @@ const calculateSelectionStats = async (userName) => {
 
     // Calculate basic metrics
     const totalSelections = selections.length;
-    const totalTournaments = new Set(selections.map(s => s.tournament_id)).size;
-    const uniqueNames = new Set(selections.map(s => s.name_id)).size;
-    const avgSelectionsPerName = uniqueNames > 0 ? Math.round(totalSelections / uniqueNames * 10) / 10 : 0;
+    const totalTournaments = new Set(selections.map((s) => s.tournament_id))
+      .size;
+    const uniqueNames = new Set(selections.map((s) => s.name_id)).size;
+    const avgSelectionsPerName =
+      uniqueNames > 0
+        ? Math.round((totalSelections / uniqueNames) * 10) / 10
+        : 0;
 
     // Find most selected name
     const nameCounts = {};
-    selections.forEach(s => {
+    selections.forEach((s) => {
       nameCounts[s.name] = (nameCounts[s.name] || 0) + 1;
     });
-    const mostSelectedName = Object.entries(nameCounts)
-      .sort(([,a], [,b]) => b - a)[0]?.[0] || 'N/A';
+    const mostSelectedName =
+      Object.entries(nameCounts).sort(([, a], [, b]) => b - a)[0]?.[0] || 'N/A';
 
     // Calculate selection streak (consecutive days)
     const sortedSelections = selections
-      .map(s => new Date(s.selected_at).toDateString())
+      .map((s) => new Date(s.selected_at).toDateString())
       .sort()
       .filter((date, index, arr) => index === 0 || date !== arr[index - 1]);
 
@@ -125,7 +129,9 @@ const calculateSelectionStats = async (userName) => {
       } else {
         const prevDate = new Date(sortedSelections[i - 1]);
         const currDate = new Date(sortedSelections[i]);
-                const dayDiff = Math.floor((currDate - prevDate) / (1000 * 60 * 60 * 24));
+        const dayDiff = Math.floor(
+          (currDate - prevDate) / (1000 * 60 * 60 * 24)
+        );
 
         if (dayDiff === 1) {
           tempStreak++;
@@ -146,14 +152,18 @@ const calculateSelectionStats = async (userName) => {
 
     let userRank = 'N/A';
     if (!rankingError && allUserStats) {
-      userRank = allUserStats.findIndex(u => u.user_name === userName) + 1;
+      userRank = allUserStats.findIndex((u) => u.user_name === userName) + 1;
     }
 
     // Generate insights
     const insights = {
       selectionPattern: generateSelectionPattern(selections),
       preferredCategories: await generatePreferredCategories(selections),
-      improvementTip: generateImprovementTip(totalSelections, totalTournaments, currentStreak)
+      improvementTip: generateImprovementTip(
+        totalSelections,
+        totalTournaments,
+        currentStreak
+      )
     };
 
     return {
@@ -174,11 +184,14 @@ const calculateSelectionStats = async (userName) => {
 
 // * Generate selection pattern insights
 const generateSelectionPattern = (selections) => {
-  if (!selections || selections.length === 0) return 'No selection data available';
+  if (!selections || selections.length === 0)
+    return 'No selection data available';
 
   const totalSelections = selections.length;
-  const uniqueTournaments = new Set(selections.map(s => s.tournament_id)).size;
-  const avgSelectionsPerTournament = Math.round(totalSelections / uniqueTournaments * 10) / 10;
+  const uniqueTournaments = new Set(selections.map((s) => s.tournament_id))
+    .size;
+  const avgSelectionsPerTournament =
+    Math.round((totalSelections / uniqueTournaments) * 10) / 10;
 
   if (avgSelectionsPerTournament > 8) {
     return 'You prefer large tournaments with many names';
@@ -192,7 +205,7 @@ const generateSelectionPattern = (selections) => {
 // * Generate preferred categories insight
 const generatePreferredCategories = async (selections) => {
   try {
-    const nameIds = selections.map(s => s.name_id);
+    const nameIds = selections.map((s) => s.name_id);
     const { data: names, error } = await supabase
       .from('cat_name_options')
       .select('categories')
@@ -201,20 +214,20 @@ const generatePreferredCategories = async (selections) => {
     if (error || !names) return 'Analyzing your preferences...';
 
     const categoryCounts = {};
-    names.forEach(name => {
+    names.forEach((name) => {
       if (name.categories && Array.isArray(name.categories)) {
-        name.categories.forEach(cat => {
+        name.categories.forEach((cat) => {
           categoryCounts[cat] = (categoryCounts[cat] || 0) + 1;
         });
       }
     });
 
     const topCategories = Object.entries(categoryCounts)
-      .sort(([,a], [,b]) => b - a)
+      .sort(([, a], [, b]) => b - a)
       .slice(0, 3)
       .map(([cat]) => cat);
 
-        if (topCategories.length > 0) {
+    if (topCategories.length > 0) {
       return `You favor: ${topCategories.join(', ')}`;
     }
 
@@ -225,8 +238,12 @@ const generatePreferredCategories = async (selections) => {
 };
 
 // * Generate improvement tips
-const generateImprovementTip = (totalSelections, totalTournaments, currentStreak) => {
-    if (totalSelections === 0) {
+const generateImprovementTip = (
+  totalSelections,
+  totalTournaments,
+  currentStreak
+) => {
+  if (totalSelections === 0) {
     return 'Start selecting names to see your first tournament!';
   }
 
@@ -242,7 +259,7 @@ const generateImprovementTip = (totalSelections, totalTournaments, currentStreak
     return 'Consider selecting more names per tournament for variety';
   }
 
-  return 'Great job! You\'re an active tournament participant';
+  return "Great job! You're an active tournament participant";
 };
 
 // * Main Profile Component
@@ -278,7 +295,7 @@ const Profile = ({ userName, onStartNewTournament }) => {
   }, [userName]); // Remove fetchNames dependency to prevent infinite loops
 
   // * Fetch selection statistics
-    const fetchSelectionStats = useCallback(async () => {
+  const fetchSelectionStats = useCallback(async () => {
     if (!userName) return;
 
     try {
@@ -293,7 +310,9 @@ const Profile = ({ userName, onStartNewTournament }) => {
   useEffect(() => {
     const checkAdminStatus = async () => {
       try {
-        const { data: { user } } = await supabase.auth.getUser();
+        const {
+          data: { user }
+        } = await supabase.auth.getUser();
         if (user) {
           const { data: adminCheck } = await supabase
             .from('user_preferences')
@@ -316,58 +335,64 @@ const Profile = ({ userName, onStartNewTournament }) => {
   const stats = calculateEnhancedStats(allNames, filterStatus);
 
   // * Handle name visibility toggle
-  const handleToggleVisibility = useCallback(async (nameId) => {
-    try {
-      const { error } = await supabase
-        .from('cat_name_options')
-        .update({ is_hidden: !hiddenNames.has(nameId) })
-        .eq('id', nameId);
+  const handleToggleVisibility = useCallback(
+    async (nameId) => {
+      try {
+        const { error } = await supabase
+          .from('cat_name_options')
+          .update({ is_hidden: !hiddenNames.has(nameId) })
+          .eq('id', nameId);
 
-      if (error) throw error;
+        if (error) throw error;
 
-      // * Update local state
-      setHiddenNames(prev => {
-        const newSet = new Set(prev);
-        if (newSet.has(nameId)) {
-          newSet.delete(nameId);
-        } else {
-          newSet.add(nameId);
-        }
-        return newSet;
-      });
+        // * Update local state
+        setHiddenNames((prev) => {
+          const newSet = new Set(prev);
+          if (newSet.has(nameId)) {
+            newSet.delete(nameId);
+          } else {
+            newSet.add(nameId);
+          }
+          return newSet;
+        });
 
-      // * Refresh names
-      fetchNames();
-    } catch (error) {
-      ErrorService.handleError(error, 'Profile - Toggle Visibility', {
-        isRetryable: true,
-        affectsUserData: false,
-        isCritical: false
-      });
-    }
-  }, [hiddenNames, fetchNames]);
+        // * Refresh names
+        fetchNames();
+      } catch (error) {
+        ErrorService.handleError(error, 'Profile - Toggle Visibility', {
+          isRetryable: true,
+          affectsUserData: false,
+          isCritical: false
+        });
+      }
+    },
+    [hiddenNames, fetchNames]
+  );
 
   // * Handle name deletion
-  const handleDelete = useCallback(async (name) => {
-    try {
-      const { error } = await deleteName(name.id);
-      if (error) throw error;
+  const handleDelete = useCallback(
+    async (name) => {
+      try {
+        const { error } = await deleteName(name.id);
+        if (error) throw error;
 
-      // * Refresh names and selection stats
-      fetchNames();
-      fetchSelectionStats();
-    } catch (error) {
-      ErrorService.handleError(error, 'Profile - Delete Name', {
-        isRetryable: true,
-        affectsUserData: true,
-        isCritical: false
-      });
-    }
-  }, [fetchNames, fetchSelectionStats]);
+        // * Refresh names and selection stats
+        fetchNames();
+        fetchSelectionStats();
+      } catch (error) {
+        ErrorService.handleError(error, 'Profile - Delete Name', {
+          isRetryable: true,
+          affectsUserData: true,
+          isCritical: false
+        });
+      }
+    },
+    [fetchNames, fetchSelectionStats]
+  );
 
   // * Handle name selection
   const handleSelectionChange = useCallback((nameId, selected) => {
-    setSelectedNames(prev => {
+    setSelectedNames((prev) => {
       const newSet = new Set(prev);
       if (selected) {
         newSet.add(nameId);

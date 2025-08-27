@@ -30,7 +30,12 @@ export class TournamentService {
    * @param {Object} existingRatings - Current ratings from database
    * @returns {Promise<Object>} Updated ratings object
    */
-  static async processTournamentCompletion(finalRatings, voteHistory, userName, existingRatings = {}) {
+  static async processTournamentCompletion(
+    finalRatings,
+    voteHistory,
+    userName,
+    existingRatings = {}
+  ) {
     try {
       // * Convert finalRatings to array if it's an object
       const ratingsArray = Array.isArray(finalRatings)
@@ -102,7 +107,10 @@ export class TournamentService {
             ratingsArray.find((r) => r.name === name)?.rating || 1500;
 
           // * Get existing rating data
-          const existingRating = existingRatings[name] || { wins: 0, losses: 0 };
+          const existingRating = existingRatings[name] || {
+            wins: 0,
+            losses: 0
+          };
 
           return {
             user_name: userName,
@@ -121,9 +129,7 @@ export class TournamentService {
       // * Return updated ratings for local state
       const updatedRatings = { ...existingRatings };
       recordsToUpsert.forEach((record) => {
-        const name = nameOptions.find(
-          (opt) => opt.id === record.name_id
-        )?.name;
+        const name = nameOptions.find((opt) => opt.id === record.name_id)?.name;
         if (name) {
           updatedRatings[name] = {
             rating: record.rating,

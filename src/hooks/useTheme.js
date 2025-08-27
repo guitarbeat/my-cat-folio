@@ -18,18 +18,21 @@ function useTheme() {
   const [isLightTheme, setIsLightTheme] = useLocalStorage('theme', true);
 
   // * Memoize theme classes to prevent unnecessary recalculations
-  const themeClasses = useMemo(() => ({
-    light: {
-      bodyClass: 'light-theme',
-      darkBodyClass: 'dark-theme',
-      metaColor: '#eef1f6'
-    },
-    dark: {
-      bodyClass: 'dark-theme',
-      darkBodyClass: 'light-theme',
-      metaColor: '#1a1f2e'
-    }
-  }), []);
+  const themeClasses = useMemo(
+    () => ({
+      light: {
+        bodyClass: 'light-theme',
+        darkBodyClass: 'dark-theme',
+        metaColor: '#eef1f6'
+      },
+      dark: {
+        bodyClass: 'dark-theme',
+        darkBodyClass: 'light-theme',
+        metaColor: '#1a1f2e'
+      }
+    }),
+    []
+  );
 
   // Update document body class and meta tag when theme changes
   useEffect(() => {
@@ -51,13 +54,16 @@ function useTheme() {
 
   // Toggle between light and dark themes
   const toggleTheme = useCallback(() => {
-    setIsLightTheme(prev => !prev);
+    setIsLightTheme((prev) => !prev);
   }, [setIsLightTheme]);
 
   // Set theme directly
-  const setTheme = useCallback((isLight) => {
-    setIsLightTheme(isLight);
-  }, [setIsLightTheme]);
+  const setTheme = useCallback(
+    (isLight) => {
+      setIsLightTheme(isLight);
+    },
+    [setIsLightTheme]
+  );
 
   return {
     isLightTheme,

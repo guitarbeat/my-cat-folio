@@ -260,7 +260,9 @@ function NameCard({
           </div>
         )}
 
-        <h3 className={styles.name} id={`${getSafeId(name)}-title`}>{name}</h3>
+        <h3 className={styles.name} id={`${getSafeId(name)}-title`}>
+          {name}
+        </h3>
         {description && (
           <p
             id={`${getSafeId(name)}-description`}

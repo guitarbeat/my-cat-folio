@@ -6,7 +6,11 @@ import styles from './SkeletonLoader.module.css';
  * Provides visual placeholders while content is loading
  */
 
-export const SkeletonLoader = ({ type = 'default', lines = 3, className = '' }) => {
+export const SkeletonLoader = ({
+  type = 'default',
+  lines = 3,
+  className = ''
+}) => {
   const renderSkeleton = () => {
     switch (type) {
       case 'text':
@@ -98,12 +102,14 @@ export const TournamentSkeleton = ({ size = 8 }) => {
       {Array.from({ length: rounds }).map((_, roundIndex) => (
         <div key={roundIndex} className={styles.tournamentRound}>
           <h3 className={styles.roundTitle}>Round {roundIndex + 1}</h3>
-          {Array.from({ length: Math.pow(2, rounds - roundIndex - 1) }).map((_, matchIndex) => (
-            <div key={matchIndex} className={styles.skeletonMatch}>
-              <div className={styles.skeletonTeam} />
-              <div className={styles.skeletonTeam} />
-            </div>
-          ))}
+          {Array.from({ length: Math.pow(2, rounds - roundIndex - 1) }).map(
+            (_, matchIndex) => (
+              <div key={matchIndex} className={styles.skeletonMatch}>
+                <div className={styles.skeletonTeam} />
+                <div className={styles.skeletonTeam} />
+              </div>
+            )
+          )}
         </div>
       ))}
     </div>

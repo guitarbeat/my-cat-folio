@@ -243,7 +243,9 @@
   margin: 0;
   overflow: hidden;
   -webkit-line-clamp: 6; /* Increased from 3 to 6 lines for better description visibility */
-  font-size: var(--text-base); /* Increased from text-sm for better readability */
+  font-size: var(
+    --text-base
+  ); /* Increased from text-sm for better readability */
   font-weight: 450; /* Slightly heavier for better readability */
   line-height: 1.6;
   color: var(--text-secondary);
@@ -758,15 +760,15 @@
     height: 150px;
     margin-bottom: var(--space-2);
   }
-  
+
   .hasImage .cardImageContainer {
     height: 150px;
   }
-  
+
   .hasImage {
     min-height: 280px !important;
   }
-  
+
   .card:has(.cardImageContainer) {
     min-height: 280px;
   }

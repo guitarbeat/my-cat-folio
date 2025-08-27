@@ -52,12 +52,14 @@ export const catNamesAPI = {
     try {
       // Get ALL hidden name IDs globally (not user-specific)
       let hiddenIds = [];
-      const { data: hiddenData, error: hiddenError } = await databaseRetry.read(async () => {
-        return await supabase
-          .from('cat_name_ratings')
-          .select('name_id')
-          .eq('is_hidden', true);
-      });
+      const { data: hiddenData, error: hiddenError } = await databaseRetry.read(
+        async () => {
+          return await supabase
+            .from('cat_name_ratings')
+            .select('name_id')
+            .eq('is_hidden', true);
+        }
+      );
 
       if (hiddenError) {
         console.error('Error fetching hidden names:', hiddenError);
@@ -136,7 +138,10 @@ export const catNamesAPI = {
       if (process.env.NODE_ENV === 'development') {
         console.error('Error adding name:', error);
       }
-      return { success: false, error: error.message || 'Unknown error occurred' };
+      return {
+        success: false,
+        error: error.message || 'Unknown error occurred'
+      };
     }
   },
 
@@ -152,14 +157,20 @@ export const catNamesAPI = {
 
       if (error) {
         console.error('Error removing name:', error);
-        return { success: false, error: error.message || 'Failed to remove name' };
+        return {
+          success: false,
+          error: error.message || 'Failed to remove name'
+        };
       }
       return { success: true };
     } catch (error) {
       if (process.env.NODE_ENV === 'development') {
         console.error('Error removing name:', error);
       }
-      return { success: false, error: error.message || 'Unknown error occurred' };
+      return {
+        success: false,
+        error: error.message || 'Unknown error occurred'
+      };
     }
   },
 
@@ -249,7 +260,10 @@ export const ratingsAPI = {
 
       if (error) {
         console.error('Error updating rating:', error);
-        return { success: false, error: error.message || 'Failed to update rating' };
+        return {
+          success: false,
+          error: error.message || 'Failed to update rating'
+        };
       }
 
       return {
@@ -265,7 +279,10 @@ export const ratingsAPI = {
       if (process.env.NODE_ENV === 'development') {
         console.error('Error updating rating:', error);
       }
-      return { success: false, error: error.message || 'Unknown error occurred' };
+      return {
+        success: false,
+        error: error.message || 'Unknown error occurred'
+      };
     }
   },
 
@@ -291,11 +308,12 @@ export const ratingsAPI = {
       }
 
       // Extract and flatten rating history from JSONB
-      const allHistory = data
-        ?.map(item => item.rating_history || [])
-        .flat()
-        .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
-        .slice(0, limit) || [];
+      const allHistory =
+        data
+          ?.map((item) => item.rating_history || [])
+          .flat()
+          .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
+          .slice(0, limit) || [];
 
       return allHistory;
     } catch (error) {
@@ -349,17 +367,18 @@ export const ratingsAPI = {
       };
 
       // Update or insert the rating_history in cat_name_ratings
-      const { error } = await supabase
-        .from('cat_name_ratings')
-        .upsert({
+      const { error } = await supabase.from('cat_name_ratings').upsert(
+        {
           user_name: userName,
           name_id: nameId,
           rating_history: existingRating?.rating_history
             ? [...existingRating.rating_history, newHistoryEntry]
             : [newHistoryEntry]
-        }, {
+        },
+        {
           onConflict: 'user_name,name_id'
-        });
+        }
+      );
 
       if (error) throw error;
       return { success: true };
@@ -382,19 +401,20 @@ export const hiddenNamesAPI = {
   async hideName(userName, nameId) {
     try {
       // Update or insert the hidden status in cat_name_ratings
-      const { error } = await supabase
-        .from('cat_name_ratings')
-        .upsert({
+      const { error } = await supabase.from('cat_name_ratings').upsert(
+        {
           name_id: nameId,
           user_name: userName,
           is_hidden: true,
           // * FIXED: Don't overwrite existing rating - only set if record is new
           wins: 0,
           losses: 0
-        }, {
+        },
+        {
           onConflict: 'name_id,user_name',
           ignoreDuplicates: false
-        });
+        }
+      );
 
       if (error) throw error;
       return { success: true };
@@ -495,24 +515,32 @@ export const tournamentsAPI = {
       if (userError && userError.code !== 'PGRST116') {
         // If it's a column doesn't exist error, initialize with empty array
         if (userError.code === '42703') {
-          console.warn('Tournament data column not found, initializing with empty array. Run the migration to add the column.');
+          console.warn(
+            'Tournament data column not found, initializing with empty array. Run the migration to add the column.'
+          );
           const tournaments = [newTournament];
 
           // Try to create the column and insert the tournament
           const { error: upsertError } = await supabase
             .from('cat_app_users')
-            .upsert({
-              user_name: userName,
-              tournament_data: tournaments
-            }, {
-              onConflict: 'user_name',
-              ignoreDuplicates: false
-            })
+            .upsert(
+              {
+                user_name: userName,
+                tournament_data: tournaments
+              },
+              {
+                onConflict: 'user_name',
+                ignoreDuplicates: false
+              }
+            )
             .select()
             .single();
 
           if (upsertError) {
-            console.error('Failed to create tournament after column creation attempt:', upsertError);
+            console.error(
+              'Failed to create tournament after column creation attempt:',
+              upsertError
+            );
             // Return the tournament object anyway to prevent app crashes
             return newTournament;
           }
@@ -528,20 +556,25 @@ export const tournamentsAPI = {
       // Update user's tournament data
       const { error } = await supabase
         .from('cat_app_users')
-        .upsert({
-          user_name: userName,
-          tournament_data: tournaments
-        }, {
-          onConflict: 'user_name',
-          ignoreDuplicates: false
-        })
+        .upsert(
+          {
+            user_name: userName,
+            tournament_data: tournaments
+          },
+          {
+            onConflict: 'user_name',
+            ignoreDuplicates: false
+          }
+        )
         .select()
         .single();
 
       if (error) {
         // If it's a column doesn't exist error, log warning and return tournament
         if (error.code === '42703') {
-          console.warn('Tournament data column not found, cannot save tournament. Run the migration to add the column.');
+          console.warn(
+            'Tournament data column not found, cannot save tournament. Run the migration to add the column.'
+          );
           return newTournament;
         }
         throw error;
@@ -568,7 +601,10 @@ export const tournamentsAPI = {
         .not('tournament_data', 'is', null);
 
       if (fetchError) {
-        console.error('Error fetching users for tournament update:', fetchError);
+        console.error(
+          'Error fetching users for tournament update:',
+          fetchError
+        );
         return { success: false, error: 'Failed to fetch tournament data' };
       }
 
@@ -577,9 +613,12 @@ export const tournamentsAPI = {
 
       // Search through all users to find the tournament
       for (const user of allUsers) {
-        if (!user.tournament_data || !Array.isArray(user.tournament_data)) continue;
+        if (!user.tournament_data || !Array.isArray(user.tournament_data))
+          continue;
 
-        const tournamentIndex = user.tournament_data.findIndex(t => t.id === tournamentId);
+        const tournamentIndex = user.tournament_data.findIndex(
+          (t) => t.id === tournamentId
+        );
         if (tournamentIndex !== -1) {
           // Update the tournament status
           const updatedTournaments = [...user.tournament_data];
@@ -597,7 +636,10 @@ export const tournamentsAPI = {
 
           if (updateError) {
             console.error('Error updating tournament status:', updateError);
-            return { success: false, error: 'Failed to update tournament status' };
+            return {
+              success: false,
+              error: 'Failed to update tournament status'
+            };
           }
 
           tournamentFound = true;
@@ -621,7 +663,10 @@ export const tournamentsAPI = {
       if (process.env.NODE_ENV === 'development') {
         console.error('Error updating tournament status:', error);
       }
-      return { success: false, error: error.message || 'Unknown error occurred' };
+      return {
+        success: false,
+        error: error.message || 'Unknown error occurred'
+      };
     }
   },
 
@@ -640,7 +685,9 @@ export const tournamentsAPI = {
       if (error) {
         // If it's a column doesn't exist error, return empty array
         if (error.code === '42703') {
-          console.warn('Tournament data column not found, returning empty array. Run the migration to add the column.');
+          console.warn(
+            'Tournament data column not found, returning empty array. Run the migration to add the column.'
+          );
           return [];
         }
         throw error;
@@ -650,11 +697,13 @@ export const tournamentsAPI = {
 
       // Filter by status if specified
       if (status) {
-        tournaments = tournaments.filter(t => t.status === status);
+        tournaments = tournaments.filter((t) => t.status === status);
       }
 
       // Sort by created_at (newest first)
-      tournaments.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+      tournaments.sort(
+        (a, b) => new Date(b.created_at) - new Date(a.created_at)
+      );
 
       return tournaments;
     } catch (error) {
@@ -685,13 +734,22 @@ export const tournamentsAPI = {
       const updatePromises = selectedNames.map(async (nameObj) => {
         try {
           // Use atomic server-side increment to avoid 409s and RLS reads
-          const { error: rpcError } = await supabase.rpc('increment_selection', {
-            p_user_name: userName,
-            p_name_id: nameObj.id
-          });
+          const { error: rpcError } = await supabase.rpc(
+            'increment_selection',
+            {
+              p_user_name: userName,
+              p_name_id: nameObj.id
+            }
+          );
 
           if (rpcError) {
-            console.error('RPC increment_selection error for', userName, nameObj.id, ':', rpcError);
+            console.error(
+              'RPC increment_selection error for',
+              userName,
+              nameObj.id,
+              ':',
+              rpcError
+            );
             return { error: rpcError };
           }
 
@@ -704,7 +762,7 @@ export const tournamentsAPI = {
       const results = await Promise.all(updatePromises);
 
       // Check for any errors
-      const errors = results.filter(result => result.error);
+      const errors = results.filter((result) => result.error);
       if (errors.length > 0) {
         console.warn('Some tournament selections had errors:', errors);
       }
@@ -723,7 +781,10 @@ export const tournamentsAPI = {
           name: `Tournament Setup - ${selectedNames.length} names`,
           created_at: now,
           status: 'setup_complete',
-          selected_names: selectedNames.map(n => ({ id: n.id, name: n.name })),
+          selected_names: selectedNames.map((n) => ({
+            id: n.id,
+            name: n.name
+          })),
           selection_count: selectedNames.length
         };
 
@@ -731,13 +792,21 @@ export const tournamentsAPI = {
 
         const { error: userUpsertError } = await supabase
           .from('cat_app_users')
-          .upsert({
-            user_name: userName,
-            tournament_data: tournaments
-          }, { onConflict: 'user_name' });
+          .upsert(
+            {
+              user_name: userName,
+              tournament_data: tournaments
+            },
+            { onConflict: 'user_name' }
+          );
 
         if (userUpsertError) {
-          console.error('User upsert error for', userName, ':', userUpsertError);
+          console.error(
+            'User upsert error for',
+            userName,
+            ':',
+            userUpsertError
+          );
         }
       } catch (tournamentError) {
         // Don't fail if tournament creation fails
@@ -750,7 +819,7 @@ export const tournamentsAPI = {
         success: true,
         finalTournamentId,
         selectionCount: selectedNames.length,
-        selectedNames: selectedNames.map(n => n.name),
+        selectedNames: selectedNames.map((n) => n.name),
         method: 'cat_name_ratings_update'
       };
     } catch (error) {
@@ -766,15 +835,23 @@ export const tournamentsAPI = {
    */
   async createTournamentSelectionsTable() {
     try {
-      const { error } = await supabase.rpc('create_tournament_selections_table');
+      const { error } = await supabase.rpc(
+        'create_tournament_selections_table'
+      );
       if (error) {
         if (process.env.NODE_ENV === 'development') {
-          console.warn('Could not create table via RPC, table may already exist:', error);
+          console.warn(
+            'Could not create table via RPC, table may already exist:',
+            error
+          );
         }
       }
     } catch (error) {
       if (process.env.NODE_ENV === 'development') {
-        console.warn('Table creation RPC not available, table may already exist:', error);
+        console.warn(
+          'Table creation RPC not available, table may already exist:',
+          error
+        );
       }
     }
   },
@@ -789,13 +866,15 @@ export const tournamentsAPI = {
     try {
       const { data, error } = await supabase
         .from('tournament_selections')
-        .select(`
+        .select(
+          `
           *,
           cat_name_options (
             name,
             description
           )
-        `)
+        `
+        )
         .eq('user_name', userName)
         .order('selected_at', { ascending: false })
         .limit(limit);
@@ -826,14 +905,16 @@ export const tournamentsAPI = {
     try {
       const { data, error } = await supabase
         .from('tournament_selections')
-        .select(`
+        .select(
+          `
           name_id,
           cat_name_options (
             name,
             description
           ),
           selection_count:count
-        `)
+        `
+        )
         .group('name_id, cat_name_options.name, cat_name_options.description')
         .order('selection_count', { ascending: false })
         .limit(limit);
@@ -956,7 +1037,9 @@ export const userPreferencesAPI = {
       if (error && error.code !== 'PGRST116') {
         // If it's a column doesn't exist error, return defaults
         if (error.code === '42703') {
-          console.warn('Preferences column not found, returning defaults. Run the migration to add the column.');
+          console.warn(
+            'Preferences column not found, returning defaults. Run the migration to add the column.'
+          );
           return {
             user_name: userName,
             preferred_categories: [],
@@ -1020,7 +1103,9 @@ export const userPreferencesAPI = {
       if (error) {
         // If it's a column doesn't exist error, log warning and return preferences
         if (error.code === '42703') {
-          console.warn('Preferences column not found, cannot save preferences. Run the migration to add the column.');
+          console.warn(
+            'Preferences column not found, cannot save preferences. Run the migration to add the column.'
+          );
           return preferences;
         }
         throw error;
@@ -1069,14 +1154,16 @@ export const categoriesAPI = {
       // Categories are now stored as JSONB in cat_name_options
       const { data, error } = await supabase
         .from('cat_name_options')
-        .select(`
+        .select(
+          `
           id,
           name,
           description,
           avg_rating,
           popularity_score,
           categories
-        `)
+        `
+        )
         .contains('categories', [categoryId]);
 
       if (error) throw error;
@@ -1097,7 +1184,9 @@ export const categoriesAPI = {
  * This function is kept for backward compatibility but no longer creates tables
  */
 export const ensureRatingHistoryTable = async () => {
-  devLog('Rating history is now stored in cat_name_ratings.rating_history as JSONB');
+  devLog(
+    'Rating history is now stored in cat_name_ratings.rating_history as JSONB'
+  );
   return { success: true };
 };
 

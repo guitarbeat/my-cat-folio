@@ -257,8 +257,12 @@
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 /* Responsive adjustments */
@@ -267,16 +271,16 @@
     flex-direction: column;
     text-align: center;
   }
-  
+
   .skeletonStats {
     justify-content: center;
   }
-  
+
   .tournamentSkeleton {
     flex-direction: column;
     gap: 1rem;
   }
-  
+
   .skeletonNameCardGrid {
     grid-template-columns: 1fr;
   }

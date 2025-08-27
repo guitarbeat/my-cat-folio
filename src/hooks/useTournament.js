@@ -43,7 +43,7 @@ export function useTournament({
 
   // * Helper function to update tournament state
   const updateTournamentState = useCallback((updates) => {
-    setTournamentState(prev => ({ ...prev, ...updates }));
+    setTournamentState((prev) => ({ ...prev, ...updates }));
   }, []);
 
   // * Destructure state for easier access
@@ -80,14 +80,17 @@ export function useTournament({
   });
 
   // * Update persistent state helper
-  const updatePersistentState = useCallback((updates) => {
-    setPersistentState((prev) => ({
-      ...prev,
-      ...updates,
-      lastUpdated: Date.now(),
-      userName: userName || 'anonymous'
-    }));
-  }, [userName, setPersistentState]);
+  const updatePersistentState = useCallback(
+    (updates) => {
+      setPersistentState((prev) => ({
+        ...prev,
+        ...updates,
+        lastUpdated: Date.now(),
+        userName: userName || 'anonymous'
+      }));
+    },
+    [userName, setPersistentState]
+  );
 
   // * Tournament initialization logic
   const lastInitKeyRef = useRef('');
@@ -95,7 +98,7 @@ export function useTournament({
     // Guard invalid input
     if (!Array.isArray(names) || names.length < 2) return;
 
-    const namesKey = names.map(n => n.id || n.name).join(',');
+    const namesKey = names.map((n) => n.id || n.name).join(',');
 
     // Skip re-init when names set is unchanged
     if (lastInitKeyRef.current === namesKey) return;
@@ -104,7 +107,10 @@ export function useTournament({
     const newSorter = new PreferenceSorter(nameStrings);
 
     // * Calculate estimated matches
-    const estimatedMatches = names.length === 2 ? 1 : Math.ceil(names.length * Math.log2(names.length));
+    const estimatedMatches =
+      names.length === 2
+        ? 1
+        : Math.ceil(names.length * Math.log2(names.length));
 
     // * Reset tournament state
     updateTournamentState({
@@ -200,9 +206,10 @@ export function useTournament({
     };
 
     return names.map((name) => {
-      const existingData = typeof currentRatings[name.name] === 'object'
-        ? currentRatings[name.name]
-        : { rating: currentRatings[name.name] || 1500, wins: 0, losses: 0 };
+      const existingData =
+        typeof currentRatings[name.name] === 'object'
+          ? currentRatings[name.name]
+          : { rating: currentRatings[name.name] || 1500, wins: 0, losses: 0 };
 
       const wins = countPlayerVotes(name.name, 'win');
       const losses = countPlayerVotes(name.name, 'loss');
@@ -224,161 +231,174 @@ export function useTournament({
         confidence: currentMatchNumber / totalMatches
       };
     });
-  }, [names, currentRatings, persistentState.matchHistory, currentMatchNumber, totalMatches]);
+  }, [
+    names,
+    currentRatings,
+    persistentState.matchHistory,
+    currentMatchNumber,
+    totalMatches
+  ]);
 
   // * Vote handling logic
-  const handleVote = useCallback((result) => {
-    if (isTransitioning || isError || !currentMatch) {
-      return;
-    }
-
-    try {
-      updateTournamentState({ isTransitioning: true });
-
-      // * Convert vote to preference value and Elo outcome
-      const { voteValue, eloOutcome } = convertVoteToOutcome(result);
-
-      // * Get current ratings
-      const leftName = currentMatch.left.name;
-      const rightName = currentMatch.right.name;
-      const leftRating = currentRatings[leftName]?.rating || 1500;
-      const rightRating = currentRatings[rightName]?.rating || 1500;
-
-      // * Calculate new Elo ratings
-      const leftStats = {
-        winsA: currentRatings[leftName]?.wins || 0,
-        lossesA: currentRatings[leftName]?.losses || 0,
-        winsB: currentRatings[rightName]?.wins || 0,
-        lossesB: currentRatings[rightName]?.losses || 0
-      };
-
-      const {
-        newRatingA: updatedLeftRating,
-        newRatingB: updatedRightRating,
-        winsA: newLeftWins,
-        lossesA: newLeftLosses,
-        winsB: newRightWins,
-        lossesB: newRightLosses
-      } = EloRating.calculateNewRatings(
-        leftRating,
-        rightRating,
-        eloOutcome,
-        leftStats
-      );
-
-      // * Update PreferenceSorter
-      if (sorter) {
-        sorter.addPreference(leftName, rightName, voteValue);
-      }
-
-      // * Create vote data
-      const voteData = createVoteData({
-        result: voteValue,
-        matchNumber: currentMatchNumber,
-        currentMatch,
-        eloOutcome,
-        leftRating,
-        rightRating,
-        updatedLeftRating,
-        updatedRightRating,
-        userName
-      });
-
-      // * Update persistent state
-      updatePersistentState((prev) => ({
-        ...prev,
-        matchHistory: [...prev.matchHistory, voteData],
-        currentMatch: currentMatchNumber + 1
-      }));
-
-      // * Update current ratings
-      updateTournamentState({
-        currentRatings: {
-          ...currentRatings,
-          [leftName]: {
-            ...currentRatings[leftName],
-            rating: updatedLeftRating,
-            wins: newLeftWins,
-            losses: newLeftLosses
-          },
-          [rightName]: {
-            ...currentRatings[rightName],
-            rating: updatedRightRating,
-            wins: newRightWins,
-            losses: newRightLosses
-          }
-        },
-        canUndo: true
-      });
-
-      // * Check if tournament is complete
-      if (currentMatchNumber >= totalMatches) {
-        const finalRatings = getCurrentRatings();
-        onComplete(finalRatings);
+  const handleVote = useCallback(
+    (result) => {
+      if (isTransitioning || isError || !currentMatch) {
         return;
       }
 
-      // * Move to next match
-      updateTournamentState({
-        currentMatchNumber: currentMatchNumber + 1
-      });
+      try {
+        updateTournamentState({ isTransitioning: true });
 
-      // * Update round number if needed
-      if (names.length > 2) {
-        const matchesPerRound = Math.ceil(names.length / 2);
-        if (currentMatchNumber % matchesPerRound === 0) {
-          const newRound = roundNumber + 1;
-          updateTournamentState({ roundNumber: newRound });
-          updatePersistentState({ currentRound: newRound });
+        // * Convert vote to preference value and Elo outcome
+        const { voteValue, eloOutcome } = convertVoteToOutcome(result);
+
+        // * Get current ratings
+        const leftName = currentMatch.left.name;
+        const rightName = currentMatch.right.name;
+        const leftRating = currentRatings[leftName]?.rating || 1500;
+        const rightRating = currentRatings[rightName]?.rating || 1500;
+
+        // * Calculate new Elo ratings
+        const leftStats = {
+          winsA: currentRatings[leftName]?.wins || 0,
+          lossesA: currentRatings[leftName]?.losses || 0,
+          winsB: currentRatings[rightName]?.wins || 0,
+          lossesB: currentRatings[rightName]?.losses || 0
+        };
+
+        const {
+          newRatingA: updatedLeftRating,
+          newRatingB: updatedRightRating,
+          winsA: newLeftWins,
+          lossesA: newLeftLosses,
+          winsB: newRightWins,
+          lossesB: newRightLosses
+        } = EloRating.calculateNewRatings(
+          leftRating,
+          rightRating,
+          eloOutcome,
+          leftStats
+        );
+
+        // * Update PreferenceSorter
+        if (sorter) {
+          sorter.addPreference(leftName, rightName, voteValue);
         }
+
+        // * Create vote data
+        const voteData = createVoteData({
+          result: voteValue,
+          matchNumber: currentMatchNumber,
+          currentMatch,
+          eloOutcome,
+          leftRating,
+          rightRating,
+          updatedLeftRating,
+          updatedRightRating,
+          userName
+        });
+
+        // * Update persistent state
+        updatePersistentState((prev) => ({
+          ...prev,
+          matchHistory: [...prev.matchHistory, voteData],
+          currentMatch: currentMatchNumber + 1
+        }));
+
+        // * Update current ratings
+        updateTournamentState({
+          currentRatings: {
+            ...currentRatings,
+            [leftName]: {
+              ...currentRatings[leftName],
+              rating: updatedLeftRating,
+              wins: newLeftWins,
+              losses: newLeftLosses
+            },
+            [rightName]: {
+              ...currentRatings[rightName],
+              rating: updatedRightRating,
+              wins: newRightWins,
+              losses: newRightLosses
+            }
+          },
+          canUndo: true
+        });
+
+        // * Check if tournament is complete
+        if (currentMatchNumber >= totalMatches) {
+          const finalRatings = getCurrentRatings();
+          onComplete(finalRatings);
+          return;
+        }
+
+        // * Move to next match
+        updateTournamentState({
+          currentMatchNumber: currentMatchNumber + 1
+        });
+
+        // * Update round number if needed
+        if (names.length > 2) {
+          const matchesPerRound = Math.ceil(names.length / 2);
+          if (currentMatchNumber % matchesPerRound === 0) {
+            const newRound = roundNumber + 1;
+            updateTournamentState({ roundNumber: newRound });
+            updatePersistentState({ currentRound: newRound });
+          }
+        }
+
+        // * Set up next match
+        const nextMatch = getNextMatch(names, sorter, currentMatchNumber + 1);
+        if (nextMatch) {
+          updateTournamentState({ currentMatch: nextMatch });
+        }
+
+        // * Clear transition state after delay
+        const timeoutId = setTimeout(() => {
+          updateTournamentState({ isTransitioning: false });
+        }, 500);
+
+        return () => clearTimeout(timeoutId);
+      } catch (error) {
+        console.error('Vote handling error:', error);
+        updateTournamentState({
+          isError: true,
+          isTransitioning: false
+        });
       }
-
-      // * Set up next match
-      const nextMatch = getNextMatch(names, sorter, currentMatchNumber + 1);
-      if (nextMatch) {
-        updateTournamentState({ currentMatch: nextMatch });
-      }
-
-      // * Clear transition state after delay
-      const timeoutId = setTimeout(() => {
-        updateTournamentState({ isTransitioning: false });
-      }, 500);
-
-      return () => clearTimeout(timeoutId);
-
-    } catch (error) {
-      console.error('Vote handling error:', error);
-      updateTournamentState({
-        isError: true,
-        isTransitioning: false
-      });
-    }
-  }, [
-    isTransitioning,
-    isError,
-    currentMatch,
-    currentMatchNumber,
-    totalMatches,
-    names.length,
-    roundNumber,
-    currentRatings,
-    sorter,
-    onComplete,
-    getCurrentRatings,
-    updateTournamentState,
-    updatePersistentState,
-    userName
-  ]);
+    },
+    [
+      isTransitioning,
+      isError,
+      currentMatch,
+      currentMatchNumber,
+      totalMatches,
+      names.length,
+      roundNumber,
+      currentRatings,
+      sorter,
+      onComplete,
+      getCurrentRatings,
+      updateTournamentState,
+      updatePersistentState,
+      userName
+    ]
+  );
 
   // * Undo functionality
   const handleUndo = useCallback(() => {
-    if (isTransitioning || !canUndo || persistentState.matchHistory.length === 0) {
+    if (
+      isTransitioning ||
+      !canUndo ||
+      persistentState.matchHistory.length === 0
+    ) {
       return;
     }
 
     updateTournamentState({ isTransitioning: true });
 
-    const lastVote = persistentState.matchHistory[persistentState.matchHistory.length - 1];
+    const lastVote =
+      persistentState.matchHistory[persistentState.matchHistory.length - 1];
 
     updateTournamentState({
       currentMatch: lastVote.match,
@@ -535,7 +555,7 @@ function createVoteData({
  * @param {number} matchNumber - Current match number
  * @returns {Object|null} Next match object or null if no more matches
  */
-function getNextMatch(names, sorter, matchNumber) {
+function getNextMatch(names, sorter, _matchNumber) {
   if (!sorter || names.length <= 2) {
     return null;
   }
@@ -544,8 +564,8 @@ function getNextMatch(names, sorter, matchNumber) {
     const nextMatch = sorter.getNextMatch();
     if (nextMatch) {
       return {
-        left: names.find(n => n.name === nextMatch.left) || nextMatch.left,
-        right: names.find(n => n.name === nextMatch.right) || nextMatch.right
+        left: names.find((n) => n.name === nextMatch.left) || nextMatch.left,
+        right: names.find((n) => n.name === nextMatch.right) || nextMatch.right
       };
     }
   } catch (error) {

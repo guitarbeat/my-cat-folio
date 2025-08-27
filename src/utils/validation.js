@@ -16,16 +16,26 @@ export const validateUsername = (username) => {
   const trimmed = username.trim();
 
   if (trimmed.length < 2) {
-    return { success: false, error: 'Username must be at least 2 characters long' };
+    return {
+      success: false,
+      error: 'Username must be at least 2 characters long'
+    };
   }
 
   if (trimmed.length > 50) {
-    return { success: false, error: 'Username must be less than 50 characters' };
+    return {
+      success: false,
+      error: 'Username must be less than 50 characters'
+    };
   }
 
   // Check for valid characters (letters, numbers, spaces, hyphens, underscores)
   if (!/^[a-zA-Z0-9\s\-_]+$/.test(trimmed)) {
-    return { success: false, error: 'Username can only contain letters, numbers, spaces, hyphens, and underscores' };
+    return {
+      success: false,
+      error:
+        'Username can only contain letters, numbers, spaces, hyphens, and underscores'
+    };
   }
 
   return { success: true, value: trimmed };
@@ -48,7 +58,10 @@ export const validateCatName = (name) => {
   }
 
   if (trimmed.length > 100) {
-    return { success: false, error: 'Cat name must be less than 100 characters' };
+    return {
+      success: false,
+      error: 'Cat name must be less than 100 characters'
+    };
   }
 
   return { success: true, value: trimmed };
@@ -67,11 +80,17 @@ export const validateDescription = (description) => {
   const trimmed = description.trim();
 
   if (trimmed.length < 10) {
-    return { success: false, error: 'Description must be at least 10 characters long' };
+    return {
+      success: false,
+      error: 'Description must be at least 10 characters long'
+    };
   }
 
   if (trimmed.length > 500) {
-    return { success: false, error: 'Description must be less than 500 characters' };
+    return {
+      success: false,
+      error: 'Description must be less than 500 characters'
+    };
   }
 
   return { success: true, value: trimmed };
@@ -97,7 +116,10 @@ export const validateTournamentSize = (size) => {
 
   // Check if it's a power of 2
   if ((size & (size - 1)) !== 0) {
-    return { success: false, error: 'Tournament size must be a power of 2 (2, 4, 8, 16, 32, 64)' };
+    return {
+      success: false,
+      error: 'Tournament size must be a power of 2 (2, 4, 8, 16, 32, 64)'
+    };
   }
 
   return { success: true, value: size };

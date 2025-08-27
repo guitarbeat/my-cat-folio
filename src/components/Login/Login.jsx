@@ -10,7 +10,6 @@ import useToast from '../../hooks/useToast';
 import { validateUsername } from '../../utils/validation';
 import styles from './Login.module.css';
 
-
 function Login({ onLogin }) {
   const [name, setName] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -135,7 +134,6 @@ function Login({ onLogin }) {
     }
   };
 
-
   return (
     <div className={styles.loginWrapper}>
       {/* Background with overlay */}
@@ -172,10 +170,7 @@ function Login({ onLogin }) {
           <h2 className={styles.loginTitle}>Cat Name Olympics</h2>
           <p className={styles.catFact}>
             {catFact ? (
-              <>
-
-                {catFact}
-              </>
+              <>{catFact}</>
             ) : (
               <span className={styles.loadingFact}>
                 <span className={styles.loadingDots}>
@@ -198,7 +193,12 @@ function Login({ onLogin }) {
             </div>
           ) : null}
 
-          <form onSubmit={handleSubmit} className={styles.loginForm} role="form" aria-label="Login form">
+          <form
+            onSubmit={handleSubmit}
+            className={styles.loginForm}
+            role="form"
+            aria-label="Login form"
+          >
             <div className={styles.inputWrapper}>
               <label htmlFor="loginName" className={styles.inputLabel}>
                 Your Judge Name:

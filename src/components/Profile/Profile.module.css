@@ -39,20 +39,7 @@
 }
 
 .button {
-  padding: 0.75rem 1.5rem;
-  font-weight: 600;
-  color: white;
-  cursor: pointer;
-  background: linear-gradient(135deg, var(--primary-400), var(--primary-600));
-  border: none;
-  border-radius: 12px;
-  box-shadow: var(--shadow-md);
-  transition: all 0.3s ease;
-}
-
-.button:hover {
-  box-shadow: var(--shadow-lg);
-  transform: translateY(-2px);
+  composes: btn btn--primary from "../../styles/global.css";
 }
 
 /* Main Content - Sidebar Layout */
@@ -107,11 +94,8 @@
 }
 
 .quickStat {
-  padding: 1rem;
+  composes: card from "../../styles/global.css";
   text-align: center;
-  background: var(--surface-color);
-  border: 1px solid var(--border-color);
-  border-radius: 12px;
 }
 
 .quickStatValue {
@@ -136,21 +120,12 @@
 }
 
 .sidebarButton {
-  padding: 0.75rem 1rem;
+  composes: btn btn--secondary from "../../styles/global.css";
   font-size: 0.9rem;
-  font-weight: 500;
-  color: var(--text-primary);
   text-align: left;
-  cursor: pointer;
-  background: var(--surface-color);
-  border: 2px solid var(--border-color);
-  border-radius: 10px;
-  transition: all 0.2s ease;
 }
 
 .sidebarButton:hover {
-  background: var(--card-hover);
-  border-color: var(--primary-300);
   transform: translateX(4px);
 }
 
@@ -365,15 +340,12 @@
 
 /* Controls - Compact */
 .controls {
+  composes: card from "../../styles/global.css";
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
   gap: 1.5rem;
   align-items: start;
-  padding: 1.5rem;
   margin-bottom: 2rem;
-  background: var(--surface-color);
-  border: 1px solid var(--border-color);
-  border-radius: 12px;
   backdrop-filter: blur(10px);
 }
 
@@ -411,17 +383,10 @@
 }
 
 .sortButton {
+  composes: btn btn--secondary from "../../styles/global.css";
   min-width: 60px;
-  padding: 0.75rem 1rem;
   font-size: 1.1rem;
   font-weight: bold;
-  color: var(--text-primary);
-  cursor: pointer;
-  background: var(--card-background);
-  border: 1px solid var(--border-color);
-  border-radius: 10px;
-  box-shadow: var(--shadow-sm);
-  transition: all 0.2s ease;
 }
 
 .sortButton:hover {
@@ -443,21 +408,11 @@
 }
 
 .userFilterButton {
-  padding: 0.5rem 0.75rem;
+  composes: btn btn--secondary from "../../styles/global.css";
   font-size: 0.85rem;
-  font-weight: 600;
-  color: var(--text-primary);
-  cursor: pointer;
-  background: var(--surface-color);
-  border: 1px solid var(--border-color);
-  border-radius: 8px;
-  box-shadow: var(--shadow-sm);
-  transition: all 0.2s ease;
 }
 
 .userFilterButton:hover {
-  background: var(--card-hover);
-  box-shadow: var(--shadow-md);
   transform: translateY(-1px);
 }
 
@@ -707,11 +662,8 @@
 
 /* User Selection Compact */
 .userSelectionCompact {
-  padding: 1.5rem;
+  composes: card from "../../styles/global.css";
   margin-bottom: 1.5rem;
-  background: var(--card-background);
-  border: 1px solid var(--border-color);
-  border-radius: 12px;
   box-shadow: var(--shadow-md);
   backdrop-filter: blur(10px);
 }
@@ -730,15 +682,8 @@
 }
 
 .userSelectionButton {
-  padding: 0.75rem;
+  composes: btn btn--secondary from "../../styles/global.css";
   font-size: 0.9rem;
-  font-weight: 500;
-  color: var(--text-primary);
-  cursor: pointer;
-  background: var(--surface-color);
-  border: 2px solid var(--border-color);
-  border-radius: 8px;
-  transition: all 0.2s ease;
 }
 
 .userSelectionButton:hover {
@@ -747,10 +692,7 @@
 }
 
 .userSelectionButton.selectedUser {
-  color: white;
-  background: linear-gradient(135deg, var(--primary-400), var(--primary-600));
-  border-color: var(--primary-400);
-  box-shadow: var(--shadow-md);
+  composes: btn btn--primary from "../../styles/global.css";
 }
 
 /* User Analysis */
@@ -766,11 +708,8 @@
 }
 
 .userStatCard {
-  padding: 1.5rem;
+  composes: card from "../../styles/global.css";
   text-align: center;
-  background: var(--surface-color);
-  border: 1px solid var(--border-color);
-  border-radius: 10px;
 }
 
 .userStatCard h4 {

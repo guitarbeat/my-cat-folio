@@ -2,7 +2,13 @@
  * @module FloatingKitties
  * @description Animated floating cat images background with space/galaxy theme
  */
-import React, { useCallback, useEffect, useRef, useState, useMemo } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  useMemo
+} from 'react';
 import PropTypes from 'prop-types';
 import styles from './FloatingKitties.module.css';
 

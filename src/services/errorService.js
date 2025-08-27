@@ -8,23 +8,27 @@ export class ErrorService {
   /**
    * * Error types for categorization
    */
-  static ERROR_TYPES = {
-    NETWORK: 'network',
-    VALIDATION: 'validation',
-    AUTH: 'auth',
-    DATABASE: 'database',
-    UNKNOWN: 'unknown'
-  };
+  static get ERROR_TYPES() {
+    return {
+      NETWORK: 'network',
+      VALIDATION: 'validation',
+      AUTH: 'auth',
+      DATABASE: 'database',
+      UNKNOWN: 'unknown'
+    };
+  }
 
   /**
    * * Error severity levels
    */
-  static SEVERITY_LEVELS = {
-    LOW: 'low',
-    MEDIUM: 'medium',
-    HIGH: 'high',
-    CRITICAL: 'critical'
-  };
+  static get SEVERITY_LEVELS() {
+    return {
+      LOW: 'low',
+      MEDIUM: 'medium',
+      HIGH: 'high',
+      CRITICAL: 'critical'
+    };
+  }
 
   /**
    * * Handles errors with consistent formatting and logging
@@ -36,10 +40,10 @@ export class ErrorService {
   static handleError(error, context = 'Unknown', metadata = {}) {
     const errorInfo = this.parseError(error);
     const formattedError = this.formatError(errorInfo, context, metadata);
-    
+
     // * Log error for debugging
     this.logError(formattedError, context, metadata);
-    
+
     return formattedError;
   }
 
@@ -100,11 +104,18 @@ export class ErrorService {
       return this.ERROR_TYPES.VALIDATION;
     }
 
-    if (error.status === 0 || error.status === 500 || error.message?.includes('fetch')) {
+    if (
+      error.status === 0 ||
+      error.status === 500 ||
+      error.message?.includes('fetch')
+    ) {
       return this.ERROR_TYPES.NETWORK;
     }
 
-    if (error.message?.includes('database') || error.message?.includes('supabase')) {
+    if (
+      error.message?.includes('database') ||
+      error.message?.includes('supabase')
+    ) {
       return this.ERROR_TYPES.DATABASE;
     }
 
@@ -180,7 +191,7 @@ export class ErrorService {
       'Tournament Completion': 'Failed to complete tournament',
       'Tournament Setup': 'Failed to set up tournament',
       'Rating Update': 'Failed to update ratings',
-      'Login': 'Failed to log in',
+      Login: 'Failed to log in',
       'Profile Load': 'Failed to load profile',
       'Database Query': 'Failed to fetch data'
     };
@@ -290,23 +301,23 @@ export class ErrorService {
 
     return async (...args) => {
       let lastError;
-      
+
       for (let attempt = 1; attempt <= maxRetries; attempt++) {
         try {
           return await operation(...args);
         } catch (error) {
           lastError = error;
-          
+
           if (attempt === maxRetries || !shouldRetry(error)) {
             throw error;
           }
 
           // * Wait before retrying with exponential backoff
           const waitTime = delay * Math.pow(backoff, attempt - 1);
-          await new Promise(resolve => setTimeout(resolve, waitTime));
+          await new Promise((resolve) => setTimeout(resolve, waitTime));
         }
       }
-      
+
       throw lastError;
     };
   }
