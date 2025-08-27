@@ -270,7 +270,7 @@ export function useTournament({
     }
 
     const namesKey = names.map(n => n.id || n.name).join(',');
-    
+
     // Only run if names actually changed
     if (namesKey === initializedNamesRef.current) {
       return;

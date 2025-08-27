@@ -669,36 +669,11 @@ export const tournamentsAPI = {
       const now = new Date().toISOString();
       const finalTournamentId = tournamentId || `tournament_${Date.now()}`;
 
-      // Prepare records for tournament selections
-      const selectionRecords = selectedNames.map(nameObj => ({
-        user_name: userName,
-        name_id: nameObj.id,
-        name: nameObj.name,
-        tournament_id: finalTournamentId,
-        selected_at: now,
-        selection_type: 'tournament_setup'
-      }));
+      // Instead of using tournament_selections table (which has RLS issues),
+      // we'll store the selections in the cat_name_ratings table
+      // This approach is simpler and avoids RLS policy complications
 
-      // Insert tournament selections
-      const { error: selectionError } = await supabase
-        .from('tournament_selections')
-        .insert(selectionRecords);
-
-      if (selectionError) {
-        // If table doesn't exist, create it first
-        if (selectionError.code === '42P01') {
-          await this.createTournamentSelectionsTable();
-          // Retry insert
-          const { error: retryError } = await supabase
-            .from('tournament_selections')
-            .insert(selectionRecords);
-          if (retryError) throw retryError;
-        } else {
-          throw selectionError;
-        }
-      }
-
-      // Update the cat_name_ratings table to track selection count
+      // Update the cat_name_ratings table to track selection count and tournament data
       const updatePromises = selectedNames.map(nameObj =>
         supabase
           .from('cat_name_ratings')
@@ -707,17 +682,63 @@ export const tournamentsAPI = {
             name_id: nameObj.id,
             tournament_selections: supabase.sql`COALESCE(tournament_selections, 0) + 1`,
             last_selected_at: now,
+            tournament_data: supabase.sql`COALESCE(tournament_data, '[]'::jsonb) || ${JSON.stringify([{
+              tournament_id: finalTournamentId,
+              selected_at: now,
+              selection_type: 'tournament_setup'
+            }])}`,
             updated_at: now
           }, { onConflict: 'user_name,name_id' })
       );
 
-      await Promise.all(updatePromises);
+      const results = await Promise.all(updatePromises);
+      
+      // Check for any errors
+      const errors = results.filter(result => result.error);
+      if (errors.length > 0) {
+        console.warn('Some tournament selections had errors:', errors);
+      }
+
+      // Also try to create a simple tournament record in the user's preferences
+      try {
+        const { data: userData } = await supabase
+          .from('cat_app_users')
+          .select('tournament_data')
+          .eq('user_name', userName)
+          .single();
+
+        const tournaments = userData?.tournament_data || [];
+        const newTournament = {
+          id: finalTournamentId,
+          name: `Tournament Setup - ${selectedNames.length} names`,
+          created_at: now,
+          status: 'setup_complete',
+          selected_names: selectedNames.map(n => ({ id: n.id, name: n.name })),
+          selection_count: selectedNames.length
+        };
+
+        tournaments.push(newTournament);
+
+        await supabase
+          .from('cat_app_users')
+          .upsert({
+            user_name: userName,
+            tournament_data: tournaments,
+            updated_at: now
+          }, { onConflict: 'user_name' });
+      } catch (tournamentError) {
+        // Don't fail if tournament creation fails
+        if (process.env.NODE_ENV === 'development') {
+          console.warn('Could not save tournament record:', tournamentError);
+        }
+      }
 
       return {
         success: true,
         finalTournamentId,
         selectionCount: selectedNames.length,
-        selectedNames: selectedNames.map(n => n.name)
+        selectedNames: selectedNames.map(n => n.name),
+        method: 'cat_name_ratings_update'
       };
     } catch (error) {
       if (process.env.NODE_ENV === 'development') {

@@ -7,7 +7,8 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import {
   supabase,
-  getNamesWithDescriptions
+  getNamesWithDescriptions,
+  tournamentsAPI
 } from '../../supabase/supabaseClient';
 import devLog from '../../utils/logger';
 import { LoadingSpinner, NameCard, ErrorBoundary, ErrorDisplay, InlineError } from '../';
@@ -730,13 +731,11 @@ function useTournamentSetup(userName) {
   // Save tournament selections to database
   const saveTournamentSelections = async (selectedNames) => {
     try {
-      const { supabaseClient } = await import('../../supabase/supabaseClient');
-
       // Create a unique tournament ID for this selection session
       const tournamentId = `selection_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
 
       // Save selections to database
-      const result = await supabaseClient.saveTournamentSelections(
+      const result = await tournamentsAPI.saveTournamentSelections(
         userName,
         selectedNames,
         tournamentId
