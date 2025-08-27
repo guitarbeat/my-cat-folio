@@ -24,7 +24,8 @@ const ProfileNameList = ({
   onDelete,
   onSelectionChange,
   selectedNames = new Set(),
-  className = ''
+  className = '',
+  showAdminControls = false
 }) => {
   // * Filter and sort names based on current filters
   const filteredAndSortedNames = useMemo(() => {
@@ -210,7 +211,8 @@ ProfileNameList.propTypes = {
   onDelete: PropTypes.func,
   onSelectionChange: PropTypes.func,
   selectedNames: PropTypes.instanceOf(Set),
-  className: PropTypes.string
+  className: PropTypes.string,
+  showAdminControls: PropTypes.bool
 };
 
 export default ProfileNameList;

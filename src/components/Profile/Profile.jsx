@@ -125,8 +125,8 @@ const calculateSelectionStats = async (userName) => {
       } else {
         const prevDate = new Date(sortedSelections[i - 1]);
         const currDate = new Date(sortedSelections[i]);
-        const dayDiff = Math.floor((currDate - prevDate) / (1000 * 60 * 60 * 24));
-        
+                const dayDiff = Math.floor((currDate - prevDate) / (1000 * 60 * 60 * 24));
+
         if (dayDiff === 1) {
           tempStreak++;
         } else {
@@ -175,11 +175,11 @@ const calculateSelectionStats = async (userName) => {
 // * Generate selection pattern insights
 const generateSelectionPattern = (selections) => {
   if (!selections || selections.length === 0) return 'No selection data available';
-  
+
   const totalSelections = selections.length;
   const uniqueTournaments = new Set(selections.map(s => s.tournament_id)).size;
   const avgSelectionsPerTournament = Math.round(totalSelections / uniqueTournaments * 10) / 10;
-  
+
   if (avgSelectionsPerTournament > 8) {
     return 'You prefer large tournaments with many names';
   } else if (avgSelectionsPerTournament > 4) {
@@ -214,10 +214,10 @@ const generatePreferredCategories = async (selections) => {
       .slice(0, 3)
       .map(([cat]) => cat);
 
-    if (topCategories.length > 0) {
+        if (topCategories.length > 0) {
       return `You favor: ${topCategories.join(', ')}`;
     }
-    
+
     return 'Discovering your preferences...';
   } catch (error) {
     return 'Analyzing your preferences...';
@@ -226,22 +226,22 @@ const generatePreferredCategories = async (selections) => {
 
 // * Generate improvement tips
 const generateImprovementTip = (totalSelections, totalTournaments, currentStreak) => {
-  if (totalSelections === 0) {
+    if (totalSelections === 0) {
     return 'Start selecting names to see your first tournament!';
   }
-  
+
   if (totalTournaments < 3) {
     return 'Try creating more tournaments to discover your preferences';
   }
-  
+
   if (currentStreak < 3) {
     return 'Build a selection streak by playing daily';
   }
-  
+
   if (totalSelections / totalTournaments < 4) {
     return 'Consider selecting more names per tournament for variety';
   }
-  
+
   return 'Great job! You\'re an active tournament participant';
 };
 
@@ -276,9 +276,9 @@ const Profile = ({ userName, onStartNewTournament }) => {
   }, [userName]); // Remove fetchNames dependency to prevent infinite loops
 
   // * Fetch selection statistics
-  const fetchSelectionStats = useCallback(async () => {
+    const fetchSelectionStats = useCallback(async () => {
     if (!userName) return;
-    
+
     try {
       const stats = await calculateSelectionStats(userName);
       setSelectionStats(stats);
@@ -437,6 +437,7 @@ const Profile = ({ userName, onStartNewTournament }) => {
         onSelectionChange={handleSelectionChange}
         selectedNames={selectedNames}
         className={styles.namesSection}
+        showAdminControls={isAdmin} // * Pass admin controls flag
       />
     </div>
   );
