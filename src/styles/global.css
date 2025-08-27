@@ -628,6 +628,11 @@ body.light-theme {
   --start-section-pattern: #64748b; /* * Subtle pattern color */
   --accent-subtle: rgb(100 116 139 / 15%); /* * Subtle accent for light theme */
   --accent-medium: rgb(100 116 139 / 25%); /* * Medium accent for light theme */
+
+  /* NameCard selected state variables */
+  --namecard-selected-bg: linear-gradient(135deg, var(--primary-50), var(--primary-100));
+  --namecard-selected-border: var(--primary-500);
+  --namecard-selected-description: var(--primary-600);
 }
 
 /* Dark Theme Overrides */
@@ -669,6 +674,11 @@ body.dark-theme {
   --start-section-pattern: #64748b; /* * Subtle pattern color */
   --accent-subtle: rgb(255 255 255 / 8%); /* * Subtle accent for dark theme */
   --accent-medium: rgb(255 255 255 / 15%); /* * Medium accent for dark theme */
+
+  /* NameCard selected state variables */
+  --namecard-selected-bg: linear-gradient(135deg, var(--primary-700), var(--primary-800));
+  --namecard-selected-border: var(--primary-400);
+  --namecard-selected-description: var(--primary-300);
 }
 
 /* High Contrast Mode */
@@ -3542,10 +3552,11 @@ h1 {
   .cat-background__cat--2 { top: 18%; right: 8%; }
   .cat-background__cat--3 { bottom: 12%; left: 12%; }
   .cat-background__cat--4 { right: 3%; bottom: 22%; }
-}
+
 
 /* Limit global button resets to layout regions to avoid module collisions */
 .layout button,
 .main-content button {
   /* move previous global button declarations here if needed */
+
 }

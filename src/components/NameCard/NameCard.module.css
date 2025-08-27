@@ -398,8 +398,11 @@
 }
 
 .selected {
-  background: linear-gradient(135deg, var(--primary-50), var(--primary-100));
-  border-color: var(--primary-500);
+  background: var(
+    --namecard-selected-bg,
+    linear-gradient(135deg, var(--primary-50), var(--primary-100))
+  );
+  border-color: var(--namecard-selected-border, var(--primary-500));
   box-shadow:
     0 0 0 2px rgba(var(--primary-rgb), 0.2),
     var(--shadow-lg);
@@ -420,7 +423,7 @@
 }
 
 .selected .description {
-  color: var(--primary-600);
+  color: var(--namecard-selected-description, var(--primary-600));
   opacity: 0.9;
 }
 
