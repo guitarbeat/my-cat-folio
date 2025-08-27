@@ -867,3 +867,225 @@
     transition: none !important;
   }
 }
+
+/* Bubble Action Buttons */
+.bubbleActions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  width: 100%;
+  margin-top: 1rem;
+}
+
+.bubbleNextButton,
+.bubbleFinishButton {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: center;
+}
+
+.bubbleNextButton {
+  background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+  color: white;
+  box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+}
+
+.bubbleNextButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+}
+
+.bubbleFinishButton {
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: white;
+  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+}
+
+.bubbleFinishButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+}
+
+.bubbleDontShowButton {
+  width: 100%;
+  padding: 0.5rem 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 6px;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: center;
+}
+
+.bubbleDontShowButton:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.9);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+/* Completed Bubble State */
+.floatingBubble.contentBubble.completedBubble {
+  opacity: 0.7;
+  transform: scale(0.95);
+  pointer-events: none;
+}
+
+.floatingBubble.contentBubble.completedBubble .bubbleIcon {
+  filter: grayscale(0.5);
+}
+
+/* Enhanced Bubble Content for Actions */
+.expandedBubble .bubbleContent {
+  padding: 1.5rem;
+  gap: 1rem;
+}
+
+.expandedBubble .bubbleText {
+  font-size: 0.9rem;
+  line-height: 1.5;
+  margin-bottom: 1rem;
+}
+
+.expandedBubble .bubbleFeatures {
+  margin-bottom: 1rem;
+}
+
+/* Drag Handle */
+.dragHandle {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  cursor: grab;
+  transition: all 0.2s ease;
+  z-index: 10;
+}
+
+.dragHandle:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: scale(1.1);
+}
+
+.dragIcon {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.8);
+  font-weight: bold;
+  line-height: 1;
+}
+
+/* Dragging State */
+.floatingBubble.draggingBubble {
+  cursor: grabbing !important;
+  transform: scale(1.05);
+  z-index: 1000;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+}
+
+.floatingBubble.draggingBubble .dragHandle {
+  cursor: grabbing;
+  background: rgba(255, 255, 255, 0.4);
+}
+
+/* Close Button */
+.bubbleCloseButton {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  width: 28px;
+  height: 28px;
+  border: none;
+  background: rgba(255, 255, 255, 0.2);
+  color: rgba(255, 255, 255, 0.8);
+  border-radius: 50%;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+
+.bubbleCloseButton:hover {
+  background: rgba(255, 255, 255, 0.3);
+  color: rgba(255, 255, 255, 1);
+  transform: scale(1.1);
+}
+
+/* Hide drag handle when expanded (close button takes its place) */
+.expandedBubble .dragHandle {
+  display: none;
+}
+
+/* Enhanced cursor states */
+.floatingBubble.contentBubble {
+  cursor: grab;
+  user-select: none;
+}
+
+.floatingBubble.contentBubble:hover {
+  cursor: grab;
+}
+
+.floatingBubble.contentBubble:active {
+  cursor: grabbing;
+}
+
+/* Prevent text selection during drag */
+.floatingBubble.contentBubble * {
+  user-select: none;
+}
+
+/* Responsive adjustments for action buttons */
+@media (max-width: 480px) {
+  .bubbleActions {
+    gap: 0.5rem;
+  }
+
+  .bubbleNextButton,
+  .bubbleFinishButton {
+    padding: 0.625rem 0.875rem;
+    font-size: 0.85rem;
+  }
+
+  .bubbleDontShowButton {
+    padding: 0.375rem 0.75rem;
+    font-size: 0.75rem;
+  }
+}
+
+/* Mobile touch improvements */
+@media (max-width: 768px) {
+  .dragHandle {
+    width: 32px;
+    height: 32px;
+    top: 0.75rem;
+    right: 0.75rem;
+  }
+
+  .dragIcon {
+    font-size: 1rem;
+  }
+
+  .bubbleCloseButton {
+    width: 32px;
+    height: 32px;
+    top: 0.75rem;
+    right: 0.75rem;
+    font-size: 1.1rem;
+  }
+}

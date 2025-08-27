@@ -3,64 +3,83 @@ import PropTypes from 'prop-types';
 import styles from './OnboardingModal.module.css';
 
 /**
- * Floating bubbles onboarding modal that moves across the page
+ * Floating bubbles onboarding - ONLY bubbles, no traditional modal
+ * Each bubble is a complete step that appears sequentially
+ * Features: Drag & Drop, Easy Close, Smart Positioning
  */
 const OnboardingModal = ({ isOpen, onClose, onDontShowAgain, isLightTheme = false }) => {
   const [currentStep, setCurrentStep] = useState(0);
-  const [isClosing, setIsClosing] = useState(false);
   const [bubblePositions, setBubblePositions] = useState([]);
   const [expandedBubble, setExpandedBubble] = useState(null);
+  const [completedSteps, setCompletedSteps] = useState(new Set());
+  const [draggedBubble, setDraggedBubble] = useState(null);
+  const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
 
-  // Reset closing state when modal opens
+  // Reset state when modal opens
   useEffect(() => {
     if (isOpen) {
-      setIsClosing(false);
-      // Initialize random bubble positions
-      const positions = Array.from({ length: 5 }, () => ({
-        x: Math.random() * 80 + 10, // 10% to 90% of viewport width
-        y: Math.random() * 80 + 10, // 10% to 90% of viewport height
-        delay: Math.random() * 2,
-        speed: 0.5 + Math.random() * 1
-      }));
-      setBubblePositions(positions);
+      setCurrentStep(0);
+      setCompletedSteps(new Set());
+      setExpandedBubble(null);
+      setDraggedBubble(null);
+
+      // Initialize first bubble position
+      const firstBubble = {
+        x: 50, // Center of screen
+        y: 50,
+        delay: 0,
+        speed: 0.1 + Math.random() * 0.2,
+        directionX: Math.random() > 0.5 ? 1 : -1,
+        directionY: Math.random() > 0.5 ? 1 : -1
+      };
+      setBubblePositions([firstBubble]);
     }
   }, [isOpen]);
 
-  // Animate bubbles
+  // Animate bubbles with proper boundary checking (only when not dragging)
   useEffect(() => {
-    if (!isOpen) return;
+    if (!isOpen || draggedBubble !== null) return;
 
     const interval = setInterval(() => {
-      setBubblePositions(prev => prev.map(bubble => {
-        let newX = bubble.x + bubble.speed * 0.1;
-        let newY = bubble.y + bubble.speed * 0.05;
+      setBubblePositions(prev => prev.map((bubble, index) => {
+        // Only animate if bubble is visible (step is active)
+        if (index > currentStep) return bubble;
 
-        // Bounce off edges
-        if (newX <= 5 || newX >= 95) {
+        // Calculate new positions with slower movement
+        let newX = bubble.x + (bubble.speed * 0.02) * bubble.directionX;
+        let newY = bubble.y + (bubble.speed * 0.015) * bubble.directionY;
+
+        // Bounce off edges with proper boundary checking
+        if (newX <= 20 || newX >= 80) {
           newX = bubble.x;
-          bubble.speed = -bubble.speed; // Reverse direction
+          bubble.directionX = -bubble.directionX;
         }
-        if (newY <= 5 || newY >= 95) {
+        if (newY <= 20 || newY >= 80) {
           newY = bubble.y;
-          bubble.speed = -bubble.speed; // Reverse direction
+          bubble.directionY = -bubble.directionY;
         }
+
+        // Ensure bubbles stay within safe bounds
+        newX = Math.max(20, Math.min(80, newX));
+        newY = Math.max(20, Math.min(80, newY));
 
         return {
           ...bubble,
           x: newX,
           y: newY,
-          speed: bubble.speed
+          directionX: bubble.directionX,
+          directionY: bubble.directionY
         };
       }));
-    }, 50);
+    }, 150);
 
     return () => clearInterval(interval);
-  }, [isOpen]);
+  }, [isOpen, currentStep, draggedBubble]);
 
   const steps = [
     {
       icon: '🚀',
-      title: 'Welcome to Aaron\'s Folly!',
+      title: 'Welcome to Aaron&apos;s Folly!',
       content: 'Get ready for a wild ride through the most indecisive naming adventure you\'ve ever seen. Buckle up!',
       features: [
         { icon: '🎯', title: 'Smart Suggestions', description: 'AI-powered name recommendations' },
@@ -87,186 +106,252 @@ const OnboardingModal = ({ isOpen, onClose, onDontShowAgain, isLightTheme = fals
     }
   ];
 
-  const nextStep = () => {
-    if (currentStep < steps.length - 1) {
-      setCurrentStep(currentStep + 1);
-    }
-  };
-
-  const prevStep = () => {
-    if (currentStep > 0) {
-      setCurrentStep(currentStep - 1);
-    }
-  };
-
-  const handleClose = () => {
-    setIsClosing(true);
-    setTimeout(() => {
-      setIsClosing(false);
-      onClose();
-    }, 400); // Match the animation duration
-  };
-
-  const handleDontShowAgain = () => {
-    setIsClosing(true);
-    setTimeout(() => {
-      setIsClosing(false);
-      onDontShowAgain();
-      onClose();
-    }, 400); // Match the animation duration
-  };
-
   const handleBubbleClick = (index) => {
-    setExpandedBubble(index);
-    setCurrentStep(index);
+    if (index === currentStep && !draggedBubble) {
+      setExpandedBubble(index);
+    }
   };
 
   const handleBubbleClose = () => {
     setExpandedBubble(null);
+
+    // Mark current step as completed
+    const newCompletedSteps = new Set(completedSteps);
+    newCompletedSteps.add(currentStep);
+    setCompletedSteps(newCompletedSteps);
+
+    // Move to next step or complete onboarding
+    if (currentStep < steps.length - 1) {
+      setCurrentStep(currentStep + 1);
+
+      // Add new bubble for next step
+      const newBubble = {
+        x: Math.random() * 60 + 20,
+        y: Math.random() * 60 + 20,
+        delay: 0,
+        speed: 0.1 + Math.random() * 0.2,
+        directionX: Math.random() > 0.5 ? 1 : -1,
+        directionY: Math.random() > 0.5 ? 1 : -1
+      };
+      setBubblePositions(prev => [...prev, newBubble]);
+    } else {
+      // All steps completed
+      onClose();
+    }
+  };
+
+  const handleDontShowAgain = () => {
+    onDontShowAgain();
+    onClose();
+  };
+
+  // Drag and Drop Handlers
+  const handleMouseDown = (e, index) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    const rect = e.currentTarget.getBoundingClientRect();
+    const offsetX = e.clientX - rect.left;
+    const offsetY = e.clientY - rect.top;
+
+    setDraggedBubble(index);
+    setDragOffset({ x: offsetX, y: offsetY });
+
+    // Add global mouse event listeners
+    document.addEventListener('mousemove', handleMouseMove);
+    document.addEventListener('mouseup', handleMouseUp);
+  };
+
+  const handleMouseMove = (e) => {
+    if (draggedBubble === null) return;
+    
+    const viewportWidth = window.innerWidth;
+    const viewportHeight = window.innerHeight;
+    
+    // Calculate new position based on mouse position and offset
+    let newX = ((e.clientX - dragOffset.x) / viewportWidth) * 100;
+    let newY = ((e.clientY - dragOffset.y) / viewportHeight) * 100;
+    
+    // Keep bubbles within safe bounds (5% to 95% of viewport)
+    newX = Math.max(5, Math.min(95, newX));
+    newY = Math.max(5, Math.min(95, newY));
+    
+    setBubblePositions(prev => prev.map((bubble, index) => 
+      index === draggedBubble 
+        ? { ...bubble, x: newX, y: newY }
+        : bubble
+    ));
+  };
+
+  const handleMouseUp = () => {
+    setDraggedBubble(null);
+    setDragOffset({ x: 0, y: 0 });
+    
+    // Remove global event listeners
+    document.removeEventListener('mousemove', handleMouseMove);
+    document.removeEventListener('mouseup', handleMouseUp);
+  };
+
+  // Touch handlers for mobile
+  const handleTouchStart = (e, index) => {
+    const touch = e.touches[0];
+    const rect = e.currentTarget.getBoundingClientRect();
+    const offsetX = touch.clientX - rect.left;
+    const offsetY = touch.clientY - rect.top;
+    
+    setDraggedBubble(index);
+    setDragOffset({ x: offsetX, y: offsetY });
+    
+    // Add global touch event listeners
+    document.addEventListener('touchmove', handleTouchMove, { passive: false });
+    document.addEventListener('touchend', handleTouchEnd);
+  };
+
+  const handleTouchMove = (e) => {
+    if (draggedBubble === null) return;
+    e.preventDefault(); // Prevent scrolling while dragging
+    
+    const touch = e.touches[0];
+    const viewportWidth = window.innerWidth;
+    const viewportHeight = window.innerHeight;
+    
+    let newX = ((touch.clientX - dragOffset.x) / viewportWidth) * 100;
+    let newY = ((touch.clientY - dragOffset.y) / viewportHeight) * 100;
+    
+    newX = Math.max(5, Math.min(95, newX));
+    newY = Math.max(5, Math.min(95, newY));
+    
+    setBubblePositions(prev => prev.map((bubble, index) => 
+      index === draggedBubble 
+        ? { ...bubble, x: newX, y: newY }
+        : bubble
+    ));
+  };
+
+  const handleTouchEnd = () => {
+    setDraggedBubble(null);
+    setDragOffset({ x: 0, y: 0 });
+    
+    document.removeEventListener('touchmove', handleTouchMove);
+    document.removeEventListener('touchend', handleTouchEnd);
   };
 
   if (!isOpen) return null;
 
-  const isFirstStep = currentStep === 0;
-  const isLastStep = currentStep === steps.length - 1;
-
   return (
     <div className={`${styles.overlay} ${isLightTheme ? styles.lightTheme : styles.darkTheme}`}>
-      {/* Content bubbles - each step in its own bubble */}
-      {steps.map((step, index) => (
-        <div
-          key={index}
-          className={`${styles.floatingBubble} ${styles.contentBubble} ${expandedBubble === index ? styles.expandedBubble : ''} ${currentStep === index ? styles.activeBubble : ''}`}
-          style={{
-            left: `${bubblePositions[index]?.x || 20 + index * 15}%`,
-            top: `${bubblePositions[index]?.y || 20 + index * 10}%`,
-            animationDelay: `${bubblePositions[index]?.delay || index * 0.5}s`,
-            animationDuration: `${3 + (bubblePositions[index]?.speed || 0.5)}s`
-          }}
-          onClick={() => handleBubbleClick(index)}
-          role="button"
-          tabIndex={0}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter' || e.key === ' ') {
-              e.preventDefault();
-              handleBubbleClick(index);
-            }
-          }}
-          aria-label={`Go to step ${index + 1}: ${step.title}`}
-        >
-          <div className={styles.bubbleContent}>
-            <div className={styles.bubbleIcon}>{step.icon}</div>
-            <h3 className={styles.bubbleTitle}>{step.title}</h3>
-            {expandedBubble === index && (
-              <>
-                <p className={styles.bubbleText}>{step.content}</p>
-                <div className={styles.bubbleFeatures}>
-                  {step.features.map((feature, idx) => (
-                    <div key={idx} className={styles.bubbleFeature}>
-                      <span className={styles.bubbleFeatureIcon}>{feature.icon}</span>
-                      <span className={styles.bubbleFeatureText}>{feature.title}</span>
-                    </div>
-                  ))}
-                </div>
-                <button
-                  className={styles.bubbleCloseButton}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleBubbleClose();
-                  }}
-                  aria-label="Close expanded bubble"
-                >
-                  ✕
-                </button>
-              </>
-            )}
-          </div>
-        </div>
-      ))}
+      {/* Only show bubbles for completed and current steps */}
+      {bubblePositions.slice(0, currentStep + 1).map((bubble, index) => {
+        const step = steps[index];
+        const isCompleted = completedSteps.has(index);
+        const isCurrent = index === currentStep;
+        const isExpanded = expandedBubble === index;
+        const isDragging = draggedBubble === index;
 
-      {/* Main modal for navigation */}
-      <div className={`${styles.modal} ${styles[`modal--${currentStep}`]} ${isClosing ? styles.closing : ''} ${isLightTheme ? styles.lightTheme : styles.darkTheme}`}>
-        <div className={styles.header}>
-          <div className={styles.stepIndicator}>
-            <span className={styles.stepNumber}>{currentStep + 1}</span>
-            <span className={styles.stepSeparator}>/</span>
-            <span className={styles.totalSteps}>{steps.length}</span>
-          </div>
-          <button
-            type="button"
-            className={styles.closeButton}
-            onClick={handleClose}
-            aria-label="Close onboarding"
+        return (
+          <div
+            key={index}
+            className={`${styles.floatingBubble} ${styles.contentBubble} ${
+              isExpanded ? styles.expandedBubble : ''
+            } ${isCurrent ? styles.activeBubble : ''} ${
+              isCompleted ? styles.completedBubble : ''
+            } ${isDragging ? styles.draggingBubble : ''}`}
+            style={{
+              left: `${bubble.x}%`,
+              top: `${bubble.y}%`,
+              animationDelay: `${bubble.delay}s`,
+              animationDuration: `${5 + (bubble.speed || 0.1) * 20}s`,
+              cursor: isDragging ? 'grabbing' : 'grab'
+            }}
+            onClick={() => handleBubbleClick(index)}
+            onMouseDown={(e) => handleMouseDown(e, index)}
+            onTouchStart={(e) => handleTouchStart(e, index)}
+            role="button"
+            tabIndex={0}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                handleBubbleClick(index);
+              }
+            }}
+            aria-label={`Step ${index + 1}: ${step.title} - Click to expand, drag to move`}
           >
-            ✕
-          </button>
-        </div>
+            {/* Drag Handle */}
+            <div className={styles.dragHandle}>
+              <span className={styles.dragIcon}>⋮⋮</span>
+            </div>
 
-        <div className={styles.content}>
-          <div className={styles.navigationContent}>
-            <h2 className={styles.navigationTitle}>Navigate the Bubbles</h2>
-            <p className={styles.navigationText}>
-              Click on the floating bubbles to expand and explore each step, or use the navigation below.
-            </p>
-            <div className={styles.bubbleNavigation}>
-              {steps.map((step, index) => (
-                <button
-                  key={index}
-                  className={`${styles.bubbleNavButton} ${currentStep === index ? styles.activeNavButton : ''}`}
-                  onClick={() => setCurrentStep(index)}
-                >
-                  {step.icon}
-                </button>
-              ))}
+            <div className={styles.bubbleContent}>
+              <div className={styles.bubbleIcon}>{step.icon}</div>
+              <h3 className={styles.bubbleTitle}>{step.title}</h3>
+              
+              {isExpanded && (
+                <>
+                  <p className={styles.bubbleText}>{step.content}</p>
+                  <div className={styles.bubbleFeatures}>
+                    {step.features.map((feature, idx) => (
+                      <div key={idx} className={styles.bubbleFeature}>
+                        <span className={styles.bubbleFeatureIcon}>{feature.icon}</span>
+                        <span className={styles.bubbleFeatureText}>{feature.title}</span>
+                      </div>
+                    ))}
+                  </div>
+                  
+                  {/* Action buttons */}
+                  <div className={styles.bubbleActions}>
+                    {currentStep < steps.length - 1 ? (
+                      <button
+                        className={styles.bubbleNextButton}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleBubbleClose();
+                        }}
+                        aria-label="Continue to next step"
+                      >
+                        Continue →
+                      </button>
+                    ) : (
+                      <button
+                        className={styles.bubbleFinishButton}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleBubbleClose();
+                        }}
+                        aria-label="Finish onboarding"
+                      >
+                        Get Started! 🎉
+                      </button>
+                    )}
+                    
+                    <button
+                      className={styles.bubbleDontShowButton}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleDontShowAgain();
+                      }}
+                      aria-label="Don't show onboarding again"
+                    >
+                      Don&apos;t show again
+                    </button>
+                  </div>
+
+                  {/* Close Button */}
+                  <button
+                    className={styles.bubbleCloseButton}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setExpandedBubble(null);
+                    }}
+                    aria-label="Close this bubble"
+                  >
+                    ✕
+                  </button>
+                </>
+              )}
             </div>
           </div>
-        </div>
-
-        <div className={styles.footer}>
-          <div className={styles.leftActions}>
-            {!isFirstStep && (
-              <button
-                type="button"
-                className={styles.secondaryButton}
-                onClick={prevStep}
-              >
-                ← Back
-              </button>
-            )}
-          </div>
-
-          <div className={styles.centerActions}>
-            {!isLastStep && (
-              <button
-                type="button"
-                className={styles.primaryButton}
-                onClick={nextStep}
-              >
-                Next →
-              </button>
-            )}
-            {isLastStep && (
-              <button
-                type="button"
-                className={styles.primaryButton}
-                onClick={handleClose}
-              >
-                Get Started!
-              </button>
-            )}
-          </div>
-
-          <div className={styles.rightActions}>
-            <button
-              type="button"
-              className={styles.dontShowButton}
-              onClick={handleDontShowAgain}
-            >
-              Don&apos;t show again
-            </button>
-          </div>
-        </div>
-      </div>
+        );
+      })}
     </div>
   );
 };

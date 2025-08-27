@@ -481,6 +481,8 @@ function App() {
         isLightTheme={isLightTheme}
         onThemeChange={toggleTheme}
         onShowOnboarding={() => setShowOnboarding(true)}
+        onCloseOnboarding={closeOnboarding}
+        isOnboardingOpen={showOnboarding}
       />
       <div id="main-content" className="main-content" tabIndex="-1">
         {/* Global error display */}

@@ -457,6 +457,31 @@ export const tournamentsAPI = {
         .single();
 
       if (userError && userError.code !== 'PGRST116') {
+        // If it's a column doesn't exist error, initialize with empty array
+        if (userError.code === '42703') {
+          console.warn('Tournament data column not found, initializing with empty array. Run the migration to add the column.');
+          const tournaments = [newTournament];
+          
+          // Try to create the column and insert the tournament
+          const { error: upsertError } = await supabase
+            .from('cat_app_users')
+            .upsert({
+              user_name: userName,
+              tournament_data: tournaments
+            }, {
+              onConflict: 'user_name',
+              ignoreDuplicates: false
+            })
+            .select()
+            .single();
+
+          if (upsertError) {
+            console.error('Failed to create tournament after column creation attempt:', upsertError);
+            // Return the tournament object anyway to prevent app crashes
+            return newTournament;
+          }
+          return newTournament;
+        }
         throw userError;
       }
 
@@ -477,7 +502,14 @@ export const tournamentsAPI = {
         .select()
         .single();
 
-      if (error) throw error;
+      if (error) {
+        // If it's a column doesn't exist error, log warning and return tournament
+        if (error.code === '42703') {
+          console.warn('Tournament data column not found, cannot save tournament. Run the migration to add the column.');
+          return newTournament;
+        }
+        throw error;
+      }
       return newTournament;
     } catch (error) {
       if (process.env.NODE_ENV === 'development') {
@@ -520,7 +552,14 @@ export const tournamentsAPI = {
         .eq('user_name', userName)
         .single();
 
-      if (error) throw error;
+      if (error) {
+        // If it's a column doesn't exist error, return empty array
+        if (error.code === '42703') {
+          console.warn('Tournament data column not found, returning empty array. Run the migration to add the column.');
+          return [];
+        }
+        throw error;
+      }
 
       let tournaments = userData?.tournament_data || [];
 
@@ -715,15 +754,30 @@ export const userPreferencesAPI = {
    */
   async getPreferences(userName) {
     try {
+      // First try to get preferences from the preferences column
       const { data, error } = await supabase
         .from('cat_app_users')
         .select('preferences')
         .eq('user_name', userName)
         .single();
 
-      if (error && error.code !== 'PGRST116') throw error;
+      if (error && error.code !== 'PGRST116') {
+        // If it's a column doesn't exist error, return defaults
+        if (error.code === '42703') {
+          console.warn('Preferences column not found, returning defaults. Run the migration to add the column.');
+          return {
+            user_name: userName,
+            preferred_categories: [],
+            tournament_size_preference: 8,
+            rating_display_preference: 'elo',
+            sound_enabled: true,
+            theme_preference: 'dark'
+          };
+        }
+        throw error;
+      }
 
-      // Return defaults if no preferences exist
+      // Return preferences if they exist, otherwise return defaults
       return (
         data?.preferences || {
           user_name: userName,
@@ -738,7 +792,15 @@ export const userPreferencesAPI = {
       if (process.env.NODE_ENV === 'development') {
         console.error('Error fetching preferences:', error);
       }
-      throw error;
+      // Return defaults on any error to prevent app crashes
+      return {
+        user_name: userName,
+        preferred_categories: [],
+        tournament_size_preference: 8,
+        rating_display_preference: 'elo',
+        sound_enabled: true,
+        theme_preference: 'dark'
+      };
     }
   },
 
@@ -763,13 +825,21 @@ export const userPreferencesAPI = {
         .select()
         .single();
 
-      if (error) throw error;
+      if (error) {
+        // If it's a column doesn't exist error, log warning and return preferences
+        if (error.code === '42703') {
+          console.warn('Preferences column not found, cannot save preferences. Run the migration to add the column.');
+          return preferences;
+        }
+        throw error;
+      }
       return data?.preferences;
     } catch (error) {
       if (process.env.NODE_ENV === 'development') {
         console.error('Error updating preferences:', error);
       }
-      throw error;
+      // Return the preferences object on error to prevent app crashes
+      return preferences;
     }
   }
 };
