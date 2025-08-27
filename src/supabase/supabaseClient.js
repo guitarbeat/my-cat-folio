@@ -684,43 +684,15 @@ export const tournamentsAPI = {
       // Update the cat_name_ratings table to track selection count and tournament data
       const updatePromises = selectedNames.map(async (nameObj) => {
         try {
-          // * First try to update existing row without reading (avoids 406 selects)
-          const { data: updatedRows, error: updateError } = await supabase
-            .from('cat_name_ratings')
-            .update({
-              last_selected_at: now,
-              updated_at: now
-            })
-            .eq('user_name', userName)
-            .eq('name_id', nameObj.id)
-            .select('name_id');
+          // Use atomic server-side increment to avoid 409s and RLS reads
+          const { error: rpcError } = await supabase.rpc('increment_selection', {
+            p_user_name: userName,
+            p_name_id: nameObj.id
+          });
 
-          if (updateError) {
-            console.error('Update error for', userName, nameObj.id, ':', updateError);
-            // Fall through to insert attempt
-          }
-
-          // If no existing row was updated, insert a new one
-          if (!updatedRows || updatedRows.length === 0) {
-            const { error: insertError } = await supabase
-              .from('cat_name_ratings')
-              .insert({
-                user_name: userName,
-                name_id: nameObj.id,
-                rating: 1500,
-                wins: 0,
-                losses: 0,
-                tournament_selections: 1,
-                selection_frequency: 1,
-                first_selected_at: now,
-                last_selected_at: now,
-                updated_at: now
-              });
-
-            if (insertError) {
-              console.error('Insert error for', userName, nameObj.id, ':', insertError);
-              return { error: insertError };
-            }
+          if (rpcError) {
+            console.error('RPC increment_selection error for', userName, nameObj.id, ':', rpcError);
+            return { error: rpcError };
           }
 
           return { error: null };

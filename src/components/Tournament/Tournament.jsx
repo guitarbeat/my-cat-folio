@@ -408,10 +408,15 @@ function TournamentContent({ onComplete, existingRatings = {}, names = [], onVot
     isError
   } = tournament;
 
-  // * Debug logging
-  console.log('[DEV] 🎮 Tournament: Received names prop:', names);
-  console.log('[DEV] 🎮 Tournament: Randomized names:', randomizedNames);
-  console.log('[DEV] 🎮 Tournament: Current match:', currentMatch);
+  // * Debug logging (development only, less frequent)
+  if (process.env.NODE_ENV === 'development') {
+    // eslint-disable-next-line no-console
+    console.debug('[DEV] 🎮 Tournament: render', {
+      namesCount: names?.length || 0,
+      randomizedCount: randomizedNames?.length || 0,
+      hasMatch: !!currentMatch
+    });
+  }
 
   // * Rate limiting for voting
   const lastVoteTimeRef = useRef(0);

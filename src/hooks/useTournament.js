@@ -18,8 +18,11 @@ export function useTournament({
   existingRatings = {},
   onComplete
 }) {
-  console.log('[DEV] 🎮 useTournament: Hook called with names:', names);
-  console.log('[DEV] 🎮 useTournament: Hook called with existingRatings:', existingRatings);
+  if (process.env.NODE_ENV === 'development') {
+    // * Log once per mount for sanity; avoid flooding on every render
+    // eslint-disable-next-line no-console
+    console.debug('[DEV] 🎮 useTournament: mount');
+  }
   
   const { userName } = useUserSession();
 
@@ -152,13 +155,15 @@ export function useTournament({
 
   // * Validate names array
   useEffect(() => {
-    if (!Array.isArray(names) || names.length < 2) {
-      console.error('Invalid names array:', names);
-      updateTournamentState({ isError: true });
-    } else {
-      updateTournamentState({ isError: false });
+    const invalid = !Array.isArray(names) || names.length < 2;
+    if (invalid !== isError) {
+      if (invalid && process.env.NODE_ENV === 'development') {
+        // eslint-disable-next-line no-console
+        console.warn('[DEV] 🎮 useTournament: Invalid names array detected');
+      }
+      updateTournamentState({ isError: invalid });
     }
-  }, [names, updateTournamentState]);
+  }, [names, isError, updateTournamentState]);
 
   // * Cleanup on unmount
   useEffect(() => {
