@@ -23,7 +23,7 @@ function useAudioManager() {
   const [volume, setVolume] = useState({ music: 0.2, effects: 0.3 });
   const [audioError, setAudioError] = useState(null);
   const [currentTrack, setCurrentTrack] = useState(0);
-  
+
   const audioRef = useRef(null);
   const musicRef = useRef(null);
 
@@ -103,7 +103,7 @@ function useAudioManager() {
         if (musicRef.current) {
           musicRef.current.pause();
           await new Promise(resolve => setTimeout(resolve, 50));
-          
+
           musicRef.current.src = musicTracks[currentTrack].path;
           musicRef.current.volume = volume.music;
           musicRef.current.loop = true;
@@ -373,11 +373,11 @@ function RoundTransition({ showRoundTransition, nextRoundNumber }) {
 // * Main tournament content component
 function TournamentContent({ onComplete, existingRatings = {}, names = [], onVote }) {
   const { showSuccess, showError } = useToast();
-  
+
   // * Custom hooks
   const audioManager = useAudioManager();
   const tournamentState = useTournamentState(names, existingRatings, onComplete, onVote);
-  
+
   const {
     randomizedNames,
     selectedOption,

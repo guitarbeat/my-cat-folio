@@ -23,7 +23,7 @@ export function useTournament({
     // eslint-disable-next-line no-console
     console.debug('[DEV] 🎮 useTournament: mount');
   }
-  
+
   const { userName } = useUserSession();
 
   // * Tournament state management
@@ -100,7 +100,7 @@ export function useTournament({
     lastInitKeyRef.current = namesKey;
     const nameStrings = names.map((n) => n.name);
     const newSorter = new PreferenceSorter(nameStrings);
-    
+
     // * Calculate estimated matches
     const estimatedMatches = names.length === 2 ? 1 : Math.ceil(names.length * Math.log2(names.length));
 
@@ -345,9 +345,9 @@ export function useTournament({
 
     } catch (error) {
       console.error('Vote handling error:', error);
-      updateTournamentState({ 
-        isError: true, 
-        isTransitioning: false 
+      updateTournamentState({
+        isError: true,
+        isTransitioning: false
       });
     }
   }, [
@@ -376,14 +376,14 @@ export function useTournament({
     updateTournamentState({ isTransitioning: true });
 
     const lastVote = persistentState.matchHistory[persistentState.matchHistory.length - 1];
-    
+
     updateTournamentState({
       currentMatch: lastVote.match,
       currentMatchNumber: lastVote.matchNumber
     });
 
-    updatePersistentState({ 
-      matchHistory: persistentState.matchHistory.slice(0, -1) 
+    updatePersistentState({
+      matchHistory: persistentState.matchHistory.slice(0, -1)
     });
 
     if (sorter) {
@@ -465,14 +465,14 @@ function convertVoteToOutcome(result) {
     case 'right':
       return { voteValue: 1, eloOutcome: 'right' };
     case 'both':
-      return { 
-        voteValue: Math.random() * 0.1 - 0.05, 
-        eloOutcome: 'both' 
+      return {
+        voteValue: Math.random() * 0.1 - 0.05,
+        eloOutcome: 'both'
       };
     case 'none':
-      return { 
-        voteValue: Math.random() * 0.06 - 0.03, 
-        eloOutcome: 'none' 
+      return {
+        voteValue: Math.random() * 0.06 - 0.03,
+        eloOutcome: 'none'
       };
     default:
       return { voteValue: 0, eloOutcome: 'none' };
