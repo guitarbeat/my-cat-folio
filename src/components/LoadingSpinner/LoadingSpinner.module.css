@@ -46,8 +46,9 @@
 
 /* Text styles */
 .text {
+  composes: text-base from "../../styles/global.css";
   margin-top: 1.5rem;
-  color: rgb(255 255 255 / 95%);
+  color: var(--text-primary);
   letter-spacing: 0.05em;
   text-shadow: 0 2px 4px rgb(0 0 0 / 20%);
 }
@@ -76,11 +77,11 @@
   margin: 10px;
   font-size: 15px;
   font-weight: 300;
-  color: gray;
+  color: var(--text-tertiary);
 }
 
 .attribution a {
-  color: gray;
+  color: var(--text-tertiary);
   text-decoration: underline;
 }
 

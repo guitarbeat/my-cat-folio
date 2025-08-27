@@ -89,14 +89,10 @@
 }
 
 .statCard {
-  composes: cardinteractive from "../../styles/global.css";
+  composes: card--interactive from "../../styles/global.css";
   position: relative;
   min-width: 140px;
-  padding: 1.5rem;
   text-align: center;
-  background: var(--surface-color);
-  border: 1px solid var(--border-color);
-  border-radius: 0.75rem;
   transition: transform 0.2s ease;
 }
 
@@ -134,13 +130,10 @@
 }
 
 .startNewButton {
-  composes: btnprimary from "../../styles/global.css";
+  composes: btn btn--primary from "../../styles/global.css";
   display: inline-flex;
   gap: var(--space-2);
   align-items: center;
-  padding: var(--space-3) var(--space-6);
-  font-size: var(--text-base);
-  font-weight: 500;
 }
 
 .startNewButton:hover {
@@ -204,7 +197,7 @@
 }
 
 .tournamentBracket {
-  composes: cardinteractive from "../../styles/global.css";
+  composes: card--interactive from "../../styles/global.css";
   padding: var(--space-8);
   margin: var(--space-8) 0;
   overflow-x: auto;
@@ -372,7 +365,7 @@
 
 /* Tournament Bracket */
 .bracketContainer {
-  composes: cardinteractive from "../../styles/global.css";
+  composes: card--interactive from "../../styles/global.css";
   padding: var(--space-4);
   margin-bottom: var(--space-6);
   overflow-x: auto;
@@ -387,7 +380,7 @@
 }
 
 .actionButton {
-  composes: btnprimary from "../../styles/global.css";
+  composes: btn btn--primary from "../../styles/global.css";
   min-width: 200px;
 }
 

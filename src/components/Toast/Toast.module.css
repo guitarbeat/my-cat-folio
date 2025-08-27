@@ -7,7 +7,7 @@
   z-index: var(--z-toast); /* Use CSS custom property for toast layer */
   min-width: 300px;
   max-width: 400px;
-  background: #fff;
+  background: var(--card-background);
   border-left: 4px solid;
   border-radius: 8px;
   box-shadow: 0 4px 12px rgb(0 0 0 / 15%);
@@ -23,27 +23,27 @@
 
 /* Type-specific styling */
 .success {
-  color: #065f46;
-  background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
-  border-left-color: #10b981;
+  color: var(--success-700);
+  background: var(--success-50);
+  border-left-color: var(--success-500);
 }
 
 .error {
-  color: #991b1b;
-  background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
-  border-left-color: #ef4444;
+  color: var(--error-700);
+  background: var(--error-50);
+  border-left-color: var(--error-500);
 }
 
 .warning {
-  color: #92400e;
-  background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
-  border-left-color: #f59e0b;
+  color: var(--warning-700);
+  background: var(--warning-50);
+  border-left-color: var(--warning-500);
 }
 
 .info {
-  color: #1e40af;
-  background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
-  border-left-color: #3b82f6;
+  color: var(--secondary-700);
+  background: var(--secondary-50);
+  border-left-color: var(--secondary-500);
 }
 
 /* Content layout */
@@ -68,22 +68,10 @@
 }
 
 .dismissButton {
-  display: flex;
-  flex-shrink: 0;
-  align-items: center;
-  justify-content: center;
-  width: 24px;
-  height: 24px;
-  padding: 0;
-  font-size: 1.2em;
-  font-weight: bold;
-  line-height: 1;
+  composes: btn btn--icon from "../../styles/global.css";
   color: inherit;
-  cursor: pointer;
   background: rgb(255 255 255 / 80%);
   border: 1px solid currentcolor;
-  border-radius: 50%;
-  transition: all 0.2s ease;
 }
 
 .dismissButton:hover {
