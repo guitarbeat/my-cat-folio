@@ -1,7 +1,9 @@
-/* Additional global styles to prevent scrollbars */
+/* Additional global styles to ensure proper scrolling */
 :global(body.login-page) {
-  /* Remove scrollbar restrictions - allow normal scrolling */
-  overflow: auto;
+  /* Ensure body can scroll normally */
+  overflow: auto !important;
+  height: auto !important;
+  min-height: 100vh !important;
 }
 
 :global(body.login-page::-webkit-scrollbar) {
@@ -9,13 +11,20 @@
   display: auto;
 }
 
+/* Ensure html element can also scroll */
+:global(html.login-page) {
+  overflow: auto !important;
+  height: auto !important;
+}
+
 /* Login Component - Centered Hero Design */
 
 .loginWrapper {
   position: relative;
-  width: 100vw;
-  height: 100vh;
-  overflow: hidden;
+  width: 100%;
+  min-height: 100vh;
+  overflow: visible;
+  padding-top: 65px; /* Account for navbar height */
 }
 
 .backgroundContainer {
@@ -52,9 +61,10 @@
   gap: 3rem;
   align-items: center;
   justify-content: center;
-  min-height: 100vh;
+  min-height: calc(100vh - 65px); /* Account for navbar height */
   padding: 2rem;
   animation: fadeInScale 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+  overflow: visible;
 }
 
 /* Hero Content Section */
@@ -490,9 +500,13 @@
 
 /* Responsive Design */
 @media (width <= 768px) {
+  .loginWrapper {
+    padding-top: 60px; /* Slightly less navbar height on mobile */
+  }
+  
   .heroContainer {
     gap: 2rem;
-    min-height: calc(100vh - 60px);
+    min-height: calc(100vh - 60px); /* Account for mobile navbar height */
     padding: 1rem;
   }
 
@@ -530,8 +544,13 @@
 }
 
 @media (width <= 480px) {
+  .loginWrapper {
+    padding-top: 55px; /* Even less navbar height on small mobile */
+  }
+  
   .heroContainer {
     gap: 1.5rem;
+    min-height: calc(100vh - 55px); /* Account for small mobile navbar height */
     padding: 0.5rem;
   }
 

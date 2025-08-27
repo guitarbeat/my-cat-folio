@@ -22,13 +22,15 @@ function Login({ onLogin }) {
   const containerRef = useRef(null);
   const typingTimeoutRef = useRef(null);
 
-  // Add login-page class to body when component mounts
+  // Add login-page class to body and html when component mounts
   useEffect(() => {
     document.body.classList.add('login-page');
+    document.documentElement.classList.add('login-page');
 
     // Remove class when component unmounts
     return () => {
       document.body.classList.remove('login-page');
+      document.documentElement.classList.remove('login-page');
     };
   }, []);
 

@@ -1,0 +1,233 @@
+/* * Profile Name List Container */
+.container {
+  margin-bottom: 2rem;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.sectionTitle {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--text-primary, #111827);
+  margin: 0;
+}
+
+.selectionInfo {
+  background: var(--selection-bg, #eff6ff);
+  color: var(--selection-text, #1e40af);
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  border: 1px solid var(--selection-border, #bfdbfe);
+}
+
+/* * Names Grid Layout */
+.namesGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+.nameWrapper {
+  transition: transform 0.2s ease;
+}
+
+.nameWrapper:hover {
+  transform: translateY(-2px);
+}
+
+/* * Hidden Name Styles */
+.hiddenName {
+  opacity: 0.6;
+}
+
+.hiddenNameCard {
+  border: 2px dashed var(--hidden-border, #d1d5db);
+  background: var(--hidden-bg, #f9fafb);
+}
+
+/* * Loading States */
+.loadingGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+/* * Empty State */
+.emptyState {
+  text-align: center;
+  padding: 3rem 2rem;
+  background: var(--empty-bg, #f9fafb);
+  border-radius: 8px;
+  border: 2px dashed var(--empty-border, #d1d5db);
+}
+
+.emptyTitle {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--text-primary, #111827);
+  margin: 0 0 0.75rem 0;
+}
+
+.emptyMessage {
+  font-size: 1rem;
+  color: var(--text-secondary, #6b7280);
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* * Responsive Design */
+@media (max-width: 768px) {
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+
+  .sectionTitle {
+    font-size: 1.25rem;
+  }
+
+  .namesGrid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .loadingGrid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .emptyState {
+    padding: 2rem 1rem;
+  }
+
+  .emptyTitle {
+    font-size: 1.125rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    margin-bottom: 1.5rem;
+  }
+
+  .header {
+    margin-bottom: 1rem;
+  }
+
+  .namesGrid {
+    gap: 0.75rem;
+  }
+
+  .loadingGrid {
+    gap: 0.75rem;
+  }
+
+  .selectionInfo {
+    font-size: 0.8125rem;
+    padding: 0.375rem 0.75rem;
+  }
+}
+
+/* * Dark Theme Support */
+@media (prefers-color-scheme: dark) {
+  .sectionTitle {
+    --text-primary: #f9fafb;
+  }
+
+  .selectionInfo {
+    --selection-bg: #1e3a8a;
+    --selection-text: #dbeafe;
+    --selection-border: #3b82f6;
+  }
+
+  .hiddenNameCard {
+    --hidden-border: #4b5563;
+    --hidden-bg: #1f2937;
+  }
+
+  .emptyState {
+    --empty-bg: #1f2937;
+    --empty-border: #374151;
+  }
+
+  .emptyTitle {
+    --text-primary: #f9fafb;
+  }
+
+  .emptyMessage {
+    --text-secondary: #9ca3af;
+  }
+}
+
+/* * Light Theme Variables */
+.sectionTitle {
+  --text-primary: #111827;
+}
+
+.selectionInfo {
+  --selection-bg: #eff6ff;
+  --selection-text: #1e40af;
+  --selection-border: #bfdbfe;
+}
+
+.hiddenNameCard {
+  --hidden-border: #d1d5db;
+  --hidden-bg: #f9fafb;
+}
+
+.emptyState {
+  --empty-bg: #f9fafb;
+  --empty-border: #d1d5db;
+}
+
+.emptyTitle {
+  --text-primary: #111827;
+}
+
+.emptyMessage {
+  --text-secondary: #6b7280;
+}
+
+/* * High Contrast Mode Support */
+@media (prefers-contrast: high) {
+  .hiddenNameCard {
+    border-width: 3px;
+  }
+
+  .emptyState {
+    border-width: 3px;
+  }
+
+  .selectionInfo {
+    border-width: 2px;
+  }
+}
+
+/* * Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  .nameWrapper:hover {
+    transform: none;
+  }
+}
+
+/* * Print Styles */
+@media print {
+  .namesGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+
+  .nameWrapper:hover {
+    transform: none;
+  }
+}
