@@ -140,7 +140,7 @@ function useUserSession() {
 
       const trimmedName = name.trim();
 
-      // Create/update user in cat_app_users table
+      // Create/update user in cat_app_users table (basic user authentication)
       const { error: upsertError } = await supabase.from('cat_app_users').upsert(
         {
           user_name: trimmedName,

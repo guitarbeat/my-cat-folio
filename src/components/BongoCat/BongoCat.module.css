@@ -31,6 +31,7 @@
   transition:
     top 0.2s ease-out,
     opacity 0.3s ease;
+  z-index: 10; /* Ensure BongoCat is above background but below content */
 }
 
 .bongoContainerPositioned {
@@ -44,6 +45,7 @@
   transition:
     top 0.2s ease-out,
     opacity 0.3s ease;
+  z-index: 10; /* Ensure BongoCat is above background but below content */
 }
 
 .bongoContainerVisible {
@@ -101,201 +103,196 @@
 }
 
 .ears.fill .ear:last-child {
-  top: calc(1.7rem * var(--scale));
-  left: calc(-0.5rem * var(--scale));
-  border-bottom: calc(10rem * var(--scale)) solid var(--cat-bg);
+  top: calc(1.2rem * var(--scale));
+  left: calc(0.4rem * var(--scale));
+  border-bottom: calc(8rem * var(--scale)) solid var(--cat-bg);
 }
 
 /* Outline variant */
 .ears.outline .ear:first-child {
+  top: calc(1.2rem * var(--scale));
+  left: calc(0.4rem * var(--scale));
   border-bottom: calc(8rem * var(--scale)) solid var(--cat-outline);
 }
 
 .ears.outline .ear:last-child {
-  border-bottom: calc(10rem * var(--scale)) solid var(--cat-outline);
+  top: calc(1.2rem * var(--scale));
+  left: calc(0.4rem * var(--scale));
+  border-bottom: calc(8rem * var(--scale)) solid var(--cat-outline);
 }
 
 /* Face */
 .face {
   top: calc(20rem * var(--scale));
-  left: calc(17rem * var(--scale));
-  width: calc(70rem * var(--scale));
+  left: calc(15rem * var(--scale));
+  width: calc(40rem * var(--scale));
+  height: calc(30rem * var(--scale));
+  background: var(--cat-bg);
+  border: var(--linesize) solid var(--cat-outline);
+  border-radius: 50%;
 }
 
+/* Eyes */
 .eyes {
-  display: flex;
+  top: calc(8rem * var(--scale));
+  left: calc(8rem * var(--scale));
+  width: calc(24rem * var(--scale));
+  height: calc(12rem * var(--scale));
 }
 
 .eye {
-  position: relative;
-  display: inline-block;
-  width: calc(3rem * var(--scale));
-  height: calc(3rem * var(--scale));
-  background: #fff; /* White eyes for visibility */
+  position: absolute;
+  top: 0;
+  width: calc(8rem * var(--scale));
+  height: calc(8rem * var(--scale));
+  background: white;
+  border: var(--linesize) solid var(--cat-outline);
   border-radius: 50%;
-  animation: blink 5s ease infinite;
 }
 
-.eyes .eye:first-child {
-  margin-right: calc(20rem * var(--scale));
+.eye:first-child {
+  left: 0;
 }
 
+.eye:last-child {
+  right: 0;
+}
+
+/* Mouth */
 .mouth {
-  top: calc(1rem * var(--scale));
-  left: calc(6.5rem * var(--scale));
+  top: calc(18rem * var(--scale));
+  left: calc(12rem * var(--scale));
+  width: calc(16rem * var(--scale));
+  height: calc(8rem * var(--scale));
 }
 
 .uu {
-  position: relative;
-}
-
-.uu::before,
-.uu::after {
-  display: inline-block;
-  width: calc(4rem * var(--scale));
-  height: calc(1.5rem * var(--scale));
-  content: "";
-  border: var(--cat-outline) solid var(--linesize);
-  border-color: var(--border-color); /* Use theme border color */
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: var(--linesize) solid var(--cat-outline);
   border-top: none;
-  border-radius: 0 0 50% 50% / 0 0 100% 100%;
-}
-
-.uu::after {
-  margin-left: calc(-0.9rem * var(--scale));
+  border-radius: 0 0 50% 50%;
+  background: var(--cat-bg);
 }
 
 /* Paws */
 .paws {
-  top: 70%;
+  position: absolute;
   left: 50%;
-  width: calc(80rem * var(--scale));
   transform: translateX(-50%);
-  transform-origin: 50% 0%;
+  display: flex;
+  gap: calc(2rem * var(--scale));
 }
 
-.paws.up .paw {
-  width: calc(15rem * var(--scale));
-  height: calc(14rem * var(--scale));
+.paws.up {
+  top: calc(65rem * var(--scale));
+}
+
+.paws.down {
+  top: calc(75rem * var(--scale));
+}
+
+.paw {
+  position: relative;
+  width: calc(12rem * var(--scale));
+  height: calc(12rem * var(--scale));
+}
+
+.palm {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
   background: var(--cat-bg);
-  border-right: var(--linesize) solid var(--cat-outline);
-  border-bottom: var(--linesize) solid var(--cat-outline);
-  border-radius: 0 0 50% 50% / 0 0 70% 70%;
-  box-shadow: 0 1px 4px rgb(0 0 0 / 30%);
-  transform: rotate(150deg);
-  transform-origin: 50% 0%;
-}
-
-.paws.up .paw .palm {
-  top: calc(4rem * var(--scale));
-  left: calc(6rem * var(--scale));
-  width: calc(4rem * var(--scale));
-  height: calc(4rem * var(--scale));
-  background: var(--toebean);
+  border: var(--linesize) solid var(--cat-outline);
   border-radius: 50%;
-  box-shadow: inset 0 -1px 2px rgb(0 0 0 / 20%);
 }
 
-.paws.up .paw .bean {
-  top: calc(9.5rem * var(--scale));
-  left: calc(7rem * var(--scale));
-  width: calc(2.5rem * var(--scale));
-  height: calc(2.5rem * var(--scale));
+.bean {
+  position: absolute;
+  width: calc(3rem * var(--scale));
+  height: calc(3rem * var(--scale));
   background: var(--toebean);
+  border: var(--linesize) solid var(--cat-outline);
   border-radius: 50%;
-  box-shadow: inset 0 -1px 2px rgb(0 0 0 / 20%);
 }
 
-.paws.up .paw .bean:first-child {
-  top: calc(8rem * var(--scale));
+.bean:first-child {
+  top: calc(2rem * var(--scale));
+  left: calc(2rem * var(--scale));
+}
+
+.bean:nth-child(2) {
+  top: calc(2rem * var(--scale));
+  left: calc(5rem * var(--scale));
+}
+
+.bean:last-child {
+  top: calc(5rem * var(--scale));
   left: calc(3.5rem * var(--scale));
 }
 
-.paws.up .paw .bean:last-child {
-  top: calc(8rem * var(--scale));
-  left: calc(10.5rem * var(--scale));
+/* Animation for paws */
+.paws.up .paw {
+  animation: pawUp 0.3s ease-out;
 }
 
 .paws.down .paw {
-  width: calc(15rem * var(--scale));
-  height: calc(13rem * var(--scale));
-  margin-top: calc(-0.5rem * var(--scale));
-  background: var(--cat-bg);
-  border-right: var(--linesize) solid var(--cat-outline);
-  border-bottom: var(--linesize) solid var(--cat-outline);
-  border-left: var(--linesize) solid var(--cat-outline);
-  border-radius: 0 0 50% 50% / 0 0 80% 80%;
-  box-shadow: 0 1px 4px rgb(0 0 0 / 30%);
-  transform: rotate(15deg);
-  transform-origin: 50% 0%;
+  animation: pawDown 0.3s ease-out;
 }
 
-.paws.down .paw::before {
-  position: absolute;
-  top: 0;
-  right: 0;
-  display: block;
-  width: 100%;
-  height: calc(3rem * var(--scale));
-  content: "";
-  background: var(--cat-bg);
-  border-right: var(--linesize) solid var(--cat-outline);
-  transform: translate(calc(1rem * var(--scale)), -90%);
-}
-
-.paws.down .paw:first-child {
-  left: calc(16.5rem * var(--scale));
-}
-
-.paws .paw:first-child {
-  left: calc(14rem * var(--scale));
-}
-
-.paws .paw:last-child {
-  left: calc(65rem * var(--scale));
-}
-
-/* Animations */
-@keyframes blink {
+@keyframes pawUp {
   0% {
-    transform: scaleY(1);
+    transform: translateY(calc(10rem * var(--scale)));
   }
-
-  3% {
-    transform: scaleY(0.1);
-  }
-
-  6% {
-    transform: scaleY(1);
-  }
-
   100% {
-    transform: scaleY(1);
+    transform: translateY(0);
   }
 }
 
-/* Helper class for BongoCat container with positioning is now handled in-component */
-.bongoContainer {
-  position: absolute;
-  top: 0;
-  left: 50%;
-  z-index: 20; /* Ensure cat stays above other elements */
-  width: 180px;
-  max-width: 100%;
-  aspect-ratio: 1;
-  pointer-events: none;
-  transform: translateX(-50%);
-  transition:
-    top 0.2s ease-out,
-    opacity 0.3s ease;
+@keyframes pawDown {
+  0% {
+    transform: translateY(calc(-10rem * var(--scale)));
+  }
+  100% {
+    transform: translateY(0);
+  }
 }
 
-/* No longer needed since we're using a different approach for the paws */
+/* Hover effects */
+.container:hover .head {
+  transform: scale(1.05);
+  transition: transform 0.2s ease;
+}
 
-/* .pawsContainer {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
-} */
+.container:hover .face {
+  transform: scale(1.05);
+  transition: transform 0.2s ease;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .bongoContainer,
+  .bongoContainerPositioned {
+    width: 140px; /* Smaller on mobile */
+  }
+  
+  .container {
+    transform: scale(calc(var(--cat-size) * 0.8)); /* Scale down on mobile */
+  }
+}
+
+@media (max-width: 480px) {
+  .bongoContainer,
+  .bongoContainerPositioned {
+    width: 120px; /* Even smaller on small mobile */
+  }
+  
+  .container {
+    transform: scale(calc(var(--cat-size) * 0.7)); /* Scale down more on small mobile */
+  }
+}

@@ -187,6 +187,14 @@ dist
 
 # Testing
 /coverage
+/tests/debug/*.tmp
+/tests/debug/*.html
+/tests/debug/*.js
+*.test.html
+*.test.js
+*.debug.html
+*.debug.js
+check-*.sql
 
 # Production
 /build

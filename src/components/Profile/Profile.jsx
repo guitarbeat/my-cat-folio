@@ -643,7 +643,7 @@ const Profile = ({ userName, onStartNewTournament }) => {
           )
         `);
 
-      // Since cat_users table might not exist, we'll use cat_name_ratings instead
+      // Get user data from cat_name_ratings (consolidated schema)
       const { data: allUsers } = await supabase
         .from('cat_name_ratings')
         .select('user_name')

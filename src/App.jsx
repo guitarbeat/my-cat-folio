@@ -467,6 +467,9 @@ function App() {
         enableHover={true}
       />
 
+      {/* Always present Login component for onboarding to bounce off */}
+      <Login onLogin={login} />
+
       <NavBar
         view={view}
         setView={setView}
@@ -482,22 +485,19 @@ function App() {
         {error && (
           <ErrorDisplay
             errors={error}
-            onRetry={(error) => {
-              // Implement retry logic based on error context
-              if (error.context.includes('Tournament')) {
-                window.location.reload();
-              }
-            }}
-            onDismiss={clearError}
-            onClearAll={() => {}} // No clearAll for single error
-            showDetails={process.env.NODE_ENV === 'development'}
-            className="global-error-display"
+            onDismiss={() => setError(null)}
+            onRetry={() => window.location.reload()}
           />
         )}
 
-        <Suspense fallback={<LoadingSpinner size="large" text="Loading..." />}>
-          {renderMainContent()}
-        </Suspense>
+        {/* Main content area */}
+        {isLoggedIn ? (
+          <ErrorBoundary>
+            {renderMainContent()}
+          </ErrorBoundary>
+        ) : (
+          <div className="login-placeholder" />
+        )}
       </div>
 
       {isTournamentLoading && (

@@ -420,15 +420,15 @@ function useSupabaseStorage(userName = '') {
           )
           .subscribe(),
 
-        // User preferences changes (now in cat_users)
+        // User preferences changes (now in cat_app_users)
         supabase
-          .channel('cat_users_preferences_changes')
+          .channel('cat_app_users_preferences_changes')
           .on(
             'postgres_changes',
             {
               event: '*',
               schema: 'public',
-              table: 'cat_users',
+              table: 'cat_app_users',
               filter: `user_name=eq.${userName}`
             },
             fetchUserPreferences

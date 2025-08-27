@@ -237,16 +237,15 @@ export const ratingsAPI = {
   },
 
   /**
-   * Get rating history for a user
+   * Get rating history for a user from the consolidated cat_name_ratings table
    */
   async getRatingHistory(userName, nameId = null, limit = 20) {
     try {
       let query = supabase
-        .from('cat_rating_history')
-        .select('*')
+        .from('cat_name_ratings')
+        .select('rating_history')
         .eq('user_name', userName)
-        .order('timestamp', { ascending: false })
-        .limit(limit);
+        .not('rating_history', 'is', null);
 
       if (nameId) {
         query = query.eq('name_id', nameId);
@@ -255,7 +254,14 @@ export const ratingsAPI = {
       const { data, error } = await query;
       if (error) throw error;
 
-      return data || [];
+      // Extract and flatten rating history from JSONB
+      const allHistory = data
+        ?.map(item => item.rating_history || [])
+        .flat()
+        .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
+        .slice(0, limit) || [];
+
+      return allHistory;
     } catch (error) {
       if (process.env.NODE_ENV === 'development') {
         console.error('Error fetching rating history:', error);
@@ -282,7 +288,20 @@ export const ratingsAPI = {
         .eq('id', nameId)
         .single();
 
-      const { error } = await supabase.from('cat_rating_history').insert({
+      // Get existing rating data to update the rating_history JSONB column
+      const { data: existingRating, error: fetchError } = await supabase
+        .from('cat_name_ratings')
+        .select('rating_history')
+        .eq('user_name', userName)
+        .eq('name_id', nameId)
+        .single();
+
+      if (fetchError && fetchError.code !== 'PGRST116') {
+        throw fetchError;
+      }
+
+      // Prepare new history entry
+      const newHistoryEntry = {
         user_name: userName,
         name_id: nameId,
         name: nameData?.name || 'Unknown',
@@ -291,7 +310,20 @@ export const ratingsAPI = {
         change: newRating - (oldRating || 0),
         context,
         timestamp: new Date().toISOString()
-      });
+      };
+
+      // Update or insert the rating_history in cat_name_ratings
+      const { error } = await supabase
+        .from('cat_name_ratings')
+        .upsert({
+          user_name: userName,
+          name_id: nameId,
+          rating_history: existingRating?.rating_history 
+            ? [...existingRating.rating_history, newHistoryEntry]
+            : [newHistoryEntry]
+        }, {
+          onConflict: 'user_name,name_id'
+        });
 
       if (error) throw error;
       return { success: true };
@@ -397,7 +429,7 @@ export const hiddenNamesAPI = {
  */
 export const tournamentsAPI = {
   /**
-   * Create a new tournament
+   * Create a new tournament (updated for consolidated schema)
    */
   async createTournament(
     userName,
@@ -406,7 +438,7 @@ export const tournamentsAPI = {
     tournamentData = {}
   ) {
     try {
-      // Create tournament in the consolidated cat_users table
+      // Create tournament in the consolidated cat_app_users table
       const newTournament = {
         id: crypto.randomUUID(), // Generate unique ID
         user_name: userName,
@@ -417,9 +449,9 @@ export const tournamentsAPI = {
         created_at: new Date().toISOString()
       };
 
-      // Get or create user record
+      // Get or create user record in cat_app_users
       const { data: userData, error: userError } = await supabase
-        .from('cat_users')
+        .from('cat_app_users')
         .select('tournament_data')
         .eq('user_name', userName)
         .single();
@@ -434,7 +466,7 @@ export const tournamentsAPI = {
 
       // Update user's tournament data
       const { error } = await supabase
-        .from('cat_users')
+        .from('cat_app_users')
         .upsert({
           user_name: userName,
           tournament_data: tournaments
@@ -477,13 +509,13 @@ export const tournamentsAPI = {
   },
 
   /**
-   * Get user tournaments
+   * Get user tournaments (updated for consolidated schema)
    */
   async getUserTournaments(userName, status = null) {
     try {
-      // Get tournaments from the consolidated cat_users table
+      // Get tournaments from the consolidated cat_app_users table
       const { data: userData, error } = await supabase
-        .from('cat_users')
+        .from('cat_app_users')
         .select('tournament_data')
         .eq('user_name', userName)
         .single();
@@ -679,12 +711,12 @@ export const tournamentsAPI = {
  */
 export const userPreferencesAPI = {
   /**
-   * Get user preferences
+   * Get user preferences (updated for consolidated schema)
    */
   async getPreferences(userName) {
     try {
       const { data, error } = await supabase
-        .from('cat_users')
+        .from('cat_app_users')
         .select('preferences')
         .eq('user_name', userName)
         .single();
@@ -711,13 +743,13 @@ export const userPreferencesAPI = {
   },
 
   /**
-   * Update user preferences
+   * Update user preferences (updated for consolidated schema)
    */
   async updatePreferences(userName, preferences) {
     try {
-      // Update preferences in the consolidated cat_users table
+      // Update preferences in the consolidated cat_app_users table
       const { data, error } = await supabase
-        .from('cat_users')
+        .from('cat_app_users')
         .upsert(
           {
             user_name: userName,
@@ -768,27 +800,25 @@ export const categoriesAPI = {
   },
 
   /**
-   * Get names by category
+   * Get names by category (updated for consolidated schema)
    */
   async getNamesByCategory(categoryId) {
     try {
+      // Categories are now stored as JSONB in cat_name_options
       const { data, error } = await supabase
-        .from('cat_name_category_mappings')
-        .select(
-          `
-          cat_name_options (
-            id,
-            name,
-            description,
-            avg_rating,
-            popularity_score
-          )
-        `
-        )
-        .eq('category_id', categoryId);
+        .from('cat_name_options')
+        .select(`
+          id,
+          name,
+          description,
+          avg_rating,
+          popularity_score,
+          categories
+        `)
+        .contains('categories', [categoryId]);
 
       if (error) throw error;
-      return data?.map((item) => item.cat_name_options).filter(Boolean) || [];
+      return data || [];
     } catch (error) {
       if (process.env.NODE_ENV === 'development') {
         console.error('Error fetching names by category:', error);
@@ -801,25 +831,12 @@ export const categoriesAPI = {
 // ===== UTILITY FUNCTIONS =====
 
 /**
- * Ensure rating history table exists
+ * Note: Rating history is now stored in cat_name_ratings.rating_history as JSONB
+ * This function is kept for backward compatibility but no longer creates tables
  */
 export const ensureRatingHistoryTable = async () => {
-  try {
-    const { data: tableExists } = await supabase
-      .from('information_schema.tables')
-      .select('table_name')
-      .eq('table_name', 'cat_rating_history')
-      .single();
-
-    if (!tableExists) {
-      await supabase.rpc('create_cat_rating_history_table');
-      devLog('Created cat_rating_history table');
-    }
-  } catch (error) {
-    if (process.env.NODE_ENV === 'development') {
-      console.error('Error ensuring cat_rating_history table exists:', error);
-    }
-  }
+  devLog('Rating history is now stored in cat_name_ratings.rating_history as JSONB');
+  return { success: true };
 };
 
 /**

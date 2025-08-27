@@ -1,109 +1,242 @@
+/* Onboarding Modal - Side Panel Design */
+
 .overlay {
   position: fixed;
-  inset: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   z-index: 1000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: rgb(0 0 0 / 70%);
-  backdrop-filter: blur(8px);
-  animation: fadeIn 0.3s ease-out;
+  pointer-events: none;
 }
 
 .modal {
-  position: relative;
-  width: 90%;
-  max-width: 600px;
-  max-height: 80vh;
-  padding: 0;
-  overflow: hidden;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  position: fixed;
+  top: 50%;
+  left: 2rem;
+  transform: translateY(-50%) translateX(-100%);
+  width: min(500px, calc(100vw - 4rem));
+  max-height: 90vh;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 20px;
-  box-shadow: 0 20px 40px rgb(0 0 0 / 30%);
-  animation: slideUp 0.3s ease-out;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+  overflow: visible;
+  pointer-events: all;
+  animation: slideInLeft 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+  transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
 
+/* Step-specific animations */
+.modal--0 {
+  animation-delay: 0.1s;
+}
+
+.modal--1 {
+  animation-delay: 0.2s;
+}
+
+.modal--2 {
+  animation-delay: 0.3s;
+}
+
+.modal--3 {
+  animation-delay: 0.4s;
+}
+
+/* Bouncy slide-in animation from left */
+@keyframes slideInLeft {
+  0% {
+    transform: translateY(-50%) translateX(-100%);
+    opacity: 0;
+  }
+  50% {
+    transform: translateY(-50%) translateX(10%);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-50%) translateX(0);
+    opacity: 1;
+  }
+}
+
+/* Slide-out animation to left */
+.modal.closing {
+  animation: slideOutLeft 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+}
+
+@keyframes slideOutLeft {
+  0% {
+    transform: translateY(-50%) translateX(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-50%) translateX(-100%);
+    opacity: 0;
+  }
+}
+
+/* Mobile responsive positioning */
+@media (max-width: 768px) {
+  .modal {
+    left: 1rem;
+    right: 1rem;
+    width: auto;
+    top: auto;
+    bottom: 2rem;
+    transform: translateY(100%);
+    max-height: 60vh;
+  }
+  
+  @keyframes slideInLeft {
+    0% {
+      transform: translateY(100%);
+      opacity: 0;
+    }
+    50% {
+      transform: translateY(-10%);
+      opacity: 1;
+    }
+    100% {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+  
+  @keyframes slideOutLeft {
+    0% {
+      transform: translateY(0);
+      opacity: 1;
+    }
+    100% {
+      transform: translateY(100%);
+      opacity: 0;
+    }
+  }
+}
+
+
+
+/* Header styling */
 .header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 20px 24px 16px;
-  background: rgb(255 255 255 / 10%);
-  backdrop-filter: blur(10px);
+  padding: clamp(1rem, 3vw, 1.5rem);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  background: rgba(255, 255, 255, 0.8);
 }
 
 .stepIndicator {
   display: flex;
-  gap: 4px;
   align-items: center;
-  font-size: 14px;
-  color: rgb(255 255 255 / 80%);
+  gap: 0.25rem;
+  font-size: 0.875rem;
+  color: #666;
 }
 
 .stepNumber {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 24px;
-  height: 24px;
-  font-weight: 600;
-  color: white;
-  background: rgb(255 255 255 / 20%);
-  border-radius: 50%;
+  font-weight: 700;
+  color: #3b82f6;
 }
 
 .totalSteps {
-  color: rgb(255 255 255 / 60%);
+  color: #999;
 }
 
 .closeButton {
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 50%;
+  color: #666;
+  font-size: 1.25rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 32px;
-  height: 32px;
-  font-size: 20px;
-  color: white;
-  cursor: pointer;
-  background: rgb(255 255 255 / 20%);
-  border: none;
-  border-radius: 50%;
-  transition: all 0.2s ease;
 }
 
 .closeButton:hover {
-  background: rgb(255 255 255 / 30%);
+  background: rgba(0, 0, 0, 0.2);
+  color: #333;
   transform: scale(1.1);
 }
 
+/* Content styling */
 .content {
-  padding: 32px 24px;
-  color: white;
-  text-align: center;
+  padding: 1.5rem;
+  overflow: hidden;
+  max-height: calc(80vh - 200px);
 }
 
 .stepIcon {
-  margin-bottom: 16px;
-  font-size: 48px;
-  animation: bounce 2s infinite;
+  font-size: clamp(2.5rem, 8vw, 3rem);
+  text-align: center;
+  margin-bottom: clamp(0.75rem, 2vw, 1rem);
+  animation: bounceIn 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55) 0.3s both;
+}
+
+@keyframes bounceIn {
+  0% {
+    transform: scale(0.3);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  70% {
+    transform: scale(0.9);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
 }
 
 .stepTitle {
-  margin: 0 0 24px;
-  font-size: 24px;
+  font-size: clamp(1.2rem, 4vw, 1.5rem);
   font-weight: 700;
-  text-shadow: 0 2px 4px rgb(0 0 0 / 30%);
+  color: #1f2937;
+  margin: 0 0 1.5rem 0;
+  text-align: center;
+  animation: slideInUp 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55) 0.4s both;
+}
+
+@keyframes slideInUp {
+  0% {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
 
 .stepContent {
-  text-align: left;
+  animation: fadeInUp 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55) 0.5s both;
+}
+
+@keyframes fadeInUp {
+  0% {
+    transform: translateY(15px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
 
 .stepContent p {
-  margin: 0 0 16px;
-  font-size: 16px;
+  margin: 0 0 1rem 0;
   line-height: 1.6;
-  color: rgb(255 255 255 / 90%);
+  color: #4b5563;
+  font-size: clamp(0.875rem, 3vw, 1rem);
 }
 
 .stepContent p:last-child {
@@ -112,13 +245,13 @@
 
 .feature {
   display: flex;
-  gap: 16px;
   align-items: flex-start;
-  padding: 16px;
-  margin-bottom: 20px;
-  background: rgb(255 255 255 / 10%);
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  padding: 1rem;
+  background: rgba(59, 130, 246, 0.05);
   border-radius: 12px;
-  backdrop-filter: blur(10px);
+  border: 1px solid rgba(59, 130, 246, 0.1);
 }
 
 .feature:last-child {
@@ -126,187 +259,153 @@
 }
 
 .featureIcon {
+  font-size: 1.5rem;
   flex-shrink: 0;
-  font-size: 24px;
+  margin-top: 0.25rem;
 }
 
 .feature h4 {
-  margin: 0 0 8px;
-  font-size: 18px;
+  margin: 0 0 0.5rem 0;
+  font-size: clamp(1rem, 3.5vw, 1.1rem);
   font-weight: 600;
-  color: white;
+  color: #1f2937;
 }
 
 .feature p {
   margin: 0;
-  font-size: 14px;
-  line-height: 1.5;
-  color: rgb(255 255 255 / 80%);
+  font-size: clamp(0.8rem, 2.5vw, 0.9rem);
+  color: #6b7280;
 }
 
+/* Footer styling */
 .footer {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 20px 24px;
-  background: rgb(255 255 255 / 10%);
-  backdrop-filter: blur(10px);
+  padding: clamp(1rem, 3vw, 1.5rem);
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  background: rgba(255, 255, 255, 0.8);
+  gap: clamp(0.5rem, 2vw, 1rem);
 }
 
 .leftActions,
 .centerActions,
 .rightActions {
   display: flex;
+  align-items: center;
+}
+
+.centerActions {
   flex: 1;
   justify-content: center;
 }
 
-.leftActions {
-  justify-content: flex-start;
-}
-
-.rightActions {
-  justify-content: flex-end;
+.primaryButton,
+.secondaryButton,
+.dontShowButton {
+  padding: clamp(0.5rem, 2vw, 0.75rem) clamp(1rem, 3vw, 1.5rem);
+  border: none;
+  border-radius: clamp(8px, 2vw, 12px);
+  font-weight: 600;
+  font-size: clamp(0.8rem, 2.5vw, 0.9rem);
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  white-space: nowrap;
 }
 
 .primaryButton {
-  padding: 12px 32px;
-  font-size: 16px;
-  font-weight: 600;
+  background: linear-gradient(135deg, #3b82f6, #1d4ed8);
   color: white;
-  cursor: pointer;
-  background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
-  border: none;
-  border-radius: 25px;
-  box-shadow: 0 4px 15px rgb(238 90 36 / 40%);
-  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
 }
 
 .primaryButton:hover {
-  box-shadow: 0 6px 20px rgb(238 90 36 / 60%);
   transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
 }
 
 .secondaryButton {
-  padding: 10px 24px;
-  font-size: 14px;
-  font-weight: 500;
-  color: white;
-  cursor: pointer;
-  background: rgb(255 255 255 / 20%);
-  border: 2px solid rgb(255 255 255 / 30%);
-  border-radius: 25px;
-  transition: all 0.3s ease;
+  background: rgba(0, 0, 0, 0.1);
+  color: #4b5563;
 }
 
 .secondaryButton:hover {
-  background: rgb(255 255 255 / 30%);
-  border-color: rgb(255 255 255 / 50%);
+  background: rgba(0, 0, 0, 0.15);
+  transform: translateY(-1px);
 }
 
 .dontShowButton {
-  padding: 8px 20px;
-  font-size: 12px;
-  font-weight: 500;
-  color: rgb(255 255 255 / 70%);
-  cursor: pointer;
   background: transparent;
-  border: 2px solid rgb(255 255 255 / 30%);
-  border-radius: 20px;
-  transition: all 0.3s ease;
+  color: #6b7280;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  padding: 0.5rem 1rem;
+  font-size: 0.8rem;
 }
 
 .dontShowButton:hover {
-  color: rgb(255 255 255 / 90%);
-  border-color: rgb(255 255 255 / 60%);
+  background: rgba(0, 0, 0, 0.05);
+  color: #4b5563;
 }
 
+/* Progress bar */
 .progressBar {
   position: absolute;
-  right: 0;
   bottom: 0;
   left: 0;
+  right: 0;
   height: 4px;
-  background: rgb(255 255 255 / 20%);
+  background: rgba(0, 0, 0, 0.1);
+  overflow: hidden;
 }
 
 .progressFill {
   height: 100%;
-  background: linear-gradient(90deg, #ff6b6b 0%, #ee5a24 100%);
-  transition: width 0.3s ease;
+  background: linear-gradient(90deg, #3b82f6, #1d4ed8);
+  transition: width 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  border-radius: 0 0 20px 20px;
 }
 
-/* Animations */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-
-  to {
-    opacity: 1;
-  }
-}
-
-@keyframes slideUp {
-  from {
-    opacity: 0;
-    transform: translateY(30px) scale(0.95);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-}
-
-@keyframes bounce {
-  0%, 20%, 50%, 80%, 100% {
-    transform: translateY(0);
-  }
-
-  40% {
-    transform: translateY(-10px);
-  }
-
-  60% {
-    transform: translateY(-5px);
-  }
-}
-
-/* Responsive design */
-@media (width <= 768px) {
+/* Dark theme adjustments */
+@media (prefers-color-scheme: dark) {
   .modal {
-    width: 95%;
-    max-height: 90vh;
-  }
-  
-  .content {
-    padding: 24px 20px;
+    background: rgba(30, 41, 59, 0.95);
+    border-color: rgba(255, 255, 255, 0.1);
   }
   
   .header,
   .footer {
-    padding: 16px 20px;
+    background: rgba(30, 41, 59, 0.8);
+    border-color: rgba(255, 255, 255, 0.1);
   }
   
   .stepTitle {
-    font-size: 20px;
+    color: #f1f5f9;
+  }
+  
+  .stepContent p {
+    color: #cbd5e1;
   }
   
   .feature {
-    flex-direction: column;
-    gap: 12px;
-    text-align: center;
+    background: rgba(59, 130, 246, 0.1);
+    border-color: rgba(59, 130, 246, 0.2);
   }
   
-  .footer {
-    flex-direction: column;
-    gap: 16px;
+  .feature h4 {
+    color: #f1f5f9;
   }
   
-  .leftActions,
-  .centerActions,
-  .rightActions {
-    justify-content: center;
+  .feature p {
+    color: #94a3b8;
+  }
+  
+  .closeButton {
+    background: rgba(255, 255, 255, 0.1);
+    color: #cbd5e1;
+  }
+  
+  .closeButton:hover {
+    background: rgba(255, 255, 255, 0.2);
+    color: #f1f5f9;
   }
 }

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import styles from './OnboardingModal.module.css';
 
@@ -9,6 +9,14 @@ import styles from './OnboardingModal.module.css';
  */
 const OnboardingModal = ({ isOpen, onClose, onDontShowAgain }) => {
   const [currentStep, setCurrentStep] = useState(0);
+  const [isClosing, setIsClosing] = useState(false);
+
+  // Reset closing state when modal opens
+  useEffect(() => {
+    if (isOpen) {
+      setIsClosing(false);
+    }
+  }, [isOpen]);
 
   const steps = [
     {
@@ -104,12 +112,20 @@ const OnboardingModal = ({ isOpen, onClose, onDontShowAgain }) => {
   };
 
   const handleClose = () => {
-    onClose();
+    setIsClosing(true);
+    setTimeout(() => {
+      setIsClosing(false);
+      onClose();
+    }, 400); // Match the animation duration
   };
 
   const handleDontShowAgain = () => {
-    onDontShowAgain();
-    onClose();
+    setIsClosing(true);
+    setTimeout(() => {
+      setIsClosing(false);
+      onDontShowAgain();
+      onClose();
+    }, 400); // Match the animation duration
   };
 
   if (!isOpen) return null;
@@ -120,7 +136,7 @@ const OnboardingModal = ({ isOpen, onClose, onDontShowAgain }) => {
 
   return (
     <div className={styles.overlay}>
-      <div className={styles.modal}>
+      <div className={`${styles.modal} ${styles[`modal--${currentStep}`]} ${isClosing ? styles.closing : ''}`}>
         <div className={styles.header}>
           <div className={styles.stepIndicator}>
             <span className={styles.stepNumber}>{currentStep + 1}</span>
