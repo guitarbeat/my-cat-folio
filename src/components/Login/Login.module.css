@@ -1,9 +1,10 @@
 /* Additional global styles to ensure proper scrolling */
 :global(body.login-page) {
-  /* Ensure body can scroll normally */
-  overflow: auto !important;
   height: auto !important;
   min-height: 100vh !important;
+
+  /* Ensure body can scroll normally */
+  overflow: auto !important;
 }
 
 :global(body.login-page::-webkit-scrollbar) {
@@ -13,8 +14,8 @@
 
 /* Ensure html element can also scroll */
 :global(html.login-page) {
-  overflow: auto !important;
   height: auto !important;
+  overflow: auto !important;
 }
 
 /* Login Component - Centered Hero Design */
@@ -23,8 +24,8 @@
   position: relative;
   width: 100%;
   min-height: 100vh;
-  overflow: visible;
   padding-top: 65px; /* Account for navbar height */
+  overflow: visible;
 }
 
 .backgroundContainer {
@@ -63,8 +64,8 @@
   justify-content: center;
   min-height: calc(100vh - 65px); /* Account for navbar height */
   padding: 2rem;
-  animation: fadeInScale 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
   overflow: visible;
+  animation: fadeInScale 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
 }
 
 /* Hero Content Section */
@@ -173,7 +174,6 @@
   text-align: center;
   text-shadow: 0 2px 8px rgb(0 0 0 / 30%);
   background: linear-gradient(135deg, #60a5fa, #a78bfa);
-  background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
 }

@@ -83,8 +83,8 @@ const ProfileFilters = ({
               className={styles.filterSelect}
             >
               <option value="all">All Names</option>
-              <option value="selected">Names I've Selected</option>
-              <option value="never_selected">Names I've Never Selected</option>
+              <option value="selected">Names I&apos;ve Selected</option>
+              <option value="never_selected">Names I&apos;ve Never Selected</option>
               <option value="frequently_selected">Frequently Selected</option>
               <option value="recently_selected">Recently Selected</option>
             </select>

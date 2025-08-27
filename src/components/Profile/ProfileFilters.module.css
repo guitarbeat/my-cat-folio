@@ -1,18 +1,18 @@
 /* * Profile Filters Container */
 .container {
-  margin-bottom: var(--space-6, 2rem);
   padding: var(--space-4, 1.5rem);
+  margin-bottom: var(--space-6, 2rem);
   background: var(--surface-color, #f9fafb);
-  border-radius: var(--radius-lg, 8px);
   border: 1px solid var(--border-color, #e5e7eb);
+  border-radius: var(--radius-lg, 8px);
   transition: var(--transition-all, all 0.2s ease);
 }
 
 .sectionTitle {
+  margin: 0 0 var(--space-4, 1.5rem) 0;
   font-size: var(--text-lg, 1.25rem);
   font-weight: 600;
   color: var(--text-primary, #111827);
-  margin: 0 0 var(--space-4, 1.5rem) 0;
   text-align: center;
 }
 
@@ -32,50 +32,50 @@
 }
 
 .filterLabel {
+  margin: 0;
   font-size: var(--text-sm, 0.875rem);
   font-weight: 500;
   color: var(--text-secondary, #374151);
-  margin: 0;
 }
 
 .filterSelect {
   padding: var(--space-2, 0.5rem) var(--space-3, 0.75rem);
+  font-family: inherit;
+  font-size: var(--text-sm, 0.875rem);
+  color: var(--text-primary, #111827);
+  cursor: pointer;
+  background: var(--card-background, #fff);
   border: 1px solid var(--border-color, #d1d5db);
   border-radius: var(--radius-md, 6px);
-  background: var(--card-background, #ffffff);
-  color: var(--text-primary, #111827);
-  font-size: var(--text-sm, 0.875rem);
   transition: var(--transition-all, all 0.2s ease);
-  cursor: pointer;
-  font-family: inherit;
 }
 
 .filterSelect:hover {
-  border-color: var(--primary-color, #9ca3af);
   background: var(--surface-hover, #f3f4f6);
+  border-color: var(--primary-color, #9ca3af);
 }
 
 .filterSelect:focus {
   outline: none;
   border-color: var(--primary-color, #3b82f6);
-  box-shadow: 0 0 0 3px var(--primary-color-alpha, rgba(59, 130, 246, 0.1));
+  box-shadow: 0 0 0 3px var(--primary-color-alpha, rgb(59 130 246 / 10%));
 }
 
 /* * Sort Order Button */
 .sortOrderButton {
   display: flex;
-  align-items: center;
   gap: var(--space-2, 0.5rem);
+  align-items: center;
+  min-height: 38px;
   padding: var(--space-2, 0.5rem) var(--space-3, 0.75rem);
+  font-family: inherit;
+  font-size: var(--text-sm, 0.875rem);
+  color: var(--text-primary, #111827);
+  cursor: pointer;
+  background: var(--card-background, #fff);
   border: 1px solid var(--border-color, #d1d5db);
   border-radius: var(--radius-md, 6px);
-  background: var(--card-background, #ffffff);
-  color: var(--text-primary, #111827);
-  font-size: var(--text-sm, 0.875rem);
-  cursor: pointer;
   transition: var(--transition-all, all 0.2s ease);
-  min-height: 38px;
-  font-family: inherit;
 }
 
 .sortOrderButton:hover {
@@ -87,7 +87,7 @@
 .sortOrderButton:focus {
   outline: none;
   border-color: var(--primary-color, #3b82f6);
-  box-shadow: 0 0 0 3px var(--primary-color-alpha, rgba(59, 130, 246, 0.1));
+  box-shadow: 0 0 0 3px var(--primary-color-alpha, rgb(59 130 246 / 10%));
 }
 
 .sortOrderIcon {
@@ -112,41 +112,41 @@
   gap: var(--space-3, 0.75rem);
   align-items: center;
   padding: var(--space-4, 1rem);
-  background: var(--card-background, #ffffff);
-  border-radius: var(--radius-md, 6px);
+  background: var(--card-background, #fff);
   border: 1px solid var(--border-color, #e5e7eb);
+  border-radius: var(--radius-md, 6px);
   transition: var(--transition-all, all 0.2s ease);
 }
 
 .activeFilterLabel {
+  margin-right: var(--space-2, 0.5rem);
   font-size: var(--text-sm, 0.875rem);
   font-weight: 600;
   color: var(--text-secondary, #6b7280);
-  margin-right: var(--space-2, 0.5rem);
 }
 
 .activeFilter {
   display: inline-flex;
   align-items: center;
   padding: var(--space-1, 0.25rem) var(--space-3, 0.75rem);
-  background: var(--primary-color-alpha, #eff6ff);
-  color: var(--primary-color, #1e40af);
-  border: 1px solid var(--primary-color-light, #bfdbfe);
-  border-radius: var(--radius-full, 20px);
   font-size: var(--text-xs, 0.75rem);
   font-weight: 500;
+  color: var(--primary-color, #1e40af);
+  background: var(--primary-color-alpha, #eff6ff);
+  border: 1px solid var(--primary-color-light, #bfdbfe);
+  border-radius: var(--radius-full, 20px);
   transition: var(--transition-all, all 0.2s ease);
 }
 
 .activeFilter:hover {
+  color: var(--white, #fff);
   background: var(--primary-color, #1e40af);
-  color: var(--white, #ffffff);
+  box-shadow: var(--shadow-sm, 0 1px 2px 0 rgb(0 0 0 / 5%));
   transform: translateY(-1px);
-  box-shadow: var(--shadow-sm, 0 1px 2px 0 rgba(0, 0, 0, 0.05));
 }
 
 /* * Responsive Design */
-@media (max-width: 768px) {
+@media (width <= 768px) {
   .container {
     padding: var(--space-3, 1rem);
   }
@@ -157,18 +157,18 @@
   }
 
   .sectionTitle {
-    font-size: var(--text-base, 1.125rem);
     margin-bottom: var(--space-3, 1rem);
+    font-size: var(--text-base, 1.125rem);
   }
 
   .activeFilters {
     flex-direction: column;
-    align-items: flex-start;
     gap: var(--space-2, 0.5rem);
+    align-items: flex-start;
   }
 }
 
-@media (max-width: 480px) {
+@media (width <= 480px) {
   .container {
     padding: var(--space-2, 0.75rem);
     margin-bottom: var(--space-4, 1.5rem);
@@ -189,8 +189,8 @@
   }
 
   .activeFilter {
-    font-size: var(--text-xs, 0.6875rem);
     padding: var(--space-1, 0.1875rem) var(--space-2, 0.5rem);
+    font-size: var(--text-xs, 0.6875rem);
   }
 }
 
@@ -210,25 +210,25 @@
   }
 
   .filterSelect {
-    border-color: var(--border-color-dark, #4b5563);
-    background: var(--card-background-dark, #374151);
     color: var(--text-primary-dark, #f9fafb);
+    background: var(--card-background-dark, #374151);
+    border-color: var(--border-color-dark, #4b5563);
   }
 
   .filterSelect:hover {
-    border-color: var(--primary-color-dark, #60a5fa);
     background: var(--surface-hover-dark, #4b5563);
+    border-color: var(--primary-color-dark, #60a5fa);
   }
 
   .filterSelect:focus {
     border-color: var(--primary-color-dark, #60a5fa);
-    box-shadow: 0 0 0 3px var(--primary-color-alpha-dark, rgba(96, 165, 250, 0.1));
+    box-shadow: 0 0 0 3px var(--primary-color-alpha-dark, rgb(96 165 250 / 10%));
   }
 
   .sortOrderButton {
-    border-color: var(--border-color-dark, #4b5563);
-    background: var(--card-background-dark, #374151);
     color: var(--text-primary-dark, #f9fafb);
+    background: var(--card-background-dark, #374151);
+    border-color: var(--border-color-dark, #4b5563);
   }
 
   .sortOrderButton:hover {
@@ -238,7 +238,7 @@
 
   .sortOrderButton:focus {
     border-color: var(--primary-color-dark, #60a5fa);
-    box-shadow: 0 0 0 3px var(--primary-color-alpha-dark, rgba(96, 165, 250, 0.1));
+    box-shadow: 0 0 0 3px var(--primary-color-alpha-dark, rgb(96 165 250 / 10%));
   }
 
   .sortOrderIcon {
@@ -259,14 +259,14 @@
   }
 
   .activeFilter {
-    background: var(--primary-color-alpha-dark, #1e3a8a);
     color: var(--primary-color-light-dark, #dbeafe);
+    background: var(--primary-color-alpha-dark, #1e3a8a);
     border-color: var(--primary-color-dark, #3b82f6);
   }
 
   .activeFilter:hover {
+    color: var(--white-dark, #fff);
     background: var(--primary-color-dark, #3b82f6);
-    color: var(--white-dark, #ffffff);
   }
 }
 
@@ -274,15 +274,15 @@
 .container {
   --surface-color: #f9fafb;
   --border-color: #e5e7eb;
-  --card-background: #ffffff;
+  --card-background: #fff;
   --surface-hover: #f3f4f6;
   --text-primary: #111827;
   --text-secondary: #374151;
   --primary-color: #3b82f6;
   --primary-color-light: #bfdbfe;
-  --primary-color-alpha: rgba(59, 130, 246, 0.1);
-  --white: #ffffff;
-  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --primary-color-alpha: rgb(59 130 246 / 10%);
+  --white: #fff;
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 5%);
   --space-1: 0.25rem;
   --space-2: 0.5rem;
   --space-3: 0.75rem;
@@ -309,8 +309,8 @@
     --text-secondary-dark: #d1d5db;
     --primary-color-dark: #60a5fa;
     --primary-color-light-dark: #dbeafe;
-    --primary-color-alpha-dark: rgba(96, 165, 250, 0.1);
-    --white-dark: #ffffff;
+    --primary-color-alpha-dark: rgb(96 165 250 / 10%);
+    --white-dark: #fff;
   }
 }
 
@@ -328,7 +328,7 @@
 
   .filterSelect:focus,
   .sortOrderButton:focus {
-    outline: 3px solid var(--primary-color, #000000);
+    outline: 3px solid var(--primary-color, #000);
     outline-offset: 2px;
   }
 }
