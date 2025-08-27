@@ -8,52 +8,8 @@
   }
 
   /* Adjust main containers to account for navbar */
-  .container,
-  .main-container,
-  .app-container {
+  .container {
     padding-top: calc(var(--space-4) + 70px);
-  }
-
-  /* Ensure proper spacing for tournament setup */
-  .tournament-setup {
-    margin-top: 1rem;
-  }
-
-  /* Mobile color overrides for better visibility */
-  .name-card {
-    background: var(--mobile-card-background, var(--card-background));
-    border-color: var(--mobile-card-border, var(--card-border));
-    box-shadow: 0 2px 4px var(--shadow-color-light);
-  }
-
-  .name-card:hover {
-    background: var(--mobile-card-hover, var(--card-hover));
-    border-color: var(--primary-color);
-    box-shadow: 0 4px 8px var(--shadow-color-medium);
-  }
-
-  /* Mobile button improvements - Updated to 48x48px minimum */
-  .button-primary,
-  .button-secondary {
-    min-width: 48px; /* Ensure minimum width for touch targets */
-    min-height: 48px; /* Updated to meet mobile guidelines */
-    padding: var(--space-3) var(--space-4);
-    font-size: var(--text-base);
-    font-weight: 600;
-    border-radius: var(--radius-md);
-    transition: all 0.2s ease;
-  }
-
-  .button-primary {
-    color: var(--button-text-light, white);
-    background: var(--button-primary-bg, var(--primary-color));
-    border: 2px solid var(--primary-color);
-  }
-
-  .button-secondary {
-    color: var(--text-primary);
-    background: var(--button-secondary-bg, transparent);
-    border: 2px solid var(--border-color);
   }
 
   /* Mobile navigation improvements - Updated to 48x48px minimum */

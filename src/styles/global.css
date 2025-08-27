@@ -265,6 +265,7 @@ select:focus-visible {
     margin: 0.5rem;
   }
 }
+
 /* =====================
    Global UI Utilities
    Reusable primitives for buttons, cards, text, spacing
@@ -3036,6 +3037,7 @@ h1 {
   100% {
     opacity: 1;
   }
+
   50% {
     opacity: 0.3;
   }
@@ -3046,6 +3048,7 @@ h1 {
   100% {
     transform: translateY(0) rotate(0deg);
   }
+
   50% {
     transform: translateY(-20px) rotate(5deg);
   }
@@ -3056,6 +3059,7 @@ h1 {
   100% {
     transform: translateY(0) rotate(0deg);
   }
+
   50% {
     transform: translateY(-15px) rotate(-3deg);
   }
@@ -3066,6 +3070,7 @@ h1 {
   100% {
     transform: translateY(0) rotate(0deg);
   }
+
   50% {
     transform: translateY(-25px) rotate(2deg);
   }
@@ -3076,6 +3081,7 @@ h1 {
   100% {
     transform: translateY(0) rotate(0deg);
   }
+
   50% {
     transform: translateY(-18px) rotate(-4deg);
   }
@@ -3157,6 +3163,7 @@ h1 {
     width: 25px;
     height: 25px;
   }
+
   .cat-background__cat--1 {
     top: 8%;
     left: 3%;
@@ -3176,6 +3183,8 @@ h1 {
     right: 3%;
     bottom: 22%;
   }
+
+}
 
 /* Limit global button resets to layout regions to avoid module collisions */
 .layout button,
