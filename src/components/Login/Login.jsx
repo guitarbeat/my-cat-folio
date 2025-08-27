@@ -92,9 +92,8 @@ function Login({ onLogin }) {
         setCatFact('Cats are amazing creatures with unique personalities!');
       });
 
+    const currentTimeout = typingTimeoutRef.current;
     return () => {
-      // Store the current timeout ref in a variable to avoid the warning
-      const currentTimeout = typingTimeoutRef.current;
       if (currentTimeout) {
         clearTimeout(currentTimeout);
       }

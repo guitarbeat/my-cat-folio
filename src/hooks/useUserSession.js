@@ -84,19 +84,24 @@ function useUserSession() {
     initializedRef.current = true;
 
     const initializeSession = async () => {
-      // If Supabase isn't configured, skip DB checks but allow the app to load
+      const storedUser = localStorage.getItem('catNamesUser');
+
+      // If Supabase isn't configured, fall back to localStorage only
       if (!supabase) {
         if (process.env.NODE_ENV === 'development') {
           console.warn(
-            'Supabase not configured; skipping session initialization'
+            'Supabase not configured; using local storage for session management'
           );
+        }
+        if (storedUser) {
+          setUserName(storedUser);
+          setIsLoggedIn(true);
         }
         setIsInitialized(true);
         return;
       }
 
       try {
-        const storedUser = localStorage.getItem('catNamesUser');
         if (storedUser) {
           devLog('Found stored user:', storedUser);
 
@@ -146,7 +151,15 @@ function useUserSession() {
       }
 
       if (!supabase) {
-        throw new Error('Supabase is not configured. Login is unavailable.');
+        if (process.env.NODE_ENV === 'development') {
+          console.warn('Supabase not configured; using local login only');
+        }
+        const trimmedName = name.trim();
+        localStorage.setItem('catNamesUser', trimmedName);
+        setUserName(trimmedName);
+        setIsLoggedIn(true);
+        setError(null);
+        return;
       }
 
       const trimmedName = name.trim();

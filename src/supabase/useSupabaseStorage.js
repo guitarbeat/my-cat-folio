@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 /**
  * @module useSupabaseStorage
  * @description Consolidated React hook for all Supabase operations in the cat name tournament system.
@@ -11,6 +12,31 @@ import { supabase } from './supabaseClient';
  * Main hook for all Supabase operations
  */
 function useSupabaseStorage(userName = '') {
+  if (!supabase) {
+    return {
+      names: [],
+      categories: [],
+      userPreferences: null,
+      loading: false,
+      error: null,
+      addName: async () => {},
+      removeName: async () => {},
+      updateRating: async () => {},
+      getRatingHistory: async () => [],
+      hideName: async () => {},
+      unhideName: async () => {},
+      getHiddenNames: async () => [],
+      createTournament: async () => {},
+      updateTournamentStatus: async () => {},
+      getUserTournaments: async () => [],
+      fetchUserPreferences: async () => {},
+      updateUserPreferences: async () => {},
+      fetchCategories: async () => [],
+      getNamesByCategory: async () => [],
+      getLeaderboard: async () => []
+    };
+  }
+
   const [names, setNames] = useState([]);
   const [categories, setCategories] = useState([]);
   const [userPreferences, setUserPreferences] = useState(null);
@@ -464,16 +490,16 @@ function useSupabaseStorage(userName = '') {
     }, 1000); // 1 second debounce
   }, [fetchUserPreferences]);
 
-  useEffect(() => {
-    if (!userName) return;
+    useEffect(() => {
+      if (!userName) return;
 
-    // Fetch initial data
-    fetchNames();
-    fetchUserPreferences();
-    fetchCategories();
+      // Fetch initial data
+      fetchNames();
+      fetchUserPreferences();
+      fetchCategories();
 
-    // Set up real-time subscriptions
-    const setupSubscriptions = async () => {
+      // Set up real-time subscriptions
+      const setupSubscriptions = async () => {
       const { supabase } = await import('./supabaseClient');
 
       const subscriptions = [
@@ -563,13 +589,16 @@ function useSupabaseStorage(userName = '') {
       };
     };
 
-    setupSubscriptions();
-  }, [
-    userName,
-    debouncedFetchNames,
-    debouncedFetchCategories,
-    debouncedFetchUserPreferences
-  ]);
+      setupSubscriptions();
+    }, [
+      userName,
+      fetchNames,
+      fetchUserPreferences,
+      fetchCategories,
+      debouncedFetchNames,
+      debouncedFetchCategories,
+      debouncedFetchUserPreferences
+    ]);
 
   // ===== RETURN OBJECT =====
 

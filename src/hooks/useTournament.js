@@ -367,22 +367,22 @@ export function useTournament({
         });
       }
     },
-    [
-      isTransitioning,
-      isError,
-      currentMatch,
-      currentMatchNumber,
-      totalMatches,
-      names.length,
-      roundNumber,
-      currentRatings,
-      sorter,
-      onComplete,
-      getCurrentRatings,
-      updateTournamentState,
-      updatePersistentState,
-      userName
-    ]
+      [
+        isTransitioning,
+        isError,
+        currentMatch,
+        currentMatchNumber,
+        totalMatches,
+        names,
+        roundNumber,
+        currentRatings,
+        sorter,
+        onComplete,
+        getCurrentRatings,
+        updateTournamentState,
+        updatePersistentState,
+        userName
+      ]
   );
 
   // * Undo functionality
