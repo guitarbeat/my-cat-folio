@@ -36,26 +36,15 @@
 .navbar__menu-list--desktop {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  width: 100%;
   gap: 2rem;
   list-style: none;
   margin: 0;
   padding: 0;
 }
 
-/* Left Side Controls */
-.navbar__item--theme-toggle {
-  margin-right: 0.5rem;
-}
-
-.navbar__item--help {
-  margin-right: auto;
-}
-
 /* Logo Section */
 .navbar__item--logo {
-  margin-left: auto;
+  margin-right: auto;
 }
 
 .navbar__item--logo .navbar__logo-link {
@@ -115,77 +104,62 @@
 }
 
 /* Theme Toggle Button */
+.navbar__item--theme-toggle {
+  margin-left: 1rem;
+}
+
 .navbar__theme-toggle {
-  width: 36px;
-  height: 36px;
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  width: 44px;
+  height: 44px;
+  border: none;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  color: var(--text-primary);
-  font-size: 1rem;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  color: #fff;
+  font-size: 1.2rem;
   cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.2s ease;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 
-    0 2px 8px rgba(0, 0, 0, 0.1),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
 .navbar__theme-toggle:hover {
-  background: rgba(255, 255, 255, 0.15);
-  border-color: rgba(255, 255, 255, 0.25);
-  transform: translateY(-2px) scale(1.05);
-  box-shadow: 
-    0 4px 16px rgba(0, 0, 0, 0.15),
-    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.2);
+  transform: scale(1.05);
 }
 
 .navbar__theme-toggle:active {
-  transform: translateY(0) scale(0.98);
-  box-shadow: 
-    0 2px 8px rgba(0, 0, 0, 0.1),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  transform: scale(0.95);
 }
 
 /* Help Button */
 .navbar__help-button {
-  width: 36px;
-  height: 36px;
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  width: 44px;
+  height: 44px;
+  border: none;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  color: var(--text-primary);
-  font-size: 1rem;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  color: #fff;
+  font-size: 1.2rem;
   cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.2s ease;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 
-    0 2px 8px rgba(0, 0, 0, 0.1),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  margin-left: 0.5rem;
 }
 
 .navbar__help-button:hover {
-  background: rgba(255, 255, 255, 0.15);
-  border-color: rgba(255, 255, 255, 0.25);
-  transform: translateY(-2px) scale(1.05);
-  box-shadow: 
-    0 4px 16px rgba(0, 0, 0, 0.15),
-    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.2);
+  transform: scale(1.05);
 }
 
 .navbar__help-button:active {
-  transform: translateY(0) scale(0.98);
-  box-shadow: 
-    0 2px 8px rgba(0, 0, 0, 0.1),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  transform: scale(0.95);
 }
 
 /* Mobile Menu Button */
@@ -498,6 +472,31 @@
 .navbar__item a:focus {
   outline: 2px solid #3b82f6;
   outline-offset: 2px;
+}
+
+/* Focus States for Buttons */
+.navbar__theme-toggle:focus-visible,
+.navbar__help-button:focus-visible {
+  outline: 2px solid var(--accent-color);
+  outline-offset: 2px;
+  box-shadow: 
+    0 0 0 4px rgba(232, 191, 118, 0.3),
+    0 2px 8px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+/* Enhanced Button States */
+.navbar__theme-toggle:disabled,
+.navbar__help-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Smooth transitions for all interactive states */
+.navbar__theme-toggle,
+.navbar__help-button {
+  will-change: transform, box-shadow, background-color, border-color;
 }
 
 /* Reduced Motion */
