@@ -208,6 +208,26 @@ const initialState = {
 localStorage.setItem('tournamentState', JSON.stringify(initialState));
 
 
+        // * FIXED: Set up tournament interface without blocking sort operation
+        console.log("[DEV] 🎮 runTournament: Setting up tournament interface");
+        
+        // Calculate estimated matches
+        const n = names.length;
+        const estimatedMatches = Math.ceil(n * Math.log2(n));
+        setTotalMatches(estimatedMatches);
+        setCurrentMatchNumber(1);
+        setRoundNumber(1);
+        
+        // Set up the first match
+        if (names.length >= 2) {
+          const left = names[0];
+          const right = names[1];
+          setCurrentMatch({ left, right });
+          console.log("[DEV] 🎮 runTournament: First match set:", { left: left.name, right: right.name });
+        }
+        
+        // * FIXED: Tournament is now interactive - no blocking operations
+        console.log("[DEV] 🎮 runTournament: Tournament ready for user interaction");
 
 
 
@@ -217,36 +237,6 @@ localStorage.setItem('tournamentState', JSON.stringify(initialState));
 
 
 
-
-});
-
-const ratingsArray = sortedResults.map((name, index) => {
-  const existingData =
-    typeof existingRatings[name] === 'object'
-      ? existingRatings[name]
-      : { rating: existingRatings[name] || 1500, wins: 0, losses: 0 };
-
-  const totalNames = sortedResults.length;
-  const position = index;
-  const finalRating = computeRating(
-    existingData.rating,
-    position,
-    totalNames,
-    currentMatchNumber,
-    totalMatches
-  );
-
-  return {
-    name,
-    rating: finalRating,
-    wins: existingData.wins,
-    losses: existingData.losses,
-    confidence: currentMatchNumber / totalMatches
-  };
-});
-
-localStorage.removeItem('tournamentState');
-onComplete(ratingsArray);
       } catch (error) {
 if (process.env.NODE_ENV === 'development') {
   console.error('Tournament completion error:', error);
