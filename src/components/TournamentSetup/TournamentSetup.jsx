@@ -44,6 +44,17 @@ const CAT_IMAGES = [
 
 const DEFAULT_DESCRIPTION = 'A name as unique as your future companion';
 
+const FALLBACK_NAMES = [
+  { id: '1', name: 'Whiskers', description: 'Classic and cozy.' },
+  { id: '2', name: 'Shadow', description: 'A stealthy feline.' },
+  { id: '3', name: 'Luna', description: 'For night-loving cats.' },
+  { id: '4', name: 'Mittens', description: 'Those cute little paws!' },
+  { id: '5', name: 'Simba', description: 'The king of your home.' },
+  { id: '6', name: 'Neko', description: 'Means cat in Japanese.' },
+  { id: '7', name: 'Tiger', description: 'Small but fierce.' },
+  { id: '8', name: 'Gizmo', description: 'For the curious explorer.' }
+];
+
 // Helper function to get random cat images
 const getRandomCatImage = (nameId) => {
   // Convert UUID string to a number for consistent image selection
@@ -59,15 +70,7 @@ const getRandomCatImage = (nameId) => {
 
   // Use the numeric ID to consistently get the same image for the same name
   const index = Math.abs(numericId) % CAT_IMAGES.length;
-  const result = CAT_IMAGES[index];
-  console.log('getRandomCatImage:', {
-    nameId,
-    numericId,
-    index,
-    totalImages: CAT_IMAGES.length,
-    result
-  });
-  return result;
+  return CAT_IMAGES[index];
 };
 
 // Simple name selection - names and descriptions only
@@ -696,6 +699,11 @@ function useTournamentSetup(userName) {
     const fetchNames = async () => {
       try {
         setIsLoading(true);
+        if (!supabase) {
+          setAvailableNames(FALLBACK_NAMES);
+          setIsLoading(false);
+          return;
+        }
 
         // Get all names and hidden names in parallel for efficiency
         const [namesData, { data: hiddenData, error: hiddenError }] =
@@ -751,7 +759,7 @@ function useTournamentSetup(userName) {
     };
 
     fetchNames();
-  }, []); // Remove handleError dependency to prevent infinite loops
+    }, [handleError, userName]);
 
   const toggleName = async (nameObj) => {
     setSelectedNames((prev) => {
@@ -781,6 +789,8 @@ function useTournamentSetup(userName) {
       const tournamentId = `selection_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
 
       // Save selections to database
+      if (!supabase) return;
+
       const result = await tournamentsAPI.saveTournamentSelections(
         userName,
         selectedNames,

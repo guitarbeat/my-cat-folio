@@ -76,7 +76,7 @@ function useAudioManager() {
         audioRef.current = null;
       }
     };
-  }, []);
+  }, [soundEffects, volume.effects, musicTracks, volume.music]);
 
   // * Get random sound effect based on weights
   const getRandomSoundEffect = useCallback(() => {
@@ -504,12 +504,12 @@ function TournamentContent({
       setTimeout(() => setShowMatchResult(false), 2500);
       showSuccess('Vote recorded successfully!', { duration: 3000 });
     },
-    [currentMatch, showSuccess]
+    [currentMatch, showSuccess, setLastMatchResult, setShowMatchResult]
   );
 
   // * Handle vote with animation
-  const handleVoteWithAnimation = useCallback(
-    async (option) => {
+    const handleVoteWithAnimation = useCallback(
+      async (option) => {
       if (isProcessing || isTransitioning || isError) return;
 
       // Rate limiting check
@@ -601,28 +601,32 @@ function TournamentContent({
         setIsTransitioning(false);
       }
     },
-    [
-      isProcessing,
-      isTransitioning,
-      isError,
-      audioManager.playSound,
-      updateMatchResult,
-      handleVote,
-      onVote,
-      currentMatch,
-      showError
-    ]
-  );
+      [
+        isProcessing,
+        isTransitioning,
+        isError,
+        audioManager,
+        updateMatchResult,
+        handleVote,
+        onVote,
+        currentMatch,
+        showError,
+        setIsProcessing,
+        setIsTransitioning,
+        setSelectedOption,
+        setVotingError
+      ]
+    );
 
   // * Handle name card click
-  const handleNameCardClick = useCallback(
-    (option) => {
-      if (isProcessing || isTransitioning) return;
-      setSelectedOption(option);
-      handleVoteWithAnimation(option);
-    },
-    [isProcessing, isTransitioning, handleVoteWithAnimation]
-  );
+    const handleNameCardClick = useCallback(
+      (option) => {
+        if (isProcessing || isTransitioning) return;
+        setSelectedOption(option);
+        handleVoteWithAnimation(option);
+      },
+      [isProcessing, isTransitioning, handleVoteWithAnimation, setSelectedOption]
+    );
 
   // * Handle end early
   const handleEndEarly = useCallback(async () => {
@@ -640,9 +644,9 @@ function TournamentContent({
   }, [getCurrentRatings, onComplete, setIsProcessing]);
 
   // * Handle vote retry
-  const handleVoteRetry = useCallback(() => {
-    setVotingError(null);
-  }, []);
+    const handleVoteRetry = useCallback(() => {
+      setVotingError(null);
+    }, [setVotingError]);
 
   // * Keyboard controls
   useKeyboardControls(

@@ -105,7 +105,7 @@ const FloatingKitties = ({
         intervalRef.current = null;
       }
     };
-  }, [kittieCount, creationInterval, createKittie]); // * Removed kitties.length dependency
+    }, [kittieCount, creationInterval, createKittie, kitties.length]);
 
   // * Memoize kitties array to prevent unnecessary re-renders
   const memoizedKitties = useMemo(() => kitties, [kitties]);

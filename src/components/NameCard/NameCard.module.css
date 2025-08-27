@@ -246,6 +246,7 @@
   font-size: var(
     --text-base
   ); /* Increased from text-sm for better readability */
+
   font-weight: 450; /* Slightly heavier for better readability */
   line-height: 1.6;
   color: var(--text-secondary);

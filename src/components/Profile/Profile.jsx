@@ -292,7 +292,7 @@ const Profile = ({ userName, onStartNewTournament }) => {
       fetchNames();
       fetchSelectionStats();
     }
-  }, [userName]); // Remove fetchNames dependency to prevent infinite loops
+  }, [userName, fetchNames, fetchSelectionStats]);
 
   // * Fetch selection statistics
   const fetchSelectionStats = useCallback(async () => {

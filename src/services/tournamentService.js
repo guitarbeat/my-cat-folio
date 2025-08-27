@@ -77,6 +77,21 @@ export class TournamentService {
         // * For values near 0 (both/none), we don't update wins/losses
       });
 
+      if (!supabase) {
+        const updatedRatings = { ...existingRatings };
+        Object.entries(tournamentResults).forEach(([name, results]) => {
+          const finalRating =
+            ratingsArray.find((r) => r.name === name)?.rating || 1500;
+          const existing = updatedRatings[name] || { wins: 0, losses: 0 };
+          updatedRatings[name] = {
+            rating: Math.round(finalRating),
+            wins: (existing.wins || 0) + results.wins,
+            losses: (existing.losses || 0) + results.losses
+          };
+        });
+        return updatedRatings;
+      }
+
       // * Get name_ids from cat_name_options table
       const { data: nameOptions, error: nameError } = await supabase
         .from('cat_name_options')
@@ -154,6 +169,20 @@ export class TournamentService {
    */
   static async updateRatings(adjustedRatings, userName) {
     try {
+      if (!supabase) {
+        return adjustedRatings.reduce(
+          (acc, { name, rating, wins = 0, losses = 0 }) => {
+            acc[name] = {
+              rating: Math.round(rating),
+              wins,
+              losses
+            };
+            return acc;
+          },
+          {}
+        );
+      }
+
       // * Convert array format to consistent object format
       const updatedRatings = adjustedRatings.reduce(
         (acc, { name, rating, wins = 0, losses = 0 }) => {
