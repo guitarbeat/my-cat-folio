@@ -53,7 +53,7 @@
   margin-right: auto;
 }
 
-/* Right Side Elements */
+/* Logo Section */
 .navbar__item--logo {
   margin-left: auto;
 }
@@ -115,25 +115,24 @@
 }
 
 /* Theme Toggle Button */
-.navbar__item--theme-toggle {
-  /* Positioned on left side now */
-}
-
 .navbar__theme-toggle {
-  width: 44px;
-  height: 44px;
-  border: none;
+  width: 36px;
+  height: 36px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  color: #fff;
-  font-size: 1.2rem;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  color: var(--text-primary);
+  font-size: 1rem;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   display: flex;
   align-items: center;
   justify-content: center;
+  box-shadow: 
+    0 2px 8px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
 .navbar__theme-toggle:hover {
@@ -161,6 +160,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  margin-left: 0.5rem;
 }
 
 .navbar__help-button:hover {
