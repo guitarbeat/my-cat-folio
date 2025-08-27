@@ -57,10 +57,10 @@
   margin-top: 5px;
   font-size: 0.875rem;
   font-weight: 500;
-  color: white;
+  color: var(--text-primary);
   text-align: center;
   pointer-events: none;
-  background: rgb(0 0 0 / 70%);
+  background: var(--overlay-dark);
   border-radius: 20px;
 }
 

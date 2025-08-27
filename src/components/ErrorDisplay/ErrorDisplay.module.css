@@ -22,15 +22,10 @@
 }
 
 .clearAllButton {
-  padding: 0.5rem 1rem;
-  font-size: 0.8rem;
-  font-weight: 500;
-  color: white;
-  cursor: pointer;
-  background: #e53e3e;
-  border: none;
-  border-radius: 6px;
-  transition: all 0.2s ease;
+  composes: btn from "../../styles/global.css";
+  color: #fff;
+  background: var(--error-500);
+  border-color: var(--error-600);
 }
 
 .clearAllButton:hover {
@@ -121,14 +116,14 @@
   min-width: 0;
   font-weight: 500;
   line-height: 1.4;
-  color: #2d3748;
+  color: var(--text-primary);
 }
 
 .errorTime {
   flex-shrink: 0;
   font-size: 0.8rem;
   font-weight: 400;
-  color: #718096;
+  color: var(--text-tertiary);
   white-space: nowrap;
 }
 
@@ -142,22 +137,14 @@
 .retryButton,
 .dismissButton,
 .detailsButton {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  composes: btn from "../../styles/global.css";
   min-width: 60px;
-  padding: 0.5rem 0.75rem;
   font-size: 0.8rem;
-  font-weight: 500;
-  cursor: pointer;
-  border: none;
-  border-radius: 6px;
-  transition: all 0.2s ease;
 }
 
 .retryButton {
-  color: white;
-  background: #38a169;
+  color: #fff;
+  background: var(--success-500);
 }
 
 .retryButton:hover {
@@ -166,13 +153,7 @@
 }
 
 .dismissButton {
-  width: 32px;
-  min-width: 32px;
-  height: 32px;
-  padding: 0;
-  color: white;
-  background: #718096;
-  border-radius: 50%;
+  composes: btn--icon from "../../styles/global.css";
 }
 
 .dismissButton:hover {
@@ -181,14 +162,7 @@
 }
 
 .detailsButton {
-  width: 32px;
-  min-width: 32px;
-  height: 32px;
-  padding: 0;
-  font-weight: 600;
-  color: #4a5568;
-  background: #e2e8f0;
-  border-radius: 50%;
+  composes: btn--icon from "../../styles/global.css";
 }
 
 .detailsButton:hover {
@@ -240,7 +214,7 @@
   overflow-wrap: break-word;
   white-space: pre-wrap;
   background: rgb(0 0 0 / 10%);
-  border-left: 3px solid #e53e3e;
+  border-left: 3px solid var(--error-500);
   border-radius: 6px;
 }
 
