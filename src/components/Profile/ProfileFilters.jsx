@@ -6,7 +6,7 @@ import styles from './ProfileFilters.module.css';
 /**
  * @module ProfileFilters
  * @description Handles filtering and sorting controls for the profile view.
- * Extracted from Profile component for better separation of concerns.
+ * Now includes selection-based filtering and sorting options.
  */
 
 const ProfileFilters = ({
@@ -19,7 +19,11 @@ const ProfileFilters = ({
   sortOrder,
   setSortOrder,
   isAdmin = false,
-  className = ''
+  className = '',
+  // * New selection-based filter props
+  selectionFilter = 'all',
+  setSelectionFilter,
+  hasSelectionData = false
 }) => {
   const handleSortOrderToggle = () => {
     setSortOrder(sortOrder === FILTER_OPTIONS.ORDER.ASC ? FILTER_OPTIONS.ORDER.DESC : FILTER_OPTIONS.ORDER.ASC);
@@ -66,7 +70,28 @@ const ProfileFilters = ({
           </select>
         </div>
 
-        {/* * Sort By */}
+        {/* * NEW: Selection Status Filter */}
+        {hasSelectionData && (
+          <div className={styles.filterGroup}>
+            <label htmlFor="selection-filter" className={styles.filterLabel}>
+              Selection Status
+            </label>
+            <select
+              id="selection-filter"
+              value={selectionFilter}
+              onChange={(e) => setSelectionFilter(e.target.value)}
+              className={styles.filterSelect}
+            >
+              <option value="all">All Names</option>
+              <option value="selected">Names I've Selected</option>
+              <option value="never_selected">Names I've Never Selected</option>
+              <option value="frequently_selected">Frequently Selected</option>
+              <option value="recently_selected">Recently Selected</option>
+            </select>
+          </div>
+        )}
+
+        {/* * Sort By - Enhanced with selection options */}
         <div className={styles.filterGroup}>
           <label htmlFor="sort-by" className={styles.filterLabel}>
             Sort By
@@ -83,6 +108,15 @@ const ProfileFilters = ({
             <option value={FILTER_OPTIONS.SORT.LOSSES}>Losses</option>
             <option value={FILTER_OPTIONS.SORT.WIN_RATE}>Win Rate</option>
             <option value={FILTER_OPTIONS.SORT.CREATED}>Created Date</option>
+            {/* * NEW: Selection-based sort options */}
+            {hasSelectionData && (
+              <>
+                <option value="selection_count">Selection Count</option>
+                <option value="last_selected">Last Selected</option>
+                <option value="selection_frequency">Selection Frequency</option>
+                <option value="tournament_appearances">Tournament Appearances</option>
+              </>
+            )}
           </select>
         </div>
 
@@ -107,7 +141,7 @@ const ProfileFilters = ({
         </div>
       </div>
 
-      {/* * Active Filters Display */}
+      {/* * Active Filters Display - Enhanced */}
       <div className={styles.activeFilters}>
         <span className={styles.activeFilterLabel}>Active Filters:</span>
         <span className={styles.activeFilter}>
@@ -116,8 +150,13 @@ const ProfileFilters = ({
         <span className={styles.activeFilter}>
           User: {userFilter === FILTER_OPTIONS.USER.ALL ? 'All' : userFilter}
         </span>
+        {hasSelectionData && selectionFilter !== 'all' && (
+          <span className={styles.activeFilter}>
+            Selection: {selectionFilter.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase())}
+          </span>
+        )}
         <span className={styles.activeFilter}>
-          Sort: {sortBy} ({sortOrder})
+          Sort: {sortBy.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase())} ({sortOrder})
         </span>
       </div>
     </div>
@@ -134,7 +173,11 @@ ProfileFilters.propTypes = {
   sortOrder: PropTypes.string.isRequired,
   setSortOrder: PropTypes.func.isRequired,
   isAdmin: PropTypes.bool,
-  className: PropTypes.string
+  className: PropTypes.string,
+  // * New props for selection-based filtering
+  selectionFilter: PropTypes.string,
+  setSelectionFilter: PropTypes.func,
+  hasSelectionData: PropTypes.bool
 };
 
 export default ProfileFilters;

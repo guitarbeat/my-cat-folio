@@ -17,18 +17,32 @@ import useToast from '../../hooks/useToast';
 import { validateCatName, validateDescription } from '../../utils/validation';
 import styles from './TournamentSetup.module.css';
 
-// Use relative paths for better Vite compatibility
+// Use absolute paths for better image loading compatibility
 const CAT_IMAGES = [
-  './images/IMG_4844.jpg',
-  './images/IMG_4845.jpg',
-  './images/IMG_4846.jpg',
-  './images/IMG_4847.jpg',
-  './images/IMG_5044.JPEG',
-  './images/IMG_5071.JPG'
+  '/images/IMG_4844.jpg',
+  '/images/IMG_4845.jpg',
+  '/images/IMG_4846.jpg',
+  '/images/IMG_4847.jpg',
+  '/images/IMG_5044.JPEG',
+  '/images/IMG_5071.JPG',
+  '/images/IMG_0778.jpg',
+  '/images/IMG_0779.jpg',
+  '/images/IMG_0865.jpg',
+  '/images/IMG_0884.jpg',
+  '/images/IMG_0923.jpg',
+  '/images/IMG_1116.jpg',
+  '/images/IMG_7205.jpg',
+  '/images/75209580524__60DCC26F-55A1-4EF8-A0B2-14E80A026A8D.jpg'
 ];
 
 const DEFAULT_DESCRIPTION = 'A name as unique as your future companion';
 
+// Helper function to get random cat images
+const getRandomCatImage = (nameId) => {
+  // Use the name ID to consistently get the same image for the same name
+  const index = nameId % CAT_IMAGES.length;
+  return CAT_IMAGES[index];
+};
 
 // Simple name selection - names and descriptions only
 const NameSelection = ({
@@ -44,7 +58,8 @@ const NameSelection = ({
   onSearchChange,
   sortBy,
   onSortChange,
-  isSwipeMode
+  isSwipeMode,
+  showCatPictures
 }) => {
   // For non-admin users, just show all names
   const displayNames = isAdmin
@@ -175,6 +190,7 @@ const NameSelection = ({
             selectedNames={selectedNames}
             onToggleName={onToggleName}
             isAdmin={isAdmin}
+            showCatPictures={showCatPictures}
           />
         ) : (
           displayNames.map((nameObj) => (
@@ -185,6 +201,8 @@ const NameSelection = ({
               isSelected={selectedNames.some((n) => n.id === nameObj.id)}
               onClick={() => onToggleName(nameObj)}
               size="small"
+              // Cat picture when enabled
+              image={showCatPictures ? getRandomCatImage(nameObj.id) : undefined}
               // Admin-only metadata display
               metadata={
                 isAdmin
@@ -216,7 +234,8 @@ const SwipeableNameCards = ({
   names,
   selectedNames,
   onToggleName,
-  isAdmin
+  isAdmin,
+  showCatPictures = false
 }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
@@ -326,10 +345,10 @@ const SwipeableNameCards = ({
   };
 
   return (
-    <div className={styles.swipeContainer}>
-      <div className={styles.swipeCardWrapper}>
-        <div
-          className={`${styles.swipeCard} ${isSelected ? styles.selected : ''}`}
+          <div className={styles.swipeContainer}>
+        <div className={`${styles.swipeCardWrapper} ${showCatPictures ? styles.withCatPictures : ''}`}>
+          <div
+            className={`${styles.swipeCard} ${isSelected ? styles.selected : ''} ${showCatPictures ? styles.withCatPictures : ''}`}
           style={cardStyle}
           onMouseDown={handleDragStart}
           onMouseMove={handleDragMove}
@@ -355,6 +374,21 @@ const SwipeableNameCards = ({
 
           {/* Card content */}
           <div className={styles.swipeCardContent}>
+            {/* Cat picture when enabled */}
+            {showCatPictures && (
+              <div className={styles.swipeCardImageContainer}>
+                <img
+                  src={getRandomCatImage(currentName.id)}
+                  alt="Random cat picture"
+                  className={styles.swipeCardImage}
+                  loading="eager"
+                  onError={(e) => {
+                    console.error('Image failed to load:', e.target.src);
+                  }}
+                />
+              </div>
+            )}
+
             <h3 className={styles.swipeCardName}>{currentName.name}</h3>
             <p className={styles.swipeCardDescription}>
               {currentName.description || DEFAULT_DESCRIPTION}
@@ -738,6 +772,7 @@ function TournamentSetupContent({ onStart, userName }) {
   const [searchTerm, setSearchTerm] = useState('');
   const [sortBy, setSortBy] = useState('alphabetical');
   const [isSwipeMode, setIsSwipeMode] = useState(false);
+  const [showCatPictures, setShowCatPictures] = useState(false);
 
   // Get categories and other enhanced data
   const { categories } = useSupabaseStorage();
@@ -1004,6 +1039,17 @@ function TournamentSetupContent({ onStart, userName }) {
                   {isSwipeMode ? '🎯 Cards' : '💫 Swipe'}
                 </button>
 
+                <button
+                  onClick={() => setShowCatPictures(!showCatPictures)}
+                  className={`${styles.catPicturesToggleButton} ${showCatPictures ? styles.active : ''}`}
+                  aria-label={
+                    showCatPictures ? 'Hide cat pictures' : 'Show cat pictures on cards'
+                  }
+                  title="Add random cat pictures to make it more like Tinder! 🐱"
+                >
+                  {showCatPictures ? '🐱 Hide Cats' : '🐱 Show Cats'}
+                </button>
+
                 {selectedNames.length >= 2 && (
                   <StartButton
                     selectedNames={selectedNames}
@@ -1074,6 +1120,7 @@ function TournamentSetupContent({ onStart, userName }) {
             onSortChange={setSortBy}
             isSwipeMode={isSwipeMode}
             onSwipeModeToggle={() => setIsSwipeMode(!isSwipeMode)}
+            showCatPictures={showCatPictures}
           />
 
           {selectedNames.length >= 2 && (

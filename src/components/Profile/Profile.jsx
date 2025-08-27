@@ -255,6 +255,8 @@ const Profile = ({ userName, onStartNewTournament }) => {
   const [isAdmin, setIsAdmin] = useState(false);
   const [hiddenNames, setHiddenNames] = useState(new Set());
   const [selectionStats, setSelectionStats] = useState(null);
+  // * NEW: Selection-based filtering state
+  const [selectionFilter, setSelectionFilter] = useState('all');
 
   // * Hooks
   const {
@@ -420,6 +422,9 @@ const Profile = ({ userName, onStartNewTournament }) => {
         setSortOrder={setSortOrder}
         isAdmin={isAdmin}
         className={styles.filtersSection}
+        selectionFilter={selectionFilter}
+        setSelectionFilter={setSelectionFilter}
+        hasSelectionData={!!selectionStats} // * Show selection filters if we have selection data
       />
 
       {/* * Names List Section */}
@@ -438,6 +443,8 @@ const Profile = ({ userName, onStartNewTournament }) => {
         selectedNames={selectedNames}
         className={styles.namesSection}
         showAdminControls={isAdmin} // * Pass admin controls flag
+        selectionFilter={selectionFilter}
+        selectionStats={selectionStats}
       />
     </div>
   );

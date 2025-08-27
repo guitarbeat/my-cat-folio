@@ -67,7 +67,8 @@ function NameCard({
   isHidden = false,
   onToggleVisibility,
   onDelete,
-  onSelectionChange
+  onSelectionChange,
+  image
 }) {
   const [rippleStyle, setRippleStyle] = useState({});
   const [isRippling, setIsRippling] = useState(false);
@@ -242,6 +243,18 @@ function NameCard({
             opacity: disabled ? 0 : 1
           }}
         />
+
+        {/* Cat image when provided */}
+        {image && (
+          <div className={styles.cardImageContainer}>
+            <img
+              src={image}
+              alt="Cat picture"
+              className={styles.cardImage}
+              loading="lazy"
+            />
+          </div>
+        )}
 
         <h3 className={styles.name} id={`${getSafeId(name)}-title`}>{name}</h3>
         {description && (

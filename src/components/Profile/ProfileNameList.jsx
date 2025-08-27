@@ -25,7 +25,9 @@ const ProfileNameList = ({
   onSelectionChange,
   selectedNames = new Set(),
   className = '',
-  showAdminControls = false
+  showAdminControls = false,
+  selectionFilter,
+  selectionStats
 }) => {
   // * Filter and sort names based on current filters
   const filteredAndSortedNames = useMemo(() => {
@@ -47,7 +49,46 @@ const ProfileNameList = ({
       filtered = filtered.filter(name => name.user_name !== ratings.userName);
     }
 
-    // * Sort names
+    // * NEW: Apply selection-based filters
+    if (selectionFilter !== 'all' && selectionStats) {
+      switch (selectionFilter) {
+        case 'selected':
+          // Filter to names that have been selected at least once
+          filtered = filtered.filter(name => {
+            const selectionCount = selectionStats.nameSelectionCounts?.[name.id] || 0;
+            return selectionCount > 0;
+          });
+          break;
+        case 'never_selected':
+          // Filter to names that have never been selected
+          filtered = filtered.filter(name => {
+            const selectionCount = selectionStats.nameSelectionCounts?.[name.id] || 0;
+            return selectionCount === 0;
+          });
+          break;
+        case 'frequently_selected':
+          // Filter to names selected more than average
+          const avgSelections = selectionStats.avgSelectionsPerName || 0;
+          filtered = filtered.filter(name => {
+            const selectionCount = selectionStats.nameSelectionCounts?.[name.id] || 0;
+            return selectionCount > avgSelections;
+          });
+          break;
+        case 'recently_selected':
+          // Filter to names selected in the last 30 days
+          const thirtyDaysAgo = new Date();
+          thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+          filtered = filtered.filter(name => {
+            const lastSelected = selectionStats.nameLastSelected?.[name.id];
+            return lastSelected && new Date(lastSelected) > thirtyDaysAgo;
+          });
+          break;
+        default:
+          break;
+      }
+    }
+
+    // * Sort names - Enhanced with selection-based sorting
     filtered.sort((a, b) => {
       let aValue, bValue;
 
@@ -68,15 +109,33 @@ const ProfileNameList = ({
           aValue = a.user_losses || 0;
           bValue = b.user_losses || 0;
           break;
-        case FILTER_OPTIONS.SORT.WIN_RATE:
+        case FILTER_OPTIONS.SORT.WIN_RATE: {
           const aTotal = (a.user_wins || 0) + (a.user_losses || 0);
           const bTotal = (b.user_wins || 0) + (b.user_losses || 0);
           aValue = aTotal > 0 ? (a.user_wins || 0) / aTotal : 0;
-          bValue = bTotal > 0 ? (b.user_wins || 0) / bTotal : 0;
+          bValue = bTotal > 0 ? (b.user_losses || 0) / bTotal : 0;
           break;
+        }
         case FILTER_OPTIONS.SORT.CREATED:
           aValue = new Date(a.created_at || 0);
           bValue = new Date(b.created_at || 0);
+          break;
+        // * NEW: Selection-based sorting options
+        case 'selection_count':
+          aValue = selectionStats?.nameSelectionCounts?.[a.id] || 0;
+          bValue = selectionStats?.nameSelectionCounts?.[b.id] || 0;
+          break;
+        case 'last_selected':
+          aValue = selectionStats?.nameLastSelected?.[a.id] ? new Date(selectionStats.nameLastSelected[a.id]) : new Date(0);
+          bValue = selectionStats?.nameLastSelected?.[b.id] ? new Date(selectionStats.nameLastSelected[b.id]) : new Date(0);
+          break;
+        case 'selection_frequency':
+          aValue = selectionStats?.nameSelectionFrequency?.[a.id] || 0;
+          bValue = selectionStats?.nameSelectionFrequency?.[b.id] || 0;
+          break;
+        case 'tournament_appearances':
+          aValue = a.total_tournaments || 0;
+          bValue = b.total_tournaments || 0;
           break;
         default:
           aValue = a.user_rating || TOURNAMENT.DEFAULT_RATING;
@@ -110,7 +169,7 @@ const ProfileNameList = ({
     });
 
     return filtered;
-  }, [names, filterStatus, userFilter, sortBy, sortOrder, ratings.userName]);
+  }, [names, filterStatus, userFilter, sortBy, sortOrder, ratings.userName, selectionFilter, selectionStats]);
 
   if (isLoading) {
     return (
@@ -212,7 +271,9 @@ ProfileNameList.propTypes = {
   onSelectionChange: PropTypes.func,
   selectedNames: PropTypes.instanceOf(Set),
   className: PropTypes.string,
-  showAdminControls: PropTypes.bool
+  showAdminControls: PropTypes.bool,
+  selectionFilter: PropTypes.string,
+  selectionStats: PropTypes.object
 };
 
 export default ProfileNameList;
