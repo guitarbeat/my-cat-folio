@@ -330,7 +330,7 @@
 }
 
 /* * High Contrast Mode Support */
-@media (prefers-contrast: high) {
+@media (prefers-contrast: more) {
   .hiddenNameCard {
     border-width: 3px;
   }

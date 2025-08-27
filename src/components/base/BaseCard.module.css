@@ -172,7 +172,7 @@
 }
 
 /* * High Contrast Mode Support */
-@media (prefers-contrast: high) {
+@media (prefers-contrast: more) {
   .card {
     border-width: 2px;
   }

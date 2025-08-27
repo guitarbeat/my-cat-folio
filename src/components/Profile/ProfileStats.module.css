@@ -159,7 +159,7 @@
 }
 
 /* * High Contrast Mode Support */
-@media (prefers-contrast: high) {
+@media (prefers-contrast: more) {
   .loadingCard {
     border-width: 2px;
   }
