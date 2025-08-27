@@ -9,7 +9,8 @@ import { supabase, deleteName } from '../../supabase/supabaseClient';
 
 import StatsCard from '../StatsCard/StatsCard';
 import NameCard from '../NameCard/NameCard';
-import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
+import { SkeletonLoader } from '../LoadingSpinner';
+import { validateCatName } from '../../utils/validation';
 import styles from './Profile.module.css';
 import { DEFAULT_RATING, FILTER_OPTIONS } from '../../utils/constants';
 
@@ -503,10 +504,22 @@ const Profile = ({ userName, onStartNewTournament }) => {
   const handleDeleteName = useCallback(
     async (name) => {
       try {
-        await deleteName(name.id);
+        // Validate the name before deletion
+        const validation = validateCatName(name.name);
+        if (!validation.success) {
+          alert(`Invalid name: ${validation.error}`);
+          return;
+        }
+
+        const result = await deleteName(name.id);
+        if (result?.success === false) {
+          throw new Error(result.error || 'Failed to delete name');
+        }
+
         fetchNames();
       } catch (error) {
         console.error('Error deleting name:', error);
+        alert(`Failed to delete name: ${error.message}`);
       }
     },
     [fetchNames]
@@ -534,9 +547,10 @@ const Profile = ({ userName, onStartNewTournament }) => {
       setSelectedNames(new Set());
       fetchNames();
       console.log(`Bulk hidden ${selectedNames.size} names globally`);
-    } catch (error) {
-      console.error('Error in bulk hide:', error);
-    }
+          } catch (error) {
+        console.error('Error in bulk hide:', error);
+        alert(`Failed to hide names: ${error.message}`);
+      }
   }, [selectedNames, isAdmin, fetchNames]);
 
   const handleBulkDelete = useCallback(async () => {
@@ -546,9 +560,10 @@ const Profile = ({ userName, onStartNewTournament }) => {
       }
       setSelectedNames(new Set());
       fetchNames();
-    } catch (error) {
-      console.error('Error in bulk delete:', error);
-    }
+          } catch (error) {
+        console.error('Error in bulk delete:', error);
+        alert(`Failed to delete names: ${error.message}`);
+      }
   }, [selectedNames, fetchNames]);
 
   // New bulk operations for all names - Admin only
@@ -710,13 +725,39 @@ const Profile = ({ userName, onStartNewTournament }) => {
   }, [isAdmin, filterStatus, userFilter]);
 
   // Loading and error states
-  if (ratingsLoading) return <LoadingSpinner />;
+  if (ratingsLoading) {
+    return (
+      <div className={styles.profileContainer}>
+        <div className={styles.profileHeader}>
+          <h1 className={styles.profileTitle}>Loading Profile...</h1>
+        </div>
+        <div className={styles.mainContent}>
+          <SkeletonLoader type="profile" />
+          <div className={styles.namesGrid}>
+            <SkeletonLoader type="card" lines={5} />
+            <SkeletonLoader type="card" lines={5} />
+            <SkeletonLoader type="card" lines={5} />
+          </div>
+        </div>
+      </div>
+    );
+  }
   if (ratingsError) {
     // Handle error object properly - extract message or convert to string
     const errorMessage = ratingsError?.message || ratingsError?.details ||
                         (typeof ratingsError === 'string' ? ratingsError : 'Unknown error occurred');
     return (
-      <div className={styles.error}>Error loading ratings: {errorMessage}</div>
+      <div className={styles.error}>
+        <h3>⚠️ Error Loading Profile Data</h3>
+        <p>Error loading ratings: {errorMessage}</p>
+        <button
+          onClick={() => fetchNames()}
+          className={styles.button}
+          style={{ marginTop: '1rem' }}
+        >
+          🔄 Retry
+        </button>
+      </div>
     );
   }
 

@@ -7,6 +7,7 @@ import PropTypes from 'prop-types';
 
 import { InlineError } from '../';
 import useToast from '../../hooks/useToast';
+import { validateUsername } from '../../utils/validation';
 import styles from './Login.module.css';
 
 
@@ -91,8 +92,10 @@ function Login({ onLogin }) {
       });
 
     return () => {
-      if (typingTimeoutRef.current) {
-        clearTimeout(typingTimeoutRef.current);
+      // Store the current timeout ref in a variable to avoid the warning
+      const currentTimeout = typingTimeoutRef.current;
+      if (currentTimeout) {
+        clearTimeout(currentTimeout);
       }
     };
   }, []);
@@ -110,10 +113,18 @@ function Login({ onLogin }) {
     e.preventDefault();
     const finalName = name.trim() || generateFunName();
 
+    // Validate the username
+    const validation = validateUsername(finalName);
+    if (!validation.success) {
+      setError(validation.error);
+      showError(validation.error);
+      return;
+    }
+
     try {
       setIsLoading(true);
-      await onLogin(finalName);
-      showSuccess(`Welcome, ${finalName}! 🎉`);
+      await onLogin(validation.value);
+      showSuccess(`Welcome, ${validation.value}! 🎉`);
     } catch (err) {
       setError(err.message || 'Something went wrong. Please try again.');
       showError('Login failed. Please try again.');

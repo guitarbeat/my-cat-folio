@@ -30,7 +30,10 @@ describe('NavBar Component', () => {
     userName: '',
     onLogout: vi.fn(),
     isLightTheme: true,
-    onThemeChange: vi.fn()
+    onThemeChange: vi.fn(),
+    onShowOnboarding: vi.fn(),
+    onCloseOnboarding: vi.fn(),
+    isOnboardingOpen: false
   };
 
   beforeEach(() => {
@@ -106,50 +109,59 @@ describe('NavBar Component', () => {
 
   test('renders help button', () => {
     render(<NavBar {...defaultProps} />);
-    const helpButton = screen.getByRole('button', {
-      name: /Show help tutorial/i
+    // The help button is a div with role="button", so we need to look for that
+    const helpButtons = screen.getAllByRole('button', {
+      name: /Show onboarding tutorial/i
     });
-    expect(helpButton).toBeInTheDocument();
+    expect(helpButtons.length).toBeGreaterThan(0);
+    expect(helpButtons[0]).toBeInTheDocument();
   });
 
-  test('help button resets onboarding when clicked', () => {
-    const removeItemSpy = vi.spyOn(localStorage, 'removeItem');
-    const reloadSpy = vi.spyOn(window, 'location', 'get').mockReturnValue({
-      reload: vi.fn()
-    });
+  test('help button shows onboarding when clicked', () => {
+    const onShowOnboarding = vi.fn();
 
-    render(<NavBar {...defaultProps} />);
+    render(<NavBar {...defaultProps} onShowOnboarding={onShowOnboarding} />);
 
-    const helpButton = screen.getByRole('button', {
-      name: /Show help tutorial/i
+    // Get the first help button (desktop version) - it's a div with role="button"
+    const helpButtons = screen.getAllByRole('button', {
+      name: /Show onboarding tutorial/i
     });
+    const helpButton = helpButtons[0];
     fireEvent.click(helpButton);
 
-    expect(removeItemSpy).toHaveBeenCalledWith('catNameTournament_onboardingSeen');
-    expect(reloadSpy).toBeDefined();
-
-    removeItemSpy.mockRestore();
-    reloadSpy.mockRestore();
+    expect(onShowOnboarding).toHaveBeenCalled();
   });
 
   test('renders logo with correct title', () => {
     render(<NavBar {...defaultProps} />);
-    expect(screen.getByText("Aaron's Folly")).toBeInTheDocument();
+    // Check that we have at least one logo title (desktop and mobile versions)
+    const logoTitles = screen.getAllByText("Aaron's Folly");
+    expect(logoTitles.length).toBeGreaterThan(0);
+    expect(logoTitles[0]).toBeInTheDocument();
   });
 
   test('renders navigation items', () => {
     render(<NavBar {...defaultProps} />);
-    expect(screen.getByText('Tournament')).toBeInTheDocument();
+    // Check that we have at least one Tournament link (desktop and mobile versions)
+    const tournamentLinks = screen.getAllByText('Tournament');
+    expect(tournamentLinks.length).toBeGreaterThan(0);
+    expect(tournamentLinks[0]).toBeInTheDocument();
   });
 
   test('renders user info when logged in', () => {
     render(<NavBar {...defaultProps} isLoggedIn={true} userName="TestUser" />);
-    expect(screen.getByText('Welcome, TestUser')).toBeInTheDocument();
+    // Check that we have at least one welcome message (desktop and mobile versions)
+    const welcomeMessages = screen.getAllByText('Welcome, TestUser');
+    expect(welcomeMessages.length).toBeGreaterThan(0);
+    expect(welcomeMessages[0]).toBeInTheDocument();
   });
 
   test('renders logout button when logged in', () => {
     render(<NavBar {...defaultProps} isLoggedIn={true} />);
-    expect(screen.getByText('Logout')).toBeInTheDocument();
+    // Check that we have at least one logout link (desktop and mobile versions)
+    const logoutLinks = screen.getAllByText('Logout');
+    expect(logoutLinks.length).toBeGreaterThan(0);
+    expect(logoutLinks[0]).toBeInTheDocument();
   });
 
   test('renders external links when not logged in', () => {

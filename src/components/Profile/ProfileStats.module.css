@@ -1,0 +1,176 @@
+/* * Profile Stats Container */
+.container {
+  margin-bottom: 2rem;
+}
+
+.sectionTitle {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--text-primary, #111827);
+  margin: 0 0 1.5rem 0;
+  text-align: center;
+}
+
+/* * Stats Grid Layout */
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+/* * Loading States */
+.loadingGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.loadingCard {
+  background: var(--loading-bg, #f9fafb);
+  border-radius: 8px;
+  padding: 1.5rem;
+  border: 1px solid var(--loading-border, #e5e7eb);
+  min-height: 120px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.loadingBar {
+  height: 24px;
+  background: var(--loading-bar-bg, #e5e7eb);
+  border-radius: 4px;
+  margin-bottom: 0.5rem;
+  animation: loadingPulse 1.5s ease-in-out infinite;
+}
+
+.loadingText {
+  height: 16px;
+  background: var(--loading-text-bg, #e5e7eb);
+  border-radius: 4px;
+  width: 60%;
+  animation: loadingPulse 1.5s ease-in-out infinite 0.5s;
+}
+
+@keyframes loadingPulse {
+  0%, 100% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+/* * No Stats Message */
+.noStats {
+  text-align: center;
+  color: var(--text-secondary, #6b7280);
+  font-style: italic;
+  padding: 2rem;
+  background: var(--no-stats-bg, #f9fafb);
+  border-radius: 8px;
+  border: 1px dashed var(--no-stats-border, #d1d5db);
+}
+
+/* * Responsive Design */
+@media (max-width: 768px) {
+  .statsGrid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .loadingGrid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .sectionTitle {
+    font-size: 1.25rem;
+    margin-bottom: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    margin-bottom: 1.5rem;
+  }
+
+  .statsGrid {
+    gap: 0.75rem;
+  }
+
+  .loadingGrid {
+    gap: 0.75rem;
+  }
+
+  .loadingCard {
+    padding: 1rem;
+    min-height: 100px;
+  }
+}
+
+/* * Dark Theme Support */
+@media (prefers-color-scheme: dark) {
+  .sectionTitle {
+    --text-primary: #f9fafb;
+  }
+
+  .noStats {
+    --text-secondary: #9ca3af;
+    --no-stats-bg: #1f2937;
+    --no-stats-border: #374151;
+  }
+
+  .loadingCard {
+    --loading-bg: #1f2937;
+    --loading-border: #374151;
+  }
+
+  .loadingBar,
+  .loadingText {
+    --loading-bar-bg: #374151;
+    --loading-text-bg: #374151;
+  }
+}
+
+/* * Light Theme Variables */
+.sectionTitle {
+  --text-primary: #111827;
+}
+
+.noStats {
+  --text-secondary: #6b7280;
+  --no-stats-bg: #f9fafb;
+  --no-stats-border: #d1d5db;
+}
+
+.loadingCard {
+  --loading-bg: #f9fafb;
+  --loading-border: #e5e7eb;
+}
+
+.loadingBar,
+.loadingText {
+  --loading-bar-bg: #e5e7eb;
+  --loading-text-bg: #e5e7eb;
+}
+
+/* * High Contrast Mode Support */
+@media (prefers-contrast: high) {
+  .loadingCard {
+    border-width: 2px;
+  }
+
+  .noStats {
+    border-width: 2px;
+  }
+}
+
+/* * Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  .loadingBar,
+  .loadingText {
+    animation: none;
+  }
+}

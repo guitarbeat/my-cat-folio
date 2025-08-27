@@ -22,9 +22,9 @@
   position: fixed;
   top: 0;
   left: 0;
+  z-index: 0;
   width: 100%;
   height: 100%;
-  z-index: 0;
 }
 
 .backgroundImage {
@@ -40,20 +40,20 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.4);
+  background: rgb(0 0 0 / 40%);
 }
 
 /* Centered Hero Container */
 .heroContainer {
   position: relative;
+  z-index: 1000;
   display: flex;
   flex-direction: column;
+  gap: 3rem;
   align-items: center;
   justify-content: center;
   min-height: 100vh;
   padding: 2rem;
-  gap: 3rem;
-  z-index: 1000;
   animation: fadeInScale 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
 }
 
@@ -61,10 +61,10 @@
 .heroContent {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  text-align: center;
   gap: 2rem;
+  align-items: center;
   max-width: 600px;
+  text-align: center;
   animation: slideUp 0.6s 0.2s ease-out both;
 }
 
@@ -72,15 +72,15 @@
 .formSection {
   width: 100%;
   max-width: 500px;
-  background: linear-gradient(135deg, rgba(30, 41, 59, 0.95), rgba(51, 65, 85, 0.95));
-  backdrop-filter: blur(25px);
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  padding: 2.5rem;
+  background: linear-gradient(135deg, rgb(30 41 59 / 95%), rgb(51 65 85 / 95%));
+  border: 1px solid rgb(255 255 255 / 15%);
   border-radius: 28px;
   box-shadow: 
-    0 25px 50px rgba(0, 0, 0, 0.25),
-    0 0 0 1px rgba(255, 255, 255, 0.1),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1);
-  padding: 2.5rem;
+    0 25px 50px rgb(0 0 0 / 25%),
+    0 0 0 1px rgb(255 255 255 / 10%),
+    inset 0 1px 0 rgb(255 255 255 / 10%);
+  backdrop-filter: blur(25px);
   animation: slideUp 0.6s 0.4s ease-out both;
 }
 
@@ -90,6 +90,7 @@
     opacity: 0;
     transform: scale(0.95);
   }
+
   100% {
     opacity: 1;
     transform: scale(1);
@@ -101,6 +102,7 @@
     opacity: 0;
     transform: translateY(20px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -109,13 +111,13 @@
 
 /* Hero Content Styles */
 .welcomeTitle {
+  margin: 0;
   font-size: clamp(2rem, 6vw, 3rem);
   font-weight: 700;
+  line-height: 1.2;
   color: #f8fafc;
   text-align: center;
-  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
-  margin: 0;
-  line-height: 1.2;
+  text-shadow: 0 2px 8px rgb(0 0 0 / 50%);
 }
 
 .welcomeTitle::after {
@@ -124,18 +126,20 @@
   right: clamp(-25px, -5vw, -20px);
   font-size: clamp(1.2rem, 4vw, 1.5rem);
   content: "🐱";
+  filter: drop-shadow(0 2px 4px rgb(0 0 0 / 30%));
   transform: rotate(10deg);
   animation: bounce 2s infinite;
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
 }
 
 @keyframes bounce {
   0%, 20%, 50%, 80%, 100% {
     transform: translateY(0) rotate(10deg);
   }
+
   40% {
     transform: translateY(-10px) rotate(10deg);
   }
+
   60% {
     transform: translateY(-5px) rotate(10deg);
   }
@@ -144,11 +148,11 @@
 .catImage {
   width: clamp(120px, 18vw, 180px);
   height: clamp(120px, 18vw, 180px);
+  border: 4px solid rgb(59 130 246 / 40%);
   border-radius: 50%;
-  border: 4px solid rgba(59, 130, 246, 0.4);
   box-shadow: 
-    0 12px 30px rgba(59, 130, 246, 0.3),
-    0 0 0 1px rgba(255, 255, 255, 0.1);
+    0 12px 30px rgb(59 130 246 / 30%),
+    0 0 0 1px rgb(255 255 255 / 10%);
   animation: float 3s ease-in-out infinite;
 }
 
@@ -156,56 +160,57 @@
   0%, 100% {
     transform: translateY(0);
   }
+
   50% {
     transform: translateY(-10px);
   }
 }
 
 .welcomeText {
-  font-size: clamp(1rem, 3.5vw, 1.3rem);
-  color: #cbd5e1;
-  text-align: center;
-  line-height: 1.6;
   max-width: clamp(300px, 50vw, 450px);
   margin: 0;
+  font-size: clamp(1rem, 3.5vw, 1.3rem);
+  line-height: 1.6;
+  color: #cbd5e1;
+  text-align: center;
 }
 
 /* Form Section Styles */
 .loginTitle {
+  margin: 0 0 clamp(1rem, 3vw, 1.5rem);
   font-size: clamp(1.5rem, 5vw, 2rem);
   font-weight: 700;
   color: #f8fafc;
   text-align: center;
-  margin: 0 0 clamp(1rem, 3vw, 1.5rem) 0;
-  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  text-shadow: 0 2px 8px rgb(0 0 0 / 30%);
   background: linear-gradient(135deg, #60a5fa, #a78bfa);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
   background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .catFact {
-  background: rgba(255, 255, 255, 0.1);
+  padding: clamp(0.75rem, 2vw, 1rem);
+  margin: 0 0 clamp(1rem, 3vw, 1.5rem);
+  font-size: clamp(0.875rem, 3vw, 1rem);
+  line-height: 1.4;
+  color: rgb(255 255 255 / 90%);
+  text-align: left;
+  background: rgb(255 255 255 / 10%);
   border-left: 3px solid #e8bf76;
   border-radius: 8px;
-  padding: clamp(0.75rem, 2vw, 1rem);
-  margin: 0 0 clamp(1rem, 3vw, 1.5rem) 0;
-  font-size: clamp(0.875rem, 3vw, 1rem);
-  color: rgba(255, 255, 255, 0.9);
-  text-align: left;
-  line-height: 1.4;
   backdrop-filter: blur(10px);
 }
 
 .catFactIcon {
-  font-size: 1.1em;
   margin-right: 0.5rem;
+  font-size: 1.1em;
   animation: bounce 2s infinite;
 }
 
 .loadingFact {
-  color: rgba(255, 255, 255, 0.7);
   font-style: italic;
+  color: rgb(255 255 255 / 70%);
 }
 
 .loadingDots {
@@ -216,31 +221,32 @@
   0%, 100% {
     opacity: 0.5;
   }
+
   50% {
     opacity: 1;
   }
 }
 
 .typingIndicator {
-  background: rgba(59, 130, 246, 0.1);
-  border: 1px solid rgba(59, 130, 246, 0.2);
-  border-radius: 8px;
   padding: clamp(0.5rem, 2vw, 0.75rem);
   margin-bottom: clamp(1rem, 3vw, 1.5rem);
   text-align: center;
+  background: rgb(59 130 246 / 10%);
+  border: 1px solid rgb(59 130 246 / 20%);
+  border-radius: 8px;
 }
 
 .typingText {
+  display: block;
+  margin-bottom: 0.5rem;
   font-size: clamp(0.8rem, 2.5vw, 0.9rem);
   color: #1f2937;
-  margin-bottom: 0.5rem;
-  display: block;
 }
 
 .typingDots {
   display: flex;
-  justify-content: center;
   gap: 0.25rem;
+  justify-content: center;
 }
 
 .dot {
@@ -261,12 +267,13 @@
 
 @keyframes typingDot {
   0%, 80%, 100% {
-    transform: scale(0.8);
     opacity: 0.5;
+    transform: scale(0.8);
   }
+
   40% {
-    transform: scale(1);
     opacity: 1;
+    transform: scale(1);
   }
 }
 
@@ -287,7 +294,7 @@
   font-size: clamp(0.9rem, 3vw, 1rem);
   font-weight: 600;
   color: white;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  text-shadow: 0 1px 2px rgb(0 0 0 / 30%);
 }
 
 .inputContainer {
@@ -301,48 +308,48 @@
   padding: clamp(0.75rem, 2vw, 1rem) clamp(2.5rem, 6vw, 3rem) clamp(0.75rem, 2vw, 1rem) clamp(1rem, 2.5vw, 1.25rem);
   font-size: clamp(0.875rem, 3vw, 1rem);
   color: white;
-  background: rgba(255, 255, 255, 0.1);
-  border: 2px solid rgba(255, 255, 255, 0.2);
+  background: rgb(255 255 255 / 10%);
+  border: 2px solid rgb(255 255 255 / 20%);
   border-radius: 8px;
   backdrop-filter: blur(10px);
   transition: all 0.2s ease;
 }
 
 .loginInput::placeholder {
-  color: rgba(255, 255, 255, 0.6);
+  color: rgb(255 255 255 / 60%);
 }
 
 .loginInput:focus {
   outline: none;
+  background: rgb(255 255 255 / 15%);
   border-color: #e8bf76;
-  box-shadow: 0 0 0 3px rgba(232, 191, 118, 0.2);
-  background: rgba(255, 255, 255, 0.15);
+  box-shadow: 0 0 0 3px rgb(232 191 118 / 20%);
 }
 
 .loginInput.error {
   border-color: #ef4444;
-  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2);
+  box-shadow: 0 0 0 3px rgb(239 68 68 / 20%);
 }
 
 .randomNameIndicator {
   position: absolute;
-  right: 8px;
   top: 50%;
-  transform: translateY(-50%);
+  right: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
   width: 32px;
   height: 32px;
   cursor: help;
-  background: rgba(232, 191, 118, 0.2);
+  background: rgb(232 191 118 / 20%);
   border-radius: 50%;
+  transform: translateY(-50%);
   animation: pulse 2s infinite ease-in-out;
 }
 
 .diceIcon {
   font-size: 1.2rem;
-  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.2));
+  filter: drop-shadow(0 1px 2px rgb(0 0 0 / 20%));
 }
 
 .loginError {
@@ -350,11 +357,11 @@
 }
 
 .explainerText {
+  margin-top: clamp(0.5rem, 2vw, 0.75rem);
   font-size: clamp(0.8rem, 2.5vw, 0.9rem);
+  line-height: 1.4;
   color: #6b7280;
   text-align: center;
-  margin-top: clamp(0.5rem, 2vw, 0.75rem);
-  line-height: 1.4;
 }
 
 .characterCounter {
@@ -366,16 +373,16 @@
 
 .counterText {
   font-size: 0.75rem;
-  color: rgba(255, 255, 255, 0.6);
+  color: rgb(255 255 255 / 60%);
   text-align: center;
 }
 
 .counterBar {
   width: 100%;
   height: 4px;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 2px;
   overflow: hidden;
+  background: rgb(255 255 255 / 10%);
+  border-radius: 2px;
 }
 
 .counterProgress {
@@ -388,21 +395,21 @@
 .singleButton {
   width: 100%;
   padding: clamp(0.875rem, 3vw, 1.125rem) clamp(1.5rem, 4vw, 2rem);
+  margin-top: 1rem;
   font-size: clamp(0.9rem, 3vw, 1rem);
   font-weight: 600;
   color: white;
+  cursor: pointer;
   background: linear-gradient(135deg, #e8bf76, #f1a438);
   border: none;
   border-radius: clamp(8px, 2vw, 12px);
-  cursor: pointer;
+  box-shadow: 0 4px 16px rgb(232 191 118 / 30%);
   transition: all 0.2s ease;
-  box-shadow: 0 4px 16px rgba(232, 191, 118, 0.3);
-  margin-top: 1rem;
 }
 
 .singleButton:hover {
+  box-shadow: 0 6px 20px rgb(249 115 22 / 40%);
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(249, 115, 22, 0.4);
 }
 
 .singleButton:active:not(:disabled) {
@@ -410,22 +417,22 @@
 }
 
 .singleButton:disabled {
-  opacity: 0.7;
   cursor: not-allowed;
+  opacity: 0.7;
   transform: none;
 }
 
 .buttonContent {
   display: flex;
+  gap: 0.5rem;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
 }
 
 .spinner {
   width: 16px;
   height: 16px;
-  border: 2px solid rgba(255, 255, 255, 0.3);
+  border: 2px solid rgb(255 255 255 / 30%);
   border-top: 2px solid white;
   border-radius: 50%;
   animation: spin 1s linear infinite;
@@ -441,20 +448,20 @@
 }
 
 .namePreview {
-  text-align: center;
   margin-top: 1rem;
+  text-align: center;
 }
 
 .helperText {
-  font-size: 0.9rem;
-  color: rgba(255, 255, 255, 0.8);
   margin: 0;
+  font-size: 0.9rem;
+  color: rgb(255 255 255 / 80%);
 }
 
 .nameHighlight {
-  color: #e8bf76;
   font-weight: 600;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  color: #e8bf76;
+  text-shadow: 0 1px 2px rgb(0 0 0 / 30%);
 }
 
 .randomPreview {
@@ -469,7 +476,7 @@
 
 .randomNameExample {
   font-size: 0.8rem;
-  color: rgba(255, 255, 255, 0.6);
+  color: rgb(255 255 255 / 60%);
 }
 
 .exampleLabel {
@@ -477,16 +484,16 @@
 }
 
 .exampleValue {
-  color: #e8bf76;
   font-family: monospace;
+  color: #e8bf76;
 }
 
 /* Responsive Design */
-@media (max-width: 768px) {
+@media (width <= 768px) {
   .heroContainer {
+    gap: 2rem;
     min-height: calc(100vh - 60px);
     padding: 1rem;
-    gap: 2rem;
   }
 
   .heroContent {
@@ -494,8 +501,8 @@
   }
 
   .formSection {
-    padding: 1.5rem;
     max-width: 100%;
+    padding: 1.5rem;
   }
 
   .welcomeTitle {
@@ -508,8 +515,8 @@
   }
 
   .welcomeText {
-    font-size: 1rem;
     max-width: 100%;
+    font-size: 1rem;
   }
 
   .loginTitle {
@@ -517,15 +524,15 @@
   }
 
   .catFact {
-    font-size: 0.875rem;
     padding: 0.75rem;
+    font-size: 0.875rem;
   }
 }
 
-@media (max-width: 480px) {
+@media (width <= 480px) {
   .heroContainer {
-    padding: 0.5rem;
     gap: 1.5rem;
+    padding: 0.5rem;
   }
 
   .formSection {

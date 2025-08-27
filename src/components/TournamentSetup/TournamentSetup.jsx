@@ -14,6 +14,7 @@ import { LoadingSpinner, NameCard, ErrorBoundary, ErrorDisplay, InlineError } fr
 import useSupabaseStorage from '../../supabase/useSupabaseStorage';
 import useErrorHandler from '../../hooks/useErrorHandler';
 import useToast from '../../hooks/useToast';
+import { validateCatName, validateDescription } from '../../utils/validation';
 import styles from './TournamentSetup.module.css';
 
 // Use relative paths for better Vite compatibility
@@ -419,14 +420,20 @@ const SwipeableNameCards = ({
 
 const StartButton = ({ selectedNames, onStart, variant = 'default' }) => {
   const validateNames = (names) => {
-    return names.every(
-      (nameObj) =>
-        nameObj &&
-        typeof nameObj === 'object' &&
-        nameObj.name &&
-        typeof nameObj.name === 'string' &&
-        nameObj.id
-    );
+    return names.every((nameObj) => {
+      if (!nameObj || typeof nameObj !== 'object' || !nameObj.id) {
+        return false;
+      }
+
+      // Validate the name using our validation utility
+      const nameValidation = validateCatName(nameObj.name);
+      if (!nameValidation.success) {
+        console.warn('Invalid name detected:', nameObj.name, nameValidation.error);
+        return false;
+      }
+
+      return true;
+    });
   };
 
   const handleStart = () => {
@@ -474,18 +481,22 @@ const NameSuggestionSection = () => {
     setError('');
     setSuccess('');
 
-    if (!name.trim()) {
-      setError('Please enter a name');
+    // Validate the name
+    const nameValidation = validateCatName(name.trim());
+    if (!nameValidation.success) {
+      setError(nameValidation.error);
       return;
     }
 
-    if (!description.trim()) {
-      setError('Please enter a description');
+    // Validate the description
+    const descriptionValidation = validateDescription(description.trim());
+    if (!descriptionValidation.success) {
+      setError(descriptionValidation.error);
       return;
     }
 
     try {
-      await addName(name.trim(), description.trim());
+      await addName(nameValidation.value, descriptionValidation.value);
       setSuccess('Thank you for your suggestion!');
       showSuccess('Name suggestion submitted successfully!', { duration: 4000 });
       setName('');

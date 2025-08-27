@@ -6,6 +6,7 @@
 
 import { createClient } from '@supabase/supabase-js';
 import devLog from '../utils/logger';
+import { databaseRetry } from '../utils/retryUtils';
 
 // Environment configuration
 const supabaseUrl =
@@ -43,13 +44,19 @@ export const catNamesAPI = {
     try {
       // Get ALL hidden name IDs globally (not user-specific)
       let hiddenIds = [];
-      const { data: hiddenData, error: hiddenError } = await supabase
-        .from('cat_name_ratings')
-        .select('name_id')
-        .eq('is_hidden', true);
+      const { data: hiddenData, error: hiddenError } = await databaseRetry.read(async () => {
+        return await supabase
+          .from('cat_name_ratings')
+          .select('name_id')
+          .eq('is_hidden', true);
+      });
 
-      if (hiddenError) throw hiddenError;
-      hiddenIds = hiddenData?.map((item) => item.name_id) || [];
+      if (hiddenError) {
+        console.error('Error fetching hidden names:', hiddenError);
+        hiddenIds = [];
+      } else {
+        hiddenIds = hiddenData?.map((item) => item.name_id) || [];
+      }
 
       // Build query
       let query = supabase.from('cat_name_options').select(`
@@ -74,8 +81,13 @@ export const catNamesAPI = {
         query = query.not('id', 'in', `(${hiddenIds.join(',')})`);
       }
 
-      const { data, error } = await query.order('name');
-      if (error) throw error;
+      const { data, error } = await databaseRetry.read(async () => {
+        return await query.order('name');
+      });
+      if (error) {
+        console.error('Error fetching names with descriptions:', error);
+        return [];
+      }
 
       // Process data to include latest updated_at and user-specific info
       return (
@@ -107,13 +119,16 @@ export const catNamesAPI = {
         .select()
         .single();
 
-      if (error) throw error;
-      return data;
+      if (error) {
+        console.error('Error adding name:', error);
+        return { success: false, error: error.message || 'Failed to add name' };
+      }
+      return { success: true, data };
     } catch (error) {
       if (process.env.NODE_ENV === 'development') {
         console.error('Error adding name:', error);
       }
-      throw error;
+      return { success: false, error: error.message || 'Unknown error occurred' };
     }
   },
 
@@ -127,13 +142,16 @@ export const catNamesAPI = {
         .delete()
         .eq('name', name);
 
-      if (error) throw error;
+      if (error) {
+        console.error('Error removing name:', error);
+        return { success: false, error: error.message || 'Failed to remove name' };
+      }
       return { success: true };
     } catch (error) {
       if (process.env.NODE_ENV === 'development') {
         console.error('Error removing name:', error);
       }
-      throw error;
+      return { success: false, error: error.message || 'Unknown error occurred' };
     }
   },
 
@@ -148,7 +166,10 @@ export const catNamesAPI = {
         p_min_tournaments: minTournaments
       });
 
-      if (error) throw error;
+      if (error) {
+        console.error('Error fetching leaderboard:', error);
+        return [];
+      }
       return data || [];
     } catch (error) {
       if (process.env.NODE_ENV === 'development') {
@@ -218,9 +239,13 @@ export const ratingsAPI = {
         { onConflict: 'user_name,name_id', returning: 'minimal' }
       );
 
-      if (error) throw error;
+      if (error) {
+        console.error('Error updating rating:', error);
+        return { success: false, error: error.message || 'Failed to update rating' };
+      }
 
       return {
+        success: true,
         rating: newRating,
         previous_rating: currentRating,
         change: newRating - currentRating,
@@ -232,7 +257,7 @@ export const ratingsAPI = {
       if (process.env.NODE_ENV === 'development') {
         console.error('Error updating rating:', error);
       }
-      throw error;
+      return { success: false, error: error.message || 'Unknown error occurred' };
     }
   },
 
@@ -252,7 +277,10 @@ export const ratingsAPI = {
       }
 
       const { data, error } = await query;
-      if (error) throw error;
+      if (error) {
+        console.error('Error fetching rating history:', error);
+        return [];
+      }
 
       // Extract and flatten rating history from JSONB
       const allHistory = data
@@ -522,21 +550,70 @@ export const tournamentsAPI = {
   /**
    * Update tournament status
    */
-  // eslint-disable-next-line no-unused-vars
   async updateTournamentStatus(tournamentId, status) {
     try {
-      // This function needs to be updated to work with the new schema
-      // For now, we'll need to know which user owns the tournament
-      // This is a limitation of the new consolidated schema
-      if (process.env.NODE_ENV === 'development') {
-        console.warn('updateTournamentStatus: This function needs to be updated for the new consolidated schema');
+      // Find the tournament in the user's tournament_data array
+      // We need to search through all users to find the tournament
+      const { data: allUsers, error: fetchError } = await supabase
+        .from('cat_app_users')
+        .select('user_name, tournament_data')
+        .not('tournament_data', 'is', null);
+
+      if (fetchError) {
+        console.error('Error fetching users for tournament update:', fetchError);
+        return { success: false, error: 'Failed to fetch tournament data' };
       }
-      throw new Error('updateTournamentStatus: Function needs to be updated for new schema');
+
+      let tournamentFound = false;
+      let updatedUser = null;
+
+      // Search through all users to find the tournament
+      for (const user of allUsers) {
+        if (!user.tournament_data || !Array.isArray(user.tournament_data)) continue;
+
+        const tournamentIndex = user.tournament_data.findIndex(t => t.id === tournamentId);
+        if (tournamentIndex !== -1) {
+          // Update the tournament status
+          const updatedTournaments = [...user.tournament_data];
+          updatedTournaments[tournamentIndex] = {
+            ...updatedTournaments[tournamentIndex],
+            status: status,
+            updated_at: new Date().toISOString()
+          };
+
+          // Update the user's tournament data
+          const { error: updateError } = await supabase
+            .from('cat_app_users')
+            .update({ tournament_data: updatedTournaments })
+            .eq('user_name', user.user_name);
+
+          if (updateError) {
+            console.error('Error updating tournament status:', updateError);
+            return { success: false, error: 'Failed to update tournament status' };
+          }
+
+          tournamentFound = true;
+          updatedUser = user.user_name;
+          break;
+        }
+      }
+
+      if (!tournamentFound) {
+        return { success: false, error: 'Tournament not found' };
+      }
+
+      return {
+        success: true,
+        tournamentId,
+        status,
+        updatedUser,
+        message: `Tournament status updated to ${status}`
+      };
     } catch (error) {
       if (process.env.NODE_ENV === 'development') {
-        console.error('Error updating tournament:', error);
+        console.error('Error updating tournament status:', error);
       }
-      throw error;
+      return { success: false, error: error.message || 'Unknown error occurred' };
     }
   },
 

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import styles from './OnboardingModal.module.css';
 
@@ -44,16 +44,6 @@ const OnboardingModal = ({ isOpen, onClose, onDontShowAgain, isLightTheme = fals
       setBubblePositions([]);
     }
   }, [isOpen]);
-
-  // Cleanup event listeners on unmount
-  useEffect(() => {
-    return () => {
-      document.removeEventListener('mousemove', handleMouseMove);
-      document.removeEventListener('mouseup', handleMouseUp);
-      document.removeEventListener('touchmove', handleTouchMove);
-      document.removeEventListener('touchend', handleTouchEnd);
-    };
-  }, []);
 
   // Animate bubbles with proper boundary checking (only when not dragging)
   useEffect(() => {
@@ -190,7 +180,7 @@ const OnboardingModal = ({ isOpen, onClose, onDontShowAgain, isLightTheme = fals
     document.addEventListener('mouseup', handleMouseUp);
   };
 
-  const handleMouseMove = (e) => {
+  const handleMouseMove = useCallback((e) => {
     if (draggedBubble === null) return;
 
     const viewportWidth = window.innerWidth;
@@ -209,9 +199,9 @@ const OnboardingModal = ({ isOpen, onClose, onDontShowAgain, isLightTheme = fals
         ? { ...bubble, x: newX, y: newY }
         : bubble
     ));
-  };
+  }, [draggedBubble, dragOffset]);
 
-  const handleMouseUp = () => {
+  const handleMouseUp = useCallback(() => {
     if (draggedBubble === null) return;
 
     setDraggedBubble(null);
@@ -220,7 +210,7 @@ const OnboardingModal = ({ isOpen, onClose, onDontShowAgain, isLightTheme = fals
     // Remove global event listeners
     document.removeEventListener('mousemove', handleMouseMove);
     document.removeEventListener('mouseup', handleMouseUp);
-  };
+  }, [draggedBubble, handleMouseMove]);
 
   // Touch handlers for mobile
   const handleTouchStart = (e, index) => {
@@ -240,7 +230,7 @@ const OnboardingModal = ({ isOpen, onClose, onDontShowAgain, isLightTheme = fals
     document.addEventListener('touchend', handleTouchEnd);
   };
 
-  const handleTouchMove = (e) => {
+  const handleTouchMove = useCallback((e) => {
     if (draggedBubble === null) return;
     e.preventDefault(); // Prevent scrolling while dragging
 
@@ -260,9 +250,9 @@ const OnboardingModal = ({ isOpen, onClose, onDontShowAgain, isLightTheme = fals
         ? { ...bubble, x: newX, y: newY }
         : bubble
     ));
-  };
+  }, [draggedBubble, dragOffset]);
 
-  const handleTouchEnd = () => {
+  const handleTouchEnd = useCallback(() => {
     if (draggedBubble === null) return;
 
     setDraggedBubble(null);
@@ -270,7 +260,17 @@ const OnboardingModal = ({ isOpen, onClose, onDontShowAgain, isLightTheme = fals
 
     document.removeEventListener('touchmove', handleTouchMove);
     document.removeEventListener('touchend', handleTouchEnd);
-  };
+  }, [draggedBubble, handleTouchMove]);
+
+  // Cleanup event listeners on unmount - moved after function definitions
+  useEffect(() => {
+    return () => {
+      document.removeEventListener('mousemove', handleMouseMove);
+      document.removeEventListener('mouseup', handleMouseUp);
+      document.removeEventListener('touchmove', handleTouchMove);
+      document.removeEventListener('touchend', handleTouchEnd);
+    };
+  }, [handleMouseMove, handleMouseUp, handleTouchMove, handleTouchEnd]);
 
   if (!isOpen) return null;
 
