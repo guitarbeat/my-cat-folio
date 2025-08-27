@@ -31,9 +31,9 @@
  * --- END AUTO-GENERATED DOCSTRING ---
  */
 
-import React, { useState, useEffect, useRef } from 'react';
-import PropTypes from 'prop-types';
-import styles from './NameCard.module.css';
+import React, { useState, useEffect, useRef } from "react";
+import PropTypes from "prop-types";
+import styles from "./NameCard.module.css";
 
 /**
  * NameCard Component
@@ -60,15 +60,15 @@ function NameCard({
   onClick,
   disabled = false,
   shortcutHint,
-  className = '',
-  size = 'medium',
+  className = "",
+  size = "medium",
   metadata,
   isAdmin = false,
   isHidden = false,
   onToggleVisibility,
   onDelete,
   onSelectionChange,
-  image
+  image,
 }) {
   const [rippleStyle, setRippleStyle] = useState({});
   const [isRippling, setIsRippling] = useState(false);
@@ -107,39 +107,39 @@ function NameCard({
 
       setTiltStyle({
         transform: `perspective(1000px) rotateX(${tiltX}deg) rotateY(${tiltY}deg) scale3d(1.05, 1.05, 1.05)`,
-        transition: 'transform 0.1s ease-out'
+        transition: "transform 0.1s ease-out",
       });
 
       setMousePosition({ x: mouseX, y: mouseY });
 
       // Set CSS custom properties for mouse position
       if (card) {
-        card.style.setProperty('--mouse-x', `${mouseX}%`);
-        card.style.setProperty('--mouse-y', `${mouseY}%`);
+        card.style.setProperty("--mouse-x", `${mouseX}%`);
+        card.style.setProperty("--mouse-y", `${mouseY}%`);
       }
     };
 
     const handleMouseLeave = () => {
       setTiltStyle({
         transform:
-          'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)',
-        transition: 'transform 0.5s ease-out'
+          "perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)",
+        transition: "transform 0.5s ease-out",
       });
       setMousePosition({ x: 50, y: 50 });
 
       // Reset CSS custom properties
       if (card) {
-        card.style.setProperty('--mouse-x', '50%');
-        card.style.setProperty('--mouse-y', '50%');
+        card.style.setProperty("--mouse-x", "50%");
+        card.style.setProperty("--mouse-y", "50%");
       }
     };
 
-    card.addEventListener('mousemove', handleMouseMove);
-    card.addEventListener('mouseleave', handleMouseLeave);
+    card.addEventListener("mousemove", handleMouseMove);
+    card.addEventListener("mouseleave", handleMouseLeave);
 
     return () => {
-      card.removeEventListener('mousemove', handleMouseMove);
-      card.removeEventListener('mouseleave', handleMouseLeave);
+      card.removeEventListener("mousemove", handleMouseMove);
+      card.removeEventListener("mouseleave", handleMouseLeave);
     };
   }, [disabled]);
 
@@ -149,8 +149,8 @@ function NameCard({
     }
 
     if (
-      event.type === 'click' ||
-      (event.type === 'keydown' && (event.key === 'Enter' || event.key === ' '))
+      event.type === "click" ||
+      (event.type === "keydown" && (event.key === "Enter" || event.key === " "))
     ) {
       event.preventDefault();
 
@@ -161,7 +161,7 @@ function NameCard({
 
       setRippleStyle({
         left: `${x}px`,
-        top: `${y}px`
+        top: `${y}px`,
       });
 
       setIsRippling(true);
@@ -190,20 +190,20 @@ function NameCard({
       label += ` - ${description}`;
     }
     if (isSelected) {
-      label += ' (selected)';
+      label += " (selected)";
     }
     if (disabled) {
-      label += ' (disabled)';
+      label += " (disabled)";
     }
     if (isHidden) {
-      label += ' (hidden)';
+      label += " (hidden)";
     }
     return label;
   };
 
   // Generate safe ID for aria-describedby
   const getSafeId = (text) => {
-    return text.replace(/[^a-zA-Z0-9]/g, '-').toLowerCase();
+    return text.replace(/[^a-zA-Z0-9]/g, "-").toLowerCase();
   };
 
   const cardClasses = [
@@ -213,10 +213,10 @@ function NameCard({
     disabled && styles.disabled,
     isHidden && styles.hidden,
     image && styles.hasImage, // * Add special class for cards with images
-    className
+    className,
   ]
     .filter(Boolean)
-    .join(' ');
+    .join(" ");
 
   return (
     <div className={styles.cardContainer}>
@@ -241,7 +241,7 @@ function NameCard({
           className={styles.backgroundEffect}
           style={{
             background: `radial-gradient(circle at ${mousePosition.x}% ${mousePosition.y}%, rgba(var(--primary-rgb), 0.1) 0%, transparent 50%)`,
-            opacity: disabled ? 0 : 1
+            opacity: disabled ? 0 : 1,
           }}
         />
 
@@ -254,13 +254,15 @@ function NameCard({
               className={styles.cardImage}
               loading="lazy"
               onError={(e) => {
-                console.error('Image failed to load:', e.target.src);
+                console.error("Image failed to load:", e.target.src);
               }}
             />
           </div>
         )}
 
-        <h3 className={styles.name} id={`${getSafeId(name)}-title`}>{name}</h3>
+        <h3 className={styles.name} id={`${getSafeId(name)}-title`}>
+          {name}
+        </h3>
         {description && (
           <p
             id={`${getSafeId(name)}-description`}
@@ -330,10 +332,10 @@ function NameCard({
           <button
             onClick={(e) => handleAdminAction(e, () => onToggleVisibility?.())}
             className={styles.actionButton}
-            aria-label={`${isHidden ? 'Show' : 'Hide'} ${name}`}
-            title={`${isHidden ? 'Show' : 'Hide'} ${name}`}
+            aria-label={`${isHidden ? "Show" : "Hide"} ${name}`}
+            title={`${isHidden ? "Show" : "Hide"} ${name}`}
           >
-            {isHidden ? '🔒' : '🔓'}
+            {isHidden ? "🔒" : "🔓"}
           </button>
           {isHidden && onDelete && (
             <button
@@ -359,18 +361,18 @@ NameCard.propTypes = {
   disabled: PropTypes.bool,
   shortcutHint: PropTypes.string,
   className: PropTypes.string,
-  size: PropTypes.oneOf(['small', 'medium']),
+  size: PropTypes.oneOf(["small", "medium"]),
   metadata: PropTypes.shape({
     rating: PropTypes.number,
     popularity: PropTypes.number,
     tournaments: PropTypes.number,
-    categories: PropTypes.arrayOf(PropTypes.string)
+    categories: PropTypes.arrayOf(PropTypes.string),
   }),
   isAdmin: PropTypes.bool,
   isHidden: PropTypes.bool,
   onToggleVisibility: PropTypes.func,
   onDelete: PropTypes.func,
-  onSelectionChange: PropTypes.func
+  onSelectionChange: PropTypes.func,
 };
 
 export default NameCard;

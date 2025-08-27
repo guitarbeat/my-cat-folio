@@ -226,12 +226,12 @@
 /* Name styling - Ensure it doesn't take too much space */
 .name {
   composes: heading from "../../styles/global.css";
+  flex-shrink: 0; /* Prevent name from shrinking */
   margin: 0;
   font-size: var(--text-xl);
   font-weight: 700;
-  color: var(--text-primary);
   line-height: 1.2;
-  flex-shrink: 0; /* Prevent name from shrinking */
+  color: var(--text-primary);
 }
 
 /* Description styling - Enhanced for better readability and space */
@@ -239,32 +239,34 @@
   composes: text from "../../styles/global.css";
   display: -webkit-box;
   flex: 1; /* Take remaining space */
+  min-height: 4.8em; /* Ensure minimum height for description (6 lines * 1.6 line-height * 0.5em) */
   margin: 0;
   overflow: hidden;
   -webkit-line-clamp: 6; /* Increased from 3 to 6 lines for better description visibility */
-  font-size: var(--text-base); /* Increased from text-sm for better readability */
+  font-size: var(
+    --text-base
+  ); /* Increased from text-sm for better readability */
   font-weight: 450; /* Slightly heavier for better readability */
   line-height: 1.6;
   color: var(--text-secondary);
   opacity: 0.9; /* Increased from 0.85 for better visibility */
   transition: opacity var(--duration-normal) var(--ease-out);
   -webkit-box-orient: vertical;
-  min-height: 4.8em; /* Ensure minimum height for description (6 lines * 1.6 line-height * 0.5em) */
 }
 
 .small .description {
+  min-height: 3.2em; /* Minimum height for small cards */
   -webkit-line-clamp: 4; /* Increased from 2 to 4 for small cards */
   font-size: var(--text-sm);
-  min-height: 3.2em; /* Minimum height for small cards */
 }
 
 /* Metadata Display - Better positioning and spacing */
 .metadata {
   display: flex;
+  flex-shrink: 0; /* Prevent metadata from shrinking */
   flex-direction: column;
   gap: var(--space-3);
   margin-top: auto;
-  flex-shrink: 0; /* Prevent metadata from shrinking */
 }
 
 .metaItem {
@@ -337,11 +339,11 @@
 
 /* Enhanced hover effects for better description visibility */
 .card:hover .description {
-  color: var(--text-primary);
-  opacity: 1;
-  -webkit-line-clamp: unset; /* Show full description on hover */
   max-height: none; /* Allow full expansion on hover */
   overflow: visible; /* Show overflow content on hover */
+  -webkit-line-clamp: unset; /* Show full description on hover */
+  color: var(--text-primary);
+  opacity: 1;
 }
 
 /* Enhanced tilt hover effect */
@@ -669,8 +671,8 @@
   width: 100%;
   height: 120px;
   margin-bottom: var(--space-3);
-  border-radius: var(--radius-md);
   overflow: hidden;
+  border-radius: var(--radius-md);
   box-shadow: var(--shadow-sm);
 }
 
@@ -687,29 +689,32 @@
 
 /* Enhanced card styling when image is present */
 .card:has(.cardImageContainer) {
-  padding-top: var(--space-4);
   /* * Make cards taller when images are present */
   min-height: 300px;
+  padding-top: var(--space-4);
 }
 
 /* * Special styling for cards with images - Tinder-style layout */
 .hasImage {
-  /* * Disable complex 3D transforms when images are present */
-  transform-style: flat !important;
-  perspective: none !important;
   /* * Increase card height for better image display */
   min-height: 320px !important;
+  overflow: hidden !important;
+
   /* * Enhanced Tinder-style appearance */
   border: 2px solid var(--border-color) !important;
   border-radius: 20px !important;
   box-shadow: 0 10px 40px rgb(0 0 0 / 20%) !important;
-  overflow: hidden !important;
+  perspective: none !important;
+
+  /* * Disable complex 3D transforms when images are present */
+  transform-style: flat !important;
 }
 
 .hasImage:hover {
+  box-shadow: 0 15px 50px rgb(0 0 0 / 30%) !important;
+
   /* * Simpler hover effect for cards with images */
   transform: translateY(-4px) scale(1.02) !important;
-  box-shadow: 0 15px 50px rgb(0 0 0 / 30%) !important;
 }
 
 .hasImage .backgroundEffect {
@@ -721,6 +726,7 @@
 .hasImage .cardImageContainer {
   position: relative;
   z-index: 1;
+
   /* * Match swipe card image height */
   height: 200px;
   margin-bottom: var(--space-4);
@@ -746,20 +752,20 @@
 }
 
 /* Mobile responsive styles for card images */
-@media (max-width: 768px) {
+@media (width <= 768px) {
   .cardImageContainer {
     height: 150px;
     margin-bottom: var(--space-2);
   }
-  
+
   .hasImage .cardImageContainer {
     height: 150px;
   }
-  
+
   .hasImage {
     min-height: 280px !important;
   }
-  
+
   .card:has(.cardImageContainer) {
     min-height: 280px;
   }

@@ -1,29 +1,28 @@
 /* * Base Modal Styles */
 .overlay {
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
+  inset: 0;
+  z-index: 1000;
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 1000;
   padding: 1rem;
+  background-color: rgb(0 0 0 / 50%);
   backdrop-filter: blur(4px);
   animation: fadeIn 0.2s ease-out;
 }
 
 .modal {
-  background: var(--modal-bg, #ffffff);
-  border-radius: 12px;
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
   max-width: 90vw;
   max-height: 90vh;
   overflow: hidden;
-  animation: slideIn 0.3s ease-out;
+  background: var(--modal-bg, #fff);
   border: 1px solid var(--modal-border, #e5e7eb);
+  border-radius: 12px;
+  box-shadow:
+    0 20px 25px -5px rgb(0 0 0 / 10%),
+    0 10px 10px -5px rgb(0 0 0 / 4%);
+  animation: slideIn 0.3s ease-out;
 }
 
 /* * Modal Sizes */
@@ -44,8 +43,8 @@
 
 .fullscreen {
   width: 95vw;
-  height: 95vh;
   max-width: none;
+  height: 95vh;
   max-height: none;
 }
 
@@ -55,37 +54,37 @@
   align-items: center;
   justify-content: space-between;
   padding: 1.5rem 1.5rem 1rem;
-  border-bottom: 1px solid var(--modal-border, #e5e7eb);
   background: var(--modal-header-bg, #f9fafb);
+  border-bottom: 1px solid var(--modal-border, #e5e7eb);
 }
 
 .title {
   margin: 0;
   font-size: 1.25rem;
   font-weight: 600;
-  color: var(--modal-title-color, #111827);
   line-height: 1.5;
+  color: var(--modal-title-color, #111827);
 }
 
 .closeButton {
-  background: none;
-  border: none;
-  font-size: 1.5rem;
-  color: var(--modal-close-color, #6b7280);
-  cursor: pointer;
-  padding: 0.5rem;
-  border-radius: 6px;
-  transition: all 0.2s ease;
   display: flex;
   align-items: center;
   justify-content: center;
   width: 32px;
   height: 32px;
+  padding: 0.5rem;
+  font-size: 1.5rem;
+  color: var(--modal-close-color, #6b7280);
+  cursor: pointer;
+  background: none;
+  border: none;
+  border-radius: 6px;
+  transition: all 0.2s ease;
 }
 
 .closeButton:hover {
-  background-color: var(--modal-close-hover-bg, #f3f4f6);
   color: var(--modal-close-hover-color, #374151);
+  background-color: var(--modal-close-hover-bg, #f3f4f6);
 }
 
 .closeButton:focus {
@@ -95,9 +94,9 @@
 
 /* * Content Styles */
 .content {
+  max-height: calc(90vh - 120px);
   padding: 1.5rem;
   overflow-y: auto;
-  max-height: calc(90vh - 120px);
 }
 
 /* * Dark Theme Support */
@@ -116,7 +115,7 @@
 
 /* * Light Theme Variables */
 .modal {
-  --modal-bg: #ffffff;
+  --modal-bg: #fff;
   --modal-border: #e5e7eb;
   --modal-header-bg: #f9fafb;
   --modal-title-color: #111827;
@@ -131,6 +130,7 @@
   from {
     opacity: 0;
   }
+
   to {
     opacity: 1;
   }
@@ -141,6 +141,7 @@
     opacity: 0;
     transform: translateY(-20px) scale(0.95);
   }
+
   to {
     opacity: 1;
     transform: translateY(0) scale(1);
@@ -148,14 +149,14 @@
 }
 
 /* * Responsive Design */
-@media (max-width: 640px) {
+@media (width <= 640px) {
   .overlay {
     padding: 0.5rem;
   }
 
   .modal {
-    border-radius: 8px;
     margin: 0.5rem;
+    border-radius: 8px;
   }
 
   .header {
@@ -177,7 +178,7 @@
   }
 }
 
-@media (max-width: 480px) {
+@media (width <= 480px) {
   .small,
   .medium,
   .large {
@@ -195,15 +196,15 @@
 /* * High Contrast Mode Support */
 @media (prefers-contrast: high) {
   .overlay {
-    background-color: rgba(0, 0, 0, 0.8);
+    background-color: rgb(0 0 0 / 80%);
   }
 
   .modal {
-    border: 2px solid var(--modal-border, #000000);
+    border: 2px solid var(--modal-border, #000);
   }
 
   .closeButton:focus {
-    outline: 3px solid var(--modal-close-focus-color, #000000);
+    outline: 3px solid var(--modal-close-focus-color, #000);
   }
 }
 

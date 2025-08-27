@@ -67,7 +67,8 @@
   }
 
   /* Improve mobile list spacing */
-  ul, ol {
+  ul,
+  ol {
     padding-left: var(--space-4, 1rem);
   }
 
@@ -123,9 +124,18 @@
 @supports (padding: max(0px)) {
   @media (width <= 768px) {
     .main-content {
-      padding-right: max(var(--space-4, 1rem), env(safe-area-inset-right)) !important;
-      padding-bottom: max(var(--space-4, 1rem), env(safe-area-inset-bottom)) !important;
-      padding-left: max(var(--space-4, 1rem), env(safe-area-inset-left)) !important;
+      padding-right: max(
+        var(--space-4, 1rem),
+        env(safe-area-inset-right)
+      ) !important;
+      padding-bottom: max(
+        var(--space-4, 1rem),
+        env(safe-area-inset-bottom)
+      ) !important;
+      padding-left: max(
+        var(--space-4, 1rem),
+        env(safe-area-inset-left)
+      ) !important;
     }
 
     .navbar {
@@ -141,9 +151,18 @@
 
   @media (width <= 430px) {
     .main-content {
-      padding-right: max(var(--space-3, 0.75rem), env(safe-area-inset-right)) !important;
-      padding-bottom: max(var(--space-3, 0.75rem), env(safe-area-inset-bottom)) !important;
-      padding-left: max(var(--space-3, 0.75rem), env(safe-area-inset-left)) !important;
+      padding-right: max(
+        var(--space-3, 0.75rem),
+        env(safe-area-inset-right)
+      ) !important;
+      padding-bottom: max(
+        var(--space-3, 0.75rem),
+        env(safe-area-inset-bottom)
+      ) !important;
+      padding-left: max(
+        var(--space-3, 0.75rem),
+        env(safe-area-inset-left)
+      ) !important;
     }
 
     .scroll-to-top {

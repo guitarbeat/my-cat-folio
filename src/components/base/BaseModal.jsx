@@ -1,6 +1,6 @@
-import React, { useEffect, useRef } from 'react';
-import PropTypes from 'prop-types';
-import styles from './BaseModal.module.css';
+import React, { useEffect, useRef } from "react";
+import PropTypes from "prop-types";
+import styles from "./BaseModal.module.css";
 
 /**
  * @module BaseModal
@@ -13,12 +13,12 @@ const BaseModal = ({
   onClose,
   title,
   children,
-  size = 'medium',
+  size = "medium",
   showCloseButton = true,
   closeOnOverlayClick = true,
   closeOnEscape = true,
-  overlayClassName = '',
-  contentClassName = '',
+  overlayClassName = "",
+  contentClassName = "",
   ...props
 }) => {
   const modalRef = useRef(null);
@@ -29,13 +29,13 @@ const BaseModal = ({
     if (!isOpen || !closeOnEscape) return;
 
     const handleEscape = (event) => {
-      if (event.key === 'Escape') {
+      if (event.key === "Escape") {
         onClose();
       }
     };
 
-    document.addEventListener('keydown', handleEscape);
-    return () => document.removeEventListener('keydown', handleEscape);
+    document.addEventListener("keydown", handleEscape);
+    return () => document.removeEventListener("keydown", handleEscape);
   }, [isOpen, onClose, closeOnEscape]);
 
   // * Handle focus management
@@ -51,11 +51,11 @@ const BaseModal = ({
     }
 
     // * Prevent body scroll
-    document.body.style.overflow = 'hidden';
+    document.body.style.overflow = "hidden";
 
     return () => {
       // * Restore body scroll
-      document.body.style.overflow = '';
+      document.body.style.overflow = "";
 
       // * Restore focus to the previously focused element
       if (previousActiveElement.current) {
@@ -84,7 +84,7 @@ const BaseModal = ({
       onClick={handleOverlayClick}
       role="dialog"
       aria-modal="true"
-      aria-labelledby={title ? 'modal-title' : undefined}
+      aria-labelledby={title ? "modal-title" : undefined}
     >
       <div
         ref={modalRef}
@@ -114,9 +114,7 @@ const BaseModal = ({
         )}
 
         {/* * Content */}
-        <div className={styles.content}>
-          {children}
-        </div>
+        <div className={styles.content}>{children}</div>
       </div>
     </div>
   );
@@ -127,13 +125,13 @@ BaseModal.propTypes = {
   onClose: PropTypes.func.isRequired,
   title: PropTypes.string,
   children: PropTypes.node.isRequired,
-  size: PropTypes.oneOf(['small', 'medium', 'large', 'fullscreen']),
+  size: PropTypes.oneOf(["small", "medium", "large", "fullscreen"]),
   showCloseButton: PropTypes.bool,
   closeOnOverlayClick: PropTypes.bool,
   closeOnEscape: PropTypes.bool,
   className: PropTypes.string,
   overlayClassName: PropTypes.string,
-  contentClassName: PropTypes.string
+  contentClassName: PropTypes.string,
 };
 
 export default BaseModal;

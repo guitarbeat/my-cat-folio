@@ -153,11 +153,11 @@
     max-width: none;
     transform: translateY(-100%);
   }
-  
+
   .container.exiting {
     transform: translateY(-100%);
   }
-  
+
   @keyframes slideIn {
     from {
       opacity: 0;
@@ -169,16 +169,16 @@
       transform: translateY(0);
     }
   }
-  
+
   .content {
     gap: 8px;
     padding: 12px;
   }
-  
+
   .message {
     font-size: 0.9rem;
   }
-  
+
   .dismissButton {
     width: 20px;
     height: 20px;
@@ -192,11 +192,11 @@
     right: 5px;
     left: 5px;
   }
-  
+
   .content {
     padding: 10px;
   }
-  
+
   .message {
     font-size: 0.85rem;
   }
@@ -208,7 +208,7 @@
     border-width: 2px;
     box-shadow: 0 2px 8px rgb(0 0 0 / 30%);
   }
-  
+
   .dismissButton {
     border-width: 2px;
   }
@@ -220,11 +220,11 @@
     transition: none;
     animation: none;
   }
-  
+
   .progressFill {
     animation: none;
   }
-  
+
   .dismissButton:hover {
     transform: none;
   }
@@ -244,7 +244,7 @@
     border: 1px solid #000;
     box-shadow: none;
   }
-  
+
   .progressBar {
     display: none;
   }

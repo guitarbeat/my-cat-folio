@@ -44,7 +44,7 @@ function getRelativeLuminance(r, g, b) {
 export function getContrastRatio(color1, color2) {
   // Convert colors to RGB values
   const getRGB = (color) => {
-    if (color.startsWith('#')) {
+    if (color.startsWith("#")) {
       const hex = color.slice(1);
       const r = parseInt(hex.slice(0, 2), 16);
       const g = parseInt(hex.slice(2, 4), 16);
@@ -52,7 +52,7 @@ export function getContrastRatio(color1, color2) {
       return [r, g, b];
     }
 
-    if (color.startsWith('rgb')) {
+    if (color.startsWith("rgb")) {
       const match = color.match(/\d+/g);
       return match ? match.map(Number) : [0, 0, 0];
     }
@@ -63,7 +63,7 @@ export function getContrastRatio(color1, color2) {
       black: [0, 0, 0],
       red: [255, 0, 0],
       green: [0, 128, 0],
-      blue: [0, 0, 255]
+      blue: [0, 0, 255],
     };
 
     return namedColors[color.toLowerCase()] || [0, 0, 0];
@@ -87,8 +87,8 @@ export function getContrastRatio(color1, color2) {
  * @param {string} size - Text size ('normal' or 'large')
  * @returns {boolean} True if meets WCAG AA standards
  */
-export function meetsWCAGAA(contrastRatio, size = 'normal') {
-  const threshold = size === 'large' ? 3 : 4.5;
+export function meetsWCAGAA(contrastRatio, size = "normal") {
+  const threshold = size === "large" ? 3 : 4.5;
   return contrastRatio >= threshold;
 }
 
@@ -98,8 +98,8 @@ export function meetsWCAGAA(contrastRatio, size = 'normal') {
  * @param {string} size - Text size ('normal' or 'large')
  * @returns {boolean} True if meets WCAG AAA standards
  */
-export function meetsWCAGAAA(contrastRatio, size = 'normal') {
-  const threshold = size === 'large' ? 4.5 : 7;
+export function meetsWCAGAAA(contrastRatio, size = "normal") {
+  const threshold = size === "large" ? 4.5 : 7;
   return contrastRatio >= threshold;
 }
 
@@ -109,12 +109,12 @@ export function meetsWCAGAAA(contrastRatio, size = 'normal') {
  * @param {string} size - Text size ('normal' or 'large')
  * @returns {string} Accessibility level description
  */
-export function getAccessibilityLevel(contrastRatio, size = 'normal') {
+export function getAccessibilityLevel(contrastRatio, size = "normal") {
   if (meetsWCAGAAA(contrastRatio, size)) {
-    return 'AAA';
+    return "AAA";
   } else if (meetsWCAGAA(contrastRatio, size)) {
-    return 'AA';
+    return "AA";
   } else {
-    return 'Fail';
+    return "Fail";
   }
 }

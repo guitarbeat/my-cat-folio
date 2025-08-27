@@ -1,4 +1,4 @@
-import { supabase } from '../supabase/supabaseClient';
+import { supabase } from "../supabase/supabaseClient";
 
 /**
  * @module TournamentService
@@ -18,7 +18,7 @@ export class TournamentService {
       id: n.id,
       name: n.name,
       description: n.description,
-      rating: existingRatings[n.name]?.rating || 1500
+      rating: existingRatings[n.name]?.rating || 1500,
     }));
   }
 
@@ -30,14 +30,19 @@ export class TournamentService {
    * @param {Object} existingRatings - Current ratings from database
    * @returns {Promise<Object>} Updated ratings object
    */
-  static async processTournamentCompletion(finalRatings, voteHistory, userName, existingRatings = {}) {
+  static async processTournamentCompletion(
+    finalRatings,
+    voteHistory,
+    userName,
+    existingRatings = {},
+  ) {
     try {
       // * Convert finalRatings to array if it's an object
       const ratingsArray = Array.isArray(finalRatings)
         ? finalRatings
         : Object.entries(finalRatings).map(([name, rating]) => ({
             name,
-            rating
+            rating,
           }));
 
       // * Initialize tournament results for all names
@@ -74,9 +79,9 @@ export class TournamentService {
 
       // * Get name_ids from cat_name_options table
       const { data: nameOptions, error: nameError } = await supabase
-        .from('cat_name_options')
-        .select('id, name')
-        .in('name', Object.keys(tournamentResults));
+        .from("cat_name_options")
+        .select("id, name")
+        .in("name", Object.keys(tournamentResults));
 
       if (nameError) {
         throw new Error(`Failed to fetch names: ${nameError.message}`);
@@ -102,7 +107,10 @@ export class TournamentService {
             ratingsArray.find((r) => r.name === name)?.rating || 1500;
 
           // * Get existing rating data
-          const existingRating = existingRatings[name] || { wins: 0, losses: 0 };
+          const existingRating = existingRatings[name] || {
+            wins: 0,
+            losses: 0,
+          };
 
           return {
             user_name: userName,
@@ -111,7 +119,7 @@ export class TournamentService {
             // * Add new wins/losses to existing totals
             wins: (existingRating.wins || 0) + results.wins,
             losses: (existingRating.losses || 0) + results.losses,
-            updated_at: new Date().toISOString()
+            updated_at: new Date().toISOString(),
           };
         })
         .filter(Boolean);
@@ -121,21 +129,19 @@ export class TournamentService {
       // * Return updated ratings for local state
       const updatedRatings = { ...existingRatings };
       recordsToUpsert.forEach((record) => {
-        const name = nameOptions.find(
-          (opt) => opt.id === record.name_id
-        )?.name;
+        const name = nameOptions.find((opt) => opt.id === record.name_id)?.name;
         if (name) {
           updatedRatings[name] = {
             rating: record.rating,
             wins: record.wins,
-            losses: record.losses
+            losses: record.losses,
           };
         }
       });
 
       return updatedRatings;
     } catch (error) {
-      console.error('Error in tournament completion:', error);
+      console.error("Error in tournament completion:", error);
       throw error;
     }
   }
@@ -154,18 +160,18 @@ export class TournamentService {
           acc[name] = {
             rating: Math.round(rating),
             wins: wins,
-            losses: losses
+            losses: losses,
           };
           return acc;
         },
-        {}
+        {},
       );
 
       // * Get name_ids in a single query
       const { data: nameOptions, error: nameError } = await supabase
-        .from('cat_name_options')
-        .select('id, name')
-        .in('name', Object.keys(updatedRatings));
+        .from("cat_name_options")
+        .select("id, name")
+        .in("name", Object.keys(updatedRatings));
 
       if (nameError) {
         throw nameError;
@@ -178,14 +184,14 @@ export class TournamentService {
         rating: updatedRatings[name].rating,
         wins: updatedRatings[name].wins,
         losses: updatedRatings[name].losses,
-        updated_at: new Date().toISOString()
+        updated_at: new Date().toISOString(),
       }));
 
       await TournamentService.upsertRatingRecords(recordsToUpsert);
 
       return updatedRatings;
     } catch (error) {
-      console.error('Error updating ratings:', error);
+      console.error("Error updating ratings:", error);
       throw error;
     }
   }
@@ -197,14 +203,14 @@ export class TournamentService {
    */
   static async upsertRatingRecords(recordsToUpsert) {
     if (recordsToUpsert.length === 0) {
-      throw new Error('No valid records to update');
+      throw new Error("No valid records to update");
     }
 
     const { error: upsertError } = await supabase
-      .from('cat_name_ratings')
+      .from("cat_name_ratings")
       .upsert(recordsToUpsert, {
-        onConflict: 'user_name,name_id',
-        returning: 'minimal'
+        onConflict: "user_name,name_id",
+        returning: "minimal",
       });
 
     if (upsertError) {
@@ -226,7 +232,7 @@ export class TournamentService {
         winRate: 0,
         avgRating: 0,
         ratingSpread: 0,
-        totalMatches: 0
+        totalMatches: 0,
       };
     }
 
@@ -241,7 +247,7 @@ export class TournamentService {
       ratingsWithValues.length > 0
         ? Math.round(
             ratingsWithValues.reduce((sum, r) => sum + (r.rating || 0), 0) /
-              ratingsWithValues.length
+              ratingsWithValues.length,
           )
         : 0;
 
@@ -260,7 +266,7 @@ export class TournamentService {
       winRate,
       avgRating,
       ratingSpread,
-      totalMatches
+      totalMatches,
     };
   }
 }

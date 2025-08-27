@@ -1,1 +1,1 @@
-export { default } from './FloatingKitties';
+export { default } from "./FloatingKitties";

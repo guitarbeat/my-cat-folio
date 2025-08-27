@@ -2,20 +2,19 @@
  * @module Login
  * @description User login component with fun cat-themed interactions.
  */
-import React, { useState, useEffect, useRef } from 'react';
-import PropTypes from 'prop-types';
+import React, { useState, useEffect, useRef } from "react";
+import PropTypes from "prop-types";
 
-import { InlineError } from '../';
-import useToast from '../../hooks/useToast';
-import { validateUsername } from '../../utils/validation';
-import styles from './Login.module.css';
-
+import { InlineError } from "../";
+import useToast from "../../hooks/useToast";
+import { validateUsername } from "../../utils/validation";
+import styles from "./Login.module.css";
 
 function Login({ onLogin }) {
-  const [name, setName] = useState('');
+  const [name, setName] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState('');
-  const [catFact, setCatFact] = useState('');
+  const [error, setError] = useState("");
+  const [catFact, setCatFact] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   const { showSuccess, showError } = useToast();
 
@@ -24,46 +23,46 @@ function Login({ onLogin }) {
 
   // Add login-page class to body and html when component mounts
   useEffect(() => {
-    document.body.classList.add('login-page');
-    document.documentElement.classList.add('login-page');
+    document.body.classList.add("login-page");
+    document.documentElement.classList.add("login-page");
 
     // Remove class when component unmounts
     return () => {
-      document.body.classList.remove('login-page');
-      document.documentElement.classList.remove('login-page');
+      document.body.classList.remove("login-page");
+      document.documentElement.classList.remove("login-page");
     };
   }, []);
 
   const funnyPrefixes = [
-    'Captain',
-    'Dr.',
-    'Professor',
-    'Lord',
-    'Lady',
-    'Sir',
-    'Duchess',
-    'Count',
-    'Princess',
-    'Chief',
-    'Master',
-    'Agent',
-    'Detective',
-    'Admiral'
+    "Captain",
+    "Dr.",
+    "Professor",
+    "Lord",
+    "Lady",
+    "Sir",
+    "Duchess",
+    "Count",
+    "Princess",
+    "Chief",
+    "Master",
+    "Agent",
+    "Detective",
+    "Admiral",
   ];
 
   const funnyAdjectives = [
-    'Whiskers',
-    'Purrington',
-    'Meowington',
-    'Pawsome',
-    'Fluffles',
-    'Scratchy',
-    'Naptastic',
-    'Furball',
-    'Cattastic',
-    'Pawdorable',
-    'Whiskertron',
-    'Purrfect'
+    "Whiskers",
+    "Purrington",
+    "Meowington",
+    "Pawsome",
+    "Fluffles",
+    "Scratchy",
+    "Naptastic",
+    "Furball",
+    "Cattastic",
+    "Pawdorable",
+    "Whiskertron",
+    "Purrfect",
   ];
 
   const generateFunName = () => {
@@ -85,12 +84,12 @@ function Login({ onLogin }) {
 
   // Fetch cat fact on component mount
   useEffect(() => {
-    fetch('https://catfact.ninja/fact')
+    fetch("https://catfact.ninja/fact")
       .then((response) => response.json())
       .then((data) => setCatFact(data.fact))
       .catch((error) => {
-        console.error('Error fetching cat fact:', error);
-        setCatFact('Cats are amazing creatures with unique personalities!');
+        console.error("Error fetching cat fact:", error);
+        setCatFact("Cats are amazing creatures with unique personalities!");
       });
 
     return () => {
@@ -107,7 +106,7 @@ function Login({ onLogin }) {
     setIsTyping(true);
     resetTypingTimer();
     if (error) {
-      setError('');
+      setError("");
     }
   };
 
@@ -128,13 +127,12 @@ function Login({ onLogin }) {
       await onLogin(validation.value);
       showSuccess(`Welcome, ${validation.value}! 🎉`);
     } catch (err) {
-      setError(err.message || 'Something went wrong. Please try again.');
-      showError('Login failed. Please try again.');
+      setError(err.message || "Something went wrong. Please try again.");
+      showError("Login failed. Please try again.");
     } finally {
       setIsLoading(false);
     }
   };
-
 
   return (
     <div className={styles.loginWrapper}>
@@ -172,10 +170,7 @@ function Login({ onLogin }) {
           <h2 className={styles.loginTitle}>Cat Name Olympics</h2>
           <p className={styles.catFact}>
             {catFact ? (
-              <>
-
-                {catFact}
-              </>
+              <>{catFact}</>
             ) : (
               <span className={styles.loadingFact}>
                 <span className={styles.loadingDots}>
@@ -198,7 +193,12 @@ function Login({ onLogin }) {
             </div>
           ) : null}
 
-          <form onSubmit={handleSubmit} className={styles.loginForm} role="form" aria-label="Login form">
+          <form
+            onSubmit={handleSubmit}
+            className={styles.loginForm}
+            role="form"
+            aria-label="Login form"
+          >
             <div className={styles.inputWrapper}>
               <label htmlFor="loginName" className={styles.inputLabel}>
                 Your Judge Name:
@@ -210,11 +210,11 @@ function Login({ onLogin }) {
                   value={name}
                   onChange={handleNameChange}
                   placeholder="Enter your name (or leave empty for random)"
-                  className={`${styles.loginInput} ${error ? styles.error : ''}`}
+                  className={`${styles.loginInput} ${error ? styles.error : ""}`}
                   autoFocus
                   disabled={isLoading}
                   aria-label="Your name"
-                  aria-describedby={error ? 'loginError' : 'loginHelp'}
+                  aria-describedby={error ? "loginError" : "loginHelp"}
                   aria-required="false"
                   maxLength={30}
                 />
@@ -233,7 +233,7 @@ function Login({ onLogin }) {
                   error={error}
                   context="form"
                   position="below"
-                  onDismiss={() => setError('')}
+                  onDismiss={() => setError("")}
                   showRetry={false}
                   showDismiss={true}
                   size="medium"
@@ -261,7 +261,7 @@ function Login({ onLogin }) {
 
             <button
               type="submit"
-              className={`${styles.singleButton} ${isLoading ? styles.loading : ''} ${name.trim() ? styles.hasName : ''}`}
+              className={`${styles.singleButton} ${isLoading ? styles.loading : ""} ${name.trim() ? styles.hasName : ""}`}
               disabled={isLoading}
             >
               <span className={styles.buttonContent}>
@@ -272,7 +272,7 @@ function Login({ onLogin }) {
                   </>
                 ) : (
                   <>
-                    {name.trim() ? 'Start Judging!' : 'Get Random Name & Start'}
+                    {name.trim() ? "Start Judging!" : "Get Random Name & Start"}
                     <span className={styles.buttonEmoji} aria-hidden="true">
                       🏆
                     </span>
@@ -285,7 +285,7 @@ function Login({ onLogin }) {
           <div className={styles.namePreview}>
             {name ? (
               <p className={styles.helperText}>
-                You&apos;ll be known as{' '}
+                You&apos;ll be known as{" "}
                 <span className={styles.nameHighlight}>&quot;{name}&quot;</span>
               </p>
             ) : (
@@ -308,10 +308,10 @@ function Login({ onLogin }) {
   );
 }
 
-Login.displayName = 'Login';
+Login.displayName = "Login";
 
 Login.propTypes = {
-  onLogin: PropTypes.func.isRequired
+  onLogin: PropTypes.func.isRequired,
 };
 
 export default Login;

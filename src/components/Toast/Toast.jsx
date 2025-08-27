@@ -4,9 +4,9 @@
  * Provides different types (success, error, info, warning) with auto-dismiss functionality.
  */
 
-import React, { useCallback, useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
-import styles from './Toast.module.css';
+import React, { useCallback, useEffect, useState } from "react";
+import PropTypes from "prop-types";
+import styles from "./Toast.module.css";
 
 /**
  * Toast component for displaying temporary notifications
@@ -21,11 +21,11 @@ import styles from './Toast.module.css';
  */
 const Toast = ({
   message,
-  type = 'info',
+  type = "info",
   duration = 5000,
   onDismiss,
   autoDismiss = true,
-  className = ''
+  className = "",
 }) => {
   const [isVisible, setIsVisible] = useState(true);
   const [isExiting, setIsExiting] = useState(false);
@@ -52,27 +52,27 @@ const Toast = ({
 
   const getTypeIcon = () => {
     switch (type) {
-      case 'success':
-        return '✅';
-      case 'error':
-        return '❌';
-      case 'warning':
-        return '⚠️';
-      case 'info':
+      case "success":
+        return "✅";
+      case "error":
+        return "❌";
+      case "warning":
+        return "⚠️";
+      case "info":
       default:
-        return 'ℹ️';
+        return "ℹ️";
     }
   };
 
   const getTypeClass = () => {
     switch (type) {
-      case 'success':
+      case "success":
         return styles.success;
-      case 'error':
+      case "error":
         return styles.error;
-      case 'warning':
+      case "warning":
         return styles.warning;
-      case 'info':
+      case "info":
       default:
         return styles.info;
     }
@@ -83,7 +83,7 @@ const Toast = ({
       className={`
         ${styles.container} 
         ${getTypeClass()} 
-        ${isExiting ? styles.exiting : ''} 
+        ${isExiting ? styles.exiting : ""} 
         ${className}
       `}
       role="alert"
@@ -91,13 +91,9 @@ const Toast = ({
       aria-atomic="true"
     >
       <div className={styles.content}>
-        <span className={styles.icon}>
-          {getTypeIcon()}
-        </span>
+        <span className={styles.icon}>{getTypeIcon()}</span>
 
-        <span className={styles.message}>
-          {message}
-        </span>
+        <span className={styles.message}>{message}</span>
 
         <button
           onClick={handleDismiss}
@@ -116,7 +112,7 @@ const Toast = ({
             className={styles.progressFill}
             style={{
               animationDuration: `${duration}ms`,
-              animationPlayState: isExiting ? 'paused' : 'running'
+              animationPlayState: isExiting ? "paused" : "running",
             }}
           />
         </div>
@@ -127,11 +123,11 @@ const Toast = ({
 
 Toast.propTypes = {
   message: PropTypes.string.isRequired,
-  type: PropTypes.oneOf(['success', 'error', 'info', 'warning']),
+  type: PropTypes.oneOf(["success", "error", "info", "warning"]),
   duration: PropTypes.number,
   onDismiss: PropTypes.func,
   autoDismiss: PropTypes.bool,
-  className: PropTypes.string
+  className: PropTypes.string,
 };
 
 export default Toast;

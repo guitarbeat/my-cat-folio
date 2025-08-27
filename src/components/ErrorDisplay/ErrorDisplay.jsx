@@ -4,10 +4,10 @@
  * appropriate styling, actions, and information based on error severity.
  */
 
-import React, { useState } from 'react';
-import PropTypes from 'prop-types';
-import { ERROR_SEVERITY } from '../../utils/errorHandler';
-import styles from './ErrorDisplay.module.css';
+import React, { useState } from "react";
+import PropTypes from "prop-types";
+import { ERROR_SEVERITY } from "../../utils/errorHandler";
+import styles from "./ErrorDisplay.module.css";
 
 /**
  * ErrorDisplay component for showing user-friendly error messages
@@ -26,7 +26,7 @@ const ErrorDisplay = ({
   onDismiss,
   onClearAll,
   showDetails = false,
-  className = ''
+  className = "",
 }) => {
   const [expandedErrors, setExpandedErrors] = useState(new Set());
 
@@ -35,7 +35,7 @@ const ErrorDisplay = ({
   }
 
   const toggleErrorExpansion = (errorId) => {
-    setExpandedErrors(prev => {
+    setExpandedErrors((prev) => {
       const newSet = new Set(prev);
       if (newSet.has(errorId)) {
         newSet.delete(errorId);
@@ -49,15 +49,15 @@ const ErrorDisplay = ({
   const getSeverityIcon = (severity) => {
     switch (severity) {
       case ERROR_SEVERITY.CRITICAL:
-        return '🚨';
+        return "🚨";
       case ERROR_SEVERITY.HIGH:
-        return '⚠️';
+        return "⚠️";
       case ERROR_SEVERITY.MEDIUM:
-        return '⚠️';
+        return "⚠️";
       case ERROR_SEVERITY.LOW:
-        return 'ℹ️';
+        return "ℹ️";
       default:
-        return '❓';
+        return "❓";
     }
   };
 
@@ -80,7 +80,7 @@ const ErrorDisplay = ({
     try {
       return new Date(timestamp).toLocaleTimeString();
     } catch {
-      return 'Unknown time';
+      return "Unknown time";
     }
   };
 
@@ -90,7 +90,7 @@ const ErrorDisplay = ({
       {errors.length > 1 && onClearAll && (
         <div className={styles.header}>
           <span className={styles.errorCount}>
-            {errors.length} error{errors.length !== 1 ? 's' : ''}
+            {errors.length} error{errors.length !== 1 ? "s" : ""}
           </span>
           <button
             onClick={onClearAll}
@@ -115,9 +115,7 @@ const ErrorDisplay = ({
                 <span className={styles.severityIcon}>
                   {getSeverityIcon(error.severity)}
                 </span>
-                <span className={styles.errorMessage}>
-                  {error.message}
-                </span>
+                <span className={styles.errorMessage}>{error.message}</span>
                 <span className={styles.errorTime}>
                   {formatTimestamp(error.timestamp)}
                 </span>
@@ -146,38 +144,43 @@ const ErrorDisplay = ({
 
                 {showDetails && (
                   <button
-                    onClick={() => toggleErrorExpansion(`${error.timestamp}-${index}`)}
+                    onClick={() =>
+                      toggleErrorExpansion(`${error.timestamp}-${index}`)
+                    }
                     className={styles.detailsButton}
                     aria-label="Toggle error details"
                   >
-                    {expandedErrors.has(`${error.timestamp}-${index}`) ? '−' : '+'}
+                    {expandedErrors.has(`${error.timestamp}-${index}`)
+                      ? "−"
+                      : "+"}
                   </button>
                 )}
               </div>
             </div>
 
             {/* Error details (expandable) */}
-            {showDetails && expandedErrors.has(`${error.timestamp}-${index}`) && (
-              <div className={styles.errorDetails}>
-                <div className={styles.detailRow}>
-                  <strong>Type:</strong> {error.errorType}
-                </div>
-                <div className={styles.detailRow}>
-                  <strong>Severity:</strong> {error.severity}
-                </div>
-                <div className={styles.detailRow}>
-                  <strong>Context:</strong> {error.context}
-                </div>
-                {error.originalError && (
+            {showDetails &&
+              expandedErrors.has(`${error.timestamp}-${index}`) && (
+                <div className={styles.errorDetails}>
                   <div className={styles.detailRow}>
-                    <strong>Original Error:</strong>
-                    <pre className={styles.errorStack}>
-                      {error.originalError.toString()}
-                    </pre>
+                    <strong>Type:</strong> {error.errorType}
                   </div>
-                )}
-              </div>
-            )}
+                  <div className={styles.detailRow}>
+                    <strong>Severity:</strong> {error.severity}
+                  </div>
+                  <div className={styles.detailRow}>
+                    <strong>Context:</strong> {error.context}
+                  </div>
+                  {error.originalError && (
+                    <div className={styles.detailRow}>
+                      <strong>Original Error:</strong>
+                      <pre className={styles.errorStack}>
+                        {error.originalError.toString()}
+                      </pre>
+                    </div>
+                  )}
+                </div>
+              )}
           </div>
         ))}
       </div>
@@ -186,23 +189,25 @@ const ErrorDisplay = ({
 };
 
 ErrorDisplay.propTypes = {
-  errors: PropTypes.arrayOf(PropTypes.shape({
-    message: PropTypes.string.isRequired,
-    severity: PropTypes.oneOf(Object.values(ERROR_SEVERITY)).isRequired,
-    timestamp: PropTypes.string.isRequired,
-    context: PropTypes.string,
-    errorType: PropTypes.string,
-    isRetryable: PropTypes.bool,
-    originalError: PropTypes.oneOfType([
-      PropTypes.instanceOf(Error),
-      PropTypes.object
-    ])
-  })),
+  errors: PropTypes.arrayOf(
+    PropTypes.shape({
+      message: PropTypes.string.isRequired,
+      severity: PropTypes.oneOf(Object.values(ERROR_SEVERITY)).isRequired,
+      timestamp: PropTypes.string.isRequired,
+      context: PropTypes.string,
+      errorType: PropTypes.string,
+      isRetryable: PropTypes.bool,
+      originalError: PropTypes.oneOfType([
+        PropTypes.instanceOf(Error),
+        PropTypes.object,
+      ]),
+    }),
+  ),
   onRetry: PropTypes.func,
   onDismiss: PropTypes.func,
   onClearAll: PropTypes.func,
   showDetails: PropTypes.bool,
-  className: PropTypes.string
+  className: PropTypes.string,
 };
 
 export default ErrorDisplay;

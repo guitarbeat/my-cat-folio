@@ -7,25 +7,30 @@
  * @returns {JSX.Element} The complete application UI
  */
 
-import React, { useCallback, useMemo } from 'react';
-import { ErrorBoundary, Login, ErrorDisplay, ToastContainer } from './components';
-import NavBar from './components/NavBar/NavBar';
-import useUserSession from './hooks/useUserSession';
-import useTheme from './hooks/useTheme';
-import useToast from './hooks/useToast';
-import useAppStore from './store/useAppStore';
-import { TournamentService } from './services/tournamentService';
-import { ErrorService } from './services/errorService';
-import LoadingSpinner from './components/LoadingSpinner/LoadingSpinner';
+import React, { useCallback, useMemo } from "react";
+import {
+  ErrorBoundary,
+  Login,
+  ErrorDisplay,
+  ToastContainer,
+} from "./components";
+import NavBar from "./components/NavBar/NavBar";
+import useUserSession from "./hooks/useUserSession";
+import useTheme from "./hooks/useTheme";
+import useToast from "./hooks/useToast";
+import useAppStore from "./store/useAppStore";
+import { TournamentService } from "./services/tournamentService";
+import { ErrorService } from "./services/errorService";
+import LoadingSpinner from "./components/LoadingSpinner/LoadingSpinner";
 
 // * Lazy-loaded components for performance
-const Results = React.lazy(() => import('./components/Results/Results'));
-const Profile = React.lazy(() => import('./components/Profile/Profile'));
+const Results = React.lazy(() => import("./components/Results/Results"));
+const Profile = React.lazy(() => import("./components/Profile/Profile"));
 const TournamentSetup = React.lazy(
-  () => import('./components/TournamentSetup/TournamentSetup')
+  () => import("./components/TournamentSetup/TournamentSetup"),
 );
 const Tournament = React.lazy(
-  () => import('./components/Tournament/Tournament')
+  () => import("./components/Tournament/Tournament"),
 );
 
 function App() {
@@ -33,10 +38,7 @@ function App() {
   const { isLightTheme, toggleTheme } = useTheme();
 
   // * Toast notifications
-  const {
-    toasts,
-    removeToast
-  } = useToast();
+  const { toasts, removeToast } = useToast();
 
   // * Centralized store
   const {
@@ -45,34 +47,38 @@ function App() {
     tournamentActions,
     userActions,
     uiActions,
-    errorActions
+    errorActions,
   } = useAppStore();
 
   // * Handle tournament completion
-  const handleTournamentComplete = useCallback(async (finalRatings) => {
-    try {
-      if (!userName) {
-        throw new Error('No user name available');
+  const handleTournamentComplete = useCallback(
+    async (finalRatings) => {
+      try {
+        if (!userName) {
+          throw new Error("No user name available");
+        }
+
+        const updatedRatings =
+          await TournamentService.processTournamentCompletion(
+            finalRatings,
+            tournament.voteHistory,
+            userName,
+            tournament.ratings,
+          );
+
+        // * Update store with new ratings
+        tournamentActions.setRatings(updatedRatings);
+        tournamentActions.setComplete(true);
+      } catch (error) {
+        ErrorService.handleError(error, "Tournament Completion", {
+          isRetryable: true,
+          affectsUserData: true,
+          isCritical: false,
+        });
       }
-
-      const updatedRatings = await TournamentService.processTournamentCompletion(
-        finalRatings,
-        tournament.voteHistory,
-        userName,
-        tournament.ratings
-      );
-
-      // * Update store with new ratings
-      tournamentActions.setRatings(updatedRatings);
-      tournamentActions.setComplete(true);
-    } catch (error) {
-      ErrorService.handleError(error, 'Tournament Completion', {
-        isRetryable: true,
-        affectsUserData: true,
-        isCritical: false
-      });
-    }
-  }, [userName, tournament.voteHistory, tournament.ratings, tournamentActions]);
+    },
+    [userName, tournament.voteHistory, tournament.ratings, tournamentActions],
+  );
 
   // * Handle start new tournament
   const handleStartNewTournament = useCallback(() => {
@@ -80,40 +86,55 @@ function App() {
   }, [tournamentActions]);
 
   // * Handle tournament setup
-  const handleTournamentSetup = useCallback((names) => {
-    console.log('[DEV] 🎮 App: handleTournamentSetup called with names:', names);
+  const handleTournamentSetup = useCallback(
+    (names) => {
+      console.log(
+        "[DEV] 🎮 App: handleTournamentSetup called with names:",
+        names,
+      );
 
-    // * Only set loading if we don't already have names
-    if (!tournament.names) {
-      tournamentActions.setLoading(true);
-    }
+      // * Only set loading if we don't already have names
+      if (!tournament.names) {
+        tournamentActions.setLoading(true);
+      }
 
-    const processedNames = TournamentService.createTournament(names, tournament.ratings);
-    console.log('[DEV] 🎮 App: Processed names:', processedNames);
+      const processedNames = TournamentService.createTournament(
+        names,
+        tournament.ratings,
+      );
+      console.log("[DEV] 🎮 App: Processed names:", processedNames);
 
-    tournamentActions.setNames(processedNames);
+      tournamentActions.setNames(processedNames);
 
-    // * Use setTimeout to ensure the loading state is visible and prevent flashing
-    setTimeout(() => {
-      tournamentActions.setLoading(false);
-    }, 100);
-  }, [tournament.ratings, tournament.names, tournamentActions]);
+      // * Use setTimeout to ensure the loading state is visible and prevent flashing
+      setTimeout(() => {
+        tournamentActions.setLoading(false);
+      }, 100);
+    },
+    [tournament.ratings, tournament.names, tournamentActions],
+  );
 
   // * Handle ratings update
-  const handleUpdateRatings = useCallback(async (adjustedRatings) => {
-    try {
-      const updatedRatings = await TournamentService.updateRatings(adjustedRatings, userName);
-      tournamentActions.setRatings(updatedRatings);
-      return true;
-    } catch (error) {
-      ErrorService.handleError(error, 'Rating Update', {
-        isRetryable: true,
-        affectsUserData: true,
-        isCritical: false
-      });
-      throw error;
-    }
-  }, [userName, tournamentActions]);
+  const handleUpdateRatings = useCallback(
+    async (adjustedRatings) => {
+      try {
+        const updatedRatings = await TournamentService.updateRatings(
+          adjustedRatings,
+          userName,
+        );
+        tournamentActions.setRatings(updatedRatings);
+        return true;
+      } catch (error) {
+        ErrorService.handleError(error, "Rating Update", {
+          isRetryable: true,
+          affectsUserData: true,
+          isCritical: false,
+        });
+        throw error;
+      }
+    },
+    [userName, tournamentActions],
+  );
 
   // * Handle logout
   const handleLogout = useCallback(async () => {
@@ -122,11 +143,14 @@ function App() {
   }, [logout, userActions]);
 
   // * Handle theme change
-  const handleThemeChange = useCallback((isLight) => {
-    const theme = isLight ? 'light' : 'dark';
-    uiActions.setTheme(theme);
-    toggleTheme();
-  }, [uiActions, toggleTheme]);
+  const handleThemeChange = useCallback(
+    (isLight) => {
+      const theme = isLight ? "light" : "dark";
+      uiActions.setTheme(theme);
+      toggleTheme();
+    },
+    [uiActions, toggleTheme],
+  );
 
   // * Memoize main content to prevent unnecessary re-renders
   const mainContent = useMemo(() => {
@@ -135,7 +159,7 @@ function App() {
     }
 
     switch (tournament.currentView) {
-      case 'profile':
+      case "profile":
         return (
           <Profile
             userName={userName}
@@ -144,13 +168,13 @@ function App() {
             onUpdateRatings={handleUpdateRatings}
           />
         );
-      case 'loading':
+      case "loading":
         return (
           <div className="fullScreenCenter">
             <LoadingSpinner size="large" text="Testing Loading Spinner..." />
           </div>
         );
-      case 'tournament':
+      case "tournament":
         if (tournament.isComplete) {
           return (
             <Results
@@ -201,29 +225,32 @@ function App() {
     handleUpdateRatings,
     handleTournamentSetup,
     handleTournamentComplete,
-    tournamentActions
+    tournamentActions,
   ]);
 
   // * Memoize NavBar props to prevent unnecessary re-renders
-  const navBarProps = useMemo(() => ({
-    view: tournament.currentView,
-    setView: (view) => tournamentActions.setView(view),
-    isLoggedIn,
-    userName,
-    onLogout: handleLogout,
-    onStartNewTournament: handleStartNewTournament,
-    isLightTheme,
-    onThemeChange: handleThemeChange
-  }), [
-    tournament.currentView,
-    tournamentActions,
-    isLoggedIn,
-    userName,
-    handleLogout,
-    handleStartNewTournament,
-    isLightTheme,
-    handleThemeChange
-  ]);
+  const navBarProps = useMemo(
+    () => ({
+      view: tournament.currentView,
+      setView: (view) => tournamentActions.setView(view),
+      isLoggedIn,
+      userName,
+      onLogout: handleLogout,
+      onStartNewTournament: handleStartNewTournament,
+      isLightTheme,
+      onThemeChange: handleThemeChange,
+    }),
+    [
+      tournament.currentView,
+      tournamentActions,
+      isLoggedIn,
+      userName,
+      handleLogout,
+      handleStartNewTournament,
+      isLightTheme,
+      handleThemeChange,
+    ],
+  );
 
   return (
     <div className="app">
@@ -237,10 +264,26 @@ function App() {
         <div className="cat-background__stars"></div>
         <div className="cat-background__nebula"></div>
         <div className="cat-background__floating-cats">
-          <img src="/images/cat.gif" alt="" className="cat-background__cat cat-background__cat--1" />
-          <img src="/images/cat.gif" alt="" className="cat-background__cat cat-background__cat--2" />
-          <img src="/images/cat.gif" alt="" className="cat-background__cat cat-background__cat--3" />
-          <img src="/images/cat.gif" alt="" className="cat-background__cat cat-background__cat--4" />
+          <img
+            src="/images/cat.gif"
+            alt=""
+            className="cat-background__cat cat-background__cat--1"
+          />
+          <img
+            src="/images/cat.gif"
+            alt=""
+            className="cat-background__cat cat-background__cat--2"
+          />
+          <img
+            src="/images/cat.gif"
+            alt=""
+            className="cat-background__cat cat-background__cat--3"
+          />
+          <img
+            src="/images/cat.gif"
+            alt=""
+            className="cat-background__cat cat-background__cat--4"
+          />
         </div>
       </div>
 
@@ -260,9 +303,7 @@ function App() {
           )}
 
           {/* * Main content area */}
-          <ErrorBoundary>
-            {mainContent}
-          </ErrorBoundary>
+          <ErrorBoundary>{mainContent}</ErrorBoundary>
         </div>
       ) : (
         /* * Show Login component when not logged in */

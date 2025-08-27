@@ -4,7 +4,7 @@
  * Provides functions to show, hide, and manage multiple toast notifications.
  */
 
-import { useState, useCallback, useRef } from 'react';
+import { useState, useCallback, useRef } from "react";
 
 /**
  * Custom hook for managing toast notifications
@@ -14,10 +14,7 @@ import { useState, useCallback, useRef } from 'react';
  * @returns {Object} Toast management utilities and state
  */
 export const useToast = (options = {}) => {
-  const {
-    maxToasts = 5,
-    defaultDuration = 5000
-  } = options;
+  const { maxToasts = 5, defaultDuration = 5000 } = options;
 
   const [toasts, setToasts] = useState([]);
   const toastIdCounter = useRef(0);
@@ -39,33 +36,36 @@ export const useToast = (options = {}) => {
    * @param {boolean} toastConfig.autoDismiss - Whether to auto-dismiss
    * @returns {string} Toast ID
    */
-  const showToast = useCallback((toastConfig) => {
-    const {
-      message,
-      type = 'info',
-      duration = defaultDuration,
-      autoDismiss = true
-    } = toastConfig;
+  const showToast = useCallback(
+    (toastConfig) => {
+      const {
+        message,
+        type = "info",
+        duration = defaultDuration,
+        autoDismiss = true,
+      } = toastConfig;
 
-    const toastId = generateToastId();
+      const toastId = generateToastId();
 
-    const newToast = {
-      id: toastId,
-      message,
-      type,
-      duration,
-      autoDismiss,
-      timestamp: Date.now()
-    };
+      const newToast = {
+        id: toastId,
+        message,
+        type,
+        duration,
+        autoDismiss,
+        timestamp: Date.now(),
+      };
 
-    setToasts(prev => {
-      const updatedToasts = [...prev, newToast];
-      // Keep only the most recent toasts up to maxToasts
-      return updatedToasts.slice(-maxToasts);
-    });
+      setToasts((prev) => {
+        const updatedToasts = [...prev, newToast];
+        // Keep only the most recent toasts up to maxToasts
+        return updatedToasts.slice(-maxToasts);
+      });
 
-    return toastId;
-  }, [defaultDuration, maxToasts, generateToastId]);
+      return toastId;
+    },
+    [defaultDuration, maxToasts, generateToastId],
+  );
 
   /**
    * Show a success toast
@@ -73,13 +73,16 @@ export const useToast = (options = {}) => {
    * @param {Object} options - Additional options
    * @returns {string} Toast ID
    */
-  const showSuccess = useCallback((message, options = {}) => {
-    return showToast({
-      message,
-      type: 'success',
-      ...options
-    });
-  }, [showToast]);
+  const showSuccess = useCallback(
+    (message, options = {}) => {
+      return showToast({
+        message,
+        type: "success",
+        ...options,
+      });
+    },
+    [showToast],
+  );
 
   /**
    * Show an error toast
@@ -87,13 +90,16 @@ export const useToast = (options = {}) => {
    * @param {Object} options - Additional options
    * @returns {string} Toast ID
    */
-  const showError = useCallback((message, options = {}) => {
-    return showToast({
-      message,
-      type: 'error',
-      ...options
-    });
-  }, [showToast]);
+  const showError = useCallback(
+    (message, options = {}) => {
+      return showToast({
+        message,
+        type: "error",
+        ...options,
+      });
+    },
+    [showToast],
+  );
 
   /**
    * Show an info toast
@@ -101,13 +107,16 @@ export const useToast = (options = {}) => {
    * @param {Object} options - Additional options
    * @returns {string} Toast ID
    */
-  const showInfo = useCallback((message, options = {}) => {
-    return showToast({
-      message,
-      type: 'info',
-      ...options
-    });
-  }, [showToast]);
+  const showInfo = useCallback(
+    (message, options = {}) => {
+      return showToast({
+        message,
+        type: "info",
+        ...options,
+      });
+    },
+    [showToast],
+  );
 
   /**
    * Show a warning toast
@@ -115,20 +124,23 @@ export const useToast = (options = {}) => {
    * @param {Object} options - Additional options
    * @returns {string} Toast ID
    */
-  const showWarning = useCallback((message, options = {}) => {
-    return showToast({
-      message,
-      type: 'warning',
-      ...options
-    });
-  }, [showToast]);
+  const showWarning = useCallback(
+    (message, options = {}) => {
+      return showToast({
+        message,
+        type: "warning",
+        ...options,
+      });
+    },
+    [showToast],
+  );
 
   /**
    * Remove a specific toast by ID
    * @param {string} toastId - ID of the toast to remove
    */
   const removeToast = useCallback((toastId) => {
-    setToasts(prev => prev.filter(toast => toast.id !== toastId));
+    setToasts((prev) => prev.filter((toast) => toast.id !== toastId));
   }, []);
 
   /**
@@ -143,7 +155,7 @@ export const useToast = (options = {}) => {
    * @param {string} type - Type of toasts to remove
    */
   const removeToastsByType = useCallback((type) => {
-    setToasts(prev => prev.filter(toast => toast.type !== type));
+    setToasts((prev) => prev.filter((toast) => toast.type !== type));
   }, []);
 
   /**
@@ -152,9 +164,11 @@ export const useToast = (options = {}) => {
    * @param {Object} updates - Updates to apply
    */
   const updateToast = useCallback((toastId, updates) => {
-    setToasts(prev => prev.map(toast =>
-      toast.id === toastId ? { ...toast, ...updates } : toast
-    ));
+    setToasts((prev) =>
+      prev.map((toast) =>
+        toast.id === toastId ? { ...toast, ...updates } : toast,
+      ),
+    );
   }, []);
 
   /**
@@ -162,18 +176,24 @@ export const useToast = (options = {}) => {
    * @param {string} type - Type of toasts to get
    * @returns {Array} Array of toasts of the specified type
    */
-  const getToastsByType = useCallback((type) => {
-    return toasts.filter(toast => toast.type === type);
-  }, [toasts]);
+  const getToastsByType = useCallback(
+    (type) => {
+      return toasts.filter((toast) => toast.type === type);
+    },
+    [toasts],
+  );
 
   /**
    * Check if there are any toasts of a specific type
    * @param {string} type - Type to check
    * @returns {boolean} True if there are toasts of the specified type
    */
-  const hasToastsOfType = useCallback((type) => {
-    return toasts.some(toast => toast.type === type);
-  }, [toasts]);
+  const hasToastsOfType = useCallback(
+    (type) => {
+      return toasts.some((toast) => toast.type === type);
+    },
+    [toasts],
+  );
 
   return {
     // State
@@ -196,7 +216,7 @@ export const useToast = (options = {}) => {
 
     // Utilities
     toastCount: toasts.length,
-    hasToasts: toasts.length > 0
+    hasToasts: toasts.length > 0,
   };
 };
 

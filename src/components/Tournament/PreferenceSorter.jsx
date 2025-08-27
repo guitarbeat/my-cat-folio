@@ -36,7 +36,7 @@
 export class PreferenceSorter {
   constructor(items) {
     if (!Array.isArray(items)) {
-      throw new Error('PreferenceSorter requires an array of items');
+      throw new Error("PreferenceSorter requires an array of items");
     }
     this.items = items;
     this.preferences = new Map();
@@ -49,7 +49,7 @@ export class PreferenceSorter {
   }
 
   getName(item) {
-    return typeof item === 'string' ? item : item.name;
+    return typeof item === "string" ? item : item.name;
   }
 
   addPreference(item1, item2, value) {
@@ -132,7 +132,7 @@ export class PreferenceSorter {
           merged.push(this.items[i++]);
         }
       } catch (error) {
-        console.error('Comparison failed:', error);
+        console.error("Comparison failed:", error);
         // Handle cancellation or fallback strategy
       }
     }
