@@ -1,5 +1,5 @@
-import { create } from "zustand";
-import { devtools } from "zustand/middleware";
+import { create } from 'zustand';
+import { devtools } from 'zustand/middleware';
 
 /**
  * @module useAppStore
@@ -17,30 +17,30 @@ const useAppStore = create(
         isComplete: false,
         isLoading: false,
         voteHistory: [],
-        currentView: "tournament",
+        currentView: 'tournament'
       },
 
       // * User State
       user: {
-        name: "",
+        name: '',
         isLoggedIn: false,
         isAdmin: false,
-        preferences: {},
+        preferences: {}
       },
 
       // * UI State
       ui: {
-        theme: "light",
+        theme: 'light',
 
         showGlobalAnalytics: false,
         showUserComparison: false,
-        matrixMode: false,
+        matrixMode: false
       },
 
       // * Error State
       errors: {
         current: null,
-        history: [],
+        history: []
       },
 
       // * Tournament Actions
@@ -53,41 +53,41 @@ const useAppStore = create(
                 id: n.id,
                 name: n.name,
                 description: n.description,
-                rating: state.tournament.ratings[n.name]?.rating || 1500,
-              })),
-            },
+                rating: state.tournament.ratings[n.name]?.rating || 1500
+              }))
+            }
           })),
 
         setRatings: (ratings) =>
           set((state) => ({
             tournament: {
               ...state.tournament,
-              ratings: { ...state.tournament.ratings, ...ratings },
-            },
+              ratings: { ...state.tournament.ratings, ...ratings }
+            }
           })),
 
         setComplete: (isComplete) =>
           set((state) => ({
             tournament: {
               ...state.tournament,
-              isComplete,
-            },
+              isComplete
+            }
           })),
 
         setLoading: (isLoading) =>
           set((state) => ({
             tournament: {
               ...state.tournament,
-              isLoading,
-            },
+              isLoading
+            }
           })),
 
         addVote: (vote) =>
           set((state) => ({
             tournament: {
               ...state.tournament,
-              voteHistory: [...state.tournament.voteHistory, vote],
-            },
+              voteHistory: [...state.tournament.voteHistory, vote]
+            }
           })),
 
         resetTournament: () =>
@@ -97,17 +97,17 @@ const useAppStore = create(
               names: null,
               isComplete: false,
               voteHistory: [],
-              isLoading: false, // * Explicitly set loading to false to prevent flashing
-            },
+              isLoading: false // * Explicitly set loading to false to prevent flashing
+            }
           })),
 
         setView: (view) =>
           set((state) => ({
             tournament: {
               ...state.tournament,
-              currentView: view,
-            },
-          })),
+              currentView: view
+            }
+          }))
       },
 
       // * User Actions
@@ -116,8 +116,8 @@ const useAppStore = create(
           set((state) => ({
             user: {
               ...state.user,
-              ...userData,
-            },
+              ...userData
+            }
           })),
 
         login: (userName) =>
@@ -125,33 +125,33 @@ const useAppStore = create(
             user: {
               ...state.user,
               name: userName,
-              isLoggedIn: true,
-            },
+              isLoggedIn: true
+            }
           })),
 
         logout: () =>
           set((state) => ({
             user: {
               ...state.user,
-              name: "",
+              name: '',
               isLoggedIn: false,
-              isAdmin: false,
+              isAdmin: false
             },
             tournament: {
               ...state.tournament,
               names: null,
               isComplete: false,
-              voteHistory: [],
-            },
+              voteHistory: []
+            }
           })),
 
         setAdminStatus: (isAdmin) =>
           set((state) => ({
             user: {
               ...state.user,
-              isAdmin,
-            },
-          })),
+              isAdmin
+            }
+          }))
       },
 
       // * UI Actions
@@ -160,41 +160,41 @@ const useAppStore = create(
           set((state) => ({
             ui: {
               ...state.ui,
-              theme,
-            },
+              theme
+            }
           })),
 
         toggleTheme: () =>
           set((state) => ({
             ui: {
               ...state.ui,
-              theme: state.ui.theme === "light" ? "dark" : "light",
-            },
+              theme: state.ui.theme === 'light' ? 'dark' : 'light'
+            }
           })),
 
         setMatrixMode: (enabled) =>
           set((state) => ({
             ui: {
               ...state.ui,
-              matrixMode: enabled,
-            },
+              matrixMode: enabled
+            }
           })),
 
         setGlobalAnalytics: (show) =>
           set((state) => ({
             ui: {
               ...state.ui,
-              showGlobalAnalytics: show,
-            },
+              showGlobalAnalytics: show
+            }
           })),
 
         setUserComparison: (show) =>
           set((state) => ({
             ui: {
               ...state.ui,
-              showUserComparison: show,
-            },
-          })),
+              showUserComparison: show
+            }
+          }))
       },
 
       // * Error Actions
@@ -205,16 +205,16 @@ const useAppStore = create(
               current: error,
               history: error
                 ? [...state.errors.history, error]
-                : state.errors.history,
-            },
+                : state.errors.history
+            }
           })),
 
         clearError: () =>
           set((state) => ({
             errors: {
               ...state.errors,
-              current: null,
-            },
+              current: null
+            }
           })),
 
         logError: (error, context, metadata = {}) => {
@@ -222,21 +222,21 @@ const useAppStore = create(
             error,
             context,
             metadata,
-            timestamp: new Date().toISOString(),
+            timestamp: new Date().toISOString()
           };
 
           set((state) => ({
             errors: {
               ...state.errors,
-              history: [...state.errors.history, errorLog],
-            },
+              history: [...state.errors.history, errorLog]
+            }
           }));
 
           // * Log to console for development
-          if (process.env.NODE_ENV === "development") {
-            console.error("Error logged:", errorLog);
+          if (process.env.NODE_ENV === 'development') {
+            console.error('Error logged:', errorLog);
           }
-        },
+        }
       },
 
       // * Computed Selectors
@@ -252,14 +252,14 @@ const useAppStore = create(
         getIsAdmin: () => get().user.isAdmin,
         getTheme: () => get().ui.theme,
 
-        getCurrentError: () => get().errors.current,
-      },
+        getCurrentError: () => get().errors.current
+      }
     }),
     {
-      name: "meow-namester-store",
-      enabled: process.env.NODE_ENV === "development",
-    },
-  ),
+      name: 'meow-namester-store',
+      enabled: process.env.NODE_ENV === 'development'
+    }
+  )
 );
 
 export default useAppStore;

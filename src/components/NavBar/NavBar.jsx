@@ -3,9 +3,9 @@
  * @description Responsive navigation bar with theme toggle and links.
  */
 // Third-party imports
-import React, { useState, useEffect, useCallback } from "react";
-import PropTypes from "prop-types";
-import "./navbar.css";
+import React, { useState, useEffect, useCallback } from 'react';
+import PropTypes from 'prop-types';
+import './navbar.css';
 
 function NavBar({
   view,
@@ -15,7 +15,7 @@ function NavBar({
   onLogout,
   onStartNewTournament,
   isLightTheme,
-  onThemeChange,
+  onThemeChange
 }) {
   const [showScrollTop, setShowScrollTop] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -24,19 +24,19 @@ function NavBar({
   const navItems = [];
 
   // Always show Tournament
-  navItems.push({ key: "Tournament", label: "Tournament", href: "#" });
+  navItems.push({ key: 'Tournament', label: 'Tournament', href: '#' });
 
   // Show Profile if logged in
   if (isLoggedIn) {
-    navItems.push({ key: "Profile", label: "Profile", href: "#" });
+    navItems.push({ key: 'Profile', label: 'Profile', href: '#' });
   }
 
   // Add external project links if on login page
   const externalLinks = isLoggedIn
     ? []
     : [
-        { name: "K-Pop Site", url: "https://kpop.alw.lol" },
-        { name: "Personal Site", url: "https://aaronwoods.info" },
+        { name: 'K-Pop Site', url: 'https://kpop.alw.lol' },
+        { name: 'Personal Site', url: 'https://aaronwoods.info' }
       ];
 
   const handleMobileMenuClick = useCallback(() => {
@@ -48,7 +48,7 @@ function NavBar({
       setView(key.toLowerCase());
       setIsMobileMenuOpen(false);
     },
-    [setView],
+    [setView]
   );
 
   useEffect(() => {
@@ -75,17 +75,17 @@ function NavBar({
       });
     };
 
-    window.addEventListener("scroll", throttledCheckScroll, { passive: true });
+    window.addEventListener('scroll', throttledCheckScroll, { passive: true });
 
     const handleResize = () => {
       checkScroll();
     };
 
-    window.addEventListener("resize", handleResize, { passive: true });
+    window.addEventListener('resize', handleResize, { passive: true });
 
     return () => {
-      window.removeEventListener("scroll", throttledCheckScroll);
-      window.removeEventListener("resize", handleResize);
+      window.removeEventListener('scroll', throttledCheckScroll);
+      window.removeEventListener('resize', handleResize);
       if (scrollTimeout) {
         cancelAnimationFrame(scrollTimeout);
       }
@@ -101,7 +101,7 @@ function NavBar({
           event.preventDefault();
           handleNavItemClick(item.key);
         }}
-        className={view === item.key.toLowerCase() ? "active" : ""}
+        className={view === item.key.toLowerCase() ? 'active' : ''}
       >
         {item.label}
       </a>
@@ -121,7 +121,7 @@ function NavBar({
           >
             {link.name}
           </a>
-        </li>,
+        </li>
       );
     });
   }
@@ -140,7 +140,7 @@ function NavBar({
         >
           Logout
         </a>
-      </li>,
+      </li>
     );
   }
 
@@ -151,8 +151,8 @@ function NavBar({
         href="#"
         onClick={(e) => {
           e.preventDefault();
-          setView("tournament");
-          if (typeof onStartNewTournament === "function") {
+          setView('tournament');
+          if (typeof onStartNewTournament === 'function') {
             onStartNewTournament();
           }
         }}
@@ -184,7 +184,7 @@ function NavBar({
   }
 
   // Navbar class
-  const navbarClass = `navbar ${isLoggedIn ? "" : "transparent"} ${isMobileMenuOpen ? "mobile-menu-open" : ""} ${isLightTheme ? "light-theme" : "dark-theme"}`;
+  const navbarClass = `navbar ${isLoggedIn ? '' : 'transparent'} ${isMobileMenuOpen ? 'mobile-menu-open' : ''} ${isLightTheme ? 'light-theme' : 'dark-theme'}`;
 
   return (
     <>
@@ -200,16 +200,16 @@ function NavBar({
                 onClick={onThemeChange}
                 aria-label={
                   isLightTheme
-                    ? "Switch to dark theme"
-                    : "Switch to light theme"
+                    ? 'Switch to dark theme'
+                    : 'Switch to light theme'
                 }
                 title={
                   isLightTheme
-                    ? "Switch to dark theme"
-                    : "Switch to light theme"
+                    ? 'Switch to dark theme'
+                    : 'Switch to light theme'
                 }
               >
-                {isLightTheme ? "🌙" : "☀️"}
+                {isLightTheme ? '🌙' : '☀️'}
               </button>
             </li>
 
@@ -223,7 +223,7 @@ function NavBar({
           <button
             className="navbar__mobile-menu-button"
             onClick={handleMobileMenuClick}
-            aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
+            aria-label={isMobileMenuOpen ? 'Close menu' : 'Open menu'}
             aria-expanded={isMobileMenuOpen}
             aria-controls="mobile-menu"
             type="button"
@@ -238,7 +238,7 @@ function NavBar({
         {/* Mobile Menu Overlay */}
         <div
           id="mobile-menu"
-          className={`navbar__mobile-menu ${isMobileMenuOpen ? "visible" : ""}`}
+          className={`navbar__mobile-menu ${isMobileMenuOpen ? 'visible' : ''}`}
           aria-hidden={!isMobileMenuOpen}
         >
           <div className="navbar__mobile-menu-header">
@@ -261,9 +261,9 @@ function NavBar({
                       setIsMobileMenuOpen(false);
                       handleNavItemClick(item.key);
                     }}
-                    className={`navbar__mobile-link ${isActive ? "active" : ""}`}
-                    aria-current={isActive ? "page" : undefined}
-                    aria-label={`${item.label}${isActive ? " (current page)" : ""}`}
+                    className={`navbar__mobile-link ${isActive ? 'active' : ''}`}
+                    aria-current={isActive ? 'page' : undefined}
+                    aria-label={`${item.label}${isActive ? ' (current page)' : ''}`}
                   >
                     {item.label}
                   </a>
@@ -299,18 +299,18 @@ function NavBar({
                 }}
                 aria-label={
                   isLightTheme
-                    ? "Switch to dark theme"
-                    : "Switch to light theme"
+                    ? 'Switch to dark theme'
+                    : 'Switch to light theme'
                 }
                 title={
                   isLightTheme
-                    ? "Switch to dark theme"
-                    : "Switch to light theme"
+                    ? 'Switch to dark theme'
+                    : 'Switch to light theme'
                 }
               >
                 {isLightTheme
-                  ? "🌙 Switch to Dark Theme"
-                  : "☀️ Switch to Light Theme"}
+                  ? '🌙 Switch to Dark Theme'
+                  : '☀️ Switch to Light Theme'}
               </button>
             </li>
           </ul>
@@ -330,8 +330,8 @@ function NavBar({
       {isLoggedIn && (
         <button
           type="button"
-          className={`scroll-to-top ${showScrollTop ? "visible" : ""}`}
-          onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+          className={`scroll-to-top ${showScrollTop ? 'visible' : ''}`}
+          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
           aria-label="Scroll to top"
           aria-hidden={!showScrollTop}
           tabIndex={showScrollTop ? 0 : -1}
@@ -343,7 +343,7 @@ function NavBar({
   );
 }
 
-NavBar.displayName = "NavBar";
+NavBar.displayName = 'NavBar';
 
 NavBar.propTypes = {
   view: PropTypes.string.isRequired,
@@ -353,7 +353,7 @@ NavBar.propTypes = {
   onLogout: PropTypes.func.isRequired,
   onStartNewTournament: PropTypes.func,
   isLightTheme: PropTypes.bool.isRequired,
-  onThemeChange: PropTypes.func.isRequired,
+  onThemeChange: PropTypes.func.isRequired
 };
 
 export default NavBar;

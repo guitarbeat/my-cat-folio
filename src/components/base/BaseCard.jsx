@@ -1,6 +1,6 @@
-import React from "react";
-import PropTypes from "prop-types";
-import styles from "./BaseCard.module.css";
+import React from 'react';
+import PropTypes from 'prop-types';
+import styles from './BaseCard.module.css';
 
 /**
  * @module BaseCard
@@ -14,15 +14,15 @@ const BaseCard = ({
   subtitle,
   header,
   footer,
-  size = "medium",
-  variant = "default",
+  size = 'medium',
+  variant = 'default',
   onClick,
   disabled = false,
   selected = false,
-  className = "",
-  headerClassName = "",
-  contentClassName = "",
-  footerClassName = "",
+  className = '',
+  headerClassName = '',
+  contentClassName = '',
+  footerClassName = '',
   ...props
 }) => {
   const handleClick = (event) => {
@@ -38,26 +38,26 @@ const BaseCard = ({
     selected && styles.selected,
     disabled && styles.disabled,
     onClick && !disabled && styles.clickable,
-    className,
+    className
   ]
     .filter(Boolean)
-    .join(" ");
+    .join(' ');
 
   const headerClasses = [styles.header, headerClassName]
     .filter(Boolean)
-    .join(" ");
+    .join(' ');
   const contentClasses = [styles.content, contentClassName]
     .filter(Boolean)
-    .join(" ");
+    .join(' ');
   const footerClasses = [styles.footer, footerClassName]
     .filter(Boolean)
-    .join(" ");
+    .join(' ');
 
   return (
     <div
       className={cardClasses}
       onClick={handleClick}
-      role={onClick ? "button" : undefined}
+      role={onClick ? 'button' : undefined}
       tabIndex={onClick && !disabled ? 0 : undefined}
       aria-disabled={disabled}
       aria-selected={selected}
@@ -89,15 +89,15 @@ BaseCard.propTypes = {
   subtitle: PropTypes.string,
   header: PropTypes.node,
   footer: PropTypes.node,
-  size: PropTypes.oneOf(["small", "medium", "large"]),
-  variant: PropTypes.oneOf(["default", "outlined", "elevated", "flat"]),
+  size: PropTypes.oneOf(['small', 'medium', 'large']),
+  variant: PropTypes.oneOf(['default', 'outlined', 'elevated', 'flat']),
   onClick: PropTypes.func,
   disabled: PropTypes.bool,
   selected: PropTypes.bool,
   className: PropTypes.string,
   headerClassName: PropTypes.string,
   contentClassName: PropTypes.string,
-  footerClassName: PropTypes.string,
+  footerClassName: PropTypes.string
 };
 
 export default BaseCard;

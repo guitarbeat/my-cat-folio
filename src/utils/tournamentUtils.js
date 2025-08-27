@@ -17,7 +17,7 @@ export function computeRating(
   position,
   totalNames,
   matchesPlayed,
-  maxMatches,
+  maxMatches
 ) {
   const ratingSpread = Math.min(1000, totalNames * 25);
   const positionValue =
@@ -25,7 +25,7 @@ export function computeRating(
   const newPositionRating = 1500 + positionValue;
   const blendFactor = Math.min(0.8, (matchesPlayed / maxMatches) * 0.9);
   const newRating = Math.round(
-    blendFactor * newPositionRating + (1 - blendFactor) * existingRating,
+    blendFactor * newPositionRating + (1 - blendFactor) * existingRating
   );
   return Math.max(1000, Math.min(2000, newRating));
 }

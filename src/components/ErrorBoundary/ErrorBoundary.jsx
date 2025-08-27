@@ -5,10 +5,10 @@
  * enhanced error handling and recovery options.
  */
 
-import React from "react";
-import PropTypes from "prop-types";
-import { createStandardizedError } from "../../utils/errorHandler";
-import styles from "./ErrorBoundary.module.css";
+import React from 'react';
+import PropTypes from 'prop-types';
+import { createStandardizedError } from '../../utils/errorHandler';
+import styles from './ErrorBoundary.module.css';
 
 class ErrorBoundary extends React.Component {
   constructor(props) {
@@ -19,7 +19,7 @@ class ErrorBoundary extends React.Component {
       errorInfo: null,
       standardizedError: null,
       retryCount: 0,
-      maxRetries: 3,
+      maxRetries: 3
     };
   }
 
@@ -31,23 +31,23 @@ class ErrorBoundary extends React.Component {
     // Create standardized error object
     const standardizedError = createStandardizedError(
       error,
-      "React Component Error",
+      'React Component Error',
       {
         isRetryable: true,
         affectsUserData: false,
         isCritical: false,
-        componentStack: errorInfo.componentStack,
-      },
+        componentStack: errorInfo.componentStack
+      }
     );
 
     this.setState({
       error,
       errorInfo,
-      standardizedError,
+      standardizedError
     });
 
     // Log the error to your error reporting service
-    console.error("ErrorBoundary caught an error:", error, errorInfo);
+    console.error('ErrorBoundary caught an error:', error, errorInfo);
   }
 
   handleRetry() {
@@ -59,7 +59,7 @@ class ErrorBoundary extends React.Component {
         hasError: false,
         error: null,
         errorInfo: null,
-        standardizedError: null,
+        standardizedError: null
       }));
     } else {
       // If max retries reached, reload the page
@@ -72,7 +72,7 @@ class ErrorBoundary extends React.Component {
   }
 
   handleGoHome() {
-    window.location.href = "/";
+    window.location.href = '/';
   }
 
   render() {
@@ -82,7 +82,7 @@ class ErrorBoundary extends React.Component {
       errorInfo,
       standardizedError,
       retryCount,
-      maxRetries,
+      maxRetries
     } = this.state;
 
     if (hasError) {
@@ -131,7 +131,7 @@ class ErrorBoundary extends React.Component {
             </div>
 
             {/* Development error details */}
-            {process.env.NODE_ENV === "development" && error && (
+            {process.env.NODE_ENV === 'development' && error && (
               <details className={styles.errorDetails}>
                 <summary>Error Details (Development)</summary>
                 <div className={styles.errorContent}>
@@ -153,18 +153,18 @@ class ErrorBoundary extends React.Component {
                           <strong>Type:</strong> {standardizedError.errorType}
                         </li>
                         <li>
-                          <strong>Severity:</strong>{" "}
+                          <strong>Severity:</strong>{' '}
                           {standardizedError.severity}
                         </li>
                         <li>
                           <strong>Context:</strong> {standardizedError.context}
                         </li>
                         <li>
-                          <strong>Retryable:</strong>{" "}
-                          {standardizedError.isRetryable ? "Yes" : "No"}
+                          <strong>Retryable:</strong>{' '}
+                          {standardizedError.isRetryable ? 'Yes' : 'No'}
                         </li>
                         <li>
-                          <strong>Timestamp:</strong>{" "}
+                          <strong>Timestamp:</strong>{' '}
                           {standardizedError.timestamp}
                         </li>
                       </ul>
@@ -193,10 +193,10 @@ class ErrorBoundary extends React.Component {
   }
 }
 
-ErrorBoundary.displayName = "ErrorBoundary";
+ErrorBoundary.displayName = 'ErrorBoundary';
 
 ErrorBoundary.propTypes = {
-  children: PropTypes.node,
+  children: PropTypes.node
 };
 
 export default ErrorBoundary;

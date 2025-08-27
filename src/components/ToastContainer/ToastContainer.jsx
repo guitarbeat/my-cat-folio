@@ -4,10 +4,10 @@
  * Provides a queue system and handles positioning of multiple toasts.
  */
 
-import React, { useRef, useCallback } from "react";
-import PropTypes from "prop-types";
-import Toast from "../Toast/Toast";
-import styles from "./ToastContainer.module.css";
+import React, { useRef, useCallback } from 'react';
+import PropTypes from 'prop-types';
+import Toast from '../Toast/Toast';
+import styles from './ToastContainer.module.css';
 
 /**
  * ToastContainer component for managing multiple toast notifications
@@ -21,8 +21,8 @@ import styles from "./ToastContainer.module.css";
 const ToastContainer = ({
   toasts = [],
   removeToast,
-  position = "top-right",
-  maxToasts = 5,
+  position = 'top-right',
+  maxToasts = 5
 }) => {
   const containerRef = useRef(null);
 
@@ -31,17 +31,17 @@ const ToastContainer = ({
 
   const getPositionClass = () => {
     switch (position) {
-      case "top-left":
+      case 'top-left':
         return styles.topLeft;
-      case "top-center":
+      case 'top-center':
         return styles.topCenter;
-      case "top-right":
+      case 'top-right':
         return styles.topRight;
-      case "bottom-left":
+      case 'bottom-left':
         return styles.bottomLeft;
-      case "bottom-center":
+      case 'bottom-center':
         return styles.bottomCenter;
-      case "bottom-right":
+      case 'bottom-right':
         return styles.bottomRight;
       default:
         return styles.topRight;
@@ -52,7 +52,7 @@ const ToastContainer = ({
     (toastId) => {
       removeToast?.(toastId);
     },
-    [removeToast],
+    [removeToast]
   );
 
   if (toasts.length === 0) {
@@ -95,21 +95,21 @@ ToastContainer.propTypes = {
     PropTypes.shape({
       id: PropTypes.string.isRequired,
       message: PropTypes.string.isRequired,
-      type: PropTypes.oneOf(["success", "error", "info", "warning"]),
+      type: PropTypes.oneOf(['success', 'error', 'info', 'warning']),
       duration: PropTypes.number,
-      autoDismiss: PropTypes.bool,
-    }),
+      autoDismiss: PropTypes.bool
+    })
   ),
   removeToast: PropTypes.func.isRequired,
   position: PropTypes.oneOf([
-    "top-left",
-    "top-center",
-    "top-right",
-    "bottom-left",
-    "bottom-center",
-    "bottom-right",
+    'top-left',
+    'top-center',
+    'top-right',
+    'bottom-left',
+    'bottom-center',
+    'bottom-right'
   ]),
-  maxToasts: PropTypes.number,
+  maxToasts: PropTypes.number
 };
 
 export default ToastContainer;

@@ -11,7 +11,7 @@ export const retryConfig = {
   baseDelay: 1000, // 1 second
   maxDelay: 10000, // 10 seconds
   backoffMultiplier: 2,
-  jitter: 0.1, // 10% random jitter
+  jitter: 0.1 // 10% random jitter
 };
 
 /**
@@ -62,10 +62,10 @@ export const withRetry = async (fn, options = {}) => {
       const delay = calculateDelay(attempt, config);
 
       // Log retry attempt
-      if (process.env.NODE_ENV === "development") {
+      if (process.env.NODE_ENV === 'development') {
         console.warn(
           `Retry attempt ${attempt}/${config.maxAttempts} failed:`,
-          error.message,
+          error.message
         );
         console.warn(`Retrying in ${delay}ms...`);
       }
@@ -95,17 +95,17 @@ const isNonRetryableError = (error) => {
   }
 
   // Validation errors
-  if (error?.code === "VALIDATION_ERROR") {
+  if (error?.code === 'VALIDATION_ERROR') {
     return true;
   }
 
   // Network errors that might be retryable
-  if (error?.code === "NETWORK_ERROR" || error?.code === "TIMEOUT") {
+  if (error?.code === 'NETWORK_ERROR' || error?.code === 'TIMEOUT') {
     return false;
   }
 
   // Database errors that might be retryable
-  if (error?.code === "PGRST301" || error?.code === "PGRST302") {
+  if (error?.code === 'PGRST301' || error?.code === 'PGRST302') {
     return false;
   }
 
@@ -123,7 +123,7 @@ export class CircuitBreaker {
     this.resetTimeout = resetTimeout;
     this.failureCount = 0;
     this.lastFailureTime = null;
-    this.state = "CLOSED"; // CLOSED, OPEN, HALF_OPEN
+    this.state = 'CLOSED'; // CLOSED, OPEN, HALF_OPEN
   }
 
   /**
@@ -132,11 +132,11 @@ export class CircuitBreaker {
    * @returns {Promise} Promise that resolves with the function result
    */
   async execute(fn) {
-    if (this.state === "OPEN") {
+    if (this.state === 'OPEN') {
       if (this.shouldAttemptReset()) {
-        this.state = "HALF_OPEN";
+        this.state = 'HALF_OPEN';
       } else {
-        throw new Error("Circuit breaker is OPEN - service is unavailable");
+        throw new Error('Circuit breaker is OPEN - service is unavailable');
       }
     }
 
@@ -155,7 +155,7 @@ export class CircuitBreaker {
    */
   onSuccess() {
     this.failureCount = 0;
-    this.state = "CLOSED";
+    this.state = 'CLOSED';
     this.lastFailureTime = null;
   }
 
@@ -167,7 +167,7 @@ export class CircuitBreaker {
     this.lastFailureTime = Date.now();
 
     if (this.failureCount >= this.failureThreshold) {
-      this.state = "OPEN";
+      this.state = 'OPEN';
     }
   }
 
@@ -192,7 +192,7 @@ export class CircuitBreaker {
       lastFailureTime: this.lastFailureTime,
       timeUntilReset: this.lastFailureTime
         ? Math.max(0, this.resetTimeout - (Date.now() - this.lastFailureTime))
-        : 0,
+        : 0
     };
   }
 
@@ -200,7 +200,7 @@ export class CircuitBreaker {
    * Manually reset the circuit breaker
    */
   reset() {
-    this.state = "CLOSED";
+    this.state = 'CLOSED';
     this.failureCount = 0;
     this.lastFailureTime = null;
   }
@@ -215,7 +215,7 @@ export class CircuitBreaker {
 export const createResilientFunction = (fn, options = {}) => {
   const circuitBreaker = new CircuitBreaker(
     options.failureThreshold || 5,
-    options.resetTimeout || 60000,
+    options.resetTimeout || 60000
   );
 
   return async (...args) => {
@@ -234,7 +234,7 @@ export const databaseRetry = {
     const readOptions = {
       maxAttempts: 3,
       baseDelay: 500,
-      ...options,
+      ...options
     };
 
     return withRetry(fn, readOptions);
@@ -247,7 +247,7 @@ export const databaseRetry = {
     const writeOptions = {
       maxAttempts: 2,
       baseDelay: 1000,
-      ...options,
+      ...options
     };
 
     return withRetry(fn, writeOptions);
@@ -260,9 +260,9 @@ export const databaseRetry = {
     const criticalOptions = {
       maxAttempts: 5,
       baseDelay: 2000,
-      ...options,
+      ...options
     };
 
     return withRetry(fn, criticalOptions);
-  },
+  }
 };

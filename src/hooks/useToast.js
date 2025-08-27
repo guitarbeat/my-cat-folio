@@ -4,7 +4,7 @@
  * Provides functions to show, hide, and manage multiple toast notifications.
  */
 
-import { useState, useCallback, useRef } from "react";
+import { useState, useCallback, useRef } from 'react';
 
 /**
  * Custom hook for managing toast notifications
@@ -40,9 +40,9 @@ export const useToast = (options = {}) => {
     (toastConfig) => {
       const {
         message,
-        type = "info",
+        type = 'info',
         duration = defaultDuration,
-        autoDismiss = true,
+        autoDismiss = true
       } = toastConfig;
 
       const toastId = generateToastId();
@@ -53,7 +53,7 @@ export const useToast = (options = {}) => {
         type,
         duration,
         autoDismiss,
-        timestamp: Date.now(),
+        timestamp: Date.now()
       };
 
       setToasts((prev) => {
@@ -64,7 +64,7 @@ export const useToast = (options = {}) => {
 
       return toastId;
     },
-    [defaultDuration, maxToasts, generateToastId],
+    [defaultDuration, maxToasts, generateToastId]
   );
 
   /**
@@ -77,11 +77,11 @@ export const useToast = (options = {}) => {
     (message, options = {}) => {
       return showToast({
         message,
-        type: "success",
-        ...options,
+        type: 'success',
+        ...options
       });
     },
-    [showToast],
+    [showToast]
   );
 
   /**
@@ -94,11 +94,11 @@ export const useToast = (options = {}) => {
     (message, options = {}) => {
       return showToast({
         message,
-        type: "error",
-        ...options,
+        type: 'error',
+        ...options
       });
     },
-    [showToast],
+    [showToast]
   );
 
   /**
@@ -111,11 +111,11 @@ export const useToast = (options = {}) => {
     (message, options = {}) => {
       return showToast({
         message,
-        type: "info",
-        ...options,
+        type: 'info',
+        ...options
       });
     },
-    [showToast],
+    [showToast]
   );
 
   /**
@@ -128,11 +128,11 @@ export const useToast = (options = {}) => {
     (message, options = {}) => {
       return showToast({
         message,
-        type: "warning",
-        ...options,
+        type: 'warning',
+        ...options
       });
     },
-    [showToast],
+    [showToast]
   );
 
   /**
@@ -166,8 +166,8 @@ export const useToast = (options = {}) => {
   const updateToast = useCallback((toastId, updates) => {
     setToasts((prev) =>
       prev.map((toast) =>
-        toast.id === toastId ? { ...toast, ...updates } : toast,
-      ),
+        toast.id === toastId ? { ...toast, ...updates } : toast
+      )
     );
   }, []);
 
@@ -180,7 +180,7 @@ export const useToast = (options = {}) => {
     (type) => {
       return toasts.filter((toast) => toast.type === type);
     },
-    [toasts],
+    [toasts]
   );
 
   /**
@@ -192,7 +192,7 @@ export const useToast = (options = {}) => {
     (type) => {
       return toasts.some((toast) => toast.type === type);
     },
-    [toasts],
+    [toasts]
   );
 
   return {
@@ -216,7 +216,7 @@ export const useToast = (options = {}) => {
 
     // Utilities
     toastCount: toasts.length,
-    hasToasts: toasts.length > 0,
+    hasToasts: toasts.length > 0
   };
 };
 

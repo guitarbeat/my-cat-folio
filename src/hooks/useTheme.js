@@ -10,35 +10,35 @@
  * @returns {Object} An object containing theme state and control functions
  */
 
-import { useEffect, useCallback, useMemo } from "react";
-import useLocalStorage from "./useLocalStorage";
+import { useEffect, useCallback, useMemo } from 'react';
+import useLocalStorage from './useLocalStorage';
 
 function useTheme() {
   // Get initial theme from localStorage or default to light theme
-  const [isLightTheme, setIsLightTheme] = useLocalStorage("theme", true);
+  const [isLightTheme, setIsLightTheme] = useLocalStorage('theme', true);
 
   // * Memoize theme classes to prevent unnecessary recalculations
   const themeClasses = useMemo(
     () => ({
       light: {
-        bodyClass: "light-theme",
-        darkBodyClass: "dark-theme",
-        metaColor: "#eef1f6",
+        bodyClass: 'light-theme',
+        darkBodyClass: 'dark-theme',
+        metaColor: '#eef1f6'
       },
       dark: {
-        bodyClass: "dark-theme",
-        darkBodyClass: "light-theme",
-        metaColor: "#1a1f2e",
-      },
+        bodyClass: 'dark-theme',
+        darkBodyClass: 'light-theme',
+        metaColor: '#1a1f2e'
+      }
     }),
-    [],
+    []
   );
 
   // Update document body class and meta tag when theme changes
   useEffect(() => {
     const body = document.body;
     const themeColorMeta = document.querySelector('meta[name="theme-color"]');
-    const currentTheme = isLightTheme ? "light" : "dark";
+    const currentTheme = isLightTheme ? 'light' : 'dark';
     const { bodyClass, darkBodyClass, metaColor } = themeClasses[currentTheme];
 
     // * Batch DOM updates to prevent layout thrashing
@@ -47,7 +47,7 @@ function useTheme() {
       body.classList.remove(darkBodyClass);
 
       if (themeColorMeta) {
-        themeColorMeta.setAttribute("content", metaColor);
+        themeColorMeta.setAttribute('content', metaColor);
       }
     });
   }, [isLightTheme, themeClasses]);
@@ -62,13 +62,13 @@ function useTheme() {
     (isLight) => {
       setIsLightTheme(isLight);
     },
-    [setIsLightTheme],
+    [setIsLightTheme]
   );
 
   return {
     isLightTheme,
     toggleTheme,
-    setTheme,
+    setTheme
   };
 }
 

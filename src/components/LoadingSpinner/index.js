@@ -1,6 +1,6 @@
-export { default } from "./LoadingSpinner";
+export { default } from './LoadingSpinner';
 export {
   default as SkeletonLoader,
   TournamentSkeleton,
-  NameCardSkeleton,
-} from "./SkeletonLoader";
+  NameCardSkeleton
+} from './SkeletonLoader';

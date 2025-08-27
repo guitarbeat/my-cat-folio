@@ -10,11 +10,11 @@ export class ErrorService {
    */
   static get ERROR_TYPES() {
     return {
-      NETWORK: "network",
-      VALIDATION: "validation",
-      AUTH: "auth",
-      DATABASE: "database",
-      UNKNOWN: "unknown",
+      NETWORK: 'network',
+      VALIDATION: 'validation',
+      AUTH: 'auth',
+      DATABASE: 'database',
+      UNKNOWN: 'unknown'
     };
   }
 
@@ -23,10 +23,10 @@ export class ErrorService {
    */
   static get SEVERITY_LEVELS() {
     return {
-      LOW: "low",
-      MEDIUM: "medium",
-      HIGH: "high",
-      CRITICAL: "critical",
+      LOW: 'low',
+      MEDIUM: 'medium',
+      HIGH: 'high',
+      CRITICAL: 'critical'
     };
   }
 
@@ -37,7 +37,7 @@ export class ErrorService {
    * @param {Object} metadata - Additional metadata about the error
    * @returns {Object} Formatted error object for UI display
    */
-  static handleError(error, context = "Unknown", metadata = {}) {
+  static handleError(error, context = 'Unknown', metadata = {}) {
     const errorInfo = this.parseError(error);
     const formattedError = this.formatError(errorInfo, context, metadata);
 
@@ -58,35 +58,35 @@ export class ErrorService {
         message: error.message,
         name: error.name,
         stack: error.stack,
-        type: this.determineErrorType(error),
+        type: this.determineErrorType(error)
       };
     }
 
-    if (typeof error === "string") {
+    if (typeof error === 'string') {
       return {
         message: error,
-        name: "StringError",
+        name: 'StringError',
         stack: null,
-        type: this.ERROR_TYPES.UNKNOWN,
+        type: this.ERROR_TYPES.UNKNOWN
       };
     }
 
-    if (error && typeof error === "object") {
+    if (error && typeof error === 'object') {
       return {
-        message: error.message || error.error || "Unknown error occurred",
-        name: error.name || "ObjectError",
+        message: error.message || error.error || 'Unknown error occurred',
+        name: error.name || 'ObjectError',
         stack: error.stack || null,
         type: this.determineErrorType(error),
         code: error.code || null,
-        status: error.status || null,
+        status: error.status || null
       };
     }
 
     return {
-      message: "An unexpected error occurred",
-      name: "UnknownError",
+      message: 'An unexpected error occurred',
+      name: 'UnknownError',
       stack: null,
-      type: this.ERROR_TYPES.UNKNOWN,
+      type: this.ERROR_TYPES.UNKNOWN
     };
   }
 
@@ -96,25 +96,25 @@ export class ErrorService {
    * @returns {string} Error type
    */
   static determineErrorType(error) {
-    if (error.code === "PGRST301" || error.code === "PGRST302") {
+    if (error.code === 'PGRST301' || error.code === 'PGRST302') {
       return this.ERROR_TYPES.AUTH;
     }
 
-    if (error.code === "PGRST116" || error.code === "PGRST117") {
+    if (error.code === 'PGRST116' || error.code === 'PGRST117') {
       return this.ERROR_TYPES.VALIDATION;
     }
 
     if (
       error.status === 0 ||
       error.status === 500 ||
-      error.message?.includes("fetch")
+      error.message?.includes('fetch')
     ) {
       return this.ERROR_TYPES.NETWORK;
     }
 
     if (
-      error.message?.includes("database") ||
-      error.message?.includes("supabase")
+      error.message?.includes('database') ||
+      error.message?.includes('supabase')
     ) {
       return this.ERROR_TYPES.DATABASE;
     }
@@ -146,8 +146,8 @@ export class ErrorService {
       metadata: {
         ...metadata,
         originalError: errorInfo,
-        stack: errorInfo.stack,
-      },
+        stack: errorInfo.stack
+      }
     };
   }
 
@@ -188,15 +188,15 @@ export class ErrorService {
    */
   static getUserFriendlyMessage(errorInfo, context) {
     const contextMap = {
-      "Tournament Completion": "Failed to complete tournament",
-      "Tournament Setup": "Failed to set up tournament",
-      "Rating Update": "Failed to update ratings",
-      Login: "Failed to log in",
-      "Profile Load": "Failed to load profile",
-      "Database Query": "Failed to fetch data",
+      'Tournament Completion': 'Failed to complete tournament',
+      'Tournament Setup': 'Failed to set up tournament',
+      'Rating Update': 'Failed to update ratings',
+      Login: 'Failed to log in',
+      'Profile Load': 'Failed to load profile',
+      'Database Query': 'Failed to fetch data'
     };
 
-    const contextMessage = contextMap[context] || "An error occurred";
+    const contextMessage = contextMap[context] || 'An error occurred';
 
     switch (errorInfo.type) {
       case this.ERROR_TYPES.NETWORK:
@@ -269,18 +269,18 @@ export class ErrorService {
       error: formattedError,
       context,
       metadata,
-      timestamp: new Date().toISOString(),
+      timestamp: new Date().toISOString()
     };
 
     // * Console logging for development
-    if (process.env.NODE_ENV === "development") {
+    if (process.env.NODE_ENV === 'development') {
       console.group(`🚨 Error in ${context}`);
-      console.error("Error Details:", logData);
+      console.error('Error Details:', logData);
       console.groupEnd();
     }
 
     // * TODO: Send to error tracking service (e.g., Sentry) in production
-    if (process.env.NODE_ENV === "production") {
+    if (process.env.NODE_ENV === 'production') {
       // * this.sendToErrorService(logData);
     }
   }
@@ -296,7 +296,7 @@ export class ErrorService {
       maxRetries = 3,
       delay = 1000,
       backoff = 2,
-      shouldRetry = (error) => this.isRetryable(error, {}),
+      shouldRetry = (error) => this.isRetryable(error, {})
     } = options;
 
     return async (...args) => {

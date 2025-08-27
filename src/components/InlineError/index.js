@@ -1,1 +1,1 @@
-export { default } from "./InlineError";
+export { default } from './InlineError';

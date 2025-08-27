@@ -4,10 +4,10 @@
  * appropriate styling, actions, and information based on error severity.
  */
 
-import React, { useState } from "react";
-import PropTypes from "prop-types";
-import { ERROR_SEVERITY } from "../../utils/errorHandler";
-import styles from "./ErrorDisplay.module.css";
+import React, { useState } from 'react';
+import PropTypes from 'prop-types';
+import { ERROR_SEVERITY } from '../../utils/errorHandler';
+import styles from './ErrorDisplay.module.css';
 
 /**
  * ErrorDisplay component for showing user-friendly error messages
@@ -26,7 +26,7 @@ const ErrorDisplay = ({
   onDismiss,
   onClearAll,
   showDetails = false,
-  className = "",
+  className = ''
 }) => {
   const [expandedErrors, setExpandedErrors] = useState(new Set());
 
@@ -49,15 +49,15 @@ const ErrorDisplay = ({
   const getSeverityIcon = (severity) => {
     switch (severity) {
       case ERROR_SEVERITY.CRITICAL:
-        return "🚨";
+        return '🚨';
       case ERROR_SEVERITY.HIGH:
-        return "⚠️";
+        return '⚠️';
       case ERROR_SEVERITY.MEDIUM:
-        return "⚠️";
+        return '⚠️';
       case ERROR_SEVERITY.LOW:
-        return "ℹ️";
+        return 'ℹ️';
       default:
-        return "❓";
+        return '❓';
     }
   };
 
@@ -80,7 +80,7 @@ const ErrorDisplay = ({
     try {
       return new Date(timestamp).toLocaleTimeString();
     } catch {
-      return "Unknown time";
+      return 'Unknown time';
     }
   };
 
@@ -90,7 +90,7 @@ const ErrorDisplay = ({
       {errors.length > 1 && onClearAll && (
         <div className={styles.header}>
           <span className={styles.errorCount}>
-            {errors.length} error{errors.length !== 1 ? "s" : ""}
+            {errors.length} error{errors.length !== 1 ? 's' : ''}
           </span>
           <button
             onClick={onClearAll}
@@ -151,8 +151,8 @@ const ErrorDisplay = ({
                     aria-label="Toggle error details"
                   >
                     {expandedErrors.has(`${error.timestamp}-${index}`)
-                      ? "−"
-                      : "+"}
+                      ? '−'
+                      : '+'}
                   </button>
                 )}
               </div>
@@ -199,15 +199,15 @@ ErrorDisplay.propTypes = {
       isRetryable: PropTypes.bool,
       originalError: PropTypes.oneOfType([
         PropTypes.instanceOf(Error),
-        PropTypes.object,
-      ]),
-    }),
+        PropTypes.object
+      ])
+    })
   ),
   onRetry: PropTypes.func,
   onDismiss: PropTypes.func,
   onClearAll: PropTypes.func,
   showDetails: PropTypes.bool,
-  className: PropTypes.string,
+  className: PropTypes.string
 };
 
 export default ErrorDisplay;

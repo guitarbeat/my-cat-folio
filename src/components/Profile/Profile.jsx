@@ -3,22 +3,22 @@
  * @description Main profile component that orchestrates user statistics and name management.
  * Now includes comprehensive selection analytics and tournament insights.
  */
-import React, { useState, useCallback, useEffect } from "react";
-import PropTypes from "prop-types";
-import useSupabaseStorage from "../../supabase/useSupabaseStorage";
-import { supabase, deleteName } from "../../supabase/supabaseClient";
-import { FILTER_OPTIONS } from "../../constants";
-import { ErrorService } from "../../services/errorService";
+import React, { useState, useCallback, useEffect } from 'react';
+import PropTypes from 'prop-types';
+import useSupabaseStorage from '../../supabase/useSupabaseStorage';
+import { supabase, deleteName } from '../../supabase/supabaseClient';
+import { FILTER_OPTIONS } from '../../constants';
+import { ErrorService } from '../../services/errorService';
 
-import ProfileStats from "./ProfileStats";
-import ProfileFilters from "./ProfileFilters";
-import ProfileNameList from "./ProfileNameList";
-import styles from "./Profile.module.css";
+import ProfileStats from './ProfileStats';
+import ProfileFilters from './ProfileFilters';
+import ProfileNameList from './ProfileNameList';
+import styles from './Profile.module.css';
 
 // * Enhanced utility functions for better statistics
 const calculateEnhancedStats = (
   ratings,
-  filterStatus = FILTER_OPTIONS.STATUS.ALL,
+  filterStatus = FILTER_OPTIONS.STATUS.ALL
 ) => {
   if (!ratings?.length)
     return {
@@ -30,7 +30,7 @@ const calculateEnhancedStats = (
       ratingSpread: 0,
       totalMatches: 0,
       activeNames: 0,
-      popularNames: 0,
+      popularNames: 0
     };
 
   const filtered =
@@ -51,7 +51,7 @@ const calculateEnhancedStats = (
     ratingsWithValues.length > 0
       ? Math.round(
           ratingsWithValues.reduce((sum, r) => sum + (r.user_rating || 0), 0) /
-            ratingsWithValues.length,
+            ratingsWithValues.length
         )
       : 0;
 
@@ -64,7 +64,7 @@ const calculateEnhancedStats = (
   const totalMatches = wins + losses;
   const activeNames = filtered.filter((r) => r.is_active).length;
   const popularNames = filtered.filter(
-    (r) => (r.popularity_score || 0) > 100,
+    (r) => (r.popularity_score || 0) > 100
   ).length;
 
   return {
@@ -76,7 +76,7 @@ const calculateEnhancedStats = (
     ratingSpread,
     totalMatches,
     activeNames,
-    popularNames,
+    popularNames
   };
 };
 
@@ -85,9 +85,9 @@ const calculateSelectionStats = async (userName) => {
   try {
     // Get user's tournament selections
     const { data: selections, error: selectionsError } = await supabase
-      .from("tournament_selections")
-      .select("*")
-      .eq("user_name", userName);
+      .from('tournament_selections')
+      .select('*')
+      .eq('user_name', userName);
 
     if (selectionsError) throw selectionsError;
 
@@ -111,7 +111,7 @@ const calculateSelectionStats = async (userName) => {
       nameCounts[s.name] = (nameCounts[s.name] || 0) + 1;
     });
     const mostSelectedName =
-      Object.entries(nameCounts).sort(([, a], [, b]) => b - a)[0]?.[0] || "N/A";
+      Object.entries(nameCounts).sort(([, a], [, b]) => b - a)[0]?.[0] || 'N/A';
 
     // Calculate selection streak (consecutive days)
     const sortedSelections = selections
@@ -130,7 +130,7 @@ const calculateSelectionStats = async (userName) => {
         const prevDate = new Date(sortedSelections[i - 1]);
         const currDate = new Date(sortedSelections[i]);
         const dayDiff = Math.floor(
-          (currDate - prevDate) / (1000 * 60 * 60 * 24),
+          (currDate - prevDate) / (1000 * 60 * 60 * 24)
         );
 
         if (dayDiff === 1) {
@@ -146,11 +146,11 @@ const calculateSelectionStats = async (userName) => {
 
     // Get user ranking
     const { data: allUserStats, error: rankingError } = await supabase
-      .from("user_preference_analysis")
-      .select("user_name, total_selections")
-      .order("total_selections", { ascending: false });
+      .from('user_preference_analysis')
+      .select('user_name, total_selections')
+      .order('total_selections', { ascending: false });
 
-    let userRank = "N/A";
+    let userRank = 'N/A';
     if (!rankingError && allUserStats) {
       userRank = allUserStats.findIndex((u) => u.user_name === userName) + 1;
     }
@@ -162,8 +162,8 @@ const calculateSelectionStats = async (userName) => {
       improvementTip: generateImprovementTip(
         totalSelections,
         totalTournaments,
-        currentStreak,
-      ),
+        currentStreak
+      )
     };
 
     return {
@@ -173,11 +173,11 @@ const calculateSelectionStats = async (userName) => {
       mostSelectedName,
       currentStreak,
       maxStreak,
-      userRank: userRank || "N/A",
-      insights,
+      userRank: userRank || 'N/A',
+      insights
     };
   } catch (error) {
-    console.error("Error calculating selection stats:", error);
+    console.error('Error calculating selection stats:', error);
     return null;
   }
 };
@@ -185,7 +185,7 @@ const calculateSelectionStats = async (userName) => {
 // * Generate selection pattern insights
 const generateSelectionPattern = (selections) => {
   if (!selections || selections.length === 0)
-    return "No selection data available";
+    return 'No selection data available';
 
   const totalSelections = selections.length;
   const uniqueTournaments = new Set(selections.map((s) => s.tournament_id))
@@ -194,11 +194,11 @@ const generateSelectionPattern = (selections) => {
     Math.round((totalSelections / uniqueTournaments) * 10) / 10;
 
   if (avgSelectionsPerTournament > 8) {
-    return "You prefer large tournaments with many names";
+    return 'You prefer large tournaments with many names';
   } else if (avgSelectionsPerTournament > 4) {
-    return "You enjoy medium-sized tournaments";
+    return 'You enjoy medium-sized tournaments';
   } else {
-    return "You prefer focused, smaller tournaments";
+    return 'You prefer focused, smaller tournaments';
   }
 };
 
@@ -207,11 +207,11 @@ const generatePreferredCategories = async (selections) => {
   try {
     const nameIds = selections.map((s) => s.name_id);
     const { data: names, error } = await supabase
-      .from("cat_name_options")
-      .select("categories")
-      .in("id", nameIds);
+      .from('cat_name_options')
+      .select('categories')
+      .in('id', nameIds);
 
-    if (error || !names) return "Analyzing your preferences...";
+    if (error || !names) return 'Analyzing your preferences...';
 
     const categoryCounts = {};
     names.forEach((name) => {
@@ -228,12 +228,12 @@ const generatePreferredCategories = async (selections) => {
       .map(([cat]) => cat);
 
     if (topCategories.length > 0) {
-      return `You favor: ${topCategories.join(", ")}`;
+      return `You favor: ${topCategories.join(', ')}`;
     }
 
-    return "Discovering your preferences...";
+    return 'Discovering your preferences...';
   } catch (error) {
-    return "Analyzing your preferences...";
+    return 'Analyzing your preferences...';
   }
 };
 
@@ -241,22 +241,22 @@ const generatePreferredCategories = async (selections) => {
 const generateImprovementTip = (
   totalSelections,
   totalTournaments,
-  currentStreak,
+  currentStreak
 ) => {
   if (totalSelections === 0) {
-    return "Start selecting names to see your first tournament!";
+    return 'Start selecting names to see your first tournament!';
   }
 
   if (totalTournaments < 3) {
-    return "Try creating more tournaments to discover your preferences";
+    return 'Try creating more tournaments to discover your preferences';
   }
 
   if (currentStreak < 3) {
-    return "Build a selection streak by playing daily";
+    return 'Build a selection streak by playing daily';
   }
 
   if (totalSelections / totalTournaments < 4) {
-    return "Consider selecting more names per tournament for variety";
+    return 'Consider selecting more names per tournament for variety';
   }
 
   return "Great job! You're an active tournament participant";
@@ -267,20 +267,20 @@ const Profile = ({ userName, onStartNewTournament }) => {
   // * State
   const [filterStatus, setFilterStatus] = useState(FILTER_OPTIONS.STATUS.ALL);
   const [userFilter, setUserFilter] = useState(FILTER_OPTIONS.USER.ALL);
-  const [sortBy, setSortBy] = useState("rating");
-  const [sortOrder, setSortOrder] = useState("desc");
+  const [sortBy, setSortBy] = useState('rating');
+  const [sortOrder, setSortOrder] = useState('desc');
   const [isAdmin, setIsAdmin] = useState(false);
   const [hiddenNames, setHiddenNames] = useState(new Set());
   const [selectionStats, setSelectionStats] = useState(null);
   // * NEW: Selection-based filtering state
-  const [selectionFilter, setSelectionFilter] = useState("all");
+  const [selectionFilter, setSelectionFilter] = useState('all');
 
   // * Hooks
   const {
     names: allNames,
     loading: ratingsLoading,
     error: ratingsError,
-    fetchNames,
+    fetchNames
   } = useSupabaseStorage(userName);
 
   // * State for selected names
@@ -302,7 +302,7 @@ const Profile = ({ userName, onStartNewTournament }) => {
       const stats = await calculateSelectionStats(userName);
       setSelectionStats(stats);
     } catch (error) {
-      console.error("Error fetching selection stats:", error);
+      console.error('Error fetching selection stats:', error);
     }
   }, [userName]);
 
@@ -311,19 +311,19 @@ const Profile = ({ userName, onStartNewTournament }) => {
     const checkAdminStatus = async () => {
       try {
         const {
-          data: { user },
+          data: { user }
         } = await supabase.auth.getUser();
         if (user) {
           const { data: adminCheck } = await supabase
-            .from("user_preferences")
-            .select("is_admin")
-            .eq("user_name", user.email)
+            .from('user_preferences')
+            .select('is_admin')
+            .eq('user_name', user.email)
             .single();
 
           setIsAdmin(adminCheck?.is_admin || false);
         }
       } catch (error) {
-        console.error("Error checking admin status:", error);
+        console.error('Error checking admin status:', error);
         setIsAdmin(false);
       }
     };
@@ -339,9 +339,9 @@ const Profile = ({ userName, onStartNewTournament }) => {
     async (nameId) => {
       try {
         const { error } = await supabase
-          .from("cat_name_options")
+          .from('cat_name_options')
           .update({ is_hidden: !hiddenNames.has(nameId) })
-          .eq("id", nameId);
+          .eq('id', nameId);
 
         if (error) throw error;
 
@@ -359,14 +359,14 @@ const Profile = ({ userName, onStartNewTournament }) => {
         // * Refresh names
         fetchNames();
       } catch (error) {
-        ErrorService.handleError(error, "Profile - Toggle Visibility", {
+        ErrorService.handleError(error, 'Profile - Toggle Visibility', {
           isRetryable: true,
           affectsUserData: false,
-          isCritical: false,
+          isCritical: false
         });
       }
     },
-    [hiddenNames, fetchNames],
+    [hiddenNames, fetchNames]
   );
 
   // * Handle name deletion
@@ -380,14 +380,14 @@ const Profile = ({ userName, onStartNewTournament }) => {
         fetchNames();
         fetchSelectionStats();
       } catch (error) {
-        ErrorService.handleError(error, "Profile - Delete Name", {
+        ErrorService.handleError(error, 'Profile - Delete Name', {
           isRetryable: true,
           affectsUserData: true,
-          isCritical: false,
+          isCritical: false
         });
       }
     },
-    [fetchNames, fetchSelectionStats],
+    [fetchNames, fetchSelectionStats]
   );
 
   // * Handle name selection
@@ -477,7 +477,7 @@ const Profile = ({ userName, onStartNewTournament }) => {
 
 Profile.propTypes = {
   userName: PropTypes.string.isRequired,
-  onStartNewTournament: PropTypes.func.isRequired,
+  onStartNewTournament: PropTypes.func.isRequired
 };
 
 export default Profile;

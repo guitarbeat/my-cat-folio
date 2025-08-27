@@ -4,9 +4,9 @@
  * Combines all database operations, real-time subscriptions, and utility functions.
  */
 
-import { createClient } from "@supabase/supabase-js";
-import devLog from "../utils/logger";
-import { databaseRetry } from "../utils/retryUtils";
+import { createClient } from '@supabase/supabase-js';
+import devLog from '../utils/logger';
+import { databaseRetry } from '../utils/retryUtils';
 
 // Environment configuration
 const supabaseUrl =
@@ -20,14 +20,14 @@ const supabaseAnonKey =
 // Otherwise export `null` so the application can still render without Supabase
 let supabase = null;
 if (!supabaseUrl || !supabaseAnonKey) {
-  if (process.env.NODE_ENV === "development") {
+  if (process.env.NODE_ENV === 'development') {
     console.warn(
-      "Missing Supabase environment variables. Supabase features are disabled.",
+      'Missing Supabase environment variables. Supabase features are disabled.'
     );
   }
 } else {
   // Ensure a single Supabase client instance in browser (avoids multiple GoTrueClient warnings)
-  if (typeof window !== "undefined") {
+  if (typeof window !== 'undefined') {
     if (!window.__supabaseClient) {
       window.__supabaseClient = createClient(supabaseUrl, supabaseAnonKey);
     }
@@ -55,21 +55,21 @@ export const catNamesAPI = {
       const { data: hiddenData, error: hiddenError } = await databaseRetry.read(
         async () => {
           return await supabase
-            .from("cat_name_ratings")
-            .select("name_id")
-            .eq("is_hidden", true);
-        },
+            .from('cat_name_ratings')
+            .select('name_id')
+            .eq('is_hidden', true);
+        }
       );
 
       if (hiddenError) {
-        console.error("Error fetching hidden names:", hiddenError);
+        console.error('Error fetching hidden names:', hiddenError);
         hiddenIds = [];
       } else {
         hiddenIds = hiddenData?.map((item) => item.name_id) || [];
       }
 
       // Build query
-      let query = supabase.from("cat_name_options").select(`
+      let query = supabase.from('cat_name_options').select(`
         id,
         name,
         description,
@@ -88,14 +88,14 @@ export const catNamesAPI = {
 
       // Filter out ALL hidden names globally
       if (hiddenIds.length > 0) {
-        query = query.not("id", "in", `(${hiddenIds.join(",")})`);
+        query = query.not('id', 'in', `(${hiddenIds.join(',')})`);
       }
 
       const { data, error } = await databaseRetry.read(async () => {
-        return await query.order("name");
+        return await query.order('name');
       });
       if (error) {
-        console.error("Error fetching names with descriptions:", error);
+        console.error('Error fetching names with descriptions:', error);
         return [];
       }
 
@@ -107,12 +107,12 @@ export const catNamesAPI = {
           user_rating: item.cat_name_ratings?.[0]?.rating || null,
           user_wins: item.cat_name_ratings?.[0]?.wins || 0,
           user_losses: item.cat_name_ratings?.[0]?.losses || 0,
-          has_user_rating: !!item.cat_name_ratings?.[0],
+          has_user_rating: !!item.cat_name_ratings?.[0]
         })) || []
       );
     } catch (error) {
-      if (process.env.NODE_ENV === "development") {
-        console.error("Error fetching names:", error);
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Error fetching names:', error);
       }
       throw error;
     }
@@ -121,26 +121,26 @@ export const catNamesAPI = {
   /**
    * Add a new name option
    */
-  async addName(name, description = "") {
+  async addName(name, description = '') {
     try {
       const { data, error } = await supabase
-        .from("cat_name_options")
+        .from('cat_name_options')
         .insert([{ name: name.trim(), description: description.trim() }])
         .select()
         .single();
 
       if (error) {
-        console.error("Error adding name:", error);
-        return { success: false, error: error.message || "Failed to add name" };
+        console.error('Error adding name:', error);
+        return { success: false, error: error.message || 'Failed to add name' };
       }
       return { success: true, data };
     } catch (error) {
-      if (process.env.NODE_ENV === "development") {
-        console.error("Error adding name:", error);
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Error adding name:', error);
       }
       return {
         success: false,
-        error: error.message || "Unknown error occurred",
+        error: error.message || 'Unknown error occurred'
       };
     }
   },
@@ -151,25 +151,25 @@ export const catNamesAPI = {
   async removeName(name) {
     try {
       const { error } = await supabase
-        .from("cat_name_options")
+        .from('cat_name_options')
         .delete()
-        .eq("name", name);
+        .eq('name', name);
 
       if (error) {
-        console.error("Error removing name:", error);
+        console.error('Error removing name:', error);
         return {
           success: false,
-          error: error.message || "Failed to remove name",
+          error: error.message || 'Failed to remove name'
         };
       }
       return { success: true };
     } catch (error) {
-      if (process.env.NODE_ENV === "development") {
-        console.error("Error removing name:", error);
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Error removing name:', error);
       }
       return {
         success: false,
-        error: error.message || "Unknown error occurred",
+        error: error.message || 'Unknown error occurred'
       };
     }
   },
@@ -179,24 +179,24 @@ export const catNamesAPI = {
    */
   async getLeaderboard(limit = 50, categoryId = null, minTournaments = 1) {
     try {
-      const { data, error } = await supabase.rpc("get_cat_name_leaderboard", {
+      const { data, error } = await supabase.rpc('get_cat_name_leaderboard', {
         p_limit: limit,
         p_category_id: categoryId,
-        p_min_tournaments: minTournaments,
+        p_min_tournaments: minTournaments
       });
 
       if (error) {
-        console.error("Error fetching leaderboard:", error);
+        console.error('Error fetching leaderboard:', error);
         return [];
       }
       return data || [];
     } catch (error) {
-      if (process.env.NODE_ENV === "development") {
-        console.error("Error fetching leaderboard:", error);
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Error fetching leaderboard:', error);
       }
       return [];
     }
-  },
+  }
 };
 
 /**
@@ -211,20 +211,20 @@ export const ratingsAPI = {
     nameId,
     newRating,
     outcome = null,
-    context = "tournament",
+    context = 'tournament'
   ) {
     const now = new Date().toISOString();
 
     try {
       // Get existing rating data
       const { data: existingData, error: fetchError } = await supabase
-        .from("cat_name_ratings")
-        .select("rating, wins, losses, updated_at")
-        .eq("user_name", userName)
-        .eq("name_id", nameId)
+        .from('cat_name_ratings')
+        .select('rating, wins, losses, updated_at')
+        .eq('user_name', userName)
+        .eq('name_id', nameId)
         .single();
 
-      if (fetchError && fetchError.code !== "PGRST116") {
+      if (fetchError && fetchError.code !== 'PGRST116') {
         throw fetchError;
       }
 
@@ -233,8 +233,8 @@ export const ratingsAPI = {
       let wins = existingData?.wins || 0;
       let losses = existingData?.losses || 0;
 
-      if (outcome === "win") wins += 1;
-      else if (outcome === "loss") losses += 1;
+      if (outcome === 'win') wins += 1;
+      else if (outcome === 'loss') losses += 1;
 
       // Record to rating history
       await this.addRatingHistory(
@@ -242,27 +242,27 @@ export const ratingsAPI = {
         nameId,
         currentRating,
         newRating,
-        context,
+        context
       );
 
       // Update rating
-      const { error } = await supabase.from("cat_name_ratings").upsert(
+      const { error } = await supabase.from('cat_name_ratings').upsert(
         {
           user_name: userName,
           name_id: nameId,
           rating: newRating,
           wins,
           losses,
-          updated_at: now,
+          updated_at: now
         },
-        { onConflict: "user_name,name_id", returning: "minimal" },
+        { onConflict: 'user_name,name_id', returning: 'minimal' }
       );
 
       if (error) {
-        console.error("Error updating rating:", error);
+        console.error('Error updating rating:', error);
         return {
           success: false,
-          error: error.message || "Failed to update rating",
+          error: error.message || 'Failed to update rating'
         };
       }
 
@@ -273,15 +273,15 @@ export const ratingsAPI = {
         change: newRating - currentRating,
         wins,
         losses,
-        updated_at: now,
+        updated_at: now
       };
     } catch (error) {
-      if (process.env.NODE_ENV === "development") {
-        console.error("Error updating rating:", error);
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Error updating rating:', error);
       }
       return {
         success: false,
-        error: error.message || "Unknown error occurred",
+        error: error.message || 'Unknown error occurred'
       };
     }
   },
@@ -292,18 +292,18 @@ export const ratingsAPI = {
   async getRatingHistory(userName, nameId = null, limit = 20) {
     try {
       let query = supabase
-        .from("cat_name_ratings")
-        .select("rating_history")
-        .eq("user_name", userName)
-        .not("rating_history", "is", null);
+        .from('cat_name_ratings')
+        .select('rating_history')
+        .eq('user_name', userName)
+        .not('rating_history', 'is', null);
 
       if (nameId) {
-        query = query.eq("name_id", nameId);
+        query = query.eq('name_id', nameId);
       }
 
       const { data, error } = await query;
       if (error) {
-        console.error("Error fetching rating history:", error);
+        console.error('Error fetching rating history:', error);
         return [];
       }
 
@@ -317,8 +317,8 @@ export const ratingsAPI = {
 
       return allHistory;
     } catch (error) {
-      if (process.env.NODE_ENV === "development") {
-        console.error("Error fetching rating history:", error);
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Error fetching rating history:', error);
       }
       return [];
     }
@@ -332,25 +332,25 @@ export const ratingsAPI = {
     nameId,
     oldRating,
     newRating,
-    context = "manual",
+    context = 'manual'
   ) {
     try {
       // Get name from name_id
       const { data: nameData } = await supabase
-        .from("cat_name_options")
-        .select("name")
-        .eq("id", nameId)
+        .from('cat_name_options')
+        .select('name')
+        .eq('id', nameId)
         .single();
 
       // Get existing rating data to update the rating_history JSONB column
       const { data: existingRating, error: fetchError } = await supabase
-        .from("cat_name_ratings")
-        .select("rating_history")
-        .eq("user_name", userName)
-        .eq("name_id", nameId)
+        .from('cat_name_ratings')
+        .select('rating_history')
+        .eq('user_name', userName)
+        .eq('name_id', nameId)
         .single();
 
-      if (fetchError && fetchError.code !== "PGRST116") {
+      if (fetchError && fetchError.code !== 'PGRST116') {
         throw fetchError;
       }
 
@@ -358,37 +358,37 @@ export const ratingsAPI = {
       const newHistoryEntry = {
         user_name: userName,
         name_id: nameId,
-        name: nameData?.name || "Unknown",
+        name: nameData?.name || 'Unknown',
         old_rating: oldRating,
         new_rating: newRating,
         change: newRating - (oldRating || 0),
         context,
-        timestamp: new Date().toISOString(),
+        timestamp: new Date().toISOString()
       };
 
       // Update or insert the rating_history in cat_name_ratings
-      const { error } = await supabase.from("cat_name_ratings").upsert(
+      const { error } = await supabase.from('cat_name_ratings').upsert(
         {
           user_name: userName,
           name_id: nameId,
           rating_history: existingRating?.rating_history
             ? [...existingRating.rating_history, newHistoryEntry]
-            : [newHistoryEntry],
+            : [newHistoryEntry]
         },
         {
-          onConflict: "user_name,name_id",
-        },
+          onConflict: 'user_name,name_id'
+        }
       );
 
       if (error) throw error;
       return { success: true };
     } catch (error) {
-      if (process.env.NODE_ENV === "development") {
-        console.error("Error saving rating history:", error);
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Error saving rating history:', error);
       }
       throw error;
     }
-  },
+  }
 };
 
 /**
@@ -401,26 +401,26 @@ export const hiddenNamesAPI = {
   async hideName(userName, nameId) {
     try {
       // Update or insert the hidden status in cat_name_ratings
-      const { error } = await supabase.from("cat_name_ratings").upsert(
+      const { error } = await supabase.from('cat_name_ratings').upsert(
         {
           name_id: nameId,
           user_name: userName,
           is_hidden: true,
           // * FIXED: Don't overwrite existing rating - only set if record is new
           wins: 0,
-          losses: 0,
+          losses: 0
         },
         {
-          onConflict: "name_id,user_name",
-          ignoreDuplicates: false,
-        },
+          onConflict: 'name_id,user_name',
+          ignoreDuplicates: false
+        }
       );
 
       if (error) throw error;
       return { success: true };
     } catch (error) {
-      if (process.env.NODE_ENV === "development") {
-        console.error("Error hiding name:", error);
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Error hiding name:', error);
       }
       throw error;
     }
@@ -433,16 +433,16 @@ export const hiddenNamesAPI = {
     try {
       // Update the hidden status to false in cat_name_ratings
       const { error } = await supabase
-        .from("cat_name_ratings")
+        .from('cat_name_ratings')
         .update({ is_hidden: false })
-        .eq("name_id", nameId)
-        .eq("user_name", userName);
+        .eq('name_id', nameId)
+        .eq('user_name', userName);
 
       if (error) throw error;
       return { success: true };
     } catch (error) {
-      if (process.env.NODE_ENV === "development") {
-        console.error("Error unhiding name:", error);
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Error unhiding name:', error);
       }
       throw error;
     }
@@ -454,7 +454,7 @@ export const hiddenNamesAPI = {
   async getHiddenNames(userName) {
     try {
       const { data, error } = await supabase
-        .from("cat_name_ratings")
+        .from('cat_name_ratings')
         .select(
           `
           name_id,
@@ -464,20 +464,20 @@ export const hiddenNamesAPI = {
             name,
             description
           )
-        `,
+        `
         )
-        .eq("user_name", userName)
-        .eq("is_hidden", true);
+        .eq('user_name', userName)
+        .eq('is_hidden', true);
 
       if (error) throw error;
       return data || [];
     } catch (error) {
-      if (process.env.NODE_ENV === "development") {
-        console.error("Error fetching hidden names:", error);
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Error fetching hidden names:', error);
       }
       return [];
     }
-  },
+  }
 };
 
 /**
@@ -491,7 +491,7 @@ export const tournamentsAPI = {
     userName,
     tournamentName,
     participantNames,
-    tournamentData = {},
+    tournamentData = {}
   ) {
     try {
       // Create tournament in the consolidated cat_app_users table
@@ -501,45 +501,45 @@ export const tournamentsAPI = {
         tournament_name: tournamentName,
         participant_names: participantNames,
         tournament_data: tournamentData,
-        status: "in_progress",
-        created_at: new Date().toISOString(),
+        status: 'in_progress',
+        created_at: new Date().toISOString()
       };
 
       // Get or create user record in cat_app_users
       const { data: userData, error: userError } = await supabase
-        .from("cat_app_users")
-        .select("tournament_data")
-        .eq("user_name", userName)
+        .from('cat_app_users')
+        .select('tournament_data')
+        .eq('user_name', userName)
         .single();
 
-      if (userError && userError.code !== "PGRST116") {
+      if (userError && userError.code !== 'PGRST116') {
         // If it's a column doesn't exist error, initialize with empty array
-        if (userError.code === "42703") {
+        if (userError.code === '42703') {
           console.warn(
-            "Tournament data column not found, initializing with empty array. Run the migration to add the column.",
+            'Tournament data column not found, initializing with empty array. Run the migration to add the column.'
           );
           const tournaments = [newTournament];
 
           // Try to create the column and insert the tournament
           const { error: upsertError } = await supabase
-            .from("cat_app_users")
+            .from('cat_app_users')
             .upsert(
               {
                 user_name: userName,
-                tournament_data: tournaments,
+                tournament_data: tournaments
               },
               {
-                onConflict: "user_name",
-                ignoreDuplicates: false,
-              },
+                onConflict: 'user_name',
+                ignoreDuplicates: false
+              }
             )
             .select()
             .single();
 
           if (upsertError) {
             console.error(
-              "Failed to create tournament after column creation attempt:",
-              upsertError,
+              'Failed to create tournament after column creation attempt:',
+              upsertError
             );
             // Return the tournament object anyway to prevent app crashes
             return newTournament;
@@ -555,25 +555,25 @@ export const tournamentsAPI = {
 
       // Update user's tournament data
       const { error } = await supabase
-        .from("cat_app_users")
+        .from('cat_app_users')
         .upsert(
           {
             user_name: userName,
-            tournament_data: tournaments,
+            tournament_data: tournaments
           },
           {
-            onConflict: "user_name",
-            ignoreDuplicates: false,
-          },
+            onConflict: 'user_name',
+            ignoreDuplicates: false
+          }
         )
         .select()
         .single();
 
       if (error) {
         // If it's a column doesn't exist error, log warning and return tournament
-        if (error.code === "42703") {
+        if (error.code === '42703') {
           console.warn(
-            "Tournament data column not found, cannot save tournament. Run the migration to add the column.",
+            'Tournament data column not found, cannot save tournament. Run the migration to add the column.'
           );
           return newTournament;
         }
@@ -581,8 +581,8 @@ export const tournamentsAPI = {
       }
       return newTournament;
     } catch (error) {
-      if (process.env.NODE_ENV === "development") {
-        console.error("Error creating tournament:", error);
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Error creating tournament:', error);
       }
       throw error;
     }
@@ -596,16 +596,16 @@ export const tournamentsAPI = {
       // Find the tournament in the user's tournament_data array
       // We need to search through all users to find the tournament
       const { data: allUsers, error: fetchError } = await supabase
-        .from("cat_app_users")
-        .select("user_name, tournament_data")
-        .not("tournament_data", "is", null);
+        .from('cat_app_users')
+        .select('user_name, tournament_data')
+        .not('tournament_data', 'is', null);
 
       if (fetchError) {
         console.error(
-          "Error fetching users for tournament update:",
-          fetchError,
+          'Error fetching users for tournament update:',
+          fetchError
         );
-        return { success: false, error: "Failed to fetch tournament data" };
+        return { success: false, error: 'Failed to fetch tournament data' };
       }
 
       let tournamentFound = false;
@@ -617,7 +617,7 @@ export const tournamentsAPI = {
           continue;
 
         const tournamentIndex = user.tournament_data.findIndex(
-          (t) => t.id === tournamentId,
+          (t) => t.id === tournamentId
         );
         if (tournamentIndex !== -1) {
           // Update the tournament status
@@ -625,20 +625,20 @@ export const tournamentsAPI = {
           updatedTournaments[tournamentIndex] = {
             ...updatedTournaments[tournamentIndex],
             status: status,
-            updated_at: new Date().toISOString(),
+            updated_at: new Date().toISOString()
           };
 
           // Update the user's tournament data
           const { error: updateError } = await supabase
-            .from("cat_app_users")
+            .from('cat_app_users')
             .update({ tournament_data: updatedTournaments })
-            .eq("user_name", user.user_name);
+            .eq('user_name', user.user_name);
 
           if (updateError) {
-            console.error("Error updating tournament status:", updateError);
+            console.error('Error updating tournament status:', updateError);
             return {
               success: false,
-              error: "Failed to update tournament status",
+              error: 'Failed to update tournament status'
             };
           }
 
@@ -649,7 +649,7 @@ export const tournamentsAPI = {
       }
 
       if (!tournamentFound) {
-        return { success: false, error: "Tournament not found" };
+        return { success: false, error: 'Tournament not found' };
       }
 
       return {
@@ -657,15 +657,15 @@ export const tournamentsAPI = {
         tournamentId,
         status,
         updatedUser,
-        message: `Tournament status updated to ${status}`,
+        message: `Tournament status updated to ${status}`
       };
     } catch (error) {
-      if (process.env.NODE_ENV === "development") {
-        console.error("Error updating tournament status:", error);
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Error updating tournament status:', error);
       }
       return {
         success: false,
-        error: error.message || "Unknown error occurred",
+        error: error.message || 'Unknown error occurred'
       };
     }
   },
@@ -677,16 +677,16 @@ export const tournamentsAPI = {
     try {
       // Get tournaments from the consolidated cat_app_users table
       const { data: userData, error } = await supabase
-        .from("cat_app_users")
-        .select("tournament_data")
-        .eq("user_name", userName)
+        .from('cat_app_users')
+        .select('tournament_data')
+        .eq('user_name', userName)
         .single();
 
       if (error) {
         // If it's a column doesn't exist error, return empty array
-        if (error.code === "42703") {
+        if (error.code === '42703') {
           console.warn(
-            "Tournament data column not found, returning empty array. Run the migration to add the column.",
+            'Tournament data column not found, returning empty array. Run the migration to add the column.'
           );
           return [];
         }
@@ -702,13 +702,13 @@ export const tournamentsAPI = {
 
       // Sort by created_at (newest first)
       tournaments.sort(
-        (a, b) => new Date(b.created_at) - new Date(a.created_at),
+        (a, b) => new Date(b.created_at) - new Date(a.created_at)
       );
 
       return tournaments;
     } catch (error) {
-      if (process.env.NODE_ENV === "development") {
-        console.error("Error fetching tournaments:", error);
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Error fetching tournaments:', error);
       }
       return [];
     }
@@ -735,20 +735,20 @@ export const tournamentsAPI = {
         try {
           // Use atomic server-side increment to avoid 409s and RLS reads
           const { error: rpcError } = await supabase.rpc(
-            "increment_selection",
+            'increment_selection',
             {
               p_user_name: userName,
-              p_name_id: nameObj.id,
-            },
+              p_name_id: nameObj.id
+            }
           );
 
           if (rpcError) {
             console.error(
-              "RPC increment_selection error for",
+              'RPC increment_selection error for',
               userName,
               nameObj.id,
-              ":",
-              rpcError,
+              ':',
+              rpcError
             );
             return { error: rpcError };
           }
@@ -764,15 +764,15 @@ export const tournamentsAPI = {
       // Check for any errors
       const errors = results.filter((result) => result.error);
       if (errors.length > 0) {
-        console.warn("Some tournament selections had errors:", errors);
+        console.warn('Some tournament selections had errors:', errors);
       }
 
       // Also try to create a simple tournament record in the user's preferences
       try {
         const { data: userData } = await supabase
-          .from("cat_app_users")
-          .select("tournament_data")
-          .eq("user_name", userName)
+          .from('cat_app_users')
+          .select('tournament_data')
+          .eq('user_name', userName)
           .single();
 
         const tournaments = userData?.tournament_data || [];
@@ -780,38 +780,38 @@ export const tournamentsAPI = {
           id: finalTournamentId,
           name: `Tournament Setup - ${selectedNames.length} names`,
           created_at: now,
-          status: "setup_complete",
+          status: 'setup_complete',
           selected_names: selectedNames.map((n) => ({
             id: n.id,
-            name: n.name,
+            name: n.name
           })),
-          selection_count: selectedNames.length,
+          selection_count: selectedNames.length
         };
 
         tournaments.push(newTournament);
 
         const { error: userUpsertError } = await supabase
-          .from("cat_app_users")
+          .from('cat_app_users')
           .upsert(
             {
               user_name: userName,
-              tournament_data: tournaments,
+              tournament_data: tournaments
             },
-            { onConflict: "user_name" },
+            { onConflict: 'user_name' }
           );
 
         if (userUpsertError) {
           console.error(
-            "User upsert error for",
+            'User upsert error for',
             userName,
-            ":",
-            userUpsertError,
+            ':',
+            userUpsertError
           );
         }
       } catch (tournamentError) {
         // Don't fail if tournament creation fails
-        if (process.env.NODE_ENV === "development") {
-          console.warn("Could not save tournament record:", tournamentError);
+        if (process.env.NODE_ENV === 'development') {
+          console.warn('Could not save tournament record:', tournamentError);
         }
       }
 
@@ -820,11 +820,11 @@ export const tournamentsAPI = {
         finalTournamentId,
         selectionCount: selectedNames.length,
         selectedNames: selectedNames.map((n) => n.name),
-        method: "cat_name_ratings_update",
+        method: 'cat_name_ratings_update'
       };
     } catch (error) {
-      if (process.env.NODE_ENV === "development") {
-        console.error("Error saving tournament selections:", error);
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Error saving tournament selections:', error);
       }
       throw error;
     }
@@ -836,21 +836,21 @@ export const tournamentsAPI = {
   async createTournamentSelectionsTable() {
     try {
       const { error } = await supabase.rpc(
-        "create_tournament_selections_table",
+        'create_tournament_selections_table'
       );
       if (error) {
-        if (process.env.NODE_ENV === "development") {
+        if (process.env.NODE_ENV === 'development') {
           console.warn(
-            "Could not create table via RPC, table may already exist:",
-            error,
+            'Could not create table via RPC, table may already exist:',
+            error
           );
         }
       }
     } catch (error) {
-      if (process.env.NODE_ENV === "development") {
+      if (process.env.NODE_ENV === 'development') {
         console.warn(
-          "Table creation RPC not available, table may already exist:",
-          error,
+          'Table creation RPC not available, table may already exist:',
+          error
         );
       }
     }
@@ -865,7 +865,7 @@ export const tournamentsAPI = {
   async getTournamentSelectionHistory(userName, limit = 50) {
     try {
       const { data, error } = await supabase
-        .from("tournament_selections")
+        .from('tournament_selections')
         .select(
           `
           *,
@@ -873,15 +873,15 @@ export const tournamentsAPI = {
             name,
             description
           )
-        `,
+        `
         )
-        .eq("user_name", userName)
-        .order("selected_at", { ascending: false })
+        .eq('user_name', userName)
+        .order('selected_at', { ascending: false })
         .limit(limit);
 
       if (error) {
         // If table doesn't exist, return empty array
-        if (error.code === "42P01") {
+        if (error.code === '42P01') {
           return [];
         }
         throw error;
@@ -889,8 +889,8 @@ export const tournamentsAPI = {
 
       return data || [];
     } catch (error) {
-      if (process.env.NODE_ENV === "development") {
-        console.error("Error fetching tournament selection history:", error);
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Error fetching tournament selection history:', error);
       }
       return [];
     }
@@ -904,7 +904,7 @@ export const tournamentsAPI = {
   async getPopularTournamentNames(limit = 20) {
     try {
       const { data, error } = await supabase
-        .from("tournament_selections")
+        .from('tournament_selections')
         .select(
           `
           name_id,
@@ -913,15 +913,15 @@ export const tournamentsAPI = {
             description
           ),
           selection_count:count
-        `,
+        `
         )
-        .group("name_id, cat_name_options.name, cat_name_options.description")
-        .order("selection_count", { ascending: false })
+        .group('name_id, cat_name_options.name, cat_name_options.description')
+        .order('selection_count', { ascending: false })
         .limit(limit);
 
       if (error) {
         // If table doesn't exist, return empty array
-        if (error.code === "42P01") {
+        if (error.code === '42P01') {
           return [];
         }
         throw error;
@@ -929,8 +929,8 @@ export const tournamentsAPI = {
 
       return data || [];
     } catch (error) {
-      if (process.env.NODE_ENV === "development") {
-        console.error("Error fetching popular tournament names:", error);
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Error fetching popular tournament names:', error);
       }
       return [];
     }
@@ -945,22 +945,22 @@ export const tournamentsAPI = {
   async getPersonalizedRecommendations(userName, limit = 10) {
     try {
       const { data, error } = await supabase.rpc(
-        "get_personalized_recommendations",
+        'get_personalized_recommendations',
         {
           p_user_name: userName,
-          p_limit: limit,
-        },
+          p_limit: limit
+        }
       );
 
       if (error) {
-        console.error("Error getting personalized recommendations:", error);
+        console.error('Error getting personalized recommendations:', error);
         return [];
       }
 
       return data || [];
     } catch (error) {
-      if (process.env.NODE_ENV === "development") {
-        console.error("Error getting personalized recommendations:", error);
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Error getting personalized recommendations:', error);
       }
       return [];
     }
@@ -973,19 +973,19 @@ export const tournamentsAPI = {
   async getSelectionDashboard() {
     try {
       const { data, error } = await supabase
-        .from("selection_summary")
-        .select("*")
+        .from('selection_summary')
+        .select('*')
         .single();
 
       if (error) {
-        console.error("Error getting selection dashboard:", error);
+        console.error('Error getting selection dashboard:', error);
         return null;
       }
 
       return data;
     } catch (error) {
-      if (process.env.NODE_ENV === "development") {
-        console.error("Error getting selection dashboard:", error);
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Error getting selection dashboard:', error);
       }
       return null;
     }
@@ -999,23 +999,23 @@ export const tournamentsAPI = {
   async getPopularNamesBySelections(limit = 20) {
     try {
       const { data, error } = await supabase
-        .from("popular_names_by_selections")
-        .select("*")
+        .from('popular_names_by_selections')
+        .select('*')
         .limit(limit);
 
       if (error) {
-        console.error("Error getting popular names:", error);
+        console.error('Error getting popular names:', error);
         return [];
       }
 
       return data || [];
     } catch (error) {
-      if (process.env.NODE_ENV === "development") {
-        console.error("Error getting popular names:", error);
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Error getting popular names:', error);
       }
       return [];
     }
-  },
+  }
 };
 
 /**
@@ -1029,24 +1029,24 @@ export const userPreferencesAPI = {
     try {
       // First try to get preferences from the preferences column
       const { data, error } = await supabase
-        .from("cat_app_users")
-        .select("preferences")
-        .eq("user_name", userName)
+        .from('cat_app_users')
+        .select('preferences')
+        .eq('user_name', userName)
         .single();
 
-      if (error && error.code !== "PGRST116") {
+      if (error && error.code !== 'PGRST116') {
         // If it's a column doesn't exist error, return defaults
-        if (error.code === "42703") {
+        if (error.code === '42703') {
           console.warn(
-            "Preferences column not found, returning defaults. Run the migration to add the column.",
+            'Preferences column not found, returning defaults. Run the migration to add the column.'
           );
           return {
             user_name: userName,
             preferred_categories: [],
             tournament_size_preference: 8,
-            rating_display_preference: "elo",
+            rating_display_preference: 'elo',
             sound_enabled: true,
-            theme_preference: "dark",
+            theme_preference: 'dark'
           };
         }
         throw error;
@@ -1058,23 +1058,23 @@ export const userPreferencesAPI = {
           user_name: userName,
           preferred_categories: [],
           tournament_size_preference: 8,
-          rating_display_preference: "elo",
+          rating_display_preference: 'elo',
           sound_enabled: true,
-          theme_preference: "dark",
+          theme_preference: 'dark'
         }
       );
     } catch (error) {
-      if (process.env.NODE_ENV === "development") {
-        console.error("Error fetching preferences:", error);
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Error fetching preferences:', error);
       }
       // Return defaults on any error to prevent app crashes
       return {
         user_name: userName,
         preferred_categories: [],
         tournament_size_preference: 8,
-        rating_display_preference: "elo",
+        rating_display_preference: 'elo',
         sound_enabled: true,
-        theme_preference: "dark",
+        theme_preference: 'dark'
       };
     }
   },
@@ -1086,25 +1086,25 @@ export const userPreferencesAPI = {
     try {
       // Update preferences in the consolidated cat_app_users table
       const { data, error } = await supabase
-        .from("cat_app_users")
+        .from('cat_app_users')
         .upsert(
           {
             user_name: userName,
             preferences: {
               ...preferences,
-              updated_at: new Date().toISOString(),
-            },
+              updated_at: new Date().toISOString()
+            }
           },
-          { onConflict: "user_name" },
+          { onConflict: 'user_name' }
         )
         .select()
         .single();
 
       if (error) {
         // If it's a column doesn't exist error, log warning and return preferences
-        if (error.code === "42703") {
+        if (error.code === '42703') {
           console.warn(
-            "Preferences column not found, cannot save preferences. Run the migration to add the column.",
+            'Preferences column not found, cannot save preferences. Run the migration to add the column.'
           );
           return preferences;
         }
@@ -1112,13 +1112,13 @@ export const userPreferencesAPI = {
       }
       return data?.preferences;
     } catch (error) {
-      if (process.env.NODE_ENV === "development") {
-        console.error("Error updating preferences:", error);
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Error updating preferences:', error);
       }
       // Return the preferences object on error to prevent app crashes
       return preferences;
     }
-  },
+  }
 };
 
 /**
@@ -1132,15 +1132,15 @@ export const categoriesAPI = {
     try {
       // Get categories from the consolidated cat_name_options table
       const { data, error } = await supabase
-        .from("cat_name_options")
-        .select("categories")
-        .not("categories", "is", null);
+        .from('cat_name_options')
+        .select('categories')
+        .not('categories', 'is', null);
 
       if (error) throw error;
       return data || [];
     } catch (error) {
-      if (process.env.NODE_ENV === "development") {
-        console.error("Error fetching categories:", error);
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Error fetching categories:', error);
       }
       return [];
     }
@@ -1153,7 +1153,7 @@ export const categoriesAPI = {
     try {
       // Categories are now stored as JSONB in cat_name_options
       const { data, error } = await supabase
-        .from("cat_name_options")
+        .from('cat_name_options')
         .select(
           `
           id,
@@ -1162,19 +1162,19 @@ export const categoriesAPI = {
           avg_rating,
           popularity_score,
           categories
-        `,
+        `
         )
-        .contains("categories", [categoryId]);
+        .contains('categories', [categoryId]);
 
       if (error) throw error;
       return data || [];
     } catch (error) {
-      if (process.env.NODE_ENV === "development") {
-        console.error("Error fetching names by category:", error);
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Error fetching names by category:', error);
       }
       return [];
     }
-  },
+  }
 };
 
 // ===== UTILITY FUNCTIONS =====
@@ -1185,7 +1185,7 @@ export const categoriesAPI = {
  */
 export const ensureRatingHistoryTable = async () => {
   devLog(
-    "Rating history is now stored in cat_name_ratings.rating_history as JSONB",
+    'Rating history is now stored in cat_name_ratings.rating_history as JSONB'
   );
   return { success: true };
 };
@@ -1197,43 +1197,43 @@ export const deleteName = async (nameId) => {
   try {
     // Check if name exists
     const { data: nameData, error: nameError } = await supabase
-      .from("cat_name_options")
-      .select("name")
-      .eq("id", nameId)
+      .from('cat_name_options')
+      .select('name')
+      .eq('id', nameId)
       .single();
 
-    if (nameError?.code === "PGRST116") {
-      throw new Error("Name has already been deleted");
+    if (nameError?.code === 'PGRST116') {
+      throw new Error('Name has already been deleted');
     } else if (nameError) {
       throw nameError;
     }
 
     if (!nameData) {
-      throw new Error("Name does not exist in database");
+      throw new Error('Name does not exist in database');
     }
 
     // Check if name is hidden
     const { data: hiddenData, error: hiddenError } = await supabase
-      .from("cat_name_ratings")
-      .select("*")
-      .eq("name_id", nameId)
-      .eq("is_hidden", true);
+      .from('cat_name_ratings')
+      .select('*')
+      .eq('name_id', nameId)
+      .eq('is_hidden', true);
 
     if (hiddenError) throw hiddenError;
     if (!hiddenData || hiddenData.length === 0) {
-      throw new Error("Cannot delete name that is not hidden");
+      throw new Error('Cannot delete name that is not hidden');
     }
 
     // Use transaction to delete
-    const { error } = await supabase.rpc("delete_name_cascade", {
-      target_name_id: nameId,
+    const { error } = await supabase.rpc('delete_name_cascade', {
+      target_name_id: nameId
     });
 
     if (error) throw error;
     return { success: true };
   } catch (error) {
-    if (process.env.NODE_ENV === "development") {
-      console.error("Error in deleteName function:", error);
+    if (process.env.NODE_ENV === 'development') {
+      console.error('Error in deleteName function:', error);
     }
     throw error;
   }

@@ -15,12 +15,12 @@
  */
 export default function devLog(...args) {
   try {
-    if (process.env.NODE_ENV !== "production") {
-      console.log("[DEV]", ...args);
+    if (process.env.NODE_ENV !== 'production') {
+      console.log('[DEV]', ...args);
     }
   } catch (error) {
-    if (process.env.NODE_ENV === "development") {
-      console.error("Logger error:", error);
+    if (process.env.NODE_ENV === 'development') {
+      console.error('Logger error:', error);
     }
   }
 }

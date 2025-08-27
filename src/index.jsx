@@ -8,21 +8,21 @@
  * @requires App
  */
 
-import React from "react";
-import ReactDOM from "react-dom/client";
-import { setupGlobalErrorHandling } from "./utils/errorHandler";
-import "./styles/global.css";
-import "./styles/mobile.css";
-import "./styles/mobile-ergonomics.css";
-import App from "./App.jsx";
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import { setupGlobalErrorHandling } from './utils/errorHandler';
+import './styles/global.css';
+import './styles/mobile.css';
+import './styles/mobile-ergonomics.css';
+import App from './App.jsx';
 // import { Analytics } from "@vercel/analytics/react"
 
 // Set up global error handling
 setupGlobalErrorHandling();
 
-const root = ReactDOM.createRoot(document.getElementById("root"));
+const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <App />
-  </React.StrictMode>,
+  </React.StrictMode>
 );

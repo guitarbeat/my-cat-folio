@@ -9,8 +9,8 @@
  * @returns {Object} Validation result with success and error message
  */
 export const validateUsername = (username) => {
-  if (!username || typeof username !== "string") {
-    return { success: false, error: "Username is required" };
+  if (!username || typeof username !== 'string') {
+    return { success: false, error: 'Username is required' };
   }
 
   const trimmed = username.trim();
@@ -18,14 +18,14 @@ export const validateUsername = (username) => {
   if (trimmed.length < 2) {
     return {
       success: false,
-      error: "Username must be at least 2 characters long",
+      error: 'Username must be at least 2 characters long'
     };
   }
 
   if (trimmed.length > 50) {
     return {
       success: false,
-      error: "Username must be less than 50 characters",
+      error: 'Username must be less than 50 characters'
     };
   }
 
@@ -34,7 +34,7 @@ export const validateUsername = (username) => {
     return {
       success: false,
       error:
-        "Username can only contain letters, numbers, spaces, hyphens, and underscores",
+        'Username can only contain letters, numbers, spaces, hyphens, and underscores'
     };
   }
 
@@ -47,20 +47,20 @@ export const validateUsername = (username) => {
  * @returns {Object} Validation result with success and error message
  */
 export const validateCatName = (name) => {
-  if (!name || typeof name !== "string") {
-    return { success: false, error: "Cat name is required" };
+  if (!name || typeof name !== 'string') {
+    return { success: false, error: 'Cat name is required' };
   }
 
   const trimmed = name.trim();
 
   if (trimmed.length < 1) {
-    return { success: false, error: "Cat name cannot be empty" };
+    return { success: false, error: 'Cat name cannot be empty' };
   }
 
   if (trimmed.length > 100) {
     return {
       success: false,
-      error: "Cat name must be less than 100 characters",
+      error: 'Cat name must be less than 100 characters'
     };
   }
 
@@ -73,8 +73,8 @@ export const validateCatName = (name) => {
  * @returns {Object} Validation result with success and error message
  */
 export const validateDescription = (description) => {
-  if (!description || typeof description !== "string") {
-    return { success: false, error: "Description is required" };
+  if (!description || typeof description !== 'string') {
+    return { success: false, error: 'Description is required' };
   }
 
   const trimmed = description.trim();
@@ -82,14 +82,14 @@ export const validateDescription = (description) => {
   if (trimmed.length < 10) {
     return {
       success: false,
-      error: "Description must be at least 10 characters long",
+      error: 'Description must be at least 10 characters long'
     };
   }
 
   if (trimmed.length > 500) {
     return {
       success: false,
-      error: "Description must be less than 500 characters",
+      error: 'Description must be less than 500 characters'
     };
   }
 
@@ -102,23 +102,23 @@ export const validateDescription = (description) => {
  * @returns {Object} Validation result with success and error message
  */
 export const validateTournamentSize = (size) => {
-  if (typeof size !== "number" || isNaN(size)) {
-    return { success: false, error: "Tournament size must be a number" };
+  if (typeof size !== 'number' || isNaN(size)) {
+    return { success: false, error: 'Tournament size must be a number' };
   }
 
   if (size < 2) {
-    return { success: false, error: "Tournament size must be at least 2" };
+    return { success: false, error: 'Tournament size must be at least 2' };
   }
 
   if (size > 64) {
-    return { success: false, error: "Tournament size must be 64 or less" };
+    return { success: false, error: 'Tournament size must be 64 or less' };
   }
 
   // Check if it's a power of 2
   if ((size & (size - 1)) !== 0) {
     return {
       success: false,
-      error: "Tournament size must be a power of 2 (2, 4, 8, 16, 32, 64)",
+      error: 'Tournament size must be a power of 2 (2, 4, 8, 16, 32, 64)'
     };
   }
 
@@ -131,16 +131,16 @@ export const validateTournamentSize = (size) => {
  * @returns {Object} Validation result with success and error message
  */
 export const validateRating = (rating) => {
-  if (typeof rating !== "number" || isNaN(rating)) {
-    return { success: false, error: "Rating must be a number" };
+  if (typeof rating !== 'number' || isNaN(rating)) {
+    return { success: false, error: 'Rating must be a number' };
   }
 
   if (rating < 0) {
-    return { success: false, error: "Rating cannot be negative" };
+    return { success: false, error: 'Rating cannot be negative' };
   }
 
   if (rating > 3000) {
-    return { success: false, error: "Rating cannot exceed 3000" };
+    return { success: false, error: 'Rating cannot exceed 3000' };
   }
 
   return { success: true, value: rating };
@@ -152,15 +152,15 @@ export const validateRating = (rating) => {
  * @returns {Object} Validation result with success and error message
  */
 export const validateEmail = (email) => {
-  if (!email || typeof email !== "string") {
-    return { success: false, error: "Email is required" };
+  if (!email || typeof email !== 'string') {
+    return { success: false, error: 'Email is required' };
   }
 
   const trimmed = email.trim();
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
   if (!emailRegex.test(trimmed)) {
-    return { success: false, error: "Please enter a valid email address" };
+    return { success: false, error: 'Please enter a valid email address' };
   }
 
   return { success: true, value: trimmed };
@@ -187,6 +187,6 @@ export const validateForm = (validations, values) => {
   return {
     success: isValid,
     errors,
-    values: isValid ? values : null,
+    values: isValid ? values : null
   };
 };

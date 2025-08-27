@@ -6,69 +6,69 @@
 
 // Error types for categorization
 export const ERROR_TYPES = {
-  NETWORK: "NETWORK",
-  AUTHENTICATION: "AUTHENTICATION",
-  DATABASE: "DATABASE",
-  VALIDATION: "VALIDATION",
-  RUNTIME: "RUNTIME",
-  UNKNOWN: "UNKNOWN",
+  NETWORK: 'NETWORK',
+  AUTHENTICATION: 'AUTHENTICATION',
+  DATABASE: 'DATABASE',
+  VALIDATION: 'VALIDATION',
+  RUNTIME: 'RUNTIME',
+  UNKNOWN: 'UNKNOWN'
 };
 
 // Error severity levels
 export const ERROR_SEVERITY = {
-  LOW: "LOW",
-  MEDIUM: "MEDIUM",
-  HIGH: "HIGH",
-  CRITICAL: "CRITICAL",
+  LOW: 'LOW',
+  MEDIUM: 'MEDIUM',
+  HIGH: 'HIGH',
+  CRITICAL: 'CRITICAL'
 };
 
 // Error messages for user display
 export const USER_FRIENDLY_MESSAGES = {
   [ERROR_TYPES.NETWORK]: {
-    [ERROR_SEVERITY.LOW]: "Connection is slow. Please try again.",
+    [ERROR_SEVERITY.LOW]: 'Connection is slow. Please try again.',
     [ERROR_SEVERITY.MEDIUM]:
-      "Network connection issue. Please check your internet and try again.",
+      'Network connection issue. Please check your internet and try again.',
     [ERROR_SEVERITY.HIGH]:
-      "Unable to connect to the server. Please try again later.",
+      'Unable to connect to the server. Please try again later.',
     [ERROR_SEVERITY.CRITICAL]:
-      "Service temporarily unavailable. Please try again later.",
+      'Service temporarily unavailable. Please try again later.'
   },
   [ERROR_TYPES.AUTHENTICATION]: {
-    [ERROR_SEVERITY.LOW]: "Please log in again.",
-    [ERROR_SEVERITY.MEDIUM]: "Your session has expired. Please log in again.",
+    [ERROR_SEVERITY.LOW]: 'Please log in again.',
+    [ERROR_SEVERITY.MEDIUM]: 'Your session has expired. Please log in again.',
     [ERROR_SEVERITY.HIGH]:
-      "Authentication failed. Please check your credentials.",
-    [ERROR_SEVERITY.CRITICAL]: "Account access issue. Please contact support.",
+      'Authentication failed. Please check your credentials.',
+    [ERROR_SEVERITY.CRITICAL]: 'Account access issue. Please contact support.'
   },
   [ERROR_TYPES.DATABASE]: {
-    [ERROR_SEVERITY.LOW]: "Data loading is slow. Please try again.",
-    [ERROR_SEVERITY.MEDIUM]: "Unable to load data. Please refresh the page.",
-    [ERROR_SEVERITY.HIGH]: "Data access error. Please try again later.",
+    [ERROR_SEVERITY.LOW]: 'Data loading is slow. Please try again.',
+    [ERROR_SEVERITY.MEDIUM]: 'Unable to load data. Please refresh the page.',
+    [ERROR_SEVERITY.HIGH]: 'Data access error. Please try again later.',
     [ERROR_SEVERITY.CRITICAL]:
-      "Database connection issue. Please try again later.",
+      'Database connection issue. Please try again later.'
   },
   [ERROR_TYPES.VALIDATION]: {
-    [ERROR_SEVERITY.LOW]: "Please check your input and try again.",
+    [ERROR_SEVERITY.LOW]: 'Please check your input and try again.',
     [ERROR_SEVERITY.MEDIUM]:
-      "Invalid input detected. Please review and try again.",
-    [ERROR_SEVERITY.HIGH]: "Input validation failed. Please check your data.",
+      'Invalid input detected. Please review and try again.',
+    [ERROR_SEVERITY.HIGH]: 'Input validation failed. Please check your data.',
     [ERROR_SEVERITY.CRITICAL]:
-      "Critical validation error. Please contact support.",
+      'Critical validation error. Please contact support.'
   },
   [ERROR_TYPES.RUNTIME]: {
-    [ERROR_SEVERITY.LOW]: "Something went wrong. Please try again.",
-    [ERROR_SEVERITY.MEDIUM]: "An error occurred. Please refresh the page.",
-    [ERROR_SEVERITY.HIGH]: "Application error. Please try again later.",
+    [ERROR_SEVERITY.LOW]: 'Something went wrong. Please try again.',
+    [ERROR_SEVERITY.MEDIUM]: 'An error occurred. Please refresh the page.',
+    [ERROR_SEVERITY.HIGH]: 'Application error. Please try again later.',
     [ERROR_SEVERITY.CRITICAL]:
-      "Critical application error. Please contact support.",
+      'Critical application error. Please contact support.'
   },
   [ERROR_TYPES.UNKNOWN]: {
-    [ERROR_SEVERITY.LOW]: "Something unexpected happened. Please try again.",
-    [ERROR_SEVERITY.MEDIUM]: "An unexpected error occurred. Please try again.",
-    [ERROR_SEVERITY.HIGH]: "Unexpected error. Please try again later.",
+    [ERROR_SEVERITY.LOW]: 'Something unexpected happened. Please try again.',
+    [ERROR_SEVERITY.MEDIUM]: 'An unexpected error occurred. Please try again.',
+    [ERROR_SEVERITY.HIGH]: 'Unexpected error. Please try again later.',
     [ERROR_SEVERITY.CRITICAL]:
-      "Critical unexpected error. Please contact support.",
-  },
+      'Critical unexpected error. Please contact support.'
+  }
 };
 
 /**
@@ -77,25 +77,25 @@ export const USER_FRIENDLY_MESSAGES = {
  * @returns {string} Error type
  */
 export const getErrorType = (error) => {
-  if (error?.code === "NETWORK_ERROR" || error?.message?.includes("fetch")) {
+  if (error?.code === 'NETWORK_ERROR' || error?.message?.includes('fetch')) {
     return ERROR_TYPES.NETWORK;
   }
-  if (error?.code === "PGRST116" || error?.message?.includes("auth")) {
+  if (error?.code === 'PGRST116' || error?.message?.includes('auth')) {
     return ERROR_TYPES.AUTHENTICATION;
   }
   if (
-    error?.code?.startsWith("PGRST") ||
-    error?.message?.includes("database")
+    error?.code?.startsWith('PGRST') ||
+    error?.message?.includes('database')
   ) {
     return ERROR_TYPES.DATABASE;
   }
   if (
-    error?.code === "VALIDATION_ERROR" ||
-    error?.message?.includes("validation")
+    error?.code === 'VALIDATION_ERROR' ||
+    error?.message?.includes('validation')
   ) {
     return ERROR_TYPES.VALIDATION;
   }
-  if (error?.name === "TypeError" || error?.name === "ReferenceError") {
+  if (error?.name === 'TypeError' || error?.name === 'ReferenceError') {
     return ERROR_TYPES.RUNTIME;
   }
   return ERROR_TYPES.UNKNOWN;
@@ -111,7 +111,7 @@ export const getErrorSeverity = (errorType, context = {}) => {
   const {
     isRetryable = true,
     affectsUserData = false,
-    isCritical = false,
+    isCritical = false
   } = context;
 
   if (isCritical) return ERROR_SEVERITY.CRITICAL;
@@ -139,7 +139,7 @@ export const getUserFriendlyMessage = (errorType, errorSeverity) => {
  * @param {string} context - Where the error occurred
  * @param {Object} additionalInfo - Additional information about the error
  */
-export const logError = (error, context = "Unknown", additionalInfo = {}) => {
+export const logError = (error, context = 'Unknown', additionalInfo = {}) => {
   const errorType = getErrorType(error);
   const severity = getErrorSeverity(errorType, additionalInfo);
   const userMessage = getUserFriendlyMessage(errorType, severity);
@@ -151,25 +151,25 @@ export const logError = (error, context = "Unknown", additionalInfo = {}) => {
     severity,
     userMessage,
     error: {
-      name: error?.name || "Unknown",
-      message: error?.message || "No message",
+      name: error?.name || 'Unknown',
+      message: error?.message || 'No message',
       stack: error?.stack,
-      code: error?.code,
+      code: error?.code
     },
     additionalInfo,
     userAgent: navigator.userAgent,
-    url: window.location.href,
+    url: window.location.href
   };
 
   // Log to console in development
-  if (process.env.NODE_ENV === "development") {
+  if (process.env.NODE_ENV === 'development') {
     console.group(`🚨 Error in ${context}`);
-    console.error("Error Details:", errorLog);
+    console.error('Error Details:', errorLog);
     console.groupEnd();
   }
 
   // Log to external service in production (you can implement this)
-  if (process.env.NODE_ENV === "production") {
+  if (process.env.NODE_ENV === 'production') {
     // Example: send to error tracking service
     // logToExternalService(errorLog);
   }
@@ -179,7 +179,7 @@ export const logError = (error, context = "Unknown", additionalInfo = {}) => {
     severity,
     userMessage,
     isRetryable: additionalInfo.isRetryable !== false,
-    shouldShowUser: severity !== ERROR_SEVERITY.LOW,
+    shouldShowUser: severity !== ERROR_SEVERITY.LOW
   };
 };
 
@@ -194,7 +194,7 @@ export const withRetry = async (apiCall, options = {}) => {
     maxRetries = 3,
     delay = 1000,
     backoff = 2,
-    shouldRetry = null,
+    shouldRetry = null
   } = options;
   let lastError;
 
@@ -222,23 +222,23 @@ export const withRetry = async (apiCall, options = {}) => {
       // Don't retry on runtime errors that aren't network-related
       if (
         getErrorType(error) === ERROR_TYPES.RUNTIME &&
-        !error.message?.includes("network")
+        !error.message?.includes('network')
       ) {
         throw error;
       }
 
       if (attempt === maxRetries) {
-        if (process.env.NODE_ENV === "development") {
-          console.error("Error in withRetry:", error);
-          console.error("Retry attempt failed:", attempt);
-          console.error("Max retries reached");
+        if (process.env.NODE_ENV === 'development') {
+          console.error('Error in withRetry:', error);
+          console.error('Retry attempt failed:', attempt);
+          console.error('Max retries reached');
         }
         throw error;
       }
 
       // Wait before retrying with exponential backoff
       await new Promise((resolve) =>
-        setTimeout(resolve, delay * Math.pow(backoff, attempt - 1)),
+        setTimeout(resolve, delay * Math.pow(backoff, attempt - 1))
       );
     }
   }
@@ -255,8 +255,8 @@ export const withRetry = async (apiCall, options = {}) => {
  */
 export const createStandardizedError = (
   error,
-  context = "Unknown",
-  additionalInfo = {},
+  context = 'Unknown',
+  additionalInfo = {}
 ) => {
   const errorInfo = logError(error, context, additionalInfo);
 
@@ -270,7 +270,7 @@ export const createStandardizedError = (
       if (errorInfo.isRetryable) {
         window.location.reload();
       }
-    },
+    }
   };
 };
 
@@ -279,22 +279,22 @@ export const createStandardizedError = (
  */
 export const setupGlobalErrorHandling = () => {
   // Handle unhandled promise rejections
-  window.addEventListener("unhandledrejection", (event) => {
+  window.addEventListener('unhandledrejection', (event) => {
     event.preventDefault();
-    logError(event.reason, "Unhandled Promise Rejection", {
+    logError(event.reason, 'Unhandled Promise Rejection', {
       isRetryable: false,
       affectsUserData: false,
-      isCritical: true,
+      isCritical: true
     });
   });
 
   // Handle unhandled errors
-  window.addEventListener("error", (event) => {
+  window.addEventListener('error', (event) => {
     event.preventDefault();
-    logError(event.error, "Unhandled Error", {
+    logError(event.error, 'Unhandled Error', {
       isRetryable: false,
       affectsUserData: false,
-      isCritical: true,
+      isCritical: true
     });
   });
 };
@@ -308,5 +308,5 @@ export default {
   logError,
   withRetry,
   createStandardizedError,
-  setupGlobalErrorHandling,
+  setupGlobalErrorHandling
 };

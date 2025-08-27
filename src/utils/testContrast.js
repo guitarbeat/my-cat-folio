@@ -17,39 +17,39 @@
 import {
   getContrastRatio,
   meetsWCAGAA,
-  getAccessibilityLevel,
-} from "./contrastChecker";
+  getAccessibilityLevel
+} from './contrastChecker';
 
 // Current color scheme from global.css
 const colorScheme = {
   light: {
-    textPrimary: "#111827",
-    textSecondary: "#1f2937",
-    textTertiary: "#374151",
-    background: "#eef1f6",
-    cardBackground: "#ffffff",
-    cardBorder: "#d1d5db",
-    cardHover: "#f9fafb",
-    borderColor: "#d1d5db",
-    surfaceColor: "#f4f6fa",
-    primary: "#5a5cff",
-    primaryLight: "#e6e7ff",
-    primaryDark: "#3235db",
+    textPrimary: '#111827',
+    textSecondary: '#1f2937',
+    textTertiary: '#374151',
+    background: '#eef1f6',
+    cardBackground: '#ffffff',
+    cardBorder: '#d1d5db',
+    cardHover: '#f9fafb',
+    borderColor: '#d1d5db',
+    surfaceColor: '#f4f6fa',
+    primary: '#5a5cff',
+    primaryLight: '#e6e7ff',
+    primaryDark: '#3235db'
   },
   dark: {
-    textPrimary: "#ffffff",
-    textSecondary: "#f1f5f9",
-    textTertiary: "#cbd5e1",
-    background: "#0f1420",
-    cardBackground: "#1a1f3d",
-    cardBorder: "#2a2f4a",
-    cardHover: "#242a45",
-    borderColor: "#2a2f4a",
-    surfaceColor: "#1a1f35",
-    primary: "#7d7fff",
-    primaryLight: "rgb(125 127 255 / 20%)",
-    primaryDark: "#cdceff",
-  },
+    textPrimary: '#ffffff',
+    textSecondary: '#f1f5f9',
+    textTertiary: '#cbd5e1',
+    background: '#0f1420',
+    cardBackground: '#1a1f3d',
+    cardBorder: '#2a2f4a',
+    cardHover: '#242a45',
+    borderColor: '#2a2f4a',
+    surfaceColor: '#1a1f35',
+    primary: '#7d7fff',
+    primaryLight: 'rgb(125 127 255 / 20%)',
+    primaryDark: '#cdceff'
+  }
 };
 
 /**
@@ -58,7 +58,7 @@ const colorScheme = {
  * @param {string} themeName - Name of the theme for logging
  */
 function testColorScheme(scheme, themeName) {
-  if (process.env.NODE_ENV === "development") {
+  if (process.env.NODE_ENV === 'development') {
     console.log(`\n=== Testing ${themeName} Theme ===`);
   }
 
@@ -67,62 +67,62 @@ function testColorScheme(scheme, themeName) {
     {
       foreground: scheme.textPrimary,
       background: scheme.background,
-      description: "Primary text on background",
+      description: 'Primary text on background'
     },
     {
       foreground: scheme.textSecondary,
       background: scheme.background,
-      description: "Secondary text on background",
+      description: 'Secondary text on background'
     },
     {
       foreground: scheme.textPrimary,
       background: scheme.cardBackground,
-      description: "Primary text on card",
+      description: 'Primary text on card'
     },
     {
       foreground: scheme.textSecondary,
       background: scheme.cardBackground,
-      description: "Secondary text on card",
+      description: 'Secondary text on card'
     },
     {
       foreground: scheme.textPrimary,
       background: scheme.surfaceColor,
-      description: "Primary text on surface",
+      description: 'Primary text on surface'
     },
     {
       foreground: scheme.textSecondary,
       background: scheme.surfaceColor,
-      description: "Secondary text on surface",
+      description: 'Secondary text on surface'
     },
 
     // Primary colors on backgrounds
     {
       foreground: scheme.primary,
       background: scheme.background,
-      description: "Primary color on background",
+      description: 'Primary color on background'
     },
     {
       foreground: scheme.primary,
       background: scheme.cardBackground,
-      description: "Primary color on card",
+      description: 'Primary color on card'
     },
     {
       foreground: scheme.primary,
       background: scheme.surfaceColor,
-      description: "Primary color on surface",
+      description: 'Primary color on surface'
     },
 
     // Borders and interactive elements
     {
       foreground: scheme.borderColor,
       background: scheme.background,
-      description: "Border on background",
+      description: 'Border on background'
     },
     {
       foreground: scheme.cardBorder,
       background: scheme.cardBackground,
-      description: "Card border on card",
-    },
+      description: 'Card border on card'
+    }
   ];
 
   let passCount = 0;
@@ -136,31 +136,31 @@ function testColorScheme(scheme, themeName) {
 
       if (meetsAA) {
         passCount++;
-        if (process.env.NODE_ENV === "development") {
+        if (process.env.NODE_ENV === 'development') {
           console.log(
-            `✅ ${test.description}: ${ratio.toFixed(2)}:1 (${level})`,
+            `✅ ${test.description}: ${ratio.toFixed(2)}:1 (${level})`
           );
         }
       } else {
         failCount++;
-        if (process.env.NODE_ENV === "development") {
+        if (process.env.NODE_ENV === 'development') {
           console.log(
-            `❌ ${test.description}: ${ratio.toFixed(2)}:1 (${level}) - FAILS WCAG AA`,
+            `❌ ${test.description}: ${ratio.toFixed(2)}:1 (${level}) - FAILS WCAG AA`
           );
         }
       }
     } catch (error) {
-      if (process.env.NODE_ENV === "development") {
+      if (process.env.NODE_ENV === 'development') {
         console.log(
-          `⚠️  ${test.description}: Error calculating contrast - ${error.message}`,
+          `⚠️  ${test.description}: Error calculating contrast - ${error.message}`
         );
       }
     }
   });
 
-  if (process.env.NODE_ENV === "development") {
+  if (process.env.NODE_ENV === 'development') {
     console.log(
-      `\n${themeName} Theme Results: ${passCount} passed, ${failCount} failed`,
+      `\n${themeName} Theme Results: ${passCount} passed, ${failCount} failed`
     );
   }
   return { passCount, failCount };
@@ -170,14 +170,14 @@ function testColorScheme(scheme, themeName) {
  * Run all contrast tests
  */
 export function runContrastTests() {
-  if (process.env.NODE_ENV === "development") {
+  if (process.env.NODE_ENV === 'development') {
     console.log(
-      "🎨 Running Contrast Ratio Tests for Meow Namester Color Scheme",
+      '🎨 Running Contrast Ratio Tests for Meow Namester Color Scheme'
     );
   }
 
-  const lightResults = testColorScheme(colorScheme.light, "Light");
-  const darkResults = testColorScheme(colorScheme.dark, "Dark");
+  const lightResults = testColorScheme(colorScheme.light, 'Light');
+  const darkResults = testColorScheme(colorScheme.dark, 'Dark');
 
   const totalPassed = lightResults.passCount + darkResults.passCount;
   const totalTests =
@@ -185,20 +185,20 @@ export function runContrastTests() {
     lightResults.failCount +
     (darkResults.passCount + darkResults.failCount);
 
-  if (process.env.NODE_ENV === "development") {
-    console.log("\n=== Overall Results ===");
+  if (process.env.NODE_ENV === 'development') {
+    console.log('\n=== Overall Results ===');
     console.log(`Total Tests: ${totalTests}`);
     console.log(`Passed: ${totalPassed}`);
     console.log(`Failed: ${totalTests - totalPassed}`);
     console.log(
-      `Success Rate: ${((totalPassed / totalTests) * 100).toFixed(1)}%`,
+      `Success Rate: ${((totalPassed / totalTests) * 100).toFixed(1)}%`
     );
 
     if (totalPassed === totalTests) {
-      console.log("🎉 All contrast ratios meet WCAG AA standards!");
+      console.log('🎉 All contrast ratios meet WCAG AA standards!');
     } else {
       console.log(
-        "⚠️  Some contrast ratios need improvement to meet WCAG AA standards.",
+        '⚠️  Some contrast ratios need improvement to meet WCAG AA standards.'
       );
     }
   }

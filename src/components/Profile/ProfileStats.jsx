@@ -1,7 +1,7 @@
-import React from "react";
-import PropTypes from "prop-types";
-import StatsCard from "../StatsCard/StatsCard";
-import styles from "./ProfileStats.module.css";
+import React from 'react';
+import PropTypes from 'prop-types';
+import StatsCard from '../StatsCard/StatsCard';
+import styles from './ProfileStats.module.css';
 
 /**
  * @module ProfileStats
@@ -13,7 +13,7 @@ const ProfileStats = ({
   stats,
   selectionStats,
   isLoading = false,
-  className = "",
+  className = ''
 }) => {
   if (isLoading) {
     return (
@@ -47,7 +47,7 @@ const ProfileStats = ({
     ratingSpread,
     totalMatches,
     activeNames,
-    popularNames,
+    popularNames
   } = stats;
 
   return (
@@ -142,7 +142,7 @@ const ProfileStats = ({
 
             <StatsCard
               title="Most Selected"
-              value={selectionStats.mostSelectedName || "N/A"}
+              value={selectionStats.mostSelectedName || 'N/A'}
               subtitle="Your favorite name"
               icon="❤️"
               variant="danger"
@@ -158,7 +158,7 @@ const ProfileStats = ({
 
             <StatsCard
               title="Selection Rank"
-              value={`#${selectionStats.userRank || "N/A"}`}
+              value={`#${selectionStats.userRank || 'N/A'}`}
               subtitle="Your ranking among users"
               icon="🏅"
               variant="secondary"
@@ -178,7 +178,7 @@ const ProfileStats = ({
                 <h4>Selection Pattern</h4>
                 <p>
                   {selectionStats.insights.selectionPattern ||
-                    "Analyzing your patterns..."}
+                    'Analyzing your patterns...'}
                 </p>
               </div>
             </div>
@@ -189,7 +189,7 @@ const ProfileStats = ({
                 <h4>Preferred Categories</h4>
                 <p>
                   {selectionStats.insights.preferredCategories ||
-                    "Discovering your preferences..."}
+                    'Discovering your preferences...'}
                 </p>
               </div>
             </div>
@@ -200,7 +200,7 @@ const ProfileStats = ({
                 <h4>Improvement Tip</h4>
                 <p>
                   {selectionStats.insights.improvementTip ||
-                    "Optimizing your selections..."}
+                    'Optimizing your selections...'}
                 </p>
               </div>
             </div>
@@ -221,7 +221,7 @@ ProfileStats.propTypes = {
     ratingSpread: PropTypes.number,
     totalMatches: PropTypes.number,
     activeNames: PropTypes.number,
-    popularNames: PropTypes.number,
+    popularNames: PropTypes.number
   }),
   selectionStats: PropTypes.shape({
     totalSelections: PropTypes.number,
@@ -233,11 +233,11 @@ ProfileStats.propTypes = {
     insights: PropTypes.shape({
       selectionPattern: PropTypes.string,
       preferredCategories: PropTypes.string,
-      improvementTip: PropTypes.string,
-    }),
+      improvementTip: PropTypes.string
+    })
   }),
   isLoading: PropTypes.bool,
-  className: PropTypes.string,
+  className: PropTypes.string
 };
 
 export default ProfileStats;

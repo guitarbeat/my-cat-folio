@@ -7,30 +7,30 @@
  * @returns {JSX.Element} The complete application UI
  */
 
-import React, { useCallback, useMemo } from "react";
+import React, { useCallback, useMemo } from 'react';
 import {
   ErrorBoundary,
   Login,
   ErrorDisplay,
-  ToastContainer,
-} from "./components";
-import NavBar from "./components/NavBar/NavBar";
-import useUserSession from "./hooks/useUserSession";
-import useTheme from "./hooks/useTheme";
-import useToast from "./hooks/useToast";
-import useAppStore from "./store/useAppStore";
-import { TournamentService } from "./services/tournamentService";
-import { ErrorService } from "./services/errorService";
-import LoadingSpinner from "./components/LoadingSpinner/LoadingSpinner";
+  ToastContainer
+} from './components';
+import NavBar from './components/NavBar/NavBar';
+import useUserSession from './hooks/useUserSession';
+import useTheme from './hooks/useTheme';
+import useToast from './hooks/useToast';
+import useAppStore from './store/useAppStore';
+import { TournamentService } from './services/tournamentService';
+import { ErrorService } from './services/errorService';
+import LoadingSpinner from './components/LoadingSpinner/LoadingSpinner';
 
 // * Lazy-loaded components for performance
-const Results = React.lazy(() => import("./components/Results/Results"));
-const Profile = React.lazy(() => import("./components/Profile/Profile"));
+const Results = React.lazy(() => import('./components/Results/Results'));
+const Profile = React.lazy(() => import('./components/Profile/Profile'));
 const TournamentSetup = React.lazy(
-  () => import("./components/TournamentSetup/TournamentSetup"),
+  () => import('./components/TournamentSetup/TournamentSetup')
 );
 const Tournament = React.lazy(
-  () => import("./components/Tournament/Tournament"),
+  () => import('./components/Tournament/Tournament')
 );
 
 function App() {
@@ -47,7 +47,7 @@ function App() {
     tournamentActions,
     userActions,
     uiActions,
-    errorActions,
+    errorActions
   } = useAppStore();
 
   // * Handle tournament completion
@@ -55,7 +55,7 @@ function App() {
     async (finalRatings) => {
       try {
         if (!userName) {
-          throw new Error("No user name available");
+          throw new Error('No user name available');
         }
 
         const updatedRatings =
@@ -63,21 +63,21 @@ function App() {
             finalRatings,
             tournament.voteHistory,
             userName,
-            tournament.ratings,
+            tournament.ratings
           );
 
         // * Update store with new ratings
         tournamentActions.setRatings(updatedRatings);
         tournamentActions.setComplete(true);
       } catch (error) {
-        ErrorService.handleError(error, "Tournament Completion", {
+        ErrorService.handleError(error, 'Tournament Completion', {
           isRetryable: true,
           affectsUserData: true,
-          isCritical: false,
+          isCritical: false
         });
       }
     },
-    [userName, tournament.voteHistory, tournament.ratings, tournamentActions],
+    [userName, tournament.voteHistory, tournament.ratings, tournamentActions]
   );
 
   // * Handle start new tournament
@@ -89,8 +89,8 @@ function App() {
   const handleTournamentSetup = useCallback(
     (names) => {
       console.log(
-        "[DEV] 🎮 App: handleTournamentSetup called with names:",
-        names,
+        '[DEV] 🎮 App: handleTournamentSetup called with names:',
+        names
       );
 
       // * Only set loading if we don't already have names
@@ -100,9 +100,9 @@ function App() {
 
       const processedNames = TournamentService.createTournament(
         names,
-        tournament.ratings,
+        tournament.ratings
       );
-      console.log("[DEV] 🎮 App: Processed names:", processedNames);
+      console.log('[DEV] 🎮 App: Processed names:', processedNames);
 
       tournamentActions.setNames(processedNames);
 
@@ -111,7 +111,7 @@ function App() {
         tournamentActions.setLoading(false);
       }, 100);
     },
-    [tournament.ratings, tournament.names, tournamentActions],
+    [tournament.ratings, tournament.names, tournamentActions]
   );
 
   // * Handle ratings update
@@ -120,20 +120,20 @@ function App() {
       try {
         const updatedRatings = await TournamentService.updateRatings(
           adjustedRatings,
-          userName,
+          userName
         );
         tournamentActions.setRatings(updatedRatings);
         return true;
       } catch (error) {
-        ErrorService.handleError(error, "Rating Update", {
+        ErrorService.handleError(error, 'Rating Update', {
           isRetryable: true,
           affectsUserData: true,
-          isCritical: false,
+          isCritical: false
         });
         throw error;
       }
     },
-    [userName, tournamentActions],
+    [userName, tournamentActions]
   );
 
   // * Handle logout
@@ -145,11 +145,11 @@ function App() {
   // * Handle theme change
   const handleThemeChange = useCallback(
     (isLight) => {
-      const theme = isLight ? "light" : "dark";
+      const theme = isLight ? 'light' : 'dark';
       uiActions.setTheme(theme);
       toggleTheme();
     },
-    [uiActions, toggleTheme],
+    [uiActions, toggleTheme]
   );
 
   // * Memoize main content to prevent unnecessary re-renders
@@ -159,7 +159,7 @@ function App() {
     }
 
     switch (tournament.currentView) {
-      case "profile":
+      case 'profile':
         return (
           <Profile
             userName={userName}
@@ -168,13 +168,13 @@ function App() {
             onUpdateRatings={handleUpdateRatings}
           />
         );
-      case "loading":
+      case 'loading':
         return (
           <div className="fullScreenCenter">
             <LoadingSpinner size="large" text="Testing Loading Spinner..." />
           </div>
         );
-      case "tournament":
+      case 'tournament':
         if (tournament.isComplete) {
           return (
             <Results
@@ -225,7 +225,7 @@ function App() {
     handleUpdateRatings,
     handleTournamentSetup,
     handleTournamentComplete,
-    tournamentActions,
+    tournamentActions
   ]);
 
   // * Memoize NavBar props to prevent unnecessary re-renders
@@ -238,7 +238,7 @@ function App() {
       onLogout: handleLogout,
       onStartNewTournament: handleStartNewTournament,
       isLightTheme,
-      onThemeChange: handleThemeChange,
+      onThemeChange: handleThemeChange
     }),
     [
       tournament.currentView,
@@ -248,8 +248,8 @@ function App() {
       handleLogout,
       handleStartNewTournament,
       isLightTheme,
-      handleThemeChange,
-    ],
+      handleThemeChange
+    ]
   );
 
   return (

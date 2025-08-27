@@ -4,10 +4,10 @@
  * Provides immediate feedback for validation errors, network failures, and other user-facing issues.
  */
 
-import React from "react";
-import PropTypes from "prop-types";
-import { ERROR_SEVERITY } from "../../utils/errorHandler";
-import styles from "./InlineError.module.css";
+import React from 'react';
+import PropTypes from 'prop-types';
+import { ERROR_SEVERITY } from '../../utils/errorHandler';
+import styles from './InlineError.module.css';
 
 /**
  * InlineError component for showing errors inline with UI elements
@@ -25,14 +25,14 @@ import styles from "./InlineError.module.css";
  */
 const InlineError = ({
   error,
-  context = "form",
-  position = "below",
+  context = 'form',
+  position = 'below',
   onRetry,
   onDismiss,
   showRetry = true,
   showDismiss = true,
-  className = "",
-  size = "medium",
+  className = '',
+  size = 'medium'
 }) => {
   if (!error) {
     return null;
@@ -40,7 +40,7 @@ const InlineError = ({
 
   // Extract error message
   const errorMessage =
-    typeof error === "string" ? error : error.message || "An error occurred";
+    typeof error === 'string' ? error : error.message || 'An error occurred';
 
   // Determine if error is retryable
   const isRetryable = error?.isRetryable !== false && onRetry;
@@ -51,13 +51,13 @@ const InlineError = ({
   // Get context-specific styling
   const getContextClass = () => {
     switch (context) {
-      case "vote":
+      case 'vote':
         return styles.voteError;
-      case "form":
+      case 'form':
         return styles.formError;
-      case "submit":
+      case 'submit':
         return styles.submitError;
-      case "validation":
+      case 'validation':
         return styles.validationError;
       default:
         return styles.generalError;
@@ -81,9 +81,9 @@ const InlineError = ({
 
   const getSizeClass = () => {
     switch (size) {
-      case "small":
+      case 'small':
         return styles.small;
-      case "large":
+      case 'large':
         return styles.large;
       default:
         return styles.medium;
@@ -92,9 +92,9 @@ const InlineError = ({
 
   const getPositionClass = () => {
     switch (position) {
-      case "above":
+      case 'above':
         return styles.positionAbove;
-      case "inline":
+      case 'inline':
         return styles.positionInline;
       default:
         return styles.positionBelow;
@@ -117,12 +117,12 @@ const InlineError = ({
       <div className={styles.errorContent}>
         <span className={styles.errorIcon}>
           {severity === ERROR_SEVERITY.CRITICAL
-            ? "🚨"
+            ? '🚨'
             : severity === ERROR_SEVERITY.HIGH
-              ? "⚠️"
+              ? '⚠️'
               : severity === ERROR_SEVERITY.MEDIUM
-                ? "⚠️"
-                : "ℹ️"}
+                ? '⚠️'
+                : 'ℹ️'}
         </span>
 
         <span className={styles.errorMessage}>{errorMessage}</span>
@@ -154,7 +154,7 @@ const InlineError = ({
       </div>
 
       {/* Additional error details for development */}
-      {process.env.NODE_ENV === "development" && error?.stack && (
+      {process.env.NODE_ENV === 'development' && error?.stack && (
         <details className={styles.errorDetails}>
           <summary>Error Details (Development)</summary>
           <pre className={styles.errorStack}>{error.stack}</pre>
@@ -168,16 +168,16 @@ InlineError.propTypes = {
   error: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.instanceOf(Error),
-    PropTypes.object,
+    PropTypes.object
   ]),
-  context: PropTypes.oneOf(["form", "vote", "submit", "validation", "general"]),
-  position: PropTypes.oneOf(["above", "below", "inline"]),
+  context: PropTypes.oneOf(['form', 'vote', 'submit', 'validation', 'general']),
+  position: PropTypes.oneOf(['above', 'below', 'inline']),
   onRetry: PropTypes.func,
   onDismiss: PropTypes.func,
   showRetry: PropTypes.bool,
   showDismiss: PropTypes.bool,
   className: PropTypes.string,
-  size: PropTypes.oneOf(["small", "medium", "large"]),
+  size: PropTypes.oneOf(['small', 'medium', 'large'])
 };
 
 export default InlineError;

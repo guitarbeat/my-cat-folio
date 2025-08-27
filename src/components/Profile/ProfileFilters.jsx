@@ -1,7 +1,7 @@
-import React from "react";
-import PropTypes from "prop-types";
-import { FILTER_OPTIONS } from "../../constants";
-import styles from "./ProfileFilters.module.css";
+import React from 'react';
+import PropTypes from 'prop-types';
+import { FILTER_OPTIONS } from '../../constants';
+import styles from './ProfileFilters.module.css';
 
 /**
  * @module ProfileFilters
@@ -19,17 +19,17 @@ const ProfileFilters = ({
   sortOrder,
   setSortOrder,
   isAdmin = false,
-  className = "",
+  className = '',
   // * New selection-based filter props
-  selectionFilter = "all",
+  selectionFilter = 'all',
   setSelectionFilter,
-  hasSelectionData = false,
+  hasSelectionData = false
 }) => {
   const handleSortOrderToggle = () => {
     setSortOrder(
       sortOrder === FILTER_OPTIONS.ORDER.ASC
         ? FILTER_OPTIONS.ORDER.DESC
-        : FILTER_OPTIONS.ORDER.ASC,
+        : FILTER_OPTIONS.ORDER.ASC
     );
   };
 
@@ -135,15 +135,15 @@ const ProfileFilters = ({
             type="button"
             onClick={handleSortOrderToggle}
             className={styles.sortOrderButton}
-            aria-label={`Sort ${sortOrder === FILTER_OPTIONS.ORDER.ASC ? "ascending" : "descending"}`}
+            aria-label={`Sort ${sortOrder === FILTER_OPTIONS.ORDER.ASC ? 'ascending' : 'descending'}`}
           >
             <span className={styles.sortOrderIcon}>
-              {sortOrder === FILTER_OPTIONS.ORDER.ASC ? "↑" : "↓"}
+              {sortOrder === FILTER_OPTIONS.ORDER.ASC ? '↑' : '↓'}
             </span>
             <span className={styles.sortOrderText}>
               {sortOrder === FILTER_OPTIONS.ORDER.ASC
-                ? "Ascending"
-                : "Descending"}
+                ? 'Ascending'
+                : 'Descending'}
             </span>
           </button>
         </div>
@@ -153,23 +153,23 @@ const ProfileFilters = ({
       <div className={styles.activeFilters}>
         <span className={styles.activeFilterLabel}>Active Filters:</span>
         <span className={styles.activeFilter}>
-          Status:{" "}
-          {filterStatus === FILTER_OPTIONS.STATUS.ALL ? "All" : filterStatus}
+          Status:{' '}
+          {filterStatus === FILTER_OPTIONS.STATUS.ALL ? 'All' : filterStatus}
         </span>
         <span className={styles.activeFilter}>
-          User: {userFilter === FILTER_OPTIONS.USER.ALL ? "All" : userFilter}
+          User: {userFilter === FILTER_OPTIONS.USER.ALL ? 'All' : userFilter}
         </span>
-        {hasSelectionData && selectionFilter !== "all" && (
+        {hasSelectionData && selectionFilter !== 'all' && (
           <span className={styles.activeFilter}>
-            Selection:{" "}
+            Selection:{' '}
             {selectionFilter
-              .replace("_", " ")
+              .replace('_', ' ')
               .replace(/\b\w/g, (l) => l.toUpperCase())}
           </span>
         )}
         <span className={styles.activeFilter}>
-          Sort:{" "}
-          {sortBy.replace("_", " ").replace(/\b\w/g, (l) => l.toUpperCase())} (
+          Sort:{' '}
+          {sortBy.replace('_', ' ').replace(/\b\w/g, (l) => l.toUpperCase())} (
           {sortOrder})
         </span>
       </div>
@@ -191,7 +191,7 @@ ProfileFilters.propTypes = {
   // * New props for selection-based filtering
   selectionFilter: PropTypes.string,
   setSelectionFilter: PropTypes.func,
-  hasSelectionData: PropTypes.bool,
+  hasSelectionData: PropTypes.bool
 };
 
 export default ProfileFilters;

@@ -4,13 +4,13 @@
  * standardized error handling, logging, and user feedback.
  */
 
-import { useState, useCallback, useRef } from "react";
+import { useState, useCallback, useRef } from 'react';
 import {
   createStandardizedError,
   withRetry,
   ERROR_TYPES,
-  ERROR_SEVERITY,
-} from "../utils/errorHandler";
+  ERROR_SEVERITY
+} from '../utils/errorHandler';
 
 /**
  * Custom hook for error handling in React components
@@ -26,7 +26,7 @@ export const useErrorHandler = (options = {}) => {
     showUserFeedback = true,
     maxRetries = 3,
     onError = null,
-    onRecovery = null,
+    onRecovery = null
   } = options;
 
   const [errors, setErrors] = useState([]);
@@ -43,11 +43,11 @@ export const useErrorHandler = (options = {}) => {
    * @returns {Object} Standardized error information
    */
   const handleError = useCallback(
-    (error, context = "Component Error", additionalInfo = {}) => {
+    (error, context = 'Component Error', additionalInfo = {}) => {
       const standardizedError = createStandardizedError(
         error,
         context,
-        additionalInfo,
+        additionalInfo
       );
 
       // Update state
@@ -62,7 +62,7 @@ export const useErrorHandler = (options = {}) => {
 
       return standardizedError;
     },
-    [onError],
+    [onError]
   );
 
   /**
@@ -88,7 +88,7 @@ export const useErrorHandler = (options = {}) => {
         setIsRecovering(false);
       }
     },
-    [errors.length],
+    [errors.length]
   );
 
   /**
@@ -99,7 +99,7 @@ export const useErrorHandler = (options = {}) => {
   const retryOperation = useCallback(
     async (operation, retryOptions = {}) => {
       if (!lastErrorRef.current?.isRetryable) {
-        throw new Error("Operation is not retryable");
+        throw new Error('Operation is not retryable');
       }
 
       setIsRecovering(true);
@@ -108,7 +108,7 @@ export const useErrorHandler = (options = {}) => {
         const result = await withRetry(operation, {
           maxRetries: retryOptions.maxRetries || maxRetries,
           delay: retryOptions.delay || 1000,
-          backoff: retryOptions.backoff || 2,
+          backoff: retryOptions.backoff || 2
         });
 
         // Success - clear errors and call recovery callback
@@ -120,16 +120,16 @@ export const useErrorHandler = (options = {}) => {
         return result;
       } catch (retryError) {
         // Retry failed - handle the new error
-        handleError(retryError, "Retry Operation", {
+        handleError(retryError, 'Retry Operation', {
           originalError: lastErrorRef.current,
-          retryAttempt: retryCountRef.current + 1,
+          retryAttempt: retryCountRef.current + 1
         });
         throw retryError;
       } finally {
         setIsRecovering(false);
       }
     },
-    [maxRetries, onRecovery, clearErrors, handleError],
+    [maxRetries, onRecovery, clearErrors, handleError]
   );
 
   /**
@@ -141,10 +141,10 @@ export const useErrorHandler = (options = {}) => {
   const executeWithErrorHandling = useCallback(
     async (operation, options = {}) => {
       const {
-        context = "Operation",
+        context = 'Operation',
         retryOnError = false,
         showFeedback = showUserFeedback,
-        additionalInfo = {},
+        additionalInfo = {}
       } = options;
 
       try {
@@ -160,7 +160,7 @@ export const useErrorHandler = (options = {}) => {
         const errorInfo = handleError(error, context, {
           ...additionalInfo,
           retryOnError,
-          showFeedback,
+          showFeedback
         });
 
         if (retryOnError && errorInfo.isRetryable) {
@@ -170,7 +170,7 @@ export const useErrorHandler = (options = {}) => {
         throw error;
       }
     },
-    [isError, clearErrors, handleError, retryOperation, showUserFeedback],
+    [isError, clearErrors, handleError, retryOperation, showUserFeedback]
   );
 
   /**
@@ -198,7 +198,7 @@ export const useErrorHandler = (options = {}) => {
     (errorType) => {
       return errors.filter((error) => error.errorType === errorType);
     },
-    [errors],
+    [errors]
   );
 
   /**
@@ -210,7 +210,7 @@ export const useErrorHandler = (options = {}) => {
     (severity) => {
       return errors.filter((error) => error.severity === severity);
     },
-    [errors],
+    [errors]
   );
 
   /**
@@ -224,7 +224,7 @@ export const useErrorHandler = (options = {}) => {
         message: error.userMessage,
         severity: error.severity,
         timestamp: error.timestamp,
-        context: error.context,
+        context: error.context
       }));
   }, [errors]);
 
@@ -250,7 +250,7 @@ export const useErrorHandler = (options = {}) => {
 
     // Utilities
     ERROR_TYPES,
-    ERROR_SEVERITY,
+    ERROR_SEVERITY
   };
 };
 
