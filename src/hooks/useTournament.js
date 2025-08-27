@@ -21,7 +21,7 @@ export function useTournament({
   const didLogMountRef = useRef(false);
   if (process.env.NODE_ENV === 'development' && !didLogMountRef.current) {
     // * Log once per component instance, even under StrictMode double-invoke
-    // eslint-disable-next-line no-console
+
     console.debug('[DEV] 🎮 useTournament: mount');
     didLogMountRef.current = true;
   }
@@ -165,7 +165,7 @@ export function useTournament({
     const invalid = !Array.isArray(names) || (names.length > 0 && names.length < 2);
     if (invalid !== isError) {
       if (invalid && process.env.NODE_ENV === 'development') {
-        // eslint-disable-next-line no-console
+
         console.warn('[DEV] 🎮 useTournament: Invalid names array detected');
       }
       updateTournamentState({ isError: invalid });

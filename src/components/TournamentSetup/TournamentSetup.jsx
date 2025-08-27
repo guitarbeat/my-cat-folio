@@ -593,7 +593,7 @@ const NameSuggestionSection = () => {
       showSuccess('Name suggestion submitted successfully!', { duration: 4000 });
       setName('');
       setDescription('');
-    } catch (err) {
+    } catch {
       setError('Failed to add name. It might already exist.');
       showError('Failed to submit name suggestion. Please try again.', {
         duration: 5000
@@ -678,103 +678,6 @@ const NameSuggestionSection = () => {
             }
           >
             {isSubmitting ? 'Submitting...' : 'Submit Name'}
-          </button>
-        </form>
-      </div>
-    </div>
-  );
-};
-
-// Replace the placeholder with actual implementation (separate hunk to avoid diff confusion)
-      setSuccess('Thank you for your suggestion!');
-      showSuccess('Name suggestion submitted successfully!', {
-        duration: 4000
-      });
-      setName('');
-      setDescription('');
-    } catch (err) {
-      setError('Failed to add name. It might already exist.');
-      showError('Failed to submit name suggestion. Please try again.', {
-        duration: 5000
-      });
-    }
-  };
-
-  return (
-    <div className={styles.suggestionSection}>
-      <div className={styles.suggestionCard}>
-        <h2>Suggest a Cat Name</h2>
-        <p className={styles.suggestionIntro}>
-          Have a great cat name in mind? Share it with the community!
-        </p>
-
-        <form
-          onSubmit={handleSubmit}
-          className={styles.suggestionForm}
-          role="form"
-          aria-label="Name suggestion form"
-        >
-          <div className={styles.formGroup}>
-            <label htmlFor="suggestion-name">Name</label>
-            <input
-              type="text"
-              id="suggestion-name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              placeholder="Enter a cat name"
-              maxLength={50}
-              disabled={loading}
-              aria-required="true"
-              aria-describedby="name-help"
-            />
-            <div id="name-help" className={styles.helpText}>
-              Enter a unique cat name (maximum 50 characters)
-            </div>
-          </div>
-
-          <div className={styles.formGroup}>
-            <label htmlFor="suggestion-description">Description</label>
-            <textarea
-              id="suggestion-description"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              placeholder="Tell us about this name's meaning or origin"
-              maxLength={500}
-              disabled={loading}
-              aria-required="false"
-              aria-describedby="description-help"
-            />
-            <div id="description-help" className={styles.helpText}>
-              Optional: Describe the name&apos;s meaning or origin (maximum 500
-              characters)
-            </div>
-          </div>
-
-          {error && (
-            <InlineError
-              error={error}
-              context="form"
-              position="below"
-              onDismiss={() => setError('')}
-              showRetry={false}
-              showDismiss={true}
-              size="medium"
-              className={styles.loginError}
-            />
-          )}
-          {success && <p className={styles.successMessage}>{success}</p>}
-
-          <button
-            type="submit"
-            className={styles.submitButton}
-            disabled={loading}
-            aria-label={
-              loading
-                ? 'Submitting name suggestion...'
-                : 'Submit name suggestion'
-            }
-          >
-            {loading ? 'Submitting...' : 'Submit Name'}
           </button>
         </form>
       </div>

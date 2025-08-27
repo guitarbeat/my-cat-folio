@@ -146,7 +146,7 @@ function Login({ onLogin }) {
             className={styles.backgroundImage}
             loading="lazy"
             decoding="async"
-            fetchpriority="low"
+            fetchPriority="low"
           />
         </picture>
         <div className={styles.overlay} />
@@ -168,7 +168,7 @@ function Login({ onLogin }) {
               className={styles.catImage}
               loading="lazy"
               decoding="async"
-              fetchpriority="low"
+              fetchPriority="low"
             />
           </picture>
           <p className={styles.welcomeText}>

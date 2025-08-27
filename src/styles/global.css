@@ -358,8 +358,6 @@ select:focus-visible {
 .mb-2 { margin-bottom: var(--space-2); }
 .mb-4 { margin-bottom: var(--space-4); }
 
---accent-600: #ca8a04;
-
 /* Reduced Motion */
 @media (prefers-reduced-motion: reduce) {
   * {

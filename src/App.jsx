@@ -291,7 +291,7 @@ function App() {
                     alt=""
                     loading="lazy"
                     decoding="async"
-                    fetchpriority="low"
+                    fetchPriority="low"
                   />
                 </video>
                 <video
@@ -308,7 +308,7 @@ function App() {
                     alt=""
                     loading="lazy"
                     decoding="async"
-                    fetchpriority="low"
+                    fetchPriority="low"
                   />
                 </video>
                 <video
@@ -325,7 +325,7 @@ function App() {
                     alt=""
                     loading="lazy"
                     decoding="async"
-                    fetchpriority="low"
+                    fetchPriority="low"
                   />
                 </video>
                 <video
@@ -342,7 +342,7 @@ function App() {
                     alt=""
                     loading="lazy"
                     decoding="async"
-                    fetchpriority="low"
+                    fetchPriority="low"
                   />
                 </video>
               </>

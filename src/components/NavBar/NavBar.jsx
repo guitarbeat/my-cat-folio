@@ -178,7 +178,7 @@ function NavBar({
             height="32"
             loading="lazy"
             decoding="async"
-            fetchpriority="low"
+            fetchPriority="low"
           />
         </video>
         <span className="navbar__title">Aaron&apos;s Folly</span>

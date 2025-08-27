@@ -5,7 +5,7 @@
  */
 import React, { useState, useCallback, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { supabase, deleteName, catNamesAPI } from '../../supabase/supabaseClient';
+import { supabase, deleteName, catNamesAPI, tournamentsAPI } from '../../supabase/supabaseClient';
 import { FILTER_OPTIONS } from '../../constants';
 import { ErrorService } from '../../services/errorService';
 
@@ -79,25 +79,30 @@ const calculateEnhancedStats = (
   };
 };
 
-// * Calculate selection analytics from tournament selections
+// * Calculate selection analytics using consolidated tournament_data in cat_app_users
 const calculateSelectionStats = async (userName) => {
   try {
-    // Get user's tournament selections
-    const { data: selections, error: selectionsError } = await supabase
-      .from('tournament_selections')
-      .select('*')
-      .eq('user_name', userName);
+    if (!supabase) return null;
 
-    if (selectionsError) throw selectionsError;
-
-    if (!selections || selections.length === 0) {
+    // Pull tournaments from cat_app_users.tournament_data via API
+    const tournaments = await tournamentsAPI.getUserTournaments(userName);
+    if (!tournaments || tournaments.length === 0) {
       return null;
     }
 
+    // Flatten selections from tournament_data
+    const selections = tournaments.flatMap((t) =>
+      (t.selected_names || []).map((n) => ({
+        name_id: n.id,
+        name: n.name,
+        tournament_id: t.id,
+        selected_at: t.created_at
+      }))
+    );
+
     // Calculate basic metrics
     const totalSelections = selections.length;
-    const totalTournaments = new Set(selections.map((s) => s.tournament_id))
-      .size;
+    const totalTournaments = tournaments.length;
     const uniqueNames = new Set(selections.map((s) => s.name_id)).size;
     const avgSelectionsPerName =
       uniqueNames > 0
@@ -114,7 +119,7 @@ const calculateSelectionStats = async (userName) => {
 
     // Calculate selection streak (consecutive days)
     const sortedSelections = selections
-      .map((s) => new Date(s.selected_at).toDateString())
+      .map((s) => new Date(s.selected_at || Date.now()).toDateString())
       .sort()
       .filter((date, index, arr) => index === 0 || date !== arr[index - 1]);
 
@@ -143,16 +148,8 @@ const calculateSelectionStats = async (userName) => {
     maxStreak = Math.max(maxStreak, tempStreak);
     currentStreak = tempStreak;
 
-    // Get user ranking
-    const { data: allUserStats, error: rankingError } = await supabase
-      .from('user_preference_analysis')
-      .select('user_name, total_selections')
-      .order('total_selections', { ascending: false });
-
-    let userRank = 'N/A';
-    if (!rankingError && allUserStats) {
-      userRank = allUserStats.findIndex((u) => u.user_name === userName) + 1;
-    }
+    // Cross-user ranking not supported without a view; omit
+    const userRank = 'N/A';
 
     // Generate insights
     const insights = {
@@ -231,7 +228,7 @@ const generatePreferredCategories = async (selections) => {
     }
 
     return 'Discovering your preferences...';
-  } catch (error) {
+  } catch {
     return 'Analyzing your preferences...';
   }
 };
@@ -296,17 +293,6 @@ const Profile = ({ userName, onStartNewTournament }) => {
     }
   }, []);
 
-  // * State for selected names
-  const [selectedNames, setSelectedNames] = useState(new Set());
-
-  // * Fetch names and selection stats on component mount
-  useEffect(() => {
-    if (userName) {
-      fetchNames();
-      fetchSelectionStats();
-    }
-  }, [userName, fetchNames, fetchSelectionStats]);
-
   // * Fetch selection statistics
   const fetchSelectionStats = useCallback(async () => {
     if (!userName) return;
@@ -319,10 +305,25 @@ const Profile = ({ userName, onStartNewTournament }) => {
     }
   }, [userName]);
 
+  // * State for selected names
+  const [selectedNames, setSelectedNames] = useState(new Set());
+
+  // * Fetch names and selection stats on component mount
+  useEffect(() => {
+    if (userName) {
+      fetchNames();
+      fetchSelectionStats();
+    }
+  }, [userName, fetchNames, fetchSelectionStats]);
+
   // * Check admin status
   useEffect(() => {
     const checkAdminStatus = async () => {
       try {
+        if (!supabase || !supabase.auth) {
+          setIsAdmin(false);
+          return;
+        }
         const {
           data: { user }
         } = await supabase.auth.getUser();

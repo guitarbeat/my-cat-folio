@@ -19,9 +19,9 @@ export {
 } from './LoadingSpinner';
 export { default as NameCard } from './NameCard/NameCard';
 export { default as CalendarButton } from './CalendarButton/CalendarButton';
-export { default as BongoCat } from './BongoCat/BongoCat';
 export { default as StatsCard } from './StatsCard/StatsCard';
 
 export { default as InlineError } from './InlineError';
 export { default as Toast } from './Toast';
 export { default as ToastContainer } from './ToastContainer';
+export { default as BongoCat } from './BongoCat/BongoCat';

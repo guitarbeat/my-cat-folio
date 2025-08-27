@@ -471,7 +471,7 @@ function TournamentContent({
   if (process.env.NODE_ENV === 'development') {
     const now = Date.now();
     if (now - lastRenderLogRef.current > 500) {
-      // eslint-disable-next-line no-console
+
       console.debug('[DEV] 🎮 Tournament: render', {
         namesCount: names?.length || 0,
         randomizedCount: randomizedNames?.length || 0,
