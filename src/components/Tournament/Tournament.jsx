@@ -353,11 +353,22 @@ function TournamentContent({
     [currentMatch, showSuccess]
   );
 
+  // Add rate limiting to prevent rapid-fire voting
+  const lastVoteTimeRef = useRef(0);
+  const VOTE_COOLDOWN = 500; // 500ms minimum between votes
+
   const handleVoteWithAnimation = useCallback(
     async (option) => {
       if (isProcessing || isTransitioning || isError) {
         return;
       }
+
+      // Rate limiting check
+      const now = Date.now();
+      if (now - lastVoteTimeRef.current < VOTE_COOLDOWN) {
+        return; // Too soon to vote again
+      }
+      lastVoteTimeRef.current = now;
 
       try {
         setIsProcessing(true);
@@ -460,6 +471,19 @@ function TournamentContent({
     ]
   );
 
+  // Create a stable reference for keyboard event handling
+  const stableHandleVoteWithAnimation = useCallback(handleVoteWithAnimation, [
+    isProcessing,
+    isTransitioning,
+    isError,
+    playSound,
+    updateMatchResult,
+    handleVote,
+    onVote,
+    currentMatch,
+    showError
+  ]);
+
   // Separate click handler for name cards
   const handleNameCardClick = useCallback(
     (option) => {
@@ -523,16 +547,16 @@ function TournamentContent({
         case 'Enter':
           e.preventDefault();
           if (selectedOption) {
-            handleVoteWithAnimation(selectedOption);
+            stableHandleVoteWithAnimation(selectedOption);
           }
           break;
         case 'ArrowUp':
           e.preventDefault();
-          handleVoteWithAnimation('both');
+          stableHandleVoteWithAnimation('both');
           break;
         case 'ArrowDown':
           e.preventDefault();
-          handleVoteWithAnimation('neither');
+          stableHandleVoteWithAnimation('neither');
           break;
         case 'Tab':
           // Allow normal tab navigation
@@ -552,8 +576,8 @@ function TournamentContent({
     selectedOption,
     isProcessing,
     isTransitioning,
-    handleVoteWithAnimation,
     isMuted
+    // Remove handleVoteWithAnimation from dependencies to prevent re-attachment
   ]);
 
   // Match result component

@@ -16,9 +16,7 @@ function NavBar({
   onStartNewTournament,
   isLightTheme,
   onThemeChange,
-  onShowOnboarding,
-  onCloseOnboarding,
-  isOnboardingOpen
+
 }) {
   const [showScrollTop, setShowScrollTop] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -205,28 +203,7 @@ function NavBar({
               </button>
             </li>
 
-            {/* Help Button - Left Side */}
-            <li className="navbar__item navbar__item--help">
-              <div
-                className="navbar__pop-effect"
-                onClick={isOnboardingOpen ? onCloseOnboarding : onShowOnboarding}
-                role="button"
-                tabIndex={0}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter' || e.key === ' ') {
-                    e.preventDefault();
-                    if (isOnboardingOpen) {
-                      onCloseOnboarding();
-                    } else {
-                      onShowOnboarding();
-                    }
-                  }
-                }}
-                aria-label={isOnboardingOpen ? 'Close onboarding tutorial' : 'Show onboarding tutorial'}
-              >
-                <span className="pop-bubble">{isOnboardingOpen ? '❌' : '✨'}</span>
-              </div>
-            </li>
+
 
             {/* Right Side Elements */}
             {logoItem}
@@ -283,28 +260,7 @@ function NavBar({
               );
             })}
 
-            {/* Help Button for Mobile */}
-            <li className="navbar__mobile-item">
-              {isOnboardingOpen ? (
-                <button
-                  type="button"
-                  className="navbar__mobile-help-button"
-                  onClick={onCloseOnboarding}
-                  aria-label="Close onboarding tutorial"
-                >
-                  ❌ Close Tutorial
-                </button>
-              ) : (
-                <button
-                  type="button"
-                  className="navbar__mobile-help-button"
-                  onClick={onShowOnboarding}
-                  aria-label="Show onboarding tutorial"
-                >
-                  ✨ Help & Tutorial
-                </button>
-              )}
-            </li>
+
 
             {/* Logout Button for Mobile */}
             {isLoggedIn && (
@@ -379,9 +335,8 @@ NavBar.propTypes = {
   onStartNewTournament: PropTypes.func,
   isLightTheme: PropTypes.bool.isRequired,
   onThemeChange: PropTypes.func.isRequired,
-  onShowOnboarding: PropTypes.func.isRequired,
-  onCloseOnboarding: PropTypes.func.isRequired,
-  isOnboardingOpen: PropTypes.bool.isRequired
+
+  
 };
 
 export default NavBar;

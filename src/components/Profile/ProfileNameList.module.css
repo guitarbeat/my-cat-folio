@@ -32,16 +32,83 @@
 /* * Names Grid Layout */
 .namesGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
   gap: 1.5rem;
 }
 
 .nameWrapper {
-  transition: transform 0.2s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 16px;
+  overflow: hidden;
+  background: linear-gradient(135deg, var(--card-bg-start, #ffffff) 0%, var(--card-bg-end, #f8fafc) 100%);
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  border: 1px solid var(--card-border, #e2e8f0);
 }
 
 .nameWrapper:hover {
-  transform: translateY(-2px);
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  border-color: var(--card-border-hover, #cbd5e1);
+}
+
+.nameWrapper:active {
+  transform: translateY(-2px) scale(1.01);
+}
+
+/* * Enhanced Card Styling */
+.nameWrapper::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--accent-color-1, #3b82f6), var(--accent-color-2, #8b5cf6), var(--accent-color-3, #ec4899));
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.nameWrapper:hover::before {
+  opacity: 1;
+}
+
+/* * Card Content Enhancement */
+.nameWrapper .nameCard {
+  padding: 1.5rem;
+  position: relative;
+}
+
+/* * Floating Action Buttons */
+.nameWrapper .adminControls {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  display: flex;
+  gap: 0.5rem;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.nameWrapper:hover .adminControls {
+  opacity: 1;
+}
+
+/* * Status Indicators */
+.nameWrapper .statusIndicator {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--status-active, #10b981);
+  border: 2px solid var(--status-border, #ffffff);
+  box-shadow: 0 0 0 2px var(--status-shadow, #d1fae5);
+}
+
+.nameWrapper.hiddenName .statusIndicator {
+  background: var(--status-hidden, #6b7280);
+  box-shadow: 0 0 0 2px var(--status-shadow-hidden, #e5e7eb);
 }
 
 /* * Hidden Name Styles */
@@ -167,6 +234,22 @@
   .emptyMessage {
     --text-secondary: #9ca3af;
   }
+
+  /* * Dark Theme Card Variables */
+  .nameWrapper {
+    --card-bg-start: #1f2937;
+    --card-bg-end: #111827;
+    --card-border: #374151;
+    --card-border-hover: #4b5563;
+    --accent-color-1: #60a5fa;
+    --accent-color-2: #a78bfa;
+    --accent-color-3: #f472b6;
+    --status-active: #34d399;
+    --status-hidden: #9ca3af;
+    --status-border: #1f2937;
+    --status-shadow: #064e3b;
+    --status-shadow-hidden: #374151;
+  }
 }
 
 /* * Light Theme Variables */
@@ -196,6 +279,22 @@
 
 .emptyMessage {
   --text-secondary: #6b7280;
+}
+
+/* * Enhanced Card Variables */
+.nameWrapper {
+  --card-bg-start: #ffffff;
+  --card-bg-end: #f8fafc;
+  --card-border: #e2e8f0;
+  --card-border-hover: #cbd5e1;
+  --accent-color-1: #3b82f6;
+  --accent-color-2: #8b5cf6;
+  --accent-color-3: #ec4899;
+  --status-active: #10b981;
+  --status-hidden: #6b7280;
+  --status-border: #ffffff;
+  --status-shadow: #d1fae5;
+  --status-shadow-hidden: #e5e7eb;
 }
 
 /* * High Contrast Mode Support */

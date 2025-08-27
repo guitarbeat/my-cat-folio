@@ -397,9 +397,9 @@ const SwipeableNameCards = ({
         <button
           onClick={() => handleSwipeButton('left')}
           className={`${styles.swipeButton} ${styles.swipeLeftButton}`}
-          disabled={!isSelected}
+          // Remove disabled state - always allow skipping
         >
-          👎 Remove
+          👎 Skip
         </button>
 
         <div className={styles.cardProgress}>
@@ -409,7 +409,7 @@ const SwipeableNameCards = ({
         <button
           onClick={() => handleSwipeButton('right')}
           className={`${styles.swipeButton} ${styles.swipeRightButton}`}
-          disabled={isSelected}
+          // Remove disabled state - always allow selecting
         >
           👍 Select
         </button>
@@ -658,7 +658,7 @@ function useTournamentSetup(userName) {
     };
 
     fetchNames();
-  }, [handleError]); // Include handleError in dependencies
+  }, []); // Remove handleError dependency to prevent infinite loops
 
   const toggleName = async (nameObj) => {
     setSelectedNames((prev) => {

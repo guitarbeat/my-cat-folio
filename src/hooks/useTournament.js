@@ -120,7 +120,8 @@ export function useTournament({
     currentMatch: 1,
     totalMatches: 0,
     userName: userName || 'anonymous', // Store user context with tournament
-    lastUpdated: Date.now()
+    lastUpdated: Date.now(),
+    namesKey: '' // Track when names actually change
   });
 
   // Destructure match history from tournament state
@@ -147,10 +148,26 @@ export function useTournament({
         currentRound: 1,
         currentMatch: 1,
         totalMatches: 0,
-        userName: userName || 'anonymous'
+        userName: userName || 'anonymous',
+        namesKey: ''
       });
     }
   }, [userName, tournamentState.userName, updateTournamentState]);
+
+  // Cleanup tournament state on unmount
+  useEffect(() => {
+    return () => {
+      // Clear any pending operations
+      if (resolveVote) {
+        resolveVote(0); // Resolve with neutral vote to prevent hanging
+      }
+      // Reset state
+      setCurrentMatch(null);
+      setIsTransitioning(false);
+      setCurrentMatchNumber(1);
+      setRoundNumber(1);
+    };
+  }, [resolveVote]);
 
   // Validate names array when it changes
   useEffect(() => {
@@ -277,8 +294,13 @@ export function useTournament({
     setCanUndo(false);
     setCurrentRatings(existingRatings);
 
-    runTournament(newSorter);
-  }, [names, updateTournamentState, existingRatings, runTournament]);
+    // Only run tournament if names actually changed (not on every render)
+    const namesKey = names.map(n => n.id || n.name).join(',');
+    if (namesKey !== tournamentState.namesKey) {
+      updateTournamentState({ namesKey });
+      runTournament(newSorter);
+    }
+  }, [names, updateTournamentState, existingRatings, runTournament, tournamentState.namesKey]);
 
   // Define getCurrentRatings first since it's used in handleVote
   const getCurrentRatings = useCallback(() => {

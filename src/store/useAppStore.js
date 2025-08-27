@@ -31,7 +31,7 @@ const useAppStore = create(
       // * UI State
       ui: {
         theme: 'light',
-        showOnboarding: false,
+      
         showGlobalAnalytics: false,
         showUserComparison: false,
         matrixMode: false
@@ -173,12 +173,7 @@ const useAppStore = create(
           })),
 
         setOnboarding: (show) =>
-          set((state) => ({
-            ui: {
-              ...state.ui,
-              showOnboarding: show
-            }
-          })),
+
 
         setMatrixMode: (enabled) =>
           set((state) => ({
@@ -257,7 +252,7 @@ const useAppStore = create(
         getIsLoggedIn: () => get().user.isLoggedIn,
         getIsAdmin: () => get().user.isAdmin,
         getTheme: () => get().ui.theme,
-        getShowOnboarding: () => get().ui.showOnboarding,
+      
         getCurrentError: () => get().errors.current
       }
     }),

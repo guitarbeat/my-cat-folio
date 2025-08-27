@@ -4,7 +4,7 @@
  * Replaces useSupabaseStorage and useNameOptions with a unified interface.
  */
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import {
   catNamesAPI,
   ratingsAPI,
@@ -349,6 +349,38 @@ function useSupabaseStorage(userName = '') {
 
   // ===== REAL-TIME SUBSCRIPTIONS =====
 
+  // Create debounced versions of fetch functions to prevent cascading API calls
+  const namesTimeoutRef = useRef(null);
+  const categoriesTimeoutRef = useRef(null);
+  const preferencesTimeoutRef = useRef(null);
+
+  const debouncedFetchNames = useCallback(() => {
+    if (namesTimeoutRef.current) {
+      clearTimeout(namesTimeoutRef.current);
+    }
+    namesTimeoutRef.current = setTimeout(() => {
+      fetchNames();
+    }, 1000); // 1 second debounce
+  }, [fetchNames]);
+
+  const debouncedFetchCategories = useCallback(() => {
+    if (categoriesTimeoutRef.current) {
+      clearTimeout(categoriesTimeoutRef.current);
+    }
+    categoriesTimeoutRef.current = setTimeout(() => {
+      fetchCategories();
+    }, 1000); // 1 second debounce
+  }, [fetchCategories]);
+
+  const debouncedFetchUserPreferences = useCallback(() => {
+    if (preferencesTimeoutRef.current) {
+      clearTimeout(preferencesTimeoutRef.current);
+    }
+    preferencesTimeoutRef.current = setTimeout(() => {
+      fetchUserPreferences();
+    }, 1000); // 1 second debounce
+  }, [fetchUserPreferences]);
+
   useEffect(() => {
     if (!userName) return;
 
@@ -372,7 +404,7 @@ function useSupabaseStorage(userName = '') {
               schema: 'public',
               table: 'cat_name_options'
             },
-            fetchNames
+            debouncedFetchNames
           )
           .subscribe(),
 
@@ -387,7 +419,7 @@ function useSupabaseStorage(userName = '') {
               table: 'cat_name_ratings',
               filter: `user_name=eq.${userName}`
             },
-            fetchNames
+            debouncedFetchNames
           )
           .subscribe(),
 
@@ -402,7 +434,7 @@ function useSupabaseStorage(userName = '') {
               table: 'cat_name_ratings',
               filter: `user_name=eq.${userName}`
             },
-            fetchNames
+            debouncedFetchNames
           )
           .subscribe(),
 
@@ -416,7 +448,7 @@ function useSupabaseStorage(userName = '') {
               schema: 'public',
               table: 'cat_name_options'
             },
-            fetchCategories
+            debouncedFetchCategories
           )
           .subscribe(),
 
@@ -431,7 +463,7 @@ function useSupabaseStorage(userName = '') {
               table: 'cat_app_users',
               filter: `user_name=eq.${userName}`
             },
-            fetchUserPreferences
+            debouncedFetchUserPreferences
           )
           .subscribe()
       ];
@@ -439,11 +471,15 @@ function useSupabaseStorage(userName = '') {
       // Cleanup subscriptions
       return () => {
         subscriptions.forEach((sub) => sub.unsubscribe());
+        // Cleanup any pending timeouts
+        if (namesTimeoutRef.current) clearTimeout(namesTimeoutRef.current);
+        if (categoriesTimeoutRef.current) clearTimeout(categoriesTimeoutRef.current);
+        if (preferencesTimeoutRef.current) clearTimeout(preferencesTimeoutRef.current);
       };
     };
 
     setupSubscriptions();
-  }, [userName, fetchNames, fetchUserPreferences, fetchCategories]);
+  }, [userName, debouncedFetchNames, debouncedFetchCategories, debouncedFetchUserPreferences]);
 
   // ===== RETURN OBJECT =====
 

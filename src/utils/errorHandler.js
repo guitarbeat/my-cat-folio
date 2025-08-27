@@ -169,7 +169,7 @@ export const logError = (error, context = 'Unknown', additionalInfo = {}) => {
  * @returns {Promise} API call result
  */
 export const withRetry = async (apiCall, options = {}) => {
-  const { maxRetries = 3, delay = 1000, backoff = 2 } = options;
+  const { maxRetries = 3, delay = 1000, backoff = 2, shouldRetry = null } = options;
   let lastError;
 
   for (let attempt = 1; attempt <= maxRetries; attempt++) {
@@ -178,8 +178,23 @@ export const withRetry = async (apiCall, options = {}) => {
     } catch (error) {
       lastError = error;
 
+      // Add custom retry condition check
+      if (shouldRetry && !shouldRetry(error, attempt)) {
+        throw error;
+      }
+
       // Don't retry on certain error types
       if (getErrorType(error) === ERROR_TYPES.AUTHENTICATION) {
+        throw error;
+      }
+
+      // Don't retry on validation errors
+      if (getErrorType(error) === ERROR_TYPES.VALIDATION) {
+        throw error;
+      }
+
+      // Don't retry on runtime errors that aren't network-related
+      if (getErrorType(error) === ERROR_TYPES.RUNTIME && !error.message?.includes('network')) {
         throw error;
       }
 
@@ -192,7 +207,7 @@ export const withRetry = async (apiCall, options = {}) => {
         throw error;
       }
 
-      // Wait before retrying
+      // Wait before retrying with exponential backoff
       await new Promise(resolve => setTimeout(resolve, delay * Math.pow(backoff, attempt - 1)));
     }
   }

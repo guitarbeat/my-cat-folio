@@ -8,10 +8,9 @@
  */
 
 import React, { useCallback, useMemo } from 'react';
-import { ErrorBoundary, Login, ErrorDisplay, OnboardingModal, ToastContainer } from './components';
+import { ErrorBoundary, Login, ErrorDisplay, ToastContainer } from './components';
 import NavBar from './components/NavBar/NavBar';
 import useUserSession from './hooks/useUserSession';
-import useOnboarding from './hooks/useOnboarding';
 import useTheme from './hooks/useTheme';
 import useToast from './hooks/useToast';
 import useAppStore from './store/useAppStore';
@@ -32,14 +31,6 @@ const Tournament = React.lazy(
 function App() {
   const { userName, isLoggedIn, login, logout } = useUserSession();
   const { isLightTheme, toggleTheme } = useTheme();
-
-  // * Onboarding management
-  const {
-    showOnboarding,
-    closeOnboarding,
-    dontShowAgain,
-    setShowOnboarding
-  } = useOnboarding();
 
   // * Toast notifications
   const {
@@ -218,10 +209,7 @@ function App() {
     onLogout: handleLogout,
     onStartNewTournament: handleStartNewTournament,
     isLightTheme,
-    onThemeChange: handleThemeChange,
-    onShowOnboarding: () => setShowOnboarding(true),
-    onCloseOnboarding: closeOnboarding,
-    isOnboardingOpen: showOnboarding
+    onThemeChange: handleThemeChange
   }), [
     tournament.currentView,
     tournamentActions,
@@ -230,10 +218,7 @@ function App() {
     handleLogout,
     handleStartNewTournament,
     isLightTheme,
-    handleThemeChange,
-    setShowOnboarding,
-    closeOnboarding,
-    showOnboarding
+    handleThemeChange
   ]);
 
   return (
@@ -291,14 +276,6 @@ function App() {
           <LoadingSpinner text="Initializing Tournament..." />
         </div>
       )}
-
-      {/* * Onboarding Modal */}
-      <OnboardingModal
-        isOpen={showOnboarding}
-        onClose={closeOnboarding}
-        onDontShowAgain={dontShowAgain}
-        isLightTheme={isLightTheme}
-      />
 
       {/* * Toast notifications */}
       <ToastContainer

@@ -106,7 +106,7 @@ const Profile = ({ userName, onStartNewTournament }) => {
     if (userName) {
       fetchNames();
     }
-  }, [userName, fetchNames]);
+  }, [userName]); // Remove fetchNames dependency to prevent infinite loops
 
   // * Check admin status
   useEffect(() => {

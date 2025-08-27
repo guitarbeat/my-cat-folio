@@ -31,9 +31,7 @@ describe('NavBar Component', () => {
     onLogout: vi.fn(),
     isLightTheme: true,
     onThemeChange: vi.fn(),
-    onShowOnboarding: vi.fn(),
-    onCloseOnboarding: vi.fn(),
-    isOnboardingOpen: false
+
   };
 
   beforeEach(() => {
@@ -107,30 +105,7 @@ describe('NavBar Component', () => {
     expect(screen.getByText('☀️')).toBeInTheDocument();
   });
 
-  test('renders help button', () => {
-    render(<NavBar {...defaultProps} />);
-    // The help button is a div with role="button", so we need to look for that
-    const helpButtons = screen.getAllByRole('button', {
-      name: /Show onboarding tutorial/i
-    });
-    expect(helpButtons.length).toBeGreaterThan(0);
-    expect(helpButtons[0]).toBeInTheDocument();
-  });
 
-  test('help button shows onboarding when clicked', () => {
-    const onShowOnboarding = vi.fn();
-
-    render(<NavBar {...defaultProps} onShowOnboarding={onShowOnboarding} />);
-
-    // Get the first help button (desktop version) - it's a div with role="button"
-    const helpButtons = screen.getAllByRole('button', {
-      name: /Show onboarding tutorial/i
-    });
-    const helpButton = helpButtons[0];
-    fireEvent.click(helpButton);
-
-    expect(onShowOnboarding).toHaveBeenCalled();
-  });
 
   test('renders logo with correct title', () => {
     render(<NavBar {...defaultProps} />);
