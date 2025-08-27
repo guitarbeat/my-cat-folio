@@ -265,43 +265,56 @@ export function useTournament({
 
   // Reset tournament state when names change
   useEffect(() => {
-    if (!names || names.length === 0) {
-      return;
-    }
+    const initializeTournament = async () => {
+      console.log('[DEV] 🎮 useTournament: useEffect triggered with names:', names);
 
-    const namesKey = names.map(n => n.id || n.name).join(',');
+      if (!names || names.length === 0) {
+        console.log('[DEV] 🎮 useTournament: No names provided, returning early');
+        return;
+      }
 
-    // Only run if names actually changed
-    if (namesKey === initializedNamesRef.current) {
-      return;
-    }
+      const namesKey = names.map(n => n.id || n.name).join(',');
+      console.log('[DEV] 🎮 useTournament: Names key:', namesKey);
 
-    initializedNamesRef.current = namesKey;
+      // * FIXED: Remove the overly aggressive initialization check
+      // * This was preventing the tournament from starting when names were the same
+      // * We want to initialize every time names are provided
+      console.log('[DEV] 🎮 useTournament: Initializing tournament with names:', names);
+      initializedNamesRef.current = namesKey;
 
-    const nameStrings = names.map((n) => n.name);
-    const newSorter = new PreferenceSorter(nameStrings);
-    setSorter(newSorter);
+          const nameStrings = names.map((n) => n.name);
+      const newSorter = new PreferenceSorter(nameStrings);
+      setSorter(newSorter);
 
-    const n = names.length;
-    const estimatedMatches = n <= 2 ? 1 : Math.ceil(n * Math.log2(n));
+      const n = names.length;
+      const estimatedMatches = n <= 2 ? 1 : Math.ceil(n * Math.log2(n));
 
-    // Reset tournament state
-    updateTournamentState({
-      matchHistory: [],
-      currentRound: 1,
-      currentMatch: 1,
-      totalMatches: estimatedMatches,
-      namesKey
-    });
+      // Reset tournament state
+      updateTournamentState({
+        matchHistory: [],
+        currentRound: 1,
+        currentMatch: 1,
+        totalMatches: estimatedMatches,
+        namesKey
+      });
 
-    setTotalMatches(estimatedMatches);
-    setCurrentMatchNumber(1);
-    setRoundNumber(1);
-    setCanUndo(false);
-    setCurrentRatings(existingRatings);
+      setTotalMatches(estimatedMatches);
+      setCurrentMatchNumber(1);
+      setRoundNumber(1);
+      setCanUndo(false);
+      setCurrentRatings(existingRatings);
 
-    // Run tournament with new sorter
-    runTournament(newSorter);
+      // Run tournament with new sorter
+      console.log('[DEV] 🎮 useTournament: About to call runTournament with sorter:', newSorter);
+      try {
+        await runTournament(newSorter);
+        console.log('[DEV] 🎮 useTournament: runTournament completed successfully');
+      } catch (error) {
+        console.error('[DEV] 🎮 useTournament: runTournament failed:', error);
+      }
+    };
+
+    initializeTournament();
   }, [names, existingRatings, updateTournamentState, runTournament]);
 
   // Define getCurrentRatings first since it's used in handleVote

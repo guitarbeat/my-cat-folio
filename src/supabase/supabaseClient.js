@@ -714,12 +714,17 @@ export const tournamentsAPI = {
             .upsert({
               user_name: userName,
               name_id: nameObj.id,
+              rating: 1500, // * FIXED: Add default rating to satisfy not-null constraint
               tournament_selections: currentTournamentSelections + 1,
               last_selected_at: now,
               first_selected_at: currentLastSelectedAt || now,
               selection_frequency: currentTournamentSelections + 1,
               updated_at: now
             }, { onConflict: 'user_name,name_id' });
+
+          if (error) {
+            console.error('Upsert error for', userName, nameObj.id, ':', error);
+          }
 
           return { error };
         } catch (error) {
@@ -755,13 +760,16 @@ export const tournamentsAPI = {
 
         tournaments.push(newTournament);
 
-        await supabase
+        const { error: userUpsertError } = await supabase
           .from('cat_app_users')
           .upsert({
             user_name: userName,
-            tournament_data: tournaments,
-            updated_at: now
+            tournament_data: tournaments
           }, { onConflict: 'user_name' });
+
+        if (userUpsertError) {
+          console.error('User upsert error for', userName, ':', userUpsertError);
+        }
       } catch (tournamentError) {
         // Don't fail if tournament creation fails
         if (process.env.NODE_ENV === 'development') {

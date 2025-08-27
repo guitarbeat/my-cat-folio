@@ -81,12 +81,16 @@ function App() {
 
   // * Handle tournament setup
   const handleTournamentSetup = useCallback((names) => {
+    console.log('[DEV] 🎮 App: handleTournamentSetup called with names:', names);
+    
     // * Only set loading if we don't already have names
     if (!tournament.names) {
       tournamentActions.setLoading(true);
     }
 
     const processedNames = TournamentService.createTournament(names, tournament.ratings);
+    console.log('[DEV] 🎮 App: Processed names:', processedNames);
+    
     tournamentActions.setNames(processedNames);
 
     // * Use setTimeout to ensure the loading state is visible and prevent flashing
