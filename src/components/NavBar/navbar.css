@@ -170,7 +170,35 @@
 }
 
 .navbar__help-button:active {
-  transform: scale(0.95);
+  transform: translateY(0) scale(0.98);
+  box-shadow: 
+    0 2px 8px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+/* Focus States for Buttons */
+.navbar__theme-toggle:focus-visible,
+.navbar__help-button:focus-visible {
+  outline: 2px solid var(--accent-color);
+  outline-offset: 2px;
+  box-shadow: 
+    0 0 0 4px rgba(232, 191, 118, 0.3),
+    0 2px 8px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+/* Enhanced Button States */
+.navbar__theme-toggle:disabled,
+.navbar__help-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Smooth transitions for all interactive states */
+.navbar__theme-toggle,
+.navbar__help-button {
+  will-change: transform, box-shadow, background-color, border-color;
 }
 
 /* Mobile Menu Button */
@@ -483,31 +511,6 @@
 .navbar__item a:focus {
   outline: 2px solid #3b82f6;
   outline-offset: 2px;
-}
-
-/* Focus States for Buttons */
-.navbar__theme-toggle:focus-visible,
-.navbar__help-button:focus-visible {
-  outline: 2px solid var(--accent-color);
-  outline-offset: 2px;
-  box-shadow: 
-    0 0 0 4px rgba(232, 191, 118, 0.3),
-    0 2px 8px rgba(0, 0, 0, 0.1),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1);
-}
-
-/* Enhanced Button States */
-.navbar__theme-toggle:disabled,
-.navbar__help-button:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-  transform: none;
-}
-
-/* Smooth transitions for all interactive states */
-.navbar__theme-toggle,
-.navbar__help-button {
-  will-change: transform, box-shadow, background-color, border-color;
 }
 
 /* Reduced Motion */
