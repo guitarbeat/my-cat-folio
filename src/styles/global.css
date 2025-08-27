@@ -600,17 +600,17 @@ body.light-theme {
   --text-secondary: #1e293b; /* Enhanced contrast for WCAG compliance */
   --text-tertiary: #334155; /* Enhanced contrast for WCAG compliance */
   --border-color: #cbd5e1;
-  --card-background: #ffffff; /* * Keep cards white for contrast */
+  --card-background: #fff; /* * Keep cards white for contrast */
   --card-border: #cbd5e1;
   --card-hover: #e2e8f0; /* * Darker hover state */
-  --header-background: #ffffff; /* * Keep header white for contrast */
+  --header-background: #fff; /* * Keep header white for contrast */
   --header-border: #cbd5e1; /* * Darker border */
   --shadow-subtle: 0 1px 3px rgb(0 0 0 / 8%); /* * Subtle shadow for light theme */
   --shadow-medium: 0 4px 12px rgb(0 0 0 / 12%); /* * Medium shadow for light theme */
 
   /* Synced dark-mode variables for components using legacy names */
   --surface-dark: #f1f5f9; /* * Updated to match new surface color */
-  --card-background-dark: #ffffff; /* * Keep cards white */
+  --card-background-dark: #fff; /* * Keep cards white */
   --card-hover-dark: #e2e8f0; /* * Updated to match new hover color */
   --border-color-dark: #cbd5e1;
   --text-primary-dark: #0f172a;
@@ -628,6 +628,11 @@ body.light-theme {
   --start-section-pattern: #64748b; /* * Subtle pattern color */
   --accent-subtle: rgb(100 116 139 / 15%); /* * Subtle accent for light theme */
   --accent-medium: rgb(100 116 139 / 25%); /* * Medium accent for light theme */
+
+  /* NameCard selected state variables */
+  --namecard-selected-bg: linear-gradient(135deg, var(--primary-50), var(--primary-100));
+  --namecard-selected-border: var(--primary-500);
+  --namecard-selected-description: var(--primary-600);
 }
 
 /* Dark Theme Overrides */
@@ -669,6 +674,11 @@ body.dark-theme {
   --start-section-pattern: #64748b; /* * Subtle pattern color */
   --accent-subtle: rgb(255 255 255 / 8%); /* * Subtle accent for dark theme */
   --accent-medium: rgb(255 255 255 / 15%); /* * Medium accent for dark theme */
+
+  /* NameCard selected state variables */
+  --namecard-selected-bg: linear-gradient(135deg, var(--primary-700), var(--primary-800));
+  --namecard-selected-border: var(--primary-400);
+  --namecard-selected-description: var(--primary-300);
 }
 
 /* High Contrast Mode */
@@ -3291,9 +3301,9 @@ h1 {
   position: fixed;
   top: 0;
   left: 0;
+  z-index: -1;
   width: 100%;
   height: 100%;
-  z-index: -1;
   overflow: hidden;
   background: linear-gradient(135deg, #0f0f23 0%, #1a1f2e 50%, #2d1b69 100%);
 }
@@ -3306,9 +3316,9 @@ h1 {
   height: 100%;
   background-image: 
     radial-gradient(2px 2px at 20px 30px, #eee, transparent),
-    radial-gradient(2px 2px at 40px 70px, rgba(255,255,255,0.8), transparent),
+    radial-gradient(2px 2px at 40px 70px, rgb(255 255 255 / 80%), transparent),
     radial-gradient(1px 1px at 90px 40px, #fff, transparent),
-    radial-gradient(1px 1px at 130px 80px, rgba(255,255,255,0.6), transparent),
+    radial-gradient(1px 1px at 130px 80px, rgb(255 255 255 / 60%), transparent),
     radial-gradient(2px 2px at 160px 30px, #ddd, transparent);
   background-repeat: repeat;
   background-size: 200px 100px;
@@ -3322,9 +3332,9 @@ h1 {
   width: 100%;
   height: 100%;
   background: 
-    radial-gradient(ellipse at 20% 80%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
-    radial-gradient(ellipse at 80% 20%, rgba(255, 119, 198, 0.3) 0%, transparent 50%),
-    radial-gradient(ellipse at 40% 40%, rgba(120, 219, 255, 0.2) 0%, transparent 50%);
+    radial-gradient(ellipse at 20% 80%, rgb(120 119 198 / 30%) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 20%, rgb(255 119 198 / 30%) 0%, transparent 50%),
+    radial-gradient(ellipse at 40% 40%, rgb(120 219 255 / 20%) 0%, transparent 50%);
   filter: blur(1px);
 }
 
@@ -3342,14 +3352,14 @@ h1 {
   width: 40px;
   height: 40px;
   opacity: 0.6;
-  filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.3));
+  filter: drop-shadow(0 0 10px rgb(255 255 255 / 30%));
   transition: all 0.3s ease;
 }
 
 .cat-background__cat:hover {
   opacity: 1;
+  filter: drop-shadow(0 0 20px rgb(255 255 255 / 60%));
   transform: scale(1.2);
-  filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.6));
 }
 
 .cat-background__cat--1 {
@@ -3373,8 +3383,8 @@ h1 {
 }
 
 .cat-background__cat--4 {
-  bottom: 30%;
   right: 10%;
+  bottom: 30%;
   animation: float4 9s ease-in-out infinite;
   animation-delay: -6s;
 }
@@ -3385,22 +3395,22 @@ h1 {
 }
 
 @keyframes float1 {
-  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  0%, 100% { transform: translateY(0) rotate(0deg); }
   50% { transform: translateY(-20px) rotate(5deg); }
 }
 
 @keyframes float2 {
-  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  0%, 100% { transform: translateY(0) rotate(0deg); }
   50% { transform: translateY(-15px) rotate(-3deg); }
 }
 
 @keyframes float3 {
-  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  0%, 100% { transform: translateY(0) rotate(0deg); }
   50% { transform: translateY(-25px) rotate(2deg); }
 }
 
 @keyframes float4 {
-  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  0%, 100% { transform: translateY(0) rotate(0deg); }
   50% { transform: translateY(-18px) rotate(-4deg); }
 }
 
@@ -3412,31 +3422,31 @@ h1 {
 .light-theme .cat-background__stars {
   background-image: 
     radial-gradient(2px 2px at 20px 30px, #666, transparent),
-    radial-gradient(2px 2px at 40px 70px, rgba(100,100,100,0.8), transparent),
+    radial-gradient(2px 2px at 40px 70px, rgb(100 100 100 / 80%), transparent),
     radial-gradient(1px 1px at 90px 40px, #888, transparent),
-    radial-gradient(1px 1px at 130px 80px, rgba(100,100,100,0.6), transparent),
+    radial-gradient(1px 1px at 130px 80px, rgb(100 100 100 / 60%), transparent),
     radial-gradient(2px 2px at 160px 30px, #777, transparent);
 }
 
 .light-theme .cat-background__nebula {
   background: 
-    radial-gradient(ellipse at 20% 80%, rgba(100, 100, 200, 0.2) 0%, transparent 50%),
-    radial-gradient(ellipse at 80% 20%, rgba(200, 100, 200, 0.2) 0%, transparent 50%),
-    radial-gradient(ellipse at 40% 40%, rgba(100, 200, 255, 0.15) 0%, transparent 50%);
+    radial-gradient(ellipse at 20% 80%, rgb(100 100 200 / 20%) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 20%, rgb(200 100 200 / 20%) 0%, transparent 50%),
+    radial-gradient(ellipse at 40% 40%, rgb(100 200 255 / 15%) 0%, transparent 50%);
 }
 
 .light-theme .cat-background__cat {
   opacity: 0.4;
-  filter: drop-shadow(0 0 8px rgba(0, 0, 0, 0.2));
+  filter: drop-shadow(0 0 8px rgb(0 0 0 / 20%));
 }
 
 .light-theme .cat-background__cat:hover {
   opacity: 0.8;
-  filter: drop-shadow(0 0 15px rgba(0, 0, 0, 0.4));
+  filter: drop-shadow(0 0 15px rgb(0 0 0 / 40%));
 }
 
 /* * Responsive adjustments */
-@media (max-width: 768px) {
+@media (width <= 768px) {
   .cat-background__cat {
     width: 30px;
     height: 30px;
@@ -3445,10 +3455,10 @@ h1 {
   .cat-background__cat--1 { top: 10%; left: 5%; }
   .cat-background__cat--2 { top: 20%; right: 10%; }
   .cat-background__cat--3 { bottom: 15%; left: 15%; }
-  .cat-background__cat--4 { bottom: 25%; right: 5%; }
+  .cat-background__cat--4 { right: 5%; bottom: 25%; }
 }
 
-@media (max-width: 480px) {
+@media (width <= 480px) {
   .cat-background__cat {
     width: 25px;
     height: 25px;
@@ -3457,5 +3467,5 @@ h1 {
   .cat-background__cat--1 { top: 8%; left: 3%; }
   .cat-background__cat--2 { top: 18%; right: 8%; }
   .cat-background__cat--3 { bottom: 12%; left: 12%; }
-  .cat-background__cat--4 { bottom: 22%; right: 3%; }
+  .cat-background__cat--4 { right: 3%; bottom: 22%; }
 }
