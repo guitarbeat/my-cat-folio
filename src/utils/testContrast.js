@@ -137,7 +137,9 @@ function testColorScheme(scheme, themeName) {
       if (meetsAA) {
         passCount++;
         if (process.env.NODE_ENV === 'development') {
-          console.log(`✅ ${test.description}: ${ratio.toFixed(2)}:1 (${level})`);
+          console.log(
+            `✅ ${test.description}: ${ratio.toFixed(2)}:1 (${level})`
+          );
         }
       } else {
         failCount++;
@@ -169,7 +171,9 @@ function testColorScheme(scheme, themeName) {
  */
 export function runContrastTests() {
   if (process.env.NODE_ENV === 'development') {
-    console.log('🎨 Running Contrast Ratio Tests for Meow Namester Color Scheme');
+    console.log(
+      '🎨 Running Contrast Ratio Tests for Meow Namester Color Scheme'
+    );
   }
 
   const lightResults = testColorScheme(colorScheme.light, 'Light');
@@ -201,4 +205,3 @@ export function runContrastTests() {
 }
 // Export for use in development
 export default runContrastTests;
-

@@ -16,7 +16,6 @@ function NavBar({
   onStartNewTournament,
   isLightTheme,
   onThemeChange
-
 }) {
   const [showScrollTop, setShowScrollTop] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -57,7 +56,10 @@ function NavBar({
 
     const checkScroll = () => {
       const scrollY = window.scrollY;
-      const threshold = window.innerHeight <= 768 ? window.innerHeight * 1.5 : window.innerHeight;
+      const threshold =
+        window.innerHeight <= 768
+          ? window.innerHeight * 1.5
+          : window.innerHeight;
       const shouldShow = scrollY > threshold;
       setShowScrollTop(shouldShow);
     };
@@ -196,13 +198,20 @@ function NavBar({
                 type="button"
                 className="navbar__theme-toggle"
                 onClick={onThemeChange}
-                aria-label={isLightTheme ? 'Switch to dark theme' : 'Switch to light theme'}
-                title={isLightTheme ? 'Switch to dark theme' : 'Switch to light theme'}
+                aria-label={
+                  isLightTheme
+                    ? 'Switch to dark theme'
+                    : 'Switch to light theme'
+                }
+                title={
+                  isLightTheme
+                    ? 'Switch to dark theme'
+                    : 'Switch to light theme'
+                }
               >
                 {isLightTheme ? '🌙' : '☀️'}
               </button>
             </li>
-
 
             {/* Right Side Elements */}
             {logoItem}
@@ -219,7 +228,10 @@ function NavBar({
             aria-controls="mobile-menu"
             type="button"
           >
-            <span className="navbar__mobile-menu-icon" aria-hidden="true"></span>
+            <span
+              className="navbar__mobile-menu-icon"
+              aria-hidden="true"
+            ></span>
           </button>
         </div>
 
@@ -259,7 +271,6 @@ function NavBar({
               );
             })}
 
-
             {/* Logout Button for Mobile */}
             {isLoggedIn && (
               <li key="logout" className="navbar__mobile-item">
@@ -286,10 +297,20 @@ function NavBar({
                   onThemeChange();
                   setIsMobileMenuOpen(false);
                 }}
-                aria-label={isLightTheme ? 'Switch to dark theme' : 'Switch to light theme'}
-                title={isLightTheme ? 'Switch to dark theme' : 'Switch to light theme'}
+                aria-label={
+                  isLightTheme
+                    ? 'Switch to dark theme'
+                    : 'Switch to light theme'
+                }
+                title={
+                  isLightTheme
+                    ? 'Switch to dark theme'
+                    : 'Switch to light theme'
+                }
               >
-                {isLightTheme ? '🌙 Switch to Dark Theme' : '☀️ Switch to Light Theme'}
+                {isLightTheme
+                  ? '🌙 Switch to Dark Theme'
+                  : '☀️ Switch to Light Theme'}
               </button>
             </li>
           </ul>
@@ -333,8 +354,6 @@ NavBar.propTypes = {
   onStartNewTournament: PropTypes.func,
   isLightTheme: PropTypes.bool.isRequired,
   onThemeChange: PropTypes.func.isRequired
-
-
 };
 
 export default NavBar;

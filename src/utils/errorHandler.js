@@ -26,39 +26,48 @@ export const ERROR_SEVERITY = {
 export const USER_FRIENDLY_MESSAGES = {
   [ERROR_TYPES.NETWORK]: {
     [ERROR_SEVERITY.LOW]: 'Connection is slow. Please try again.',
-    [ERROR_SEVERITY.MEDIUM]: 'Network connection issue. Please check your internet and try again.',
-    [ERROR_SEVERITY.HIGH]: 'Unable to connect to the server. Please try again later.',
-    [ERROR_SEVERITY.CRITICAL]: 'Service temporarily unavailable. Please try again later.'
+    [ERROR_SEVERITY.MEDIUM]:
+      'Network connection issue. Please check your internet and try again.',
+    [ERROR_SEVERITY.HIGH]:
+      'Unable to connect to the server. Please try again later.',
+    [ERROR_SEVERITY.CRITICAL]:
+      'Service temporarily unavailable. Please try again later.'
   },
   [ERROR_TYPES.AUTHENTICATION]: {
     [ERROR_SEVERITY.LOW]: 'Please log in again.',
     [ERROR_SEVERITY.MEDIUM]: 'Your session has expired. Please log in again.',
-    [ERROR_SEVERITY.HIGH]: 'Authentication failed. Please check your credentials.',
+    [ERROR_SEVERITY.HIGH]:
+      'Authentication failed. Please check your credentials.',
     [ERROR_SEVERITY.CRITICAL]: 'Account access issue. Please contact support.'
   },
   [ERROR_TYPES.DATABASE]: {
     [ERROR_SEVERITY.LOW]: 'Data loading is slow. Please try again.',
     [ERROR_SEVERITY.MEDIUM]: 'Unable to load data. Please refresh the page.',
     [ERROR_SEVERITY.HIGH]: 'Data access error. Please try again later.',
-    [ERROR_SEVERITY.CRITICAL]: 'Database connection issue. Please try again later.'
+    [ERROR_SEVERITY.CRITICAL]:
+      'Database connection issue. Please try again later.'
   },
   [ERROR_TYPES.VALIDATION]: {
     [ERROR_SEVERITY.LOW]: 'Please check your input and try again.',
-    [ERROR_SEVERITY.MEDIUM]: 'Invalid input detected. Please review and try again.',
+    [ERROR_SEVERITY.MEDIUM]:
+      'Invalid input detected. Please review and try again.',
     [ERROR_SEVERITY.HIGH]: 'Input validation failed. Please check your data.',
-    [ERROR_SEVERITY.CRITICAL]: 'Critical validation error. Please contact support.'
+    [ERROR_SEVERITY.CRITICAL]:
+      'Critical validation error. Please contact support.'
   },
   [ERROR_TYPES.RUNTIME]: {
     [ERROR_SEVERITY.LOW]: 'Something went wrong. Please try again.',
     [ERROR_SEVERITY.MEDIUM]: 'An error occurred. Please refresh the page.',
     [ERROR_SEVERITY.HIGH]: 'Application error. Please try again later.',
-    [ERROR_SEVERITY.CRITICAL]: 'Critical application error. Please contact support.'
+    [ERROR_SEVERITY.CRITICAL]:
+      'Critical application error. Please contact support.'
   },
   [ERROR_TYPES.UNKNOWN]: {
     [ERROR_SEVERITY.LOW]: 'Something unexpected happened. Please try again.',
     [ERROR_SEVERITY.MEDIUM]: 'An unexpected error occurred. Please try again.',
     [ERROR_SEVERITY.HIGH]: 'Unexpected error. Please try again later.',
-    [ERROR_SEVERITY.CRITICAL]: 'Critical unexpected error. Please contact support.'
+    [ERROR_SEVERITY.CRITICAL]:
+      'Critical unexpected error. Please contact support.'
   }
 };
 
@@ -74,10 +83,16 @@ export const getErrorType = (error) => {
   if (error?.code === 'PGRST116' || error?.message?.includes('auth')) {
     return ERROR_TYPES.AUTHENTICATION;
   }
-  if (error?.code?.startsWith('PGRST') || error?.message?.includes('database')) {
+  if (
+    error?.code?.startsWith('PGRST') ||
+    error?.message?.includes('database')
+  ) {
     return ERROR_TYPES.DATABASE;
   }
-  if (error?.code === 'VALIDATION_ERROR' || error?.message?.includes('validation')) {
+  if (
+    error?.code === 'VALIDATION_ERROR' ||
+    error?.message?.includes('validation')
+  ) {
     return ERROR_TYPES.VALIDATION;
   }
   if (error?.name === 'TypeError' || error?.name === 'ReferenceError') {
@@ -93,7 +108,11 @@ export const getErrorType = (error) => {
  * @returns {string} Error severity
  */
 export const getErrorSeverity = (errorType, context = {}) => {
-  const { isRetryable = true, affectsUserData = false, isCritical = false } = context;
+  const {
+    isRetryable = true,
+    affectsUserData = false,
+    isCritical = false
+  } = context;
 
   if (isCritical) return ERROR_SEVERITY.CRITICAL;
   if (affectsUserData) return ERROR_SEVERITY.HIGH;
@@ -108,8 +127,10 @@ export const getErrorSeverity = (errorType, context = {}) => {
  * @returns {string} User-friendly error message
  */
 export const getUserFriendlyMessage = (errorType, errorSeverity) => {
-  return USER_FRIENDLY_MESSAGES[errorType]?.[errorSeverity] ||
-         USER_FRIENDLY_MESSAGES[ERROR_TYPES.UNKNOWN][ERROR_SEVERITY.MEDIUM];
+  return (
+    USER_FRIENDLY_MESSAGES[errorType]?.[errorSeverity] ||
+    USER_FRIENDLY_MESSAGES[ERROR_TYPES.UNKNOWN][ERROR_SEVERITY.MEDIUM]
+  );
 };
 
 /**
@@ -169,7 +190,12 @@ export const logError = (error, context = 'Unknown', additionalInfo = {}) => {
  * @returns {Promise} API call result
  */
 export const withRetry = async (apiCall, options = {}) => {
-  const { maxRetries = 3, delay = 1000, backoff = 2, shouldRetry = null } = options;
+  const {
+    maxRetries = 3,
+    delay = 1000,
+    backoff = 2,
+    shouldRetry = null
+  } = options;
   let lastError;
 
   for (let attempt = 1; attempt <= maxRetries; attempt++) {
@@ -194,7 +220,10 @@ export const withRetry = async (apiCall, options = {}) => {
       }
 
       // Don't retry on runtime errors that aren't network-related
-      if (getErrorType(error) === ERROR_TYPES.RUNTIME && !error.message?.includes('network')) {
+      if (
+        getErrorType(error) === ERROR_TYPES.RUNTIME &&
+        !error.message?.includes('network')
+      ) {
         throw error;
       }
 
@@ -208,7 +237,9 @@ export const withRetry = async (apiCall, options = {}) => {
       }
 
       // Wait before retrying with exponential backoff
-      await new Promise(resolve => setTimeout(resolve, delay * Math.pow(backoff, attempt - 1)));
+      await new Promise((resolve) =>
+        setTimeout(resolve, delay * Math.pow(backoff, attempt - 1))
+      );
     }
   }
 
@@ -222,7 +253,11 @@ export const withRetry = async (apiCall, options = {}) => {
  * @param {Object} additionalInfo - Additional context
  * @returns {Object} Standardized error object
  */
-export const createStandardizedError = (error, context = 'Unknown', additionalInfo = {}) => {
+export const createStandardizedError = (
+  error,
+  context = 'Unknown',
+  additionalInfo = {}
+) => {
   const errorInfo = logError(error, context, additionalInfo);
 
   return {

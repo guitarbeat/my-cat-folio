@@ -25,7 +25,6 @@ const ProfileNameList = ({
   onSelectionChange,
   selectedNames = new Set(),
   className = '',
-  showAdminControls = false,
   selectionFilter,
   selectionStats
 }) => {
@@ -37,16 +36,16 @@ const ProfileNameList = ({
 
     // * Apply status filter
     if (filterStatus === FILTER_OPTIONS.STATUS.ACTIVE) {
-      filtered = filtered.filter(name => !name.isHidden);
+      filtered = filtered.filter((name) => !name.isHidden);
     } else if (filterStatus === FILTER_OPTIONS.STATUS.HIDDEN) {
-      filtered = filtered.filter(name => name.isHidden);
+      filtered = filtered.filter((name) => name.isHidden);
     }
 
     // * Apply user filter
     if (userFilter === FILTER_OPTIONS.USER.CURRENT) {
-      filtered = filtered.filter(name => name.user_name === ratings.userName);
+      filtered = filtered.filter((name) => name.user_name === ratings.userName);
     } else if (userFilter === FILTER_OPTIONS.USER.OTHER) {
-      filtered = filtered.filter(name => name.user_name !== ratings.userName);
+      filtered = filtered.filter((name) => name.user_name !== ratings.userName);
     }
 
     // * NEW: Apply selection-based filters
@@ -54,35 +53,40 @@ const ProfileNameList = ({
       switch (selectionFilter) {
         case 'selected':
           // Filter to names that have been selected at least once
-          filtered = filtered.filter(name => {
-            const selectionCount = selectionStats.nameSelectionCounts?.[name.id] || 0;
+          filtered = filtered.filter((name) => {
+            const selectionCount =
+              selectionStats.nameSelectionCounts?.[name.id] || 0;
             return selectionCount > 0;
           });
           break;
         case 'never_selected':
           // Filter to names that have never been selected
-          filtered = filtered.filter(name => {
-            const selectionCount = selectionStats.nameSelectionCounts?.[name.id] || 0;
+          filtered = filtered.filter((name) => {
+            const selectionCount =
+              selectionStats.nameSelectionCounts?.[name.id] || 0;
             return selectionCount === 0;
           });
           break;
-        case 'frequently_selected':
+        case 'frequently_selected': {
           // Filter to names selected more than average
           const avgSelections = selectionStats.avgSelectionsPerName || 0;
-          filtered = filtered.filter(name => {
-            const selectionCount = selectionStats.nameSelectionCounts?.[name.id] || 0;
+          filtered = filtered.filter((name) => {
+            const selectionCount =
+              selectionStats.nameSelectionCounts?.[name.id] || 0;
             return selectionCount > avgSelections;
           });
           break;
-        case 'recently_selected':
+        }
+        case 'recently_selected': {
           // Filter to names selected in the last 30 days
           const thirtyDaysAgo = new Date();
           thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
-          filtered = filtered.filter(name => {
+          filtered = filtered.filter((name) => {
             const lastSelected = selectionStats.nameLastSelected?.[name.id];
             return lastSelected && new Date(lastSelected) > thirtyDaysAgo;
           });
           break;
+        }
         default:
           break;
       }
@@ -126,8 +130,12 @@ const ProfileNameList = ({
           bValue = selectionStats?.nameSelectionCounts?.[b.id] || 0;
           break;
         case 'last_selected':
-          aValue = selectionStats?.nameLastSelected?.[a.id] ? new Date(selectionStats.nameLastSelected[a.id]) : new Date(0);
-          bValue = selectionStats?.nameLastSelected?.[b.id] ? new Date(selectionStats.nameLastSelected[b.id]) : new Date(0);
+          aValue = selectionStats?.nameLastSelected?.[a.id]
+            ? new Date(selectionStats.nameLastSelected[a.id])
+            : new Date(0);
+          bValue = selectionStats?.nameLastSelected?.[b.id]
+            ? new Date(selectionStats.nameLastSelected[b.id])
+            : new Date(0);
           break;
         case 'selection_frequency':
           aValue = selectionStats?.nameSelectionFrequency?.[a.id] || 0;
@@ -169,7 +177,16 @@ const ProfileNameList = ({
     });
 
     return filtered;
-  }, [names, filterStatus, userFilter, sortBy, sortOrder, ratings.userName, selectionFilter, selectionStats]);
+  }, [
+    names,
+    filterStatus,
+    userFilter,
+    sortBy,
+    sortOrder,
+    ratings.userName,
+    selectionFilter,
+    selectionStats
+  ]);
 
   if (isLoading) {
     return (
@@ -189,7 +206,8 @@ const ProfileNameList = ({
         <div className={styles.emptyState}>
           <h3 className={styles.emptyTitle}>No names found</h3>
           <p className={styles.emptyMessage}>
-            {filterStatus !== FILTER_OPTIONS.STATUS.ALL || userFilter !== FILTER_OPTIONS.USER.ALL
+            {filterStatus !== FILTER_OPTIONS.STATUS.ALL ||
+            userFilter !== FILTER_OPTIONS.USER.ALL
               ? 'Try adjusting your filters to see more names.'
               : 'Start by creating your first tournament!'}
           </p>
@@ -206,7 +224,8 @@ const ProfileNameList = ({
         </h3>
         {isAdmin && selectedNames.size > 0 && (
           <div className={styles.selectionInfo}>
-            {selectedNames.size} name{selectedNames.size !== 1 ? 's' : ''} selected
+            {selectedNames.size} name{selectedNames.size !== 1 ? 's' : ''}{' '}
+            selected
           </div>
         )}
       </div>
@@ -223,29 +242,44 @@ const ProfileNameList = ({
             >
               <NameCard
                 name={name.name}
-                description={name.description || `Rating: ${name.user_rating || TOURNAMENT.DEFAULT_RATING}`}
+                description={
+                  name.description ||
+                  `Rating: ${name.user_rating || TOURNAMENT.DEFAULT_RATING}`
+                }
                 isSelected={isSelected}
                 onClick={() => {}} // * No click action needed in profile view
                 disabled={false}
                 size="medium"
                 metadata={{
-                  rating: name.user_rating || name.avg_rating || TOURNAMENT.DEFAULT_RATING,
+                  rating:
+                    name.user_rating ||
+                    name.avg_rating ||
+                    TOURNAMENT.DEFAULT_RATING,
                   popularity: name.popularity_score,
                   tournaments: name.total_tournaments,
                   categories: name.categories,
-                  winRate: name.user_wins && name.user_losses
-                    ? Math.round((name.user_wins / (name.user_wins + name.user_losses)) * 100)
-                    : 0,
+                  winRate:
+                    name.user_wins && name.user_losses
+                      ? Math.round(
+                          (name.user_wins /
+                            (name.user_wins + name.user_losses)) *
+                            100
+                        )
+                      : 0,
                   totalMatches: (name.user_wins || 0) + (name.user_losses || 0),
                   created: name.created_at
                 }}
                 className={isHidden ? styles.hiddenNameCard : ''}
                 isAdmin={isAdmin}
                 isHidden={isHidden}
-                onToggleVisibility={isAdmin ? () => onToggleVisibility(name.id) : undefined}
+                onToggleVisibility={
+                  isAdmin ? () => onToggleVisibility(name.id) : undefined
+                }
                 onDelete={isAdmin ? () => onDelete(name) : undefined}
                 onSelectionChange={
-                  isAdmin ? (selected) => onSelectionChange(name.id, selected) : undefined
+                  isAdmin
+                    ? (selected) => onSelectionChange(name.id, selected)
+                    : undefined
                 }
                 showAdminControls={isAdmin}
               />
@@ -271,7 +305,6 @@ ProfileNameList.propTypes = {
   onSelectionChange: PropTypes.func,
   selectedNames: PropTypes.instanceOf(Set),
   className: PropTypes.string,
-  showAdminControls: PropTypes.bool,
   selectionFilter: PropTypes.string,
   selectionStats: PropTypes.object
 };

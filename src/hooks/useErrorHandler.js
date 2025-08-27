@@ -42,21 +42,28 @@ export const useErrorHandler = (options = {}) => {
    * @param {Object} additionalInfo - Additional context about the error
    * @returns {Object} Standardized error information
    */
-  const handleError = useCallback((error, context = 'Component Error', additionalInfo = {}) => {
-    const standardizedError = createStandardizedError(error, context, additionalInfo);
+  const handleError = useCallback(
+    (error, context = 'Component Error', additionalInfo = {}) => {
+      const standardizedError = createStandardizedError(
+        error,
+        context,
+        additionalInfo
+      );
 
-    // Update state
-    setErrors(prev => [...prev, standardizedError]);
-    setIsError(true);
-    lastErrorRef.current = standardizedError;
+      // Update state
+      setErrors((prev) => [...prev, standardizedError]);
+      setIsError(true);
+      lastErrorRef.current = standardizedError;
 
-    // Call error callback if provided
-    if (onError) {
-      onError(standardizedError);
-    }
+      // Call error callback if provided
+      if (onError) {
+        onError(standardizedError);
+      }
 
-    return standardizedError;
-  }, [onError]);
+      return standardizedError;
+    },
+    [onError]
+  );
 
   /**
    * Clear all errors and reset error state
@@ -73,51 +80,57 @@ export const useErrorHandler = (options = {}) => {
    * Clear a specific error by index
    * @param {number} index - Index of the error to clear
    */
-  const clearError = useCallback((index) => {
-    setErrors(prev => prev.filter((_, i) => i !== index));
-    if (errors.length <= 1) {
-      setIsError(false);
-      setIsRecovering(false);
-    }
-  }, [errors.length]);
+  const clearError = useCallback(
+    (index) => {
+      setErrors((prev) => prev.filter((_, i) => i !== index));
+      if (errors.length <= 1) {
+        setIsError(false);
+        setIsRecovering(false);
+      }
+    },
+    [errors.length]
+  );
 
   /**
    * Retry the last failed operation
    * @param {Function} operation - The operation to retry
    * @param {Object} retryOptions - Retry configuration
    */
-  const retryOperation = useCallback(async (operation, retryOptions = {}) => {
-    if (!lastErrorRef.current?.isRetryable) {
-      throw new Error('Operation is not retryable');
-    }
-
-    setIsRecovering(true);
-
-    try {
-      const result = await withRetry(operation, {
-        maxRetries: retryOptions.maxRetries || maxRetries,
-        delay: retryOptions.delay || 1000,
-        backoff: retryOptions.backoff || 2
-      });
-
-      // Success - clear errors and call recovery callback
-      clearErrors();
-      if (onRecovery) {
-        onRecovery(result);
+  const retryOperation = useCallback(
+    async (operation, retryOptions = {}) => {
+      if (!lastErrorRef.current?.isRetryable) {
+        throw new Error('Operation is not retryable');
       }
 
-      return result;
-    } catch (retryError) {
-      // Retry failed - handle the new error
-      handleError(retryError, 'Retry Operation', {
-        originalError: lastErrorRef.current,
-        retryAttempt: retryCountRef.current + 1
-      });
-      throw retryError;
-    } finally {
-      setIsRecovering(false);
-    }
-  }, [maxRetries, onRecovery, clearErrors, handleError]);
+      setIsRecovering(true);
+
+      try {
+        const result = await withRetry(operation, {
+          maxRetries: retryOptions.maxRetries || maxRetries,
+          delay: retryOptions.delay || 1000,
+          backoff: retryOptions.backoff || 2
+        });
+
+        // Success - clear errors and call recovery callback
+        clearErrors();
+        if (onRecovery) {
+          onRecovery(result);
+        }
+
+        return result;
+      } catch (retryError) {
+        // Retry failed - handle the new error
+        handleError(retryError, 'Retry Operation', {
+          originalError: lastErrorRef.current,
+          retryAttempt: retryCountRef.current + 1
+        });
+        throw retryError;
+      } finally {
+        setIsRecovering(false);
+      }
+    },
+    [maxRetries, onRecovery, clearErrors, handleError]
+  );
 
   /**
    * Execute an operation with automatic error handling
@@ -125,37 +138,40 @@ export const useErrorHandler = (options = {}) => {
    * @param {Object} options - Execution options
    * @returns {Promise} Operation result
    */
-  const executeWithErrorHandling = useCallback(async (operation, options = {}) => {
-    const {
-      context = 'Operation',
-      retryOnError = false,
-      showFeedback = showUserFeedback,
-      additionalInfo = {}
-    } = options;
+  const executeWithErrorHandling = useCallback(
+    async (operation, options = {}) => {
+      const {
+        context = 'Operation',
+        retryOnError = false,
+        showFeedback = showUserFeedback,
+        additionalInfo = {}
+      } = options;
 
-    try {
-      const result = await operation();
+      try {
+        const result = await operation();
 
-      // Clear any previous errors on success
-      if (isError) {
-        clearErrors();
+        // Clear any previous errors on success
+        if (isError) {
+          clearErrors();
+        }
+
+        return result;
+      } catch (error) {
+        const errorInfo = handleError(error, context, {
+          ...additionalInfo,
+          retryOnError,
+          showFeedback
+        });
+
+        if (retryOnError && errorInfo.isRetryable) {
+          return retryOperation(operation, { context, additionalInfo });
+        }
+
+        throw error;
       }
-
-      return result;
-    } catch (error) {
-      const errorInfo = handleError(error, context, {
-        ...additionalInfo,
-        retryOnError,
-        showFeedback
-      });
-
-      if (retryOnError && errorInfo.isRetryable) {
-        return retryOperation(operation, { context, additionalInfo });
-      }
-
-      throw error;
-    }
-  }, [isError, clearErrors, handleError, retryOperation, showUserFeedback]);
+    },
+    [isError, clearErrors, handleError, retryOperation, showUserFeedback]
+  );
 
   /**
    * Get the most recent error
@@ -170,7 +186,7 @@ export const useErrorHandler = (options = {}) => {
    * @returns {boolean} True if there are critical errors
    */
   const hasCriticalErrors = useCallback(() => {
-    return errors.some(error => error.severity === ERROR_SEVERITY.CRITICAL);
+    return errors.some((error) => error.severity === ERROR_SEVERITY.CRITICAL);
   }, [errors]);
 
   /**
@@ -178,18 +194,24 @@ export const useErrorHandler = (options = {}) => {
    * @param {string} errorType - The type of errors to filter by
    * @returns {Array} Array of errors of the specified type
    */
-  const getErrorsByType = useCallback((errorType) => {
-    return errors.filter(error => error.errorType === errorType);
-  }, [errors]);
+  const getErrorsByType = useCallback(
+    (errorType) => {
+      return errors.filter((error) => error.errorType === errorType);
+    },
+    [errors]
+  );
 
   /**
    * Get errors by severity
    * @param {string} severity - The severity level to filter by
    * @returns {Array} Array of errors of the specified severity
    */
-  const getErrorsBySeverity = useCallback((severity) => {
-    return errors.filter(error => error.severity === severity);
-  }, [errors]);
+  const getErrorsBySeverity = useCallback(
+    (severity) => {
+      return errors.filter((error) => error.severity === severity);
+    },
+    [errors]
+  );
 
   /**
    * Get user-friendly error messages for display
@@ -197,8 +219,8 @@ export const useErrorHandler = (options = {}) => {
    */
   const getUserFriendlyErrors = useCallback(() => {
     return errors
-      .filter(error => error.shouldShowUser)
-      .map(error => ({
+      .filter((error) => error.shouldShowUser)
+      .map((error) => ({
         message: error.userMessage,
         severity: error.severity,
         timestamp: error.timestamp,

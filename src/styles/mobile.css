@@ -90,12 +90,16 @@
   }
 
   /* Mobile text improvements */
-  h1, h2, h3 {
+  h1,
+  h2,
+  h3 {
     color: var(--mobile-text-primary, var(--text-primary));
     text-shadow: 0 1px 2px var(--shadow-color-light);
   }
 
-  p, span, li {
+  p,
+  span,
+  li {
     color: var(--mobile-text-secondary, var(--text-secondary));
   }
 
@@ -426,7 +430,8 @@
   }
 
   /* Improve mobile list spacing */
-  ul, ol {
+  ul,
+  ol {
     padding-left: var(--space-4);
   }
 

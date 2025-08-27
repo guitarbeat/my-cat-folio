@@ -39,7 +39,12 @@
 
 .loadingBar {
   height: 24px;
-  background: linear-gradient(90deg, var(--surface-color) 25%, var(--border-color) 50%, var(--surface-color) 75%);
+  background: linear-gradient(
+    90deg,
+    var(--surface-color) 25%,
+    var(--border-color) 50%,
+    var(--surface-color) 75%
+  );
   background-size: 200% 100%;
   border-radius: var(--radius-sm);
   animation: loading 1.5s infinite;
@@ -48,7 +53,12 @@
 .loadingText {
   width: 60%;
   height: 16px;
-  background: linear-gradient(90deg, var(--surface-color) 25%, var(--border-color) 50%, var(--surface-color) 75%);
+  background: linear-gradient(
+    90deg,
+    var(--surface-color) 25%,
+    var(--border-color) 50%,
+    var(--surface-color) 75%
+  );
   background-size: 200% 100%;
   border-radius: var(--radius-sm);
   animation: loading 1.5s infinite;
@@ -241,12 +251,12 @@
   .insightsGrid {
     grid-template-columns: 1fr;
   }
-  
+
   .insightCard {
     flex-direction: column;
     text-align: center;
   }
-  
+
   .insightIcon {
     align-self: center;
   }

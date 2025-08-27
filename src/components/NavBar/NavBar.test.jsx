@@ -31,7 +31,6 @@ describe('NavBar Component', () => {
     onLogout: vi.fn(),
     isLightTheme: true,
     onThemeChange: vi.fn()
-
   };
 
   beforeEach(() => {
@@ -95,7 +94,9 @@ describe('NavBar Component', () => {
   });
 
   test('theme toggle button shows correct icon for each theme', () => {
-    const { rerender } = render(<NavBar {...defaultProps} isLightTheme={true} />);
+    const { rerender } = render(
+      <NavBar {...defaultProps} isLightTheme={true} />
+    );
 
     // Light theme should show moon icon
     expect(screen.getByText('🌙')).toBeInTheDocument();
@@ -104,7 +105,6 @@ describe('NavBar Component', () => {
     rerender(<NavBar {...defaultProps} isLightTheme={false} />);
     expect(screen.getByText('☀️')).toBeInTheDocument();
   });
-
 
   test('renders logo with correct title', () => {
     render(<NavBar {...defaultProps} />);

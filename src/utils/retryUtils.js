@@ -21,7 +21,8 @@ export const retryConfig = {
  * @returns {number} Delay in milliseconds
  */
 const calculateDelay = (attempt, config = retryConfig) => {
-  const exponentialDelay = config.baseDelay * Math.pow(config.backoffMultiplier, attempt - 1);
+  const exponentialDelay =
+    config.baseDelay * Math.pow(config.backoffMultiplier, attempt - 1);
   const cappedDelay = Math.min(exponentialDelay, config.maxDelay);
 
   // Add jitter to prevent thundering herd
@@ -62,12 +63,15 @@ export const withRetry = async (fn, options = {}) => {
 
       // Log retry attempt
       if (process.env.NODE_ENV === 'development') {
-        console.warn(`Retry attempt ${attempt}/${config.maxAttempts} failed:`, error.message);
+        console.warn(
+          `Retry attempt ${attempt}/${config.maxAttempts} failed:`,
+          error.message
+        );
         console.warn(`Retrying in ${delay}ms...`);
       }
 
       // Wait before retrying
-      await new Promise(resolve => setTimeout(resolve, delay));
+      await new Promise((resolve) => setTimeout(resolve, delay));
     }
   }
 

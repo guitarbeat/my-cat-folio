@@ -16,7 +16,7 @@
   height: 70px;
   background: rgb(255 255 255 / 12%);
   border-bottom: 1px solid rgb(255 255 255 / 20%);
-  box-shadow: 
+  box-shadow:
     0 0 0 1px rgb(255 255 255 / 70%),
     0 16px 32px rgb(0 0 0 / 15%);
   backdrop-filter: blur(10px) saturate(150%);
@@ -27,7 +27,7 @@
 .navbar:hover {
   background: rgb(255 255 255 / 18%);
   border-bottom-color: rgb(255 255 255 / 30%);
-  box-shadow: 
+  box-shadow:
     0 0 0 1px rgb(255 255 255 / 90%),
     0 20px 40px rgb(0 0 0 / 18%);
   backdrop-filter: blur(12px) saturate(160%);
@@ -142,7 +142,7 @@
   background: rgb(255 255 255 / 8%);
   border: 1px solid rgb(255 255 255 / 15%);
   border-radius: 50%;
-  box-shadow: 
+  box-shadow:
     0 2px 8px rgb(0 0 0 / 10%),
     inset 0 1px 0 rgb(255 255 255 / 10%);
   backdrop-filter: blur(12px);
@@ -152,14 +152,14 @@
 .navbar__theme-toggle:hover {
   background: rgb(255 255 255 / 15%);
   border-color: rgb(255 255 255 / 25%);
-  box-shadow: 
+  box-shadow:
     0 4px 16px rgb(0 0 0 / 15%),
     inset 0 1px 0 rgb(255 255 255 / 15%);
   transform: translateY(-2px) scale(1.05);
 }
 
 .navbar__theme-toggle:active {
-  box-shadow: 
+  box-shadow:
     0 2px 8px rgb(0 0 0 / 10%),
     inset 0 1px 0 rgb(255 255 255 / 10%);
   transform: translateY(0) scale(0.98);
@@ -178,7 +178,7 @@
   background: rgb(255 255 255 / 8%);
   border: 1px solid rgb(255 255 255 / 15%);
   border-radius: 50%;
-  box-shadow: 
+  box-shadow:
     0 2px 8px rgb(0 0 0 / 10%),
     inset 0 1px 0 rgb(255 255 255 / 10%);
   backdrop-filter: blur(12px);
@@ -188,14 +188,14 @@
 .navbar__help-button:hover {
   background: rgb(255 255 255 / 15%);
   border-color: rgb(255 255 255 / 25%);
-  box-shadow: 
+  box-shadow:
     0 4px 16px rgb(0 0 0 / 15%),
     inset 0 1px 0 rgb(255 255 255 / 15%);
   transform: translateY(-2px) scale(1.05);
 }
 
 .navbar__help-button:active {
-  box-shadow: 
+  box-shadow:
     0 2px 8px rgb(0 0 0 / 10%),
     inset 0 1px 0 rgb(255 255 255 / 10%);
   transform: translateY(0) scale(0.98);
@@ -206,7 +206,7 @@
 .navbar__help-button:focus-visible {
   outline: 2px solid var(--accent-color);
   outline-offset: 2px;
-  box-shadow: 
+  box-shadow:
     0 0 0 4px rgb(232 191 118 / 30%),
     0 2px 8px rgb(0 0 0 / 10%),
     inset 0 1px 0 rgb(255 255 255 / 10%);
@@ -269,7 +269,7 @@
   position: absolute;
   width: 20px;
   height: 2px;
-  content: '';
+  content: "";
   background: #fff;
   border-radius: 1px;
   transition: all 0.3s ease;
@@ -474,7 +474,7 @@
 .navbar.light-theme {
   background: rgb(255 255 255 / 8%);
   border-bottom: 1px solid rgb(0 0 0 / 10%);
-  box-shadow: 
+  box-shadow:
     0 0 0 1px rgb(255 255 255 / 80%),
     0 16px 32px rgb(0 0 0 / 8%);
   backdrop-filter: blur(20px) saturate(180%);
@@ -483,7 +483,7 @@
 .navbar.light-theme:hover {
   background: rgb(255 255 255 / 12%);
   border-bottom-color: rgb(0 0 0 / 15%);
-  box-shadow: 
+  box-shadow:
     0 0 0 1px rgb(255 255 255 / 90%),
     0 20px 40px rgb(0 0 0 / 12%);
 }
@@ -522,7 +522,7 @@
 .navbar.dark-theme {
   background: rgb(15 23 42 / 8%);
   border-bottom: 1px solid rgb(255 255 255 / 10%);
-  box-shadow: 
+  box-shadow:
     0 0 0 1px rgb(255 255 255 / 60%),
     0 16px 32px rgb(0 0 0 / 30%);
   backdrop-filter: blur(20px) saturate(180%);
@@ -531,7 +531,7 @@
 .navbar.dark-theme:hover {
   background: rgb(15 23 42 / 12%);
   border-bottom-color: rgb(255 255 255 / 20%);
-  box-shadow: 
+  box-shadow:
     0 0 0 1px rgb(255 255 255 / 80%),
     0 20px 40px rgb(0 0 0 / 40%);
 }
@@ -647,7 +647,11 @@
   justify-content: center;
   width: 40px;
   height: 40px;
-  background: linear-gradient(135deg, rgb(59 130 246 / 10%), rgb(147 51 234 / 10%));
+  background: linear-gradient(
+    135deg,
+    rgb(59 130 246 / 10%),
+    rgb(147 51 234 / 10%)
+  );
   border: 1px solid rgb(255 255 255 / 20%);
   border-radius: 50%;
   backdrop-filter: blur(10px);
@@ -661,7 +665,8 @@
 }
 
 @keyframes popIn {
-  0%, 100% {
+  0%,
+  100% {
     transform: scale(1);
   }
 
@@ -671,7 +676,8 @@
 }
 
 @keyframes sparkle {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 0.7;
     transform: rotate(0deg);
   }

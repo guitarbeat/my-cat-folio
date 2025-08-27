@@ -19,7 +19,9 @@
   background: var(--modal-bg, #fff);
   border: 1px solid var(--modal-border, #e5e7eb);
   border-radius: 12px;
-  box-shadow: 0 20px 25px -5px rgb(0 0 0 / 10%), 0 10px 10px -5px rgb(0 0 0 / 4%);
+  box-shadow:
+    0 20px 25px -5px rgb(0 0 0 / 10%),
+    0 10px 10px -5px rgb(0 0 0 / 4%);
   animation: slideIn 0.3s ease-out;
 }
 

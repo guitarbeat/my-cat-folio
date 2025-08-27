@@ -11,7 +11,13 @@ import {
   tournamentsAPI
 } from '../../supabase/supabaseClient';
 import devLog from '../../utils/logger';
-import { LoadingSpinner, NameCard, ErrorBoundary, ErrorDisplay, InlineError } from '../';
+import {
+  LoadingSpinner,
+  NameCard,
+  ErrorBoundary,
+  ErrorDisplay,
+  InlineError
+} from '../';
 import useSupabaseStorage from '../../supabase/useSupabaseStorage';
 import useErrorHandler from '../../hooks/useErrorHandler';
 import useToast from '../../hooks/useToast';
@@ -54,7 +60,13 @@ const getRandomCatImage = (nameId) => {
   // Use the numeric ID to consistently get the same image for the same name
   const index = Math.abs(numericId) % CAT_IMAGES.length;
   const result = CAT_IMAGES[index];
-  console.log('getRandomCatImage:', { nameId, numericId, index, totalImages: CAT_IMAGES.length, result });
+  console.log('getRandomCatImage:', {
+    nameId,
+    numericId,
+    index,
+    totalImages: CAT_IMAGES.length,
+    result
+  });
   return result;
 };
 
@@ -216,7 +228,9 @@ const NameSelection = ({
               onClick={() => onToggleName(nameObj)}
               size="small"
               // Cat picture when enabled
-              image={showCatPictures ? getRandomCatImage(nameObj.id) : undefined}
+              image={
+                showCatPictures ? getRandomCatImage(nameObj.id) : undefined
+              }
               // Admin-only metadata display
               metadata={
                 isAdmin
@@ -362,7 +376,9 @@ const SwipeableNameCards = ({
 
   return (
     <div className={styles.swipeContainer}>
-      <div className={`${styles.swipeCardWrapper} ${showCatPictures ? styles.withCatPictures : ''}`}>
+      <div
+        className={`${styles.swipeCardWrapper} ${showCatPictures ? styles.withCatPictures : ''}`}
+      >
         <div
           className={`${styles.swipeCard} ${isSelected ? styles.selected : ''} ${showCatPictures ? styles.withCatPictures : ''}`}
           style={cardStyle}
@@ -377,13 +393,17 @@ const SwipeableNameCards = ({
           {/* Swipe direction overlays - Fixed to show correct overlay */}
           <div
             className={`${styles.swipeOverlay} ${styles.swipeRight} ${swipeDirection === 'right' ? styles.active : ''}`}
-            style={swipeDirection === 'right' ? swipeOverlayStyle : { opacity: 0 }}
+            style={
+              swipeDirection === 'right' ? swipeOverlayStyle : { opacity: 0 }
+            }
           >
             <span className={styles.swipeText}>👍 SELECTED</span>
           </div>
           <div
             className={`${styles.swipeOverlay} ${styles.swipeLeft} ${swipeDirection === 'left' ? styles.active : ''}`}
-            style={swipeDirection === 'left' ? swipeOverlayStyle : { opacity: 0 }}
+            style={
+              swipeDirection === 'left' ? swipeOverlayStyle : { opacity: 0 }
+            }
           >
             <span className={styles.swipeText}>👎 SKIPPED</span>
           </div>
@@ -435,9 +455,7 @@ const SwipeableNameCards = ({
 
           {/* Selection indicator - Only show when selected */}
           {isSelected && (
-            <div
-              className={`${styles.selectionIndicator} ${styles.selected}`}
-            >
+            <div className={`${styles.selectionIndicator} ${styles.selected}`}>
               ✓ Selected
             </div>
           )}
@@ -480,7 +498,11 @@ const StartButton = ({ selectedNames, onStart, variant = 'default' }) => {
       // Validate the name using our validation utility
       const nameValidation = validateCatName(nameObj.name);
       if (!nameValidation.success) {
-        console.warn('Invalid name detected:', nameObj.name, nameValidation.error);
+        console.warn(
+          'Invalid name detected:',
+          nameObj.name,
+          nameValidation.error
+        );
         return false;
       }
 
@@ -489,14 +511,20 @@ const StartButton = ({ selectedNames, onStart, variant = 'default' }) => {
   };
 
   const handleStart = () => {
-    console.log('[DEV] 🎮 StartButton: handleStart called with selectedNames:', selectedNames);
+    console.log(
+      '[DEV] 🎮 StartButton: handleStart called with selectedNames:',
+      selectedNames
+    );
 
     if (!validateNames(selectedNames)) {
       console.error('Invalid name objects detected:', selectedNames);
       return;
     }
 
-    console.log('[DEV] 🎮 StartButton: Calling onStart with validated names:', selectedNames);
+    console.log(
+      '[DEV] 🎮 StartButton: Calling onStart with validated names:',
+      selectedNames
+    );
     onStart(selectedNames);
   };
 
@@ -554,12 +582,16 @@ const NameSuggestionSection = () => {
     try {
       await addName(nameValidation.value, descriptionValidation.value);
       setSuccess('Thank you for your suggestion!');
-      showSuccess('Name suggestion submitted successfully!', { duration: 4000 });
+      showSuccess('Name suggestion submitted successfully!', {
+        duration: 4000
+      });
       setName('');
       setDescription('');
     } catch (err) {
       setError('Failed to add name. It might already exist.');
-      showError('Failed to submit name suggestion. Please try again.', { duration: 5000 });
+      showError('Failed to submit name suggestion. Please try again.', {
+        duration: 5000
+      });
     }
   };
 
@@ -571,7 +603,12 @@ const NameSuggestionSection = () => {
           Have a great cat name in mind? Share it with the community!
         </p>
 
-        <form onSubmit={handleSubmit} className={styles.suggestionForm} role="form" aria-label="Name suggestion form">
+        <form
+          onSubmit={handleSubmit}
+          className={styles.suggestionForm}
+          role="form"
+          aria-label="Name suggestion form"
+        >
           <div className={styles.formGroup}>
             <label htmlFor="suggestion-name">Name</label>
             <input
@@ -596,14 +633,15 @@ const NameSuggestionSection = () => {
               id="suggestion-description"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              placeholder="Tell us about this name&apos;s meaning or origin"
+              placeholder="Tell us about this name's meaning or origin"
               maxLength={500}
               disabled={loading}
               aria-required="false"
               aria-describedby="description-help"
             />
             <div id="description-help" className={styles.helpText}>
-              Optional: Describe the name&apos;s meaning or origin (maximum 500 characters)
+              Optional: Describe the name&apos;s meaning or origin (maximum 500
+              characters)
             </div>
           </div>
 
@@ -625,7 +663,11 @@ const NameSuggestionSection = () => {
             type="submit"
             className={styles.submitButton}
             disabled={loading}
-            aria-label={loading ? 'Submitting name suggestion...' : 'Submit name suggestion'}
+            aria-label={
+              loading
+                ? 'Submitting name suggestion...'
+                : 'Submit name suggestion'
+            }
           >
             {loading ? 'Submitting...' : 'Submit Name'}
           </button>
@@ -641,19 +683,14 @@ function useTournamentSetup(userName) {
   const [isLoading, setIsLoading] = useState(true);
 
   // Enhanced error handling
-  const {
-    errors,
-    isError,
-    handleError,
-    clearErrors,
-    clearError
-  } = useErrorHandler({
-    showUserFeedback: true,
-    maxRetries: 2,
-    onError: (error) => {
-      console.error('TournamentSetup error:', error);
-    }
-  });
+  const { errors, isError, handleError, clearErrors, clearError } =
+    useErrorHandler({
+      showUserFeedback: true,
+      maxRetries: 2,
+      onError: (error) => {
+        console.error('TournamentSetup error:', error);
+      }
+    });
 
   useEffect(() => {
     const fetchNames = async () => {
@@ -1066,7 +1103,9 @@ function TournamentSetupContent({ onStart, userName }) {
                   onClick={() => setShowCatPictures(!showCatPictures)}
                   className={`${styles.catPicturesToggleButton} ${showCatPictures ? styles.active : ''}`}
                   aria-label={
-                    showCatPictures ? 'Hide cat pictures' : 'Show cat pictures on cards'
+                    showCatPictures
+                      ? 'Hide cat pictures'
+                      : 'Show cat pictures on cards'
                   }
                   title="Add random cat pictures to make it more like Tinder! 🐱"
                 >
@@ -1213,8 +1252,6 @@ function TournamentSetupContent({ onStart, userName }) {
           <div className={styles.sidebarCard}>
             <NameSuggestionSection />
           </div>
-
-
         </aside>
       </div>
 

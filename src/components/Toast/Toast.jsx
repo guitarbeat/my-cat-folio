@@ -91,13 +91,9 @@ const Toast = ({
       aria-atomic="true"
     >
       <div className={styles.content}>
-        <span className={styles.icon}>
-          {getTypeIcon()}
-        </span>
+        <span className={styles.icon}>{getTypeIcon()}</span>
 
-        <span className={styles.message}>
-          {message}
-        </span>
+        <span className={styles.message}>{message}</span>
 
         <button
           onClick={handleDismiss}

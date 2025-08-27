@@ -39,16 +39,24 @@
 .nameWrapper {
   min-height: 280px; /* Increased minimum height for better description space */
   overflow: hidden;
-  background: linear-gradient(135deg, var(--card-bg-start, #fff) 0%, var(--card-bg-end, #f8fafc) 100%);
+  background: linear-gradient(
+    135deg,
+    var(--card-bg-start, #fff) 0%,
+    var(--card-bg-end, #f8fafc) 100%
+  );
   border: 1px solid var(--card-border, #e2e8f0);
   border-radius: 16px;
-  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 10%), 0 1px 2px 0 rgb(0 0 0 / 6%);
+  box-shadow:
+    0 1px 3px 0 rgb(0 0 0 / 10%),
+    0 1px 2px 0 rgb(0 0 0 / 6%);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .nameWrapper:hover {
   border-color: var(--card-border-hover, #cbd5e1);
-  box-shadow: 0 20px 25px -5px rgb(0 0 0 / 10%), 0 10px 10px -5px rgb(0 0 0 / 4%);
+  box-shadow:
+    0 20px 25px -5px rgb(0 0 0 / 10%),
+    0 10px 10px -5px rgb(0 0 0 / 4%);
   transform: translateY(-4px) scale(1.02);
 }
 
@@ -63,8 +71,13 @@
   right: 0;
   left: 0;
   height: 4px;
-  content: '';
-  background: linear-gradient(90deg, var(--accent-color-1, #3b82f6), var(--accent-color-2, #8b5cf6), var(--accent-color-3, #ec4899));
+  content: "";
+  background: linear-gradient(
+    90deg,
+    var(--accent-color-1, #3b82f6),
+    var(--accent-color-2, #8b5cf6),
+    var(--accent-color-3, #ec4899)
+  );
   opacity: 0;
   transition: opacity 0.3s ease;
 }
@@ -161,7 +174,7 @@
     grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
     gap: 1.5rem;
   }
-  
+
   .loadingGrid {
     grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
     gap: 1.5rem;
@@ -196,11 +209,11 @@
   .emptyTitle {
     font-size: 1.125rem;
   }
-  
+
   .nameWrapper {
     min-height: 260px; /* Slightly reduced for mobile but still good for descriptions */
   }
-  
+
   .nameWrapper .nameCard {
     padding: 1.5rem; /* Reduced padding for mobile */
   }
@@ -227,11 +240,11 @@
     padding: 0.375rem 0.75rem;
     font-size: 0.8125rem;
   }
-  
+
   .nameWrapper {
     min-height: 240px; /* Further reduced for small mobile */
   }
-  
+
   .nameWrapper .nameCard {
     padding: 1.25rem; /* Minimal padding for small mobile */
   }

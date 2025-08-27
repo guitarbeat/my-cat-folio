@@ -39,11 +39,19 @@ const BaseCard = ({
     disabled && styles.disabled,
     onClick && !disabled && styles.clickable,
     className
-  ].filter(Boolean).join(' ');
+  ]
+    .filter(Boolean)
+    .join(' ');
 
-  const headerClasses = [styles.header, headerClassName].filter(Boolean).join(' ');
-  const contentClasses = [styles.content, contentClassName].filter(Boolean).join(' ');
-  const footerClasses = [styles.footer, footerClassName].filter(Boolean).join(' ');
+  const headerClasses = [styles.header, headerClassName]
+    .filter(Boolean)
+    .join(' ');
+  const contentClasses = [styles.content, contentClassName]
+    .filter(Boolean)
+    .join(' ');
+  const footerClasses = [styles.footer, footerClassName]
+    .filter(Boolean)
+    .join(' ');
 
   return (
     <div
@@ -56,39 +64,21 @@ const BaseCard = ({
       {...props}
     >
       {/* * Custom Header */}
-      {header && (
-        <div className={headerClasses}>
-          {header}
-        </div>
-      )}
+      {header && <div className={headerClasses}>{header}</div>}
 
       {/* * Default Header with Title/Subtitle */}
       {!header && (title || subtitle) && (
         <div className={headerClasses}>
-          {title && (
-            <h3 className={styles.title}>
-              {title}
-            </h3>
-          )}
-          {subtitle && (
-            <p className={styles.subtitle}>
-              {subtitle}
-            </p>
-          )}
+          {title && <h3 className={styles.title}>{title}</h3>}
+          {subtitle && <p className={styles.subtitle}>{subtitle}</p>}
         </div>
       )}
 
       {/* * Content */}
-      <div className={contentClasses}>
-        {children}
-      </div>
+      <div className={contentClasses}>{children}</div>
 
       {/* * Footer */}
-      {footer && (
-        <div className={footerClasses}>
-          {footer}
-        </div>
-      )}
+      {footer && <div className={footerClasses}>{footer}</div>}
     </div>
   );
 };

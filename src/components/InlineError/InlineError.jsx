@@ -39,7 +39,8 @@ const InlineError = ({
   }
 
   // Extract error message
-  const errorMessage = typeof error === 'string' ? error : error.message || 'An error occurred';
+  const errorMessage =
+    typeof error === 'string' ? error : error.message || 'An error occurred';
 
   // Determine if error is retryable
   const isRetryable = error?.isRetryable !== false && onRetry;
@@ -115,14 +116,16 @@ const InlineError = ({
     >
       <div className={styles.errorContent}>
         <span className={styles.errorIcon}>
-          {severity === ERROR_SEVERITY.CRITICAL ? '🚨' :
-           severity === ERROR_SEVERITY.HIGH ? '⚠️' :
-           severity === ERROR_SEVERITY.MEDIUM ? '⚠️' : 'ℹ️'}
+          {severity === ERROR_SEVERITY.CRITICAL
+            ? '🚨'
+            : severity === ERROR_SEVERITY.HIGH
+              ? '⚠️'
+              : severity === ERROR_SEVERITY.MEDIUM
+                ? '⚠️'
+                : 'ℹ️'}
         </span>
 
-        <span className={styles.errorMessage}>
-          {errorMessage}
-        </span>
+        <span className={styles.errorMessage}>{errorMessage}</span>
 
         <div className={styles.errorActions}>
           {isRetryable && showRetry && (
@@ -154,9 +157,7 @@ const InlineError = ({
       {process.env.NODE_ENV === 'development' && error?.stack && (
         <details className={styles.errorDetails}>
           <summary>Error Details (Development)</summary>
-          <pre className={styles.errorStack}>
-            {error.stack}
-          </pre>
+          <pre className={styles.errorStack}>{error.stack}</pre>
         </details>
       )}
     </div>

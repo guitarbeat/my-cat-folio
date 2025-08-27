@@ -282,7 +282,7 @@
   .bongoContainerPositioned {
     width: 140px; /* Smaller on mobile */
   }
-  
+
   .container {
     transform: scale(calc(var(--cat-size) * 0.8)); /* Scale down on mobile */
   }
@@ -293,8 +293,10 @@
   .bongoContainerPositioned {
     width: 120px; /* Even smaller on small mobile */
   }
-  
+
   .container {
-    transform: scale(calc(var(--cat-size) * 0.7)); /* Scale down more on small mobile */
+    transform: scale(
+      calc(var(--cat-size) * 0.7)
+    ); /* Scale down more on small mobile */
   }
 }

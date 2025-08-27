@@ -48,9 +48,12 @@ const ToastContainer = ({
     }
   };
 
-  const handleToastDismiss = useCallback((toastId) => {
-    removeToast?.(toastId);
-  }, [removeToast]);
+  const handleToastDismiss = useCallback(
+    (toastId) => {
+      removeToast?.(toastId);
+    },
+    [removeToast]
+  );
 
   if (toasts.length === 0) {
     return null;
@@ -88,13 +91,15 @@ const ToastContainer = ({
 };
 
 ToastContainer.propTypes = {
-  toasts: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.string.isRequired,
-    message: PropTypes.string.isRequired,
-    type: PropTypes.oneOf(['success', 'error', 'info', 'warning']),
-    duration: PropTypes.number,
-    autoDismiss: PropTypes.bool
-  })),
+  toasts: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string.isRequired,
+      message: PropTypes.string.isRequired,
+      type: PropTypes.oneOf(['success', 'error', 'info', 'warning']),
+      duration: PropTypes.number,
+      autoDismiss: PropTypes.bool
+    })
+  ),
   removeToast: PropTypes.func.isRequired,
   position: PropTypes.oneOf([
     'top-left',

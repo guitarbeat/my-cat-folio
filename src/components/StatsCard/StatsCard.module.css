@@ -5,9 +5,11 @@
   text-align: center;
 }
 
-.label {}
+.label {
+}
 
-.value {}
+.value {
+}
 
 .emoji {
   font-size: 1.25rem;

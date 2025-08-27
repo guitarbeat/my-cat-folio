@@ -87,7 +87,9 @@ function useUserSession() {
       // If Supabase isn't configured, skip DB checks but allow the app to load
       if (!supabase) {
         if (process.env.NODE_ENV === 'development') {
-          console.warn('Supabase not configured; skipping session initialization');
+          console.warn(
+            'Supabase not configured; skipping session initialization'
+          );
         }
         setIsInitialized(true);
         return;
@@ -106,7 +108,9 @@ function useUserSession() {
 
           if (dbError || !data) {
             if (process.env.NODE_ENV === 'development') {
-              console.warn('Stored user not found in database, clearing session');
+              console.warn(
+                'Stored user not found in database, clearing session'
+              );
             }
             localStorage.removeItem('catNamesUser');
             setUserName('');
@@ -148,16 +152,18 @@ function useUserSession() {
       const trimmedName = name.trim();
 
       // Create/update user in cat_app_users table (basic user authentication)
-      const { error: upsertError } = await supabase.from('cat_app_users').upsert(
-        {
-          user_name: trimmedName,
-          created_at: new Date().toISOString()
-        },
-        {
-          onConflict: 'user_name',
-          returning: 'minimal'
-        }
-      );
+      const { error: upsertError } = await supabase
+        .from('cat_app_users')
+        .upsert(
+          {
+            user_name: trimmedName,
+            created_at: new Date().toISOString()
+          },
+          {
+            onConflict: 'user_name',
+            returning: 'minimal'
+          }
+        );
 
       if (upsertError) {
         throw upsertError;

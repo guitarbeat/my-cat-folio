@@ -4,10 +4,8 @@
  * Replaces useSupabaseStorage and useNameOptions with a unified interface.
  */
 
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { supabase } from './supabaseClient';
-import devLog from '../utils/logger';
-
 
 /**
  * Main hook for all Supabase operations
@@ -26,7 +24,10 @@ function useSupabaseStorage(userName = '') {
 
     try {
       setLoading(true);
-      const data = await supabase.from('cat_name_options').select('*').eq('user_name', userName);
+      const data = await supabase
+        .from('cat_name_options')
+        .select('*')
+        .eq('user_name', userName);
       setNames(data);
     } catch (err) {
       if (process.env.NODE_ENV === 'development') {
@@ -42,7 +43,11 @@ function useSupabaseStorage(userName = '') {
     async (name, description = '') => {
       try {
         setLoading(true);
-        const newName = await supabase.from('cat_name_options').insert({ user_name: userName, name: name, description: description }).select().single();
+        const newName = await supabase
+          .from('cat_name_options')
+          .insert({ user_name: userName, name: name, description: description })
+          .select()
+          .single();
         await fetchNames(); // Refresh the list
         return newName;
       } catch (err) {
@@ -62,7 +67,11 @@ function useSupabaseStorage(userName = '') {
     async (name) => {
       try {
         setLoading(true);
-        await supabase.from('cat_name_options').delete().eq('user_name', userName).eq('name', name);
+        await supabase
+          .from('cat_name_options')
+          .delete()
+          .eq('user_name', userName)
+          .eq('name', name);
         await fetchNames(); // Refresh the list
       } catch (err) {
         if (process.env.NODE_ENV === 'development') {
@@ -85,13 +94,17 @@ function useSupabaseStorage(userName = '') {
 
       try {
         setLoading(true);
-        const result = await supabase.from('cat_name_ratings').upsert({
-          user_name: userName,
-          name_id: nameId,
-          rating: newRating,
-          outcome: outcome,
-          context: context
-        }).select().single();
+        const result = await supabase
+          .from('cat_name_ratings')
+          .upsert({
+            user_name: userName,
+            name_id: nameId,
+            rating: newRating,
+            outcome: outcome,
+            context: context
+          })
+          .select()
+          .single();
         await fetchNames(); // Refresh to get updated data
         return result;
       } catch (err) {
@@ -112,7 +125,13 @@ function useSupabaseStorage(userName = '') {
       if (!userName) return [];
 
       try {
-        const { data, error } = await supabase.from('cat_name_ratings').select('*').eq('user_name', userName).eq('name_id', nameId).order('timestamp', { ascending: false }).limit(limit);
+        const { data, error } = await supabase
+          .from('cat_name_ratings')
+          .select('*')
+          .eq('user_name', userName)
+          .eq('name_id', nameId)
+          .order('timestamp', { ascending: false })
+          .limit(limit);
         if (error) throw error;
         return data;
       } catch (err) {
@@ -134,11 +153,15 @@ function useSupabaseStorage(userName = '') {
 
       try {
         setLoading(true);
-        await supabase.from('cat_name_ratings').upsert({
-          user_name: userName,
-          name_id: nameId,
-          hidden: true
-        }).select().single();
+        await supabase
+          .from('cat_name_ratings')
+          .upsert({
+            user_name: userName,
+            name_id: nameId,
+            hidden: true
+          })
+          .select()
+          .single();
         await fetchNames(); // Refresh to reflect changes
       } catch (err) {
         if (process.env.NODE_ENV === 'development') {
@@ -159,11 +182,15 @@ function useSupabaseStorage(userName = '') {
 
       try {
         setLoading(true);
-        await supabase.from('cat_name_ratings').upsert({
-          user_name: userName,
-          name_id: nameId,
-          hidden: false
-        }).select().single();
+        await supabase
+          .from('cat_name_ratings')
+          .upsert({
+            user_name: userName,
+            name_id: nameId,
+            hidden: false
+          })
+          .select()
+          .single();
         await fetchNames(); // Refresh to reflect changes
       } catch (err) {
         if (process.env.NODE_ENV === 'development') {
@@ -181,9 +208,13 @@ function useSupabaseStorage(userName = '') {
     if (!userName) return [];
 
     try {
-      const { data, error } = await supabase.from('cat_name_ratings').select('name_id').eq('user_name', userName).eq('hidden', true);
+      const { data, error } = await supabase
+        .from('cat_name_ratings')
+        .select('name_id')
+        .eq('user_name', userName)
+        .eq('hidden', true);
       if (error) throw error;
-      return data.map(item => item.name_id);
+      return data.map((item) => item.name_id);
     } catch (err) {
       if (process.env.NODE_ENV === 'development') {
         console.error('Error fetching hidden names:', err);
@@ -201,12 +232,16 @@ function useSupabaseStorage(userName = '') {
 
       try {
         setLoading(true);
-        const tournament = await supabase.from('tournaments').insert({
-          user_name: userName,
-          name: tournamentName,
-          participants: participantNames,
-          data: tournamentData
-        }).select().single();
+        const tournament = await supabase
+          .from('tournaments')
+          .insert({
+            user_name: userName,
+            name: tournamentName,
+            participants: participantNames,
+            data: tournamentData
+          })
+          .select()
+          .single();
         return tournament;
       } catch (err) {
         if (process.env.NODE_ENV === 'development') {
@@ -222,10 +257,15 @@ function useSupabaseStorage(userName = '') {
   );
 
   const updateTournamentStatus = useCallback(
-    async (tournamentId, status, completedAt = null) => {
+    async (tournamentId, _status, completedAt = null) => {
       try {
         setLoading(true);
-        const tournament = await supabase.from('tournaments').update({ status: status, completed_at: completedAt }).eq('id', tournamentId).select().single();
+        const tournament = await supabase
+          .from('tournaments')
+          .update({ status: _status, completed_at: completedAt })
+          .eq('id', tournamentId)
+          .select()
+          .single();
         return tournament;
       } catch (err) {
         if (process.env.NODE_ENV === 'development') {
@@ -241,11 +281,14 @@ function useSupabaseStorage(userName = '') {
   );
 
   const getUserTournaments = useCallback(
-    async (status = null) => {
+    async (_status = null) => {
       if (!userName) return [];
 
       try {
-        const { data, error } = await supabase.from('tournaments').select('*').eq('user_name', userName);
+        const { data, error } = await supabase
+          .from('tournaments')
+          .select('*')
+          .eq('user_name', userName);
         if (error) throw error;
         return data;
       } catch (err) {
@@ -265,7 +308,10 @@ function useSupabaseStorage(userName = '') {
     if (!userName) return;
 
     try {
-      const { data, error } = await supabase.from('cat_app_users').select('*').eq('user_name', userName);
+      const { data, error } = await supabase
+        .from('cat_app_users')
+        .select('*')
+        .eq('user_name', userName);
       if (error) throw error;
       setUserPreferences(data[0]);
       return data[0];
@@ -284,10 +330,14 @@ function useSupabaseStorage(userName = '') {
 
       try {
         setLoading(true);
-        const updatedPrefs = await supabase.from('cat_app_users').upsert({
-          user_name: userName,
-          preferences: preferences
-        }).select().single();
+        const updatedPrefs = await supabase
+          .from('cat_app_users')
+          .upsert({
+            user_name: userName,
+            preferences: preferences
+          })
+          .select()
+          .single();
         setUserPreferences(updatedPrefs);
         return updatedPrefs;
       } catch (err) {
@@ -307,7 +357,10 @@ function useSupabaseStorage(userName = '') {
 
   const fetchCategories = useCallback(async () => {
     try {
-      const { data, error } = await supabase.from('cat_name_options').select('categories').eq('user_name', userName);
+      const { data, error } = await supabase
+        .from('cat_name_options')
+        .select('categories')
+        .eq('user_name', userName);
       if (error) throw error;
       setCategories(data[0].categories);
       return data[0].categories;
@@ -320,36 +373,48 @@ function useSupabaseStorage(userName = '') {
     }
   }, [userName]);
 
-  const getNamesByCategory = useCallback(async (categoryId) => {
-    try {
-      const { data, error } = await supabase.from('cat_name_options').select('names').eq('user_name', userName).eq('category_id', categoryId);
-      if (error) throw error;
-      return data.map(item => item.names);
-    } catch (err) {
-      if (process.env.NODE_ENV === 'development') {
-        console.error('Error fetching names by category:', err);
+  const getNamesByCategory = useCallback(
+    async (categoryId) => {
+      try {
+        const { data, error } = await supabase
+          .from('cat_name_options')
+          .select('names')
+          .eq('user_name', userName)
+          .eq('category_id', categoryId);
+        if (error) throw error;
+        return data.map((item) => item.names);
+      } catch (err) {
+        if (process.env.NODE_ENV === 'development') {
+          console.error('Error fetching names by category:', err);
+        }
+        setError(err);
+        return [];
       }
-      setError(err);
-      return [];
-    }
-  }, [userName]);
+    },
+    [userName]
+  );
 
   // ===== LEADERBOARD =====
 
   const getLeaderboard = useCallback(
-    async (limit = 50, categoryId = null, minTournaments = 1) => {
+    async (limit = 50, categoryId = null, _minTournaments = 1) => {
       try {
-        const { data, error } = await supabase.from('cat_name_options').select('names, ratings, tournament_count').eq('user_name', userName);
+        const { data, error } = await supabase
+          .from('cat_name_options')
+          .select('names, ratings, tournament_count')
+          .eq('user_name', userName);
         if (error) throw error;
 
-        let leaderboard = data.map(item => ({
+        let leaderboard = data.map((item) => ({
           name: item.names,
           rating: item.ratings,
           tournamentCount: item.tournament_count
         }));
 
         if (categoryId) {
-          leaderboard = leaderboard.filter(item => item.categoryId === categoryId);
+          leaderboard = leaderboard.filter(
+            (item) => item.categoryId === categoryId
+          );
         }
 
         leaderboard.sort((a, b) => b.rating - a.rating);
@@ -491,13 +556,20 @@ function useSupabaseStorage(userName = '') {
         subscriptions.forEach((sub) => sub.unsubscribe());
         // Cleanup any pending timeouts
         if (namesTimeoutRef.current) clearTimeout(namesTimeoutRef.current);
-        if (categoriesTimeoutRef.current) clearTimeout(categoriesTimeoutRef.current);
-        if (preferencesTimeoutRef.current) clearTimeout(preferencesTimeoutRef.current);
+        if (categoriesTimeoutRef.current)
+          clearTimeout(categoriesTimeoutRef.current);
+        if (preferencesTimeoutRef.current)
+          clearTimeout(preferencesTimeoutRef.current);
       };
     };
 
     setupSubscriptions();
-  }, [userName, debouncedFetchNames, debouncedFetchCategories, debouncedFetchUserPreferences]);
+  }, [
+    userName,
+    debouncedFetchNames,
+    debouncedFetchCategories,
+    debouncedFetchUserPreferences
+  ]);
 
   // ===== RETURN OBJECT =====
 

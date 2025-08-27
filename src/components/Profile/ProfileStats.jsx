@@ -176,7 +176,10 @@ const ProfileStats = ({
               <span className={styles.insightIcon}>📅</span>
               <div className={styles.insightContent}>
                 <h4>Selection Pattern</h4>
-                <p>{selectionStats.insights.selectionPattern || 'Analyzing your patterns...'}</p>
+                <p>
+                  {selectionStats.insights.selectionPattern ||
+                    'Analyzing your patterns...'}
+                </p>
               </div>
             </div>
 
@@ -184,7 +187,10 @@ const ProfileStats = ({
               <span className={styles.insightIcon}>🎯</span>
               <div className={styles.insightContent}>
                 <h4>Preferred Categories</h4>
-                <p>{selectionStats.insights.preferredCategories || 'Discovering your preferences...'}</p>
+                <p>
+                  {selectionStats.insights.preferredCategories ||
+                    'Discovering your preferences...'}
+                </p>
               </div>
             </div>
 
@@ -192,7 +198,10 @@ const ProfileStats = ({
               <span className={styles.insightIcon}>🚀</span>
               <div className={styles.insightContent}>
                 <h4>Improvement Tip</h4>
-                <p>{selectionStats.insights.improvementTip || 'Optimizing your selections...'}</p>
+                <p>
+                  {selectionStats.insights.improvementTip ||
+                    'Optimizing your selections...'}
+                </p>
               </div>
             </div>
           </div>
