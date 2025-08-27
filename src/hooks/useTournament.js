@@ -47,7 +47,7 @@ import {
    *   - updateTournamentState((prev) => ( (line 419)
    *   - setCurrentRatings((prev) => ( (line 426)
    *   - setCanUndo(true); (line 442)
-   *   - resolveVote(voteValue); (line 443)
+   *   - // Removed resolveVote call (line 443)
    *   - if (currentMatchNumber >= totalMatches) (line 445)
    *   - onComplete(finalRatings); (line 447)
    *   - setCurrentMatchNumber((prev) => prev + 1); (line 451)
@@ -107,13 +107,11 @@ export function useTournament({
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [roundNumber, setRoundNumber] = useState(1);
   const [currentMatchNumber, setCurrentMatchNumber] = useState(1);
-  const [totalMatches, setTotalMatches] = useState(1);
-  const [sorter, setSorter] = useState(null);
-  const [elo] = useState(() => new EloRating());
-  const [resolveVote, setResolveVote] = useState(null);
+  const [totalMatches, setTotalMatches] = useState(0);
   const [canUndo, setCanUndo] = useState(false);
   const [currentRatings, setCurrentRatings] = useState(existingRatings);
   const [isError, setIsError] = useState(false);
+  const [sorter, setSorter] = useState(null);
 
   // Use useLocalStorage for persistent tournament state
   const [tournamentState, setTournamentState] = useLocalStorage(tournamentId, {
@@ -183,7 +181,7 @@ resolveVote(0); // Resolve with neutral vote to prevent hanging
 
   // Define runTournament before it is referenced by effects
   const runTournament = useCallback(
-    async (tournamentSorter) => {
+    async (_tournamentSorter) => {
       try {
 console.log('[DEV] 🎮 runTournament: Starting tournament with', names.length, 'names');
 
@@ -209,32 +207,25 @@ localStorage.setItem('tournamentState', JSON.stringify(initialState));
 
 
         // * FIXED: Set up tournament interface without blocking sort operation
-        console.log("[DEV] 🎮 runTournament: Setting up tournament interface");
-        
+        console.log('Tournament ready for user interaction');
+
         // Calculate estimated matches
         const n = names.length;
         const estimatedMatches = Math.ceil(n * Math.log2(n));
         setTotalMatches(estimatedMatches);
         setCurrentMatchNumber(1);
         setRoundNumber(1);
-        
+
         // Set up the first match
         if (names.length >= 2) {
           const left = names[0];
           const right = names[1];
           setCurrentMatch({ left, right });
-          console.log("[DEV] 🎮 runTournament: First match set:", { left: left.name, right: right.name });
+          console.log('[DEV] 🎮 runTournament: First match set:', { left: left.name, right: right.name });
         }
-        
+
         // * FIXED: Tournament is now interactive - no blocking operations
-        console.log("[DEV] 🎮 runTournament: Tournament ready for user interaction");
-
-
-
-
-
-
-
+        console.log('[DEV] 🎮 runTournament: Tournament ready for user interaction');
 
 
       } catch (error) {
@@ -367,7 +358,7 @@ confidence: currentMatchNumber / totalMatches
 
   const handleVote = useCallback(
     (result) => {
-      if (isTransitioning || !resolveVote || isError) {
+      if (isTransitioning || isError) {
 return;
       }
 
@@ -486,7 +477,7 @@ setCurrentRatings((prev) => ({
 }));
 
 setCanUndo(true);
-resolveVote(voteValue);
+// Removed resolveVote call
 
 if (currentMatchNumber >= totalMatches) {
   const finalRatings = getCurrentRatings();
@@ -521,7 +512,7 @@ setIsTransitioning(false);
       }
     },
     [
-      resolveVote,
+
       isTransitioning,
       currentMatchNumber,
       totalMatches,
