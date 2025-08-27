@@ -173,7 +173,7 @@ function Login({ onLogin }) {
           <p className={styles.catFact}>
             {catFact ? (
               <>
-                <span className={styles.catFactIcon}>🐱</span>
+
                 {catFact}
               </>
             ) : (

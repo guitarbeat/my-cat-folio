@@ -7,7 +7,7 @@
  * @returns {JSX.Element} The complete application UI
  */
 
-import React from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { ErrorBoundary, Login, ErrorDisplay, OnboardingModal, ToastContainer } from './components';
 import NavBar from './components/NavBar/NavBar';
 import useUserSession from './hooks/useUserSession';
@@ -18,7 +18,6 @@ import useAppStore from './store/useAppStore';
 import { TournamentService } from './services/tournamentService';
 import { ErrorService } from './services/errorService';
 import LoadingSpinner from './components/LoadingSpinner/LoadingSpinner';
-import FloatingKitties from './components/FloatingKitties';
 
 // * Lazy-loaded components for performance
 const Results = React.lazy(() => import('./components/Results/Results'));
@@ -59,7 +58,7 @@ function App() {
   } = useAppStore();
 
   // * Handle tournament completion
-  const handleTournamentComplete = async (finalRatings) => {
+  const handleTournamentComplete = useCallback(async (finalRatings) => {
     try {
       if (!userName) {
         throw new Error('No user name available');
@@ -82,24 +81,31 @@ function App() {
         isCritical: false
       });
     }
-  };
+  }, [userName, tournament.voteHistory, tournament.ratings, tournamentActions]);
 
   // * Handle start new tournament
-  const handleStartNewTournament = () => {
+  const handleStartNewTournament = useCallback(() => {
     tournamentActions.resetTournament();
-  };
+  }, [tournamentActions]);
 
   // * Handle tournament setup
-  const handleTournamentSetup = (names) => {
-    tournamentActions.setLoading(true);
+  const handleTournamentSetup = useCallback((names) => {
+    // * Only set loading if we don't already have names
+    if (!tournament.names) {
+      tournamentActions.setLoading(true);
+    }
 
     const processedNames = TournamentService.createTournament(names, tournament.ratings);
     tournamentActions.setNames(processedNames);
-    tournamentActions.setLoading(false);
-  };
+
+    // * Use setTimeout to ensure the loading state is visible and prevent flashing
+    setTimeout(() => {
+      tournamentActions.setLoading(false);
+    }, 100);
+  }, [tournament.ratings, tournament.names, tournamentActions]);
 
   // * Handle ratings update
-  const handleUpdateRatings = async (adjustedRatings) => {
+  const handleUpdateRatings = useCallback(async (adjustedRatings) => {
     try {
       const updatedRatings = await TournamentService.updateRatings(adjustedRatings, userName);
       tournamentActions.setRatings(updatedRatings);
@@ -112,23 +118,23 @@ function App() {
       });
       throw error;
     }
-  };
+  }, [userName, tournamentActions]);
 
   // * Handle logout
-  const handleLogout = async () => {
+  const handleLogout = useCallback(async () => {
     logout();
     userActions.logout();
-  };
+  }, [logout, userActions]);
 
   // * Handle theme change
-  const handleThemeChange = (isLight) => {
+  const handleThemeChange = useCallback((isLight) => {
     const theme = isLight ? 'light' : 'dark';
     uiActions.setTheme(theme);
     toggleTheme();
-  };
+  }, [uiActions, toggleTheme]);
 
-  // * Render main content based on current view
-  const renderMainContent = () => {
+  // * Memoize main content to prevent unnecessary re-renders
+  const mainContent = useMemo(() => {
     if (!isLoggedIn) {
       return <Login onLogin={login} />;
     }
@@ -187,7 +193,48 @@ function App() {
       default:
         return null;
     }
-  };
+  }, [
+    isLoggedIn,
+    login,
+    tournament.currentView,
+    tournament.ratings,
+    tournament.isComplete,
+    tournament.names,
+    tournament.voteHistory,
+    userName,
+    handleStartNewTournament,
+    handleUpdateRatings,
+    handleTournamentSetup,
+    handleTournamentComplete,
+    tournamentActions
+  ]);
+
+  // * Memoize NavBar props to prevent unnecessary re-renders
+  const navBarProps = useMemo(() => ({
+    view: tournament.currentView,
+    setView: (view) => tournamentActions.setView(view),
+    isLoggedIn,
+    userName,
+    onLogout: handleLogout,
+    onStartNewTournament: handleStartNewTournament,
+    isLightTheme,
+    onThemeChange: handleThemeChange,
+    onShowOnboarding: () => setShowOnboarding(true),
+    onCloseOnboarding: closeOnboarding,
+    isOnboardingOpen: showOnboarding
+  }), [
+    tournament.currentView,
+    tournamentActions,
+    isLoggedIn,
+    userName,
+    handleLogout,
+    handleStartNewTournament,
+    isLightTheme,
+    handleThemeChange,
+    setShowOnboarding,
+    closeOnboarding,
+    showOnboarding
+  ]);
 
   return (
     <div className="app">
@@ -196,33 +243,20 @@ function App() {
         Skip to main content
       </a>
 
-      {/* * Floating kitties background */}
-      <FloatingKitties
-        kittieCount={12}
-        creationInterval={3000}
-        minSize={20}
-        maxSize={35}
-        minDuration={4}
-        maxDuration={10}
-        backgroundImage="galaxy"
-        enableGlow={true}
-        enableHover={true}
-      />
+      {/* * Static cat-themed background */}
+      <div className="cat-background">
+        <div className="cat-background__stars"></div>
+        <div className="cat-background__nebula"></div>
+        <div className="cat-background__floating-cats">
+          <img src="/images/cat.gif" alt="" className="cat-background__cat cat-background__cat--1" />
+          <img src="/images/cat.gif" alt="" className="cat-background__cat cat-background__cat--2" />
+          <img src="/images/cat.gif" alt="" className="cat-background__cat cat-background__cat--3" />
+          <img src="/images/cat.gif" alt="" className="cat-background__cat cat-background__cat--4" />
+        </div>
+      </div>
 
       {/* * NavBar - always visible for navigation and controls */}
-      <NavBar
-        view={tournament.currentView}
-        setView={(view) => tournamentActions.setView(view)}
-        isLoggedIn={isLoggedIn}
-        userName={userName}
-        onLogout={handleLogout}
-        onStartNewTournament={handleStartNewTournament}
-        isLightTheme={isLightTheme}
-        onThemeChange={handleThemeChange}
-        onShowOnboarding={() => setShowOnboarding(true)}
-        onCloseOnboarding={closeOnboarding}
-        isOnboardingOpen={showOnboarding}
-      />
+      <NavBar {...navBarProps} />
 
       {/* * Conditional rendering based on login state */}
       {isLoggedIn ? (
@@ -238,7 +272,7 @@ function App() {
 
           {/* * Main content area */}
           <ErrorBoundary>
-            {renderMainContent()}
+            {mainContent}
           </ErrorBoundary>
         </div>
       ) : (

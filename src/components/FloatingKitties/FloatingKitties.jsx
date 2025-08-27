@@ -2,7 +2,7 @@
  * @module FloatingKitties
  * @description Animated floating cat images background with space/galaxy theme
  */
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import styles from './FloatingKitties.module.css';
 
@@ -31,16 +31,17 @@ const FloatingKitties = ({
 }) => {
   const [kitties, setKitties] = useState([]);
   const containerRef = useRef(null);
+  const intervalRef = useRef(null);
 
-  // * Get the actual background URL
-  const getBackgroundUrl = () => {
+  // * Memoize the background URL to prevent unnecessary recalculations
+  const backgroundUrl = useMemo(() => {
     if (BACKGROUND_OPTIONS[backgroundImage]) {
       return BACKGROUND_OPTIONS[backgroundImage];
     }
     return backgroundImage; // Custom URL
-  };
+  }, [backgroundImage]);
 
-  // * Generate a new floating kittie
+  // * Generate a new floating kittie - memoized to prevent recreation
   const createKittie = useCallback(() => {
     const newKittie = {
       id: Date.now() + Math.random(),
@@ -55,7 +56,13 @@ const FloatingKitties = ({
       glowColor: Math.floor(Math.random() * 3) // 0: cyan, 1: pink, 2: red
     };
 
-    setKitties((prev) => [...prev, newKittie]);
+    setKitties((prev) => {
+      // * Only add if we're under the limit
+      if (prev.length >= kittieCount) {
+        return prev;
+      }
+      return [...prev, newKittie];
+    });
 
     // * Remove kittie after animation completes
     setTimeout(
@@ -64,33 +71,52 @@ const FloatingKitties = ({
       },
       (newKittie.duration + newKittie.delay) * 1000
     );
-  }, [maxSize, minSize, maxDuration, minDuration]);
+  }, [maxSize, minSize, maxDuration, minDuration, kittieCount]);
 
-  // * Start the kittie creation interval
+  // * Start the kittie creation interval - optimized to prevent recreation
   useEffect(() => {
-    const interval = setInterval(() => {
-      if (kitties.length < kittieCount) {
-        createKittie();
+    // * Clear any existing interval
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+    }
+
+    // * Only start interval if we need more kitties
+    if (kitties.length < kittieCount) {
+      intervalRef.current = setInterval(() => {
+        setKitties((currentKitties) => {
+          if (currentKitties.length < kittieCount) {
+            createKittie();
+            return currentKitties; // Return same array to prevent unnecessary re-render
+          }
+          return currentKitties;
+        });
+      }, creationInterval);
+    }
+
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+        intervalRef.current = null;
       }
-    }, creationInterval);
+    };
+  }, [kittieCount, creationInterval, createKittie]); // * Removed kitties.length dependency
 
-    return () => clearInterval(interval);
-  }, [kitties.length, kittieCount, createKittie, creationInterval]);
-
+  // * Memoize kitties array to prevent unnecessary re-renders
+  const memoizedKitties = useMemo(() => kitties, [kitties]);
 
   return (
     <div
       ref={containerRef}
       className={styles.kittiesWrapper}
       style={{
-        backgroundImage: `url(${getBackgroundUrl()})`
+        backgroundImage: `url(${backgroundUrl})`
       }}
     >
       {/* * Space overlay for better text readability */}
       <div className={styles.spaceOverlay} />
 
       {/* * Floating kitties */}
-      {kitties.map((kittie) => (
+      {memoizedKitties.map((kittie) => (
         <div
           key={kittie.id}
           className={`${styles.kittieWrapper} ${enableGlow ? styles.glowEnabled : ''} ${enableHover ? styles.hoverEnabled : ''}`}

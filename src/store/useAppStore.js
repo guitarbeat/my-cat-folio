@@ -96,7 +96,8 @@ const useAppStore = create(
               ...state.tournament,
               names: null,
               isComplete: false,
-              voteHistory: []
+              voteHistory: [],
+              isLoading: false // * Explicitly set loading to false to prevent flashing
             }
           })),
 

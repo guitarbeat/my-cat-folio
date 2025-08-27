@@ -4,41 +4,39 @@ import styles from './OnboardingModal.module.css';
 
 /**
  * @module OnboardingModal
- * @description Simple, performant onboarding modal that guides users through the app features.
- * Replaced the complex floating bubble system with a clean, step-by-step approach.
+ * @description iMessage-style onboarding modal that guides users through the app features.
+ * Uses conversational bubbles and non-blocking design.
  */
 
 const OnboardingModal = ({ isOpen, onClose, onDontShowAgain, isLightTheme = false }) => {
   const [currentStep, setCurrentStep] = useState(0);
   const [isVisible, setIsVisible] = useState(false);
 
-  // * Onboarding steps
+  // * Onboarding steps as conversational messages
   const steps = [
     {
-      icon: '🚀',
-      title: 'Welcome to Meow Namester!',
-      content: 'Get ready for the most fun cat name tournament you\'ve ever experienced. Let\'s find the purr-fect name together!',
-      features: [
-        { icon: '🎯', title: 'Smart Tournament System', description: 'AI-powered name battles' },
-        { icon: '🎨', title: 'Beautiful Interface', description: 'Modern, responsive design' }
+      type: 'them',
+      messages: [
+        { type: 'emoji', content: '🚀' },
+        { type: 'text', content: 'Welcome to Meow Namester!' },
+        { type: 'text', content: 'I\'m here to help you discover the perfect cat name through fun tournaments.' }
       ]
     },
     {
-      icon: '🏆',
-      title: 'How Tournaments Work',
-      content: 'Names compete head-to-head in exciting battles. You vote for your favorites, and our system learns your preferences to suggest better names.',
-      features: [
-        { icon: '⚔️', title: 'Head-to-Head Battles', description: 'Names compete in pairs' },
-        { icon: '📊', title: 'Smart Rankings', description: 'Elo rating system for fair competition' }
+      type: 'them',
+      messages: [
+        { type: 'text', content: 'Here\'s how it works:' },
+        { type: 'text', content: '• Names compete head-to-head in exciting battles' },
+        { type: 'text', content: '• You vote for your favorites' },
+        { type: 'text', content: '• Our system learns your preferences' },
+        { type: 'text', content: '• Better suggestions come with each tournament!' }
       ]
     },
     {
-      icon: '🎪',
-      title: 'Ready to Start?',
-      content: 'You\'re all set! Create your first tournament and start discovering amazing cat names. The more you play, the better the suggestions get.',
-      features: [
-        { icon: '🎯', title: 'Instant Results', description: 'Get names in seconds' },
-        { icon: '💾', title: 'Save Favorites', description: 'Keep track of your best picks' }
+      type: 'them',
+      messages: [
+        { type: 'text', content: 'Ready to start naming?' },
+        { type: 'text', content: 'Just click the button below and I\'ll guide you through your first tournament!' }
       ]
     }
   ];
@@ -143,32 +141,18 @@ const OnboardingModal = ({ isOpen, onClose, onDontShowAgain, isLightTheme = fals
           </button>
         </div>
 
-        {/* * Content */}
+        {/* * iMessage Content */}
         <div className={styles.content}>
-          <div className={styles.stepIcon}>
-            {currentStepData.icon}
-          </div>
-
-          <h2 className={styles.stepTitle}>
-            {currentStepData.title}
-          </h2>
-
-          <p className={styles.stepContent}>
-            {currentStepData.content}
-          </p>
-
-          {/* * Features */}
-          <div className={styles.features}>
-            {currentStepData.features.map((feature, index) => (
-              <div key={index} className={styles.feature}>
-                <span className={styles.featureIcon}>
-                  {feature.icon}
-                </span>
-                <div className={styles.featureText}>
-                  <strong>{feature.title}</strong>
-                  <span>{feature.description}</span>
-                </div>
-              </div>
+          <div className={styles.imessage}>
+            {currentStepData.messages.map((message, index) => (
+              <p
+                key={index}
+                className={`${styles.message} ${styles[`from-${currentStepData.type}`]} ${
+                  message.type === 'emoji' ? styles.emoji : ''
+                } ${index === currentStepData.messages.length - 1 ? '' : styles.marginBOne}`}
+              >
+                {message.content}
+              </p>
             ))}
           </div>
         </div>

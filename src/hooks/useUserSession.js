@@ -54,11 +54,14 @@
  * --- END AUTO-GENERATED DOCSTRING ---
  */
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { supabase } from '../supabase/supabaseClient';
 import devLog from '../utils/logger';
 
 function useUserSession() {
+  // * Use ref to track if we've already initialized to prevent double initialization
+  const initializedRef = useRef(false);
+  
   // Initialize state with localStorage value immediately
   const [userName, setUserName] = useState(() => {
     try {
@@ -74,59 +77,63 @@ function useUserSession() {
   const [error, setError] = useState(null);
   const [isInitialized, setIsInitialized] = useState(false);
 
-  // Initialize session state
-    useEffect(() => {
-      const initializeSession = async () => {
-        // If Supabase isn't configured, skip DB checks but allow the app to load
-        if (!supabase) {
-          if (process.env.NODE_ENV === 'development') {
-            console.warn('Supabase not configured; skipping session initialization');
-          }
-          setIsInitialized(true);
-          return;
+  // Initialize session state - only run once
+  useEffect(() => {
+    // * Prevent double initialization
+    if (initializedRef.current) return;
+    initializedRef.current = true;
+
+    const initializeSession = async () => {
+      // If Supabase isn't configured, skip DB checks but allow the app to load
+      if (!supabase) {
+        if (process.env.NODE_ENV === 'development') {
+          console.warn('Supabase not configured; skipping session initialization');
         }
+        setIsInitialized(true);
+        return;
+      }
 
-        try {
-          const storedUser = localStorage.getItem('catNamesUser');
-          if (storedUser) {
-            devLog('Found stored user:', storedUser);
+      try {
+        const storedUser = localStorage.getItem('catNamesUser');
+        if (storedUser) {
+          devLog('Found stored user:', storedUser);
 
-            const { data, error: dbError } = await supabase
-              .from('cat_app_users')
-              .select('user_name')
-              .eq('user_name', storedUser)
-              .single();
+          const { data, error: dbError } = await supabase
+            .from('cat_app_users')
+            .select('user_name')
+            .eq('user_name', storedUser)
+            .single();
 
-            if (dbError || !data) {
-              if (process.env.NODE_ENV === 'development') {
-                console.warn('Stored user not found in database, clearing session');
-              }
-              localStorage.removeItem('catNamesUser');
-              setUserName('');
-              setIsLoggedIn(false);
-            } else {
-              setUserName(storedUser);
-              setIsLoggedIn(true);
+          if (dbError || !data) {
+            if (process.env.NODE_ENV === 'development') {
+              console.warn('Stored user not found in database, clearing session');
             }
+            localStorage.removeItem('catNamesUser');
+            setUserName('');
+            setIsLoggedIn(false);
+          } else {
+            setUserName(storedUser);
+            setIsLoggedIn(true);
           }
-        } catch (error) {
-          if (process.env.NODE_ENV === 'development') {
-            console.error('Session initialization error:', error);
-          }
-        } finally {
-          setIsInitialized(true);
         }
-      };
+      } catch (error) {
+        if (process.env.NODE_ENV === 'development') {
+          console.error('Session initialization error:', error);
+        }
+      } finally {
+        setIsInitialized(true);
+      }
+    };
 
-      initializeSession();
-    }, []);
+    initializeSession();
+  }, []); // * Empty dependency array - only run once
 
   /**
    * Logs in a user with the given name
    * @param {string} name - The username to login with
    * @throws {Error} If the name is invalid or if there's a database error
    */
-    const login = useCallback(async (name) => {
+  const login = useCallback(async (name) => {
     try {
       devLog('Attempting to login with name:', name);
 
@@ -184,14 +191,7 @@ function useUserSession() {
     devLog('Logout complete');
   }, [userName]);
 
-  // Add a debug log whenever userName changes
-  useEffect(() => {
-    devLog('Current user session state:', {
-      userName,
-      isLoggedIn,
-      error
-    });
-  }, [userName, isLoggedIn, error]);
+  // * Removed the debug logging useEffect that was causing unnecessary re-renders
 
   return {
     userName,

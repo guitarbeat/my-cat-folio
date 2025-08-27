@@ -130,30 +130,9 @@
   text-shadow: 0 2px 8px rgb(0 0 0 / 50%);
 }
 
-.welcomeTitle::after {
-  position: absolute;
-  top: clamp(-15px, -3vw, -10px);
-  right: clamp(-25px, -5vw, -20px);
-  font-size: clamp(1.2rem, 4vw, 1.5rem);
-  content: "🐱";
-  filter: drop-shadow(0 2px 4px rgb(0 0 0 / 30%));
-  transform: rotate(10deg);
-  animation: bounce 2s infinite;
-}
 
-@keyframes bounce {
-  0%, 20%, 50%, 80%, 100% {
-    transform: translateY(0) rotate(10deg);
-  }
 
-  40% {
-    transform: translateY(-10px) rotate(10deg);
-  }
 
-  60% {
-    transform: translateY(-5px) rotate(10deg);
-  }
-}
 
 .catImage {
   width: clamp(120px, 18vw, 180px);
