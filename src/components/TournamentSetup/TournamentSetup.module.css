@@ -2,7 +2,10 @@
 .container {
   width: 100%;
   min-height: 100vh;
-  padding-top: calc(var(--space-6) + 70px); /* Add navbar height to prevent content cutoff */
+  padding-top: calc(
+    var(--space-6) + 70px
+  ); /* Add navbar height to prevent content cutoff */
+
   background: linear-gradient(
     135deg,
     var(--background-color) 0%,
@@ -180,8 +183,6 @@
   font-weight: 600;
 }
 
-
-
 /* Integrated Tournament Header in Sidebar */
 .tournamentHeader {
   padding-bottom: var(--space-4);
@@ -287,11 +288,11 @@
 /* Combined header layout */
 .headerRow {
   display: flex;
+  flex-wrap: wrap; /* * Allow wrapping on small screens */
+  gap: var(--space-3); /* * Add gap between wrapped items */
   align-items: flex-start;
   justify-content: space-between;
   margin-bottom: var(--space-4);
-  flex-wrap: wrap; /* * Allow wrapping on small screens */
-  gap: var(--space-3); /* * Add gap between wrapped items */
 }
 
 .headerContent {
@@ -308,11 +309,11 @@
 
 .headerActions {
   display: flex;
+  flex-wrap: wrap; /* * Allow wrapping on very small screens */
   gap: var(--space-3);
   align-items: center;
-  min-height: 50px; /* * Ensure minimum height to accommodate button */
   height: auto; /* * Allow height to grow as needed */
-  flex-wrap: wrap; /* * Allow wrapping on very small screens */
+  min-height: 50px; /* * Ensure minimum height to accommodate button */
 }
 
 .panelTitle {
@@ -382,7 +383,9 @@
 }
 
 .startSection {
+  position: relative;
   padding: var(--space-6);
+  overflow: hidden;
   text-align: center;
   background: linear-gradient(
     135deg,
@@ -390,23 +393,26 @@
     var(--start-section-bg-end, var(--primary-100)) 100%
   );
   border-top: 1px solid var(--start-section-border, var(--primary-200));
-  position: relative;
-  overflow: hidden;
 }
 
 /* * Add subtle pattern overlay for visual interest */
 .startSection::before {
-  content: '';
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-image: 
-    radial-gradient(circle at 20% 80%, var(--start-section-pattern, transparent) 0%, transparent 50%),
-    radial-gradient(circle at 80% 20%, var(--start-section-pattern, transparent) 0%, transparent 50%);
-  opacity: 0.1;
+  inset: 0;
   pointer-events: none;
+  content: "";
+  background-image:
+    radial-gradient(
+      circle at 20% 80%,
+      var(--start-section-pattern, transparent) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      circle at 80% 20%,
+      var(--start-section-pattern, transparent) 0%,
+      transparent 50%
+    );
+  opacity: 0.1;
 }
 
 /* * Ensure text has proper contrast in start section */
@@ -417,7 +423,7 @@
 
 /* * Add subtle glow effect for better visual appeal */
 .startSection {
-  box-shadow: 
+  box-shadow:
     inset 0 1px 0 var(--start-section-border, var(--primary-200)),
     0 4px 20px rgb(0 0 0 / 5%);
   transition: all var(--transition-all, 0.3s ease);
@@ -425,7 +431,7 @@
 
 /* * Add hover effect for better interactivity */
 .startSection:hover {
-  box-shadow: 
+  box-shadow:
     inset 0 1px 0 var(--start-section-border, var(--primary-200)),
     0 6px 25px rgb(0 0 0 / 8%);
   transform: translateY(-1px);
@@ -466,14 +472,12 @@
   color: var(--text-secondary);
 }
 
-
-
 /* Name Selection */
 .nameSelection {
-  padding: var(--space-6);
   display: flex;
   flex-direction: column;
   align-items: center;
+  padding: var(--space-6);
 }
 
 .cardsContainer {
@@ -848,7 +852,10 @@
 
 .resizeHandle {
   position: absolute;
-  z-index: calc(var(--z-modal) + 3); /* Use CSS custom property for resize handles */
+  z-index: calc(
+    var(--z-modal) + 3
+  ); /* Use CSS custom property for resize handles */
+
   width: 12px;
   height: 12px;
   cursor: pointer;
@@ -897,7 +904,10 @@
   position: absolute;
   top: var(--space-4);
   right: var(--space-4);
-  z-index: calc(var(--z-modal) + 2); /* Use CSS custom property for image controls */
+  z-index: calc(
+    var(--z-modal) + 2
+  ); /* Use CSS custom property for image controls */
+
   display: flex;
   gap: var(--space-2);
 }
@@ -1034,14 +1044,14 @@
   }
 
   .headerActions {
-    min-height: 60px; /* * Ensure adequate height for mobile */
     flex-wrap: wrap; /* * Allow wrapping if needed */
+    min-height: 60px; /* * Ensure adequate height for mobile */
   }
 
   .headerRow {
     flex-direction: column; /* * Stack content vertically on mobile */
-    align-items: stretch; /* * Stretch items to full width */
     gap: var(--space-3); /* * Add consistent spacing */
+    align-items: stretch; /* * Stretch items to full width */
   }
 
   .selectAllButton {
@@ -1054,9 +1064,9 @@
 
   .catPicturesToggleButton {
     width: 100%;
-    margin-top: var(--space-2);
-    padding: var(--space-1) var(--space-3); /* * Reduce vertical padding on mobile */
     min-height: 44px; /* * Ensure minimum touch target size */
+    padding: var(--space-1) var(--space-3); /* * Reduce vertical padding on mobile */
+    margin-top: var(--space-2);
   }
 }
 
@@ -1207,10 +1217,12 @@
 
 /* Cat Pictures Toggle Button */
 .catPicturesToggleButton {
+  box-sizing: border-box; /* * Ensure padding is included in height calculation */
   display: inline-flex;
   gap: var(--space-2);
   align-items: center;
   justify-content: center;
+  min-height: 44px; /* * Ensure minimum height for proper display */
   padding: var(--space-2) var(--space-4);
   font-size: var(--text-sm);
   font-weight: 500;
@@ -1221,8 +1233,6 @@
   border: none;
   border-radius: var(--radius-md);
   transition: var(--transition-all);
-  min-height: 44px; /* * Ensure minimum height for proper display */
-  box-sizing: border-box; /* * Ensure padding is included in height calculation */
 }
 
 .catPicturesToggleButton:hover:not(:disabled) {
@@ -1277,11 +1287,11 @@
 /* Tinder-style card when cat pictures are enabled */
 .swipeCard.withCatPictures {
   padding: 0;
+  overflow: hidden;
   background: var(--card-background, #0f1225);
   border: 2px solid var(--border-color, #263056);
   border-radius: 20px;
   box-shadow: 0 10px 40px rgb(0 0 0 / 20%);
-  overflow: hidden;
 }
 
 .swipeCard:active {
@@ -1306,8 +1316,8 @@
   width: 100%;
   height: 200px;
   margin-bottom: 1rem;
-  border-radius: 15px;
   overflow: hidden;
+  border-radius: 15px;
   box-shadow: 0 4px 20px rgb(0 0 0 / 20%);
 }
 
@@ -1366,6 +1376,7 @@
   position: absolute;
   top: 1rem;
   right: 1rem;
+  z-index: 10;
   padding: 0.5rem 1rem;
   font-size: 0.8rem;
   font-weight: 600;
@@ -1374,7 +1385,6 @@
   border-radius: 20px;
   backdrop-filter: blur(10px);
   transition: all 0.3s ease;
-  z-index: 10;
 }
 
 .selectionIndicator.selected {
@@ -1540,18 +1550,18 @@
     grid-template-columns: 1fr;
     padding: var(--space-4);
   }
-  
+
   .nameSelection {
-    padding: var(--space-4);
     align-items: center;
+    padding: var(--space-4);
   }
-  
+
   .swipeContainer {
-    padding: 1rem 0;
     gap: 1.5rem;
+    padding: 1rem 0;
     margin-top: 1rem; /* Add margin to prevent navbar overlap */
   }
-  
+
   .swipeCardWrapper {
     max-width: 100%;
     height: 280px; /* Increased height for better mobile experience */
@@ -1559,18 +1569,18 @@
   }
 
   .swipeCard {
-    padding: 1.5rem;
     min-height: 280px; /* Ensure consistent height */
+    padding: 1.5rem;
   }
 
   .swipeCardName {
-    font-size: 1.5rem;
     margin-bottom: 0.5rem; /* Add spacing */
+    font-size: 1.5rem;
   }
 
   .swipeCardDescription {
-    font-size: 1rem;
     margin-bottom: 1rem; /* Add spacing */
+    font-size: 1rem;
   }
 
   .swipeCardImageContainer {
@@ -1599,9 +1609,9 @@
   }
 
   .swipeModeToggleButton {
+    min-height: 48px; /* Ensure minimum touch target size */
     padding: 0.75rem 1.5rem;
     font-size: 0.9rem;
-    min-height: 48px; /* Ensure minimum touch target size */
   }
 
   /* Ensure swipe overlays are properly positioned on mobile */
@@ -1622,8 +1632,8 @@
   }
 
   .headerActions {
-    min-height: 60px; /* * Increase minimum height for very small screens */
     gap: var(--space-2); /* * Reduce gap on very small screens */
+    min-height: 60px; /* * Increase minimum height for very small screens */
   }
 
   .headerRow {
@@ -1631,8 +1641,8 @@
   }
 
   .swipeContainer {
-    padding: 0.5rem 0;
     gap: 1rem;
+    padding: 0.5rem 0;
   }
 
   .swipeCardWrapper {
@@ -1641,8 +1651,8 @@
   }
 
   .swipeCard {
-    padding: 1rem;
     min-height: 250px;
+    padding: 1rem;
   }
 
   .swipeCardName {
@@ -1669,21 +1679,21 @@
   }
 
   .catPicturesToggleButton {
-    padding: var(--space-1) var(--space-2); /* * Further reduce padding on very small screens */
-    font-size: var(--text-xs); /* * Reduce font size for better fit */
-    min-height: 40px; /* * Ensure minimum height on very small screens */
-    white-space: nowrap; /* * Prevent text wrapping */
     max-width: 100%; /* * Ensure button doesn't overflow container */
+    min-height: 40px; /* * Ensure minimum height on very small screens */
+    padding: var(--space-1) var(--space-2); /* * Further reduce padding on very small screens */
     overflow: hidden; /* * Hide any overflow */
     text-overflow: ellipsis; /* * Show ellipsis for very long text */
+    font-size: var(--text-xs); /* * Reduce font size for better fit */
+    white-space: nowrap; /* * Prevent text wrapping */
   }
 }
 
 /* Touch Device Optimizations */
 @media (hover: none) and (pointer: coarse) {
   .swipeCard {
-    cursor: default;
     touch-action: pan-y pinch-zoom; /* Optimize touch behavior */
+    cursor: default;
   }
 
   .swipeButton {
@@ -1741,42 +1751,42 @@
 
 /* Enhanced Selected Card Styling */
 .swipeCard.selected {
-  border-color: var(--primary-color, #5a5cff);
-  box-shadow: 
-    0 8px 32px rgba(90, 92, 255, 0.15),
-    0 0 0 2px rgba(90, 92, 255, 0.1),
-    inset 0 0 0 1px rgba(90, 92, 255, 0.05);
-  transform: translateY(-4px) scale(1.02);
-  background: linear-gradient(
-    135deg,
-    rgba(90, 92, 255, 0.02) 0%,
-    rgba(124, 58, 237, 0.02) 100%
-  );
   position: relative;
   overflow: hidden;
+  background: linear-gradient(
+    135deg,
+    rgb(90 92 255 / 5%) 0%,
+    rgb(124 58 237 / 5%) 100%
+  );
+  border-color: var(--primary-color, #5a5cff);
+  box-shadow:
+    0 8px 32px rgb(90 92 255 / 15%),
+    0 0 0 2px rgb(90 92 255 / 10%),
+    inset 0 0 0 1px rgb(90 92 255 / 5%);
+  transform: translateY(-4px) scale(1.02);
 }
 
+animation: cardSelect 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+
 .swipeCard.selected::before {
-  content: '';
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  inset: 0;
+  pointer-events: none;
+  content: "";
   background: linear-gradient(
     45deg,
     transparent 30%,
-    rgba(90, 92, 255, 0.03) 50%,
+    rgb(90 92 255 / 10%) 50%,
     transparent 70%
   );
   animation: shimmer 3s ease-in-out infinite;
-  pointer-events: none;
 }
 
 @keyframes shimmer {
   0% {
     transform: translateX(-100%);
   }
+
   100% {
     transform: translateX(100%);
   }
@@ -1785,22 +1795,22 @@
 /* Enhanced Selected Card Content */
 .swipeCard.selected .swipeCardName {
   color: var(--primary-color, #5a5cff);
-  text-shadow: 
-    0 0 8px rgba(90, 92, 255, 0.3),
-    0 2px 4px rgba(0, 0, 0, 0.5);
+  text-shadow:
+    0 0 8px rgb(90 92 255 / 30%),
+    0 2px 4px rgb(0 0 0 / 50%);
   transform: scale(1.05);
   transition: all 0.3s ease;
 }
 
 .swipeCard.selected .swipeCardDescription {
   color: var(--text-primary, #f8fafc);
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  text-shadow: 0 1px 2px rgb(0 0 0 / 30%);
 }
 
 .swipeCard.selected .swipeCardImage {
-  transform: scale(1.1);
-  filter: brightness(1.1) contrast(1.1);
-  box-shadow: 0 8px 25px rgba(90, 92, 255, 0.3);
+  box-shadow: 0 4px 15px rgb(90 92 255 / 15%);
+  filter: brightness(1.05) contrast(1.05);
+  transform: scale(1.05);
 }
 
 /* Enhanced Selected Card Content Background */
@@ -1809,27 +1819,26 @@
 }
 
 .swipeCard.selected .swipeCardContent::after {
-  content: '';
   position: absolute;
-  top: -10px;
-  left: -10px;
-  right: -10px;
-  bottom: -10px;
+  inset: -10px;
+  z-index: -1;
+  content: "";
   background: linear-gradient(
     45deg,
-    rgba(90, 92, 255, 0.1),
-    rgba(124, 58, 237, 0.1),
-    rgba(90, 92, 255, 0.1)
+    rgb(90 92 255 / 10%),
+    rgb(124 58 237 / 10%),
+    rgb(90 92 255 / 10%)
   );
   border-radius: 25px;
-  z-index: -1;
   animation: borderGlow 2s ease-in-out infinite;
 }
 
 @keyframes borderGlow {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 0.3;
   }
+
   50% {
     opacity: 0.6;
   }
@@ -1839,57 +1848,61 @@
 .swipeCard.selected .metadataItem {
   background: linear-gradient(
     135deg,
-    rgba(90, 92, 255, 0.2),
-    rgba(124, 58, 237, 0.2)
+    rgb(90 92 255 / 20%),
+    rgb(124 58 237 / 20%)
   );
-  border: 1px solid rgba(90, 92, 255, 0.3);
-  box-shadow: 0 2px 8px rgba(90, 92, 255, 0.2);
+  border: 1px solid rgb(90 92 255 / 30%);
+  box-shadow: 0 2px 8px rgb(90 92 255 / 20%);
   transform: scale(1.05);
 }
 
 /* Enhanced Selection Indicator Styling */
 .selectionIndicator.selected {
   background: linear-gradient(135deg, var(--primary-color, #5a5cff), #7c3aed);
-  box-shadow: 
-    0 4px 20px rgba(90, 92, 255, 0.4),
-    0 0 0 2px rgba(255, 255, 255, 0.1);
+  box-shadow:
+    0 4px 20px rgb(90 92 255 / 40%),
+    0 0 0 2px rgb(255 255 255 / 10%);
   transform: scale(1.05);
   animation: selectionPulse 2s ease-in-out infinite;
 }
 
 @keyframes selectionPulse {
-  0%, 100% {
-    box-shadow: 
-      0 4px 20px rgba(90, 92, 255, 0.4),
-      0 0 0 2px rgba(255, 255, 255, 0.1);
+  0%,
+  100% {
+    box-shadow:
+      0 4px 20px rgb(90 92 255 / 40%),
+      0 0 0 2px rgb(255 255 255 / 10%);
   }
+
   50% {
-    box-shadow: 
-      0 6px 30px rgba(90, 92, 255, 0.6),
-      0 0 0 3px rgba(255, 255, 255, 0.2);
+    box-shadow:
+      0 6px 30px rgb(90 92 255 / 60%),
+      0 0 0 3px rgb(255 255 255 / 20%);
   }
 }
 
 /* Enhanced Selection Indicator with Icon */
 .selectionIndicator.selected::before {
-  content: '✓';
   display: inline-block;
   margin-right: 0.5rem;
   font-size: 1rem;
+  content: "✓";
   animation: checkmarkBounce 0.6s ease-out;
 }
 
 @keyframes checkmarkBounce {
   0% {
-    transform: scale(0) rotate(-10deg);
     opacity: 0;
+    transform: scale(0) rotate(-10deg);
   }
+
   50% {
     transform: scale(1.2) rotate(5deg);
   }
+
   100% {
-    transform: scale(1) rotate(0deg);
     opacity: 1;
+    transform: scale(1) rotate(0deg);
   }
 }
 
@@ -1898,17 +1911,15 @@
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.swipeCard.selected {
-  animation: cardSelect 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-}
-
 @keyframes cardSelect {
   0% {
     transform: translateY(0) scale(1);
   }
+
   50% {
     transform: translateY(-8px) scale(1.05);
   }
+
   100% {
     transform: translateY(-4px) scale(1.02);
   }

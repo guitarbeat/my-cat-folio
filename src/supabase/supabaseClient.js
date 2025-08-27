@@ -380,7 +380,7 @@ export const hiddenNamesAPI = {
           name_id: nameId,
           user_name: userName,
           is_hidden: true,
-          rating: 1500, // Default rating if none exists
+          // * FIXED: Don't overwrite existing rating - only set if record is new
           wins: 0,
           losses: 0
         }, {
@@ -686,13 +686,13 @@ export const tournamentsAPI = {
 
           // If no existing record, create a new one with default values
           if (selectError && selectError.code === 'PGRST116') {
-            // No existing record, create new one
+            // No existing record, create new one with default rating
             const { error } = await supabase
               .from('cat_name_ratings')
               .insert({
                 user_name: userName,
                 name_id: nameObj.id,
-                rating: 1500, // Default rating
+                rating: 1500, // Default rating for new records only
                 wins: 0,
                 losses: 0,
                 tournament_selections: 1,
@@ -708,19 +708,19 @@ export const tournamentsAPI = {
           const currentTournamentSelections = currentData?.tournament_selections || 0;
           const currentLastSelectedAt = currentData?.last_selected_at;
 
-          // Update the record
+          // Update existing record - only update fields that should change, preserve rating
           const { error } = await supabase
             .from('cat_name_ratings')
-            .upsert({
-              user_name: userName,
-              name_id: nameObj.id,
-              rating: 1500, // * FIXED: Add default rating to satisfy not-null constraint
+            .update({
+              // * FIXED: Don't include rating field - preserve existing rating
               tournament_selections: currentTournamentSelections + 1,
               last_selected_at: now,
               first_selected_at: currentLastSelectedAt || now,
               selection_frequency: currentTournamentSelections + 1,
               updated_at: now
-            }, { onConflict: 'user_name,name_id' });
+            })
+            .eq('user_name', userName)
+            .eq('name_id', nameObj.id);
 
           if (error) {
             console.error('Upsert error for', userName, nameObj.id, ':', error);

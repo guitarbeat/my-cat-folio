@@ -208,23 +208,17 @@ export function useTournament({
         localStorage.setItem('tournamentState', JSON.stringify(initialState));
 
         // Add timeout to prevent infinite waiting
-        const sortedResults = await Promise.race([
-          tournamentSorter.sort(async (leftName, rightName) => {
-            const left = names.find((n) => n.name === leftName);
-            const right = names.find((n) => n.name === rightName);
-            if (!left || !right) {
-              throw new Error('Invalid match pair');
-            }
-            setCurrentMatch({ left, right });
-            return new Promise((resolve) => {
-              setResolveVote(() => resolve);
-            });
-          }),
-          new Promise(
-            (_, reject) =>
-              setTimeout(() => reject(new Error('Tournament timeout')), 300000) // 5 minute timeout
-          )
-        ]);
+        const sortedResults = await tournamentSorter.sort(async (leftName, rightName) => {
+          const left = names.find((n) => n.name === leftName);
+          const right = names.find((n) => n.name === rightName);
+          if (!left || !right) {
+            throw new Error('Invalid match pair');
+          }
+          setCurrentMatch({ left, right });
+          return new Promise((resolve) => {
+            setResolveVote(() => resolve);
+          });
+        });
 
         const ratingsArray = sortedResults.map((name, index) => {
           const existingData =
