@@ -14,23 +14,35 @@
   left: 0;
   z-index: var(--z-sticky); /* Use CSS custom property for sticky navigation */
   height: 70px;
-  background: rgb(255 255 255 / 12%);
-  border-bottom: 1px solid rgb(255 255 255 / 20%);
+  background: rgb(255 255 255 / 25%); /* Increased from 12% for better visibility */
+  border-bottom: 2px solid rgb(255 255 255 / 40%); /* Increased from 20% and made thicker */
   box-shadow:
-    0 0 0 1px rgb(255 255 255 / 70%),
-    0 16px 32px rgb(0 0 0 / 15%);
-  backdrop-filter: blur(10px) saturate(150%);
+    0 0 0 1px rgb(255 255 255 / 80%),
+    0 16px 32px rgb(0 0 0 / 25%); /* Increased shadow for better visibility */
+  backdrop-filter: blur(15px) saturate(180%); /* Increased blur and saturation */
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  /* Ensure navbar is always on top and clickable */
+  pointer-events: auto;
+  -webkit-transform: translateZ(0); /* Force hardware acceleration on iOS */
+  transform: translateZ(0);
+  /* Handle safe area insets for devices with notches */
+  padding-top: env(safe-area-inset-top);
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
+  /* Ensure navbar extends to edges on devices with notches */
+  margin-top: calc(-1 * env(safe-area-inset-top));
+  margin-left: calc(-1 * env(safe-area-inset-left));
+  margin-right: calc(-1 * env(safe-area-inset-right));
 }
 
 /* Enhanced hover effect for the entire navbar */
 .navbar:hover {
-  background: rgb(255 255 255 / 18%);
-  border-bottom-color: rgb(255 255 255 / 30%);
+  background: rgb(255 255 255 / 35%); /* Increased from 18% */
+  border-bottom-color: rgb(255 255 255 / 50%); /* Increased from 30% */
   box-shadow:
-    0 0 0 1px rgb(255 255 255 / 90%),
-    0 20px 40px rgb(0 0 0 / 18%);
-  backdrop-filter: blur(12px) saturate(160%);
+    0 0 0 1px rgb(255 255 255 / 95%),
+    0 20px 40px rgb(0 0 0 / 30%); /* Increased shadow */
+  backdrop-filter: blur(18px) saturate(200%); /* Increased blur and saturation */
 }
 
 /* Navbar Content Container */
@@ -41,6 +53,9 @@
   width: 100%;
   height: 100%;
   padding: 0 1.5rem;
+  /* Ensure content respects safe area insets */
+  padding-left: max(1.5rem, env(safe-area-inset-left));
+  padding-right: max(1.5rem, env(safe-area-inset-right));
 }
 
 /* Desktop Navigation */
@@ -76,10 +91,15 @@
   color: inherit;
   text-decoration: none;
   transition: opacity 0.2s ease;
+  /* Ensure logo is clickable */
+  cursor: pointer;
+  padding: 8px; /* Add padding for better touch target */
+  border-radius: 8px;
 }
 
 .navbar__item--logo .navbar__logo-link:hover {
   opacity: 0.8;
+  background: rgb(255 255 255 / 15%);
 }
 
 .navbar__item--logo .navbar__logo {
@@ -92,7 +112,7 @@
   font-size: 1.25rem;
   font-weight: 700;
   color: #fff;
-  text-shadow: 0 1px 2px rgb(0 0 0 / 30%);
+  text-shadow: 0 2px 4px rgb(0 0 0 / 60%); /* Increased shadow for better contrast */
 }
 
 /* Navigation Items */
@@ -103,26 +123,32 @@
 .navbar__item a {
   position: relative;
   display: inline-block;
-  padding: 0.375rem 0.75rem;
+  padding: 0.5rem 1rem; /* Increased padding for better touch targets */
   font-size: 0.9rem;
   font-weight: 500;
-  color: rgb(255 255 255 / 90%);
+  color: rgb(255 255 255 / 95%); /* Increased from 90% for better contrast */
   text-transform: uppercase;
   letter-spacing: 0.5px;
   text-decoration: none;
   border-radius: 8px;
   transition: all 0.2s ease;
+  /* Ensure minimum touch target size */
+  min-height: 44px;
+  min-width: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .navbar__item a:hover {
   color: #fff;
-  background: rgb(255 255 255 / 10%);
+  background: rgb(255 255 255 / 20%); /* Increased from 10% */
   transform: translateY(-1px);
 }
 
 .navbar__item a.active {
   color: #fff;
-  background: rgb(255 255 255 / 15%);
+  background: rgb(255 255 255 / 25%); /* Increased from 15% */
 }
 
 /* Theme Toggle Button */
@@ -134,34 +160,39 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 36px;
-  height: 36px;
-  font-size: 1rem;
+  width: 44px; /* Increased from 36px for better touch target */
+  height: 44px; /* Increased from 36px for better touch target */
+  font-size: 1.1rem; /* Increased from 1rem */
   color: var(--text-primary);
   cursor: pointer;
-  background: rgb(255 255 255 / 8%);
-  border: 1px solid rgb(255 255 255 / 15%);
+  background: rgb(255 255 255 / 15%); /* Increased from 8% */
+  border: 2px solid rgb(255 255 255 / 25%); /* Increased from 15% and made thicker */
   border-radius: 50%;
   box-shadow:
-    0 2px 8px rgb(0 0 0 / 10%),
-    inset 0 1px 0 rgb(255 255 255 / 10%);
-  backdrop-filter: blur(12px);
+    0 4px 12px rgb(0 0 0 / 20%), /* Increased shadow */
+    inset 0 1px 0 rgb(255 255 255 / 15%);
+  backdrop-filter: blur(15px); /* Increased blur */
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  /* Ensure button is clickable */
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
 }
 
 .navbar__theme-toggle:hover {
-  background: rgb(255 255 255 / 15%);
-  border-color: rgb(255 255 255 / 25%);
+  background: rgb(255 255 255 / 25%); /* Increased from 15% */
+  border-color: rgb(255 255 255 / 40%); /* Increased from 25% */
   box-shadow:
-    0 4px 16px rgb(0 0 0 / 15%),
-    inset 0 1px 0 rgb(255 255 255 / 15%);
+    0 6px 20px rgb(0 0 0 / 25%), /* Increased shadow */
+    inset 0 1px 0 rgb(255 255 255 / 20%);
   transform: translateY(-2px) scale(1.05);
 }
 
 .navbar__theme-toggle:active {
   box-shadow:
-    0 2px 8px rgb(0 0 0 / 10%),
-    inset 0 1px 0 rgb(255 255 255 / 10%);
+    0 2px 8px rgb(0 0 0 / 15%), /* Increased shadow */
+    inset 0 1px 0 rgb(255 255 255 / 15%);
   transform: translateY(0) scale(0.98);
 }
 
@@ -170,46 +201,51 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 36px;
-  height: 36px;
-  font-size: 1rem;
+  width: 44px; /* Increased from 36px for better touch target */
+  height: 44px; /* Increased from 36px for better touch target */
+  font-size: 1.1rem; /* Increased from 1rem */
   color: var(--text-primary);
   cursor: pointer;
-  background: rgb(255 255 255 / 8%);
-  border: 1px solid rgb(255 255 255 / 15%);
+  background: rgb(255 255 255 / 15%); /* Increased from 8% */
+  border: 2px solid rgb(255 255 255 / 25%); /* Increased from 15% and made thicker */
   border-radius: 50%;
   box-shadow:
-    0 2px 8px rgb(0 0 0 / 10%),
-    inset 0 1px 0 rgb(255 255 255 / 10%);
-  backdrop-filter: blur(12px);
+    0 4px 12px rgb(0 0 0 / 20%), /* Increased shadow */
+    inset 0 1px 0 rgb(255 255 255 / 15%);
+  backdrop-filter: blur(15px); /* Increased blur */
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  /* Ensure button is clickable */
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
 }
 
 .navbar__help-button:hover {
-  background: rgb(255 255 255 / 15%);
-  border-color: rgb(255 255 255 / 25%);
+  background: rgb(255 255 255 / 25%); /* Increased from 15% */
+  border-color: rgb(255 255 255 / 40%); /* Increased from 25% */
   box-shadow:
-    0 4px 16px rgb(0 0 0 / 15%),
-    inset 0 1px 0 rgb(255 255 255 / 15%);
+    0 6px 20px rgb(0 0 0 / 25%), /* Increased shadow */
+    inset 0 1px 0 rgb(255 255 255 / 20%);
   transform: translateY(-2px) scale(1.05);
 }
 
 .navbar__help-button:active {
   box-shadow:
-    0 2px 8px rgb(0 0 0 / 10%),
-    inset 0 1px 0 rgb(255 255 255 / 10%);
+    0 2px 8px rgb(0 0 0 / 15%), /* Increased shadow */
+    inset 0 1px 0 rgb(255 255 255 / 15%);
   transform: translateY(0) scale(0.98);
 }
 
 /* Focus States for Buttons */
 .navbar__theme-toggle:focus-visible,
 .navbar__help-button:focus-visible {
-  outline: 2px solid var(--accent-color);
-  outline-offset: 2px;
+  outline: 3px solid var(--accent-color); /* Increased from 2px */
+  outline-offset: 3px; /* Increased from 2px */
   box-shadow:
-    0 0 0 4px rgb(232 191 118 / 30%),
-    0 2px 8px rgb(0 0 0 / 10%),
-    inset 0 1px 0 rgb(255 255 255 / 10%);
+    0 0 0 6px rgb(232 191 118 / 40%), /* Increased from 4px and 30% */
+    0 4px 12px rgb(0 0 0 / 15%),
+    inset 0 1px 0 rgb(255 255 255 / 15%);
 }
 
 /* Enhanced Button States */
@@ -233,54 +269,60 @@
   gap: 4px;
   align-items: center;
   justify-content: center;
-  width: 48px; /* Increased for better touch target */
-  height: 48px; /* Increased for better touch target */
-  padding: 12px 8px;
+  width: 56px; /* Increased from 48px for better touch target */
+  height: 56px; /* Increased from 48px for better touch target */
+  padding: 16px 12px; /* Increased padding */
   cursor: pointer;
-  background: rgb(255 255 255 / 10%);
-  border: none;
-  border-radius: 12px; /* Increased for modern look */
-  box-shadow: 0 2px 8px rgb(0 0 0 / 20%);
-  backdrop-filter: blur(10px);
+  background: rgb(255 255 255 / 20%); /* Increased from 10% for better visibility */
+  border: 2px solid rgb(255 255 255 / 30%); /* Added border for better visibility */
+  border-radius: 16px; /* Increased from 12px for modern look */
+  box-shadow: 0 4px 12px rgb(0 0 0 / 30%); /* Increased shadow */
+  backdrop-filter: blur(15px); /* Increased blur */
   transition: all 0.2s ease;
+  /* Ensure button is clickable on iOS */
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
 }
 
 .navbar__mobile-menu-button:hover {
-  background: rgb(255 255 255 / 20%);
-  box-shadow: 0 4px 12px rgb(0 0 0 / 30%);
+  background: rgb(255 255 255 / 30%); /* Increased from 20% */
+  border-color: rgb(255 255 255 / 40%); /* Increased from 30% */
+  box-shadow: 0 6px 16px rgb(0 0 0 / 40%); /* Increased shadow */
   transform: translateY(-1px);
 }
 
 .navbar__mobile-menu-button:active {
-  box-shadow: 0 2px 8px rgb(0 0 0 / 20%);
+  box-shadow: 0 2px 8px rgb(0 0 0 / 30%); /* Increased shadow */
   transform: translateY(0);
 }
 
 .navbar__mobile-menu-icon {
-  width: 20px;
-  height: 2px;
+  width: 24px; /* Increased from 20px */
+  height: 3px; /* Increased from 2px for better visibility */
   background: #fff;
-  border-radius: 1px;
+  border-radius: 2px; /* Increased from 1px */
   transition: all 0.3s ease;
 }
 
 .navbar__mobile-menu-icon::before,
 .navbar__mobile-menu-icon::after {
   position: absolute;
-  width: 20px;
-  height: 2px;
+  width: 24px; /* Increased from 20px */
+  height: 3px; /* Increased from 2px for better visibility */
   content: "";
   background: #fff;
-  border-radius: 1px;
+  border-radius: 2px; /* Increased from 1px */
   transition: all 0.3s ease;
 }
 
 .navbar__mobile-menu-icon::before {
-  transform: translateY(-6px);
+  transform: translateY(-8px); /* Adjusted for new height */
 }
 
 .navbar__mobile-menu-icon::after {
-  transform: translateY(6px);
+  transform: translateY(8px); /* Adjusted for new height */
 }
 
 /* Mobile Menu Open State */
@@ -302,11 +344,19 @@
   inset: 70px 0 0;
   z-index: var(--z-drawer); /* Use CSS custom property for drawer/menu layer */
   display: none;
-  background: rgb(0 0 0 / 95%);
+  background: rgb(0 0 0 / 98%); /* Increased from 95% for better visibility */
   opacity: 0;
-  backdrop-filter: blur(20px);
+  backdrop-filter: blur(25px); /* Increased from 20px */
   transform: translateY(-100%);
   transition: all 0.3s ease;
+  /* Handle safe area insets for devices with notches */
+  padding-top: env(safe-area-inset-top);
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
+  /* Ensure menu extends to edges on devices with notches */
+  margin-top: calc(-1 * env(safe-area-inset-top));
+  margin-left: calc(-1 * env(safe-area-inset-left));
+  margin-right: calc(-1 * env(safe-area-inset-right));
 }
 
 .navbar__mobile-menu.visible {
@@ -318,8 +368,8 @@
 /* Mobile Menu Header */
 .navbar__mobile-menu-header {
   padding: 2rem 2rem 1rem;
-  background: rgb(255 255 255 / 5%);
-  border-bottom: 1px solid rgb(255 255 255 / 10%);
+  background: rgb(255 255 255 / 10%); /* Increased from 5% for better visibility */
+  border-bottom: 2px solid rgb(255 255 255 / 20%); /* Increased from 10% and made thicker */
 }
 
 .navbar__mobile-menu-header .navbar__item--logo {
@@ -328,7 +378,7 @@
 
 .navbar__mobile-user-info {
   font-size: 0.9rem;
-  color: rgb(255 255 255 / 80%);
+  color: rgb(255 255 255 / 90%); /* Increased from 80% for better contrast */
 }
 
 /* Mobile Menu List */
@@ -339,7 +389,7 @@
 }
 
 .navbar__mobile-item {
-  border-bottom: 1px solid rgb(255 255 255 / 10%);
+  border-bottom: 1px solid rgb(255 255 255 / 20%); /* Increased from 10% for better visibility */
 }
 
 .navbar__mobile-item:last-child {
@@ -350,26 +400,28 @@
   display: block;
   display: flex;
   align-items: center;
-  min-height: 56px; /* Ensure minimum touch target size */
-  padding: 1.25rem 2rem; /* Increased padding for better touch targets */
+  min-height: 60px; /* Increased from 56px for better touch target */
+  padding: 1.5rem 2rem; /* Increased padding for better touch targets */
   font-weight: 500;
-  color: rgb(255 255 255 / 90%);
+  color: rgb(255 255 255 / 95%); /* Increased from 90% for better contrast */
   text-transform: uppercase;
   letter-spacing: 0.5px;
   text-decoration: none;
   transition: all 0.2s ease;
+  /* Ensure minimum touch target size */
+  min-width: 44px;
 }
 
 .navbar__mobile-link:hover,
 .navbar__mobile-link:focus {
   padding-left: 2.5rem;
   color: #fff;
-  background: rgb(255 255 255 / 15%);
+  background: rgb(255 255 255 / 25%); /* Increased from 15% */
 }
 
 .navbar__mobile-link.active {
   color: #fff;
-  background: rgb(255 255 255 / 20%);
+  background: rgb(255 255 255 / 30%); /* Increased from 20% */
   border-left: 4px solid var(--accent-color, #e8bf76);
 }
 
@@ -380,21 +432,23 @@
   align-items: center;
   justify-content: center;
   width: 100%;
-  min-height: 56px; /* Ensure minimum touch target size */
-  padding: 1.25rem 2rem; /* Increased padding */
+  min-height: 60px; /* Increased from 56px for better touch target */
+  padding: 1.5rem 2rem; /* Increased padding */
   margin: 0.5rem 0;
   font-weight: 500;
   color: #fff;
   text-transform: uppercase;
   letter-spacing: 0.5px;
   cursor: pointer;
-  background: rgb(255 255 255 / 15%);
+  background: rgb(255 255 255 / 25%); /* Increased from 15% for better visibility */
   border: none;
   transition: all 0.2s ease;
+  /* Ensure minimum touch target size */
+  min-width: 44px;
 }
 
 .navbar__mobile-theme-toggle:hover {
-  background: rgb(255 255 255 / 25%);
+  background: rgb(255 255 255 / 35%); /* Increased from 25% */
 }
 
 /* Mobile Help Button */
@@ -404,18 +458,20 @@
   align-items: center;
   justify-content: center;
   width: 100%;
-  min-height: 56px; /* Ensure minimum touch target size */
-  padding: 1.25rem 2rem; /* Increased padding */
+  min-height: 60px; /* Increased from 56px for better touch target */
+  padding: 1.5rem 2rem; /* Increased padding */
   font-weight: 500;
   color: #fff;
   cursor: pointer;
-  background: rgb(255 255 255 / 15%);
+  background: rgb(255 255 255 / 25%); /* Increased from 15% for better visibility */
   border: none;
   transition: all 0.2s ease;
+  /* Ensure minimum touch target size */
+  min-width: 44px;
 }
 
 .navbar__mobile-help-button:hover {
-  background: rgb(255 255 255 / 25%);
+  background: rgb(255 255 255 / 35%); /* Increased from 25% */
 }
 
 /* Mobile Backdrop */
@@ -423,7 +479,7 @@
   position: fixed;
   inset: 0;
   z-index: calc(var(--z-drawer) - 1); /* Just below the mobile menu */
-  background: rgb(0 0 0 / 50%);
+  background: rgb(0 0 0 / 70%); /* Increased from 50% for better visibility */
   opacity: 0;
   animation: fadeIn 0.2s ease forwards;
 }
@@ -437,55 +493,55 @@
 /* Enhanced mobile touch feedback */
 @media (hover: none) and (pointer: coarse) {
   .navbar__mobile-menu-button:active {
-    background: rgb(255 255 255 / 25%);
+    background: rgb(255 255 255 / 40%); /* Increased from 25% */
     transform: scale(0.95);
   }
 
   .navbar__mobile-link:active {
-    background: rgb(255 255 255 / 25%);
+    background: rgb(255 255 255 / 35%); /* Increased from 25% */
     transform: scale(0.98);
   }
 
   .navbar__mobile-theme-toggle:active,
   .navbar__mobile-help-button:active {
-    background: rgb(255 255 255 / 35%);
+    background: rgb(255 255 255 / 45%); /* Increased from 35% */
     transform: scale(0.98);
   }
 }
 
 /* Transparent Navbar for Login */
 .navbar.transparent {
-  background: transparent;
-  border-bottom: none;
-  box-shadow: none;
+  background: rgb(255 255 255 / 15%); /* Changed from transparent to semi-transparent for better visibility */
+  border-bottom: 2px solid rgb(255 255 255 / 30%); /* Added border for better visibility */
+  box-shadow: 0 8px 24px rgb(0 0 0 / 20%); /* Added shadow for better visibility */
 }
 
 .navbar.transparent .navbar__item a {
   color: #fff;
-  text-shadow: 0 1px 2px rgb(0 0 0 / 50%);
+  text-shadow: 0 2px 4px rgb(0 0 0 / 70%); /* Increased shadow for better contrast */
 }
 
 .navbar.transparent .navbar__item--logo .navbar__title {
   color: #fff;
-  text-shadow: 0 1px 3px rgb(0 0 0 / 70%);
+  text-shadow: 0 2px 4px rgb(0 0 0 / 80%); /* Increased shadow for better contrast */
 }
 
 /* Light Theme - Liquid Glass */
 .navbar.light-theme {
-  background: rgb(255 255 255 / 8%);
-  border-bottom: 1px solid rgb(0 0 0 / 10%);
+  background: rgb(255 255 255 / 20%); /* Increased from 8% for better visibility */
+  border-bottom: 2px solid rgb(0 0 0 / 20%); /* Increased from 10% and made thicker */
   box-shadow:
-    0 0 0 1px rgb(255 255 255 / 80%),
-    0 16px 32px rgb(0 0 0 / 8%);
-  backdrop-filter: blur(20px) saturate(180%);
+    0 0 0 1px rgb(255 255 255 / 90%),
+    0 16px 32px rgb(0 0 0 / 15%); /* Increased shadow */
+  backdrop-filter: blur(25px) saturate(200%); /* Increased blur and saturation */
 }
 
 .navbar.light-theme:hover {
-  background: rgb(255 255 255 / 12%);
-  border-bottom-color: rgb(0 0 0 / 15%);
+  background: rgb(255 255 255 / 30%); /* Increased from 12% */
+  border-bottom-color: rgb(0 0 0 / 25%); /* Increased from 15% */
   box-shadow:
-    0 0 0 1px rgb(255 255 255 / 90%),
-    0 20px 40px rgb(0 0 0 / 12%);
+    0 0 0 1px rgb(255 255 255 / 95%),
+    0 20px 40px rgb(0 0 0 / 20%); /* Increased shadow */
 }
 
 .navbar.light-theme .navbar__item--logo .navbar__title {
@@ -498,42 +554,42 @@
 }
 
 .navbar.light-theme .navbar__item a:hover {
-  background: rgb(0 0 0 / 5%);
+  background: rgb(0 0 0 / 10%); /* Increased from 5% */
 }
 
 .navbar.light-theme .navbar__item a.active {
-  background: rgb(0 0 0 / 10%);
+  background: rgb(0 0 0 / 15%); /* Increased from 10% */
 }
 
 .navbar.light-theme .navbar__theme-toggle,
 .navbar.light-theme .navbar__help-button,
 .navbar.light-theme .navbar__mobile-menu-button {
   color: #374151;
-  background: rgb(0 0 0 / 10%);
+  background: rgb(0 0 0 / 15%); /* Increased from 10% for better visibility */
 }
 
 .navbar.light-theme .navbar__theme-toggle:hover,
 .navbar.light-theme .navbar__help-button:hover,
 .navbar.light-theme .navbar__mobile-menu-button:hover {
-  background: rgb(0 0 0 / 20%);
+  background: rgb(0 0 0 / 25%); /* Increased from 20% */
 }
 
 /* Dark Theme - Liquid Glass */
 .navbar.dark-theme {
-  background: rgb(15 23 42 / 8%);
-  border-bottom: 1px solid rgb(255 255 255 / 10%);
+  background: rgb(15 23 42 / 20%); /* Increased from 8% for better visibility */
+  border-bottom: 2px solid rgb(255 255 255 / 20%); /* Increased from 10% and made thicker */
   box-shadow:
-    0 0 0 1px rgb(255 255 255 / 60%),
-    0 16px 32px rgb(0 0 0 / 30%);
-  backdrop-filter: blur(20px) saturate(180%);
+    0 0 0 1px rgb(255 255 255 / 80%),
+    0 16px 32px rgb(0 0 0 / 40%); /* Increased shadow */
+  backdrop-filter: blur(25px) saturate(200%); /* Increased blur and saturation */
 }
 
 .navbar.dark-theme:hover {
-  background: rgb(15 23 42 / 12%);
-  border-bottom-color: rgb(255 255 255 / 20%);
+  background: rgb(15 23 42 / 30%); /* Increased from 12% */
+  border-bottom-color: rgb(255 255 255 / 30%); /* Increased from 20% */
   box-shadow:
-    0 0 0 1px rgb(255 255 255 / 80%),
-    0 20px 40px rgb(0 0 0 / 40%);
+    0 0 0 1px rgb(255 255 255 / 90%),
+    0 20px 40px rgb(0 0 0 / 50%); /* Increased shadow */
 }
 
 /* Responsive Design */
@@ -579,7 +635,100 @@
   .navbar__mobile-link,
   .navbar__mobile-theme-toggle,
   .navbar__mobile-help-button {
-    padding: 0.75rem 1rem;
+    padding: 1rem 1rem; /* Adjusted padding for smaller screens */
+  }
+}
+
+/* iPhone 14 specific optimizations */
+@media screen and (max-width: 430px) and (max-height: 932px) {
+  .navbar {
+    height: 65px; /* Slightly taller for iPhone 14 */
+    background: rgb(255 255 255 / 30%); /* Even more visible on small screens */
+    border-bottom: 3px solid rgb(255 255 255 / 50%); /* Thicker border */
+  }
+
+  .navbar__mobile-menu {
+    top: 65px;
+  }
+
+  .navbar__mobile-menu-button {
+    width: 60px; /* Larger touch target for iPhone 14 */
+    height: 60px;
+    padding: 18px 14px;
+  }
+
+  .navbar__mobile-link,
+  .navbar__mobile-theme-toggle,
+  .navbar__mobile-help-button {
+    min-height: 64px; /* Larger touch targets */
+    padding: 1.75rem 1.5rem;
+  }
+}
+
+/* Additional mobile optimizations for better touch experience */
+@media (max-width: 768px) {
+  .navbar {
+    /* Ensure navbar is always visible and clickable on mobile */
+    background: rgb(255 255 255 / 35%); /* Even more visible on mobile */
+    border-bottom: 3px solid rgb(255 255 255 / 50%);
+    box-shadow:
+      0 0 0 2px rgb(255 255 255 / 90%),
+      0 20px 40px rgb(0 0 0 / 40%);
+  }
+
+  .navbar__item a {
+    /* Ensure minimum touch target size on mobile */
+    min-height: 48px;
+    min-width: 48px;
+    padding: 0.75rem 1.25rem;
+  }
+
+  .navbar__theme-toggle,
+  .navbar__help-button {
+    /* Ensure minimum touch target size on mobile */
+    width: 48px;
+    height: 48px;
+    font-size: 1.2rem;
+  }
+}
+
+/* Touch device optimizations */
+@media (hover: none) and (pointer: coarse) {
+  .navbar {
+    /* Ensure navbar is always visible on touch devices */
+    background: rgb(255 255 255 / 40%);
+    border-bottom: 3px solid rgb(255 255 255 / 60%);
+  }
+
+  .navbar__item a {
+    /* Larger touch targets for touch devices */
+    min-height: 48px;
+    min-width: 48px;
+    padding: 0.75rem 1.25rem;
+  }
+
+  .navbar__theme-toggle,
+  .navbar__help-button {
+    /* Larger touch targets for touch devices */
+    width: 48px;
+    height: 48px;
+    font-size: 1.2rem;
+  }
+
+  .navbar__mobile-menu-button {
+    /* Larger touch target for touch devices */
+    width: 60px;
+    height: 60px;
+    padding: 18px 14px;
+  }
+}
+
+/* High DPI display optimizations */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  .navbar {
+    /* Ensure crisp rendering on high DPI displays */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 }
 
@@ -587,13 +736,13 @@
 .navbar__theme-toggle:focus,
 .navbar__help-button:focus,
 .navbar__mobile-menu-button:focus {
-  outline: 2px solid #3b82f6;
-  outline-offset: 2px;
+  outline: 3px solid #3b82f6; /* Increased from 2px */
+  outline-offset: 3px; /* Increased from 2px */
 }
 
 .navbar__item a:focus {
-  outline: 2px solid #3b82f6;
-  outline-offset: 2px;
+  outline: 3px solid #3b82f6; /* Increased from 2px */
+  outline-offset: 3px; /* Increased from 2px */
 }
 
 /* Reduced Motion */
@@ -611,18 +760,26 @@
   right: 25px;
   bottom: 25px;
   z-index: var(--z-elevate); /* Use CSS custom property for elevated elements */
-  width: 50px;
-  height: 50px;
-  font-size: 1.2rem;
+  width: 56px; /* Increased from 50px for better touch target */
+  height: 56px; /* Increased from 50px for better touch target */
+  font-size: 1.4rem; /* Increased from 1.2rem */
   color: #fff;
   pointer-events: none;
   cursor: pointer;
-  background: rgb(255 255 255 / 10%);
-  border: none;
+  background: rgb(255 255 255 / 20%); /* Increased from 10% for better visibility */
+  border: 2px solid rgb(255 255 255 / 30%); /* Added border for better visibility */
   border-radius: 50%;
   opacity: 0;
-  backdrop-filter: blur(10px);
+  backdrop-filter: blur(15px); /* Increased blur */
   transition: all 0.2s ease;
+  /* Ensure button is clickable on iOS */
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+  /* Handle safe area insets for devices with notches */
+  right: max(25px, env(safe-area-inset-right));
+  bottom: max(25px, env(safe-area-inset-bottom));
 }
 
 .scroll-to-top.visible {
@@ -631,13 +788,13 @@
 }
 
 .scroll-to-top:hover {
-  background: rgb(255 255 255 / 20%);
+  background: rgb(255 255 255 / 30%); /* Increased from 20% */
   transform: scale(1.05);
 }
 
 .scroll-to-top:focus {
-  outline: 2px solid #3b82f6;
-  outline-offset: 2px;
+  outline: 3px solid #3b82f6; /* Increased from 2px */
+  outline-offset: 3px; /* Increased from 2px */
 }
 
 /* Pop effect animation */
@@ -645,22 +802,22 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 40px;
-  height: 40px;
+  width: 44px; /* Increased from 40px for better touch target */
+  height: 44px; /* Increased from 40px for better touch target */
   background: linear-gradient(
     135deg,
-    rgb(59 130 246 / 10%),
-    rgb(147 51 234 / 10%)
+    rgb(59 130 246 / 20%), /* Increased from 10% for better visibility */
+    rgb(147 51 234 / 20%) /* Increased from 10% for better visibility */
   );
-  border: 1px solid rgb(255 255 255 / 20%);
+  border: 2px solid rgb(255 255 255 / 30%); /* Increased from 20% and made thicker */
   border-radius: 50%;
-  backdrop-filter: blur(10px);
+  backdrop-filter: blur(15px); /* Increased blur */
   animation: popIn 2s ease-in-out infinite;
 }
 
 .pop-bubble {
-  font-size: 1.2rem;
-  filter: drop-shadow(0 2px 4px rgb(0 0 0 / 20%));
+  font-size: 1.4rem; /* Increased from 1.2rem */
+  filter: drop-shadow(0 3px 6px rgb(0 0 0 / 30%)); /* Increased shadow */
   animation: sparkle 3s ease-in-out infinite;
 }
 
@@ -678,7 +835,7 @@
 @keyframes sparkle {
   0%,
   100% {
-    opacity: 0.7;
+    opacity: 0.8; /* Increased from 0.7 for better visibility */
     transform: rotate(0deg);
   }
 
@@ -688,7 +845,7 @@
   }
 
   50% {
-    opacity: 0.8;
+    opacity: 0.9; /* Increased from 0.8 for better visibility */
     transform: rotate(180deg);
   }
 
