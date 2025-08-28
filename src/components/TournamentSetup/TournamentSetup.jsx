@@ -897,8 +897,7 @@ function TournamentSetupContent({ onStart, userName }) {
 
   // Simple admin detection - user "aaron" gets admin features
   // TODO: Replace with actual user authentication check
-  // Example: const isAdmin = userName === "aaron" || userRole === "admin";
-  const isAdmin = false; // Set to false to show simplified view by default
+  const isAdmin = (userName || '').toLowerCase() === 'aaron';
 
   const handleImageOpen = (image) => {
     setOpenImages((prev) => {

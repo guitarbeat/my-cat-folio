@@ -316,34 +316,11 @@ const Profile = ({ userName, onStartNewTournament }) => {
     }
   }, [userName, fetchNames, fetchSelectionStats]);
 
-  // * Check admin status
+  // * Check admin status (simple: 'aaron' is admin)
   useEffect(() => {
-    const checkAdminStatus = async () => {
-      try {
-        if (!supabase || !supabase.auth) {
-          setIsAdmin(false);
-          return;
-        }
-        const {
-          data: { user }
-        } = await supabase.auth.getUser();
-        if (user) {
-          const { data: adminCheck } = await supabase
-            .from('user_preferences')
-            .select('is_admin')
-            .eq('user_name', user.email)
-            .single();
-
-          setIsAdmin(adminCheck?.is_admin || false);
-        }
-      } catch (error) {
-        console.error('Error checking admin status:', error);
-        setIsAdmin(false);
-      }
-    };
-
-    checkAdminStatus();
-  }, []);
+    const nameIsAdmin = (userName || '').toLowerCase() === 'aaron';
+    setIsAdmin(nameIsAdmin);
+  }, [userName]);
 
   // * Calculate statistics based on current filters
   const stats = calculateEnhancedStats(allNames, filterStatus);
