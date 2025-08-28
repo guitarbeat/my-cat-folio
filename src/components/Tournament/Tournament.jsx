@@ -357,7 +357,8 @@ function useKeyboardControls(
   isProcessing,
   isTransitioning,
   isMuted,
-  handleVoteWithAnimation
+  handleVoteWithAnimation,
+  { onToggleHelp, onUndo, canUndoNow, onClearSelection } = {}
 ) {
   useEffect(() => {
     const handleKeyPress = (e) => {
@@ -390,7 +391,22 @@ function useKeyboardControls(
         case 'Tab':
           break;
         case 'Escape':
-          // Clear selection - handled by parent
+          e.preventDefault();
+          if (canUndoNow && typeof onUndo === 'function') {
+            onUndo();
+          } else if (typeof onClearSelection === 'function') {
+            onClearSelection();
+          }
+          break;
+        case '?':
+          e.preventDefault();
+          if (typeof onToggleHelp === 'function') onToggleHelp();
+          break;
+        case '/':
+          if (e.shiftKey) {
+            e.preventDefault();
+            if (typeof onToggleHelp === 'function') onToggleHelp();
+          }
           break;
         default:
           break;
@@ -404,7 +420,11 @@ function useKeyboardControls(
     isProcessing,
     isTransitioning,
     isMuted,
-    handleVoteWithAnimation
+    handleVoteWithAnimation,
+    onToggleHelp,
+    onUndo,
+    canUndoNow,
+    onClearSelection
   ]);
 }
 
@@ -489,6 +509,7 @@ function TournamentContent({
   const {
     currentMatch,
     handleVote,
+    handleUndo,
     progress,
     roundNumber,
     currentMatchNumber,
@@ -517,6 +538,23 @@ function TournamentContent({
   const lastVoteTimeRef = useRef(0);
   const VOTE_COOLDOWN = 500;
 
+  // * Undo window (2.5s)
+  const [undoExpiresAt, setUndoExpiresAt] = useState(null);
+  const undoRemainingMs = undoExpiresAt ? Math.max(0, undoExpiresAt - Date.now()) : 0;
+  const canUndoNow = !!undoExpiresAt && undoRemainingMs > 0;
+  useEffect(() => {
+    if (!undoExpiresAt) return;
+    const id = setInterval(() => {
+      if (Date.now() >= undoExpiresAt) {
+        setUndoExpiresAt(null);
+      } else {
+        // trigger re-render
+        setUndoExpiresAt((ts) => ts);
+      }
+    }, 200);
+    return () => clearInterval(id);
+  }, [undoExpiresAt]);
+
   // * Update match result
   const updateMatchResult = useCallback(
     (option) => {
@@ -535,6 +573,8 @@ function TournamentContent({
       setTimeout(() => setShowMatchResult(true), 500);
       setTimeout(() => setShowMatchResult(false), 2500);
       showSuccess('Vote recorded successfully!', { duration: 3000 });
+      // Start undo window
+      setUndoExpiresAt(Date.now() + 2500);
     },
     [currentMatch, showSuccess, setLastMatchResult, setShowMatchResult]
   );
@@ -686,7 +726,18 @@ function TournamentContent({
     isProcessing,
     isTransitioning,
     audioManager.isMuted,
-    handleVoteWithAnimation
+    handleVoteWithAnimation,
+    {
+      onToggleHelp: () => setShowKeyboardHelp((v) => !v),
+      onUndo: () => {
+        if (canUndoNow) {
+          handleUndo();
+          setUndoExpiresAt(null);
+        }
+      },
+      canUndoNow,
+      onClearSelection: () => setSelectedOption(null)
+    }
   );
 
   // * Transform match history for bracket
@@ -781,6 +832,28 @@ function TournamentContent({
         volume={audioManager.volume}
         onVolumeChange={audioManager.handleVolumeChange}
       />
+
+      {/* Undo banner */}
+      {canUndoNow && (
+        <div className={styles.undoBanner} role="status" aria-live="polite">
+          <span>
+            Vote recorded.
+            <span className={styles.undoTimer} aria-hidden="true">
+              {` ${Math.max(0, (undoRemainingMs / 1000).toFixed(1))}s`}
+            </span>
+          </span>
+          <button
+            className={styles.undoButton}
+            onClick={() => {
+              handleUndo();
+              setUndoExpiresAt(null);
+            }}
+            aria-label="Undo last vote (Esc)"
+          >
+            Undo (Esc)
+          </button>
+        </div>
+      )}
 
       {/* Main Tournament Layout */}
       <div

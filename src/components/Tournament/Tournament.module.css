@@ -220,6 +220,39 @@
   border-radius: var(--radius-full);
 }
 
+/* Undo banner */
+.undoBanner {
+  position: fixed;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  background: var(--card-background);
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-md);
+  padding: 10px 14px;
+  border-radius: var(--radius-md);
+  z-index: 1000;
+}
+
+.undoButton {
+  background: var(--primary-600);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-sm);
+  padding: 6px 10px;
+  cursor: pointer;
+}
+.undoButton:hover { background: var(--primary-500); }
+
+.undoTimer {
+  margin-left: 6px;
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+}
+
 .soundToggleButton {
   composes: btnsecondary from "../../styles/global.css";
   display: flex;
