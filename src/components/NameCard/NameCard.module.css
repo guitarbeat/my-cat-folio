@@ -673,18 +673,22 @@
 .cardImageContainer {
   position: relative;
   width: 100%;
-  height: 120px;
+  height: 150px; /* Increased to show more of the image */
   margin-bottom: var(--space-3);
   overflow: hidden;
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-sm);
+  background: var(--surface-color); /* Neutral background for letterboxing */
 }
 
 .cardImage {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain; /* Show the whole cat, avoid cropping */
+  object-position: 50% 20%; /* Prefer top-center (faces are often higher) */
   transition: transform var(--duration-normal) var(--ease-out);
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
 }
 
 .cardImage:hover {
@@ -732,7 +736,7 @@
   z-index: 1;
 
   /* * Match swipe card image height */
-  height: 200px;
+  height: 220px; /* Slightly taller to reduce perceived cropping */
   margin-bottom: var(--space-4);
 }
 

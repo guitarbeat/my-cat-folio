@@ -19,6 +19,7 @@
   box-shadow:
     0 0 0 1px rgb(255 255 255 / 80%),
     0 16px 32px rgb(0 0 0 / 25%); /* Increased shadow for better visibility */
+  -webkit-backdrop-filter: blur(15px) saturate(180%);
   backdrop-filter: blur(15px) saturate(180%); /* Increased blur and saturation */
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   /* Ensure navbar is always on top and clickable */
@@ -29,10 +30,6 @@
   padding-top: env(safe-area-inset-top);
   padding-left: env(safe-area-inset-left);
   padding-right: env(safe-area-inset-right);
-  /* Ensure navbar extends to edges on devices with notches */
-  margin-top: calc(-1 * env(safe-area-inset-top));
-  margin-left: calc(-1 * env(safe-area-inset-left));
-  margin-right: calc(-1 * env(safe-area-inset-right));
 }
 
 /* Enhanced hover effect for the entire navbar */
@@ -346,6 +343,7 @@
   display: none;
   background: rgb(0 0 0 / 98%); /* Increased from 95% for better visibility */
   opacity: 0;
+  -webkit-backdrop-filter: blur(25px);
   backdrop-filter: blur(25px); /* Increased from 20px */
   transform: translateY(-100%);
   transition: all 0.3s ease;
@@ -353,10 +351,6 @@
   padding-top: env(safe-area-inset-top);
   padding-left: env(safe-area-inset-left);
   padding-right: env(safe-area-inset-right);
-  /* Ensure menu extends to edges on devices with notches */
-  margin-top: calc(-1 * env(safe-area-inset-top));
-  margin-left: calc(-1 * env(safe-area-inset-left));
-  margin-right: calc(-1 * env(safe-area-inset-right));
 }
 
 .navbar__mobile-menu.visible {
@@ -698,6 +692,8 @@
     /* Ensure navbar is always visible on touch devices */
     background: rgb(255 255 255 / 40%);
     border-bottom: 3px solid rgb(255 255 255 / 60%);
+    -webkit-backdrop-filter: blur(20px) saturate(200%);
+    backdrop-filter: blur(20px) saturate(200%);
   }
 
   .navbar__item a {
@@ -720,6 +716,15 @@
     width: 60px;
     height: 60px;
     padding: 18px 14px;
+  }
+}
+
+/* iOS Safari specific fixes */
+@supports (-webkit-touch-callout: none) {
+  .navbar {
+    z-index: 10000; /* ensure on top of other fixed elements */
+    -webkit-transform: translateZ(0);
+            transform: translateZ(0);
   }
 }
 

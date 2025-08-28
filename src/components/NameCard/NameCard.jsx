@@ -248,15 +248,27 @@ function NameCard({
         {/* Cat image when provided */}
         {image && (
           <div className={styles.cardImageContainer}>
-            <img
-              src={image}
-              alt="Cat picture"
-              className={styles.cardImage}
-              loading="lazy"
-              onError={(e) => {
-                console.error('Image failed to load:', e.target.src);
-              }}
-            />
+            {(() => {
+              const base = image.includes('.')
+                ? image.replace(/\.[^.]+$/, '')
+                : image;
+              return (
+                <picture>
+                  <source type="image/avif" srcSet={`${base}.avif`} />
+                  <source type="image/webp" srcSet={`${base}.webp`} />
+                  <img
+                    src={image}
+                    alt="Cat picture"
+                    className={styles.cardImage}
+                    loading="lazy"
+                    decoding="async"
+                    onError={(e) => {
+                      console.error('Image failed to load:', e.target.src);
+                    }}
+                  />
+                </picture>
+              );
+            })()}
           </div>
         )}
 
