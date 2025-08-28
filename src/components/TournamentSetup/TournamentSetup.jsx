@@ -3,7 +3,7 @@
  * @description Simple wizard for selecting cat names and starting a tournament.
  * Shows names and descriptions by default. Admin users get advanced filtering options.
  */
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import PropTypes from 'prop-types';
 import {
   supabase,
@@ -689,6 +689,8 @@ function useTournamentSetup(userName) {
   const [availableNames, setAvailableNames] = useState([]);
   const [selectedNames, setSelectedNames] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const saveTimeoutRef = useRef(null);
+  const lastSavedHashRef = useRef('');
 
   // Enhanced error handling
   const onErrorCb = useCallback((error) => {
@@ -768,6 +770,35 @@ function useTournamentSetup(userName) {
     fetchNames();
     }, [handleError, userName]);
 
+  const scheduleSave = useCallback(
+    (namesToSave) => {
+      if (!userName || !Array.isArray(namesToSave) || namesToSave.length === 0)
+        return;
+
+      const hash = namesToSave
+        .map((n) => n.id || n.name)
+        .sort()
+        .join(',');
+
+      if (hash === lastSavedHashRef.current) return;
+
+      if (saveTimeoutRef.current) clearTimeout(saveTimeoutRef.current);
+      saveTimeoutRef.current = setTimeout(() => {
+        lastSavedHashRef.current = hash;
+        saveTournamentSelections(namesToSave).catch((e) =>
+          console.warn('Save selections debounce error:', e)
+        );
+      }, 800);
+    },
+    [userName]
+  );
+
+  useEffect(() => {
+    return () => {
+      if (saveTimeoutRef.current) clearTimeout(saveTimeoutRef.current);
+    };
+  }, []);
+
   const toggleName = async (nameObj) => {
     setSelectedNames((prev) => {
       const newSelectedNames = prev.some((n) => n.id === nameObj.id)
@@ -780,10 +811,8 @@ function useTournamentSetup(userName) {
         toggleName.lastLogTs = Date.now();
       }
 
-      // Save tournament selections to database
-      if (newSelectedNames.length > 0 && userName) {
-        saveTournamentSelections(newSelectedNames);
-      }
+      // Debounce save of selections to database
+      scheduleSave(newSelectedNames);
 
       return newSelectedNames;
     });

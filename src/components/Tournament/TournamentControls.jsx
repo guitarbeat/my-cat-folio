@@ -30,6 +30,8 @@ const TournamentControls = ({
   isMuted,
   onToggleMute,
   onNextTrack,
+  isShuffle,
+  onToggleShuffle,
   trackInfo,
   audioError,
   onRetryAudio,
@@ -126,6 +128,19 @@ const TournamentControls = ({
           </button>
         )}
 
+        {!isMuted && (
+          <button
+            onClick={onToggleShuffle}
+            className={`${styles.soundToggleButton} ${isShuffle ? styles.muted : ''}`}
+            aria-label={isShuffle ? 'Disable shuffle' : 'Enable shuffle'}
+            aria-pressed={isShuffle}
+            disabled={isTransitioning}
+            title={isShuffle ? 'Shuffle: On (click to turn off)' : 'Shuffle: Off (click to turn on)'}
+          >
+            <span className={styles.icon} aria-hidden="true">🔀</span>
+          </button>
+        )}
+
         {audioError && (
           <button
             onClick={onRetryAudio}
@@ -202,6 +217,8 @@ TournamentControls.propTypes = {
   isMuted: PropTypes.bool.isRequired,
   onToggleMute: PropTypes.func.isRequired,
   onNextTrack: PropTypes.func.isRequired,
+  isShuffle: PropTypes.bool,
+  onToggleShuffle: PropTypes.func,
   trackInfo: PropTypes.object,
   audioError: PropTypes.string,
   onRetryAudio: PropTypes.func.isRequired,

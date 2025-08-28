@@ -29,6 +29,7 @@ function useAudioManager() {
   const [volume, setVolume] = useState({ music: 0.2, effects: 0.3 });
   const [audioError, setAudioError] = useState(null);
   const [currentTrack, setCurrentTrack] = useState(0);
+  const [isShuffle, setIsShuffle] = useState(false);
 
   const audioRef = useRef(null);
   const musicRef = useRef(null);
@@ -64,7 +65,7 @@ function useAudioManager() {
 
     musicRef.current = new Audio(musicTracks[0].path);
     musicRef.current.volume = volume.music;
-    musicRef.current.loop = true;
+    musicRef.current.loop = false; // allow auto-advance on 'ended'
 
     return () => {
       if (musicRef.current) {
@@ -129,7 +130,7 @@ function useAudioManager() {
 
           musicRef.current.src = musicTracks[currentTrack].path;
           musicRef.current.volume = volume.music;
-          musicRef.current.loop = true;
+          musicRef.current.loop = false;
 
           if (!isMuted) {
             await musicRef.current.play();
@@ -146,6 +147,25 @@ function useAudioManager() {
 
     playNewTrack();
   }, [currentTrack, isMuted, volume.music, musicTracks]);
+
+  // * Auto-advance on track end
+  useEffect(() => {
+    const node = musicRef.current;
+    if (!node) return;
+    const onEnded = () => {
+      setCurrentTrack((prev) => {
+        if (isShuffle) {
+          if (musicTracks.length <= 1) return prev;
+          let next = Math.floor(Math.random() * musicTracks.length);
+          if (next === prev) next = (prev + 1) % musicTracks.length;
+          return next;
+        }
+        return (prev + 1) % musicTracks.length;
+      });
+    };
+    node.addEventListener('ended', onEnded);
+    return () => node.removeEventListener('ended', onEnded);
+  }, [isShuffle, musicTracks.length]);
 
   // * Toggle mute
   const handleToggleMute = useCallback(() => {
@@ -177,6 +197,11 @@ function useAudioManager() {
   const handleNextTrack = useCallback(() => {
     setCurrentTrack((prev) => (prev + 1) % musicTracks.length);
   }, [musicTracks.length]);
+
+  // * Toggle shuffle
+  const handleToggleShuffle = useCallback(() => {
+    setIsShuffle((s) => !s);
+  }, []);
 
   // * Retry audio
   const retryAudio = useCallback(() => {
@@ -216,10 +241,12 @@ function useAudioManager() {
     volume,
     audioError,
     currentTrack,
+    isShuffle,
     trackInfo: musicTracks[currentTrack],
     playSound,
     handleToggleMute,
     handleNextTrack,
+    handleToggleShuffle,
     retryAudio,
     handleVolumeChange
   };
@@ -745,6 +772,8 @@ function TournamentContent({
         isMuted={audioManager.isMuted}
         onToggleMute={audioManager.handleToggleMute}
         onNextTrack={audioManager.handleNextTrack}
+        isShuffle={audioManager.isShuffle}
+        onToggleShuffle={audioManager.handleToggleShuffle}
         currentTrack={audioManager.currentTrack}
         trackInfo={audioManager.trackInfo}
         audioError={audioManager.audioError}
