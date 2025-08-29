@@ -3009,8 +3009,8 @@ h1 {
 
 .cat-background__cat {
   position: absolute;
-  width: 40px;
-  height: 40px;
+  width: 96px;
+  height: 96px;
   opacity: 0.6;
   filter: drop-shadow(0 0 10px rgb(255 255 255 / 30%));
   transition: all 0.3s ease;
@@ -3150,8 +3150,8 @@ h1 {
 /* * Responsive adjustments */
 @media (width <= 768px) {
   .cat-background__cat {
-    width: 30px;
-    height: 30px;
+    width: 72px;
+    height: 72px;
   }
 
   .cat-background__cat--1 {
@@ -3177,8 +3177,8 @@ h1 {
 
 @media (width <= 480px) {
   .cat-background__cat {
-    width: 25px;
-    height: 25px;
+    width: 56px;
+    height: 56px;
   }
 
   .cat-background__cat--1 {
