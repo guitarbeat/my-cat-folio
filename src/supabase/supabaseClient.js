@@ -1324,7 +1324,8 @@ export const imagesAPI = {
   async upload(file, userName = 'anon', prefix = '') {
     if (!supabase) throw new Error('Supabase not configured');
     const safe = (file?.name || 'image').replace(/[^a-zA-Z0-9._-]/g, '_');
-    const objectPath = `${prefix ? `${prefix}/` : ''}${userName}/${Date.now()}-${safe}`;
+    // Store at bucket root to simplify listing (no recursion needed)
+    const objectPath = `${prefix ? `${prefix}/` : ''}${Date.now()}-${safe}`;
     const { error } = await supabase.storage.from('cat-images').upload(objectPath, file, {
       upsert: false,
       cacheControl: '3600'

@@ -5,13 +5,14 @@
  */
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import PropTypes from 'prop-types';
-import {
-  supabase,
-  getNamesWithDescriptions,
-  tournamentsAPI,
-  catNamesAPI,
-  imagesAPI
-} from '../../supabase/supabaseClient';
+  import {
+    supabase,
+    getNamesWithDescriptions,
+    tournamentsAPI,
+    catNamesAPI,
+    imagesAPI
+  } from '../../supabase/supabaseClient';
+  import { compressImageFile } from '../../utils/imageUtils';
 import devLog from '../../utils/logger';
 import {
   LoadingSpinner,
@@ -223,7 +224,7 @@ const NameSelection = ({
             onToggleName={onToggleName}
             isAdmin={isAdmin}
             showCatPictures={showCatPictures}
-            imageList={galleryImages}
+            imageList={imageList}
           />
         ) : (
           displayNames.map((nameObj) => (
@@ -282,6 +283,9 @@ const SwipeableNameCards = ({
 
   const currentName = names[currentIndex];
   const isSelected = selectedNames.some((n) => n.id === currentName?.id);
+  const imageSrc = showCatPictures && currentName
+    ? getRandomCatImage(currentName.id, imageList)
+    : null;
 
   const handleDragStart = (e) => {
     const touch = e.touches ? e.touches[0] : e;
@@ -478,15 +482,15 @@ const SwipeableNameCards = ({
           {/* Card content */}
           <div className={styles.swipeCardContent}>
             {/* Cat picture when enabled */}
-            {showCatPictures && (
+            {showCatPictures && imageSrc && (
               <div
                 className={styles.swipeCardImageContainer}
                 ref={imgContainerRef}
-                style={{ ['--bg-image']: `url(${getRandomCatImage(currentName.id, imageList)})` }}
+                style={{ ['--bg-image']: `url(${imageSrc})` }}
               >
                 {(() => {
-                  const src = getRandomCatImage(currentName.id, imageList);
-                  if (src.startsWith('/images/')) {
+                  const src = imageSrc;
+                  if (String(src).startsWith('/images/')) {
                     const base = src.includes('.') ? src.replace(/\.[^.]+$/, '') : src;
                     return (
                       <picture>
@@ -1490,16 +1494,24 @@ function TournamentSetupContent({ onStart, userName }) {
                     onChange={async (e) => {
                       const files = Array.from(e.target.files || []);
                       if (!files.length) return;
-                      try {
-                        const uploaded = [];
-                        for (const f of files) {
-                          const url = await imagesAPI.upload(f, (userName || 'aaron'));
-                          if (url) uploaded.push(url);
-                        }
-                        if (uploaded.length) {
-                          setGalleryImages((prev) => [...uploaded, ...prev]);
-                        }
-                      } catch (err) {
+                    try {
+                      const uploaded = [];
+                      for (const f of files) {
+                        const compressed = await compressImageFile(f, {
+                          maxWidth: 1600,
+                          maxHeight: 1600,
+                          quality: 0.82
+                        });
+                        const url = await imagesAPI.upload(
+                          compressed,
+                          userName || 'aaron'
+                        );
+                        if (url) uploaded.push(url);
+                      }
+                      if (uploaded.length) {
+                        setGalleryImages((prev) => [...uploaded, ...prev]);
+                      }
+                    } catch (err) {
                         console.error('Upload failed', err);
                         // eslint-disable-next-line no-alert
                         alert('Upload failed. Please try again.');

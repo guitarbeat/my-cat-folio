@@ -325,26 +325,44 @@ function NameCard({
             }}
           >
             {(() => {
-              const base = image.includes('.')
-                ? image.replace(/\.[^.]+$/, '')
-                : image;
+              // If this is a static asset under /images, offer avif/webp sources
+              if (String(image).startsWith('/images/')) {
+                const base = image.includes('.')
+                  ? image.replace(/\.[^.]+$/, '')
+                  : image;
+                return (
+                  <picture>
+                    <source type="image/avif" srcSet={`${base}.avif`} />
+                    <source type="image/webp" srcSet={`${base}.webp`} />
+                    <img
+                      ref={imgRef}
+                      src={image}
+                      alt="Cat picture"
+                      className={styles.cardImage}
+                      loading="lazy"
+                      decoding="async"
+                      onLoad={handleImageLoad}
+                      onError={(e) => {
+                        console.error('Image failed to load:', e.target.src);
+                      }}
+                    />
+                  </picture>
+                );
+              }
+              // Otherwise, render a plain <img> (Supabase URL etc.)
               return (
-                <picture>
-                  <source type="image/avif" srcSet={`${base}.avif`} />
-                  <source type="image/webp" srcSet={`${base}.webp`} />
-                  <img
-                    ref={imgRef}
-                    src={image}
-                    alt="Cat picture"
-                    className={styles.cardImage}
-                    loading="lazy"
-                    decoding="async"
-                    onLoad={handleImageLoad}
-                    onError={(e) => {
-                      console.error('Image failed to load:', e.target.src);
-                    }}
-                  />
-                </picture>
+                <img
+                  ref={imgRef}
+                  src={image}
+                  alt="Cat picture"
+                  className={styles.cardImage}
+                  loading="lazy"
+                  decoding="async"
+                  onLoad={handleImageLoad}
+                  onError={(e) => {
+                    console.error('Image failed to load:', e.target.src);
+                  }}
+                />
               );
             })()}
           </div>
