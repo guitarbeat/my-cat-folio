@@ -44,6 +44,15 @@ export class PreferenceSorter {
     this.ranks = [];
     this.rec = new Array(items.length).fill(0);
     this.preferenceCache = new Map();
+    // Pairwise comparison queue (simple, reliable fallback)
+    this.pairs = [];
+    for (let i = 0; i < items.length - 1; i++) {
+      for (let j = i + 1; j < items.length; j++) {
+        this.pairs.push([this.getName(items[i]), this.getName(items[j])]);
+      }
+    }
+    this.currentIndex = 0;
+    this.history = [];
     // Consider adding: this.maxCacheSize = 1000;
     // Implement LRU eviction when cache exceeds max size
   }
@@ -55,6 +64,9 @@ export class PreferenceSorter {
   addPreference(item1, item2, value) {
     const key = `${this.getName(item1)}-${this.getName(item2)}`;
     this.preferences.set(key, value);
+    this.preferenceCache.set(key, value);
+    // Record history for undo support
+    this.history.push({ a: this.getName(item1), b: this.getName(item2), value });
   }
 
   getPreference(item1, item2) {
@@ -152,5 +164,34 @@ export class PreferenceSorter {
     if (left === 0 && right === this.items.length - 1) {
       this.ranks = [...merged];
     }
+  }
+
+  // Return the next un-judged pair as a match { left, right }
+  getNextMatch() {
+    // Advance index to next pair we haven't judged yet
+    while (this.currentIndex < this.pairs.length) {
+      const [a, b] = this.pairs[this.currentIndex];
+      const key = `${a}-${b}`;
+      const reverseKey = `${b}-${a}`;
+      if (!this.preferences.has(key) && !this.preferences.has(reverseKey)) {
+        return { left: a, right: b };
+      }
+      this.currentIndex++;
+    }
+    return null;
+  }
+
+  // Undo last added preference
+  undoLastPreference() {
+    const last = this.history.pop();
+    if (!last) return;
+    const key = `${last.a}-${last.b}`;
+    const reverseKey = `${last.b}-${last.a}`;
+    this.preferences.delete(key);
+    this.preferences.delete(reverseKey);
+    this.preferenceCache.delete(key);
+    this.preferenceCache.delete(reverseKey);
+    // Step back at least one index to revisit the undone pair if needed
+    this.currentIndex = Math.max(0, this.currentIndex - 1);
   }
 }

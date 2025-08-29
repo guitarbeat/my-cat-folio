@@ -166,6 +166,8 @@ function App() {
       console.log('[DEV] 🎮 App: Processed names:', processedNames);
 
       tournamentActions.setNames(processedNames);
+      // Ensure we are on the tournament view after starting
+      tournamentActions.setView('tournament');
 
       // * Use setTimeout to ensure the loading state is visible and prevent flashing
       setTimeout(() => {

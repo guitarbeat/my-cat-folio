@@ -283,8 +283,12 @@ export function useTournament({
         );
 
         // * Update PreferenceSorter
-        if (sorter) {
+        if (sorter && typeof sorter.addPreference === 'function') {
           sorter.addPreference(leftName, rightName, voteValue);
+        } else if (sorter && sorter.preferences instanceof Map) {
+          // Fallback: record preference directly on existing map
+          const key = `${leftName}-${rightName}`;
+          sorter.preferences.set(key, voteValue);
         }
 
         // * Create vote data
@@ -411,8 +415,17 @@ export function useTournament({
       matchHistory: persistentState.matchHistory.slice(0, -1)
     });
 
-    if (sorter) {
+    if (sorter && typeof sorter.undoLastPreference === 'function') {
       sorter.undoLastPreference();
+    } else if (sorter && sorter.preferences instanceof Map) {
+      // Fallback: remove last preference directly
+      const key = `${lastVote.match.left.name}-${lastVote.match.right.name}`;
+      const reverseKey = `${lastVote.match.right.name}-${lastVote.match.left.name}`;
+      sorter.preferences.delete(key);
+      sorter.preferences.delete(reverseKey);
+      if (typeof sorter._pairIndex === 'number') {
+        sorter._pairIndex = Math.max(0, sorter._pairIndex - 1);
+      }
     }
 
     // * Update round number if needed
@@ -562,16 +575,49 @@ function getNextMatch(names, sorter, _matchNumber) {
     return null;
   }
 
-  try {
-    const nextMatch = sorter.getNextMatch();
-    if (nextMatch) {
-      return {
-        left: names.find((n) => n.name === nextMatch.left) || nextMatch.left,
-        right: names.find((n) => n.name === nextMatch.right) || nextMatch.right
-      };
+  // Preferred: use sorter's own next-match API if present
+  if (typeof sorter.getNextMatch === 'function') {
+    try {
+      const nextMatch = sorter.getNextMatch();
+      if (nextMatch) {
+        return {
+          left: names.find((n) => n.name === nextMatch.left) || nextMatch.left,
+          right: names.find((n) => n.name === nextMatch.right) || nextMatch.right
+        };
+      }
+    } catch (error) {
+      console.warn('Could not get next match from sorter:', error);
     }
-  } catch (error) {
-    console.warn('Could not get next match from sorter:', error);
+  }
+
+  // Fallback: generate pairwise comparisons on the fly using the sorter's preference map
+  try {
+    const nameList = names.map((n) => n.name);
+    if (!Array.isArray(sorter._pairs)) {
+      sorter._pairs = [];
+      for (let i = 0; i < nameList.length - 1; i++) {
+        for (let j = i + 1; j < nameList.length; j++) {
+          sorter._pairs.push([nameList[i], nameList[j]]);
+        }
+      }
+      sorter._pairIndex = 0;
+    }
+
+    const prefs = sorter.preferences instanceof Map ? sorter.preferences : new Map();
+    while (sorter._pairIndex < sorter._pairs.length) {
+      const [a, b] = sorter._pairs[sorter._pairIndex];
+      const key = `${a}-${b}`;
+      const reverseKey = `${b}-${a}`;
+      if (!prefs.has(key) && !prefs.has(reverseKey)) {
+        return {
+          left: names.find((n) => n.name === a) || { name: a },
+          right: names.find((n) => n.name === b) || { name: b }
+        };
+      }
+      sorter._pairIndex++;
+    }
+  } catch (e) {
+    console.warn('Fallback next-match generation failed:', e);
   }
 
   return null;
