@@ -87,18 +87,52 @@ function Results({
       currentTournamentNames?.map((n) => n.name) || []
     );
 
+    const namesCount = currentTournamentNames?.length || 0;
+    const matchesPerRound = Math.ceil(Math.max(2, namesCount) / 2);
+
     return voteHistory
       .filter(
         (vote) =>
           tournamentNameSet.has(vote.match.left.name) &&
           tournamentNameSet.has(vote.match.right.name)
       )
-      .map((vote, index) => ({
-        id: index + 1,
-        name1: vote.match.left.name,
-        name2: vote.match.right.name,
-        winner: vote.result < 0 ? -1 : vote.result > 0 ? 1 : 0
-      }));
+      .map((vote, index) => {
+        // Prefer outcome fields if present
+        const leftOutcome = vote?.match?.left?.outcome;
+        const rightOutcome = vote?.match?.right?.outcome;
+        let winner;
+        if (leftOutcome || rightOutcome) {
+          const leftWin = leftOutcome === 'win';
+          const rightWin = rightOutcome === 'win';
+          if (leftWin && rightWin) winner = 0; // both
+          else if (leftWin && !rightWin) winner = -1;
+          else if (!leftWin && rightWin) winner = 1;
+          else winner = 2; // neither/skip
+        } else if (typeof vote.result === 'number') {
+          // Handle exact values (-1, 1, 0.5, 0) and fallback thresholds
+          if (vote.result === -1) winner = -1;
+          else if (vote.result === 1) winner = 1;
+          else if (vote.result === 0.5) winner = 0;
+          else if (vote.result === 0) winner = 2;
+          else if (vote.result < -0.1) winner = -1;
+          else if (vote.result > 0.1) winner = 1;
+          else if (Math.abs(vote.result) <= 0.1) winner = 0;
+          else winner = 2;
+        } else {
+          winner = 2;
+        }
+
+        const matchNumber = vote?.matchNumber ?? index + 1;
+        const round = Math.max(1, Math.ceil(matchNumber / Math.max(1, matchesPerRound)));
+
+        return {
+          id: matchNumber,
+          round,
+          name1: vote.match.left.name,
+          name2: vote.match.right.name,
+          winner
+        };
+      });
   }, [voteHistory, currentTournamentNames]);
 
   // Memoized rankings processor

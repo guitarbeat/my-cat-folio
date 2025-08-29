@@ -3025,28 +3025,48 @@ h1 {
 .cat-background__cat--1 {
   top: 15%;
   left: 10%;
-  animation: float1 8s ease-in-out infinite;
+  animation: float1 8s ease-in-out infinite, breathe1 7s ease-in-out infinite;
+  z-index: 1;
+  opacity: 0.55;
+  filter: drop-shadow(0 0 10px rgb(255 255 255 / 25%)) saturate(0.95) blur(0.2px);
+  width: 80px;
+  height: 80px;
 }
 
 .cat-background__cat--2 {
   top: 25%;
   right: 15%;
-  animation: float2 10s ease-in-out infinite;
-  animation-delay: -2s;
+  animation: float2 10s ease-in-out infinite, breathe2 6.5s ease-in-out infinite;
+  animation-delay: -2s, 0s;
+  z-index: 3;
+  opacity: 0.7;
+  filter: drop-shadow(0 0 14px rgb(255 255 255 / 35%)) saturate(1.1) brightness(1.05);
+  width: 104px;
+  height: 104px;
 }
 
 .cat-background__cat--3 {
   bottom: 20%;
   left: 20%;
-  animation: float3 12s ease-in-out infinite;
-  animation-delay: -4s;
+  animation: float3 12s ease-in-out infinite, breathe3 8s ease-in-out infinite;
+  animation-delay: -4s, 0s;
+  z-index: 4;
+  opacity: 0.85;
+  filter: drop-shadow(0 0 18px rgb(255 255 255 / 45%)) saturate(1.2) brightness(1.08);
+  width: 128px;
+  height: 128px;
 }
 
 .cat-background__cat--4 {
   right: 10%;
   bottom: 30%;
-  animation: float4 9s ease-in-out infinite;
-  animation-delay: -6s;
+  animation: float4 9s ease-in-out infinite, breathe4 5.5s ease-in-out infinite;
+  animation-delay: -6s, 0s;
+  z-index: 2;
+  opacity: 0.65;
+  filter: drop-shadow(0 0 12px rgb(255 255 255 / 30%)) saturate(1.0) hue-rotate(8deg);
+  width: 112px;
+  height: 112px;
 }
 
 @keyframes twinkle {
@@ -3104,6 +3124,27 @@ h1 {
   }
 }
 
+/* Subtle opacity breathing to enhance variation without fighting JS transforms */
+@keyframes breathe1 {
+  0%, 100% { opacity: 0.50; }
+  50% { opacity: 0.62; }
+}
+
+@keyframes breathe2 {
+  0%, 100% { opacity: 0.64; }
+  50% { opacity: 0.78; }
+}
+
+@keyframes breathe3 {
+  0%, 100% { opacity: 0.78; }
+  50% { opacity: 0.92; }
+}
+
+@keyframes breathe4 {
+  0%, 100% { opacity: 0.58; }
+  50% { opacity: 0.7; }
+}
+
 /* * Light theme adjustments */
 .light-theme .cat-background {
   background: linear-gradient(135deg, #e8f4fd 0%, #f0f8ff 50%, #e6f3ff 100%);
@@ -3157,21 +3198,29 @@ h1 {
   .cat-background__cat--1 {
     top: 10%;
     left: 5%;
+    width: 56px;
+    height: 56px;
   }
 
   .cat-background__cat--2 {
     top: 20%;
     right: 10%;
+    width: 76px;
+    height: 76px;
   }
 
   .cat-background__cat--3 {
     bottom: 15%;
     left: 15%;
+    width: 92px;
+    height: 92px;
   }
 
   .cat-background__cat--4 {
     right: 5%;
     bottom: 25%;
+    width: 84px;
+    height: 84px;
   }
 }
 
@@ -3184,21 +3233,29 @@ h1 {
   .cat-background__cat--1 {
     top: 8%;
     left: 3%;
+    width: 44px;
+    height: 44px;
   }
 
   .cat-background__cat--2 {
     top: 18%;
     right: 8%;
+    width: 60px;
+    height: 60px;
   }
 
   .cat-background__cat--3 {
     bottom: 12%;
     left: 12%;
+    width: 72px;
+    height: 72px;
   }
 
   .cat-background__cat--4 {
     right: 3%;
     bottom: 22%;
+    width: 64px;
+    height: 64px;
   }
 
 }

@@ -177,20 +177,39 @@ function Bracket({ matches }) {
       return [];
     }
 
+    // If caller provides explicit round numbers, group by them.
+    const hasExplicitRounds = matches.some((m) => typeof m.round === 'number');
+    if (hasExplicitRounds) {
+      const maxRound = Math.max(
+        ...matches.map((m) => (typeof m.round === 'number' ? m.round : 1))
+      );
+      const grouped = Array.from({ length: maxRound }, () => []);
+      matches.forEach((m) => {
+        const idx = Math.max(1, Number(m.round) || 1) - 1;
+        grouped[idx].push(m);
+      });
+      // Sort within each round by id if present
+      grouped.forEach((round) =>
+        round.sort((a, b) => (a.id ?? 0) - (b.id ?? 0))
+      );
+      return grouped;
+    }
+
+    // Fallback: heuristic grouping based on match id using log2
     const totalRounds = Math.ceil(Math.log2(matches.length + 1));
     const rounds = Array(totalRounds)
       .fill()
       .map(() => []);
 
     matches.forEach((match) => {
-      const roundIndex = Math.floor(Math.log2(match.id));
+      const roundIndex = Math.floor(Math.log2(Math.max(1, match.id)));
       if (roundIndex >= 0 && roundIndex < totalRounds) {
         rounds[roundIndex].push(match);
       }
     });
 
     // Sort matches within each round
-    rounds.forEach((round) => round.sort((a, b) => a.id - b.id));
+    rounds.forEach((round) => round.sort((a, b) => (a.id ?? 0) - (b.id ?? 0)));
 
     return rounds;
   }, [matches]);
@@ -223,7 +242,8 @@ Bracket.propTypes = {
       id: PropTypes.number.isRequired,
       name1: PropTypes.string.isRequired,
       name2: PropTypes.string,
-      winner: PropTypes.number
+      winner: PropTypes.number,
+      round: PropTypes.number
     })
   ).isRequired
 };

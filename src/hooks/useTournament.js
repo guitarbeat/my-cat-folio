@@ -84,12 +84,24 @@ export function useTournament({
   // * Update persistent state helper
   const updatePersistentState = useCallback(
     (updates) => {
-      setPersistentState((prev) => ({
-        ...prev,
-        ...updates,
-        lastUpdated: Date.now(),
-        userName: userName || 'anonymous'
-      }));
+      if (typeof updates === 'function') {
+        setPersistentState((prev) => {
+          const delta = updates(prev) || {};
+          return {
+            ...prev,
+            ...delta,
+            lastUpdated: Date.now(),
+            userName: userName || 'anonymous'
+          };
+        });
+      } else {
+        setPersistentState((prev) => ({
+          ...prev,
+          ...updates,
+          lastUpdated: Date.now(),
+          userName: userName || 'anonymous'
+        }));
+      }
     },
     [userName, setPersistentState]
   );

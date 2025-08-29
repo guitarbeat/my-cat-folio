@@ -742,26 +742,42 @@ function TournamentContent({
 
   // * Transform match history for bracket
   const transformedMatches = useMemo(() => {
+    const matchesPerRound = Math.ceil((names?.length || 2) / 2);
     return matchHistory.map((vote, index) => {
+      // Prefer explicit win flags if available
+      const leftWon = vote?.match?.left?.won === true;
+      const rightWon = vote?.match?.right?.won === true;
       let winner;
-      if (vote.result < -0.1) {
-        winner = -1;
-      } else if (vote.result > 0.1) {
-        winner = 1;
-      } else if (Math.abs(vote.result) <= 0.1) {
-        winner = 0;
+      if (leftWon && rightWon) {
+        winner = 0; // both advance
+      } else if (leftWon && !rightWon) {
+        winner = -1; // left wins
+      } else if (!leftWon && rightWon) {
+        winner = 1; // right wins
       } else {
-        winner = 2;
+        // Fallback to numeric result thresholds
+        if (typeof vote.result === 'number') {
+          if (vote.result < -0.1) winner = -1;
+          else if (vote.result > 0.1) winner = 1;
+          else if (Math.abs(vote.result) <= 0.1) winner = 0; // tie
+          else winner = 2; // skipped/other
+        } else {
+          winner = 2;
+        }
       }
 
+      const matchNumber = vote?.matchNumber ?? index + 1;
+      const round = Math.max(1, Math.ceil(matchNumber / Math.max(1, matchesPerRound)));
+
       return {
-        id: index + 1,
+        id: matchNumber,
+        round,
         name1: vote.match.left.name,
         name2: vote.match.right.name,
         winner
       };
     });
-  }, [matchHistory]);
+  }, [matchHistory, names]);
 
   // * Error state
   if (isError) {
