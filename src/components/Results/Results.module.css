@@ -199,10 +199,31 @@
 
 .tournamentBracket {
   composes: card--interactive from "../../styles/global.css";
+  position: relative;
   padding: var(--space-8);
   margin: var(--space-8) 0;
   overflow-x: auto;
+  background-image:
+    linear-gradient(var(--surface-color), var(--surface-color)),
+    radial-gradient(1200px 60px at 50% 0, rgb(0 0 0 / 6%), transparent),
+    radial-gradient(1200px 60px at 50% 100%, rgb(0 0 0 / 6%), transparent);
+  background-blend-mode: normal, multiply, multiply;
 }
+
+.tournamentBracket::before,
+.tournamentBracket::after {
+  content: "";
+  position: sticky;
+  top: 0;
+  bottom: 0;
+  z-index: 1;
+  width: 28px;
+  display: block;
+  pointer-events: none;
+}
+
+.tournamentBracket::before { left: 0; background: linear-gradient(90deg, rgb(0 0 0 / 10%), rgb(0 0 0 / 0)); }
+.tournamentBracket::after  { margin-left: auto; background: linear-gradient(270deg, rgb(0 0 0 / 10%), rgb(0 0 0 / 0)); }
 
 .tournamentBracket h3 {
   margin-bottom: var(--space-8);

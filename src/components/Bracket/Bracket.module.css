@@ -1,5 +1,6 @@
 .container {
   composes: cardinteractive from "../../styles/global.css";
+  position: relative;
   width: 100%;
   padding: var(--space-4);
   overflow-x: auto;
@@ -9,6 +10,52 @@
   background: var(--surface-color);
   border-radius: var(--radius-lg);
   -webkit-overflow-scrolling: touch;
+
+  /* Subtle bracket grid background */
+  background-image:
+    linear-gradient(var(--surface-color), var(--surface-color)),
+    repeating-linear-gradient(
+      to right,
+      rgb(0 0 0 / 3%) 0,
+      rgb(0 0 0 / 3%) 1px,
+      transparent 1px,
+      transparent 40px
+    ),
+    repeating-linear-gradient(
+      to bottom,
+      rgb(0 0 0 / 3%) 0,
+      rgb(0 0 0 / 3%) 1px,
+      transparent 1px,
+      transparent 24px
+    );
+  background-blend-mode: normal, multiply, multiply;
+}
+
+/* Scroll edge hints */
+.container::before,
+.container::after {
+  content: "";
+  position: sticky;
+  top: 0;
+  bottom: 0;
+  z-index: 1;
+  display: block;
+  width: 28px;
+  pointer-events: none;
+}
+
+.container::before {
+  left: 0;
+  background: linear-gradient(90deg, rgb(0 0 0 / 10%), rgb(0 0 0 / 0));
+  border-top-left-radius: inherit;
+  border-bottom-left-radius: inherit;
+}
+
+.container::after {
+  margin-left: auto;
+  background: linear-gradient(270deg, rgb(0 0 0 / 10%), rgb(0 0 0 / 0));
+  border-top-right-radius: inherit;
+  border-bottom-right-radius: inherit;
 }
 
 .bracket {
@@ -41,13 +88,18 @@
 
 .roundHeader {
   composes: cardinteractive from "../../styles/global.css";
-  padding: var(--space-2);
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  padding: var(--space-3);
   margin-bottom: var(--space-4);
   text-align: center;
-  background: var(--surface-color);
+  background: rgb(var(--surface-rgb) / 90%);
   border-color: var(--primary-200);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-sm);
+  -webkit-backdrop-filter: blur(6px);
+          backdrop-filter: blur(6px);
 }
 
 .roundTitle {
@@ -111,7 +163,7 @@
   position: relative;
   z-index: 2;
   width: 100%;
-  padding: var(--space-3);
+  padding: var(--space-4);
   background: var(--surface-color);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-lg);
@@ -127,9 +179,11 @@
 
 .player {
   display: flex;
+  gap: var(--space-2);
   align-items: center;
   justify-content: space-between;
-  padding: var(--space-2) var(--space-3);
+  width: 100%;
+  padding: var(--space-3) var(--space-4);
   margin-bottom: var(--space-2);
   background: var(--surface-color);
   border: 1px solid var(--border-color);
@@ -145,7 +199,7 @@
   composes: player;
   font-weight: 500;
   color: var(--primary-700);
-  background: rgb(var(--primary-rgb) / 10%);
+  background: linear-gradient(180deg, rgb(var(--primary-rgb) / 10%), rgb(var(--primary-rgb) / 6%));
   border-color: var(--primary-300);
 }
 
@@ -153,14 +207,15 @@
   composes: player;
   color: var(--text-secondary);
   background: var(--surface-color);
-  opacity: 0.6;
+  opacity: 0.65;
+  filter: saturate(0.85);
 }
 
 .playerBothWin {
   composes: player;
   font-weight: 500;
   color: var(--success-700);
-  background: rgb(var(--success-rgb) / 10%);
+  background: linear-gradient(180deg, rgb(var(--success-rgb) / 12%), rgb(var(--success-rgb) / 6%));
   border-color: var(--success-300);
 }
 
@@ -187,36 +242,56 @@
   transition: color var(--duration-normal) var(--ease-out);
 }
 
+.player:hover .playerName {
+  color: var(--text-primary);
+}
+
 .winnerBadge {
-  padding: var(--space-1) var(--space-2);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.5rem;
+  padding: 0 var(--space-2);
   font-size: var(--text-xs);
-  font-weight: 500;
-  color: var(--primary-500);
+  font-weight: 600;
+  line-height: 1.5;
+  color: var(--primary-600);
   background: var(--primary-50);
+  border: 1px solid var(--primary-200);
   border-radius: var(--radius-full);
+  box-shadow: var(--shadow-xs);
   transition: all var(--duration-normal) var(--ease-out);
 }
 
 .tieBadge {
   /* stylelint-disable-next-line value-keyword-case */
   composes: winnerBadge;
-  color: var(--success-500);
+  color: var(--success-600);
   background: var(--success-50);
+  border-color: var(--success-200);
 }
 
 .skipBadge {
   /* stylelint-disable-next-line value-keyword-case */
   composes: winnerBadge;
-  color: var(--warning-500);
+  color: var(--warning-600);
   background: var(--warning-50);
+  border-color: var(--warning-200);
 }
 
 .vsDivider {
   margin: var(--space-1) 0;
+  padding: 2px 8px;
   font-size: var(--text-xs);
+  font-weight: 700;
   color: var(--text-secondary);
   text-align: center;
-  opacity: 0.6;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  background: var(--card-background);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-full);
+  opacity: 0.7;
 }
 
 .byeText {
@@ -231,9 +306,10 @@
   padding: var(--space-8);
   font-size: var(--text-sm);
   color: var(--text-secondary);
-  background: var(--surface-color);
+  background: linear-gradient(180deg, var(--surface-color), rgb(0 0 0 / 2%));
   border: 1px dashed var(--border-color);
   border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
 }
 
 /* Mobile optimizations */
@@ -244,15 +320,15 @@
   }
 
   .round {
-    min-width: 200px;
+    min-width: 180px;
   }
 
   .matchContent {
-    padding: var(--space-2);
+    padding: var(--space-3);
   }
 
   .player {
-    padding: var(--space-2);
+    padding: var(--space-2) var(--space-3);
   }
 
   .matchConnector {

@@ -478,6 +478,7 @@
 }
 
 .bracketView {
+  position: relative;
   padding: var(--space-4);
   margin-top: var(--space-4);
   overflow-x: auto;
@@ -486,7 +487,29 @@
   border-radius: var(--radius-lg);
   animation: slideDown 0.3s var(--ease-out);
   -webkit-overflow-scrolling: touch;
+
+  /* Soft vignette to frame the bracket */
+  background-image:
+    linear-gradient(var(--surface-color), var(--surface-color)),
+    radial-gradient(1000px 60px at 50% 0, rgb(0 0 0 / 5%), transparent),
+    radial-gradient(1000px 60px at 50% 100%, rgb(0 0 0 / 5%), transparent);
+  background-blend-mode: normal, multiply, multiply;
 }
+
+.bracketView::before,
+.bracketView::after {
+  content: "";
+  position: sticky;
+  top: 0;
+  bottom: 0;
+  z-index: 1;
+  width: 24px;
+  display: block;
+  pointer-events: none;
+}
+
+.bracketView::before { left: 0; background: linear-gradient(90deg, rgb(0 0 0 / 10%), rgb(0 0 0 / 0)); }
+.bracketView::after  { margin-left: auto; background: linear-gradient(270deg, rgb(0 0 0 / 10%), rgb(0 0 0 / 0)); }
 
 @keyframes slideDown {
   from {
