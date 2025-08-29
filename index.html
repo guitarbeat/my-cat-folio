@@ -47,15 +47,46 @@
 
 <body>
     <script>
-      // Initialize theme from localStorage before React renders to prevent flash
+      // Initialize theme before React renders to prevent flash
+      // Logic: Respect saved preference; otherwise default to dark after local "sunset" hours.
       try {
-        const savedTheme = localStorage.getItem('theme');
-        if (savedTheme === 'false') {
-          document.body.classList.add('dark-theme');
+        const THEME_KEY = 'theme'; // stores boolean: true = light, false = dark
+        const metaTheme = document.querySelector('meta[name="theme-color"]');
+
+        const applyTheme = (isLight) => {
+          const body = document.body;
+          if (isLight) {
+            body.classList.add('light-theme');
+            body.classList.remove('dark-theme');
+            if (metaTheme) metaTheme.setAttribute('content', '#eef1f6');
+          } else {
+            body.classList.add('dark-theme');
+            body.classList.remove('light-theme');
+            if (metaTheme) metaTheme.setAttribute('content', '#1a1f2e');
+          }
+        };
+
+        const saved = localStorage.getItem(THEME_KEY);
+        if (saved !== null) {
+          // Stored as JSON boolean by useLocalStorage hook
+          const isLight = JSON.parse(saved);
+          applyTheme(Boolean(isLight));
         } else {
-          document.body.classList.add('light-theme');
+          // No saved preference: infer by time and system preference
+          const now = new Date();
+          const hour = now.getHours();
+          const minute = now.getMinutes();
+          // Consider "after sunset" roughly as after 6:30pm until 6:00am
+          const afterSunset = (hour > 18) || (hour === 18 && minute >= 30) || (hour < 6);
+          const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+          const isDark = afterSunset || prefersDark;
+
+          // Persist the inferred choice so React hook picks it up consistently
+          localStorage.setItem(THEME_KEY, JSON.stringify(!isDark ? true : false));
+          applyTheme(!isDark ? true : false);
         }
       } catch (e) {
+        // Safe fallback
         document.body.classList.add('light-theme');
       }
     </script>
