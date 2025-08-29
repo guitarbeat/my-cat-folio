@@ -146,11 +146,19 @@ export function useTournament({
       namesKey
     });
 
-    // * Set up first match
+    // * Set up first match (adaptive if possible)
     if (names.length >= 2) {
-      const left = names[0];
-      const right = names[1];
-      updateTournamentState({ currentMatch: { left, right } });
+      const first = getNextMatch(names, newSorter, 1, {
+        currentRatings: existingRatings,
+        history: []
+      });
+      if (first) {
+        updateTournamentState({ currentMatch: first });
+      } else {
+        const left = names[0];
+        const right = names[1];
+        updateTournamentState({ currentMatch: { left, right } });
+      }
     }
   }, [names, existingRatings, updateTournamentState, updatePersistentState]);
 
@@ -365,8 +373,21 @@ export function useTournament({
           }
         }
 
-        // * Set up next match
-        const nextMatch = getNextMatch(names, sorter, currentMatchNumber + 1);
+        // * Set up next match (adaptive pairing prefers close ratings + higher uncertainty)
+        const nextMatch = getNextMatch(names, sorter, currentMatchNumber + 1, {
+          currentRatings: {
+            ...currentRatings,
+            [leftName]: {
+              ...currentRatings[leftName],
+              rating: updatedLeftRating
+            },
+            [rightName]: {
+              ...currentRatings[rightName],
+              rating: updatedRightRating
+            }
+          },
+          history: persistentState.matchHistory || []
+        });
         if (nextMatch) {
           updateTournamentState({ currentMatch: nextMatch });
         }
@@ -582,12 +603,70 @@ function createVoteData({
  * @param {number} matchNumber - Current match number
  * @returns {Object|null} Next match object or null if no more matches
  */
-function getNextMatch(names, sorter, _matchNumber) {
+function getNextMatch(names, sorter, _matchNumber, options = {}) {
   if (!sorter || names.length <= 2) {
     return null;
   }
 
-  // Preferred: use sorter's own next-match API if present
+  // Preferred: adaptive pairing using ratings/history if provided
+  if (options && (options.currentRatings || options.history)) {
+    try {
+      const nameList = names.map((n) => n.name);
+      if (!Array.isArray(sorter._pairs)) {
+        sorter._pairs = [];
+        for (let i = 0; i < nameList.length - 1; i++) {
+          for (let j = i + 1; j < nameList.length; j++) {
+            sorter._pairs.push([nameList[i], nameList[j]]);
+          }
+        }
+        sorter._pairIndex = 0;
+      }
+
+      const prefs = sorter.preferences instanceof Map ? sorter.preferences : new Map();
+      const ratings = options.currentRatings || {};
+      const history = options.history || [];
+      const comparisons = new Map();
+      for (const v of history) {
+        const l = v?.match?.left?.name;
+        const r = v?.match?.right?.name;
+        if (l) comparisons.set(l, (comparisons.get(l) || 0) + 1);
+        if (r) comparisons.set(r, (comparisons.get(r) || 0) + 1);
+      }
+
+      let bestPair = null;
+      let bestScore = Infinity;
+      for (let idx = sorter._pairIndex; idx < sorter._pairs.length; idx++) {
+        const [a, b] = sorter._pairs[idx];
+        const key = `${a}-${b}`;
+        const reverseKey = `${b}-${a}`;
+        if (prefs.has(key) || prefs.has(reverseKey)) continue;
+        const ra = (ratings[a]?.rating ?? (typeof ratings[a] === 'number' ? ratings[a] : 1500));
+        const rb = (ratings[b]?.rating ?? (typeof ratings[b] === 'number' ? ratings[b] : 1500));
+        const diff = Math.abs(ra - rb);
+        const ca = comparisons.get(a) || 0;
+        const cb = comparisons.get(b) || 0;
+        const uncScore = 1 / (1 + ca) + 1 / (1 + cb);
+        const score = diff - 50 * uncScore;
+        if (score < bestScore) {
+          bestScore = score;
+          bestPair = [a, b];
+        }
+      }
+
+      if (bestPair) {
+        const [a, b] = bestPair;
+        sorter._pairIndex = Math.max(0, sorter._pairs.findIndex((p) => p[0] === a && p[1] === b));
+        return {
+          left: names.find((n) => n.name === a) || { name: a },
+          right: names.find((n) => n.name === b) || { name: b }
+        };
+      }
+    } catch (e) {
+      console.warn('Adaptive next-match selection failed:', e);
+    }
+  }
+
+  // Next preference: use sorter's own next-match API if present
   if (typeof sorter.getNextMatch === 'function') {
     try {
       const nextMatch = sorter.getNextMatch();
@@ -616,17 +695,55 @@ function getNextMatch(names, sorter, _matchNumber) {
     }
 
     const prefs = sorter.preferences instanceof Map ? sorter.preferences : new Map();
-    while (sorter._pairIndex < sorter._pairs.length) {
-      const [a, b] = sorter._pairs[sorter._pairIndex];
+
+    // Adaptive pairing: prefer unjudged pairs with small rating difference and higher uncertainty
+    const ratings = options.currentRatings || {};
+    const history = options.history || [];
+
+    // Build a quick lookup of comparisons per name to approximate uncertainty
+    const comparisons = new Map();
+    for (const v of history) {
+      const l = v?.match?.left?.name;
+      const r = v?.match?.right?.name;
+      if (l) comparisons.set(l, (comparisons.get(l) || 0) + 1);
+      if (r) comparisons.set(r, (comparisons.get(r) || 0) + 1);
+    }
+
+    let bestPair = null;
+    let bestScore = Infinity; // lower is better
+
+    for (let idx = sorter._pairIndex; idx < sorter._pairs.length; idx++) {
+      const [a, b] = sorter._pairs[idx];
       const key = `${a}-${b}`;
       const reverseKey = `${b}-${a}`;
-      if (!prefs.has(key) && !prefs.has(reverseKey)) {
-        return {
-          left: names.find((n) => n.name === a) || { name: a },
-          right: names.find((n) => n.name === b) || { name: b }
-        };
+      if (prefs.has(key) || prefs.has(reverseKey)) continue; // already judged
+
+      const ra = (ratings[a]?.rating ?? (typeof ratings[a] === 'number' ? ratings[a] : 1500));
+      const rb = (ratings[b]?.rating ?? (typeof ratings[b] === 'number' ? ratings[b] : 1500));
+      const diff = Math.abs(ra - rb);
+
+      const ca = comparisons.get(a) || 0;
+      const cb = comparisons.get(b) || 0;
+      const uncScore = 1 / (1 + ca) + 1 / (1 + cb); // higher means more uncertain
+
+      // Combined score: prefer low rating diff and higher uncertainty
+      // Weight diff more heavily, reduce by uncertainty
+      const score = diff - 50 * uncScore;
+
+      if (score < bestScore) {
+        bestScore = score;
+        bestPair = [a, b];
       }
-      sorter._pairIndex++;
+    }
+
+    if (bestPair) {
+      const [a, b] = bestPair;
+      // Move currentIndex close to the chosen pair to keep iteration stable
+      sorter._pairIndex = Math.max(0, sorter._pairs.findIndex((p) => p[0] === a && p[1] === b));
+      return {
+        left: names.find((n) => n.name === a) || { name: a },
+        right: names.find((n) => n.name === b) || { name: b }
+      };
     }
   } catch (e) {
     console.warn('Fallback next-match generation failed:', e);
