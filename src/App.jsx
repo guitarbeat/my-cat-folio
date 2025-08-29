@@ -48,37 +48,57 @@ function App() {
       window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (prefersReduced) return;
 
+    const stars = document.querySelector('.cat-background__stars');
     const nebula = document.querySelector('.cat-background__nebula');
-    const cats = Array.from(
-      document.querySelectorAll('.cat-background__cat')
-    );
+    const cats = Array.from(document.querySelectorAll('.cat-background__cat'));
     let ticking = false;
+    let mouseX = 0;
+    let mouseY = 0;
 
     const onScroll = () => {
       if (ticking) return;
       ticking = true;
       requestAnimationFrame(() => {
         const y = window.scrollY || 0;
+        if (stars) {
+          const sTranslate = Math.min(30, y * 0.02);
+          stars.style.transform = `translateY(${sTranslate}px)`;
+        }
         if (nebula) {
-          const nTranslate = Math.min(50, y * 0.04);
-          const nScale = 1 + Math.min(0.08, y * 0.0002);
-          nebula.style.transform = `translateY(${nTranslate}px) scale(${nScale})`;
+          const nTranslate = Math.min(60, y * 0.05);
+          const nScale = 1 + Math.min(0.12, y * 0.00025);
+          const nParallaxX = (mouseX - window.innerWidth / 2) * 0.0008;
+          const nParallaxY = (mouseY - window.innerHeight / 2) * 0.0006;
+          nebula.style.transform = `translate(${nParallaxX * 40}px, ${nTranslate + nParallaxY * 30}px) scale(${nScale})`;
         }
         if (cats.length) {
           cats.forEach((el, idx) => {
-            const speed = 0.02 + idx * 0.01; // vary per cat
-            const cTranslateY = Math.min(60, y * speed);
-            const cTranslateX = Math.sin((y + idx * 50) * 0.002) * 8;
-            el.style.transform = `translate(${cTranslateX}px, ${cTranslateY}px)`;
+            const speed = 0.035 + idx * 0.012; // vary per cat
+            const cTranslateY = Math.min(80, y * speed);
+            const swayX = Math.sin((y + idx * 120) * 0.002) * 10;
+            const mouseParX = (mouseX - window.innerWidth / 2) * (0.0005 + idx * 0.0001);
+            const mouseParY = (mouseY - window.innerHeight / 2) * (0.0004 + idx * 0.00008);
+            el.style.transform = `translate(${swayX + mouseParX * 35}px, ${cTranslateY + mouseParY * 25}px)`;
           });
         }
         ticking = false;
       });
     };
 
+    const onMouseMove = (e) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+      // schedule a frame if none pending to reflect latest mouse
+      if (!ticking) onScroll();
+    };
+
     window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('mousemove', onMouseMove, { passive: true });
     onScroll();
-    return () => window.removeEventListener('scroll', onScroll);
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('mousemove', onMouseMove);
+    };
   }, []);
 
   // * Centralized store

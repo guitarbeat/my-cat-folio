@@ -5,12 +5,7 @@
   padding-top: calc(
     var(--space-6) + 70px
   ); /* Add navbar height to prevent content cutoff */
-
-  background: linear-gradient(
-    135deg,
-    var(--background-color) 0%,
-    var(--surface-color) 100%
-  );
+  background: transparent; /* Let galaxy background show through */
 }
 
 /* Name count display */

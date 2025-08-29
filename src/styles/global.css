@@ -2045,7 +2045,7 @@ body {
   display: flex;
   min-height: 100vh;
   overflow-x: hidden;
-  background: var(--background-color);
+  background: transparent; /* Let galaxy show through without !important */
 }
 
 main {
@@ -2126,6 +2126,11 @@ h1 {
     padding: 0.75rem;
     margin-top: 55px;
   }
+}
+
+/* Option A: Slight translucency for main content container to showcase galaxy */
+#main-content {
+  background: transparent; /* Full transparency under content */
 }
 
 /* (removed translucent background override for #main-content) */
@@ -2946,8 +2951,8 @@ h1 {
   pointer-events: none;
   background: radial-gradient(
     circle at 50% 50%,
-    rgb(0 0 0 / 0%) 40%,
-    rgb(0 0 0 / 20%) 100%
+    rgb(0 0 0 / 0%) 35%,
+    rgb(0 0 0 / 35%) 100%
   );
 }
 

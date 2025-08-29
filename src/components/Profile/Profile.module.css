@@ -5,7 +5,7 @@
   min-height: 100vh;
   padding: 0;
   font-family: var(--font-sans);
-  background: var(--background-color);
+  background: transparent; /* let galaxy show */
 }
 
 /* Header - Fixed at top */
@@ -17,10 +17,11 @@
   align-items: center;
   justify-content: space-between;
   padding: 1rem 2rem;
-  background: var(--card-background);
-  border-bottom: 1px solid var(--border-color);
-  box-shadow: var(--shadow-lg);
-  backdrop-filter: blur(10px);
+  background: var(--glass-bg);
+  border-bottom: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+          backdrop-filter: blur(var(--glass-blur));
 }
 
 .profileTitle {
@@ -56,10 +57,11 @@
   width: 320px;
   height: calc(100vh - 80px);
   padding: 1.5rem;
-  background: var(--card-background);
-  border-right: 1px solid var(--border-color);
-  box-shadow: var(--shadow-lg);
-  backdrop-filter: blur(10px);
+  background: var(--glass-bg);
+  border-right: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+          backdrop-filter: blur(var(--glass-blur));
 }
 
 .sidebarHeader {
@@ -270,8 +272,8 @@
     135deg,
     var(--warning-50),
     var(--warning-100)
-  ) !important;
-  border: 2px solid var(--warning-300) !important;
+  );
+  border: 2px solid var(--warning-300);
   opacity: 0.7;
 }
 

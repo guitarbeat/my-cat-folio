@@ -745,29 +745,29 @@
 /* * Special styling for cards with images - Tinder-style layout */
 .hasImage {
   /* * Increase card height for better image display */
-  min-height: 320px !important;
-  overflow: hidden !important;
+  min-height: 320px;
+  overflow: hidden;
 
   /* * Enhanced Tinder-style appearance */
-  border: 2px solid var(--border-color) !important;
-  border-radius: 20px !important;
-  box-shadow: 0 10px 40px rgb(0 0 0 / 20%) !important;
-  perspective: none !important;
+  border: 2px solid var(--border-color);
+  border-radius: 20px;
+  box-shadow: 0 10px 40px rgb(0 0 0 / 20%);
+  perspective: none;
 
   /* * Disable complex 3D transforms when images are present */
-  transform-style: flat !important;
+  transform-style: flat;
 }
 
 .hasImage:hover {
-  box-shadow: 0 15px 50px rgb(0 0 0 / 30%) !important;
+  box-shadow: 0 15px 50px rgb(0 0 0 / 30%);
 
   /* * Simpler hover effect for cards with images */
-  transform: translateY(-4px) scale(1.02) !important;
+  transform: translateY(-4px) scale(1.02);
 }
 
 .hasImage .backgroundEffect {
   /* * Disable tilt effect for cards with images */
-  display: none !important;
+  display: none;
 }
 
 /* * Ensure images are properly positioned */
@@ -811,7 +811,7 @@
   }
 
   .hasImage {
-    min-height: 280px !important;
+    min-height: 280px;
   }
 
   .card:has(.cardImageContainer) {

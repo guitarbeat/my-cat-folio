@@ -51,14 +51,15 @@
 }
 
 .filterSelect:hover {
-  background: var(--surface-hover, #f3f4f6);
-  border-color: var(--primary-color, #9ca3af);
+  background: var(--card-hover);
+  border-color: var(--primary-color);
 }
 
 .filterSelect:focus {
   outline: none;
-  border-color: var(--primary-color, #3b82f6);
-  box-shadow: 0 0 0 3px var(--primary-color-alpha, rgb(59 130 246 / 10%));
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px var(--primary-light);
+  box-shadow: 0 0 0 3px rgb(var(--primary-rgb) / 0.15);
 }
 
 /* * Sort Order Button */
@@ -70,24 +71,25 @@
   padding: var(--space-2, 0.5rem) var(--space-3, 0.75rem);
   font-family: inherit;
   font-size: var(--text-sm, 0.875rem);
-  color: var(--text-primary, #111827);
+  color: var(--text-primary);
   cursor: pointer;
-  background: var(--card-background, #fff);
-  border: 1px solid var(--border-color, #d1d5db);
+  background: var(--card-background);
+  border: 1px solid var(--border-color);
   border-radius: var(--radius-md, 6px);
   transition: var(--transition-all, all 0.2s ease);
 }
 
 .sortOrderButton:hover {
-  background: var(--surface-hover, #f3f4f6);
-  border-color: var(--primary-color, #9ca3af);
+  background: var(--card-hover);
+  border-color: var(--primary-color);
   transform: translateY(-1px);
 }
 
 .sortOrderButton:focus {
   outline: none;
-  border-color: var(--primary-color, #3b82f6);
-  box-shadow: 0 0 0 3px var(--primary-color-alpha, rgb(59 130 246 / 10%));
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px var(--primary-light);
+  box-shadow: 0 0 0 3px rgb(var(--primary-rgb) / 0.15);
 }
 
 .sortOrderIcon {
@@ -112,8 +114,8 @@
   gap: var(--space-3, 0.75rem);
   align-items: center;
   padding: var(--space-4, 1rem);
-  background: var(--card-background, #fff);
-  border: 1px solid var(--border-color, #e5e7eb);
+  background: var(--card-background);
+  border: 1px solid var(--border-color);
   border-radius: var(--radius-md, 6px);
   transition: var(--transition-all, all 0.2s ease);
 }
@@ -122,7 +124,7 @@
   margin-right: var(--space-2, 0.5rem);
   font-size: var(--text-sm, 0.875rem);
   font-weight: 600;
-  color: var(--text-secondary, #6b7280);
+  color: var(--text-secondary);
 }
 
 .activeFilter {
@@ -131,17 +133,17 @@
   padding: var(--space-1, 0.25rem) var(--space-3, 0.75rem);
   font-size: var(--text-xs, 0.75rem);
   font-weight: 500;
-  color: var(--primary-color, #1e40af);
-  background: var(--primary-color-alpha, #eff6ff);
-  border: 1px solid var(--primary-color-light, #bfdbfe);
+  color: var(--primary-color);
+  background: rgb(var(--primary-rgb) / 0.12);
+  border: 1px solid var(--primary-400);
   border-radius: var(--radius-full, 20px);
   transition: var(--transition-all, all 0.2s ease);
 }
 
 .activeFilter:hover {
-  color: var(--white, #fff);
-  background: var(--primary-color, #1e40af);
-  box-shadow: var(--shadow-sm, 0 1px 2px 0 rgb(0 0 0 / 5%));
+  color: var(--button-text-light);
+  background: var(--primary-color);
+  box-shadow: var(--shadow-sm);
   transform: translateY(-1px);
 }
 
@@ -194,125 +196,9 @@
   }
 }
 
-/* * Dark Theme Support */
-@media (prefers-color-scheme: dark) {
-  .container {
-    background: var(--surface-color-dark, #1f2937);
-    border-color: var(--border-color-dark, #374151);
-  }
+/* Theme is driven by global CSS variables on body.light-theme/dark-theme */
 
-  .sectionTitle {
-    color: var(--text-primary-dark, #f9fafb);
-  }
-
-  .filterLabel {
-    color: var(--text-secondary-dark, #d1d5db);
-  }
-
-  .filterSelect {
-    color: var(--text-primary-dark, #f9fafb);
-    background: var(--card-background-dark, #374151);
-    border-color: var(--border-color-dark, #4b5563);
-  }
-
-  .filterSelect:hover {
-    background: var(--surface-hover-dark, #4b5563);
-    border-color: var(--primary-color-dark, #60a5fa);
-  }
-
-  .filterSelect:focus {
-    border-color: var(--primary-color-dark, #60a5fa);
-    box-shadow: 0 0 0 3px var(--primary-color-alpha-dark, rgb(96 165 250 / 10%));
-  }
-
-  .sortOrderButton {
-    color: var(--text-primary-dark, #f9fafb);
-    background: var(--card-background-dark, #374151);
-    border-color: var(--border-color-dark, #4b5563);
-  }
-
-  .sortOrderButton:hover {
-    background: var(--surface-hover-dark, #4b5563);
-    border-color: var(--primary-color-dark, #60a5fa);
-  }
-
-  .sortOrderButton:focus {
-    border-color: var(--primary-color-dark, #60a5fa);
-    box-shadow: 0 0 0 3px var(--primary-color-alpha-dark, rgb(96 165 250 / 10%));
-  }
-
-  .sortOrderIcon {
-    color: var(--text-secondary-dark, #9ca3af);
-  }
-
-  .sortOrderButton:hover .sortOrderIcon {
-    color: var(--primary-color-dark, #60a5fa);
-  }
-
-  .activeFilters {
-    background: var(--card-background-dark, #374151);
-    border-color: var(--border-color-dark, #4b5563);
-  }
-
-  .activeFilterLabel {
-    color: var(--text-secondary-dark, #9ca3af);
-  }
-
-  .activeFilter {
-    color: var(--primary-color-light-dark, #dbeafe);
-    background: var(--primary-color-alpha-dark, #1e3a8a);
-    border-color: var(--primary-color-dark, #3b82f6);
-  }
-
-  .activeFilter:hover {
-    color: var(--white-dark, #fff);
-    background: var(--primary-color-dark, #3b82f6);
-  }
-}
-
-/* * Light Theme Variables (Default) */
-.container {
-  --surface-color: #f9fafb;
-  --border-color: #e5e7eb;
-  --card-background: #fff;
-  --surface-hover: #f3f4f6;
-  --text-primary: #111827;
-  --text-secondary: #374151;
-  --primary-color: #3b82f6;
-  --primary-color-light: #bfdbfe;
-  --primary-color-alpha: rgb(59 130 246 / 10%);
-  --white: #fff;
-  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 5%);
-  --space-1: 0.25rem;
-  --space-2: 0.5rem;
-  --space-3: 0.75rem;
-  --space-4: 1rem;
-  --space-6: 2rem;
-  --text-xs: 0.75rem;
-  --text-sm: 0.875rem;
-  --text-base: 1rem;
-  --text-lg: 1.25rem;
-  --radius-md: 6px;
-  --radius-lg: 8px;
-  --radius-full: 20px;
-  --transition-all: all 0.2s ease;
-}
-
-/* * Dark Theme Variables */
-@media (prefers-color-scheme: dark) {
-  .container {
-    --surface-color-dark: #1f2937;
-    --border-color-dark: #374151;
-    --card-background-dark: #374151;
-    --surface-hover-dark: #4b5563;
-    --text-primary-dark: #f9fafb;
-    --text-secondary-dark: #d1d5db;
-    --primary-color-dark: #60a5fa;
-    --primary-color-light-dark: #dbeafe;
-    --primary-color-alpha-dark: rgb(96 165 250 / 10%);
-    --white-dark: #fff;
-  }
-}
+/* Component respects global variables; no local theme overrides here */
 
 /* * High Contrast Mode Support */
 @media (prefers-contrast: more) {
