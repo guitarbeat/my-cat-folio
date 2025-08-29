@@ -24,6 +24,7 @@ const ProfileNameList = ({
   onDelete,
   onSelectionChange,
   selectedNames = new Set(),
+  hiddenIds = new Set(),
   className = '',
   selectionFilter,
   selectionStats
@@ -34,18 +35,23 @@ const ProfileNameList = ({
 
     let filtered = names;
 
+    const isNameHidden = (n) => Boolean(n.isHidden) || hiddenIds.has(n.id);
+
     // * Apply status filter
     if (filterStatus === FILTER_OPTIONS.STATUS.ACTIVE) {
-      filtered = filtered.filter((name) => !name.isHidden);
+      filtered = filtered.filter((name) => !isNameHidden(name));
     } else if (filterStatus === FILTER_OPTIONS.STATUS.HIDDEN) {
-      filtered = filtered.filter((name) => name.isHidden);
+      filtered = filtered.filter((name) => isNameHidden(name));
     }
 
     // * Apply user filter
-    if (userFilter === FILTER_OPTIONS.USER.CURRENT) {
-      filtered = filtered.filter((name) => name.user_name === ratings.userName);
-    } else if (userFilter === FILTER_OPTIONS.USER.OTHER) {
-      filtered = filtered.filter((name) => name.user_name !== ratings.userName);
+    // Only apply user filter if user_name exists on items
+    if (names.length && Object.prototype.hasOwnProperty.call(names[0], 'user_name')) {
+      if (userFilter === FILTER_OPTIONS.USER.CURRENT) {
+        filtered = filtered.filter((name) => name.user_name === ratings.userName);
+      } else if (userFilter === FILTER_OPTIONS.USER.OTHER) {
+        filtered = filtered.filter((name) => name.user_name !== ratings.userName);
+      }
     }
 
     // * NEW: Apply selection-based filters
@@ -185,7 +191,8 @@ const ProfileNameList = ({
     sortOrder,
     ratings.userName,
     selectionFilter,
-    selectionStats
+    selectionStats,
+    hiddenIds
   ]);
 
   if (isLoading) {
@@ -232,7 +239,7 @@ const ProfileNameList = ({
 
       <div className={styles.namesGrid}>
         {filteredAndSortedNames.map((name) => {
-          const isHidden = name.isHidden || false;
+          const isHidden = Boolean(name.isHidden) || hiddenIds.has(name.id);
           const isSelected = selectedNames.has(name.id);
 
           return (
@@ -240,6 +247,19 @@ const ProfileNameList = ({
               key={name.id}
               className={`${styles.nameWrapper} ${isHidden ? styles.hiddenName : ''}`}
             >
+              {isHidden && (
+                <button
+                  type="button"
+                  className={styles.hiddenBadge}
+                  title="Click to unhide"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onToggleVisibility?.(name.id);
+                  }}
+                >
+                  Hidden
+                </button>
+              )}
               <NameCard
                 name={name.name}
                 description={

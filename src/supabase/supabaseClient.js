@@ -82,6 +82,7 @@ export const catNamesAPI = {
           rating,
           wins,
           losses,
+          is_hidden,
           updated_at
         )
       `);
@@ -107,6 +108,7 @@ export const catNamesAPI = {
           user_rating: item.cat_name_ratings?.[0]?.rating || null,
           user_wins: item.cat_name_ratings?.[0]?.wins || 0,
           user_losses: item.cat_name_ratings?.[0]?.losses || 0,
+          isHidden: item.cat_name_ratings?.[0]?.is_hidden || false,
           has_user_rating: !!item.cat_name_ratings?.[0]
         })) || []
       );
@@ -1252,6 +1254,86 @@ export const deleteName = async (nameId) => {
   }
 };
 
+/**
+ * Images (Supabase Storage)
+ */
+export const imagesAPI = {
+  /**
+   * List images from the `cat-images` bucket. Optionally from a prefix folder.
+   * Deduplicates by base filename (ignoring extension) and prefers smaller files
+   * when Supabase returns sizes. Otherwise, prefers modern formats (avif > webp > jpg/jpeg > png > gif).
+   */
+  async list(prefix = '', limit = 1000) {
+    try {
+      if (!supabase) return [];
+      const opts = { limit, search: undefined, sortBy: { column: 'updated_at', order: 'desc' } };
+      const { data, error } = await supabase.storage.from('cat-images').list(prefix, opts);
+      if (error) {
+        if (process.env.NODE_ENV === 'development') console.warn('imagesAPI.list error:', error);
+        return [];
+      }
+      const files = (data || []).filter((f) => f && f.name);
+      if (!files.length) return [];
+
+      const rankByExt = (name) => {
+        const n = name.toLowerCase();
+        if (n.endsWith('.avif')) return 1;
+        if (n.endsWith('.webp')) return 2;
+        if (n.endsWith('.jpg') || n.endsWith('.jpeg')) return 3;
+        if (n.endsWith('.png')) return 4;
+        if (n.endsWith('.gif')) return 5;
+        return 9;
+      };
+
+      const pickSmaller = (a, b) => {
+        const sizeA = a?.metadata?.size ?? a?.size;
+        const sizeB = b?.metadata?.size ?? b?.size;
+        if (typeof sizeA === 'number' && typeof sizeB === 'number') {
+          return sizeA <= sizeB ? a : b;
+        }
+        // fallback to extension ranking
+        return rankByExt(a.name) <= rankByExt(b.name) ? a : b;
+      };
+
+      const byBase = new Map();
+      for (const f of files) {
+        const base = f.name.replace(/\.[^.]+$/, '').toLowerCase();
+        const current = byBase.get(base);
+        byBase.set(base, current ? pickSmaller(current, f) : f);
+      }
+
+      // Map to public URLs
+      const toUrl = (name) => {
+        const fullPath = prefix ? `${prefix}/${name}` : name;
+        const { data: urlData } = supabase.storage.from('cat-images').getPublicUrl(fullPath);
+        return urlData?.publicUrl;
+      };
+
+      return Array.from(byBase.values())
+        .map((f) => toUrl(f.name))
+        .filter(Boolean);
+    } catch (e) {
+      if (process.env.NODE_ENV === 'development') console.error('imagesAPI.list fatal:', e);
+      return [];
+    }
+  },
+
+  /**
+   * Upload an image file to the `cat-images` bucket. Returns public URL.
+   */
+  async upload(file, userName = 'anon', prefix = '') {
+    if (!supabase) throw new Error('Supabase not configured');
+    const safe = (file?.name || 'image').replace(/[^a-zA-Z0-9._-]/g, '_');
+    const objectPath = `${prefix ? `${prefix}/` : ''}${userName}/${Date.now()}-${safe}`;
+    const { error } = await supabase.storage.from('cat-images').upload(objectPath, file, {
+      upsert: false,
+      cacheControl: '3600'
+    });
+    if (error) throw error;
+    const { data } = supabase.storage.from('cat-images').getPublicUrl(objectPath);
+    return data?.publicUrl;
+  }
+};
 // ===== LEGACY EXPORTS (for backward compatibility) =====
 
 // Keep these for existing code that might still use them

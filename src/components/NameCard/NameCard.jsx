@@ -31,7 +31,7 @@
  * --- END AUTO-GENERATED DOCSTRING ---
  */
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import styles from './NameCard.module.css';
 
@@ -75,6 +75,76 @@ function NameCard({
   const [tiltStyle, setTiltStyle] = useState({});
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const cardRef = useRef(null);
+  const imgRef = useRef(null);
+  const imgContainerRef = useRef(null);
+
+  // Compute a simple face-aware focal Y using edge density (no external libs)
+  const computeFocalY = useCallback((imgEl) => {
+    try {
+      const naturalW = imgEl.naturalWidth || imgEl.width;
+      const naturalH = imgEl.naturalHeight || imgEl.height;
+      if (!naturalW || !naturalH) return null;
+
+      // Scale image to small analysis size
+      const targetW = 128;
+      const scale = targetW / naturalW;
+      const w = Math.max(16, Math.min(targetW, naturalW));
+      const h = Math.max(16, Math.floor(naturalH * scale));
+
+      const canvas = document.createElement('canvas');
+      canvas.width = w;
+      canvas.height = h;
+      const ctx = canvas.getContext('2d', { willReadFrequently: true });
+      ctx.drawImage(imgEl, 0, 0, w, h);
+      const { data } = ctx.getImageData(0, 0, w, h);
+
+      // Compute simple vertical gradient magnitude per row
+      const rowEnergy = new Array(h).fill(0);
+      const toGray = (r, g, b) => (r * 0.299 + g * 0.587 + b * 0.114);
+      const idx = (x, y) => (y * w + x) * 4;
+      for (let y = 1; y < h - 1; y++) {
+        let sum = 0;
+        for (let x = 0; x < w; x++) {
+          const i1 = idx(x, y - 1);
+          const i2 = idx(x, y + 1);
+          const g1 = toGray(data[i1], data[i1 + 1], data[i1 + 2]);
+          const g2 = toGray(data[i2], data[i2 + 1], data[i2 + 2]);
+          sum += Math.abs(g2 - g1);
+        }
+        rowEnergy[y] = sum / w;
+      }
+
+      // Focus on upper 70% of image; cats' faces tend to be there in these shots
+      const start = Math.floor(h * 0.08);
+      const end = Math.floor(h * 0.7);
+      let bestY = start;
+      let bestVal = -Infinity;
+      for (let y = start; y < end; y++) {
+        // Smooth with small window
+        const e = (rowEnergy[y - 1] || 0) + rowEnergy[y] + (rowEnergy[y + 1] || 0);
+        if (e > bestVal) {
+          bestVal = e;
+          bestY = y;
+        }
+      }
+
+      // Convert to percent, clamp reasonable range
+      const pct = Math.min(60, Math.max(10, Math.round((bestY / h) * 100)));
+      return pct;
+    } catch (e) {
+      return null;
+    }
+  }, []);
+
+  const handleImageLoad = useCallback(() => {
+    const imgEl = imgRef.current;
+    const container = imgContainerRef.current;
+    if (!imgEl || !container) return;
+    const focal = computeFocalY(imgEl);
+    if (focal != null) {
+      container.style.setProperty('--image-pos-y', `${focal}%`);
+    }
+  }, [computeFocalY]);
 
   useEffect(() => {
     if (isRippling) {
@@ -247,7 +317,13 @@ function NameCard({
 
         {/* Cat image when provided */}
         {image && (
-          <div className={styles.cardImageContainer}>
+          <div
+            className={styles.cardImageContainer}
+            ref={imgContainerRef}
+            style={{
+              ['--bg-image']: `url(${image})`
+            }}
+          >
             {(() => {
               const base = image.includes('.')
                 ? image.replace(/\.[^.]+$/, '')
@@ -257,11 +333,13 @@ function NameCard({
                   <source type="image/avif" srcSet={`${base}.avif`} />
                   <source type="image/webp" srcSet={`${base}.webp`} />
                   <img
+                    ref={imgRef}
                     src={image}
                     alt="Cat picture"
                     className={styles.cardImage}
                     loading="lazy"
                     decoding="async"
+                    onLoad={handleImageLoad}
                     onError={(e) => {
                       console.error('Image failed to load:', e.target.src);
                     }}

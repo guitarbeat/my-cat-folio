@@ -37,18 +37,15 @@
 }
 
 .nameWrapper {
+  position: relative; /* allow positioned badges */
   min-height: 280px; /* Increased minimum height for better description space */
-  overflow: hidden;
-  background: linear-gradient(
-    135deg,
-    var(--card-bg-start, #fff) 0%,
-    var(--card-bg-end, #f8fafc) 100%
-  );
-  border: 1px solid var(--card-border, #e2e8f0);
+  overflow: visible; /* allow admin overlays to overflow */
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
   border-radius: 16px;
-  box-shadow:
-    0 1px 3px 0 rgb(0 0 0 / 10%),
-    0 1px 2px 0 rgb(0 0 0 / 6%);
+  box-shadow: var(--glass-shadow);
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+          backdrop-filter: blur(var(--glass-blur));
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -108,6 +105,40 @@
 
 .nameWrapper:hover .adminControls {
   opacity: 1;
+}
+
+/* Small hidden badge */
+.hiddenBadge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 5;
+  display: inline-flex;
+  gap: 6px;
+  align-items: center;
+  padding: 4px 8px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #78350f; /* dark amber */
+  background: #fef3c7; /* amber-100 */
+  border: 1px solid #f59e0b; /* amber-500 */
+  border-radius: 9999px;
+  box-shadow: 0 1px 2px rgb(0 0 0 / 12%);
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.1s ease;
+  border: 1px solid #f59e0b;
+}
+
+.hiddenBadge::before {
+  content: '🔒';
+}
+
+.hiddenBadge:hover {
+  background: #fde68a; /* amber-200 */
+}
+
+.hiddenBadge:active {
+  transform: translateY(1px);
 }
 
 /* * Status Indicators */

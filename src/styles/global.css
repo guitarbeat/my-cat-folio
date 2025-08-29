@@ -2128,6 +2128,8 @@ h1 {
   }
 }
 
+/* (removed translucent background override for #main-content) */
+
 /* Matrix mode styles */
 .app.matrix-mode .main-content {
   position: relative;
@@ -2929,11 +2931,24 @@ h1 {
   position: fixed;
   top: 0;
   left: 0;
-  z-index: -1;
+  z-index: 0; /* Place galaxy above default background but below content */
   width: 100%;
   height: 100%;
   overflow: hidden;
   background: linear-gradient(135deg, #0f0f23 0%, #1a1f2e 50%, #2d1b69 100%);
+}
+
+/* Vignette overlay to focus content and improve contrast */
+.cat-background::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    circle at 50% 50%,
+    rgb(0 0 0 / 0%) 40%,
+    rgb(0 0 0 / 20%) 100%
+  );
 }
 
 .cat-background__stars {

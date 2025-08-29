@@ -240,6 +240,11 @@
 
 .starsSection {
   margin-bottom: var(--space-4);
+  padding: var(--space-4);
+  background: var(--card-background);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
 }
 
 .starsTitle {
@@ -643,7 +648,7 @@
 
 .photoGrid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
   gap: var(--space-3);
 }
 
@@ -683,7 +688,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgb(0 0 0 / 60%);
+  background: linear-gradient(180deg, rgb(0 0 0 / 0%) 0%, rgb(0 0 0 / 55%) 100%);
   opacity: 0;
   transition: opacity var(--duration-normal) var(--ease-out);
 }
@@ -692,6 +697,87 @@
   font-size: var(--text-2xl);
   color: white;
   text-shadow: 0 2px 4px rgb(0 0 0 / 50%);
+}
+
+/* Accessible button reset for thumbnails */
+.photoThumbButton {
+  appearance: none;
+  background: transparent;
+  border: none;
+  padding: 0;
+}
+
+.photoThumbButton:focus-visible {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 2px;
+}
+
+/* Actions row below grid */
+.photoActionsRow {
+  display: flex;
+  justify-content: center;
+  margin-top: var(--space-3);
+}
+
+.photoToolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  margin-top: var(--space-3);
+}
+
+.photoUploadRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.photoUploadButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-4);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--button-text-light, white);
+  background: var(--button-primary-bg, var(--primary-color));
+  border: none;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: var(--transition-all);
+}
+
+.photoUploadButton:hover {
+  background: var(--button-primary-hover, var(--primary-dark));
+  box-shadow: var(--shadow-sm);
+}
+
+.photoMoreButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-4);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--text-primary);
+  background: var(--surface-color);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  transition: var(--transition-all);
+}
+
+.photoMoreButton:hover {
+  background: var(--card-hover);
+  box-shadow: var(--shadow-sm);
+}
+
+@media (width <= 768px) {
+  .starsSection {
+    padding: var(--space-3);
+  }
 }
 
 /* Suggestion Section */
@@ -957,6 +1043,93 @@
   background: var(--overlay-medium);
   border-radius: var(--radius-full);
   transform: translateX(-50%);
+}
+
+/* Lightbox styles */
+.lightboxContent {
+  position: fixed;
+  inset: 0;
+  z-index: calc(var(--z-modal) + 1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-8);
+}
+
+.lightboxImageWrap {
+  max-width: min(92vw, 1200px);
+  max-height: 80vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.lightboxImage {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-xl);
+}
+
+.lightboxNav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-full);
+  background: var(--overlay-medium);
+  color: rgb(var(--white-rgb));
+  border: none;
+  cursor: pointer;
+  font-size: var(--text-2xl);
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition-all);
+}
+
+.lightboxNav:hover {
+  background: var(--overlay-dark);
+  transform: translateY(-50%) scale(1.05);
+}
+
+.lightboxNav.left { left: var(--space-4); }
+.lightboxNav.right { right: var(--space-4); }
+
+.lightboxClose {
+  position: absolute;
+  top: var(--space-4);
+  right: var(--space-4);
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-full);
+  background: var(--overlay-medium);
+  color: rgb(var(--white-rgb));
+  border: none;
+  cursor: pointer;
+  font-size: var(--text-2xl);
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition-all);
+}
+
+.lightboxClose:hover { background: var(--overlay-dark); }
+
+.lightboxCounter {
+  position: absolute;
+  bottom: var(--space-4);
+  left: 50%;
+  transform: translateX(-50%);
+  padding: var(--space-1) var(--space-3);
+  font-size: var(--text-sm);
+  color: rgb(var(--white-rgb));
+  background: var(--overlay-medium);
+  border-radius: var(--radius-full);
 }
 
 /* Messages */
@@ -1285,18 +1458,42 @@
 .swipeCardImageContainer {
   position: relative;
   width: 100%;
-  height: 200px;
+  height: 220px; /* show more of the cat */
   margin-bottom: 1rem;
   overflow: hidden;
   border-radius: 15px;
   box-shadow: 0 4px 20px rgb(0 0 0 / 20%);
 }
 
+/* Blurred background fill for swipe card images */
+.swipeCardImageContainer::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background-image: var(--bg-image);
+  background-size: cover;
+  background-position: 50% var(--image-pos-y, 20%);
+  filter: blur(16px) brightness(0.9) saturate(110%);
+  transform: scale(1.1);
+}
+
+.swipeCardImageContainer::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: linear-gradient(180deg, rgb(0 0 0 / 0%) 0%, rgb(0 0 0 / 6%) 100%);
+}
+
 .swipeCardImage {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain; /* show full cat; blurred bg fills behind */
+  object-position: 50% var(--image-pos-y, 20%);
   transition: transform 0.3s ease;
+  position: relative;
+  z-index: 1;
 }
 
 .swipeCardImage:hover {

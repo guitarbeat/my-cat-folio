@@ -9,7 +9,8 @@ import {
   supabase,
   getNamesWithDescriptions,
   tournamentsAPI,
-  catNamesAPI
+  catNamesAPI,
+  imagesAPI
 } from '../../supabase/supabaseClient';
 import devLog from '../../utils/logger';
 import {
@@ -56,7 +57,7 @@ const FALLBACK_NAMES = [
 ];
 
 // Helper function to get random cat images
-const getRandomCatImage = (nameId) => {
+const getRandomCatImage = (nameId, imageList = CAT_IMAGES) => {
   // Convert UUID string to a number for consistent image selection
   let numericId;
   if (typeof nameId === 'string') {
@@ -69,8 +70,9 @@ const getRandomCatImage = (nameId) => {
   }
 
   // Use the numeric ID to consistently get the same image for the same name
-  const index = Math.abs(numericId) % CAT_IMAGES.length;
-  return CAT_IMAGES[index];
+  const list = Array.isArray(imageList) && imageList.length ? imageList : CAT_IMAGES;
+  const index = Math.abs(numericId) % list.length;
+  return list[index];
 };
 
 // Simple name selection - names and descriptions only
@@ -88,7 +90,8 @@ const NameSelection = ({
   sortBy,
   onSortChange,
   isSwipeMode,
-  showCatPictures
+  showCatPictures,
+  imageList
 }) => {
   // For non-admin users, just show all names
   const displayNames = isAdmin
@@ -220,6 +223,7 @@ const NameSelection = ({
             onToggleName={onToggleName}
             isAdmin={isAdmin}
             showCatPictures={showCatPictures}
+            imageList={galleryImages}
           />
         ) : (
           displayNames.map((nameObj) => (
@@ -231,9 +235,7 @@ const NameSelection = ({
               onClick={() => onToggleName(nameObj)}
               size="small"
               // Cat picture when enabled
-              image={
-                showCatPictures ? getRandomCatImage(nameObj.id) : undefined
-              }
+              image={showCatPictures ? getRandomCatImage(nameObj.id, imageList) : undefined}
               // Admin-only metadata display
               metadata={
                 isAdmin
@@ -266,8 +268,11 @@ const SwipeableNameCards = ({
   selectedNames,
   onToggleName,
   isAdmin,
-  showCatPictures = false
+  showCatPictures = false,
+  imageList = CAT_IMAGES
 }) => {
+  const imgRef = React.useRef(null);
+  const imgContainerRef = React.useRef(null);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
@@ -377,6 +382,65 @@ const SwipeableNameCards = ({
     transform: `scale(${0.8 + swipeProgress * 0.2})`
   };
 
+  // Lightweight vertical edge-density focal detector (same approach as NameCard)
+  const computeFocalY = React.useCallback((imgEl) => {
+    try {
+      const naturalW = imgEl.naturalWidth || imgEl.width;
+      const naturalH = imgEl.naturalHeight || imgEl.height;
+      if (!naturalW || !naturalH) return null;
+      const targetW = 128;
+      const scale = targetW / naturalW;
+      const w = Math.max(16, Math.min(targetW, naturalW));
+      const h = Math.max(16, Math.floor(naturalH * scale));
+      const canvas = document.createElement('canvas');
+      canvas.width = w;
+      canvas.height = h;
+      const ctx = canvas.getContext('2d', { willReadFrequently: true });
+      ctx.drawImage(imgEl, 0, 0, w, h);
+      const { data } = ctx.getImageData(0, 0, w, h);
+      const rowEnergy = new Array(h).fill(0);
+      const toGray = (r, g, b) => r * 0.299 + g * 0.587 + b * 0.114;
+      const idx = (x, y) => (y * w + x) * 4;
+      for (let y = 1; y < h - 1; y++) {
+        let sum = 0;
+        for (let x = 0; x < w; x++) {
+          const i1 = idx(x, y - 1);
+          const i2 = idx(x, y + 1);
+          sum += Math.abs(
+            toGray(data[i2], data[i2 + 1], data[i2 + 2]) -
+              toGray(data[i1], data[i1 + 1], data[i1 + 2])
+          );
+        }
+        rowEnergy[y] = sum / w;
+      }
+      const start = Math.floor(h * 0.08);
+      const end = Math.floor(h * 0.7);
+      let bestY = start;
+      let bestVal = -Infinity;
+      for (let y = start; y < end; y++) {
+        const e = (rowEnergy[y - 1] || 0) + rowEnergy[y] + (rowEnergy[y + 1] || 0);
+        if (e > bestVal) {
+          bestVal = e;
+          bestY = y;
+        }
+      }
+      const pct = Math.min(60, Math.max(10, Math.round((bestY / h) * 100)));
+      return pct;
+    } catch {
+      return null;
+    }
+  }, []);
+
+  const handleImageLoad = React.useCallback(() => {
+    const imgEl = imgRef.current;
+    const container = imgContainerRef.current;
+    if (!imgEl || !container) return;
+    const focal = computeFocalY(imgEl);
+    if (focal != null) {
+      container.style.setProperty('--image-pos-y', `${focal}%`);
+    }
+  }, [computeFocalY]);
+
   return (
     <div className={styles.swipeContainer}>
       <div
@@ -415,16 +479,49 @@ const SwipeableNameCards = ({
           <div className={styles.swipeCardContent}>
             {/* Cat picture when enabled */}
             {showCatPictures && (
-              <div className={styles.swipeCardImageContainer}>
-                <img
-                  src={getRandomCatImage(currentName.id)}
-                  alt="Random cat picture"
-                  className={styles.swipeCardImage}
-                  loading="eager"
-                  onError={(e) => {
-                    console.error('Image failed to load:', e.target.src);
-                  }}
-                />
+              <div
+                className={styles.swipeCardImageContainer}
+                ref={imgContainerRef}
+                style={{ ['--bg-image']: `url(${getRandomCatImage(currentName.id, imageList)})` }}
+              >
+                {(() => {
+                  const src = getRandomCatImage(currentName.id, imageList);
+                  if (src.startsWith('/images/')) {
+                    const base = src.includes('.') ? src.replace(/\.[^.]+$/, '') : src;
+                    return (
+                      <picture>
+                        <source type="image/avif" srcSet={`${base}.avif`} />
+                        <source type="image/webp" srcSet={`${base}.webp`} />
+                        <img
+                          ref={imgRef}
+                          src={src}
+                          alt="Random cat picture"
+                          className={styles.swipeCardImage}
+                          loading="eager"
+                          decoding="async"
+                          onLoad={handleImageLoad}
+                          onError={(e) => {
+                            console.error('Image failed to load:', e.target.src);
+                          }}
+                        />
+                      </picture>
+                    );
+                  }
+                  return (
+                    <img
+                      ref={imgRef}
+                      src={src}
+                      alt="Random cat picture"
+                      className={styles.swipeCardImage}
+                      loading="eager"
+                      decoding="async"
+                      onLoad={handleImageLoad}
+                      onError={(e) => {
+                        console.error('Image failed to load:', e.target.src);
+                      }}
+                    />
+                  );
+                })()}
               </div>
             )}
 
@@ -879,6 +976,62 @@ function TournamentSetupContent({ onStart, userName }) {
   const [sortBy, setSortBy] = useState('alphabetical');
   const [isSwipeMode, setIsSwipeMode] = useState(false);
   const [showCatPictures, setShowCatPictures] = useState(false);
+  const [showAllPhotos, setShowAllPhotos] = useState(false);
+  const [galleryImages, setGalleryImages] = useState(CAT_IMAGES);
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [lightboxIndex, setLightboxIndex] = useState(0);
+
+  // Load gallery dynamically from Supabase Storage (cat-images bucket)
+  // Merge with static gallery.json and built-in defaults (de-dup by basename)
+  useEffect(() => {
+    let cancelled = false;
+    const trySupabase = async () => {
+      try {
+        if (!supabase) return false;
+        const list = await imagesAPI.list('');
+        if (Array.isArray(list) && list.length) return list;
+      } catch (_) {}
+      return [];
+    };
+
+    const tryStaticManifest = async () => {
+      try {
+        const res = await fetch('/images/gallery.json', { cache: 'no-cache' });
+        if (!res.ok) return [];
+        const data = await res.json();
+        if (Array.isArray(data) && data.length) return data;
+      } catch (_) {}
+      return [];
+    };
+
+    (async () => {
+      const supa = await trySupabase();
+      const manifest = await tryStaticManifest();
+
+      // Merge: supa first, then manifest, then built-ins
+      const merged = [...(supa || []), ...(manifest || []), ...CAT_IMAGES];
+
+      // Deduplicate by base name (ignore extension), prefer earlier entries
+      const seen = new Set();
+      const deduped = [];
+      for (const url of merged) {
+        if (!url) continue;
+        // strip query/hash and extension
+        const clean = String(url).split(/[?#]/)[0];
+        const name = clean.substring(clean.lastIndexOf('/') + 1);
+        const base = name.replace(/\.[^.]+$/, '').toLowerCase();
+        if (seen.has(base)) continue;
+        seen.add(base);
+        deduped.push(url);
+      }
+
+      if (!cancelled) setGalleryImages(deduped);
+    })();
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   // Get categories and other enhanced data
   const [categories, setCategories] = useState([]);
@@ -900,24 +1053,9 @@ function TournamentSetupContent({ onStart, userName }) {
   const isAdmin = (userName || '').toLowerCase() === 'aaron';
 
   const handleImageOpen = (image) => {
-    setOpenImages((prev) => {
-      if (prev.some((img) => img.src === image)) {
-        return prev;
-      }
-      return [
-        ...prev,
-        {
-          src: image,
-          position: { x: 0, y: 0 },
-          isDragging: false,
-          dragStart: { x: 0, y: 0 },
-          isMinimized: false,
-          size: { width: 90, height: 90 },
-          isResizing: false,
-          resizeStart: { x: 0, y: 0 }
-        }
-      ];
-    });
+    const idx = galleryImages.indexOf(image);
+    setLightboxIndex(idx >= 0 ? idx : 0);
+    setLightboxOpen(true);
   };
 
   const handleImageClose = (imageSrc) => {
@@ -1240,6 +1378,7 @@ function TournamentSetupContent({ onStart, userName }) {
             isSwipeMode={isSwipeMode}
             onSwipeModeToggle={() => setIsSwipeMode(!isSwipeMode)}
             showCatPictures={showCatPictures}
+            imageList={galleryImages}
           />
 
           {selectedNames.length >= 2 && (
@@ -1279,40 +1418,103 @@ function TournamentSetupContent({ onStart, userName }) {
               <p className={styles.starsDescription}>
                 Click any photo to get a closer look
               </p>
-              <div className={styles.photoGrid}>
-                {CAT_IMAGES.map((image, index) => (
-                  <div
+            <div className={styles.photoGrid}>
+              {(showAllPhotos ? galleryImages : galleryImages.slice(0, 8)).map(
+                (image, index) => (
+                  <button
                     key={image}
-                    className={styles.photoThumbnail}
+                    type="button"
+                    className={`${styles.photoThumbnail} ${styles.photoThumbButton}`}
                     onClick={() => handleImageOpen(image)}
-                    role="button"
-                    tabIndex={0}
-                    aria-label={`View cat photo ${index + 1}`}
+                    aria-label={`Open cat photo ${index + 1}`}
                   >
-                    {(() => {
-                      const base = image.replace(/\.[^.]+$/, '');
-                      return (
-                        <picture>
-                          <source type="image/avif" srcSet={`${base}.avif`} />
-                          <source type="image/webp" srcSet={`${base}.webp`} />
-                          <img
-                            src={image}
-                            alt={`Cat photo ${index + 1}`}
-                            loading="lazy"
-                            decoding="async"
-                            width="200"
-                            height="200"
-                          />
-                        </picture>
-                      );
-                    })()}
+                    {image.startsWith('/images/') ? (
+                      (() => {
+                        const base = image.replace(/\.[^.]+$/, '');
+                        return (
+                          <picture>
+                            <source type="image/avif" srcSet={`${base}.avif`} />
+                            <source type="image/webp" srcSet={`${base}.webp`} />
+                            <img
+                              src={image}
+                              alt=""
+                              loading="lazy"
+                              decoding="async"
+                              width="200"
+                              height="200"
+                            />
+                          </picture>
+                        );
+                      })()
+                    ) : (
+                      <img
+                        src={image}
+                        alt=""
+                        loading="lazy"
+                        decoding="async"
+                        width="200"
+                        height="200"
+                      />
+                    )}
                     <div className={styles.photoOverlay}>
                       <span className={styles.photoIcon}>👁️</span>
                     </div>
-                  </div>
-                ))}
-              </div>
+                  </button>
+                )
+              )}
             </div>
+
+            <div className={styles.photoToolbar}>
+              {galleryImages.length > 8 && (
+                <div className={styles.photoActionsRow}>
+                  <button
+                    type="button"
+                    className={styles.photoMoreButton}
+                    onClick={() => setShowAllPhotos((v) => !v)}
+                  >
+                    {showAllPhotos
+                      ? 'Show fewer photos'
+                      : `Show ${galleryImages.length - 8} more photos`}
+                  </button>
+                </div>
+              )}
+              {isAdmin && (
+                <div className={styles.photoUploadRow}>
+                  <input
+                    id="gallery-upload"
+                    type="file"
+                    accept="image/*"
+                    multiple
+                    capture="environment"
+                    style={{ display: 'none' }}
+                    onChange={async (e) => {
+                      const files = Array.from(e.target.files || []);
+                      if (!files.length) return;
+                      try {
+                        const uploaded = [];
+                        for (const f of files) {
+                          const url = await imagesAPI.upload(f, (userName || 'aaron'));
+                          if (url) uploaded.push(url);
+                        }
+                        if (uploaded.length) {
+                          setGalleryImages((prev) => [...uploaded, ...prev]);
+                        }
+                      } catch (err) {
+                        console.error('Upload failed', err);
+                        // eslint-disable-next-line no-alert
+                        alert('Upload failed. Please try again.');
+                      } finally {
+                        e.target.value = '';
+                      }
+                    }}
+                  />
+                  <label htmlFor="gallery-upload" className={styles.photoUploadButton}>
+                    Upload Photos
+                  </label>
+                </div>
+              )}
+            </div>
+          </div>
           </div>
 
           <div className={styles.sidebarCard}>
@@ -1321,83 +1523,21 @@ function TournamentSetupContent({ onStart, userName }) {
         </aside>
       </div>
 
-      {openImages.map((image) => (
-        <div
-          key={image.src}
-          className={`${styles.overlayBackdrop} ${image.isMinimized ? styles.minimized : ''}`}
-          onClick={() => handleImageClose(image.src)}
-        >
-          <div className={styles.overlayContent}>
-            <div
-              className={`${styles.imageWrapperDynamic} ${styles.imageWrapper}`}
-              style={{
-                width: `${image.size.width}%`,
-                height: `${image.size.height}%`,
-                transform: `translate(${image.position.x}px, ${image.position.y}px)`
-              }}
-            >
-              <img
-                src={image.src}
-                alt="Enlarged cat photo"
-                className={`${styles.enlargedImage} ${image.isMinimized ? styles.minimizedImage : ''} ${image.isDragging ? styles.imageWrapperDragging : styles.imageWrapperNotDragging}`}
-                onMouseDown={(e) => {
-                  e.stopPropagation();
-                  handleMouseDown(image.src, e);
-                }}
-                loading="eager"
-                decoding="async"
-              />
-              {!image.isMinimized && (
-                <>
-                  <div
-                    className={`${styles.resizeHandle} ${styles.nw}`}
-                    onMouseDown={(e) => handleResizeStart(image.src, e, 'nw')}
-                  />
-                  <div
-                    className={`${styles.resizeHandle} ${styles.ne}`}
-                    onMouseDown={(e) => handleResizeStart(image.src, e, 'ne')}
-                  />
-                  <div
-                    className={`${styles.resizeHandle} ${styles.sw}`}
-                    onMouseDown={(e) => handleResizeStart(image.src, e, 'sw')}
-                  />
-                  <div
-                    className={`${styles.resizeHandle} ${styles.se}`}
-                    onMouseDown={(e) => handleResizeStart(image.src, e, 'se')}
-                  />
-                </>
-              )}
-            </div>
-            <div className={styles.imageControls}>
-              <button
-                className={styles.minimizeButton}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleMinimize(image.src);
-                }}
-                aria-label={
-                  image.isMinimized ? 'Maximize image' : 'Minimize image'
-                }
-              >
-                {image.isMinimized ? '↗' : '↙'}
-              </button>
-              <button
-                className={styles.closeButton}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleImageClose(image.src);
-                }}
-              >
-                ×
-              </button>
-            </div>
-            <p className={styles.imageInstructions}>
-              Click and drag to pan • Drag corners to resize • Press ESC or
-              click outside to close
-            </p>
-          </div>
-        </div>
-      ))}
+      {lightboxOpen && (
+        <Lightbox
+          images={galleryImages}
+          index={lightboxIndex}
+          onClose={() => setLightboxOpen(false)}
+          onPrev={() =>
+            setLightboxIndex((i) =>
+              (i - 1 + galleryImages.length) % galleryImages.length
+            )
+          }
+          onNext={() =>
+            setLightboxIndex((i) => (i + 1) % galleryImages.length)
+          }
+        />
+      )}
     </div>
   );
 }
@@ -1417,3 +1557,81 @@ TournamentSetup.propTypes = {
 };
 
 export default TournamentSetup;
+
+// Lightweight lightbox component with keyboard navigation
+function Lightbox({ images, index, onClose, onPrev, onNext }) {
+  const closeBtnRef = React.useRef(null);
+
+  React.useEffect(() => {
+    const onKey = (e) => {
+      if (e.key === 'Escape') onClose();
+      else if (e.key === 'ArrowLeft') onPrev();
+      else if (e.key === 'ArrowRight') onNext();
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [onClose, onPrev, onNext]);
+
+  React.useEffect(() => {
+    closeBtnRef.current?.focus();
+  }, []);
+
+  const current = images[index] || images[0];
+  const base = current.replace(/\.[^.]+$/, '');
+
+  return (
+    <div className={styles.overlayBackdrop} onClick={onClose} role="dialog" aria-modal="true" aria-label="Image gallery">
+      <div className={styles.lightboxContent} onClick={(e) => e.stopPropagation()}>
+        <button
+          type="button"
+          className={styles.lightboxClose}
+          onClick={onClose}
+          aria-label="Close gallery"
+          ref={closeBtnRef}
+        >
+          ×
+        </button>
+        <button
+          type="button"
+          className={`${styles.lightboxNav} ${styles.left}`}
+          onClick={onPrev}
+          aria-label="Previous photo"
+        >
+          ‹
+        </button>
+        <div className={styles.lightboxImageWrap}>
+          <picture>
+            <source type="image/avif" srcSet={`${base}.avif`} />
+            <source type="image/webp" srcSet={`${base}.webp`} />
+            <img
+              src={current}
+              alt={`Cat photo ${index + 1} of ${images.length}`}
+              className={styles.lightboxImage}
+              loading="eager"
+              decoding="async"
+            />
+          </picture>
+        </div>
+        <button
+          type="button"
+          className={`${styles.lightboxNav} ${styles.right}`}
+          onClick={onNext}
+          aria-label="Next photo"
+        >
+          ›
+        </button>
+        <div className={styles.lightboxCounter} aria-live="polite">
+          {index + 1} / {images.length}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+Lightbox.propTypes = {
+  images: PropTypes.arrayOf(PropTypes.string).isRequired,
+  index: PropTypes.number.isRequired,
+  onClose: PropTypes.func.isRequired,
+  onPrev: PropTypes.func.isRequired,
+  onNext: PropTypes.func.isRequired
+};

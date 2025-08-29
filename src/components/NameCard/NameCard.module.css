@@ -673,7 +673,7 @@
 .cardImageContainer {
   position: relative;
   width: 100%;
-  height: 150px; /* Increased to show more of the image */
+  height: 150px; /* Taller to showcase the image */
   margin-bottom: var(--space-3);
   overflow: hidden;
   border-radius: var(--radius-md);
@@ -681,14 +681,54 @@
   background: var(--surface-color); /* Neutral background for letterboxing */
 }
 
+/* Blurred background fill to avoid blank space when the image uses contain */
+.cardImageContainer::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background-image: var(--bg-image);
+  background-size: cover;
+  background-position: 50% var(--image-pos-y, 20%);
+  filter: blur(16px) brightness(0.9) saturate(110%);
+  transform: scale(1.1); /* prevent blur edges */
+  opacity: 0; /* hidden by default */
+  transition: opacity var(--duration-normal) var(--ease-out);
+}
+
+.cardImageContainer::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: linear-gradient(180deg, rgb(0 0 0 / 0%) 0%, rgb(0 0 0 / 6%) 100%);
+  opacity: 0; /* hidden by default */
+  transition: opacity var(--duration-normal) var(--ease-out);
+}
+
 .cardImage {
   width: 100%;
   height: 100%;
-  object-fit: contain; /* Show the whole cat, avoid cropping */
-  object-position: 50% 20%; /* Prefer top-center (faces are often higher) */
+  object-fit: cover; /* default: fill container */
+  object-position: 50% var(--image-pos-y, 20%); /* Use computed focal point */
   transition: transform var(--duration-normal) var(--ease-out);
-  image-rendering: -webkit-optimize-contrast;
-  image-rendering: crisp-edges;
+  image-rendering: auto;
+  position: relative;
+  z-index: 1; /* above blurred bg */
+}
+
+/* Hover/F4A: zoom out to show full cat and reveal blurred backdrop */
+.hasImage:hover .cardImageContainer::before,
+.hasImage:hover .cardImageContainer::after,
+.hasImage:focus-within .cardImageContainer::before,
+.hasImage:focus-within .cardImageContainer::after {
+  opacity: 1;
+}
+
+.hasImage:hover .cardImage,
+.hasImage:focus-within .cardImage {
+  object-fit: contain;
+  transform: scale(0.98);
 }
 
 .cardImage:hover {

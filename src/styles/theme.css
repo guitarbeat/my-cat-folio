@@ -272,6 +272,12 @@
   --header-background: #1e293b; /* Darker header for better contrast */
   --header-border: #334155; /* Darker header border */
 
+  /* Glass surface tokens */
+  --glass-bg: rgb(15 23 42 / 28%);
+  --glass-border: rgb(255 255 255 / 18%);
+  --glass-shadow: 0 10px 30px rgb(0 0 0 / 35%);
+  --glass-blur: 18px;
+
   /* Legacy dark-mode variables for backward compatibility */
   --surface-dark: #1e293b; /* Darker charcoal for better contrast */
   --card-background-dark: #1e293b; /* Darker charcoal for better contrast */
@@ -310,6 +316,11 @@ body.light-theme {
   --card-hover: #e2e8f0; /* * Darker hover state */
   --header-background: #fff; /* * Keep header white for contrast */
   --header-border: #cbd5e1; /* * Darker border */
+  /* Glass surface tokens (light) */
+  --glass-bg: rgb(255 255 255 / 55%);
+  --glass-border: rgb(0 0 0 / 10%);
+  --glass-shadow: 0 10px 30px rgb(0 0 0 / 18%);
+  --glass-blur: 16px;
   --shadow-subtle: 0 1px 3px rgb(0 0 0 / 8%); /* * Subtle shadow for light theme */
   --shadow-medium: 0 4px 12px rgb(0 0 0 / 12%); /* * Medium shadow for light theme */
 

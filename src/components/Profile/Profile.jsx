@@ -5,7 +5,8 @@
  */
 import React, { useState, useCallback, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { supabase, deleteName, catNamesAPI, tournamentsAPI } from '../../supabase/supabaseClient';
+import { supabase, deleteName, catNamesAPI, tournamentsAPI, hiddenNamesAPI } from '../../supabase/supabaseClient';
+import useToast from '../../hooks/useToast';
 import { FILTER_OPTIONS } from '../../constants';
 import { ErrorService } from '../../services/errorService';
 
@@ -270,6 +271,7 @@ const Profile = ({ userName, onStartNewTournament }) => {
   const [selectionStats, setSelectionStats] = useState(null);
   // * NEW: Selection-based filtering state
   const [selectionFilter, setSelectionFilter] = useState('all');
+  const { showSuccess, showError } = useToast();
 
   // * Hooks
   const [allNames, setAllNames] = useState([]);
@@ -329,25 +331,27 @@ const Profile = ({ userName, onStartNewTournament }) => {
   const handleToggleVisibility = useCallback(
     async (nameId) => {
       try {
-        const { error } = await supabase
-          .from('cat_name_options')
-          .update({ is_hidden: !hiddenNames.has(nameId) })
-          .eq('id', nameId);
+        const currentlyHidden = hiddenNames.has(nameId);
 
-        if (error) throw error;
+        if (!supabase) return;
 
-        // * Update local state
+        if (currentlyHidden) {
+          await hiddenNamesAPI.unhideName(userName, nameId);
+          showSuccess('Unhidden');
+        } else {
+          await hiddenNamesAPI.hideName(userName, nameId);
+          showSuccess('Hidden');
+        }
+
+        // Optimistic local update for instant UI feedback
         setHiddenNames((prev) => {
-          const newSet = new Set(prev);
-          if (newSet.has(nameId)) {
-            newSet.delete(nameId);
-          } else {
-            newSet.add(nameId);
-          }
-          return newSet;
+          const next = new Set(prev);
+          if (currentlyHidden) next.delete(nameId);
+          else next.add(nameId);
+          return next;
         });
 
-        // * Refresh names
+        // Refresh backing data (ensures filters reflect server state)
         fetchNames();
       } catch (error) {
         ErrorService.handleError(error, 'Profile - Toggle Visibility', {
@@ -355,9 +359,10 @@ const Profile = ({ userName, onStartNewTournament }) => {
           affectsUserData: false,
           isCritical: false
         });
+        showError('Failed to update visibility');
       }
     },
-    [hiddenNames, fetchNames]
+    [hiddenNames, fetchNames, userName, showSuccess, showError]
   );
 
   // * Handle name deletion
@@ -457,6 +462,7 @@ const Profile = ({ userName, onStartNewTournament }) => {
         onDelete={handleDelete}
         onSelectionChange={handleSelectionChange}
         selectedNames={selectedNames}
+        hiddenIds={hiddenNames}
         className={styles.namesSection}
         showAdminControls={isAdmin} // * Pass admin controls flag
         selectionFilter={selectionFilter}

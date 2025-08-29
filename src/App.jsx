@@ -40,6 +40,47 @@ function App() {
   // * Toast notifications
   const { toasts, removeToast } = useToast();
 
+  // * Parallax for galaxy background (respects reduced motion)
+  React.useEffect(() => {
+    const prefersReduced =
+      typeof window !== 'undefined' &&
+      window.matchMedia &&
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReduced) return;
+
+    const nebula = document.querySelector('.cat-background__nebula');
+    const cats = Array.from(
+      document.querySelectorAll('.cat-background__cat')
+    );
+    let ticking = false;
+
+    const onScroll = () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => {
+        const y = window.scrollY || 0;
+        if (nebula) {
+          const nTranslate = Math.min(50, y * 0.04);
+          const nScale = 1 + Math.min(0.08, y * 0.0002);
+          nebula.style.transform = `translateY(${nTranslate}px) scale(${nScale})`;
+        }
+        if (cats.length) {
+          cats.forEach((el, idx) => {
+            const speed = 0.02 + idx * 0.01; // vary per cat
+            const cTranslateY = Math.min(60, y * speed);
+            const cTranslateX = Math.sin((y + idx * 50) * 0.002) * 8;
+            el.style.transform = `translate(${cTranslateX}px, ${cTranslateY}px)`;
+          });
+        }
+        ticking = false;
+      });
+    };
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
   // * Centralized store
   const {
     tournament,
