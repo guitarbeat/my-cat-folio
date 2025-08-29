@@ -694,7 +694,18 @@
 }
 
 .selectedUser {
-  composes: btn btn--primary from "../../styles/global.css";
+  /* Use in combination with .userSelectionButton; overrides defined below */
+}
+
+/* Selected state overrides for user selection buttons */
+.userSelectionButton.selectedUser {
+  color: #fff;
+  background: var(--primary-600, var(--primary-color));
+  border-color: var(--primary-500, var(--primary-color));
+}
+
+.userSelectionButton.selectedUser:hover {
+  background: var(--primary-500);
 }
 
 /* User Analysis */
