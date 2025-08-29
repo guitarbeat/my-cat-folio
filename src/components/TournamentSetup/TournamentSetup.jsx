@@ -47,14 +47,10 @@ const CAT_IMAGES = [
 const DEFAULT_DESCRIPTION = 'A name as unique as your future companion';
 
 const FALLBACK_NAMES = [
-  { id: '1', name: 'Whiskers', description: 'Classic and cozy.' },
-  { id: '2', name: 'Shadow', description: 'A stealthy feline.' },
-  { id: '3', name: 'Luna', description: 'For night-loving cats.' },
-  { id: '4', name: 'Mittens', description: 'Those cute little paws!' },
-  { id: '5', name: 'Simba', description: 'The king of your home.' },
-  { id: '6', name: 'Neko', description: 'Means cat in Japanese.' },
-  { id: '7', name: 'Tiger', description: 'Small but fierce.' },
-  { id: '8', name: 'Gizmo', description: 'For the curious explorer.' }
+  { id: 'aaron', name: 'aaron', description: 'temporary fallback — backend offline' },
+  { id: 'fix', name: 'fix', description: 'temporary fallback — backend offline' },
+  { id: 'the', name: 'the', description: 'temporary fallback — backend offline' },
+  { id: 'site', name: 'site', description: 'temporary fallback — backend offline' }
 ];
 
 // Helper function to get random cat images
@@ -858,6 +854,8 @@ function useTournamentSetup(userName) {
           prev.filter((name) => !hiddenIds.has(name.id))
         );
       } catch (err) {
+        // Provide a clear offline fallback list when backend fails
+        setAvailableNames(FALLBACK_NAMES);
         handleError(err, 'TournamentSetup - Fetch Names', {
           isRetryable: true,
           affectsUserData: false,
