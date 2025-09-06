@@ -445,7 +445,7 @@ const Profile = ({ userName, onStartNewTournament }) => {
         <div className={styles.noDataContainer}>
           <h2>No Data Available</h2>
           <p>
-            {!supabase 
+            {!supabase
               ? 'Database not configured. Please set up Supabase environment variables to view your profile data.'
               : 'No names found in your profile. Start a tournament to begin collecting data!'
             }

@@ -316,6 +316,7 @@ body.light-theme {
   --card-hover: #e2e8f0; /* * Darker hover state */
   --header-background: #fff; /* * Keep header white for contrast */
   --header-border: #cbd5e1; /* * Darker border */
+
   /* Glass surface tokens (light) */
   --glass-bg: rgb(255 255 255 / 55%);
   --glass-border: rgb(0 0 0 / 10%);

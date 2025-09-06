@@ -5,6 +5,7 @@
   padding-top: calc(
     var(--space-6) + 70px
   ); /* Add navbar height to prevent content cutoff */
+
   background: transparent; /* Let galaxy background show through */
 }
 
@@ -234,8 +235,8 @@
 }
 
 .starsSection {
-  margin-bottom: var(--space-4);
   padding: var(--space-4);
+  margin-bottom: var(--space-4);
   background: var(--card-background);
   border: 1px solid var(--card-border);
   border-radius: var(--radius-lg);
@@ -696,10 +697,10 @@
 
 /* Accessible button reset for thumbnails */
 .photoThumbButton {
+  padding: 0;
   appearance: none;
   background: transparent;
   border: none;
-  padding: 0;
 }
 
 .photoThumbButton:focus-visible {
@@ -716,31 +717,31 @@
 
 .photoToolbar {
   display: flex;
+  gap: var(--space-3);
   align-items: center;
   justify-content: space-between;
-  gap: var(--space-3);
   margin-top: var(--space-3);
 }
 
 .photoUploadRow {
   display: flex;
-  align-items: center;
   gap: var(--space-2);
+  align-items: center;
 }
 
 .photoUploadButton {
   display: inline-flex;
+  gap: var(--space-2);
   align-items: center;
   justify-content: center;
-  gap: var(--space-2);
   padding: var(--space-2) var(--space-4);
   font-size: var(--text-sm);
   font-weight: 600;
   color: var(--button-text-light, white);
+  cursor: pointer;
   background: var(--button-primary-bg, var(--primary-color));
   border: none;
   border-radius: var(--radius-md);
-  cursor: pointer;
   transition: var(--transition-all);
 }
 
@@ -751,9 +752,9 @@
 
 .photoMoreButton {
   display: inline-flex;
+  gap: var(--space-2);
   align-items: center;
   justify-content: center;
-  gap: var(--space-2);
   padding: var(--space-2) var(--space-4);
   font-size: var(--text-sm);
   font-weight: 600;
@@ -1052,11 +1053,11 @@
 }
 
 .lightboxImageWrap {
-  max-width: min(92vw, 1200px);
-  max-height: 80vh;
   display: flex;
   align-items: center;
   justify-content: center;
+  max-width: min(92vw, 1200px);
+  max-height: 80vh;
 }
 
 .lightboxImage {
@@ -1070,19 +1071,19 @@
 .lightboxNav {
   position: absolute;
   top: 50%;
-  transform: translateY(-50%);
-  width: 48px;
-  height: 48px;
-  border-radius: var(--radius-full);
-  background: var(--overlay-medium);
-  color: rgb(var(--white-rgb));
-  border: none;
-  cursor: pointer;
-  font-size: var(--text-2xl);
-  line-height: 1;
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  width: 48px;
+  height: 48px;
+  font-size: var(--text-2xl);
+  line-height: 1;
+  color: rgb(var(--white-rgb));
+  cursor: pointer;
+  background: var(--overlay-medium);
+  border: none;
+  border-radius: var(--radius-full);
+  transform: translateY(-50%);
   transition: var(--transition-all);
 }
 
@@ -1098,18 +1099,18 @@
   position: absolute;
   top: var(--space-4);
   right: var(--space-4);
-  width: 44px;
-  height: 44px;
-  border-radius: var(--radius-full);
-  background: var(--overlay-medium);
-  color: rgb(var(--white-rgb));
-  border: none;
-  cursor: pointer;
-  font-size: var(--text-2xl);
-  line-height: 1;
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  width: 44px;
+  height: 44px;
+  font-size: var(--text-2xl);
+  line-height: 1;
+  color: rgb(var(--white-rgb));
+  cursor: pointer;
+  background: var(--overlay-medium);
+  border: none;
+  border-radius: var(--radius-full);
   transition: var(--transition-all);
 }
 
@@ -1119,12 +1120,12 @@
   position: absolute;
   bottom: var(--space-4);
   left: 50%;
-  transform: translateX(-50%);
   padding: var(--space-1) var(--space-3);
   font-size: var(--text-sm);
   color: rgb(var(--white-rgb));
   background: var(--overlay-medium);
   border-radius: var(--radius-full);
+  transform: translateX(-50%);
 }
 
 /* Messages */
@@ -1462,33 +1463,33 @@
 
 /* Blurred background fill for swipe card images */
 .swipeCardImageContainer::before {
-  content: "";
   position: absolute;
   inset: 0;
   z-index: 0;
+  content: "";
   background-image: var(--bg-image);
-  background-size: cover;
   background-position: 50% var(--image-pos-y, 20%);
+  background-size: cover;
   filter: blur(16px) brightness(0.9) saturate(110%);
   transform: scale(1.1);
 }
 
 .swipeCardImageContainer::after {
-  content: "";
   position: absolute;
   inset: 0;
   z-index: 0;
+  content: "";
   background: linear-gradient(180deg, rgb(0 0 0 / 0%) 0%, rgb(0 0 0 / 6%) 100%);
 }
 
 .swipeCardImage {
+  position: relative;
+  z-index: 1;
   width: 100%;
   height: 100%;
   object-fit: contain; /* show full cat; blurred bg fills behind */
   object-position: 50% var(--image-pos-y, 20%);
   transition: transform 0.3s ease;
-  position: relative;
-  z-index: 1;
 }
 
 .swipeCardImage:hover {

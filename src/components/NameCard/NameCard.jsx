@@ -131,7 +131,7 @@ function NameCard({
       // Convert to percent, clamp reasonable range
       const pct = Math.min(60, Math.max(10, Math.round((bestY / h) * 100)));
       return pct;
-    } catch (e) {
+    } catch {
       return null;
     }
   }, []);

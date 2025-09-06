@@ -20,7 +20,6 @@
   background: var(--glass-bg);
   border-bottom: 1px solid var(--glass-border);
   box-shadow: var(--glass-shadow);
-  -webkit-backdrop-filter: blur(var(--glass-blur));
           backdrop-filter: blur(var(--glass-blur));
 }
 
@@ -60,7 +59,6 @@
   background: var(--glass-bg);
   border-right: 1px solid var(--glass-border);
   box-shadow: var(--glass-shadow);
-  -webkit-backdrop-filter: blur(var(--glass-blur));
           backdrop-filter: blur(var(--glass-blur));
 }
 
@@ -889,8 +887,8 @@
 .noDataContainer p {
   margin: 0 0 2rem;
   font-size: 1.1rem;
-  color: var(--text-secondary);
   line-height: 1.6;
+  color: var(--text-secondary);
 }
 
 .primaryButton {
@@ -899,17 +897,17 @@
   font-weight: 600;
   color: white;
   text-decoration: none;
+  cursor: pointer;
   background: linear-gradient(135deg, var(--primary-500), var(--primary-600));
   border: 1px solid var(--primary-500);
   border-radius: 12px;
   box-shadow: var(--shadow-md);
   transition: all 0.3s ease;
-  cursor: pointer;
 }
 
 .primaryButton:hover {
-  transform: translateY(-2px);
   box-shadow: var(--shadow-lg);
+  transform: translateY(-2px);
 }
 
 /* Error Container */
@@ -937,8 +935,8 @@
 .errorContainer p {
   margin: 0 0 2rem;
   font-size: 1.1rem;
-  color: var(--error-600);
   line-height: 1.6;
+  color: var(--error-600);
 }
 
 .errorContainer button {
@@ -946,19 +944,19 @@
   font-size: 1.1rem;
   font-weight: 600;
   color: var(--error-700);
+  cursor: pointer;
   background: var(--error-100);
   border: 1px solid var(--error-300);
   border-radius: 12px;
   box-shadow: var(--shadow-md);
   transition: all 0.3s ease;
-  cursor: pointer;
 }
 
 .errorContainer button:hover {
   background: var(--error-200);
   border-color: var(--error-400);
-  transform: translateY(-2px);
   box-shadow: var(--shadow-lg);
+  transform: translateY(-2px);
 }
 
 /* Responsive Design */

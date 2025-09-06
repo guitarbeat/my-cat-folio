@@ -420,7 +420,9 @@ export function useTournament({
         getCurrentRatings,
         updateTournamentState,
         updatePersistentState,
-        userName
+        userName,
+        elo,
+        persistentState.matchHistory
       ]
   );
 
