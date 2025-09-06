@@ -863,6 +863,104 @@
   text-align: center;
 }
 
+/* No Data Container */
+.noDataContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  padding: 3rem 2rem;
+  text-align: center;
+  background: var(--card-background);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  box-shadow: var(--shadow-lg);
+  backdrop-filter: blur(10px);
+}
+
+.noDataContainer h2 {
+  margin: 0 0 1rem;
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.noDataContainer p {
+  margin: 0 0 2rem;
+  font-size: 1.1rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+.primaryButton {
+  padding: 1rem 2rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: white;
+  text-decoration: none;
+  background: linear-gradient(135deg, var(--primary-500), var(--primary-600));
+  border: 1px solid var(--primary-500);
+  border-radius: 12px;
+  box-shadow: var(--shadow-md);
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.primaryButton:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+/* Error Container */
+.errorContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  padding: 3rem 2rem;
+  text-align: center;
+  background: var(--error-50);
+  border: 1px solid var(--error-200);
+  border-radius: 16px;
+  box-shadow: var(--shadow-lg);
+}
+
+.errorContainer h2 {
+  margin: 0 0 1rem;
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--error-700);
+}
+
+.errorContainer p {
+  margin: 0 0 2rem;
+  font-size: 1.1rem;
+  color: var(--error-600);
+  line-height: 1.6;
+}
+
+.errorContainer button {
+  padding: 1rem 2rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--error-700);
+  background: var(--error-100);
+  border: 1px solid var(--error-300);
+  border-radius: 12px;
+  box-shadow: var(--shadow-md);
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.errorContainer button:hover {
+  background: var(--error-200);
+  border-color: var(--error-400);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
 /* Responsive Design */
 @media (width <= 1200px) {
   .adminSidebar {
