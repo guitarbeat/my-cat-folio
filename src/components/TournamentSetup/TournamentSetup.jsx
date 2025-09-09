@@ -370,18 +370,6 @@ const SwipeableNameCards = ({
     }, 300);
   };
 
-  if (!currentName) return null;
-
-  const cardStyle = {
-    transform: `translate(${dragOffset.x}px, ${dragOffset.y}px) rotate(${dragOffset.x * 0.1}deg)`,
-    opacity: isDragging ? 0.9 : 1
-  };
-
-  const swipeOverlayStyle = {
-    opacity: swipeProgress,
-    transform: `scale(${0.8 + swipeProgress * 0.2})`
-  };
-
   // Lightweight vertical edge-density focal detector (same approach as NameCard)
   const computeFocalY = React.useCallback((imgEl) => {
     try {
@@ -440,6 +428,18 @@ const SwipeableNameCards = ({
       container.style.setProperty('--image-pos-y', `${focal}%`);
     }
   }, [computeFocalY]);
+
+  if (!currentName) return null;
+
+  const cardStyle = {
+    transform: `translate(${dragOffset.x}px, ${dragOffset.y}px) rotate(${dragOffset.x * 0.1}deg)`,
+    opacity: isDragging ? 0.9 : 1
+  };
+
+  const swipeOverlayStyle = {
+    opacity: swipeProgress,
+    transform: `scale(${0.8 + swipeProgress * 0.2})`
+  };
 
   return (
     <div className={styles.swipeContainer}>
@@ -889,7 +889,7 @@ function useTournamentSetup(userName) {
         );
       }, 800);
     },
-    [userName]
+    [userName, saveTournamentSelections]
   );
 
   useEffect(() => {
@@ -918,7 +918,7 @@ function useTournamentSetup(userName) {
   };
 
   // Save tournament selections to database
-  const saveTournamentSelections = async (selectedNames) => {
+  const saveTournamentSelections = useCallback(async (selectedNames) => {
     try {
       // Create a unique tournament ID for this selection session
       const tournamentId = `selection_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
@@ -937,7 +937,7 @@ function useTournamentSetup(userName) {
       console.error('Error saving tournament selections:', error);
       // Don't block the UI if saving fails
     }
-  };
+  }, [userName]);
 
   const handleSelectAll = () => {
     setSelectedNames(
@@ -992,7 +992,9 @@ function TournamentSetupContent({ onStart, userName }) {
         if (!supabase) return false;
         const list = await imagesAPI.list('');
         if (Array.isArray(list) && list.length) return list;
-      } catch (_) {}
+      } catch {
+        // Ignore errors when trying to load images
+      }
       return [];
     };
 
@@ -1002,7 +1004,9 @@ function TournamentSetupContent({ onStart, userName }) {
         if (!res.ok) return [];
         const data = await res.json();
         if (Array.isArray(data) && data.length) return data;
-      } catch (_) {}
+      } catch {
+        // Ignore errors when trying to load images
+      }
       return [];
     };
 
@@ -1060,41 +1064,6 @@ function TournamentSetupContent({ onStart, userName }) {
     setLightboxOpen(true);
   };
 
-  const handleImageClose = (imageSrc) => {
-    setOpenImages((prev) => prev.filter((img) => img.src !== imageSrc));
-  };
-
-  const handleMinimize = (imageSrc) => {
-    setOpenImages((prev) =>
-      prev.map((img) => {
-        if (img.src === imageSrc) {
-          return {
-            ...img,
-            isMinimized: !img.isMinimized
-          };
-        }
-        return img;
-      })
-    );
-  };
-
-  const handleMouseDown = (imageSrc, e) => {
-    setOpenImages((prev) =>
-      prev.map((img) => {
-        if (img.src === imageSrc) {
-          return {
-            ...img,
-            isDragging: true,
-            dragStart: {
-              x: e.clientX - img.position.x,
-              y: e.clientY - img.position.y
-            }
-          };
-        }
-        return img;
-      })
-    );
-  };
 
   const handleMouseMove = (e) => {
     setOpenImages((prev) =>
@@ -1122,25 +1091,6 @@ function TournamentSetupContent({ onStart, userName }) {
     );
   };
 
-  const handleResizeStart = (imageSrc, e, handle) => {
-    e.stopPropagation();
-    setOpenImages((prev) =>
-      prev.map((img) => {
-        if (img.src === imageSrc) {
-          return {
-            ...img,
-            isResizing: true,
-            resizeHandle: handle,
-            resizeStart: {
-              x: e.clientX,
-              y: e.clientY
-            }
-          };
-        }
-        return img;
-      })
-    );
-  };
 
   const handleResizeMove = (e) => {
     setOpenImages((prev) =>
@@ -1511,7 +1461,7 @@ function TournamentSetupContent({ onStart, userName }) {
                       }
                     } catch (err) {
                         console.error('Upload failed', err);
-                        // eslint-disable-next-line no-alert
+
                         alert('Upload failed. Please try again.');
                       } finally {
                         e.target.value = '';

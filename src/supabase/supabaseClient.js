@@ -1321,7 +1321,7 @@ export const imagesAPI = {
   /**
    * Upload an image file to the `cat-images` bucket. Returns public URL.
    */
-  async upload(file, userName = 'anon', prefix = '') {
+  async upload(file, _userName = 'anon', prefix = '') {
     if (!supabase) throw new Error('Supabase not configured');
     const safe = (file?.name || 'image').replace(/[^a-zA-Z0-9._-]/g, '_');
     // Store at bucket root to simplify listing (no recursion needed)

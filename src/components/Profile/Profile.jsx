@@ -283,12 +283,14 @@ const Profile = ({ userName, onStartNewTournament }) => {
       setRatingsLoading(true);
       setRatingsError(null);
       if (!supabase) {
+        console.warn('Supabase not configured, using empty data for Profile');
         setAllNames([]);
         return;
       }
       const names = await catNamesAPI.getNamesWithDescriptions();
       setAllNames(names);
     } catch (err) {
+      console.error('Error fetching names:', err);
       setRatingsError(err);
     } finally {
       setRatingsLoading(false);
@@ -300,10 +302,16 @@ const Profile = ({ userName, onStartNewTournament }) => {
     if (!userName) return;
 
     try {
+      if (!supabase) {
+        console.warn('Supabase not configured, skipping selection stats');
+        setSelectionStats(null);
+        return;
+      }
       const stats = await calculateSelectionStats(userName);
       setSelectionStats(stats);
     } catch (error) {
       console.error('Error fetching selection stats:', error);
+      setSelectionStats(null);
     }
   }, [userName]);
 
@@ -333,7 +341,11 @@ const Profile = ({ userName, onStartNewTournament }) => {
       try {
         const currentlyHidden = hiddenNames.has(nameId);
 
-        if (!supabase) return;
+        if (!supabase) {
+          console.warn('Supabase not configured, cannot toggle visibility');
+          showError('Database not available');
+          return;
+        }
 
         if (currentlyHidden) {
           await hiddenNamesAPI.unhideName(userName, nameId);
@@ -369,6 +381,12 @@ const Profile = ({ userName, onStartNewTournament }) => {
   const handleDelete = useCallback(
     async (name) => {
       try {
+        if (!supabase) {
+          console.warn('Supabase not configured, cannot delete name');
+          showError('Database not available');
+          return;
+        }
+
         const { error } = await deleteName(name.id);
         if (error) throw error;
 
@@ -381,9 +399,10 @@ const Profile = ({ userName, onStartNewTournament }) => {
           affectsUserData: true,
           isCritical: false
         });
+        showError('Failed to delete name');
       }
     },
-    [fetchNames, fetchSelectionStats]
+    [fetchNames, fetchSelectionStats, showError]
   );
 
   // * Handle name selection
@@ -406,6 +425,35 @@ const Profile = ({ userName, onStartNewTournament }) => {
         <h2>Error Loading Profile</h2>
         <p>{ratingsError.message}</p>
         <button onClick={fetchNames}>Retry</button>
+      </div>
+    );
+  }
+
+  // * Handle case when no data is available (e.g., Supabase not configured)
+  if (!ratingsLoading && allNames.length === 0 && !ratingsError) {
+    return (
+      <div className={styles.profileContainer}>
+        <div className={styles.header}>
+          <h1 className={styles.title}>Profile: {userName}</h1>
+          <button
+            onClick={onStartNewTournament}
+            className={styles.newTournamentButton}
+          >
+            Start New Tournament
+          </button>
+        </div>
+        <div className={styles.noDataContainer}>
+          <h2>No Data Available</h2>
+          <p>
+            {!supabase
+              ? 'Database not configured. Please set up Supabase environment variables to view your profile data.'
+              : 'No names found in your profile. Start a tournament to begin collecting data!'
+            }
+          </p>
+          <button onClick={onStartNewTournament} className={styles.primaryButton}>
+            Start New Tournament
+          </button>
+        </div>
       </div>
     );
   }
