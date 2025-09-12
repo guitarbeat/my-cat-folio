@@ -7,15 +7,15 @@ This directory contains all testing-related files and utilities for the Meow Nam
 ```
 tests/
 ├── README.md           # This file - testing overview
-├── debug/              # Debug testing utilities
-│   └── README.md      # Debug testing guidelines
+├── utilities/           # Development testing utilities
+│   └── README.md      # Development utilities guidelines
 ├── unit/               # Unit tests (future)
 └── integration/        # Integration tests (future)
 ```
 
 ## **🧪 Testing Types**
 
-### **Debug Testing** (`tests/debug/`)
+### **Development Utilities** (`tests/utilities/`)
 - **Purpose:** Temporary debugging and troubleshooting
 - **Use Case:** When debugging Supabase connections, database issues, or other problems
 - **Files:** HTML test pages, SQL queries, JavaScript debug scripts
@@ -39,7 +39,7 @@ tests/
 
 ## **📝 Testing Guidelines**
 
-1. **Debug Tests:** Keep in `tests/debug/` and clean up after use
+1. **Development Utilities:** Keep in `tests/utilities/` and clean up after use
 2. **Unit Tests:** Write for all new components and functions
 3. **Integration Tests:** Write for critical user workflows
 4. **Coverage:** Aim for >80% code coverage
