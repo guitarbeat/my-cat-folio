@@ -149,11 +149,6 @@ function App() {
   // * Handle tournament setup
   const handleTournamentSetup = useCallback(
     (names) => {
-      console.log(
-        '[DEV] 🎮 App: handleTournamentSetup called with names:',
-        names
-      );
-
       // * Only set loading if we don't already have names
       if (!tournament.names) {
         tournamentActions.setLoading(true);
@@ -163,7 +158,6 @@ function App() {
         names,
         tournament.ratings
       );
-      console.log('[DEV] 🎮 App: Processed names:', processedNames);
 
       tournamentActions.setNames(processedNames);
       // Ensure we are on the tournament view after starting

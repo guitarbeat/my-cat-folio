@@ -1,14 +1,14 @@
-# Debug Testing Directory
+# Development Utilities Directory
 
 This directory contains debugging and testing utilities for development and troubleshooting.
 
 ## **📁 Directory Structure**
 
-- `tests/debug/` - Debug testing utilities
+- `tests/utilities/` - Development testing utilities
 - `tests/unit/` - Unit tests (if needed)
 - `tests/integration/` - Integration tests (if needed)
 
-## **🔧 Debug Utilities**
+## **🔧 Development Utilities**
 
 ### **Supabase Connection Testing**
 When debugging Supabase connection issues, create temporary test files here:
@@ -53,7 +53,7 @@ WHERE table_schema = 'public' AND table_name LIKE 'cat_%';
 1. **Isolation:** Keep debug files separate from production code
 2. **Documentation:** Document what each debug file tests
 3. **Cleanup:** Remove debug files when no longer needed
-4. **Version Control:** Add `tests/debug/*.tmp` to `.gitignore` if needed
+4. **Version Control:** Add `tests/utilities/*.tmp` to `.gitignore` if needed
 
 ---
 
