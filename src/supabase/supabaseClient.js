@@ -39,6 +39,22 @@ if (!supabaseUrl || !supabaseAnonKey) {
 
 export { supabase };
 
+// ===== HELPER FUNCTIONS =====
+
+/**
+ * Check if Supabase is configured and available
+ * @returns {boolean} True if Supabase is available
+ */
+const isSupabaseAvailable = () => {
+  if (!supabase) {
+    if (process.env.NODE_ENV === 'development') {
+      console.warn('Supabase not configured. Some features may not work.');
+    }
+    return false;
+  }
+  return true;
+};
+
 // ===== CORE API FUNCTIONS =====
 
 /**
@@ -50,6 +66,10 @@ export const catNamesAPI = {
    */
   async getNamesWithDescriptions() {
     try {
+      if (!isSupabaseAvailable()) {
+        return [];
+      }
+
       // Get ALL hidden name IDs globally (not user-specific)
       let hiddenIds = [];
       const { data: hiddenData, error: hiddenError } = await databaseRetry.read(
@@ -125,6 +145,10 @@ export const catNamesAPI = {
    */
   async addName(name, description = '') {
     try {
+      if (!isSupabaseAvailable()) {
+        return { success: false, error: 'Supabase not configured' };
+      }
+
       const { data, error } = await supabase
         .from('cat_name_options')
         .insert([{ name: name.trim(), description: description.trim() }])
@@ -152,6 +176,10 @@ export const catNamesAPI = {
    */
   async removeName(name) {
     try {
+      if (!isSupabaseAvailable()) {
+        return { success: false, error: 'Supabase not configured' };
+      }
+
       const { error } = await supabase
         .from('cat_name_options')
         .delete()
@@ -181,6 +209,10 @@ export const catNamesAPI = {
    */
   async getLeaderboard(limit = 50, categoryId = null, minTournaments = 1) {
     try {
+      if (!isSupabaseAvailable()) {
+        return [];
+      }
+
       const { data, error } = await supabase.rpc('get_cat_name_leaderboard', {
         p_limit: limit,
         p_category_id: categoryId,
@@ -218,6 +250,10 @@ export const ratingsAPI = {
     const now = new Date().toISOString();
 
     try {
+      if (!isSupabaseAvailable()) {
+        return { success: false, error: 'Supabase not configured' };
+      }
+
       // Get existing rating data
       const { data: existingData, error: fetchError } = await supabase
         .from('cat_name_ratings')
@@ -293,6 +329,10 @@ export const ratingsAPI = {
    */
   async getRatingHistory(userName, nameId = null, limit = 20) {
     try {
+      if (!isSupabaseAvailable()) {
+        return [];
+      }
+
       let query = supabase
         .from('cat_name_ratings')
         .select('rating_history')
@@ -337,6 +377,10 @@ export const ratingsAPI = {
     context = 'manual'
   ) {
     try {
+      if (!isSupabaseAvailable()) {
+        return { success: false, error: 'Supabase not configured' };
+      }
+
       // Get name from name_id
       const { data: nameData } = await supabase
         .from('cat_name_options')
@@ -402,6 +446,10 @@ export const hiddenNamesAPI = {
    */
   async hideName(userName, nameId) {
     try {
+      if (!isSupabaseAvailable()) {
+        return { success: false, error: 'Supabase not configured' };
+      }
+
       // First check if a record exists to avoid overwriting wins/losses
       const { data: existing, error: fetchError } = await supabase
         .from('cat_name_ratings')
@@ -446,6 +494,10 @@ export const hiddenNamesAPI = {
    */
   async unhideName(userName, nameId) {
     try {
+      if (!isSupabaseAvailable()) {
+        return { success: false, error: 'Supabase not configured' };
+      }
+
       // Update the hidden status to false in cat_name_ratings
       const { error } = await supabase
         .from('cat_name_ratings')
@@ -468,6 +520,10 @@ export const hiddenNamesAPI = {
    */
   async getHiddenNames(userName) {
     try {
+      if (!isSupabaseAvailable()) {
+        return [];
+      }
+
       const { data, error } = await supabase
         .from('cat_name_ratings')
         .select(
@@ -509,6 +565,10 @@ export const tournamentsAPI = {
     tournamentData = {}
   ) {
     try {
+      if (!isSupabaseAvailable()) {
+        return { success: false, error: 'Supabase not configured' };
+      }
+
       // Create tournament in the consolidated cat_app_users table
       const newTournament = {
         id: crypto.randomUUID(), // Generate unique ID
@@ -608,6 +668,10 @@ export const tournamentsAPI = {
    */
   async updateTournamentStatus(tournamentId, status) {
     try {
+      if (!isSupabaseAvailable()) {
+        return { success: false, error: 'Supabase not configured' };
+      }
+
       // Find the tournament in the user's tournament_data array
       // We need to search through all users to find the tournament
       const { data: allUsers, error: fetchError } = await supabase
@@ -690,6 +754,10 @@ export const tournamentsAPI = {
    */
   async getUserTournaments(userName, status = null) {
     try {
+      if (!isSupabaseAvailable()) {
+        return [];
+      }
+
       // Get tournaments from the consolidated cat_app_users table
       const { data: userData, error } = await supabase
         .from('cat_app_users')
@@ -738,6 +806,10 @@ export const tournamentsAPI = {
    */
   async saveTournamentSelections(userName, selectedNames, tournamentId = null) {
     try {
+      if (!isSupabaseAvailable()) {
+        return { success: false, error: 'Supabase not configured' };
+      }
+
       const now = new Date().toISOString();
       const finalTournamentId = tournamentId || `tournament_${Date.now()}`;
 
@@ -850,6 +922,10 @@ export const tournamentsAPI = {
    */
   async createTournamentSelectionsTable() {
     try {
+      if (!isSupabaseAvailable()) {
+        return { success: false, error: 'Supabase not configured' };
+      }
+
       const { error } = await supabase.rpc(
         'create_tournament_selections_table'
       );
@@ -879,6 +955,10 @@ export const tournamentsAPI = {
    */
   async getTournamentSelectionHistory(userName, limit = 50) {
     try {
+      if (!isSupabaseAvailable()) {
+        return [];
+      }
+
       const { data, error } = await supabase
         .from('tournament_selections')
         .select(
@@ -918,6 +998,10 @@ export const tournamentsAPI = {
    */
   async getPopularTournamentNames(limit = 20) {
     try {
+      if (!isSupabaseAvailable()) {
+        return [];
+      }
+
       const { data, error } = await supabase
         .from('tournament_selections')
         .select(
@@ -959,6 +1043,10 @@ export const tournamentsAPI = {
    */
   async getPersonalizedRecommendations(userName, limit = 10) {
     try {
+      if (!isSupabaseAvailable()) {
+        return [];
+      }
+
       const { data, error } = await supabase.rpc(
         'get_personalized_recommendations',
         {
@@ -987,6 +1075,10 @@ export const tournamentsAPI = {
    */
   async getSelectionDashboard() {
     try {
+      if (!isSupabaseAvailable()) {
+        return null;
+      }
+
       const { data, error } = await supabase
         .from('selection_summary')
         .select('*')
@@ -1013,6 +1105,10 @@ export const tournamentsAPI = {
    */
   async getPopularNamesBySelections(limit = 20) {
     try {
+      if (!isSupabaseAvailable()) {
+        return [];
+      }
+
       const { data, error } = await supabase
         .from('popular_names_by_selections')
         .select('*')
@@ -1042,6 +1138,17 @@ export const userPreferencesAPI = {
    */
   async getPreferences(userName) {
     try {
+      if (!isSupabaseAvailable()) {
+        return {
+          user_name: userName,
+          preferred_categories: [],
+          tournament_size_preference: 8,
+          rating_display_preference: 'elo',
+          sound_enabled: true,
+          theme_preference: 'dark'
+        };
+      }
+
       // First try to get preferences from the preferences column
       const { data, error } = await supabase
         .from('cat_app_users')
@@ -1099,6 +1206,10 @@ export const userPreferencesAPI = {
    */
   async updatePreferences(userName, preferences) {
     try {
+      if (!isSupabaseAvailable()) {
+        return preferences;
+      }
+
       // Update preferences in the consolidated cat_app_users table
       const { data, error } = await supabase
         .from('cat_app_users')
@@ -1145,6 +1256,10 @@ export const categoriesAPI = {
    */
   async getCategories() {
     try {
+      if (!isSupabaseAvailable()) {
+        return [];
+      }
+
       // Get categories from the consolidated cat_name_options table
       const { data, error } = await supabase
         .from('cat_name_options')
@@ -1166,6 +1281,10 @@ export const categoriesAPI = {
    */
   async getNamesByCategory(categoryId) {
     try {
+      if (!isSupabaseAvailable()) {
+        return [];
+      }
+
       // Categories are now stored as JSONB in cat_name_options
       const { data, error } = await supabase
         .from('cat_name_options')
@@ -1210,6 +1329,10 @@ export const ensureRatingHistoryTable = async () => {
  */
 export const deleteName = async (nameId) => {
   try {
+    if (!isSupabaseAvailable()) {
+      return { success: false, error: 'Supabase not configured' };
+    }
+
     // Check if name exists
     const { data: nameData, error: nameError } = await supabase
       .from('cat_name_options')
@@ -1265,7 +1388,10 @@ export const imagesAPI = {
    */
   async list(prefix = '', limit = 1000) {
     try {
-      if (!supabase) return [];
+      if (!isSupabaseAvailable()) {
+        return [];
+      }
+
       const opts = { limit, search: undefined, sortBy: { column: 'updated_at', order: 'desc' } };
       const { data, error } = await supabase.storage.from('cat-images').list(prefix, opts);
       if (error) {
@@ -1322,7 +1448,10 @@ export const imagesAPI = {
    * Upload an image file to the `cat-images` bucket. Returns public URL.
    */
   async upload(file, _userName = 'anon', prefix = '') {
-    if (!supabase) throw new Error('Supabase not configured');
+    if (!isSupabaseAvailable()) {
+      throw new Error('Supabase not configured');
+    }
+
     const safe = (file?.name || 'image').replace(/[^a-zA-Z0-9._-]/g, '_');
     // Store at bucket root to simplify listing (no recursion needed)
     const objectPath = `${prefix ? `${prefix}/` : ''}${Date.now()}-${safe}`;
