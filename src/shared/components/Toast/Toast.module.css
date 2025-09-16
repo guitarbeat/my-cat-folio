@@ -68,7 +68,7 @@
 }
 
 .dismissButton {
-  composes: btn btn--icon from "../../styles/global.css";
+  
   color: inherit;
   background: rgb(255 255 255 / 80%);
   border: 1px solid currentcolor;

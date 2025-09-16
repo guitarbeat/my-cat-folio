@@ -168,7 +168,7 @@
 
 /* Ensure card takes remaining space */
 .card {
-  composes: card--interactive from "../../styles/global.css";
+  
   position: relative;
   display: flex;
   flex: 1;
@@ -225,7 +225,7 @@
 
 /* Name styling - Ensure it doesn't take too much space */
 .name {
-  composes: heading from "../../styles/global.css";
+  
   flex-shrink: 0; /* Prevent name from shrinking */
   margin: 0;
   font-size: var(--text-xl);
@@ -236,7 +236,7 @@
 
 /* Description styling - Enhanced for better readability and space */
 .description {
-  composes: text from "../../styles/global.css";
+  
   display: -webkit-box;
   flex: 1; /* Take remaining space */
   min-height: 4.8em; /* Ensure minimum height for description (6 lines * 1.6 line-height * 0.5em) */

@@ -17,7 +17,7 @@
 /* Layout & Container
    ========================================================================== */
 .tournament {
-  composes: container from "../../styles/global.css";
+  
   position: relative;
   display: flex;
   flex-direction: column;
@@ -61,7 +61,7 @@
 }
 
 .roundInfo {
-  composes: flex-col from "../../styles/global.css";
+  
   gap: var(--space-2);
   font-weight: 500;
 }
@@ -73,7 +73,7 @@
 }
 
 .matchCount {
-  composes: textsm from "../../styles/global.css";
+  
   color: var(--text-secondary);
 }
 
@@ -96,7 +96,7 @@
 }
 
 .matchup {
-  composes: cardinteractive from "../../styles/global.css";
+  
   display: flex;
   flex-direction: column;
   gap: var(--space-6);
@@ -171,7 +171,7 @@
 }
 
 .extraOptionsButton {
-  composes: btn btn--secondary from "../../styles/global.css";
+  
   min-width: 120px;
   transition: all var(--duration-normal) var(--ease-out);
 }
@@ -185,7 +185,7 @@
 }
 
 .selected {
-  composes: btnprimary from "../../styles/global.css";
+  
   background: var(--primary-color);
 }
 
@@ -212,7 +212,7 @@
   transition: all var(--duration-normal) var(--ease-out);
 }
 
-.controlButton { composes: btn btn--primary from "../../styles/global.css"; }
+.controlButton {  }
 
 .soundControls {
   display: flex;
@@ -258,7 +258,7 @@
 }
 
 .soundToggleButton {
-  composes: btnsecondary from "../../styles/global.css";
+  
   display: flex;
   align-items: center;
   justify-content: center;
@@ -332,7 +332,7 @@
 }
 
 .bracketToggle {
-  composes: btn btn--secondary from "../../styles/global.css";
+  
   display: flex;
   gap: var(--space-2);
   align-items: center;
@@ -372,7 +372,7 @@
 }
 
 .keyboardHelpToggle {
-  composes: btnsecondary from "../../styles/global.css";
+  
   display: flex;
   gap: var(--space-2);
   align-items: center;
@@ -530,7 +530,7 @@
 /* Modal Components
    ========================================================================== */
 .modal {
-  composes: modal from "../../styles/global.css";
+  
 
   /* Improve modal accessibility */
   outline: none;
@@ -539,35 +539,35 @@
 }
 
 .modalBackdrop {
-  composes: modalbackdrop from "../../styles/global.css";
+  
   animation: fadeIn var(--duration-normal) var(--ease-out);
 }
 
 .modalContent {
-  composes: flex-col from "../../styles/global.css";
+  
   gap: var(--space-4);
 }
 
 .modalTitle {
-  composes: heading2 from "../../styles/global.css";
+  
 }
 
 .modalText {
-  composes: text from "../../styles/global.css";
+  
 }
 
 .modalActions {
-  composes: flex-center from "../../styles/global.css";
+  
   gap: var(--space-4);
   margin-top: var(--space-4);
 }
 
 .confirmButton {
-  composes: btnprimary from "../../styles/global.css";
+  
 }
 
 .cancelButton {
-  composes: btnsecondary from "../../styles/global.css";
+  
 }
 
 /* Animations
@@ -782,7 +782,7 @@
 }
 
 .randomizeButton {
-  composes: btnsecondary from "../../styles/global.css";
+  
   display: flex;
   gap: var(--space-2);
   align-items: center;

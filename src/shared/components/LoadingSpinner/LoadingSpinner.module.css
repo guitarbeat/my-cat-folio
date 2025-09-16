@@ -46,7 +46,7 @@
 
 /* Text styles */
 .text {
-  composes: text-base from "../../styles/global.css";
+  
   margin-top: 1.5rem;
   color: var(--text-primary);
   letter-spacing: 0.05em;

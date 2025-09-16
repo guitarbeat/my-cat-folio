@@ -1,5 +1,5 @@
 .container {
-  composes: container from "../../styles/global.css";
+  
   position: relative;
   z-index: var(--z-0);
   width: 100%;
@@ -89,7 +89,7 @@
 }
 
 .statCard {
-  composes: card--interactive from "../../styles/global.css";
+  
   position: relative;
   min-width: 140px;
   text-align: center;
@@ -130,7 +130,7 @@
 }
 
 .startNewButton {
-  composes: btn btn--primary from "../../styles/global.css";
+  
   display: inline-flex;
   gap: var(--space-2);
   align-items: center;
@@ -197,7 +197,7 @@
 }
 
 .tournamentBracket {
-  composes: card--interactive from "../../styles/global.css";
+  
   position: relative;
   padding: var(--space-8);
   margin: var(--space-8) 0;
@@ -393,7 +393,7 @@
 
 /* Tournament Bracket */
 .bracketContainer {
-  composes: card--interactive from "../../styles/global.css";
+  
   padding: var(--space-4);
   margin-bottom: var(--space-6);
   overflow-x: auto;
@@ -408,7 +408,7 @@
 }
 
 .actionButton {
-  composes: btn btn--primary from "../../styles/global.css";
+  
   min-width: 200px;
 }
 

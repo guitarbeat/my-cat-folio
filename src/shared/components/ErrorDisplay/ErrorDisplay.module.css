@@ -29,7 +29,7 @@
 }
 
 .clearAllButton {
-  composes: btn from "../../styles/global.css";
+  
   color: #fff;
   background: var(--error-500);
   border-color: var(--error-600);
@@ -144,7 +144,7 @@
 .retryButton,
 .dismissButton,
 .detailsButton {
-  composes: btn from "../../styles/global.css";
+  
   min-width: 60px;
   font-size: 0.8rem;
 }
@@ -160,7 +160,7 @@
 }
 
 .dismissButton {
-  composes: btn--icon from "../../styles/global.css";
+  
 }
 
 .dismissButton:hover {
@@ -169,7 +169,7 @@
 }
 
 .detailsButton {
-  composes: btn--icon from "../../styles/global.css";
+  
 }
 
 .detailsButton:hover {

@@ -39,7 +39,7 @@
 }
 
 .button {
-  composes: btn btn--primary from "../../styles/global.css";
+  
 }
 
 /* Main Content - Sidebar Layout */
@@ -94,7 +94,7 @@
 }
 
 .quickStat {
-  composes: card from "../../styles/global.css";
+  
   text-align: center;
 }
 
@@ -120,7 +120,7 @@
 }
 
 .sidebarButton {
-  composes: btn btn--secondary from "../../styles/global.css";
+  
   font-size: 0.9rem;
   text-align: left;
 }
@@ -340,7 +340,7 @@
 
 /* Controls - Compact */
 .controls {
-  composes: card from "../../styles/global.css";
+  
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
   gap: 1.5rem;
@@ -383,7 +383,7 @@
 }
 
 .sortButton {
-  composes: btn btn--secondary from "../../styles/global.css";
+  
   min-width: 60px;
   font-size: 1.1rem;
   font-weight: bold;
@@ -408,7 +408,7 @@
 }
 
 .userFilterButton {
-  composes: btn btn--secondary from "../../styles/global.css";
+  
   font-size: 0.85rem;
 }
 
@@ -662,7 +662,7 @@
 
 /* User Selection Compact */
 .userSelectionCompact {
-  composes: card from "../../styles/global.css";
+  
   margin-bottom: 1.5rem;
   box-shadow: var(--shadow-md);
   backdrop-filter: blur(10px);
@@ -682,7 +682,7 @@
 }
 
 .userSelectionButton {
-  composes: btn btn--secondary from "../../styles/global.css";
+  
   font-size: 0.9rem;
 }
 
@@ -719,7 +719,7 @@
 }
 
 .userStatCard {
-  composes: card from "../../styles/global.css";
+  
   text-align: center;
 }
 

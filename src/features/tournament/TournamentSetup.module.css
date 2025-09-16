@@ -1349,7 +1349,7 @@
 }
 
 /* Swipe Mode Toggle Button */
-.swipeModeToggleButton { composes: btn btn--secondary from "../../styles/global.css"; }
+.swipeModeToggleButton {  }
 
 .swipeModeToggleButton:hover {
   color: white;
@@ -1371,7 +1371,7 @@
 
 /* Cat Pictures Toggle Button */
 .catPicturesToggleButton {
-  composes: btn btn--secondary from "../../styles/global.css";
+  
   min-height: 44px;
 }
 
