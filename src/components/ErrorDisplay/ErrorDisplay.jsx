@@ -6,7 +6,7 @@
 
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { ERROR_SEVERITY } from '../../utils/errorHandler';
+import { ERROR_SEVERITY, getSeverityClass } from '../../utils/errorHandler';
 import styles from './ErrorDisplay.module.css';
 
 /**
@@ -61,20 +61,7 @@ const ErrorDisplay = ({
     }
   };
 
-  const getSeverityClass = (severity) => {
-    switch (severity) {
-      case ERROR_SEVERITY.CRITICAL:
-        return styles.critical;
-      case ERROR_SEVERITY.HIGH:
-        return styles.high;
-      case ERROR_SEVERITY.MEDIUM:
-        return styles.medium;
-      case ERROR_SEVERITY.LOW:
-        return styles.low;
-      default:
-        return styles.unknown;
-    }
-  };
+  // * Using shared getSeverityClass function from errorHandler utility
 
   const formatTimestamp = (timestamp) => {
     try {
@@ -107,7 +94,7 @@ const ErrorDisplay = ({
         {errors.map((error, index) => (
           <div
             key={`${error.timestamp}-${index}`}
-            className={`${styles.errorItem} ${getSeverityClass(error.severity)}`}
+            className={`${styles.errorItem} ${getSeverityClass(error.severity, styles)}`}
           >
             {/* Error header */}
             <div className={styles.errorHeader}>

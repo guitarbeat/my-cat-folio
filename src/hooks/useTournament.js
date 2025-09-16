@@ -3,7 +3,13 @@ import { PreferenceSorter } from '../components/Tournament/PreferenceSorter';
 import EloRating from '../components/Tournament/EloRating';
 import useLocalStorage from './useLocalStorage';
 import useUserSession from './useUserSession';
-import { computeRating } from '../utils/tournamentUtils';
+import { 
+  computeRating, 
+  generatePairs, 
+  buildComparisonsMap, 
+  initializeSorterPairs, 
+  getPreferencesMap 
+} from '../utils/tournamentUtils';
 
 /**
  * Custom hook for managing tournament state and logic
@@ -614,26 +620,12 @@ function getNextMatch(names, sorter, _matchNumber, options = {}) {
   if (options && (options.currentRatings || options.history)) {
     try {
       const nameList = names.map((n) => n.name);
-      if (!Array.isArray(sorter._pairs)) {
-        sorter._pairs = [];
-        for (let i = 0; i < nameList.length - 1; i++) {
-          for (let j = i + 1; j < nameList.length; j++) {
-            sorter._pairs.push([nameList[i], nameList[j]]);
-          }
-        }
-        sorter._pairIndex = 0;
-      }
+      initializeSorterPairs(sorter, nameList);
 
-      const prefs = sorter.preferences instanceof Map ? sorter.preferences : new Map();
+      const prefs = getPreferencesMap(sorter);
       const ratings = options.currentRatings || {};
       const history = options.history || [];
-      const comparisons = new Map();
-      for (const v of history) {
-        const l = v?.match?.left?.name;
-        const r = v?.match?.right?.name;
-        if (l) comparisons.set(l, (comparisons.get(l) || 0) + 1);
-        if (r) comparisons.set(r, (comparisons.get(r) || 0) + 1);
-      }
+      const comparisons = buildComparisonsMap(history);
 
       let bestPair = null;
       let bestScore = Infinity;
@@ -686,30 +678,16 @@ function getNextMatch(names, sorter, _matchNumber, options = {}) {
   // Fallback: generate pairwise comparisons on the fly using the sorter's preference map
   try {
     const nameList = names.map((n) => n.name);
-    if (!Array.isArray(sorter._pairs)) {
-      sorter._pairs = [];
-      for (let i = 0; i < nameList.length - 1; i++) {
-        for (let j = i + 1; j < nameList.length; j++) {
-          sorter._pairs.push([nameList[i], nameList[j]]);
-        }
-      }
-      sorter._pairIndex = 0;
-    }
+    initializeSorterPairs(sorter, nameList);
 
-    const prefs = sorter.preferences instanceof Map ? sorter.preferences : new Map();
+    const prefs = getPreferencesMap(sorter);
 
     // Adaptive pairing: prefer unjudged pairs with small rating difference and higher uncertainty
     const ratings = options.currentRatings || {};
     const history = options.history || [];
 
     // Build a quick lookup of comparisons per name to approximate uncertainty
-    const comparisons = new Map();
-    for (const v of history) {
-      const l = v?.match?.left?.name;
-      const r = v?.match?.right?.name;
-      if (l) comparisons.set(l, (comparisons.get(l) || 0) + 1);
-      if (r) comparisons.set(r, (comparisons.get(r) || 0) + 1);
-    }
+    const comparisons = buildComparisonsMap(history);
 
     let bestPair = null;
     let bestScore = Infinity; // lower is better

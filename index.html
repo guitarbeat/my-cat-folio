@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Help Me Name My Cat!</title>
+
+    <!-- Mobile-specific meta tags for better navbar experience -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="msapplication-tap-highlight" content="no">
+
+    <!-- SEO -->
+    <meta name="description"
+        content="Pick the perfect cat name via a fun tournament. Save, compare, and share results.">
+    <meta name="theme-color" content="#eef1f6">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="Meow Namester">
+    <meta property="og:description" content="Tournament-style voting for cat names.">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="/images/IMG_4844.jpg">
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Meow Namester">
+    <meta name="twitter:description" content="Tournament-style voting for cat names.">
+  <meta name="twitter:image" content="/images/IMG_4844.jpg">
+
+  <!-- Fonts performance -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+      href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@700&family=Josefin+Slab:wght@400;600&display=swap"
+      rel="stylesheet">
+
+  <!-- Lightweight inline SVG favicon to avoid loading large /favicon.ico -->
+  <link
+    rel="icon"
+    href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ctext y='0.9em' font-size='64'%3E%F0%9F%90%B1%3C/text%3E%3C/svg%3E"
+    type="image/svg+xml"
+  />
+</head>
+
+<body>
+    <script>
+      // Initialize theme before React renders to prevent flash
+      // Logic: Respect saved preference; otherwise default to dark after local "sunset" hours.
+      try {
+        const THEME_KEY = 'theme'; // stores boolean: true = light, false = dark
+        const metaTheme = document.querySelector('meta[name="theme-color"]');
+
+        const applyTheme = (isLight) => {
+          const body = document.body;
+          if (isLight) {
+            body.classList.add('light-theme');
+            body.classList.remove('dark-theme');
+            if (metaTheme) metaTheme.setAttribute('content', '#eef1f6');
+          } else {
+            body.classList.add('dark-theme');
+            body.classList.remove('light-theme');
+            if (metaTheme) metaTheme.setAttribute('content', '#1a1f2e');
+          }
+        };
+
+        const saved = localStorage.getItem(THEME_KEY);
+        if (saved !== null) {
+          // Stored as JSON boolean by useLocalStorage hook
+          const isLight = JSON.parse(saved);
+          applyTheme(Boolean(isLight));
+        } else {
+          // No saved preference: infer by time and system preference
+          const now = new Date();
+          const hour = now.getHours();
+          const minute = now.getMinutes();
+          // Consider "after sunset" roughly as after 6:30pm until 6:00am
+          const afterSunset = (hour > 18) || (hour === 18 && minute >= 30) || (hour < 6);
+          const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+          const isDark = afterSunset || prefersDark;
+
+          // Persist the inferred choice so React hook picks it up consistently
+          localStorage.setItem(THEME_KEY, JSON.stringify(!isDark ? true : false));
+          applyTheme(!isDark ? true : false);
+        }
+      } catch (e) {
+        // Safe fallback
+        document.body.classList.add('light-theme');
+      }
+    </script>
+    <div id="root"></div>
+    <script type="module" src="/src/index.jsx"></script>
+</body>
+
+</html>

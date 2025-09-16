@@ -33,6 +33,31 @@ const Tournament = React.lazy(
   () => import('./components/Tournament/Tournament')
 );
 
+/**
+ * Generate a cat background video element
+ * @param {number} index - The index number for the CSS class
+ * @returns {JSX.Element} Video element with fallback image
+ */
+const createCatVideo = (index) => (
+  <video
+    className={`cat-background__cat cat-background__cat--${index}`}
+    muted
+    loop
+    autoPlay
+    playsInline
+    preload="none"
+  >
+    <source src="/images/cat.webm" type="video/webm" />
+    <img
+      src="/images/cat.gif"
+      alt=""
+      loading="lazy"
+      decoding="async"
+      fetchPriority="low"
+    />
+  </video>
+);
+
 function App() {
   const { userName, isLoggedIn, login, logout } = useUserSession();
   const { isLightTheme, toggleTheme } = useTheme();
@@ -334,74 +359,10 @@ function App() {
             if (prefersReducedMotion || saveData) return null;
             return (
               <>
-                <video
-                  className="cat-background__cat cat-background__cat--1"
-                  muted
-                  loop
-                  autoPlay
-                  playsInline
-                  preload="none"
-                >
-                  <source src="/images/cat.webm" type="video/webm" />
-                  <img
-                    src="/images/cat.gif"
-                    alt=""
-                    loading="lazy"
-                    decoding="async"
-                    fetchPriority="low"
-                  />
-                </video>
-                <video
-                  className="cat-background__cat cat-background__cat--2"
-                  muted
-                  loop
-                  autoPlay
-                  playsInline
-                  preload="none"
-                >
-                  <source src="/images/cat.webm" type="video/webm" />
-                  <img
-                    src="/images/cat.gif"
-                    alt=""
-                    loading="lazy"
-                    decoding="async"
-                    fetchPriority="low"
-                  />
-                </video>
-                <video
-                  className="cat-background__cat cat-background__cat--3"
-                  muted
-                  loop
-                  autoPlay
-                  playsInline
-                  preload="none"
-                >
-                  <source src="/images/cat.webm" type="video/webm" />
-                  <img
-                    src="/images/cat.gif"
-                    alt=""
-                    loading="lazy"
-                    decoding="async"
-                    fetchPriority="low"
-                  />
-                </video>
-                <video
-                  className="cat-background__cat cat-background__cat--4"
-                  muted
-                  loop
-                  autoPlay
-                  playsInline
-                  preload="none"
-                >
-                  <source src="/images/cat.webm" type="video/webm" />
-                  <img
-                    src="/images/cat.gif"
-                    alt=""
-                    loading="lazy"
-                    decoding="async"
-                    fetchPriority="low"
-                  />
-                </video>
+                {createCatVideo(1)}
+                {createCatVideo(2)}
+                {createCatVideo(3)}
+                {createCatVideo(4)}
               </>
             );
           })()}

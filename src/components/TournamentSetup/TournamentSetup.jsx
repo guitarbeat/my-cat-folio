@@ -869,6 +869,28 @@ function useTournamentSetup(userName) {
     fetchNames();
     }, [handleError, userName]);
 
+  // Save tournament selections to database
+  const saveTournamentSelections = useCallback(async (selectedNames) => {
+    try {
+      // Create a unique tournament ID for this selection session
+      const tournamentId = `selection_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+
+      // Save selections to database
+      if (!supabase) return;
+
+      const result = await tournamentsAPI.saveTournamentSelections(
+        userName,
+        selectedNames,
+        tournamentId
+      );
+
+      devLog('🎮 TournamentSetup: Selections saved to database', result);
+    } catch (error) {
+      console.error('Error saving tournament selections:', error);
+      // Don't block the UI if saving fails
+    }
+  }, [userName]);
+
   const scheduleSave = useCallback(
     (namesToSave) => {
       if (!userName || !Array.isArray(namesToSave) || namesToSave.length === 0)
@@ -916,28 +938,6 @@ function useTournamentSetup(userName) {
       return newSelectedNames;
     });
   };
-
-  // Save tournament selections to database
-  const saveTournamentSelections = useCallback(async (selectedNames) => {
-    try {
-      // Create a unique tournament ID for this selection session
-      const tournamentId = `selection_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-
-      // Save selections to database
-      if (!supabase) return;
-
-      const result = await tournamentsAPI.saveTournamentSelections(
-        userName,
-        selectedNames,
-        tournamentId
-      );
-
-      devLog('🎮 TournamentSetup: Selections saved to database', result);
-    } catch (error) {
-      console.error('Error saving tournament selections:', error);
-      // Don't block the UI if saving fails
-    }
-  }, [userName]);
 
   const handleSelectAll = () => {
     setSelectedNames(

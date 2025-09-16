@@ -134,6 +134,27 @@ export const getUserFriendlyMessage = (errorType, errorSeverity) => {
 };
 
 /**
+ * Get CSS class name for error severity
+ * @param {string} severity - The error severity level
+ * @param {Object} styles - The styles object containing severity classes
+ * @returns {string} CSS class name for the severity
+ */
+export const getSeverityClass = (severity, styles) => {
+  switch (severity) {
+    case ERROR_SEVERITY.CRITICAL:
+      return styles.critical;
+    case ERROR_SEVERITY.HIGH:
+      return styles.high;
+    case ERROR_SEVERITY.MEDIUM:
+      return styles.medium;
+    case ERROR_SEVERITY.LOW:
+      return styles.low;
+    default:
+      return styles.unknown || styles.medium;
+  }
+};
+
+/**
  * Enhanced error logging with context
  * @param {Error|Object} error - The error object
  * @param {string} context - Where the error occurred
@@ -305,6 +326,7 @@ export default {
   getErrorType,
   getErrorSeverity,
   getUserFriendlyMessage,
+  getSeverityClass,
   logError,
   withRetry,
   createStandardizedError,

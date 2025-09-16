@@ -158,7 +158,8 @@
   /* Positioned on left side now */
 }
 
-.navbar__theme-toggle {
+/* * Shared base styles for navbar action buttons */
+.navbar__action-button {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -182,7 +183,7 @@
   -webkit-touch-callout: none;
 }
 
-.navbar__theme-toggle:hover {
+.navbar__action-button:hover {
   background: rgb(255 255 255 / 25%); /* Increased from 15% */
   border-color: rgb(255 255 255 / 40%); /* Increased from 25% */
   box-shadow:
@@ -191,57 +192,24 @@
   transform: translateY(-2px) scale(1.05);
 }
 
-.navbar__theme-toggle:active {
+.navbar__action-button:active {
   box-shadow:
     0 2px 8px rgb(0 0 0 / 15%), /* Increased shadow */
     inset 0 1px 0 rgb(255 255 255 / 15%);
   transform: translateY(0) scale(0.98);
+}
+
+.navbar__theme-toggle {
+  /* * Theme toggle specific styles - inherits from navbar__action-button */
 }
 
 /* Help Button */
 .navbar__help-button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 44px; /* Increased from 36px for better touch target */
-  height: 44px; /* Increased from 36px for better touch target */
-  font-size: 1.1rem; /* Increased from 1rem */
-  color: var(--text-primary);
-  cursor: pointer;
-  user-select: none;
-  background: rgb(255 255 255 / 15%); /* Increased from 8% */
-  border: 2px solid rgb(255 255 255 / 25%); /* Increased from 15% and made thicker */
-  border-radius: 50%;
-  box-shadow:
-    0 4px 12px rgb(0 0 0 / 20%), /* Increased shadow */
-    inset 0 1px 0 rgb(255 255 255 / 15%);
-  backdrop-filter: blur(15px); /* Increased blur */
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-
-  /* Ensure button is clickable */
-  -webkit-tap-highlight-color: transparent;
-  -webkit-touch-callout: none;
-}
-
-.navbar__help-button:hover {
-  background: rgb(255 255 255 / 25%); /* Increased from 15% */
-  border-color: rgb(255 255 255 / 40%); /* Increased from 25% */
-  box-shadow:
-    0 6px 20px rgb(0 0 0 / 25%), /* Increased shadow */
-    inset 0 1px 0 rgb(255 255 255 / 20%);
-  transform: translateY(-2px) scale(1.05);
-}
-
-.navbar__help-button:active {
-  box-shadow:
-    0 2px 8px rgb(0 0 0 / 15%), /* Increased shadow */
-    inset 0 1px 0 rgb(255 255 255 / 15%);
-  transform: translateY(0) scale(0.98);
+  /* * Help button specific styles - inherits from navbar__action-button */
 }
 
 /* Focus States for Buttons */
-.navbar__theme-toggle:focus-visible,
-.navbar__help-button:focus-visible {
+.navbar__action-button:focus-visible {
   outline: 3px solid var(--accent-color); /* Increased from 2px */
   outline-offset: 3px; /* Increased from 2px */
   box-shadow:
@@ -251,16 +219,14 @@
 }
 
 /* Enhanced Button States */
-.navbar__theme-toggle:disabled,
-.navbar__help-button:disabled {
+.navbar__action-button:disabled {
   cursor: not-allowed;
   opacity: 0.5;
   transform: none;
 }
 
 /* Smooth transitions for all interactive states */
-.navbar__theme-toggle,
-.navbar__help-button {
+.navbar__action-button {
   will-change: transform, box-shadow, background-color, border-color;
 }
 

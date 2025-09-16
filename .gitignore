@@ -231,3 +231,10 @@ yarn-error.log*
 .yarn-integrity
 .vercel
 .env*.local
+
+# Analysis reports
+analysis/
+
+# Temporary files
+*.tmp
+*.temp

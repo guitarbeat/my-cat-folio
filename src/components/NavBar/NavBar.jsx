@@ -211,7 +211,7 @@ function NavBar({
             <li className="navbar__item navbar__item--theme-toggle">
               <button
                 type="button"
-                className="navbar__theme-toggle"
+                className="navbar__action-button navbar__theme-toggle"
                 onClick={onThemeChange}
                 aria-label={
                   isLightTheme

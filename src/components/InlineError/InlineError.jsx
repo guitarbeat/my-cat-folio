@@ -6,7 +6,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { ERROR_SEVERITY } from '../../utils/errorHandler';
+import { ERROR_SEVERITY, getSeverityClass } from '../../utils/errorHandler';
 import styles from './InlineError.module.css';
 
 /**
@@ -64,20 +64,7 @@ const InlineError = ({
     }
   };
 
-  const getSeverityClass = () => {
-    switch (severity) {
-      case ERROR_SEVERITY.CRITICAL:
-        return styles.critical;
-      case ERROR_SEVERITY.HIGH:
-        return styles.high;
-      case ERROR_SEVERITY.MEDIUM:
-        return styles.medium;
-      case ERROR_SEVERITY.LOW:
-        return styles.low;
-      default:
-        return styles.medium;
-    }
-  };
+  // * Using shared getSeverityClass function from errorHandler utility
 
   const getSizeClass = () => {
     switch (size) {
@@ -106,7 +93,7 @@ const InlineError = ({
       className={`
         ${styles.container} 
         ${getContextClass()} 
-        ${getSeverityClass()} 
+        ${getSeverityClass(severity, styles)} 
         ${getSizeClass()} 
         ${getPositionClass()} 
         ${className}

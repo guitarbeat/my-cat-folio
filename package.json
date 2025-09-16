@@ -9,7 +9,7 @@
     "build": "vite build",
     "build:analyze": "vite build --mode analyze",
     "preview": "vite preview",
-    "compress:images": "node scripts/compress-images.mjs",
+    "compress:images": "node scripts/build/compress-images.mjs",
     "convert:gif:webm": "ffmpeg -y -i public/images/cat.gif -vf \"fps=24,scale=320:-1:flags=lanczos\" -c:v libvpx-vp9 -crf 36 -b:v 0 -row-mt 1 public/images/cat.webm || echo 'Install ffmpeg to run this conversion'",
     "test": "vitest run",
     "test:watch": "vitest",
