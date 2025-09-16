@@ -13,24 +13,24 @@ import {
   Login,
   ErrorDisplay,
   ToastContainer
-} from './components';
-import NavBar from './components/NavBar/NavBar';
-import useUserSession from './hooks/useUserSession';
-import useTheme from './hooks/useTheme';
-import useToast from './hooks/useToast';
-import useAppStore from './store/useAppStore';
-import { TournamentService } from './services/tournamentService';
-import { ErrorService } from './services/errorService';
-import LoadingSpinner from './components/LoadingSpinner/LoadingSpinner';
+} from './shared/components';
+import NavBar from './shared/components/NavBar/NavBar';
+import useUserSession from './core/hooks/useUserSession';
+import useTheme from './core/hooks/useTheme';
+import useToast from './core/hooks/useToast';
+import useAppStore from './core/store/useAppStore';
+import { TournamentService } from './shared/services/tournamentService';
+import { ErrorService } from './shared/services/errorService';
+import LoadingSpinner from './shared/components/LoadingSpinner/LoadingSpinner';
 
 // * Lazy-loaded components for performance
-const Results = React.lazy(() => import('./components/Results/Results'));
-const Profile = React.lazy(() => import('./components/Profile/Profile'));
+const Results = React.lazy(() => import('./features/tournament/Results'));
+const Profile = React.lazy(() => import('./features/profile/Profile'));
 const TournamentSetup = React.lazy(
-  () => import('./components/TournamentSetup/TournamentSetup')
+  () => import('./features/tournament/TournamentSetup')
 );
 const Tournament = React.lazy(
-  () => import('./components/Tournament/Tournament')
+  () => import('./features/tournament/Tournament')
 );
 
 /**

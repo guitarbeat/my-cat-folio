@@ -4,13 +4,13 @@
  * Provides a clean interface for importing components throughout the app.
  */
 
-export { default as Tournament } from './Tournament/Tournament';
-export { default as TournamentSetup } from './TournamentSetup/TournamentSetup';
-export { default as Results } from './Results/Results';
+export { default as Tournament } from '../../features/tournament/Tournament';
+export { default as TournamentSetup } from '../../features/tournament/TournamentSetup';
+export { default as Results } from '../../features/tournament/Results';
 export { default as ErrorBoundary } from './ErrorBoundary/ErrorBoundary';
 export { default as ErrorDisplay } from './ErrorDisplay/ErrorDisplay';
-export { default as Login } from './Login/Login';
-export { default as Profile } from './Profile/Profile';
+export { default as Login } from '../../features/auth/Login';
+export { default as Profile } from '../../features/profile/Profile';
 export {
   default as LoadingSpinner,
   SkeletonLoader,

@@ -16,7 +16,7 @@
 
 import React, { memo } from 'react';
 import PropTypes from 'prop-types';
-import { useBongoCat } from '../../hooks/useBongoCat';
+import { useBongoCat } from '../../core/hooks/useBongoCat';
 import styles from './BongoCat.module.css';
 
 /**

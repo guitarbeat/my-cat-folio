@@ -55,8 +55,8 @@
  */
 
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { supabase } from '../supabase/supabaseClient';
-import devLog from '../utils/logger';
+import { supabase } from '../../backend/api/supabaseClient';
+import devLog from '../../shared/utils/logger';
 
 function useUserSession() {
   // * Use ref to track if we've already initialized to prevent double initialization

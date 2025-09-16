@@ -3,12 +3,11 @@ import { PreferenceSorter } from '../components/Tournament/PreferenceSorter';
 import EloRating from '../components/Tournament/EloRating';
 import useLocalStorage from './useLocalStorage';
 import useUserSession from './useUserSession';
-import { 
-  computeRating, 
-  generatePairs, 
-  buildComparisonsMap, 
-  initializeSorterPairs, 
-  getPreferencesMap 
+import {
+  computeRating,
+  buildComparisonsMap,
+  initializeSorterPairs,
+  getPreferencesMap
 } from '../utils/tournamentUtils';
 
 /**

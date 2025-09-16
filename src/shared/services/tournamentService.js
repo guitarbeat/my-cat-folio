@@ -1,4 +1,4 @@
-import { supabase } from '../supabase/supabaseClient';
+import { supabase } from '../../backend/api/supabaseClient';
 
 /**
  * @module TournamentService
