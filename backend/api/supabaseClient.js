@@ -5,8 +5,8 @@
  */
 
 import { createClient } from '@supabase/supabase-js';
-import devLog from '../utils/logger';
-import { databaseRetry } from '../utils/retryUtils';
+import devLog from '../../src/shared/utils/logger';
+import { databaseRetry } from '../../src/shared/utils/retryUtils';
 
 // Environment configuration
 const supabaseUrl =

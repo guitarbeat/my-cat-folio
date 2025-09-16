@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FILTER_OPTIONS } from '../../constants';
+import { FILTER_OPTIONS } from '../../core/constants';
 import styles from './ProfileFilters.module.css';
 
 /**

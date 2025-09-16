@@ -5,9 +5,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 
-import { InlineError } from '../';
-import useToast from '../../hooks/useToast';
-import { validateUsername } from '../../utils/validation';
+import { InlineError } from '../../shared/components';
+import useToast from '../../core/hooks/useToast';
+import { validateUsername } from '../../shared/utils/validation';
 import styles from './Login.module.css';
 
 function Login({ onLogin }) {
@@ -138,10 +138,10 @@ function Login({ onLogin }) {
       {/* Background with overlay */}
       <div className={styles.backgroundContainer}>
         <picture>
-          <source type="image/avif" srcSet="/images/IMG_5071.avif" />
-          <source type="image/webp" srcSet="/images/IMG_5071.webp" />
+          <source type="image/avif" srcSet="/assets/images/IMG_5071.avif" />
+          <source type="image/webp" srcSet="/assets/images/IMG_5071.webp" />
           <img
-            src="/images/IMG_5071.JPG"
+            src="/assets/images/IMG_5071.JPG"
             alt="Cat background"
             className={styles.backgroundImage}
             loading="lazy"
@@ -160,10 +160,10 @@ function Login({ onLogin }) {
             Welcome to the Cat Name Tournament!
           </h1>
           <picture>
-            <source type="image/avif" srcSet="/images/IMG_5071.avif" />
-            <source type="image/webp" srcSet="/images/IMG_5071.webp" />
+            <source type="image/avif" srcSet="/assets/images/IMG_5071.avif" />
+            <source type="image/webp" srcSet="/assets/images/IMG_5071.webp" />
             <img
-              src="/images/IMG_5071.JPG"
+              src="/assets/images/IMG_5071.JPG"
               alt="Cute cat avatar"
               className={styles.catImage}
               loading="lazy"

@@ -5,10 +5,10 @@
  */
 import React, { useState, useCallback, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { supabase, deleteName, catNamesAPI, tournamentsAPI, hiddenNamesAPI } from '../../supabase/supabaseClient';
-import useToast from '../../hooks/useToast';
-import { FILTER_OPTIONS } from '../../constants';
-import { ErrorService } from '../../services/errorService';
+import { supabase, deleteName, catNamesAPI, tournamentsAPI, hiddenNamesAPI } from '../../../backend/api/supabaseClient';
+import useToast from '../../core/hooks/useToast';
+import { FILTER_OPTIONS } from '../../core/constants';
+import { ErrorService } from '../../shared/services/errorService';
 
 import ProfileStats from './ProfileStats';
 import ProfileFilters from './ProfileFilters';

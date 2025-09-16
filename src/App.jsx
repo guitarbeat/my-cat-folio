@@ -47,9 +47,9 @@ const createCatVideo = (index) => (
     playsInline
     preload="none"
   >
-    <source src="/images/cat.webm" type="video/webm" />
+    <source src="/assets/images/cat.webm" type="video/webm" />
     <img
-      src="/images/cat.gif"
+      src="/assets/images/cat.gif"
       alt=""
       loading="lazy"
       decoding="async"

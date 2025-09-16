@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import StatsCard from '../StatsCard/StatsCard';
+import StatsCard from '../../shared/components/StatsCard/StatsCard';
 import styles from './ProfileStats.module.css';
 
 /**

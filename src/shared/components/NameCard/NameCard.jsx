@@ -326,7 +326,7 @@ function NameCard({
           >
             {(() => {
               // If this is a static asset under /images, offer avif/webp sources
-              if (String(image).startsWith('/images/')) {
+              if (String(image).startsWith('/assets/images/')) {
                 const base = image.includes('.')
                   ? image.replace(/\.[^.]+$/, '')
                   : image;

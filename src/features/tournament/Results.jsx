@@ -42,11 +42,11 @@ import React, { useState, useEffect, useCallback, memo } from 'react';
 
 import PropTypes from 'prop-types';
 
-import RankingAdjustment from '../RankingAdjustment/RankingAdjustment';
-import Bracket from '../Bracket/Bracket';
-import CalendarButton from '../CalendarButton/CalendarButton';
+import RankingAdjustment from './RankingAdjustment';
+import Bracket from '../../shared/components/Bracket/Bracket';
+import CalendarButton from '../../shared/components/CalendarButton/CalendarButton';
 import styles from './Results.module.css';
-import StatsCard from '../StatsCard/StatsCard';
+import StatsCard from '../../shared/components/StatsCard/StatsCard';
 
 // Toast component extracted for reusability
 const Toast = memo(({ message, type, onClose }) => (

@@ -11,37 +11,37 @@ import PropTypes from 'prop-types';
     tournamentsAPI,
     catNamesAPI,
     imagesAPI
-  } from '../../supabase/supabaseClient';
-  import { compressImageFile } from '../../utils/imageUtils';
-import devLog from '../../utils/logger';
+  } from '../../../backend/api/supabaseClient';
+  import { compressImageFile } from '../../shared/utils/imageUtils';
+import devLog from '../../shared/utils/logger';
 import {
   LoadingSpinner,
   NameCard,
   ErrorBoundary,
   ErrorDisplay,
   InlineError
-} from '../';
-import useErrorHandler from '../../hooks/useErrorHandler';
-import useToast from '../../hooks/useToast';
-import { validateCatName, validateDescription } from '../../utils/validation';
+} from '../../shared/components';
+import useErrorHandler from '../../core/hooks/useErrorHandler';
+import useToast from '../../core/hooks/useToast';
+import { validateCatName, validateDescription } from '../../shared/utils/validation';
 import styles from './TournamentSetup.module.css';
 
 // Use absolute paths for better image loading compatibility
 const CAT_IMAGES = [
-  '/images/IMG_4844.jpg',
-  '/images/IMG_4845.jpg',
-  '/images/IMG_4846.jpg',
-  '/images/IMG_4847.jpg',
-  '/images/IMG_5044.JPEG',
-  '/images/IMG_5071.JPG',
-  '/images/IMG_0778.jpg',
-  '/images/IMG_0779.jpg',
-  '/images/IMG_0865.jpg',
-  '/images/IMG_0884.jpg',
-  '/images/IMG_0923.jpg',
-  '/images/IMG_1116.jpg',
-  '/images/IMG_7205.jpg',
-  '/images/75209580524__60DCC26F-55A1-4EF8-A0B2-14E80A026A8D.jpg'
+  '/assets/images/IMG_4844.jpg',
+  '/assets/images/IMG_4845.jpg',
+  '/assets/images/IMG_4846.jpg',
+  '/assets/images/IMG_4847.jpg',
+  '/assets/images/IMG_5044.JPEG',
+  '/assets/images/IMG_5071.JPG',
+  '/assets/images/IMG_0778.jpg',
+  '/assets/images/IMG_0779.jpg',
+  '/assets/images/IMG_0865.jpg',
+  '/assets/images/IMG_0884.jpg',
+  '/assets/images/IMG_0923.jpg',
+  '/assets/images/IMG_1116.jpg',
+  '/assets/images/IMG_7205.jpg',
+  '/assets/images/75209580524__60DCC26F-55A1-4EF8-A0B2-14E80A026A8D.jpg'
 ];
 
 const DEFAULT_DESCRIPTION = 'A name as unique as your future companion';
@@ -486,7 +486,7 @@ const SwipeableNameCards = ({
               >
                 {(() => {
                   const src = imageSrc;
-                  if (String(src).startsWith('/images/')) {
+                  if (String(src).startsWith('/assets/images/')) {
                     const base = src.includes('.') ? src.replace(/\.[^.]+$/, '') : src;
                     return (
                       <picture>
@@ -1000,7 +1000,7 @@ function TournamentSetupContent({ onStart, userName }) {
 
     const tryStaticManifest = async () => {
       try {
-        const res = await fetch('/images/gallery.json', { cache: 'no-cache' });
+        const res = await fetch('/assets/images/gallery.json', { cache: 'no-cache' });
         if (!res.ok) return [];
         const data = await res.json();
         if (Array.isArray(data) && data.length) return data;
@@ -1380,7 +1380,7 @@ function TournamentSetupContent({ onStart, userName }) {
                     onClick={() => handleImageOpen(image)}
                     aria-label={`Open cat photo ${index + 1}`}
                   >
-                    {image.startsWith('/images/') ? (
+                    {image.startsWith('/assets/images/') ? (
                       (() => {
                         const base = image.replace(/\.[^.]+$/, '');
                         return (

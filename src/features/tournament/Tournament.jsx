@@ -12,16 +12,16 @@ import React, {
   useMemo
 } from 'react';
 import PropTypes from 'prop-types';
-import { useTournament } from '../../hooks/useTournament';
-import useToast from '../../hooks/useToast';
-import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
-import ErrorBoundary from '../ErrorBoundary/ErrorBoundary';
-import NameCard from '../NameCard/NameCard';
-import InlineError from '../InlineError/InlineError';
-import Bracket from '../Bracket/Bracket';
+import { useTournament } from '../../core/hooks/useTournament';
+import useToast from '../../core/hooks/useToast';
+import LoadingSpinner from '../../shared/components/LoadingSpinner/LoadingSpinner';
+import ErrorBoundary from '../../shared/components/ErrorBoundary/ErrorBoundary';
+import NameCard from '../../shared/components/NameCard/NameCard';
+import InlineError from '../../shared/components/InlineError/InlineError';
+import Bracket from '../../shared/components/Bracket/Bracket';
 import TournamentControls from './TournamentControls';
 import styles from './Tournament.module.css';
-import { shuffleArray } from '../../utils/arrayUtils';
+import { shuffleArray } from '../../shared/utils/arrayUtils';
 
 // * Custom hook for audio management
 function useAudioManager() {
@@ -36,24 +36,24 @@ function useAudioManager() {
 
   const musicTracks = useMemo(
     () => [
-      { path: '/sounds/AdhesiveWombat - Night Shade.mp3', name: 'Night Shade' },
-      { path: '/sounds/MiseryBusiness.mp3', name: 'Misery Business' },
-      { path: '/sounds/what-is-love.mp3', name: 'What is Love' },
+      { path: '/assets/sounds/AdhesiveWombat - Night Shade.mp3', name: 'Night Shade' },
+      { path: '/assets/sounds/MiseryBusiness.mp3', name: 'Misery Business' },
+      { path: '/assets/sounds/what-is-love.mp3', name: 'What is Love' },
       {
-        path: '/sounds/Lemon Demon - The Ultimate Showdown (8-Bit Remix).mp3',
+        path: '/assets/sounds/Lemon Demon - The Ultimate Showdown (8-Bit Remix).mp3',
         name: 'Ultimate Showdown (8-Bit)'
       },
-      { path: '/sounds/Main Menu 1 (Ruins).mp3', name: 'Ruins' }
+      { path: '/assets/sounds/Main Menu 1 (Ruins).mp3', name: 'Ruins' }
     ],
     []
   );
 
   const soundEffects = useMemo(
     () => [
-      { path: '/sounds/gameboy-pluck.mp3', weight: 0.5 },
-      { path: '/sounds/wow.mp3', weight: 0.2 },
-      { path: '/sounds/surprise.mp3', weight: 0.1 },
-      { path: '/sounds/level-up.mp3', weight: 0.2 }
+      { path: '/assets/sounds/gameboy-pluck.mp3', weight: 0.5 },
+      { path: '/assets/sounds/wow.mp3', weight: 0.2 },
+      { path: '/assets/sounds/surprise.mp3', weight: 0.1 },
+      { path: '/assets/sounds/level-up.mp3', weight: 0.2 }
     ],
     []
   );

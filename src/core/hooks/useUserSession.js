@@ -55,7 +55,7 @@
  */
 
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { supabase } from '../../backend/api/supabaseClient';
+import { supabase } from '../../../backend/api/supabaseClient';
 import devLog from '../../shared/utils/logger';
 
 function useUserSession() {

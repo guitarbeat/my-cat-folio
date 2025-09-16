@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
-import { PreferenceSorter } from '../components/Tournament/PreferenceSorter';
-import EloRating from '../components/Tournament/EloRating';
+import { PreferenceSorter } from '../../features/tournament/PreferenceSorter';
+import EloRating from '../../features/tournament/EloRating';
 import useLocalStorage from './useLocalStorage';
 import useUserSession from './useUserSession';
 import {
@@ -8,7 +8,7 @@ import {
   buildComparisonsMap,
   initializeSorterPairs,
   getPreferencesMap
-} from '../utils/tournamentUtils';
+} from '../../shared/utils/tournamentUtils';
 
 /**
  * Custom hook for managing tournament state and logic

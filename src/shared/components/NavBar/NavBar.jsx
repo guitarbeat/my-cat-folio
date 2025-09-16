@@ -170,9 +170,9 @@ function NavBar({
           preload="none"
           aria-label="Cat animation"
         >
-          <source src="/images/cat.webm" type="video/webm" />
+          <source src="/assets/images/cat.webm" type="video/webm" />
           <img
-            src="/images/cat.gif"
+            src="/assets/images/cat.gif"
             alt="Cat animation"
             width="32"
             height="32"

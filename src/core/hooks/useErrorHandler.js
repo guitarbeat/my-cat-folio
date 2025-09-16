@@ -10,7 +10,7 @@ import {
   withRetry,
   ERROR_TYPES,
   ERROR_SEVERITY
-} from '../utils/errorHandler';
+} from '../../shared/utils/errorHandler';
 
 /**
  * Custom hook for error handling in React components
