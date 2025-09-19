@@ -6,9 +6,10 @@ import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import styles from './WelcomeScreen.module.css';
 
-function WelcomeScreen({ onContinue, catName }) {
+function WelcomeScreen({ onContinue, catName, isTransitioning = false }) {
   const [isVisible, setIsVisible] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
+  const [showProgress, setShowProgress] = useState(false);
   const containerRef = useRef(null);
 
   // Add welcome-page class to body and html when component mounts
@@ -31,6 +32,7 @@ function WelcomeScreen({ onContinue, catName }) {
 
   const handleContinue = () => {
     setIsAnimating(true);
+    setShowProgress(true);
     // Add a small delay for the animation before continuing
     setTimeout(() => {
       onContinue();
@@ -38,7 +40,7 @@ function WelcomeScreen({ onContinue, catName }) {
   };
 
   return (
-    <div className={`${styles.welcomeWrapper} ${isVisible ? styles.visible : ''} ${isAnimating ? styles.animating : ''}`}>
+    <div className={`${styles.welcomeWrapper} ${isVisible ? styles.visible : ''} ${isAnimating ? styles.animating : ''} ${isTransitioning ? styles.transitioning : ''}`}>
       {/* Background with overlay */}
       <div className={styles.backgroundContainer}>
         <picture>
@@ -56,10 +58,24 @@ function WelcomeScreen({ onContinue, catName }) {
         <div className={styles.overlay} />
       </div>
 
+      {/* Progress indicator */}
+      {showProgress && (
+        <div className={styles.progressContainer}>
+          <div className={styles.progressBar}>
+            <div className={styles.progressFill} />
+          </div>
+          <p className={styles.progressText}>Preparing your tournament experience...</p>
+        </div>
+      )}
+
       {/* Centered Content Container */}
       <div className={styles.contentContainer} ref={containerRef}>
         {/* Main Content Section */}
         <div className={styles.mainContent}>
+          <div className={styles.stepIndicator}>
+            <span className={styles.stepNumber}>1</span>
+            <span className={styles.stepText}>Meet Your Cat</span>
+          </div>
           <h1 className={styles.welcomeTitle}>
             Welcome to the Cat Name Tournament!
           </h1>
@@ -122,7 +138,8 @@ WelcomeScreen.displayName = 'WelcomeScreen';
 
 WelcomeScreen.propTypes = {
   onContinue: PropTypes.func.isRequired,
-  catName: PropTypes.string.isRequired
+  catName: PropTypes.string.isRequired,
+  isTransitioning: PropTypes.bool
 };
 
 export default WelcomeScreen;

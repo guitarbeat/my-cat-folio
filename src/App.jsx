@@ -68,6 +68,7 @@ function App() {
 
   // * Welcome screen state
   const [showWelcomeScreen, setShowWelcomeScreen] = React.useState(true);
+  const [isTransitioning, setIsTransitioning] = React.useState(false);
   const [catName, setCatName] = React.useState('Loading...');
 
   // * Load cat name on component mount
@@ -256,7 +257,12 @@ function App() {
 
   // * Handle welcome screen completion
   const handleWelcomeComplete = useCallback(() => {
-    setShowWelcomeScreen(false);
+    setIsTransitioning(true);
+    // Add a smooth transition delay
+    setTimeout(() => {
+      setShowWelcomeScreen(false);
+      setIsTransitioning(false);
+    }, 800);
   }, []);
 
   // * Memoize main content to prevent unnecessary re-renders
@@ -361,11 +367,11 @@ function App() {
 
   // * Show welcome screen first
   if (showWelcomeScreen) {
-    return <WelcomeScreen onContinue={handleWelcomeComplete} catName={catName} />;
+    return <WelcomeScreen onContinue={handleWelcomeComplete} catName={catName} isTransitioning={isTransitioning} />;
   }
 
   return (
-    <div className="app">
+    <div className={`app ${isTransitioning ? 'transitioning' : ''}`}>
       {/* * Skip link for keyboard navigation */}
       <a href="#main-content" className="skip-link">
         Skip to main content

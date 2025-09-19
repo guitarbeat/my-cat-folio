@@ -156,8 +156,12 @@ function Login({ onLogin }) {
       <div className={styles.heroContainer} ref={containerRef}>
         {/* Hero Content Section */}
         <div className={styles.heroContent}>
+          <div className={styles.stepIndicator}>
+            <span className={styles.stepNumber}>2</span>
+            <span className={styles.stepText}>Create Your Judge Profile</span>
+          </div>
           <h1 className={styles.welcomeTitle}>
-            Welcome to the Cat Name Tournament!
+            Ready to Judge the Names?
           </h1>
           <picture>
             <source type="image/avif" srcSet="/assets/images/IMG_5071.avif" />
@@ -172,8 +176,7 @@ function Login({ onLogin }) {
             />
           </picture>
           <p className={styles.welcomeText}>
-            Join Aaron&apos;s quest to find the perfect cat name through science
-            and democracy!
+            Now it&apos;s your turn! Enter your name to start judging cat names and help find the perfect one.
           </p>
         </div>
 
