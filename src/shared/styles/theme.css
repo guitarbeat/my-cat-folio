@@ -305,51 +305,51 @@ body.light-theme {
   --primary-color: var(--primary-600);
   --primary-light: var(--primary-100);
   --primary-dark: var(--primary-800);
-  --surface-color: #f1f5f9; /* * Darker surface color */
-  --background-color: #f8fafc; /* * Darker background color */
-  --text-primary: #0f172a; /* Enhanced contrast for WCAG compliance */
-  --text-secondary: #1e293b; /* Enhanced contrast for WCAG compliance */
-  --text-tertiary: #334155; /* Enhanced contrast for WCAG compliance */
-  --border-color: #cbd5e1;
-  --card-background: #fff; /* * Keep cards white for contrast */
-  --card-border: #cbd5e1;
-  --card-hover: #e2e8f0; /* * Darker hover state */
-  --header-background: #fff; /* * Keep header white for contrast */
-  --header-border: #cbd5e1; /* * Darker border */
+  --surface-color: #475569; /* * Much darker surface color */
+  --background-color: #334155; /* * Much darker background color */
+  --text-primary: #f8fafc; /* Light text for dark backgrounds */
+  --text-secondary: #e2e8f0; /* Light secondary text */
+  --text-tertiary: #cbd5e1; /* Light tertiary text */
+  --border-color: #64748b; /* Darker border for better contrast */
+  --card-background: #475569; /* * Darker card background */
+  --card-border: #64748b; /* * Darker card border */
+  --card-hover: #64748b; /* * Darker hover state */
+  --header-background: #475569; /* * Darker header background */
+  --header-border: #64748b; /* * Darker header border */
 
   /* Glass surface tokens (light) */
-  --glass-bg: rgb(255 255 255 / 55%);
-  --glass-border: rgb(0 0 0 / 10%);
-  --glass-shadow: 0 10px 30px rgb(0 0 0 / 18%);
+  --glass-bg: rgb(71 85 105 / 45%); /* * Darker glass background */
+  --glass-border: rgb(255 255 255 / 15%); /* * Lighter border for contrast */
+  --glass-shadow: 0 10px 30px rgb(0 0 0 / 35%); /* * Stronger shadow */
   --glass-blur: 16px;
-  --shadow-subtle: 0 1px 3px rgb(0 0 0 / 8%); /* * Subtle shadow for light theme */
-  --shadow-medium: 0 4px 12px rgb(0 0 0 / 12%); /* * Medium shadow for light theme */
+  --shadow-subtle: 0 1px 3px rgb(0 0 0 / 25%); /* * Stronger shadow for dark theme */
+  --shadow-medium: 0 4px 12px rgb(0 0 0 / 35%); /* * Stronger shadow for dark theme */
 
   /* Synced dark-mode variables for components using legacy names */
-  --surface-dark: #f1f5f9; /* * Updated to match new surface color */
-  --card-background-dark: #fff; /* * Keep cards white */
-  --card-hover-dark: #e2e8f0; /* * Updated to match new hover color */
-  --border-color-dark: #cbd5e1;
-  --text-primary-dark: #0f172a;
-  --text-secondary-dark: #1e293b;
+  --surface-dark: #475569; /* * Updated to match new surface color */
+  --card-background-dark: #475569; /* * Updated to match new card background */
+  --card-hover-dark: #64748b; /* * Updated to match new hover color */
+  --border-color-dark: #64748b; /* * Updated to match new border color */
+  --text-primary-dark: #f8fafc; /* * Light text for dark backgrounds */
+  --text-secondary-dark: #e2e8f0; /* * Light secondary text */
   --button-primary-bg: var(--primary-600);
   --button-primary-hover: var(--primary-700);
-  --button-secondary-bg: rgb(0 0 0 / 8%); /* * Slightly more visible secondary button */
-  --button-secondary-hover: rgb(0 0 0 / 15%); /* * More visible hover state */
+  --button-secondary-bg: rgb(255 255 255 / 12%); /* * More visible secondary button */
+  --button-secondary-hover: rgb(255 255 255 / 20%); /* * More visible hover state */
   --button-text-light: white;
 
   /* * Start section colors for light theme */
-  --start-section-bg-start: #e2e8f0; /* * Darker start color */
-  --start-section-bg-end: #cbd5e1; /* * Darker end color */
+  --start-section-bg-start: #475569; /* * Much darker start color */
+  --start-section-bg-end: #64748b; /* * Much darker end color */
   --start-section-border: #94a3b8; /* * Darker border */
-  --start-section-pattern: #64748b; /* * Subtle pattern color */
-  --accent-subtle: rgb(100 116 139 / 15%); /* * Subtle accent for light theme */
-  --accent-medium: rgb(100 116 139 / 25%); /* * Medium accent for light theme */
+  --start-section-pattern: #cbd5e1; /* * Lighter pattern color for contrast */
+  --accent-subtle: rgb(255 255 255 / 10%); /* * Subtle accent for dark theme */
+  --accent-medium: rgb(255 255 255 / 20%); /* * Medium accent for dark theme */
 
   /* NameCard selected state variables */
-  --namecard-selected-bg: linear-gradient(135deg, var(--primary-50), var(--primary-100));
-  --namecard-selected-border: var(--primary-500);
-  --namecard-selected-description: var(--primary-600);
+  --namecard-selected-bg: linear-gradient(135deg, var(--primary-600), var(--primary-700));
+  --namecard-selected-border: var(--primary-400);
+  --namecard-selected-description: var(--primary-300);
 }
 
 /* Dark Theme Overrides */

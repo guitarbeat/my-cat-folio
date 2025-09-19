@@ -23,7 +23,7 @@ function useTheme() {
       light: {
         bodyClass: 'light-theme',
         darkBodyClass: 'dark-theme',
-        metaColor: '#eef1f6'
+        metaColor: '#334155'
       },
       dark: {
         bodyClass: 'dark-theme',
