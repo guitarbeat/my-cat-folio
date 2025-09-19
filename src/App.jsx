@@ -12,7 +12,8 @@ import {
   ErrorBoundary,
   Login,
   ErrorDisplay,
-  ToastContainer
+  ToastContainer,
+  WelcomeScreen
 } from './shared/components';
 import NavBar from './shared/components/NavBar/NavBar';
 import useUserSession from './core/hooks/useUserSession';
@@ -64,6 +65,10 @@ function App() {
 
   // * Toast notifications
   const { toasts, removeToast } = useToast();
+
+  // * Welcome screen state
+  const [showWelcomeScreen, setShowWelcomeScreen] = React.useState(true);
+  const [catName, setCatName] = React.useState('');
 
   // * Parallax for galaxy background (respects reduced motion)
   React.useEffect(() => {
@@ -234,6 +239,12 @@ function App() {
     [uiActions, toggleTheme]
   );
 
+  // * Handle welcome screen completion
+  const handleWelcomeComplete = useCallback((name) => {
+    setCatName(name);
+    setShowWelcomeScreen(false);
+  }, []);
+
   // * Memoize main content to prevent unnecessary re-renders
   const mainContent = useMemo(() => {
     if (!isLoggedIn) {
@@ -333,6 +344,11 @@ function App() {
       handleThemeChange
     ]
   );
+
+  // * Show welcome screen first
+  if (showWelcomeScreen) {
+    return <WelcomeScreen onContinue={handleWelcomeComplete} />;
+  }
 
   return (
     <div className="app">

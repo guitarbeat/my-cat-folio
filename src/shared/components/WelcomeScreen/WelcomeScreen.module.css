@@ -1,0 +1,473 @@
+/* WelcomeScreen.module.css */
+
+/* Additional global styles to ensure proper scrolling */
+:global(body.welcome-page) {
+  height: auto !important;
+  min-height: 100vh !important;
+
+  /* Ensure body can scroll normally */
+  overflow: auto !important;
+}
+
+:global(body.welcome-page::-webkit-scrollbar) {
+  /* Allow webkit scrollbars */
+  display: block;
+}
+
+/* Ensure html element can also scroll */
+:global(html.welcome-page) {
+  height: auto !important;
+  overflow: auto !important;
+}
+
+.welcomeWrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+.welcomeWrapper.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.backgroundContainer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -2;
+}
+
+.backgroundImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    135deg,
+    rgba(0, 0, 0, 0.7) 0%,
+    rgba(0, 0, 0, 0.4) 50%,
+    rgba(0, 0, 0, 0.8) 100%
+  );
+  z-index: -1;
+}
+
+.contentContainer {
+  width: 100%;
+  max-width: 500px;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  position: relative;
+  z-index: 1;
+}
+
+.mainContent {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.welcomeTitle {
+  font-family: 'Comic Neue', cursive;
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #ffffff;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+  margin: 0;
+  line-height: 1.2;
+}
+
+.catImage {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 4px solid rgba(255, 255, 255, 0.9);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  transition: transform 0.3s ease;
+}
+
+.catImage:hover {
+  transform: scale(1.05);
+}
+
+.questionSection {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.questionTitle {
+  font-family: 'Josefin Slab', serif;
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: #ffffff;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+  margin: 0;
+}
+
+.questionSubtext {
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.9);
+  margin: 0;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.6);
+}
+
+.formSection {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 20px;
+  padding: 2rem;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.typingIndicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  padding: 0.5rem;
+  background: rgba(255, 193, 7, 0.1);
+  border-radius: 10px;
+  border: 1px solid rgba(255, 193, 7, 0.3);
+}
+
+.typingText {
+  font-size: 0.9rem;
+  color: #856404;
+  font-weight: 500;
+}
+
+.typingDots {
+  display: flex;
+  gap: 2px;
+}
+
+.dot {
+  width: 4px;
+  height: 4px;
+  background: #856404;
+  border-radius: 50%;
+  animation: typing 1.4s infinite ease-in-out;
+}
+
+.dot:nth-child(1) {
+  animation-delay: -0.32s;
+}
+
+.dot:nth-child(2) {
+  animation-delay: -0.16s;
+}
+
+@keyframes typing {
+  0%, 80%, 100% {
+    transform: scale(0.8);
+    opacity: 0.5;
+  }
+  40% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.welcomeForm {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.inputWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.inputLabel {
+  font-family: 'Josefin Slab', serif;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #2c3e50;
+  margin: 0;
+}
+
+.inputContainer {
+  position: relative;
+}
+
+.catNameInput {
+  width: 100%;
+  padding: 1rem;
+  font-size: 1.1rem;
+  border: 2px solid #e1e8ed;
+  border-radius: 12px;
+  background: #ffffff;
+  color: #2c3e50;
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+}
+
+.catNameInput:focus {
+  outline: none;
+  border-color: #3498db;
+  box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+  transform: translateY(-1px);
+}
+
+.catNameInput::placeholder {
+  color: #95a5a6;
+  font-style: italic;
+}
+
+.helperText {
+  font-size: 0.9rem;
+  color: #7f8c8d;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.characterCounter {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin-top: 0.5rem;
+}
+
+.counterText {
+  font-size: 0.8rem;
+  color: #95a5a6;
+  text-align: right;
+}
+
+.counterBar {
+  width: 100%;
+  height: 3px;
+  background: #ecf0f1;
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.counterProgress {
+  height: 100%;
+  background: linear-gradient(90deg, #3498db, #2ecc71);
+  border-radius: 2px;
+  transition: width 0.3s ease;
+}
+
+.buttonGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.primaryButton {
+  width: 100%;
+  padding: 1rem 1.5rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #ffffff;
+  background: linear-gradient(135deg, #3498db, #2980b9);
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+.primaryButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(52, 152, 219, 0.4);
+  background: linear-gradient(135deg, #2980b9, #1f618d);
+}
+
+.primaryButton:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 10px rgba(52, 152, 219, 0.3);
+}
+
+.primaryButton.hasName {
+  background: linear-gradient(135deg, #e74c3c, #c0392b);
+  box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
+}
+
+.primaryButton.hasName:hover {
+  background: linear-gradient(135deg, #c0392b, #a93226);
+  box-shadow: 0 6px 20px rgba(231, 76, 60, 0.4);
+}
+
+.secondaryButton {
+  width: 100%;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #7f8c8d;
+  background: transparent;
+  border: 2px solid #bdc3c7;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.secondaryButton:hover {
+  color: #2c3e50;
+  border-color: #95a5a6;
+  background: rgba(149, 165, 166, 0.1);
+  transform: translateY(-1px);
+}
+
+.secondaryButton:active {
+  transform: translateY(0);
+}
+
+.buttonContent {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.buttonEmoji {
+  font-size: 1.2rem;
+}
+
+.namePreview {
+  text-align: center;
+  padding: 1rem;
+  background: rgba(52, 152, 219, 0.1);
+  border-radius: 12px;
+  border: 1px solid rgba(52, 152, 219, 0.2);
+}
+
+.nameHighlight {
+  font-weight: 600;
+  color: #e74c3c;
+  font-style: italic;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+  .contentContainer {
+    padding: 1rem;
+    gap: 1.5rem;
+  }
+
+  .welcomeTitle {
+    font-size: 2rem;
+  }
+
+  .questionTitle {
+    font-size: 1.5rem;
+  }
+
+  .catImage {
+    width: 100px;
+    height: 100px;
+  }
+
+  .formSection {
+    padding: 1.5rem;
+  }
+
+  .primaryButton,
+  .secondaryButton {
+    padding: 0.875rem 1.25rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .welcomeTitle {
+    font-size: 1.75rem;
+  }
+
+  .questionTitle {
+    font-size: 1.3rem;
+  }
+
+  .catImage {
+    width: 80px;
+    height: 80px;
+  }
+
+  .formSection {
+    padding: 1.25rem;
+  }
+}
+
+/* Dark theme support */
+:global(.dark-theme) .formSection {
+  background: rgba(30, 30, 30, 0.95);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+:global(.dark-theme) .inputLabel {
+  color: #ecf0f1;
+}
+
+:global(.dark-theme) .catNameInput {
+  background: #2c3e50;
+  border-color: #34495e;
+  color: #ecf0f1;
+}
+
+:global(.dark-theme) .catNameInput:focus {
+  border-color: #3498db;
+  background: #34495e;
+}
+
+:global(.dark-theme) .catNameInput::placeholder {
+  color: #7f8c8d;
+}
+
+:global(.dark-theme) .helperText {
+  color: #bdc3c7;
+}
+
+:global(.dark-theme) .counterText {
+  color: #7f8c8d;
+}
+
+:global(.dark-theme) .counterBar {
+  background: #34495e;
+}
+
+:global(.dark-theme) .secondaryButton {
+  color: #bdc3c7;
+  border-color: #7f8c8d;
+}
+
+:global(.dark-theme) .secondaryButton:hover {
+  color: #ecf0f1;
+  border-color: #bdc3c7;
+  background: rgba(189, 195, 199, 0.1);
+}
+
+:global(.dark-theme) .namePreview {
+  background: rgba(52, 152, 219, 0.15);
+  border-color: rgba(52, 152, 219, 0.3);
+}
