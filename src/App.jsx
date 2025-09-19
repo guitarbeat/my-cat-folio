@@ -68,7 +68,22 @@ function App() {
 
   // * Welcome screen state
   const [showWelcomeScreen, setShowWelcomeScreen] = React.useState(true);
-  const [catName, setCatName] = React.useState('');
+  const [catName, setCatName] = React.useState('Loading...');
+
+  // * Load cat name on component mount
+  React.useEffect(() => {
+    const loadCatName = async () => {
+      try {
+        const generatedName = await TournamentService.generateCatName();
+        setCatName(generatedName);
+      } catch (error) {
+        console.error('Error loading cat name:', error);
+        setCatName('Mystery Cat');
+      }
+    };
+
+    loadCatName();
+  }, []);
 
   // * Parallax for galaxy background (respects reduced motion)
   React.useEffect(() => {
@@ -240,8 +255,7 @@ function App() {
   );
 
   // * Handle welcome screen completion
-  const handleWelcomeComplete = useCallback((name) => {
-    setCatName(name);
+  const handleWelcomeComplete = useCallback(() => {
     setShowWelcomeScreen(false);
   }, []);
 
@@ -347,7 +361,7 @@ function App() {
 
   // * Show welcome screen first
   if (showWelcomeScreen) {
-    return <WelcomeScreen onContinue={handleWelcomeComplete} />;
+    return <WelcomeScreen onContinue={handleWelcomeComplete} catName={catName} />;
   }
 
   return (

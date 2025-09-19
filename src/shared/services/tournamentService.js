@@ -252,6 +252,46 @@ export class TournamentService {
   }
 
   /**
+   * * Fetches all names and their ratings to generate the cat's name
+   * @returns {Promise<string>} The cat's name made from all names ranked by rating
+   */
+  static async generateCatName() {
+    try {
+      // Fetch all names with their ratings
+      const { data: ratingsData, error: ratingsError } = await supabase
+        .from('cat_name_ratings')
+        .select(`
+          name_id,
+          rating,
+          cat_name_options (
+            name
+          )
+        `)
+        .eq('is_hidden', false)
+        .order('rating', { ascending: false });
+
+      if (ratingsError) {
+        throw ratingsError;
+      }
+
+      if (!ratingsData || ratingsData.length === 0) {
+        return 'Mystery Cat';
+      }
+
+      // Sort by rating (highest to lowest) and extract names
+      const sortedNames = ratingsData
+        .map(item => item.cat_name_options?.name)
+        .filter(name => name) // Remove any null/undefined names
+        .join('');
+
+      return sortedNames || 'Mystery Cat';
+    } catch (error) {
+      console.error('Error generating cat name:', error);
+      return 'Mystery Cat';
+    }
+  }
+
+  /**
    * * Calculates tournament statistics
    * @param {Array} ratings - Array of rating objects
    * @returns {Object} Tournament statistics

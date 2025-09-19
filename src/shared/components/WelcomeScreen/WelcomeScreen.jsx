@@ -1,17 +1,15 @@
 /**
  * @module WelcomeScreen
- * @description Pre-welcome screen that asks for the user's cat's name before showing the main app.
+ * @description Pre-welcome screen that displays the cat's name based on tournament rankings.
  */
 import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import styles from './WelcomeScreen.module.css';
 
-function WelcomeScreen({ onContinue }) {
-  const [catName, setCatName] = useState('');
+function WelcomeScreen({ onContinue, catName }) {
   const [isVisible, setIsVisible] = useState(false);
-  const [isTyping, setIsTyping] = useState(false);
+  const [isAnimating, setIsAnimating] = useState(false);
   const containerRef = useRef(null);
-  const typingTimeoutRef = useRef(null);
 
   // Add welcome-page class to body and html when component mounts
   useEffect(() => {
@@ -31,45 +29,16 @@ function WelcomeScreen({ onContinue }) {
     };
   }, []);
 
-  const resetTypingTimer = () => {
-    if (typingTimeoutRef.current) {
-      clearTimeout(typingTimeoutRef.current);
-    }
-    setIsTyping(false);
+  const handleContinue = () => {
+    setIsAnimating(true);
+    // Add a small delay for the animation before continuing
+    setTimeout(() => {
+      onContinue();
+    }, 500);
   };
-
-  const handleCatNameChange = (e) => {
-    setCatName(e.target.value);
-    setIsTyping(true);
-    resetTypingTimer();
-    
-    // Clear typing indicator after 2 seconds of no typing
-    typingTimeoutRef.current = setTimeout(() => {
-      setIsTyping(false);
-    }, 2000);
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const finalCatName = catName.trim() || 'Mystery Cat';
-    onContinue(finalCatName);
-  };
-
-  const handleSkip = () => {
-    onContinue('Mystery Cat');
-  };
-
-  // Cleanup timeout on unmount
-  useEffect(() => {
-    return () => {
-      if (typingTimeoutRef.current) {
-        clearTimeout(typingTimeoutRef.current);
-      }
-    };
-  }, []);
 
   return (
-    <div className={`${styles.welcomeWrapper} ${isVisible ? styles.visible : ''}`}>
+    <div className={`${styles.welcomeWrapper} ${isVisible ? styles.visible : ''} ${isAnimating ? styles.animating : ''}`}>
       {/* Background with overlay */}
       <div className={styles.backgroundContainer}>
         <picture>
@@ -108,107 +77,40 @@ function WelcomeScreen({ onContinue }) {
             />
           </picture>
 
-          <div className={styles.questionSection}>
-            <h2 className={styles.questionTitle}>
-              What's your cat's name?
+          <div className={styles.catNameSection}>
+            <h2 className={styles.catNameTitle}>
+              My cat's name is:
             </h2>
-            <p className={styles.questionSubtext}>
-              We'll use this to personalize your tournament experience!
+            <div className={styles.catNameDisplay}>
+              <span className={styles.catNameText}>
+                {catName || 'Loading...'}
+              </span>
+            </div>
+            <p className={styles.catNameSubtext}>
+              A name carefully crafted from all the tournament results, ranked from most to least voted!
             </p>
           </div>
         </div>
 
-        {/* Form Section */}
-        <div className={styles.formSection}>
-          {isTyping && (
-            <div className={styles.typingIndicator}>
-              <span className={styles.typingText}>
-                The cat is watching you type!
-              </span>
-              <span className={styles.typingDots}>
-                <span className={styles.dot}>.</span>
-                <span className={styles.dot}>.</span>
-                <span className={styles.dot}>.</span>
-              </span>
-            </div>
-          )}
-
-          <form
-            onSubmit={handleSubmit}
-            className={styles.welcomeForm}
-            role="form"
-            aria-label="Cat name form"
+        {/* Action Section */}
+        <div className={styles.actionSection}>
+          <button
+            onClick={handleContinue}
+            className={styles.continueButton}
+            disabled={isAnimating}
           >
-            <div className={styles.inputWrapper}>
-              <label htmlFor="catName" className={styles.inputLabel}>
-                My cat's name is:
-              </label>
-              <div className={styles.inputContainer}>
-                <input
-                  id="catName"
-                  type="text"
-                  value={catName}
-                  onChange={handleCatNameChange}
-                  placeholder="Enter your cat's name"
-                  className={styles.catNameInput}
-                  autoFocus
-                  aria-label="Your cat's name"
-                  aria-describedby="catNameHelp"
-                  maxLength={30}
-                />
-              </div>
-              <p id="catNameHelp" className={styles.helperText}>
-                Don't worry, you can always change this later!
-              </p>
-              
-              {catName.trim() && (
-                <div className={styles.characterCounter}>
-                  <span className={styles.counterText}>
-                    {catName.length}/30 characters
-                  </span>
-                  <div className={styles.counterBar}>
-                    <div
-                      className={styles.counterProgress}
-                      style={{ width: `${(catName.length / 30) * 100}%` }}
-                    />
-                  </div>
-                </div>
-              )}
-            </div>
+            <span className={styles.buttonContent}>
+              {isAnimating ? 'Entering Tournament...' : 'Start the Tournament!'}
+              <span className={styles.buttonEmoji} aria-hidden="true">
+                🏆
+              </span>
+            </span>
+          </button>
 
-            <div className={styles.buttonGroup}>
-              <button
-                type="submit"
-                className={`${styles.primaryButton} ${catName.trim() ? styles.hasName : ''}`}
-              >
-                <span className={styles.buttonContent}>
-                  {catName.trim() ? `Continue with ${catName}` : 'Continue'}
-                  <span className={styles.buttonEmoji} aria-hidden="true">
-                    🐱
-                  </span>
-                </span>
-              </button>
-              
-              <button
-                type="button"
-                onClick={handleSkip}
-                className={styles.secondaryButton}
-              >
-                Skip for now
-              </button>
-            </div>
-          </form>
-
-          <div className={styles.namePreview}>
-            {catName ? (
-              <p className={styles.helperText}>
-                Your cat <span className={styles.nameHighlight}>"{catName}"</span> will be the star of this tournament!
-              </p>
-            ) : (
-              <p className={styles.helperText}>
-                We'll help you find the perfect name for your feline friend!
-              </p>
-            )}
+          <div className={styles.explanationText}>
+            <p>
+              This name represents the collective wisdom of all tournament participants!
+            </p>
           </div>
         </div>
       </div>
@@ -219,7 +121,8 @@ function WelcomeScreen({ onContinue }) {
 WelcomeScreen.displayName = 'WelcomeScreen';
 
 WelcomeScreen.propTypes = {
-  onContinue: PropTypes.func.isRequired
+  onContinue: PropTypes.func.isRequired,
+  catName: PropTypes.string.isRequired
 };
 
 export default WelcomeScreen;
