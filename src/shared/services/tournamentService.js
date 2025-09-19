@@ -282,7 +282,7 @@ export class TournamentService {
       const sortedNames = ratingsData
         .map(item => item.cat_name_options?.name)
         .filter(name => name) // Remove any null/undefined names
-        .join('');
+        .join(' ');
 
       return sortedNames || 'Mystery Cat';
     } catch (error) {
