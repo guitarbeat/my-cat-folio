@@ -27,7 +27,9 @@ const ProfileNameList = ({
   hiddenIds = new Set(),
   className = '',
   selectionFilter,
-  selectionStats
+  selectionStats,
+  onBulkHide,
+  onBulkUnhide
 }) => {
   // * Filter and sort names based on current filters
   const filteredAndSortedNames = useMemo(() => {
@@ -223,16 +225,81 @@ const ProfileNameList = ({
     );
   }
 
+  // * Handle select all functionality
+  const handleSelectAll = () => {
+    const allVisibleIds = filteredAndSortedNames.map(name => name.id);
+    const allSelected = allVisibleIds.every(id => selectedNames.has(id));
+    
+    if (allSelected) {
+      // Deselect all visible names
+      allVisibleIds.forEach(id => onSelectionChange?.(id, false));
+    } else {
+      // Select all visible names
+      allVisibleIds.forEach(id => onSelectionChange?.(id, true));
+    }
+  };
+
+  // * Handle bulk hide/unhide
+  const handleBulkHide = () => {
+    const selectedIds = Array.from(selectedNames);
+    onBulkHide?.(selectedIds);
+  };
+
+  const handleBulkUnhide = () => {
+    const selectedIds = Array.from(selectedNames);
+    onBulkUnhide?.(selectedIds);
+  };
+
+  // * Check if all visible names are selected
+  const allVisibleSelected = filteredAndSortedNames.length > 0 && 
+    filteredAndSortedNames.every(name => selectedNames.has(name.id));
+
   return (
     <div className={`${styles.container} ${className}`}>
       <div className={styles.header}>
         <h3 className={styles.sectionTitle}>
           Names ({filteredAndSortedNames.length})
         </h3>
-        {isAdmin && selectedNames.size > 0 && (
-          <div className={styles.selectionInfo}>
-            {selectedNames.size} name{selectedNames.size !== 1 ? 's' : ''}{' '}
-            selected
+        {isAdmin && (
+          <div className={styles.headerControls}>
+            {selectedNames.size > 0 && (
+              <div className={styles.selectionInfo}>
+                {selectedNames.size} name{selectedNames.size !== 1 ? 's' : ''}{' '}
+                selected
+              </div>
+            )}
+            {isAdmin && filteredAndSortedNames.length > 0 && (
+              <div className={styles.bulkControls}>
+                <button
+                  type="button"
+                  onClick={handleSelectAll}
+                  className={styles.selectAllButton}
+                  title={allVisibleSelected ? 'Deselect All' : 'Select All'}
+                >
+                  {allVisibleSelected ? 'Deselect All' : 'Select All'}
+                </button>
+                {selectedNames.size > 0 && (
+                  <>
+                    <button
+                      type="button"
+                      onClick={handleBulkHide}
+                      className={styles.bulkActionButton}
+                      title="Hide Selected Names"
+                    >
+                      Hide Selected
+                    </button>
+                    <button
+                      type="button"
+                      onClick={handleBulkUnhide}
+                      className={styles.bulkActionButton}
+                      title="Unhide Selected Names"
+                    >
+                      Unhide Selected
+                    </button>
+                  </>
+                )}
+              </div>
+            )}
           </div>
         )}
       </div>
@@ -326,7 +393,9 @@ ProfileNameList.propTypes = {
   selectedNames: PropTypes.instanceOf(Set),
   className: PropTypes.string,
   selectionFilter: PropTypes.string,
-  selectionStats: PropTypes.object
+  selectionStats: PropTypes.object,
+  onBulkHide: PropTypes.func,
+  onBulkUnhide: PropTypes.func
 };
 
 export default ProfileNameList;

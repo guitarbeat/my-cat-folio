@@ -418,6 +418,90 @@ const Profile = ({ userName, onStartNewTournament }) => {
     });
   }, []);
 
+  // * Handle bulk hide operation
+  const handleBulkHide = useCallback(
+    async (nameIds) => {
+      try {
+        if (!supabase) {
+          console.warn('Supabase not configured, cannot hide names');
+          showError('Database not available');
+          return;
+        }
+
+        const result = await hiddenNamesAPI.hideNames(userName, nameIds);
+        
+        if (result.success) {
+          showSuccess(`Hidden ${result.processed} name${result.processed !== 1 ? 's' : ''}`);
+          
+          // Update local state optimistically
+          setHiddenNames((prev) => {
+            const newSet = new Set(prev);
+            nameIds.forEach(id => newSet.add(id));
+            return newSet;
+          });
+          
+          // Clear selection
+          setSelectedNames(new Set());
+          
+          // Refresh data
+          fetchNames();
+        } else {
+          showError('Failed to hide names');
+        }
+      } catch (error) {
+        ErrorService.handleError(error, 'Profile - Bulk Hide', {
+          isRetryable: true,
+          affectsUserData: false,
+          isCritical: false
+        });
+        showError('Failed to hide names');
+      }
+    },
+    [userName, fetchNames, showSuccess, showError]
+  );
+
+  // * Handle bulk unhide operation
+  const handleBulkUnhide = useCallback(
+    async (nameIds) => {
+      try {
+        if (!supabase) {
+          console.warn('Supabase not configured, cannot unhide names');
+          showError('Database not available');
+          return;
+        }
+
+        const result = await hiddenNamesAPI.unhideNames(userName, nameIds);
+        
+        if (result.success) {
+          showSuccess(`Unhidden ${result.processed} name${result.processed !== 1 ? 's' : ''}`);
+          
+          // Update local state optimistically
+          setHiddenNames((prev) => {
+            const newSet = new Set(prev);
+            nameIds.forEach(id => newSet.delete(id));
+            return newSet;
+          });
+          
+          // Clear selection
+          setSelectedNames(new Set());
+          
+          // Refresh data
+          fetchNames();
+        } else {
+          showError('Failed to unhide names');
+        }
+      } catch (error) {
+        ErrorService.handleError(error, 'Profile - Bulk Unhide', {
+          isRetryable: true,
+          affectsUserData: false,
+          isCritical: false
+        });
+        showError('Failed to unhide names');
+      }
+    },
+    [userName, fetchNames, showSuccess, showError]
+  );
+
   // * Handle error display
   if (ratingsError) {
     return (
@@ -515,6 +599,8 @@ const Profile = ({ userName, onStartNewTournament }) => {
         showAdminControls={isAdmin} // * Pass admin controls flag
         selectionFilter={selectionFilter}
         selectionStats={selectionStats}
+        onBulkHide={handleBulkHide}
+        onBulkUnhide={handleBulkUnhide}
       />
     </div>
   );

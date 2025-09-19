@@ -516,6 +516,76 @@ export const hiddenNamesAPI = {
   },
 
   /**
+   * Hide multiple names for a user
+   */
+  async hideNames(userName, nameIds) {
+    try {
+      if (!isSupabaseAvailable()) {
+        return { success: false, error: 'Supabase not configured' };
+      }
+
+      if (!nameIds || nameIds.length === 0) {
+        return { success: true, processed: 0 };
+      }
+
+      const results = [];
+      let processed = 0;
+
+      for (const nameId of nameIds) {
+        try {
+          const result = await this.hideName(userName, nameId);
+          results.push({ nameId, success: result.success });
+          if (result.success) processed++;
+        } catch (error) {
+          results.push({ nameId, success: false, error: error.message });
+        }
+      }
+
+      return { success: true, processed, results };
+    } catch (error) {
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Error hiding names:', error);
+      }
+      throw error;
+    }
+  },
+
+  /**
+   * Unhide multiple names for a user
+   */
+  async unhideNames(userName, nameIds) {
+    try {
+      if (!isSupabaseAvailable()) {
+        return { success: false, error: 'Supabase not configured' };
+      }
+
+      if (!nameIds || nameIds.length === 0) {
+        return { success: true, processed: 0 };
+      }
+
+      const results = [];
+      let processed = 0;
+
+      for (const nameId of nameIds) {
+        try {
+          const result = await this.unhideName(userName, nameId);
+          results.push({ nameId, success: result.success });
+          if (result.success) processed++;
+        } catch (error) {
+          results.push({ nameId, success: false, error: error.message });
+        }
+      }
+
+      return { success: true, processed, results };
+    } catch (error) {
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Error unhiding names:', error);
+      }
+      throw error;
+    }
+  },
+
+  /**
    * Get hidden names for a user
    */
   async getHiddenNames(userName) {
