@@ -83,36 +83,35 @@
 
 .statsGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-  gap: 1rem;
-  margin: 1.5rem 0;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+  margin: 2rem 0;
+  padding: 1rem;
+  background: linear-gradient(135deg, 
+    rgba(255, 255, 255, 0.05) 0%, 
+    rgba(255, 255, 255, 0.02) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  backdrop-filter: blur(10px);
 }
 
 .statCard {
-  
+  /* Override any conflicting styles from Results.module.css */
   position: relative;
-  min-width: 140px;
+  min-width: 180px;
   text-align: center;
-  transition: transform 0.2s ease;
 }
 
 .statCard:hover {
-  transform: translateY(-3px);
+  /* Let the StatsCard component handle hover effects */
 }
 
 .statCard h3 {
-  margin-bottom: var(--space-2);
-  font-size: var(--text-sm);
-  color: var(--text-secondary);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
+  /* Let the StatsCard component handle label styling */
 }
 
 .statValue {
-  font-size: var(--text-3xl);
-  font-weight: 600;
-  line-height: 1;
-  color: var(--primary-500);
+  /* Let the StatsCard component handle value styling */
 }
 
 .actions {
@@ -282,12 +281,13 @@
   }
 
   .statsGrid {
-    gap: var(--space-3);
+    gap: 1rem;
+    padding: 0.75rem;
   }
 
   .statCard {
     flex: 1;
-    min-width: 110px;
+    min-width: 150px;
   }
 
   .tournamentBracket {
@@ -324,12 +324,14 @@
   }
 
   .statsGrid {
-    flex-direction: column;
-    gap: var(--space-2);
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    padding: 0.5rem;
   }
 
   .statCard {
     width: 100%;
+    min-width: auto;
   }
 
   .actions {

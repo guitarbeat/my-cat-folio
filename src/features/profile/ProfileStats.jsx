@@ -58,48 +58,42 @@ const ProfileStats = ({
         <StatsCard
           title="Total Names"
           value={total}
-          subtitle="Names in your collection"
-          icon="📊"
+          emoji="📊"
           variant="primary"
         />
 
         <StatsCard
           title="Win Rate"
           value={`${winRate}%`}
-          subtitle={`${wins} wins, ${losses} losses`}
-          icon="🏆"
+          emoji="🏆"
           variant="success"
         />
 
         <StatsCard
           title="Average Rating"
           value={avgRating}
-          subtitle="Your average name rating"
-          icon="⭐"
+          emoji="⭐"
           variant="warning"
         />
 
         <StatsCard
           title="Rating Spread"
           value={ratingSpread}
-          subtitle="Range of your ratings"
-          icon="📈"
+          emoji="📈"
           variant="info"
         />
 
         <StatsCard
           title="Total Matches"
           value={totalMatches}
-          subtitle="Tournament matches played"
-          icon="🎯"
+          emoji="🎯"
           variant="secondary"
         />
 
         <StatsCard
           title="Active Names"
           value={activeNames}
-          subtitle="Names currently visible"
-          icon="👁️"
+          emoji="👁️"
           variant="default"
         />
 
@@ -107,8 +101,7 @@ const ProfileStats = ({
           <StatsCard
             title="Popular Names"
             value={popularNames}
-            subtitle="High popularity names"
-            icon="🔥"
+            emoji="🔥"
             variant="danger"
           />
         )}
@@ -119,48 +112,42 @@ const ProfileStats = ({
             <StatsCard
               title="Tournament Selections"
               value={selectionStats.totalSelections || 0}
-              subtitle="Names selected for tournaments"
-              icon="🎲"
+              emoji="🎲"
               variant="primary"
             />
 
             <StatsCard
               title="Tournaments Created"
               value={selectionStats.totalTournaments || 0}
-              subtitle="Tournaments you've started"
-              icon="🏁"
+              emoji="🏁"
               variant="success"
             />
 
             <StatsCard
               title="Selection Frequency"
               value={selectionStats.avgSelectionsPerName || 0}
-              subtitle="Avg selections per name"
-              icon="📊"
+              emoji="📊"
               variant="warning"
             />
 
             <StatsCard
               title="Most Selected"
               value={selectionStats.mostSelectedName || 'N/A'}
-              subtitle="Your favorite name"
-              icon="❤️"
+              emoji="❤️"
               variant="danger"
             />
 
             <StatsCard
               title="Selection Streak"
               value={selectionStats.currentStreak || 0}
-              subtitle="Consecutive days selecting"
-              icon="🔥"
+              emoji="🔥"
               variant="info"
             />
 
             <StatsCard
               title="Selection Rank"
               value={`#${selectionStats.userRank || 'N/A'}`}
-              subtitle="Your ranking among users"
-              icon="🏅"
+              emoji="🏅"
               variant="secondary"
             />
           </>
