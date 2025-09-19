@@ -12,6 +12,13 @@
   margin-bottom: 1.5rem;
 }
 
+.headerControls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: center;
+}
+
 .sectionTitle {
   margin: 0;
   font-size: 1.5rem;
@@ -27,6 +34,60 @@
   background: var(--selection-bg, #eff6ff);
   border: 1px solid var(--selection-border, #bfdbfe);
   border-radius: 20px;
+}
+
+/* * Bulk Controls */
+.bulkControls {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.selectAllButton {
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--button-text, #374151);
+  cursor: pointer;
+  background: var(--button-bg, #f3f4f6);
+  border: 1px solid var(--button-border, #d1d5db);
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+
+.selectAllButton:hover {
+  background: var(--button-bg-hover, #e5e7eb);
+  border-color: var(--button-border-hover, #9ca3af);
+}
+
+.selectAllButton:active {
+  transform: translateY(1px);
+}
+
+.bulkActionButton {
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--bulk-button-text, #ffffff);
+  cursor: pointer;
+  background: var(--bulk-button-bg, #3b82f6);
+  border: 1px solid var(--bulk-button-border, #2563eb);
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+
+.bulkActionButton:hover {
+  background: var(--bulk-button-bg-hover, #2563eb);
+  border-color: var(--bulk-button-border-hover, #1d4ed8);
+}
+
+.bulkActionButton:active {
+  transform: translateY(1px);
+}
+
+.bulkActionButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 /* * Names Grid Layout - Increased card sizes for better description visibility */
@@ -217,6 +278,17 @@
     align-items: flex-start;
   }
 
+  .headerControls {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+
+  .bulkControls {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
   .sectionTitle {
     font-size: 1.25rem;
   }
@@ -291,6 +363,22 @@
     --selection-border: #3b82f6;
   }
 
+  .selectAllButton {
+    --button-text: #d1d5db;
+    --button-bg: #374151;
+    --button-border: #4b5563;
+    --button-bg-hover: #4b5563;
+    --button-border-hover: #6b7280;
+  }
+
+  .bulkActionButton {
+    --bulk-button-text: #ffffff;
+    --bulk-button-bg: #2563eb;
+    --bulk-button-border: #1d4ed8;
+    --bulk-button-bg-hover: #1d4ed8;
+    --bulk-button-border-hover: #1e40af;
+  }
+
   .hiddenNameCard {
     --hidden-border: #4b5563;
     --hidden-bg: #1f2937;
@@ -335,6 +423,22 @@
   --selection-bg: #eff6ff;
   --selection-text: #1e40af;
   --selection-border: #bfdbfe;
+}
+
+.selectAllButton {
+  --button-text: #374151;
+  --button-bg: #f3f4f6;
+  --button-border: #d1d5db;
+  --button-bg-hover: #e5e7eb;
+  --button-border-hover: #9ca3af;
+}
+
+.bulkActionButton {
+  --bulk-button-text: #ffffff;
+  --bulk-button-bg: #3b82f6;
+  --bulk-button-border: #2563eb;
+  --bulk-button-bg-hover: #2563eb;
+  --bulk-button-border-hover: #1d4ed8;
 }
 
 .hiddenNameCard {
