@@ -63,7 +63,7 @@ function WelcomeScreen({ onContinue, catName }) {
           <h1 className={styles.welcomeTitle}>
             Welcome to the Cat Name Tournament!
           </h1>
-          
+
           <picture>
             <source type="image/avif" srcSet="/assets/images/IMG_5071.avif" />
             <source type="image/webp" srcSet="/assets/images/IMG_5071.webp" />

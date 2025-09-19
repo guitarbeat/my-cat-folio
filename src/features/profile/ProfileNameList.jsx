@@ -229,7 +229,7 @@ const ProfileNameList = ({
   const handleSelectAll = () => {
     const allVisibleIds = filteredAndSortedNames.map(name => name.id);
     const allSelected = allVisibleIds.every(id => selectedNames.has(id));
-    
+
     if (allSelected) {
       // Deselect all visible names
       allVisibleIds.forEach(id => onSelectionChange?.(id, false));
@@ -251,7 +251,7 @@ const ProfileNameList = ({
   };
 
   // * Check if all visible names are selected
-  const allVisibleSelected = filteredAndSortedNames.length > 0 && 
+  const allVisibleSelected = filteredAndSortedNames.length > 0 &&
     filteredAndSortedNames.every(name => selectedNames.has(name.id));
 
   return (

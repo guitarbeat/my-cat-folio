@@ -94,7 +94,6 @@
 }
 
 .quickStat {
-  
   text-align: center;
 }
 
@@ -120,7 +119,6 @@
 }
 
 .sidebarButton {
-  
   font-size: 0.9rem;
   text-align: left;
 }
@@ -340,7 +338,6 @@
 
 /* Controls - Compact */
 .controls {
-  
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
   gap: 1.5rem;
@@ -383,7 +380,6 @@
 }
 
 .sortButton {
-  
   min-width: 60px;
   font-size: 1.1rem;
   font-weight: bold;
@@ -408,7 +404,6 @@
 }
 
 .userFilterButton {
-  
   font-size: 0.85rem;
 }
 
@@ -662,7 +657,6 @@
 
 /* User Selection Compact */
 .userSelectionCompact {
-  
   margin-bottom: 1.5rem;
   box-shadow: var(--shadow-md);
   backdrop-filter: blur(10px);
@@ -682,7 +676,6 @@
 }
 
 .userSelectionButton {
-  
   font-size: 0.9rem;
 }
 
@@ -719,7 +712,6 @@
 }
 
 .userStatCard {
-  
   text-align: center;
 }
 

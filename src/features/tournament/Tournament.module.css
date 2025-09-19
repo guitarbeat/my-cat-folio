@@ -17,7 +17,6 @@
 /* Layout & Container
    ========================================================================== */
 .tournament {
-  
   position: relative;
   display: flex;
   flex-direction: column;
@@ -61,7 +60,6 @@
 }
 
 .roundInfo {
-  
   gap: var(--space-2);
   font-weight: 500;
 }
@@ -73,7 +71,6 @@
 }
 
 .matchCount {
-  
   color: var(--text-secondary);
 }
 
@@ -96,7 +93,6 @@
 }
 
 .matchup {
-  
   display: flex;
   flex-direction: column;
   gap: var(--space-6);
@@ -171,7 +167,6 @@
 }
 
 .extraOptionsButton {
-  
   min-width: 120px;
   transition: all var(--duration-normal) var(--ease-out);
 }
@@ -185,7 +180,6 @@
 }
 
 .selected {
-  
   background: var(--primary-color);
 }
 
@@ -258,7 +252,6 @@
 }
 
 .soundToggleButton {
-  
   display: flex;
   align-items: center;
   justify-content: center;
@@ -332,7 +325,6 @@
 }
 
 .bracketToggle {
-  
   display: flex;
   gap: var(--space-2);
   align-items: center;
@@ -372,7 +364,6 @@
 }
 
 .keyboardHelpToggle {
-  
   display: flex;
   gap: var(--space-2);
   align-items: center;
@@ -530,8 +521,6 @@
 /* Modal Components
    ========================================================================== */
 .modal {
-  
-
   /* Improve modal accessibility */
   outline: none;
   box-shadow: var(--shadow-xl);
@@ -539,12 +528,10 @@
 }
 
 .modalBackdrop {
-  
   animation: fadeIn var(--duration-normal) var(--ease-out);
 }
 
 .modalContent {
-  
   gap: var(--space-4);
 }
 
@@ -557,7 +544,6 @@
 }
 
 .modalActions {
-  
   gap: var(--space-4);
   margin-top: var(--space-4);
 }
@@ -724,8 +710,8 @@
   .tournament *,
   .modal,
   .modalBackdrop {
-    transition: none !important;
-    animation: none !important;
+    transition: none;
+    animation: none;
   }
 
   .nameContainer.selected {
@@ -782,7 +768,6 @@
 }
 
 .randomizeButton {
-  
   display: flex;
   gap: var(--space-2);
   align-items: center;

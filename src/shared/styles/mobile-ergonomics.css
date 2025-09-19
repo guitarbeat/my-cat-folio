@@ -5,38 +5,51 @@
  * - Safe area support for modern mobile devices
  */
 
+/* CSS Custom Properties for mobile ergonomics */
+:root {
+  --mobile-touch-target-min: 48px;
+  --mobile-touch-target-large: 56px;
+  --mobile-navbar-height: 70px;
+  --mobile-navbar-height-small: 65px;
+  --mobile-content-padding: 80px;
+  --mobile-safe-spacing: 20px;
+  --mobile-safe-spacing-small: 15px;
+}
+
 /* Global touch target improvements */
 @media (width <= 768px) {
   /* Ensure all interactive elements meet touch target requirements */
-  button,
-  input[type="button"],
-  input[type="submit"],
-  input[type="reset"],
-  input[type="checkbox"],
-  input[type="radio"],
-  .btn,
-  .button,
-  .button-primary,
-  .button-secondary,
-  a[role="button"],
-  .nav-menu button,
-  .navbar__mobile-link,
-  .navbar__mobile-menu-button {
-    min-width: 48px !important;
-    min-height: 48px !important;
+
+  /* Using higher specificity instead of !important */
+  body button,
+  body input[type="button"],
+  body input[type="submit"],
+  body input[type="reset"],
+  body input[type="checkbox"],
+  body input[type="radio"],
+  body .btn,
+  body .button,
+  body .button-primary,
+  body .button-secondary,
+  body a[role="button"],
+  body .nav-menu button,
+  body .navbar__mobile-link,
+  body .navbar__mobile-menu-button {
+    min-width: var(--mobile-touch-target-min);
+    min-height: var(--mobile-touch-target-min);
   }
 
   /* Form inputs should have minimum height for touch */
-  input[type="text"],
-  input[type="email"],
-  input[type="password"],
-  input[type="search"],
-  input[type="tel"],
-  input[type="url"],
-  input[type="number"],
-  textarea,
-  select {
-    min-height: 48px !important;
+  body input[type="text"],
+  body input[type="email"],
+  body input[type="password"],
+  body input[type="search"],
+  body input[type="tel"],
+  body input[type="url"],
+  body input[type="number"],
+  body textarea,
+  body select {
+    min-height: var(--mobile-touch-target-min);
   }
 
   /* Ensure proper spacing between interactive elements */
@@ -80,94 +93,94 @@
 /* Floating element spacing improvements */
 @media (width <= 768px) {
   /* Ensure main content doesn't overlap with fixed navbar */
-  .main-content {
-    padding-bottom: 80px !important; /* Add bottom padding for floating elements */
-    margin-top: 80px !important; /* Increased from 65px */
+  body .main-content {
+    padding-bottom: var(--mobile-content-padding); /* Add bottom padding for floating elements */
+    margin-top: var(--mobile-content-padding); /* Increased from 65px */
   }
 
   /* Improve navbar height for better touch targets */
-  .navbar {
-    height: 70px !important; /* Slightly increased for better touch targets */
+  body .navbar {
+    height: var(--mobile-navbar-height); /* Slightly increased for better touch targets */
   }
 
   /* Ensure scroll-to-top button doesn't overlap content */
-  .scroll-to-top {
-    right: 20px !important; /* Increased from default */
-    bottom: 20px !important; /* Increased from default */
+  body .scroll-to-top {
+    right: var(--mobile-safe-spacing); /* Increased from default */
+    bottom: var(--mobile-safe-spacing); /* Increased from default */
   }
 
   /* Ensure floating elements respect safe areas */
-  .floating-element,
-  .fixed-bottom,
-  .sticky-bottom {
-    bottom: max(20px, env(safe-area-inset-bottom) + 20px) !important;
+  body .floating-element,
+  body .fixed-bottom,
+  body .sticky-bottom {
+    bottom: max(var(--mobile-safe-spacing), env(safe-area-inset-bottom) + var(--mobile-safe-spacing));
   }
 }
 
 /* Small mobile devices (iPhone SE, etc.) */
 @media (width <= 430px) {
-  .main-content {
-    margin-top: 75px !important; /* Adjusted for smaller navbar */
+  body .main-content {
+    margin-top: 75px; /* Adjusted for smaller navbar */
   }
 
-  .navbar {
-    height: 65px !important; /* Standard height for small screens */
+  body .navbar {
+    height: var(--mobile-navbar-height-small); /* Standard height for small screens */
   }
 
-  .scroll-to-top {
-    right: 15px !important; /* Adjusted for small screens */
-    bottom: 15px !important; /* Adjusted for small screens */
+  body .scroll-to-top {
+    right: var(--mobile-safe-spacing-small); /* Adjusted for small screens */
+    bottom: var(--mobile-safe-spacing-small); /* Adjusted for small screens */
   }
 }
 
 /* Safe area insets for modern mobile devices */
 @supports (padding: max(0px)) {
   @media (width <= 768px) {
-    .main-content {
+    body .main-content {
       padding-right: max(
         var(--space-4, 1rem),
         env(safe-area-inset-right)
-      ) !important;
+      );
       padding-bottom: max(
         var(--space-4, 1rem),
         env(safe-area-inset-bottom)
-      ) !important;
+      );
       padding-left: max(
         var(--space-4, 1rem),
         env(safe-area-inset-left)
-      ) !important;
+      );
     }
 
-    .navbar {
-      padding-right: max(1rem, env(safe-area-inset-right)) !important;
-      padding-left: max(1rem, env(safe-area-inset-left)) !important;
+    body .navbar {
+      padding-right: max(1rem, env(safe-area-inset-right));
+      padding-left: max(1rem, env(safe-area-inset-left));
     }
 
-    .scroll-to-top {
-      right: max(20px, env(safe-area-inset-right) + 20px) !important;
-      bottom: max(20px, env(safe-area-inset-bottom) + 20px) !important;
+    body .scroll-to-top {
+      right: max(var(--mobile-safe-spacing), env(safe-area-inset-right) + var(--mobile-safe-spacing));
+      bottom: max(var(--mobile-safe-spacing), env(safe-area-inset-bottom) + var(--mobile-safe-spacing));
     }
   }
 
   @media (width <= 430px) {
-    .main-content {
+    body .main-content {
       padding-right: max(
         var(--space-3, 0.75rem),
         env(safe-area-inset-right)
-      ) !important;
+      );
       padding-bottom: max(
         var(--space-3, 0.75rem),
         env(safe-area-inset-bottom)
-      ) !important;
+      );
       padding-left: max(
         var(--space-3, 0.75rem),
         env(safe-area-inset-left)
-      ) !important;
+      );
     }
 
-    .scroll-to-top {
-      right: max(15px, env(safe-area-inset-right) + 15px) !important;
-      bottom: max(15px, env(safe-area-inset-bottom) + 15px) !important;
+    body .scroll-to-top {
+      right: max(var(--mobile-safe-spacing-small), env(safe-area-inset-right) + var(--mobile-safe-spacing-small));
+      bottom: max(var(--mobile-safe-spacing-small), env(safe-area-inset-bottom) + var(--mobile-safe-spacing-small));
     }
   }
 }
@@ -175,37 +188,37 @@
 /* Touch device optimizations */
 @media (hover: none) and (pointer: coarse) {
   /* Enhanced touch feedback for all interactive elements */
-  button:active,
-  input[type="button"]:active,
-  input[type="submit"]:active,
-  input[type="reset"]:active,
-  .btn:active,
-  .button:active,
-  .button-primary:active,
-  .button-secondary:active,
-  .nav-menu button:active,
-  .navbar__mobile-link:active,
-  .navbar__mobile-menu-button:active {
-    transform: scale(0.95) !important;
+  body button:active,
+  body input[type="button"]:active,
+  body input[type="submit"]:active,
+  body input[type="reset"]:active,
+  body .btn:active,
+  body .button:active,
+  body .button-primary:active,
+  body .button-secondary:active,
+  body .nav-menu button:active,
+  body .navbar__mobile-link:active,
+  body .navbar__mobile-menu-button:active {
+    transform: scale(0.95);
   }
 
   /* Ensure proper touch targets for all interactive elements */
-  button,
-  input[type="button"],
-  input[type="submit"],
-  input[type="reset"],
-  input[type="checkbox"],
-  input[type="radio"],
-  .btn,
-  .button,
-  .button-primary,
-  .button-secondary,
-  a[role="button"],
-  .nav-menu button,
-  .navbar__mobile-link,
-  .navbar__mobile-menu-button {
-    min-width: 48px !important;
-    min-height: 48px !important;
+  body button,
+  body input[type="button"],
+  body input[type="submit"],
+  body input[type="reset"],
+  body input[type="checkbox"],
+  body input[type="radio"],
+  body .btn,
+  body .button,
+  body .button-primary,
+  body .button-secondary,
+  body a[role="button"],
+  body .nav-menu button,
+  body .navbar__mobile-link,
+  body .navbar__mobile-menu-button {
+    min-width: var(--mobile-touch-target-min);
+    min-height: var(--mobile-touch-target-min);
   }
 }
 
@@ -213,14 +226,14 @@
 @media (prefers-contrast: more) {
   @media (width <= 768px) {
     /* Enhanced focus indicators for better accessibility */
-    button:focus,
-    input:focus,
-    .btn:focus,
-    .button:focus,
-    .nav-menu button:focus,
-    .navbar__mobile-link:focus {
-      outline: 3px solid var(--primary-color, #5a5cff) !important;
-      outline-offset: 2px !important;
+    body button:focus,
+    body input:focus,
+    body .btn:focus,
+    body .button:focus,
+    body .nav-menu button:focus,
+    body .navbar__mobile-link:focus {
+      outline: 3px solid var(--primary-color, #5a5cff);
+      outline-offset: 2px;
     }
   }
 }
@@ -229,23 +242,23 @@
 @media (prefers-reduced-motion: reduce) {
   @media (width <= 768px) {
     /* Remove animations for users who prefer reduced motion */
-    button,
-    input,
-    .btn,
-    .button,
-    .nav-menu button,
-    .navbar__mobile-link {
-      transition: none !important;
-      animation: none !important;
+    body button,
+    body input,
+    body .btn,
+    body .button,
+    body .nav-menu button,
+    body .navbar__mobile-link {
+      transition: none;
+      animation: none;
     }
 
-    button:hover,
-    input:hover,
-    .btn:hover,
-    .button:hover,
-    .nav-menu button:hover,
-    .navbar__mobile-link:hover {
-      transform: none !important;
+    body button:hover,
+    body input:hover,
+    body .btn:hover,
+    body .button:hover,
+    body .nav-menu button:hover,
+    body .navbar__mobile-link:hover {
+      transform: none;
     }
   }
 }
@@ -253,39 +266,39 @@
 /* Utility classes for mobile ergonomics */
 @media (width <= 768px) {
   .mobile\:touch-target {
-    min-width: 48px !important;
-    min-height: 48px !important;
+    min-width: var(--mobile-touch-target-min);
+    min-height: var(--mobile-touch-target-min);
   }
 
   .mobile\:touch-target-large {
-    min-width: 56px !important;
-    min-height: 56px !important;
+    min-width: var(--mobile-touch-target-large);
+    min-height: var(--mobile-touch-target-large);
   }
 
   .mobile\:safe-spacing {
-    padding-bottom: 80px !important;
-    margin-top: 80px !important;
+    padding-bottom: var(--mobile-content-padding);
+    margin-top: var(--mobile-content-padding);
   }
 
   .mobile\:enhanced-touch {
-    min-width: 48px !important;
-    min-height: 48px !important;
-    padding: var(--space-3, 0.75rem) var(--space-4, 1rem) !important;
+    min-width: var(--mobile-touch-target-min);
+    min-height: var(--mobile-touch-target-min);
+    padding: var(--space-3, 0.75rem) var(--space-4, 1rem);
   }
 }
 
 /* Landscape mobile optimizations */
 @media screen and (width <= 768px) and (orientation: landscape) {
-  .main-content {
-    margin-top: 70px !important; /* Reduced margin for landscape */
+  body .main-content {
+    margin-top: 70px; /* Reduced margin for landscape */
   }
 
-  .navbar {
-    height: 65px !important; /* Standard height for landscape */
+  body .navbar {
+    height: var(--mobile-navbar-height-small); /* Standard height for landscape */
   }
 
-  .scroll-to-top {
-    right: 15px !important; /* Adjusted for landscape */
-    bottom: 15px !important; /* Adjusted for landscape */
+  body .scroll-to-top {
+    right: var(--mobile-safe-spacing-small); /* Adjusted for landscape */
+    bottom: var(--mobile-safe-spacing-small); /* Adjusted for landscape */
   }
 }

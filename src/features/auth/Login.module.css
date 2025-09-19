@@ -1,10 +1,15 @@
 /* Additional global styles to ensure proper scrolling */
+
+/* Using CSS containment and proper cascade instead of !important */
 :global(body.login-page) {
-  height: auto !important;
-  min-height: 100vh !important;
+  height: auto;
+  min-height: 100vh;
+
+  /* Use CSS containment for better performance */
+  contain: layout style;
 
   /* Ensure body can scroll normally */
-  overflow: auto !important;
+  overflow: auto;
 }
 
 :global(body.login-page::-webkit-scrollbar) {
@@ -14,8 +19,11 @@
 
 /* Ensure html element can also scroll */
 :global(html.login-page) {
-  height: auto !important;
-  overflow: auto !important;
+  height: auto;
+
+  /* Use CSS containment for better performance */
+  contain: layout style;
+  overflow: auto;
 }
 
 /* Login Component - Centered Hero Design */
