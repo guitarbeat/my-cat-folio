@@ -2278,13 +2278,6 @@ h1 {
 
 /* Duplicate reduced motion section removed - handled above with CSS custom properties */
 
-  .main-content,
-  .main-content.sidebar-open {
-    filter: none;
-    transition: none;
-  }
-}
-
 /* Add global loading overlay */
 .global-loading-overlay {
   position: fixed;

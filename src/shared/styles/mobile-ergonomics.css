@@ -19,6 +19,7 @@
 /* Global touch target improvements */
 @media (width <= 768px) {
   /* Ensure all interactive elements meet touch target requirements */
+
   /* Using higher specificity instead of !important */
   body button,
   body input[type="button"],

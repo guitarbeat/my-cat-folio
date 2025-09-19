@@ -68,7 +68,7 @@
   padding: 0.5rem 1rem;
   font-size: 0.875rem;
   font-weight: 500;
-  color: var(--bulk-button-text, #ffffff);
+  color: var(--bulk-button-text, #fff);
   cursor: pointer;
   background: var(--bulk-button-bg, #3b82f6);
   border: 1px solid var(--bulk-button-border, #2563eb);
@@ -86,8 +86,8 @@
 }
 
 .bulkActionButton:disabled {
-  opacity: 0.5;
   cursor: not-allowed;
+  opacity: 0.5;
 }
 
 /* * Names Grid Layout - Increased card sizes for better description visibility */
@@ -280,8 +280,8 @@
 
   .headerControls {
     flex-direction: column;
-    align-items: flex-start;
     gap: 0.75rem;
+    align-items: flex-start;
   }
 
   .bulkControls {
@@ -372,7 +372,7 @@
   }
 
   .bulkActionButton {
-    --bulk-button-text: #ffffff;
+    --bulk-button-text: #fff;
     --bulk-button-bg: #2563eb;
     --bulk-button-border: #1d4ed8;
     --bulk-button-bg-hover: #1d4ed8;
@@ -434,7 +434,7 @@
 }
 
 .bulkActionButton {
-  --bulk-button-text: #ffffff;
+  --bulk-button-text: #fff;
   --bulk-button-bg: #3b82f6;
   --bulk-button-border: #2563eb;
   --bulk-button-bg-hover: #2563eb;
