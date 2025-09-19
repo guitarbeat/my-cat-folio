@@ -11,6 +11,7 @@ function StatsCard({
   label,
   value,
   emoji,
+  variant = 'default',
   className = '',
   labelClassName = '',
   valueClassName = '',
@@ -18,9 +19,15 @@ function StatsCard({
   ...props
 }) {
   const labelText = title || label;
+  const cardClasses = [
+    styles.card,
+    variant !== 'default' && styles[variant],
+    className
+  ].filter(Boolean).join(' ');
+
   return (
     <div
-      className={`${styles.card} ${className}`.trim()}
+      className={cardClasses}
       role="status"
       aria-label={`${labelText}: ${value}`}
       {...props}

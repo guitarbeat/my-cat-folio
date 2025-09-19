@@ -322,6 +322,8 @@ function Results({
           <StatsCard
             title="Total Names"
             value={currentRankings.length}
+            emoji="📊"
+            variant="primary"
             className={styles.statCard}
             valueClassName={styles.statValue}
           />
