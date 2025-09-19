@@ -40,8 +40,6 @@ const ProfileStats = ({
 
   const {
     total,
-    wins,
-    losses,
     winRate,
     avgRating,
     ratingSpread,
