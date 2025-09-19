@@ -1,13 +1,16 @@
 /* WelcomeScreen.module.css */
 
 /* Additional global styles to ensure proper scrolling */
+/* Using CSS containment and higher specificity instead of !important */
 :global(body.welcome-page) {
-  height: 100vh !important;
-  min-height: 100vh !important;
-  max-height: 100vh !important;
-  overflow: hidden !important;
-  margin: 0 !important;
-  padding: 0 !important;
+  height: 100vh;
+  min-height: 100vh;
+  max-height: 100vh;
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+  /* Use CSS containment to isolate the welcome page */
+  contain: layout style paint;
 }
 
 :global(body.welcome-page::-webkit-scrollbar) {
@@ -17,10 +20,12 @@
 
 /* Ensure html element can also scroll */
 :global(html.welcome-page) {
-  height: 100vh !important;
-  overflow: hidden !important;
-  margin: 0 !important;
-  padding: 0 !important;
+  height: 100vh;
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+  /* Use CSS containment for better performance */
+  contain: layout style;
 }
 
 .welcomeWrapper {

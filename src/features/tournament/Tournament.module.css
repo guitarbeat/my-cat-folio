@@ -724,8 +724,8 @@
   .tournament *,
   .modal,
   .modalBackdrop {
-    transition: none !important;
-    animation: none !important;
+    transition: none;
+    animation: none;
   }
 
   .nameContainer.selected {
