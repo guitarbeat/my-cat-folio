@@ -79,7 +79,7 @@ function WelcomeScreen({ onContinue, catName }) {
 
           <div className={styles.catNameSection}>
             <h2 className={styles.catNameTitle}>
-              My cat's name is:
+              My cat&apos;s name is:
             </h2>
             <div className={styles.catNameDisplay}>
               <span className={styles.catNameText}>
