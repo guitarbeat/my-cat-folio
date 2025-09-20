@@ -21,17 +21,23 @@ function WelcomeScreen({ onContinue, catName, nameStats = [], isTransitioning = 
   const animationFrameRef = useRef(null);
 
   // Particle system for enhanced visual appeal
-  const createParticle = useCallback(() => ({
-    id: Math.random(),
-    x: Math.random() * window.innerWidth,
-    y: Math.random() * window.innerHeight,
-    vx: (Math.random() - 0.5) * 0.5,
-    vy: (Math.random() - 0.5) * 0.5,
-    size: Math.random() * 3 + 1,
-    opacity: Math.random() * 0.5 + 0.2,
-    life: 1,
-    decay: Math.random() * 0.02 + 0.01
-  }), []);
+  const createParticle = useCallback(() => {
+    // Reduce particle count on mobile for better performance
+    const isMobile = window.innerWidth <= 768;
+    const particleCount = isMobile ? 10 : 20;
+    
+    return {
+      id: Math.random(),
+      x: Math.random() * window.innerWidth,
+      y: Math.random() * window.innerHeight,
+      vx: (Math.random() - 0.5) * (isMobile ? 0.3 : 0.5),
+      vy: (Math.random() - 0.5) * (isMobile ? 0.3 : 0.5),
+      size: Math.random() * (isMobile ? 2 : 3) + 1,
+      opacity: Math.random() * (isMobile ? 0.3 : 0.5) + 0.2,
+      life: 1,
+      decay: Math.random() * 0.02 + 0.01
+    };
+  }, []);
 
   const animateParticles = useCallback(() => {
     setParticles(prevParticles =>
@@ -53,8 +59,10 @@ function WelcomeScreen({ onContinue, catName, nameStats = [], isTransitioning = 
     document.body.classList.add('welcome-page');
     document.documentElement.classList.add('welcome-page');
 
-    // Initialize particles
-    const initialParticles = Array.from({ length: 20 }, createParticle);
+    // Initialize particles with mobile optimization
+    const isMobile = window.innerWidth <= 768;
+    const particleCount = isMobile ? 10 : 20;
+    const initialParticles = Array.from({ length: particleCount }, createParticle);
     setParticles(initialParticles);
 
     // Animate in after a brief delay
@@ -63,9 +71,13 @@ function WelcomeScreen({ onContinue, catName, nameStats = [], isTransitioning = 
       setShowCelebration(true);
     }, 100);
 
-    // Start particle animation
+    // Start particle animation with mobile optimization
     const animate = () => {
-      animateParticles();
+      // Reduce animation frequency on mobile
+      const isMobile = window.innerWidth <= 768;
+      if (!isMobile || Math.random() < 0.7) {
+        animateParticles();
+      }
       animationFrameRef.current = requestAnimationFrame(animate);
     };
     animationFrameRef.current = requestAnimationFrame(animate);
@@ -87,9 +99,9 @@ function WelcomeScreen({ onContinue, catName, nameStats = [], isTransitioning = 
     setIsAnimating(true);
     setShowProgress(true);
 
-    // Add haptic feedback if available
+    // Enhanced haptic feedback for mobile
     if (navigator.vibrate) {
-      navigator.vibrate([50, 100, 50]);
+      navigator.vibrate([100, 50, 100, 50, 100]);
     }
 
     // Play sound effect if available
@@ -107,6 +119,19 @@ function WelcomeScreen({ onContinue, catName, nameStats = [], isTransitioning = 
     setTimeout(() => {
       onContinue();
     }, 800);
+  };
+
+  // Handle mobile-specific button interactions
+  const handleButtonTouchStart = (event) => {
+    event.target.style.transform = 'scale(0.98)';
+  };
+
+  const handleButtonTouchEnd = (event) => {
+    event.target.style.transform = 'scale(1)';
+  };
+
+  const handleButtonTouchCancel = (event) => {
+    event.target.style.transform = 'scale(1)';
   };
 
   // Handle mouse events for interactive names
@@ -140,16 +165,29 @@ function WelcomeScreen({ onContinue, catName, nameStats = [], isTransitioning = 
 
     // Add haptic feedback for touch
     if (navigator.vibrate) {
-      navigator.vibrate(50);
+      navigator.vibrate([30, 50, 30]);
     }
+    
+    // Add visual feedback
+    event.target.style.transform = 'scale(0.95)';
   };
 
   const handleNameTouchEnd = (event) => {
     event.preventDefault();
+    // Reset visual feedback
+    event.target.style.transform = 'scale(1)';
+    
     // Delay hiding to allow user to see the tooltip
     setTimeout(() => {
       setHoveredName(null);
-    }, 2000);
+    }, 3000);
+  };
+
+  const handleNameTouchCancel = (event) => {
+    event.preventDefault();
+    // Reset visual feedback
+    event.target.style.transform = 'scale(1)';
+    setHoveredName(null);
   };
 
   // Create individual name components from the cat name
@@ -231,6 +269,7 @@ function WelcomeScreen({ onContinue, catName, nameStats = [], isTransitioning = 
           onMouseLeave={handleNameMouseLeave}
           onTouchStart={(e) => handleNameTouchStart(nameData, e)}
           onTouchEnd={handleNameTouchEnd}
+          onTouchCancel={handleNameTouchCancel}
           title={`Tap to see stats for ${nameData.name}`}
           aria-label={`Interactive name: ${nameData.name}. Rating: ${nameData.rating}, Win rate: ${nameData.winRate}%. Tap to view detailed statistics.`}
           role="button"
@@ -356,6 +395,9 @@ function WelcomeScreen({ onContinue, catName, nameStats = [], isTransitioning = 
         <div className={`${styles.actionSection} ${showCelebration ? styles.actionSectionCelebration : ''}`}>
           <button
             onClick={handleContinue}
+            onTouchStart={handleButtonTouchStart}
+            onTouchEnd={handleButtonTouchEnd}
+            onTouchCancel={handleButtonTouchCancel}
             className={`${styles.continueButton} ${showCelebration ? styles.continueButtonCelebration : ''}`}
             disabled={isAnimating}
             aria-label={isAnimating ? 'Entering tournament, please wait' : 'Start the tournament'}
