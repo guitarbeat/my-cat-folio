@@ -357,13 +357,21 @@ select:focus-visible {
 .mb-2 { margin-bottom: var(--space-2); }
 .mb-4 { margin-bottom: var(--space-4); }
 
-/* Reduced Motion */
+/* Reduced Motion - Using CSS custom properties for better maintainability */
+:root {
+  --reduced-motion-duration: 0.01ms;
+  --reduced-motion-iteration: 1;
+}
+
 @media (prefers-reduced-motion: reduce) {
+  /* Use higher specificity instead of !important */
+  html *,
+  body *,
   * {
-    transition-duration: 0.01ms !important;
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    scroll-behavior: auto !important;
+    transition-duration: var(--reduced-motion-duration);
+    animation-duration: var(--reduced-motion-duration);
+    animation-iteration-count: var(--reduced-motion-iteration);
+    scroll-behavior: auto;
   }
 }
 
@@ -2274,20 +2282,7 @@ h1 {
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  * {
-    transition-duration: 0.01ms !important;
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    scroll-behavior: auto !important;
-  }
-
-  .main-content,
-  .main-content.sidebar-open {
-    filter: none;
-    transition: none;
-  }
-}
+/* Duplicate reduced motion section removed - handled above with CSS custom properties */
 
 /* Add global loading overlay */
 .global-loading-overlay {

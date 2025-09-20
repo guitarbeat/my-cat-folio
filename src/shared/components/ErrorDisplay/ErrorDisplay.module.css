@@ -29,7 +29,6 @@
 }
 
 .clearAllButton {
-  
   color: #fff;
   background: var(--error-500);
   border-color: var(--error-600);
@@ -144,7 +143,6 @@
 .retryButton,
 .dismissButton,
 .detailsButton {
-  
   min-width: 60px;
   font-size: 0.8rem;
 }

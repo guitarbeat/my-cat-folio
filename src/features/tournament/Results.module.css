@@ -1,5 +1,4 @@
 .container {
-  
   position: relative;
   z-index: var(--z-0);
   width: 100%;
@@ -85,12 +84,12 @@
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 1.5rem;
-  margin: 2rem 0;
   padding: 1rem;
+  margin: 2rem 0;
   background: linear-gradient(135deg, 
-    rgba(255, 255, 255, 0.05) 0%, 
-    rgba(255, 255, 255, 0.02) 100%);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+    rgb(255 255 255 / 5%) 0%, 
+    rgb(255 255 255 / 2%) 100%);
+  border: 1px solid rgb(255 255 255 / 10%);
   border-radius: 16px;
   backdrop-filter: blur(10px);
 }
@@ -129,7 +128,6 @@
 }
 
 .startNewButton {
-  
   display: inline-flex;
   gap: var(--space-2);
   align-items: center;
@@ -196,7 +194,6 @@
 }
 
 .tournamentBracket {
-  
   position: relative;
   padding: var(--space-8);
   margin: var(--space-8) 0;
@@ -395,7 +392,6 @@
 
 /* Tournament Bracket */
 .bracketContainer {
-  
   padding: var(--space-4);
   margin-bottom: var(--space-6);
   overflow-x: auto;
@@ -410,7 +406,6 @@
 }
 
 .actionButton {
-  
   min-width: 200px;
 }
 

@@ -412,10 +412,10 @@
   *,
   *::before,
   *::after {
-    transition-duration: 0.01ms !important;
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    scroll-behavior: auto !important;
+    transition-duration: var(--reduced-motion-duration, 0.01ms);
+    animation-duration: var(--reduced-motion-duration, 0.01ms);
+    animation-iteration-count: var(--reduced-motion-iteration, 1);
+    scroll-behavior: auto;
   }
 }
 

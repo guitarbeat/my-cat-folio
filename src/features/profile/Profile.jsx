@@ -429,20 +429,20 @@ const Profile = ({ userName, onStartNewTournament }) => {
         }
 
         const result = await hiddenNamesAPI.hideNames(userName, nameIds);
-        
+
         if (result.success) {
           showSuccess(`Hidden ${result.processed} name${result.processed !== 1 ? 's' : ''}`);
-          
+
           // Update local state optimistically
           setHiddenNames((prev) => {
             const newSet = new Set(prev);
             nameIds.forEach(id => newSet.add(id));
             return newSet;
           });
-          
+
           // Clear selection
           setSelectedNames(new Set());
-          
+
           // Refresh data
           fetchNames();
         } else {
@@ -471,20 +471,20 @@ const Profile = ({ userName, onStartNewTournament }) => {
         }
 
         const result = await hiddenNamesAPI.unhideNames(userName, nameIds);
-        
+
         if (result.success) {
           showSuccess(`Unhidden ${result.processed} name${result.processed !== 1 ? 's' : ''}`);
-          
+
           // Update local state optimistically
           setHiddenNames((prev) => {
             const newSet = new Set(prev);
             nameIds.forEach(id => newSet.delete(id));
             return newSet;
           });
-          
+
           // Clear selection
           setSelectedNames(new Set());
-          
+
           // Refresh data
           fetchNames();
         } else {

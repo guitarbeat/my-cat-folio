@@ -730,8 +730,8 @@
 @media (prefers-reduced-motion: reduce) {
   .navbar,
   .navbar * {
-    transition: none !important;
-    animation: none !important;
+    transition: none;
+    animation: none;
   }
 }
 

@@ -1,13 +1,18 @@
 /* WelcomeScreen.module.css */
 
 /* Additional global styles to ensure proper scrolling */
+
+/* Using CSS containment and higher specificity instead of !important */
 :global(body.welcome-page) {
-  height: 100vh !important;
-  min-height: 100vh !important;
-  max-height: 100vh !important;
-  overflow: hidden !important;
-  margin: 0 !important;
-  padding: 0 !important;
+  height: 100vh;
+  min-height: 100vh;
+  max-height: 100vh;
+  padding: 0;
+  margin: 0;
+
+  /* Use CSS containment to isolate the welcome page */
+  contain: layout style paint;
+  overflow: hidden;
 }
 
 :global(body.welcome-page::-webkit-scrollbar) {
@@ -17,27 +22,30 @@
 
 /* Ensure html element can also scroll */
 :global(html.welcome-page) {
-  height: 100vh !important;
-  overflow: hidden !important;
-  margin: 0 !important;
-  padding: 0 !important;
+  height: 100vh;
+  padding: 0;
+  margin: 0;
+
+  /* Use CSS containment for better performance */
+  contain: layout style;
+  overflow: hidden;
 }
 
 .welcomeWrapper {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100vw;
-  height: 100vh;
-  min-height: 100vh;
   z-index: 1000;
   display: flex;
   align-items: center;
   justify-content: center;
+  width: 100vw;
+  height: 100vh;
+  min-height: 100vh;
+  overflow: hidden;
   opacity: 0;
   transform: translateY(20px);
   transition: opacity 0.6s ease-out, transform 0.6s ease-out;
-  overflow: hidden;
 }
 
 .welcomeWrapper.visible {
@@ -61,9 +69,9 @@
   position: absolute;
   top: 0;
   left: 0;
+  z-index: -2;
   width: 100%;
   height: 100%;
-  z-index: -2;
 }
 
 .backgroundImage {
@@ -77,28 +85,28 @@
   position: absolute;
   top: 0;
   left: 0;
+  z-index: -1;
   width: 100%;
   height: 100%;
   background: linear-gradient(
     135deg,
-    rgba(0, 0, 0, 0.7) 0%,
-    rgba(0, 0, 0, 0.4) 50%,
-    rgba(0, 0, 0, 0.8) 100%
+    rgb(0 0 0 / 70%) 0%,
+    rgb(0 0 0 / 40%) 50%,
+    rgb(0 0 0 / 80%) 100%
   );
-  z-index: -1;
 }
 
 .contentContainer {
-  width: 100%;
-  max-width: min(90vw, 600px);
-  min-width: 320px;
-  padding: clamp(1rem, 4vw, 3rem);
+  position: relative;
+  z-index: 1;
   display: flex;
   flex-direction: column;
   gap: clamp(1.5rem, 3vw, 2.5rem);
-  position: relative;
-  z-index: 1;
+  width: 100%;
+  min-width: 320px;
+  max-width: min(90vw, 600px);
   max-height: 90vh;
+  padding: clamp(1rem, 4vw, 3rem);
   overflow-y: auto;
   scroll-behavior: smooth;
   -webkit-overflow-scrolling: touch;
@@ -110,44 +118,44 @@
 }
 
 .contentContainer::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgb(255 255 255 / 10%);
   border-radius: 3px;
 }
 
 .contentContainer::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.3);
+  background: rgb(255 255 255 / 30%);
   border-radius: 3px;
 }
 
 .contentContainer::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.5);
+  background: rgb(255 255 255 / 50%);
 }
 
 .mainContent {
-  text-align: center;
   display: flex;
   flex-direction: column;
-  align-items: center;
   gap: 1.5rem;
+  align-items: center;
+  text-align: center;
 }
 
 .welcomeTitle {
+  margin: 0;
   font-family: 'Comic Neue', cursive;
   font-size: clamp(1.75rem, 5vw, 3rem);
   font-weight: 700;
-  color: #ffffff;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
-  margin: 0;
   line-height: 1.2;
+  color: #fff;
+  text-shadow: 2px 2px 4px rgb(0 0 0 / 80%);
 }
 
 .catImage {
   width: clamp(80px, 15vw, 150px);
   height: clamp(80px, 15vw, 150px);
-  border-radius: 50%;
   object-fit: cover;
-  border: 4px solid rgba(255, 255, 255, 0.9);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  border: 4px solid rgb(255 255 255 / 90%);
+  border-radius: 50%;
+  box-shadow: 0 8px 32px rgb(0 0 0 / 30%);
   transition: transform 0.3s ease;
 }
 
@@ -163,62 +171,66 @@
 }
 
 .catNameTitle {
+  margin: 0;
   font-family: 'Josefin Slab', serif;
   font-size: clamp(1.3rem, 3.5vw, 2.2rem);
   font-weight: 600;
-  color: #ffffff;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
-  margin: 0;
+  color: #fff;
+  text-shadow: 1px 1px 2px rgb(0 0 0 / 80%);
 }
 
 .catNameDisplay {
-  background: rgba(255, 255, 255, 0.95);
-  border-radius: 15px;
   padding: clamp(1rem, 3vw, 2rem);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-  backdrop-filter: blur(10px);
-  border: 2px solid rgba(255, 255, 255, 0.3);
   margin: clamp(0.5rem, 2vw, 1.5rem) 0;
+  background: rgb(255 255 255 / 95%);
+  border: 2px solid rgb(255 255 255 / 30%);
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgb(0 0 0 / 30%);
+  backdrop-filter: blur(10px);
 }
 
 .catNameText {
+  display: block;
   font-family: 'Comic Neue', cursive;
   font-size: clamp(1.1rem, 2.5vw, 1.6rem);
   font-weight: 700;
-  color: #2c3e50;
   line-height: 1.3;
+  color: #2c3e50;
   overflow-wrap: anywhere;
-  display: block;
 }
 
 .catNameSubtext {
-  font-size: clamp(0.85rem, 2vw, 1.1rem);
-  color: rgba(255, 255, 255, 0.9);
   margin: 0;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.6);
+  font-size: clamp(0.85rem, 2vw, 1.1rem);
   line-height: 1.4;
+  color: rgb(255 255 255 / 90%);
+  text-shadow: 1px 1px 2px rgb(0 0 0 / 60%);
 }
 
 .actionSection {
-  background: rgba(255, 255, 255, 0.95);
-  border-radius: 20px;
   padding: clamp(1.5rem, 4vw, 2.5rem);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
   text-align: center;
+  background: rgb(255 255 255 / 95%);
+  border: 1px solid rgb(255 255 255 / 20%);
+  border-radius: 20px;
+  box-shadow: 0 20px 40px rgb(0 0 0 / 30%);
+  backdrop-filter: blur(10px);
 }
 
 .continueButton {
+  position: relative;
   width: 100%;
   padding: clamp(1rem, 2.5vw, 1.5rem) clamp(1.5rem, 4vw, 2.5rem);
+  margin-bottom: clamp(1rem, 2.5vw, 1.5rem);
+  overflow: hidden;
   font-size: clamp(1rem, 2.5vw, 1.4rem);
   font-weight: 700;
-  color: #ffffff;
+  color: #fff;
+  cursor: pointer;
   background: linear-gradient(135deg, #e74c3c, #c0392b);
   border: none;
   border-radius: 15px;
-  cursor: pointer;
+  box-shadow: 0 6px 20px rgb(231 76 60 / 40%);
   transition: all 0.3s ease;
   box-shadow: 0 6px 20px rgba(231, 76, 60, 0.4);
   position: relative;
@@ -234,30 +246,31 @@
   50% {
     box-shadow: 0 8px 25px rgba(231, 76, 60, 0.6);
   }
+
 }
 
 .continueButton:hover:not(:disabled) {
-  transform: translateY(-3px);
-  box-shadow: 0 8px 25px rgba(231, 76, 60, 0.5);
   background: linear-gradient(135deg, #c0392b, #a93226);
+  box-shadow: 0 8px 25px rgb(231 76 60 / 50%);
+  transform: translateY(-3px);
 }
 
 .continueButton:active:not(:disabled) {
+  box-shadow: 0 4px 15px rgb(231 76 60 / 40%);
   transform: translateY(-1px);
-  box-shadow: 0 4px 15px rgba(231, 76, 60, 0.4);
 }
 
 .continueButton:disabled {
-  opacity: 0.7;
   cursor: not-allowed;
+  opacity: 0.7;
   transform: none;
 }
 
 .buttonContent {
   display: flex;
+  gap: 0.75rem;
   align-items: center;
   justify-content: center;
-  gap: 0.75rem;
 }
 
 .buttonEmoji {
@@ -266,26 +279,26 @@
 
 .explanationText {
   padding: 1rem;
-  background: rgba(52, 152, 219, 0.1);
+  background: rgb(52 152 219 / 10%);
+  border: 1px solid rgb(52 152 219 / 20%);
   border-radius: 12px;
-  border: 1px solid rgba(52, 152, 219, 0.2);
 }
 
 .explanationText p {
-  font-size: 0.95rem;
-  color: #2c3e50;
   margin: 0;
-  line-height: 1.5;
+  font-size: 0.95rem;
   font-style: italic;
+  line-height: 1.5;
+  color: #2c3e50;
 }
 
 /* Enhanced Responsive Design */
 
 /* Large screens and ultra-wide displays */
-@media (min-width: 1400px) {
+@media (width >= 1400px) {
   .contentContainer {
-    max-width: min(80vw, 800px);
     gap: clamp(2rem, 4vw, 3rem);
+    max-width: min(80vw, 800px);
   }
   
   .welcomeTitle {
@@ -299,7 +312,7 @@
 }
 
 /* Tablets and medium screens */
-@media (max-width: 1024px) and (min-width: 769px) {
+@media (width <= 1024px) and (width >= 769px) {
   .contentContainer {
     max-width: min(85vw, 550px);
     padding: clamp(1.5rem, 3vw, 2.5rem);
@@ -307,20 +320,20 @@
 }
 
 /* Mobile landscape and small tablets */
-@media (max-width: 768px) {
+@media (width <= 768px) {
   .contentContainer {
+    gap: clamp(1.25rem, 2.5vw, 2rem);
     max-width: min(90vw, 500px);
     padding: clamp(1rem, 3vw, 2rem);
-    gap: clamp(1.25rem, 2.5vw, 2rem);
   }
 }
 
 /* Mobile portrait */
-@media (max-width: 480px) {
+@media (width <= 480px) {
   .contentContainer {
+    gap: clamp(1rem, 2vw, 1.5rem);
     max-width: 95vw;
     padding: clamp(0.75rem, 2vw, 1.5rem);
-    gap: clamp(1rem, 2vw, 1.5rem);
   }
   
   .stepIndicator {
@@ -345,11 +358,11 @@
 }
 
 /* Very small screens */
-@media (max-width: 320px) {
+@media (width <= 320px) {
   .contentContainer {
+    gap: 1rem;
     max-width: 98vw;
     padding: 0.5rem;
-    gap: 1rem;
   }
   
   .welcomeTitle {
@@ -371,10 +384,10 @@
 }
 
 /* Tall screens (portrait orientation) */
-@media (max-height: 600px) and (orientation: portrait) {
+@media (height <= 600px) and (orientation: portrait) {
   .contentContainer {
-    max-height: 95vh;
     gap: clamp(0.75rem, 2vh, 1.5rem);
+    max-height: 95vh;
   }
   
   .welcomeTitle {
@@ -388,15 +401,15 @@
 }
 
 /* Landscape orientation on mobile */
-@media (max-height: 500px) and (orientation: landscape) {
+@media (height <= 500px) and (orientation: landscape) {
   .welcomeWrapper {
     align-items: flex-start;
     padding-top: 2vh;
   }
   
   .contentContainer {
-    max-height: 96vh;
     gap: clamp(0.5rem, 1.5vh, 1rem);
+    max-height: 96vh;
   }
   
   .mainContent {
@@ -411,13 +424,13 @@
 
 /* Dark theme support */
 :global(.dark-theme) .actionSection {
-  background: rgba(30, 30, 30, 0.95);
-  border-color: rgba(255, 255, 255, 0.1);
+  background: rgb(30 30 30 / 95%);
+  border-color: rgb(255 255 255 / 10%);
 }
 
 :global(.dark-theme) .catNameDisplay {
-  background: rgba(30, 30, 30, 0.95);
-  border-color: rgba(255, 255, 255, 0.2);
+  background: rgb(30 30 30 / 95%);
+  border-color: rgb(255 255 255 / 20%);
 }
 
 :global(.dark-theme) .catNameText {
@@ -425,8 +438,8 @@
 }
 
 :global(.dark-theme) .explanationText {
-  background: rgba(52, 152, 219, 0.15);
-  border-color: rgba(52, 152, 219, 0.3);
+  background: rgb(52 152 219 / 15%);
+  border-color: rgb(52 152 219 / 30%);
 }
 
 :global(.dark-theme) .explanationText p {
