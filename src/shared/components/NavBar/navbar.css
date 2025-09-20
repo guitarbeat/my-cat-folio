@@ -53,11 +53,11 @@
   max-width: 1800px;
   height: 100%;
   padding: 0 1.5rem;
-  margin: 0 auto;
   padding-right: max(1.5rem, env(safe-area-inset-right));
 
   /* Ensure content respects safe area insets */
   padding-left: max(1.5rem, env(safe-area-inset-left));
+  margin: 0 auto;
 }
 
 /* Desktop Navigation */
