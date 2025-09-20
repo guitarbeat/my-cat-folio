@@ -719,12 +719,65 @@
   }
 }
 
+/* Mobile-specific improvements */
+@media (width <= 768px) {
+  /* Improve scrolling on mobile */
+  .contentContainer {
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+  }
+  
+  /* Better touch targets */
+  .interactiveName {
+    min-height: 32px;
+    min-width: 36px;
+    padding: 4px 6px;
+  }
+  
+  .continueButton {
+    min-height: 48px;
+  }
+  
+  /* Improve text readability */
+  .catNameText {
+    line-height: 1.4;
+  }
+  
+  .catNameSubtext {
+    line-height: 1.5;
+  }
+  
+  /* Add subtle mobile-specific visual feedback */
+  .interactiveName {
+    -webkit-tap-highlight-color: rgb(232 191 118 / 20%);
+  }
+  
+  .continueButton {
+    -webkit-tap-highlight-color: rgb(231 76 60 / 20%);
+  }
+  
+  /* Improve button press feedback */
+  .continueButton:active {
+    background: linear-gradient(135deg, #c0392b, #a93226);
+    box-shadow: 0 4px 15px rgb(231 76 60 / 40%);
+  }
+  
+  /* Better spacing for mobile content */
+  .mainContent {
+    gap: clamp(1.25rem, 3vw, 2rem);
+  }
+  
+  .catNameSection {
+    gap: clamp(0.75rem, 2vw, 1.25rem);
+  }
+}
+
 /* Mobile portrait */
 @media (width <= 480px) {
   .contentContainer {
-    gap: clamp(1rem, 2vw, 1.5rem);
+    gap: clamp(1.2rem, 2.5vw, 1.8rem);
     max-width: 95vw;
-    padding: clamp(0.75rem, 2vw, 1.5rem);
+    padding: clamp(1rem, 2.5vw, 1.8rem);
   }
   
   .particle {
@@ -738,45 +791,79 @@
   }
   
   .catImageContainer {
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.75rem;
   }
   
   .catImage {
-    width: clamp(60px, 12vw, 100px);
-    height: clamp(60px, 12vw, 100px);
+    width: clamp(70px, 14vw, 110px);
+    height: clamp(70px, 14vw, 110px);
+    border-width: 3px;
   }
   
   .catNameTitle {
-    font-size: clamp(1.1rem, 3vw, 1.8rem);
+    font-size: clamp(1.2rem, 3.2vw, 1.9rem);
+    margin-bottom: 0.5rem;
   }
   
   .titleSparkle {
-    font-size: 1em;
+    font-size: 1.1em;
   }
   
   .catNameDisplay {
-    padding: clamp(0.75rem, 2.5vw, 1.5rem);
-    border-radius: 15px;
+    padding: clamp(1rem, 3vw, 1.75rem);
+    border-radius: 18px;
+    margin: clamp(0.75rem, 2.5vw, 1.25rem) 0;
   }
   
   .catNameText {
-    font-size: clamp(1rem, 2.2vw, 1.4rem);
+    font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+    line-height: 1.4;
+  }
+  
+  .catNameSubtext {
+    font-size: clamp(0.9rem, 2.2vw, 1.15rem);
+    line-height: 1.5;
+    margin-top: 0.5rem;
   }
   
   .actionSection {
-    padding: clamp(1rem, 3vw, 2rem);
-    border-radius: 20px;
+    padding: clamp(1.25rem, 3.5vw, 2.25rem);
+    border-radius: 22px;
   }
   
   .continueButton {
-    padding: clamp(0.875rem, 2.2vw, 1.25rem) clamp(1.25rem, 3.5vw, 2rem);
-    font-size: clamp(0.9rem, 2.2vw, 1.2rem);
-    border-radius: 15px;
+    padding: clamp(1rem, 2.8vw, 1.4rem) clamp(1.5rem, 4vw, 2.25rem);
+    font-size: clamp(1rem, 2.5vw, 1.3rem);
+    border-radius: 18px;
+    min-height: 48px; /* Ensure minimum touch target size */
   }
   
   .interactiveName {
-    padding: 1px 2px;
-    margin: 0 0.5px;
+    padding: 4px 6px;
+    margin: 0 1px;
+    min-height: 32px; /* Better touch target */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+  }
+  
+  .buttonContent {
+    gap: 0.5rem;
+  }
+  
+  .buttonEmoji {
+    font-size: 1.2rem;
+  }
+  
+  .explanationText {
+    padding: 0.875rem;
+    margin-top: 0.5rem;
+  }
+  
+  .explanationText p {
+    font-size: 0.9rem;
+    line-height: 1.6;
   }
   
   /* Reduce animations on mobile for better performance */
@@ -795,28 +882,79 @@
   .buttonEmoji {
     animation-duration: 1.5s;
   }
+  
+  /* Improve touch interactions */
+  .continueButton:active {
+    transform: translateY(-1px) scale(0.98);
+  }
+  
+  .interactiveName:active {
+    transform: scale(0.95);
+  }
 }
 
 /* Very small screens */
 @media (width <= 320px) {
   .contentContainer {
-    gap: 1rem;
+    gap: 1.1rem;
     max-width: 98vw;
-    padding: 0.5rem;
+    padding: 0.75rem;
   }
   
-  
   .catImage {
-    width: 70px;
-    height: 70px;
+    width: 75px;
+    height: 75px;
+    border-width: 2px;
   }
   
   .catNameTitle {
-    font-size: 1.2rem;
+    font-size: 1.3rem;
+    margin-bottom: 0.25rem;
   }
   
   .catNameText {
+    font-size: 1.1rem;
+    line-height: 1.3;
+  }
+  
+  .catNameDisplay {
+    padding: 0.875rem;
+    border-radius: 15px;
+  }
+  
+  .actionSection {
+    padding: 1rem;
+    border-radius: 18px;
+  }
+  
+  .continueButton {
+    padding: 0.875rem 1.25rem;
     font-size: 1rem;
+    min-height: 44px;
+  }
+  
+  .interactiveName {
+    padding: 3px 5px;
+    min-height: 28px;
+    font-size: 0.95rem;
+  }
+  
+  .explanationText {
+    padding: 0.75rem;
+  }
+  
+  .explanationText p {
+    font-size: 0.85rem;
+  }
+  
+  /* Ensure minimum touch targets on very small screens */
+  .interactiveName {
+    min-height: 32px;
+    min-width: 36px;
+  }
+  
+  .continueButton {
+    min-height: 48px;
   }
 }
 
@@ -827,10 +965,22 @@
     max-height: 95vh;
   }
   
-  
   .catImage {
     width: clamp(60px, 12vh, 100px);
     height: clamp(60px, 12vh, 100px);
+  }
+  
+  .catNameTitle {
+    font-size: clamp(1rem, 2.5vh, 1.6rem);
+  }
+  
+  .catNameText {
+    font-size: clamp(0.95rem, 2vh, 1.3rem);
+  }
+  
+  .continueButton {
+    padding: clamp(0.75rem, 2vh, 1rem) clamp(1rem, 3vh, 1.5rem);
+    font-size: clamp(0.9rem, 2vh, 1.1rem);
   }
 }
 
@@ -838,21 +988,85 @@
 @media (height <= 500px) and (orientation: landscape) {
   .welcomeWrapper {
     align-items: flex-start;
-    padding-top: 2vh;
+    padding-top: 1vh;
   }
   
   .contentContainer {
-    gap: clamp(0.5rem, 1.5vh, 1rem);
+    gap: clamp(0.75rem, 2vh, 1.25rem);
     max-height: 96vh;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
   }
   
   .mainContent {
-    gap: clamp(0.5rem, 1.5vh, 1rem);
+    gap: clamp(0.75rem, 2vh, 1.25rem);
+    flex: 1;
+    max-width: 60%;
   }
   
   .catImage {
-    width: clamp(50px, 10vh, 80px);
-    height: clamp(50px, 10vh, 80px);
+    width: clamp(60px, 12vh, 90px);
+    height: clamp(60px, 12vh, 90px);
+  }
+  
+  .catNameTitle {
+    font-size: clamp(1rem, 2.5vh, 1.5rem);
+  }
+  
+  .catNameDisplay {
+    padding: clamp(0.75rem, 2vh, 1.25rem);
+    margin: clamp(0.5rem, 1.5vh, 1rem) 0;
+  }
+  
+  .catNameText {
+    font-size: clamp(1rem, 2.2vh, 1.3rem);
+  }
+  
+  .actionSection {
+    flex: 0 0 35%;
+    padding: clamp(1rem, 2.5vh, 1.5rem);
+  }
+  
+  .continueButton {
+    padding: clamp(0.75rem, 2vh, 1rem) clamp(1rem, 3vh, 1.5rem);
+    font-size: clamp(0.9rem, 2.2vh, 1.1rem);
+    min-height: 40px;
+  }
+  
+  .explanationText {
+    padding: 0.5rem;
+  }
+  
+  .explanationText p {
+    font-size: 0.8rem;
+  }
+}
+
+/* Performance optimizations for mobile */
+@media (width <= 768px) {
+  /* Reduce particle count on mobile */
+  .particle {
+    animation-duration: 6s;
+  }
+  
+  /* Optimize animations for mobile */
+  .catImageCelebration {
+    animation-duration: 1.5s;
+  }
+  
+  .buttonEmoji {
+    animation-duration: 1.5s;
+  }
+  
+  /* Reduce blur effects for better performance */
+  .catNameDisplay,
+  .actionSection {
+    backdrop-filter: blur(8px);
+  }
+  
+  .tooltipContent {
+    backdrop-filter: blur(6px);
   }
 }
 
@@ -939,6 +1153,58 @@
 .interactiveName:focus-visible {
   outline: 2px solid #e8bf76;
   outline-offset: 1px;
+}
+
+/* Touch device optimizations */
+@media (hover: none) and (pointer: coarse) {
+  .interactiveName:hover {
+    transform: none;
+    background: linear-gradient(135deg, rgb(232 191 118 / 10%), rgb(241 164 56 / 10%));
+    border-color: transparent;
+    box-shadow: none;
+  }
+  
+  .interactiveName:active {
+    transform: scale(0.95);
+    background: linear-gradient(135deg, rgb(232 191 118 / 30%), rgb(241 164 56 / 30%));
+    border-color: rgb(232 191 118 / 50%);
+  }
+  
+  .continueButton:hover {
+    transform: none;
+  }
+  
+  .continueButton:active {
+    transform: translateY(-1px) scale(0.98);
+  }
+  
+  .catImage:hover {
+    transform: none;
+  }
+  
+  .catImage:active {
+    transform: scale(1.05) rotate(5deg);
+  }
+  
+  /* Improve touch targets for mobile */
+  .interactiveName {
+    min-height: 36px;
+    min-width: 40px;
+    padding: 6px 8px;
+  }
+  
+  .continueButton {
+    min-height: 52px;
+  }
+  
+  /* Better spacing for touch */
+  .catNameDisplay {
+    padding: clamp(1.25rem, 3.5vw, 2rem);
+  }
+  
+  .actionSection {
+    padding: clamp(1.5rem, 4vw, 2.5rem);
+  }
 }
 
 /* Dark theme support */
@@ -1046,14 +1312,19 @@
 /* Interactive name styles */
 .interactiveName {
   position: relative;
-  display: inline-block;
-  padding: 2px 4px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3px 6px;
   margin: 0 1px;
   cursor: pointer;
   background: linear-gradient(135deg, rgb(232 191 118 / 10%), rgb(241 164 56 / 10%));
   border: 1px solid transparent;
-  border-radius: 4px;
+  border-radius: 5px;
   transition: all 0.3s ease;
+  min-height: 28px;
+  min-width: 32px;
+  text-align: center;
 }
 
 .interactiveName:hover {
@@ -1063,6 +1334,11 @@
   border-color: rgb(232 191 118 / 50%);
   box-shadow: 0 4px 12px rgb(232 191 118 / 30%);
   transform: translateY(-1px);
+}
+
+.interactiveName:active {
+  transform: scale(0.95);
+  background: linear-gradient(135deg, rgb(232 191 118 / 40%), rgb(241 164 56 / 40%));
 }
 
 .interactiveName::before {

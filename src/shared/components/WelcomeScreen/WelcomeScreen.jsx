@@ -128,6 +128,30 @@ function WelcomeScreen({ onContinue, catName, nameStats = [], isTransitioning = 
     setHoveredName(null);
   };
 
+  // Handle touch events for mobile
+  const handleNameTouchStart = (nameData, event) => {
+    event.preventDefault();
+    const rect = event.target.getBoundingClientRect();
+    setTooltipPosition({
+      x: window.innerWidth / 2,
+      y: window.innerHeight / 2
+    });
+    setHoveredName(nameData);
+
+    // Add haptic feedback for touch
+    if (navigator.vibrate) {
+      navigator.vibrate(50);
+    }
+  };
+
+  const handleNameTouchEnd = (event) => {
+    event.preventDefault();
+    // Delay hiding to allow user to see the tooltip
+    setTimeout(() => {
+      setHoveredName(null);
+    }, 2000);
+  };
+
   // Create individual name components from the cat name
   const createInteractiveNames = () => {
     if (!catName || catName === 'Loading...' || nameStats.length === 0) {
@@ -205,8 +229,10 @@ function WelcomeScreen({ onContinue, catName, nameStats = [], isTransitioning = 
           className={`${styles.catNameText} ${styles.interactiveName}`}
           onMouseEnter={(e) => handleNameMouseEnter(nameData, e)}
           onMouseLeave={handleNameMouseLeave}
-          title={`Hover to see stats for ${nameData.name}`}
-          aria-label={`Interactive name: ${nameData.name}. Rating: ${nameData.rating}, Win rate: ${nameData.winRate}%. Press Enter or Space to view detailed statistics.`}
+          onTouchStart={(e) => handleNameTouchStart(nameData, e)}
+          onTouchEnd={handleNameTouchEnd}
+          title={`Tap to see stats for ${nameData.name}`}
+          aria-label={`Interactive name: ${nameData.name}. Rating: ${nameData.rating}, Win rate: ${nameData.winRate}%. Tap to view detailed statistics.`}
           role="button"
           tabIndex={0}
           onKeyDown={(e) => {
