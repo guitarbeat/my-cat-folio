@@ -167,11 +167,6 @@ function WelcomeScreen({ onContinue, catName, nameStats = [], isTransitioning = 
       <div className={styles.contentContainer} ref={containerRef}>
         {/* Main Content Section */}
         <div className={styles.mainContent}>
-          <div className={styles.stepIndicator}>
-            <span className={styles.stepNumber}>1</span>
-            <span className={styles.stepText}>Meet Your Cat</span>
-          </div>
-
           <picture>
             <source type="image/avif" srcSet="/assets/images/IMG_5071.avif" />
             <source type="image/webp" srcSet="/assets/images/IMG_5071.webp" />
