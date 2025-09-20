@@ -2054,6 +2054,12 @@ body {
   min-height: 100vh;
   overflow-x: hidden;
   background: transparent; /* Let galaxy show through without !important */
+  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+
+.app.transitioning {
+  opacity: 0.8;
+  transform: scale(0.98);
 }
 
 main {

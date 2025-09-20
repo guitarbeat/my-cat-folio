@@ -68,21 +68,28 @@ function App() {
 
   // * Welcome screen state
   const [showWelcomeScreen, setShowWelcomeScreen] = React.useState(true);
+  const [isTransitioning, setIsTransitioning] = React.useState(false);
   const [catName, setCatName] = React.useState('Loading...');
+  const [nameStats, setNameStats] = React.useState([]);
 
-  // * Load cat name on component mount
+  // * Load cat name and stats on component mount
   React.useEffect(() => {
-    const loadCatName = async () => {
+    const loadCatData = async () => {
       try {
-        const generatedName = await TournamentService.generateCatName();
+        const [generatedName, stats] = await Promise.all([
+          TournamentService.generateCatName(),
+          TournamentService.getCatNameStats()
+        ]);
         setCatName(generatedName);
+        setNameStats(stats);
       } catch (error) {
-        console.error('Error loading cat name:', error);
+        console.error('Error loading cat data:', error);
         setCatName('Mystery Cat');
+        setNameStats([]);
       }
     };
 
-    loadCatName();
+    loadCatData();
   }, []);
 
   // * Parallax for galaxy background (respects reduced motion)
@@ -256,7 +263,12 @@ function App() {
 
   // * Handle welcome screen completion
   const handleWelcomeComplete = useCallback(() => {
-    setShowWelcomeScreen(false);
+    setIsTransitioning(true);
+    // Add a smooth transition delay
+    setTimeout(() => {
+      setShowWelcomeScreen(false);
+      setIsTransitioning(false);
+    }, 800);
   }, []);
 
   // * Memoize main content to prevent unnecessary re-renders
@@ -361,11 +373,11 @@ function App() {
 
   // * Show welcome screen first
   if (showWelcomeScreen) {
-    return <WelcomeScreen onContinue={handleWelcomeComplete} catName={catName} />;
+    return <WelcomeScreen onContinue={handleWelcomeComplete} catName={catName} nameStats={nameStats} isTransitioning={isTransitioning} />;
   }
 
   return (
-    <div className="app">
+    <div className={`app ${isTransitioning ? 'transitioning' : ''}`}>
       {/* * Skip link for keyboard navigation */}
       <a href="#main-content" className="skip-link">
         Skip to main content
