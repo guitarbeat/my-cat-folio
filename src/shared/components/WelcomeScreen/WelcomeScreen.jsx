@@ -31,6 +31,8 @@ function WelcomeScreen({ onContinue, catName, nameStats = [], isTransitioning = 
       document.body.classList.remove('welcome-page');
       document.documentElement.classList.remove('welcome-page');
       clearTimeout(timer);
+      // Clean up name refs to prevent memory leaks
+      nameRefs.current = {};
     };
   }, []);
 
@@ -60,38 +62,60 @@ function WelcomeScreen({ onContinue, catName, nameStats = [], isTransitioning = 
   // Create individual name components from the cat name
   const createInteractiveNames = () => {
     if (!catName || catName === 'Loading...' || nameStats.length === 0) {
-      return <span className={styles.catNameText}>{catName || 'Loading...'}</span>;
+      return (
+        <span className={styles.catNameText}>
+          {catName || 'Loading...'}
+        </span>
+      );
     }
 
-    // Find matching names in the stats
-    const matchedNames = [];
-    let remainingName = catName;
+    // Handle error state
+    if (catName === 'Mystery Cat' || !nameStats || nameStats.length === 0) {
+      return (
+        <span className={styles.catNameText}>
+          {catName}
+        </span>
+      );
+    }
 
-    // Sort stats by rating (highest first) to prioritize top names
+    // Find all matches in the original name without modifying it
+    const matchedNames = [];
     const sortedStats = [...nameStats].sort((a, b) => b.rating - a.rating);
 
+    // Find all occurrences of each name in the cat name
     for (const stat of sortedStats) {
-      if (remainingName.includes(stat.name)) {
-        const index = remainingName.indexOf(stat.name);
-        if (index !== -1) {
-          matchedNames.push({
-            ...stat,
-            startIndex: index,
-            endIndex: index + stat.name.length
-          });
-          // Remove the matched name to avoid duplicates
-          remainingName = remainingName.replace(stat.name, '');
-        }
+      let searchIndex = 0;
+      while (searchIndex < catName.length) {
+        const index = catName.indexOf(stat.name, searchIndex);
+        if (index === -1) break;
+        
+        matchedNames.push({
+          ...stat,
+          startIndex: index,
+          endIndex: index + stat.name.length
+        });
+        searchIndex = index + 1; // Move past this match to find overlapping ones
+      }
+    }
+
+    // Remove overlapping matches (keep the one with higher rating)
+    const filteredMatches = [];
+    for (const match of matchedNames) {
+      const hasOverlap = filteredMatches.some(existing => 
+        (match.startIndex < existing.endIndex && match.endIndex > existing.startIndex)
+      );
+      if (!hasOverlap) {
+        filteredMatches.push(match);
       }
     }
 
     // Sort by position in the original name
-    matchedNames.sort((a, b) => a.startIndex - b.startIndex);
+    filteredMatches.sort((a, b) => a.startIndex - b.startIndex);
 
     const nameComponents = [];
     let lastIndex = 0;
 
-    matchedNames.forEach((nameData, index) => {
+    filteredMatches.forEach((nameData, index) => {
       // Add any text before this name
       if (nameData.startIndex > lastIndex) {
         const beforeText = catName.substring(lastIndex, nameData.startIndex);
@@ -113,6 +137,15 @@ function WelcomeScreen({ onContinue, catName, nameStats = [], isTransitioning = 
           onMouseEnter={(e) => handleNameMouseEnter(nameData, e)}
           onMouseLeave={handleNameMouseLeave}
           title={`Hover to see stats for ${nameData.name}`}
+          aria-label={`Interactive name: ${nameData.name}. Click to view statistics.`}
+          role="button"
+          tabIndex={0}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              handleNameMouseEnter(nameData, e);
+            }
+          }}
         >
           {nameData.name}
         </span>
@@ -138,25 +171,19 @@ function WelcomeScreen({ onContinue, catName, nameStats = [], isTransitioning = 
     <div className={`${styles.welcomeWrapper} ${isVisible ? styles.visible : ''} ${isAnimating ? styles.animating : ''} ${isTransitioning ? styles.transitioning : ''}`}>
       {/* Background with overlay */}
       <div className={styles.backgroundContainer}>
-        <picture>
-          <source type="image/avif" srcSet="/assets/images/IMG_5071.avif" />
-          <source type="image/webp" srcSet="/assets/images/IMG_5071.webp" />
-          <img
-            src="/assets/images/IMG_5071.JPG"
-            alt="Cat background"
-            className={styles.backgroundImage}
-            loading="lazy"
-            decoding="async"
-            fetchPriority="low"
-          />
-        </picture>
+        <div className={styles.backgroundImage} />
         <div className={styles.overlay} />
       </div>
 
       {/* Progress indicator */}
       {showProgress && (
-        <div className={styles.progressContainer}>
-          <div className={styles.progressBar}>
+        <div 
+          className={styles.progressContainer}
+          role="status"
+          aria-live="polite"
+          aria-label="Loading tournament"
+        >
+          <div className={styles.progressBar} aria-hidden="true">
             <div className={styles.progressFill} />
           </div>
           <p className={styles.progressText}>Preparing your tournament experience...</p>
@@ -199,6 +226,8 @@ function WelcomeScreen({ onContinue, catName, nameStats = [], isTransitioning = 
             onClick={handleContinue}
             className={styles.continueButton}
             disabled={isAnimating}
+            aria-label={isAnimating ? 'Entering tournament, please wait' : 'Start the tournament'}
+            aria-describedby="button-description"
           >
             <span className={styles.buttonContent}>
               {isAnimating ? 'Entering Tournament...' : 'Start the Tournament!'}
@@ -208,7 +237,7 @@ function WelcomeScreen({ onContinue, catName, nameStats = [], isTransitioning = 
             </span>
           </button>
 
-          <div className={styles.explanationText}>
+          <div className={styles.explanationText} id="button-description">
             <p>
               This name represents the collective wisdom of all tournament participants!
             </p>
