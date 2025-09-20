@@ -257,7 +257,40 @@ export class TournamentService {
    */
   static async generateCatName() {
     try {
-      // Fetch all names with their ratings
+      // First get all names from cat_name_options
+      const { data: allNames, error: namesError } = await supabase
+        .from('cat_name_options')
+        .select('id, name')
+        .order('name');
+
+      if (namesError) {
+        throw namesError;
+      }
+
+      if (!allNames || allNames.length === 0) {
+        return 'Mystery Cat';
+      }
+
+      // Get hidden name IDs
+      const { data: hiddenData, error: hiddenError } = await supabase
+        .from('cat_name_ratings')
+        .select('name_id')
+        .eq('is_hidden', true);
+
+      if (hiddenError) {
+        throw hiddenError;
+      }
+
+      const hiddenIds = new Set(hiddenData?.map(item => item.name_id) || []);
+
+      // Filter out hidden names
+      const visibleNames = allNames.filter(name => !hiddenIds.has(name.id));
+
+      if (visibleNames.length === 0) {
+        return 'Mystery Cat';
+      }
+
+      // Get ratings for visible names
       const { data: ratingsData, error: ratingsError } = await supabase
         .from('cat_name_ratings')
         .select(`
@@ -267,15 +300,17 @@ export class TournamentService {
             name
           )
         `)
-        .eq('is_hidden', false)
+        .in('name_id', visibleNames.map(n => n.id))
+        .or('is_hidden.is.null,is_hidden.eq.false')
         .order('rating', { ascending: false });
 
       if (ratingsError) {
         throw ratingsError;
       }
 
+      // If no ratings data, use all visible names
       if (!ratingsData || ratingsData.length === 0) {
-        return 'Mystery Cat';
+        return visibleNames.map(n => n.name).join(' ');
       }
 
       // Sort by rating (highest to lowest) and extract names
@@ -284,7 +319,7 @@ export class TournamentService {
         .filter(name => name) // Remove any null/undefined names
         .join(' ');
 
-      return sortedNames || 'Mystery Cat';
+      return sortedNames || visibleNames.map(n => n.name).join(' ');
     } catch (error) {
       console.error('Error generating cat name:', error);
       return 'Mystery Cat';
@@ -297,7 +332,40 @@ export class TournamentService {
    */
   static async getCatNameStats() {
     try {
-      // Fetch all names with their ratings, ordered by rating (highest first)
+      // First get all names from cat_name_options
+      const { data: allNames, error: namesError } = await supabase
+        .from('cat_name_options')
+        .select('id, name, description, categories')
+        .order('name');
+
+      if (namesError) {
+        throw namesError;
+      }
+
+      if (!allNames || allNames.length === 0) {
+        return [];
+      }
+
+      // Get hidden name IDs
+      const { data: hiddenData, error: hiddenError } = await supabase
+        .from('cat_name_ratings')
+        .select('name_id')
+        .eq('is_hidden', true);
+
+      if (hiddenError) {
+        throw hiddenError;
+      }
+
+      const hiddenIds = new Set(hiddenData?.map(item => item.name_id) || []);
+
+      // Filter out hidden names
+      const visibleNames = allNames.filter(name => !hiddenIds.has(name.id));
+
+      if (visibleNames.length === 0) {
+        return [];
+      }
+
+      // Get ratings for visible names
       const { data: ratingsData, error: ratingsError } = await supabase
         .from('cat_name_ratings')
         .select(`
@@ -311,40 +379,59 @@ export class TournamentService {
             categories
           )
         `)
-        .eq('is_hidden', false)
+        .in('name_id', visibleNames.map(n => n.id))
+        .or('is_hidden.is.null,is_hidden.eq.false')
         .order('rating', { ascending: false });
 
       if (ratingsError) {
         throw ratingsError;
       }
 
-      if (!ratingsData || ratingsData.length === 0) {
-        return [];
+      // Create a map of ratings data for quick lookup
+      const ratingsMap = new Map();
+      if (ratingsData && ratingsData.length > 0) {
+        ratingsData.forEach(item => {
+          ratingsMap.set(item.name_id, item);
+        });
       }
 
       // Process and return the data with stats
-      return ratingsData
-        .map(item => {
-          const nameData = item.cat_name_options;
-          if (!nameData) return null;
+      return visibleNames
+        .map((name, index) => {
+          const ratingData = ratingsMap.get(name.id);
+          
+          if (ratingData) {
+            const totalMatches = (ratingData.wins || 0) + (ratingData.losses || 0);
+            const winRate = totalMatches > 0 ? Math.round(((ratingData.wins || 0) / totalMatches) * 100) : 0;
 
-          const totalMatches = (item.wins || 0) + (item.losses || 0);
-          const winRate = totalMatches > 0 ? Math.round(((item.wins || 0) / totalMatches) * 100) : 0;
-
-          return {
-            id: item.name_id,
-            name: nameData.name,
-            description: nameData.description,
-            categories: nameData.categories || [],
-            rating: item.rating || 1500,
-            wins: item.wins || 0,
-            losses: item.losses || 0,
-            totalMatches,
-            winRate,
-            rank: ratingsData.indexOf(item) + 1
-          };
-        })
-        .filter(Boolean);
+            return {
+              id: name.id,
+              name: name.name,
+              description: name.description,
+              categories: name.categories || [],
+              rating: ratingData.rating || 1500,
+              wins: ratingData.wins || 0,
+              losses: ratingData.losses || 0,
+              totalMatches,
+              winRate,
+              rank: index + 1
+            };
+          } else {
+            // For names without ratings, use default values
+            return {
+              id: name.id,
+              name: name.name,
+              description: name.description,
+              categories: name.categories || [],
+              rating: 1500,
+              wins: 0,
+              losses: 0,
+              totalMatches: 0,
+              winRate: 0,
+              rank: index + 1
+            };
+          }
+        });
     } catch (error) {
       console.error('Error fetching cat name stats:', error);
       return [];
