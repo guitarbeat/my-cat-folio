@@ -292,6 +292,66 @@ export class TournamentService {
   }
 
   /**
+   * * Fetches individual name statistics for the generated cat name
+   * @returns {Promise<Array>} Array of name objects with their stats
+   */
+  static async getCatNameStats() {
+    try {
+      // Fetch all names with their ratings, ordered by rating (highest first)
+      const { data: ratingsData, error: ratingsError } = await supabase
+        .from('cat_name_ratings')
+        .select(`
+          name_id,
+          rating,
+          wins,
+          losses,
+          cat_name_options (
+            name,
+            description,
+            categories
+          )
+        `)
+        .eq('is_hidden', false)
+        .order('rating', { ascending: false });
+
+      if (ratingsError) {
+        throw ratingsError;
+      }
+
+      if (!ratingsData || ratingsData.length === 0) {
+        return [];
+      }
+
+      // Process and return the data with stats
+      return ratingsData
+        .map(item => {
+          const nameData = item.cat_name_options;
+          if (!nameData) return null;
+
+          const totalMatches = (item.wins || 0) + (item.losses || 0);
+          const winRate = totalMatches > 0 ? Math.round(((item.wins || 0) / totalMatches) * 100) : 0;
+
+          return {
+            id: item.name_id,
+            name: nameData.name,
+            description: nameData.description,
+            categories: nameData.categories || [],
+            rating: item.rating || 1500,
+            wins: item.wins || 0,
+            losses: item.losses || 0,
+            totalMatches,
+            winRate,
+            rank: ratingsData.indexOf(item) + 1
+          };
+        })
+        .filter(Boolean);
+    } catch (error) {
+      console.error('Error fetching cat name stats:', error);
+      return [];
+    }
+  }
+
+  /**
    * * Calculates tournament statistics
    * @param {Array} ratings - Array of rating objects
    * @returns {Object} Tournament statistics

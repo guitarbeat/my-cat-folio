@@ -70,20 +70,26 @@ function App() {
   const [showWelcomeScreen, setShowWelcomeScreen] = React.useState(true);
   const [isTransitioning, setIsTransitioning] = React.useState(false);
   const [catName, setCatName] = React.useState('Loading...');
+  const [nameStats, setNameStats] = React.useState([]);
 
-  // * Load cat name on component mount
+  // * Load cat name and stats on component mount
   React.useEffect(() => {
-    const loadCatName = async () => {
+    const loadCatData = async () => {
       try {
-        const generatedName = await TournamentService.generateCatName();
+        const [generatedName, stats] = await Promise.all([
+          TournamentService.generateCatName(),
+          TournamentService.getCatNameStats()
+        ]);
         setCatName(generatedName);
+        setNameStats(stats);
       } catch (error) {
-        console.error('Error loading cat name:', error);
+        console.error('Error loading cat data:', error);
         setCatName('Mystery Cat');
+        setNameStats([]);
       }
     };
 
-    loadCatName();
+    loadCatData();
   }, []);
 
   // * Parallax for galaxy background (respects reduced motion)
@@ -367,7 +373,7 @@ function App() {
 
   // * Show welcome screen first
   if (showWelcomeScreen) {
-    return <WelcomeScreen onContinue={handleWelcomeComplete} catName={catName} isTransitioning={isTransitioning} />;
+    return <WelcomeScreen onContinue={handleWelcomeComplete} catName={catName} nameStats={nameStats} isTransitioning={isTransitioning} />;
   }
 
   return (
