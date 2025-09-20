@@ -407,7 +407,7 @@ export class TournamentService {
       return visibleNames
         .map((name, index) => {
           const ratingData = ratingsMap.get(name.id);
-          
+
           if (ratingData) {
             const totalMatches = (ratingData.wins || 0) + (ratingData.losses || 0);
             const winRate = totalMatches > 0 ? Math.round(((ratingData.wins || 0) / totalMatches) * 100) : 0;

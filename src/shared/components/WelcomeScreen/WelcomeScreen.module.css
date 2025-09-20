@@ -83,9 +83,9 @@
       "/assets/images/IMG_5071.webp" type("image/webp"),
       "/assets/images/IMG_5071.JPG" type("image/jpeg")
     );
-  background-size: cover;
-  background-position: center;
   background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
 }
 
 .overlay {
@@ -125,12 +125,15 @@
   0%, 100% {
     transform: translateY(0) rotate(0deg);
   }
+
   25% {
     transform: translateY(-20px) rotate(90deg);
   }
+
   50% {
     transform: translateY(-10px) rotate(180deg);
   }
+
   75% {
     transform: translateY(-30px) rotate(270deg);
   }
@@ -157,42 +160,43 @@
 
 .confetti:nth-child(1) {
   left: 10%;
-  animation-delay: 0s;
   background: #e8bf76;
+  animation-delay: 0s;
 }
 
 .confetti:nth-child(2) {
   left: 30%;
-  animation-delay: 0.5s;
   background: #f1a438;
+  animation-delay: 0.5s;
 }
 
 .confetti:nth-child(3) {
   left: 50%;
-  animation-delay: 1s;
   background: #e74c3c;
+  animation-delay: 1s;
 }
 
 .confetti:nth-child(4) {
   left: 70%;
-  animation-delay: 1.5s;
   background: #3498db;
+  animation-delay: 1.5s;
 }
 
 .confetti:nth-child(5) {
   left: 90%;
-  animation-delay: 2s;
   background: #9b59b6;
+  animation-delay: 2s;
 }
 
 @keyframes confettiFall {
   0% {
-    transform: translateY(-100vh) rotate(0deg);
     opacity: 1;
+    transform: translateY(-100vh) rotate(0deg);
   }
+
   100% {
-    transform: translateY(100vh) rotate(720deg);
     opacity: 0;
+    transform: translateY(100vh) rotate(720deg);
   }
 }
 
@@ -258,8 +262,8 @@
 }
 
 .catImage:hover {
-  transform: scale(1.05) rotate(5deg);
   box-shadow: 0 12px 40px rgb(0 0 0 / 40%);
+  transform: scale(1.05) rotate(5deg);
 }
 
 .catImageCelebration {
@@ -270,12 +274,15 @@
   0%, 100% {
     transform: scale(1) rotate(0deg);
   }
+
   25% {
     transform: scale(1.05) rotate(2deg);
   }
+
   50% {
     transform: scale(1.1) rotate(-2deg);
   }
+
   75% {
     transform: scale(1.05) rotate(1deg);
   }
@@ -283,10 +290,7 @@
 
 .catImageGlow {
   position: absolute;
-  top: -10px;
-  left: -10px;
-  right: -10px;
-  bottom: -10px;
+  inset: -10px;
   z-index: 1;
   background: radial-gradient(circle, rgb(232 191 118 / 30%), transparent 70%);
   border-radius: 50%;
@@ -298,6 +302,7 @@
     opacity: 0.5;
     transform: scale(1);
   }
+
   50% {
     opacity: 0.8;
     transform: scale(1.1);
@@ -313,16 +318,16 @@
 
 .catNameTitle {
   position: relative;
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  justify-content: center;
   margin: 0;
   font-family: 'Josefin Slab', serif;
   font-size: clamp(1.3rem, 3.5vw, 2.2rem);
   font-weight: 600;
   color: #fff;
   text-shadow: 1px 1px 2px rgb(0 0 0 / 80%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
 }
 
 .titleText {
@@ -347,6 +352,7 @@
     opacity: 0.7;
     transform: scale(1) rotate(0deg);
   }
+
   50% {
     opacity: 1;
     transform: scale(1.2) rotate(180deg);
@@ -358,14 +364,17 @@
     opacity: 1;
     transform: scale(1.2) rotate(0deg);
   }
+
   25% {
     opacity: 0.8;
     transform: scale(1.4) rotate(90deg);
   }
+
   50% {
     opacity: 1;
     transform: scale(1.6) rotate(180deg);
   }
+
   75% {
     opacity: 0.8;
     transform: scale(1.4) rotate(270deg);
@@ -376,6 +385,7 @@
   0%, 100% {
     transform: scale(1);
   }
+
   50% {
     transform: scale(1.05);
   }
@@ -385,22 +395,22 @@
   position: relative;
   padding: clamp(1rem, 3vw, 2rem);
   margin: clamp(0.5rem, 2vw, 1.5rem) 0;
+  overflow: hidden;
   background: linear-gradient(135deg, rgb(255 255 255 / 95%), rgb(248 250 252 / 95%));
   border: 2px solid rgb(255 255 255 / 30%);
   border-radius: 20px;
   box-shadow: 0 15px 40px rgb(0 0 0 / 25%), 0 5px 15px rgb(0 0 0 / 10%);
   backdrop-filter: blur(15px);
   transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  overflow: hidden;
 }
 
 .catNameDisplay::before {
-  content: '';
   position: absolute;
   top: 0;
   left: -100%;
   width: 100%;
   height: 100%;
+  content: '';
   background: linear-gradient(90deg, transparent, rgb(255 255 255 / 20%), transparent);
   transition: left 0.6s ease;
 }
@@ -410,18 +420,19 @@
 }
 
 .catNameDisplayCelebration {
-  animation: nameDisplayCelebration 2s ease-in-out infinite;
   box-shadow: 0 20px 50px rgb(232 191 118 / 30%), 0 10px 25px rgb(0 0 0 / 20%);
+  animation: nameDisplayCelebration 2s ease-in-out infinite;
 }
 
 @keyframes nameDisplayCelebration {
   0%, 100% {
-    transform: scale(1);
     box-shadow: 0 20px 50px rgb(232 191 118 / 30%), 0 10px 25px rgb(0 0 0 / 20%);
+    transform: scale(1);
   }
+
   50% {
-    transform: scale(1.02);
     box-shadow: 0 25px 60px rgb(232 191 118 / 40%), 0 15px 30px rgb(0 0 0 / 25%);
+    transform: scale(1.02);
   }
 }
 
@@ -445,15 +456,16 @@
 }
 
 .catNameSubtextCelebration {
-  animation: subtextCelebration 2s ease-in-out infinite;
   color: rgb(232 191 118 / 95%);
   text-shadow: 1px 1px 3px rgb(0 0 0 / 70%), 0 0 10px rgb(232 191 118 / 30%);
+  animation: subtextCelebration 2s ease-in-out infinite;
 }
 
 @keyframes subtextCelebration {
   0%, 100% {
     transform: translateY(0);
   }
+
   50% {
     transform: translateY(-2px);
   }
@@ -462,6 +474,7 @@
 .actionSection {
   position: relative;
   padding: clamp(1.5rem, 4vw, 2.5rem);
+  overflow: hidden;
   text-align: center;
   background: linear-gradient(135deg, rgb(255 255 255 / 95%), rgb(248 250 252 / 95%));
   border: 1px solid rgb(255 255 255 / 20%);
@@ -469,16 +482,15 @@
   box-shadow: 0 25px 50px rgb(0 0 0 / 25%), 0 10px 20px rgb(0 0 0 / 10%);
   backdrop-filter: blur(15px);
   transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  overflow: hidden;
 }
 
 .actionSection::before {
-  content: '';
   position: absolute;
   top: 0;
-  left: 0;
   right: 0;
+  left: 0;
   height: 3px;
+  content: '';
   background: linear-gradient(90deg, #e8bf76, #f1a438, #e74c3c, #3498db, #9b59b6);
   background-size: 200% 100%;
   animation: gradientShift 3s ease-in-out infinite;
@@ -488,20 +500,22 @@
   0%, 100% {
     background-position: 0% 50%;
   }
+
   50% {
     background-position: 100% 50%;
   }
 }
 
 .actionSectionCelebration {
-  animation: actionSectionCelebration 2s ease-in-out infinite;
   box-shadow: 0 30px 60px rgb(232 191 118 / 20%), 0 15px 30px rgb(0 0 0 / 15%);
+  animation: actionSectionCelebration 2s ease-in-out infinite;
 }
 
 @keyframes actionSectionCelebration {
   0%, 100% {
     transform: scale(1);
   }
+
   50% {
     transform: scale(1.01);
   }
@@ -526,12 +540,12 @@
 }
 
 .continueButton::before {
-  content: '';
   position: absolute;
   top: 0;
   left: -100%;
   width: 100%;
   height: 100%;
+  content: '';
   background: linear-gradient(90deg, transparent, rgb(255 255 255 / 20%), transparent);
   transition: left 0.6s ease;
 }
@@ -541,19 +555,20 @@
 }
 
 .continueButtonCelebration {
-  animation: buttonCelebration 1.5s ease-in-out infinite;
   background: linear-gradient(135deg, #e8bf76, #f1a438, #e74c3c);
   box-shadow: 0 12px 35px rgb(232 191 118 / 50%), 0 6px 15px rgb(0 0 0 / 25%);
+  animation: buttonCelebration 1.5s ease-in-out infinite;
 }
 
 @keyframes buttonCelebration {
   0%, 100% {
-    transform: scale(1);
     box-shadow: 0 12px 35px rgb(232 191 118 / 50%), 0 6px 15px rgb(0 0 0 / 25%);
+    transform: scale(1);
   }
+
   50% {
-    transform: scale(1.05);
     box-shadow: 0 15px 40px rgb(232 191 118 / 60%), 0 8px 20px rgb(0 0 0 / 30%);
+    transform: scale(1.05);
   }
 }
 
@@ -612,6 +627,7 @@
   0%, 100% {
     transform: scale(1) rotate(0deg);
   }
+
   50% {
     transform: scale(1.1) rotate(10deg);
   }
@@ -621,12 +637,15 @@
   0%, 100% {
     transform: scale(1.2) rotate(0deg);
   }
+
   25% {
     transform: scale(1.4) rotate(15deg);
   }
+
   50% {
     transform: scale(1.6) rotate(-10deg);
   }
+
   75% {
     transform: scale(1.4) rotate(5deg);
   }
@@ -634,10 +653,7 @@
 
 .buttonGlow {
   position: absolute;
-  top: -2px;
-  left: -2px;
-  right: -2px;
-  bottom: -2px;
+  inset: -2px;
   z-index: 1;
   background: linear-gradient(135deg, #e8bf76, #f1a438, #e74c3c);
   border-radius: 22px;
@@ -870,8 +886,8 @@
   .emojiCelebration,
   .glowPulse,
   .gradientShift {
-    animation: none !important;
     transition: none !important;
+    animation: none !important;
   }
   
   .continueButton::before,
@@ -886,15 +902,16 @@
 }
 
 /* High contrast mode support */
+/* stylelint-disable-next-line media-feature-name-value-no-unknown */
 @media (prefers-contrast: high) {
   .catNameDisplay {
-    border: 3px solid #000;
     background: #fff;
+    border: 3px solid #000;
   }
   
   .actionSection {
-    border: 3px solid #000;
     background: #fff;
+    border: 3px solid #000;
   }
   
   .continueButton {
@@ -902,14 +919,14 @@
   }
   
   .interactiveName {
-    border: 2px solid #000;
-    background: #fff;
     color: #000;
+    background: #fff;
+    border: 2px solid #000;
   }
   
   .interactiveName:hover {
-    background: #000;
     color: #fff;
+    background: #000;
   }
 }
 
