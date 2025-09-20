@@ -171,9 +171,6 @@ function WelcomeScreen({ onContinue, catName, nameStats = [], isTransitioning = 
             <span className={styles.stepNumber}>1</span>
             <span className={styles.stepText}>Meet Your Cat</span>
           </div>
-          <h1 className={styles.welcomeTitle}>
-            Welcome to the Cat Name Tournament!
-          </h1>
 
           <picture>
             <source type="image/avif" srcSet="/assets/images/IMG_5071.avif" />
