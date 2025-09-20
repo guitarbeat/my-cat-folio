@@ -23,7 +23,7 @@
   align-items: center;
   justify-content: center;
   width: 100%;
-  max-width: 1200px;
+  max-width: 1800px;
   min-height: calc(100vh - var(--space-16));
   padding: var(--space-4);
   margin: 0 auto;
@@ -40,7 +40,7 @@
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  max-width: 800px;
+  max-width: 1200px;
   padding: var(--space-4);
   margin-bottom: var(--space-6);
   background: var(--glass-bg);
@@ -99,7 +99,7 @@
   align-items: center;
   justify-content: center;
   width: 100%;
-  max-width: 1000px;
+  max-width: 1400px;
 
   /* Improve touch target size on mobile */
   min-height: 200px;
@@ -123,8 +123,8 @@
 
 .nameContainer {
   flex: 1;
-  min-width: 280px;
-  max-width: 400px;
+  min-width: 320px;
+  max-width: 500px;
   transition: transform var(--duration-normal) var(--ease-out);
   animation: fadeInSlide 0.5s ease-out;
 }
@@ -195,7 +195,7 @@
   align-items: center;
   justify-content: center;
   width: 100%;
-  max-width: 800px;
+  max-width: 1200px;
   padding: var(--space-4);
   margin-bottom: var(--space-6);
   background: var(--glass-bg);
@@ -610,6 +610,81 @@
 
 /* Responsive Design
    ========================================================================== */
+
+/* Large screens - better space utilization */
+@media (width >= 1920px) {
+  .tournament {
+    max-width: 2000px;
+  }
+
+  .progressInfo {
+    max-width: 1600px;
+  }
+
+  .matchup {
+    max-width: 1800px;
+  }
+
+  .nameContainer {
+    min-width: 400px;
+    max-width: 600px;
+  }
+
+  .namesRow {
+    gap: var(--space-12);
+  }
+
+  .vsSection {
+    width: 100px;
+    height: 100px;
+  }
+
+  .vsText {
+    font-size: var(--text-2xl);
+  }
+
+  .tournamentControls {
+    max-width: 1600px;
+  }
+}
+
+/* Ultra-wide screens */
+@media (width >= 2560px) {
+  .tournament {
+    max-width: 2400px;
+  }
+
+  .progressInfo {
+    max-width: 2000px;
+  }
+
+  .matchup {
+    max-width: 2200px;
+  }
+
+  .nameContainer {
+    min-width: 500px;
+    max-width: 700px;
+  }
+
+  .namesRow {
+    gap: var(--space-16);
+  }
+
+  .vsSection {
+    width: 120px;
+    height: 120px;
+  }
+
+  .vsText {
+    font-size: var(--text-3xl);
+  }
+
+  .tournamentControls {
+    max-width: 2000px;
+  }
+}
+
 @media (width <= 768px) {
   .tournament {
     padding: var(--space-2);

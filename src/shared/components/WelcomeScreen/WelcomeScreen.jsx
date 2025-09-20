@@ -66,10 +66,10 @@ function WelcomeScreen({ onContinue, catName, nameStats = [], isTransitioning = 
     // Find matching names in the stats
     const matchedNames = [];
     let remainingName = catName;
-    
+
     // Sort stats by rating (highest first) to prioritize top names
     const sortedStats = [...nameStats].sort((a, b) => b.rating - a.rating);
-    
+
     for (const stat of sortedStats) {
       if (remainingName.includes(stat.name)) {
         const index = remainingName.indexOf(stat.name);

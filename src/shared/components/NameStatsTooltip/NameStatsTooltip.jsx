@@ -12,11 +12,11 @@ function NameStatsTooltip({ nameData, isVisible, position }) {
   const { name, description, rating, wins, losses, totalMatches, winRate, rank, categories } = nameData;
 
   return (
-    <div 
+    <div
       className={styles.tooltip}
       style={{
         left: position.x,
-        top: position.y,
+        top: position.y
       }}
     >
       <div className={styles.tooltipContent}>
@@ -24,38 +24,38 @@ function NameStatsTooltip({ nameData, isVisible, position }) {
           <h3 className={styles.nameTitle}>{name}</h3>
           <span className={styles.rankBadge}>#{rank}</span>
         </div>
-        
+
         {description && (
           <p className={styles.description}>{description}</p>
         )}
-        
+
         <div className={styles.statsGrid}>
           <div className={styles.statItem}>
             <span className={styles.statLabel}>Rating</span>
             <span className={styles.statValue}>{rating}</span>
           </div>
-          
+
           <div className={styles.statItem}>
             <span className={styles.statLabel}>Win Rate</span>
             <span className={styles.statValue}>{winRate}%</span>
           </div>
-          
+
           <div className={styles.statItem}>
             <span className={styles.statLabel}>Wins</span>
             <span className={styles.statValue}>{wins}</span>
           </div>
-          
+
           <div className={styles.statItem}>
             <span className={styles.statLabel}>Losses</span>
             <span className={styles.statValue}>{losses}</span>
           </div>
-          
+
           <div className={styles.statItem}>
             <span className={styles.statLabel}>Total Matches</span>
             <span className={styles.statValue}>{totalMatches}</span>
           </div>
         </div>
-        
+
         {categories && categories.length > 0 && (
           <div className={styles.categories}>
             <span className={styles.categoriesLabel}>Categories:</span>

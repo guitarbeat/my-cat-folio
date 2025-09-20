@@ -50,12 +50,14 @@
   align-items: center;
   justify-content: space-between;
   width: 100%;
+  max-width: 1800px;
   height: 100%;
   padding: 0 1.5rem;
   padding-right: max(1.5rem, env(safe-area-inset-right));
 
   /* Ensure content respects safe area insets */
   padding-left: max(1.5rem, env(safe-area-inset-left));
+  margin: 0 auto;
 }
 
 /* Desktop Navigation */
@@ -563,6 +565,61 @@
 }
 
 /* Responsive Design */
+
+/* Large screens - better space utilization */
+@media (width >= 1920px) {
+  .navbar__menu-container {
+    max-width: 2000px;
+    padding: 0 2rem;
+  }
+
+  .navbar__menu-list--desktop {
+    gap: 1.5rem;
+  }
+
+  .navbar__item a {
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+  }
+
+  .navbar__action-button {
+    width: 48px;
+    height: 48px;
+    font-size: 1.2rem;
+  }
+
+  .navbar__item--logo .navbar__title {
+    font-size: 1.5rem;
+  }
+}
+
+/* Ultra-wide screens */
+@media (width >= 2560px) {
+  .navbar__menu-container {
+    max-width: 2400px;
+    padding: 0 3rem;
+  }
+
+  .navbar__menu-list--desktop {
+    gap: 2rem;
+  }
+
+  .navbar__item a {
+    padding: 1rem 2rem;
+    font-size: 1.1rem;
+  }
+
+  .navbar__action-button {
+    width: 52px;
+    height: 52px;
+    font-size: 1.3rem;
+  }
+
+  .navbar__item--logo .navbar__title {
+    font-size: 1.75rem;
+  }
+}
+
 @media (width <= 768px) {
   .navbar__menu-container {
     padding: 0 1rem;

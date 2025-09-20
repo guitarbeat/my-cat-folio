@@ -63,7 +63,6 @@
     var(--primary-600, #2563eb) 0%, 
     var(--primary-500, #3b82f6) 100%);
   background-clip: text;
-  background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
@@ -98,7 +97,6 @@
 
 .card.success .value {
   background: linear-gradient(135deg, #16a34a, #22c55e);
-  background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
@@ -116,7 +114,6 @@
 
 .card.warning .value {
   background: linear-gradient(135deg, #d97706, #f59e0b);
-  background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
@@ -134,7 +131,6 @@
 
 .card.info .value {
   background: linear-gradient(135deg, #0891b2, #06b6d4);
-  background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
@@ -152,7 +148,6 @@
 
 .card.danger .value {
   background: linear-gradient(135deg, #dc2626, #ef4444);
-  background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
@@ -170,7 +165,6 @@
 
 .card.secondary .value {
   background: linear-gradient(135deg, #4b5563, #6b7280);
-  background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
