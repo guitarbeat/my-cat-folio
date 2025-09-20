@@ -1,8 +1,9 @@
 /**
  * @module WelcomeScreen
- * @description Pre-welcome screen that displays the cat's name based on tournament rankings.
+ * @description Enhanced welcome screen that displays the cat's name based on tournament rankings.
+ * Features improved animations, particle effects, and interactive elements.
  */
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { NameStatsTooltip } from '../index';
 import styles from './WelcomeScreen.module.css';
@@ -13,36 +14,99 @@ function WelcomeScreen({ onContinue, catName, nameStats = [], isTransitioning = 
   const [showProgress, setShowProgress] = useState(false);
   const [hoveredName, setHoveredName] = useState(null);
   const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 });
+  const [particles, setParticles] = useState([]);
+  const [showCelebration, setShowCelebration] = useState(false);
   const containerRef = useRef(null);
   const nameRefs = useRef({});
+  const animationFrameRef = useRef(null);
+
+  // Particle system for enhanced visual appeal
+  const createParticle = useCallback(() => ({
+    id: Math.random(),
+    x: Math.random() * window.innerWidth,
+    y: Math.random() * window.innerHeight,
+    vx: (Math.random() - 0.5) * 0.5,
+    vy: (Math.random() - 0.5) * 0.5,
+    size: Math.random() * 3 + 1,
+    opacity: Math.random() * 0.5 + 0.2,
+    life: 1,
+    decay: Math.random() * 0.02 + 0.01
+  }), []);
+
+  const animateParticles = useCallback(() => {
+    setParticles(prevParticles => 
+      prevParticles
+        .map(particle => ({
+          ...particle,
+          x: particle.x + particle.vx,
+          y: particle.y + particle.vy,
+          life: particle.life - particle.decay,
+          opacity: particle.opacity * particle.life
+        }))
+        .filter(particle => particle.life > 0)
+        .concat(Array.from({ length: Math.random() < 0.1 ? 1 : 0 }, createParticle))
+    );
+  }, [createParticle]);
 
   // Add welcome-page class to body and html when component mounts
   useEffect(() => {
     document.body.classList.add('welcome-page');
     document.documentElement.classList.add('welcome-page');
 
+    // Initialize particles
+    const initialParticles = Array.from({ length: 20 }, createParticle);
+    setParticles(initialParticles);
+
     // Animate in after a brief delay
     const timer = setTimeout(() => {
       setIsVisible(true);
+      setShowCelebration(true);
     }, 100);
+
+    // Start particle animation
+    const animate = () => {
+      animateParticles();
+      animationFrameRef.current = requestAnimationFrame(animate);
+    };
+    animationFrameRef.current = requestAnimationFrame(animate);
 
     // Remove class when component unmounts
     return () => {
       document.body.classList.remove('welcome-page');
       document.documentElement.classList.remove('welcome-page');
       clearTimeout(timer);
+      if (animationFrameRef.current) {
+        cancelAnimationFrame(animationFrameRef.current);
+      }
       // Clean up name refs to prevent memory leaks
       nameRefs.current = {};
     };
-  }, []);
+  }, [createParticle, animateParticles]);
 
   const handleContinue = () => {
     setIsAnimating(true);
     setShowProgress(true);
+    
+    // Add haptic feedback if available
+    if (navigator.vibrate) {
+      navigator.vibrate([50, 100, 50]);
+    }
+    
+    // Play sound effect if available
+    try {
+      const audio = new Audio('/assets/sounds/button-click.mp3');
+      audio.volume = 0.3;
+      audio.play().catch(() => {
+        // Silently fail if audio can't play
+      });
+    } catch (error) {
+      // Silently fail if audio file doesn't exist
+    }
+    
     // Add a small delay for the animation before continuing
     setTimeout(() => {
       onContinue();
-    }, 500);
+    }, 800);
   };
 
   // Handle mouse events for interactive names
@@ -53,6 +117,11 @@ function WelcomeScreen({ onContinue, catName, nameStats = [], isTransitioning = 
       y: rect.top - 10
     });
     setHoveredName(nameData);
+    
+    // Add subtle haptic feedback
+    if (navigator.vibrate) {
+      navigator.vibrate(30);
+    }
   };
 
   const handleNameMouseLeave = () => {
@@ -63,7 +132,7 @@ function WelcomeScreen({ onContinue, catName, nameStats = [], isTransitioning = 
   const createInteractiveNames = () => {
     if (!catName || catName === 'Loading...' || nameStats.length === 0) {
       return (
-        <span className={styles.catNameText}>
+        <span className={styles.catNameText} role="text" aria-label="Loading cat name">
           {catName || 'Loading...'}
         </span>
       );
@@ -72,7 +141,7 @@ function WelcomeScreen({ onContinue, catName, nameStats = [], isTransitioning = 
     // Handle error state
     if (catName === 'Mystery Cat' || !nameStats || nameStats.length === 0) {
       return (
-        <span className={styles.catNameText}>
+        <span className={styles.catNameText} role="text" aria-label="Cat name: Mystery Cat">
           {catName}
         </span>
       );
@@ -137,7 +206,7 @@ function WelcomeScreen({ onContinue, catName, nameStats = [], isTransitioning = 
           onMouseEnter={(e) => handleNameMouseEnter(nameData, e)}
           onMouseLeave={handleNameMouseLeave}
           title={`Hover to see stats for ${nameData.name}`}
-          aria-label={`Interactive name: ${nameData.name}. Click to view statistics.`}
+          aria-label={`Interactive name: ${nameData.name}. Rating: ${nameData.rating}, Win rate: ${nameData.winRate}%. Press Enter or Space to view detailed statistics.`}
           role="button"
           tabIndex={0}
           onKeyDown={(e) => {
@@ -168,11 +237,44 @@ function WelcomeScreen({ onContinue, catName, nameStats = [], isTransitioning = 
   };
 
   return (
-    <div className={`${styles.welcomeWrapper} ${isVisible ? styles.visible : ''} ${isAnimating ? styles.animating : ''} ${isTransitioning ? styles.transitioning : ''}`}>
+    <div 
+      className={`${styles.welcomeWrapper} ${isVisible ? styles.visible : ''} ${isAnimating ? styles.animating : ''} ${isTransitioning ? styles.transitioning : ''}`}
+      role="main"
+      aria-label="Welcome screen showing your cat's tournament-generated name"
+    >
       {/* Background with overlay */}
       <div className={styles.backgroundContainer}>
         <div className={styles.backgroundImage} />
         <div className={styles.overlay} />
+        
+        {/* Particle effects */}
+        <div className={styles.particleContainer}>
+          {particles.map(particle => (
+            <div
+              key={particle.id}
+              className={styles.particle}
+              style={{
+                left: particle.x,
+                top: particle.y,
+                width: particle.size,
+                height: particle.size,
+                opacity: particle.opacity,
+                transform: `rotate(${particle.x * 0.1}deg)`
+              }}
+            />
+          ))}
+        </div>
+        
+        {/* Celebration effects */}
+        {showCelebration && (
+          <div className={styles.celebrationContainer}>
+            <div className={styles.confetti} />
+            <div className={styles.confetti} />
+            <div className={styles.confetti} />
+            <div className={styles.confetti} />
+            <div className={styles.confetti} />
+          </div>
+        )}
       </div>
 
       {/* Progress indicator */}
@@ -194,47 +296,54 @@ function WelcomeScreen({ onContinue, catName, nameStats = [], isTransitioning = 
       <div className={styles.contentContainer} ref={containerRef}>
         {/* Main Content Section */}
         <div className={styles.mainContent}>
-          <picture>
-            <source type="image/avif" srcSet="/assets/images/IMG_5071.avif" />
-            <source type="image/webp" srcSet="/assets/images/IMG_5071.webp" />
-            <img
-              src="/assets/images/IMG_5071.JPG"
-              alt="Cute cat avatar"
-              className={styles.catImage}
-              loading="lazy"
-              decoding="async"
-              fetchPriority="low"
-            />
-          </picture>
+          <div className={styles.catImageContainer}>
+            <picture>
+              <source type="image/avif" srcSet="/assets/images/IMG_5071.avif" />
+              <source type="image/webp" srcSet="/assets/images/IMG_5071.webp" />
+              <img
+                src="/assets/images/IMG_5071.JPG"
+                alt="Cute cat avatar"
+                className={`${styles.catImage} ${showCelebration ? styles.catImageCelebration : ''}`}
+                loading="lazy"
+                decoding="async"
+                fetchPriority="low"
+              />
+            </picture>
+            <div className={styles.catImageGlow} />
+          </div>
 
           <div className={styles.catNameSection}>
-            <h2 className={styles.catNameTitle}>
-              My cat&apos;s name is:
+            <h2 className={`${styles.catNameTitle} ${showCelebration ? styles.catNameTitleCelebration : ''}`}>
+              <span className={styles.titleText}>My cat&apos;s name is:</span>
+              <span className={styles.titleSparkle}>✨</span>
             </h2>
-            <div className={styles.catNameDisplay}>
+            <div className={`${styles.catNameDisplay} ${showCelebration ? styles.catNameDisplayCelebration : ''}`}>
               {createInteractiveNames()}
             </div>
-            <p className={styles.catNameSubtext}>
+            <p className={`${styles.catNameSubtext} ${showCelebration ? styles.catNameSubtextCelebration : ''}`}>
               A name carefully crafted from all the tournament results, ranked from most to least voted!
             </p>
           </div>
         </div>
 
         {/* Action Section */}
-        <div className={styles.actionSection}>
+        <div className={`${styles.actionSection} ${showCelebration ? styles.actionSectionCelebration : ''}`}>
           <button
             onClick={handleContinue}
-            className={styles.continueButton}
+            className={`${styles.continueButton} ${showCelebration ? styles.continueButtonCelebration : ''}`}
             disabled={isAnimating}
             aria-label={isAnimating ? 'Entering tournament, please wait' : 'Start the tournament'}
             aria-describedby="button-description"
           >
             <span className={styles.buttonContent}>
-              {isAnimating ? 'Entering Tournament...' : 'Start the Tournament!'}
-              <span className={styles.buttonEmoji} aria-hidden="true">
+              <span className={styles.buttonText}>
+                {isAnimating ? 'Entering Tournament...' : 'Start the Tournament!'}
+              </span>
+              <span className={`${styles.buttonEmoji} ${showCelebration ? styles.buttonEmojiCelebration : ''}`} aria-hidden="true">
                 🏆
               </span>
             </span>
+            <div className={styles.buttonGlow} />
           </button>
 
           <div className={styles.explanationText} id="button-description">
