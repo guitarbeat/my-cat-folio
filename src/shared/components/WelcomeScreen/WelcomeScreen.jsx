@@ -34,7 +34,7 @@ function WelcomeScreen({ onContinue, catName, nameStats = [], isTransitioning = 
   }), []);
 
   const animateParticles = useCallback(() => {
-    setParticles(prevParticles => 
+    setParticles(prevParticles =>
       prevParticles
         .map(particle => ({
           ...particle,
@@ -86,12 +86,12 @@ function WelcomeScreen({ onContinue, catName, nameStats = [], isTransitioning = 
   const handleContinue = () => {
     setIsAnimating(true);
     setShowProgress(true);
-    
+
     // Add haptic feedback if available
     if (navigator.vibrate) {
       navigator.vibrate([50, 100, 50]);
     }
-    
+
     // Play sound effect if available
     try {
       const audio = new Audio('/assets/sounds/button-click.mp3');
@@ -99,10 +99,10 @@ function WelcomeScreen({ onContinue, catName, nameStats = [], isTransitioning = 
       audio.play().catch(() => {
         // Silently fail if audio can't play
       });
-    } catch (error) {
+    } catch {
       // Silently fail if audio file doesn't exist
     }
-    
+
     // Add a small delay for the animation before continuing
     setTimeout(() => {
       onContinue();
@@ -117,7 +117,7 @@ function WelcomeScreen({ onContinue, catName, nameStats = [], isTransitioning = 
       y: rect.top - 10
     });
     setHoveredName(nameData);
-    
+
     // Add subtle haptic feedback
     if (navigator.vibrate) {
       navigator.vibrate(30);
@@ -157,7 +157,7 @@ function WelcomeScreen({ onContinue, catName, nameStats = [], isTransitioning = 
       while (searchIndex < catName.length) {
         const index = catName.indexOf(stat.name, searchIndex);
         if (index === -1) break;
-        
+
         matchedNames.push({
           ...stat,
           startIndex: index,
@@ -170,7 +170,7 @@ function WelcomeScreen({ onContinue, catName, nameStats = [], isTransitioning = 
     // Remove overlapping matches (keep the one with higher rating)
     const filteredMatches = [];
     for (const match of matchedNames) {
-      const hasOverlap = filteredMatches.some(existing => 
+      const hasOverlap = filteredMatches.some(existing =>
         (match.startIndex < existing.endIndex && match.endIndex > existing.startIndex)
       );
       if (!hasOverlap) {
@@ -237,7 +237,7 @@ function WelcomeScreen({ onContinue, catName, nameStats = [], isTransitioning = 
   };
 
   return (
-    <div 
+    <div
       className={`${styles.welcomeWrapper} ${isVisible ? styles.visible : ''} ${isAnimating ? styles.animating : ''} ${isTransitioning ? styles.transitioning : ''}`}
       role="main"
       aria-label="Welcome screen showing your cat's tournament-generated name"
@@ -246,7 +246,7 @@ function WelcomeScreen({ onContinue, catName, nameStats = [], isTransitioning = 
       <div className={styles.backgroundContainer}>
         <div className={styles.backgroundImage} />
         <div className={styles.overlay} />
-        
+
         {/* Particle effects */}
         <div className={styles.particleContainer}>
           {particles.map(particle => (
@@ -264,7 +264,7 @@ function WelcomeScreen({ onContinue, catName, nameStats = [], isTransitioning = 
             />
           ))}
         </div>
-        
+
         {/* Celebration effects */}
         {showCelebration && (
           <div className={styles.celebrationContainer}>
@@ -279,7 +279,7 @@ function WelcomeScreen({ onContinue, catName, nameStats = [], isTransitioning = 
 
       {/* Progress indicator */}
       {showProgress && (
-        <div 
+        <div
           className={styles.progressContainer}
           role="status"
           aria-live="polite"

@@ -257,6 +257,11 @@ export class TournamentService {
    */
   static async generateCatName() {
     try {
+      // If Supabase is not available, return a default name with Woods
+      if (!supabase) {
+        return 'Mystery Cat Woods';
+      }
+
       // First get all names from cat_name_options
       const { data: allNames, error: namesError } = await supabase
         .from('cat_name_options')
@@ -310,7 +315,8 @@ export class TournamentService {
 
       // If no ratings data, use all visible names
       if (!ratingsData || ratingsData.length === 0) {
-        return visibleNames.map(n => n.name).join(' ');
+        const fallbackName = visibleNames.map(n => n.name).join(' ');
+        return fallbackName ? `${fallbackName} Woods` : 'Mystery Cat Woods';
       }
 
       // Sort by rating (highest to lowest) and extract names
@@ -319,10 +325,12 @@ export class TournamentService {
         .filter(name => name) // Remove any null/undefined names
         .join(' ');
 
-      return sortedNames || visibleNames.map(n => n.name).join(' ');
+      // Append "Woods" as the last name
+      const finalName = sortedNames || visibleNames.map(n => n.name).join(' ');
+      return finalName ? `${finalName} Woods` : 'Mystery Cat Woods';
     } catch (error) {
       console.error('Error generating cat name:', error);
-      return 'Mystery Cat';
+      return 'Mystery Cat Woods';
     }
   }
 
@@ -399,7 +407,7 @@ export class TournamentService {
       return visibleNames
         .map((name, index) => {
           const ratingData = ratingsMap.get(name.id);
-          
+
           if (ratingData) {
             const totalMatches = (ratingData.wins || 0) + (ratingData.losses || 0);
             const winRate = totalMatches > 0 ? Math.round(((ratingData.wins || 0) / totalMatches) * 100) : 0;
