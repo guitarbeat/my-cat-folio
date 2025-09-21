@@ -782,7 +782,7 @@
   }
 }
 
-/* Mobile-specific improvements */
+/* Mobile-first improvements */
 @media (width <= 768px) {
   /* Improve scrolling on mobile */
   .contentContainer {
@@ -791,19 +791,24 @@
     scroll-padding-top: 1rem;
   }
 
-  /* Better touch targets */
+  /* Enhanced touch targets for better mobile ergonomics */
   .interactiveName {
-    min-width: 40px;
-    min-height: 36px;
-    padding: 6px 8px;
+    min-width: 48px;
+    min-height: 44px;
+    padding: 8px 12px;
     font-weight: 600;
-    border-radius: 8px;
+    font-size: clamp(1rem, 2.8vw, 1.2rem);
+    border-radius: 12px;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   .continueButton {
-    min-height: 52px;
+    min-height: 56px;
     font-weight: 700;
     letter-spacing: 0.5px;
+    font-size: clamp(1.1rem, 3.2vw, 1.4rem);
+    padding: 1rem 2rem;
+    border-radius: 28px;
   }
 
   /* Improve text readability */
@@ -817,15 +822,27 @@
     line-height: 1.6;
   }
 
-  /* Add subtle mobile-specific visual feedback */
+  /* Enhanced mobile visual feedback with better micro-interactions */
   .interactiveName {
-    -webkit-tap-highlight-color: rgb(232 191 118 / 25%);
-    transition: all 0.2s ease;
+    -webkit-tap-highlight-color: rgb(232 191 118 / 30%);
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    will-change: transform, box-shadow;
+  }
+
+  .interactiveName:active {
+    transform: scale(0.95);
+    box-shadow: 0 2px 8px rgb(232 191 118 / 40%);
   }
 
   .continueButton {
-    -webkit-tap-highlight-color: rgb(231 76 60 / 25%);
-    transition: all 0.2s ease;
+    -webkit-tap-highlight-color: rgb(231 76 60 / 30%);
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    will-change: transform, box-shadow;
+  }
+
+  .continueButton:active {
+    transform: scale(0.98);
+    box-shadow: 0 4px 16px rgb(231 76 60 / 40%);
   }
 
   /* Improve button press feedback */
@@ -835,13 +852,22 @@
     transform: scale(0.98);
   }
 
-  /* Better spacing for mobile content */
+  /* Enhanced mobile spacing with better visual hierarchy */
   .mainContent {
-    gap: clamp(1.5rem, 4vw, 2.5rem);
+    gap: clamp(2rem, 5vw, 3rem);
+    padding: clamp(1rem, 3vw, 1.5rem);
   }
 
   .catNameSection {
-    gap: clamp(1rem, 2.5vw, 1.5rem);
+    gap: clamp(1.25rem, 3vw, 1.75rem);
+    padding: clamp(0.5rem, 2vw, 1rem);
+  }
+
+  /* Improved mobile content container */
+  .contentContainer {
+    gap: clamp(1.5rem, 4vw, 2.5rem);
+    padding: clamp(1.25rem, 4vw, 2.5rem);
+    max-width: min(95vw, 480px);
   }
 
   /* Enhanced mobile visual hierarchy */
@@ -863,31 +889,42 @@
       0 4px 12px rgb(0 0 0 / 8%);
   }
 
-  /* Improve mobile typography */
+  /* Enhanced mobile typography with better readability */
   .catNameTitle {
-    font-size: clamp(1.4rem, 4vw, 2.4rem);
+    font-size: clamp(1.5rem, 4.5vw, 2.6rem);
     font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
   }
 
   .catNameText {
-    font-size: clamp(1.2rem, 3vw, 1.8rem);
+    font-size: clamp(1.3rem, 3.5vw, 2rem);
+    font-weight: 700;
+    line-height: 1.4;
+    letter-spacing: 0.01em;
   }
 
   .catNameSubtext {
-    font-size: clamp(0.95rem, 2.5vw, 1.2rem);
+    font-size: clamp(1rem, 2.8vw, 1.3rem);
+    font-weight: 500;
+    line-height: 1.6;
+    letter-spacing: 0.005em;
   }
 
   .continueButton {
-    font-size: clamp(1.1rem, 3vw, 1.5rem);
+    font-size: clamp(1.2rem, 3.5vw, 1.6rem);
+    font-weight: 700;
+    letter-spacing: 0.02em;
   }
 }
 
-/* Mobile portrait */
+/* Mobile portrait - Enhanced mobile-first design */
 @media (width <= 480px) {
   .contentContainer {
-    gap: clamp(1.5rem, 3vw, 2rem);
-    max-width: 95vw;
-    padding: clamp(1.25rem, 3vw, 2rem);
+    gap: clamp(1.75rem, 4vw, 2.25rem);
+    max-width: 96vw;
+    padding: clamp(1.5rem, 4vw, 2.25rem);
+    margin: 0 auto;
   }
 
   .particle {
@@ -906,12 +943,22 @@
   }
 
   .catImage {
-    width: clamp(80px, 16vw, 120px);
-    height: clamp(80px, 16vw, 120px);
-    border-width: 4px;
+    width: clamp(100px, 20vw, 140px);
+    height: clamp(100px, 20vw, 140px);
+    border-width: 5px;
     box-shadow:
-      0 6px 20px rgb(0 0 0 / 25%),
-      0 2px 8px rgb(0 0 0 / 15%);
+      0 8px 25px rgb(0 0 0 / 30%),
+      0 4px 12px rgb(0 0 0 / 20%),
+      0 0 0 1px rgb(255 255 255 / 20%);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .catImage:hover {
+    transform: scale(1.05) rotate(2deg);
+    box-shadow:
+      0 12px 35px rgb(0 0 0 / 35%),
+      0 6px 18px rgb(0 0 0 / 25%),
+      0 0 0 2px rgb(255 255 255 / 30%);
   }
 
   .catNameTitle {
@@ -926,13 +973,24 @@
   }
 
   .catNameDisplay {
-    padding: clamp(1.25rem, 3.5vw, 2rem);
-    margin: clamp(1rem, 3vw, 1.5rem) 0;
-    border: 3px solid rgb(255 255 255 / 40%);
-    border-radius: 20px;
+    padding: clamp(1.5rem, 4vw, 2.25rem);
+    margin: clamp(1.25rem, 4vw, 1.75rem) 0;
+    border: 3px solid rgb(255 255 255 / 50%);
+    border-radius: 24px;
     box-shadow:
-      0 12px 30px rgb(0 0 0 / 20%),
-      0 4px 15px rgb(0 0 0 / 10%);
+      0 16px 40px rgb(0 0 0 / 25%),
+      0 6px 20px rgb(0 0 0 / 15%),
+      inset 0 1px 0 rgb(255 255 255 / 20%);
+    backdrop-filter: blur(20px);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .catNameDisplay:hover {
+    transform: translateY(-2px);
+    box-shadow:
+      0 20px 50px rgb(0 0 0 / 30%),
+      0 8px 25px rgb(0 0 0 / 20%),
+      inset 0 1px 0 rgb(255 255 255 / 30%);
   }
 
   .catNameText {
@@ -949,38 +1007,66 @@
   }
 
   .actionSection {
-    padding: clamp(1.5rem, 4vw, 2.5rem);
-    border: 2px solid rgb(255 255 255 / 30%);
-    border-radius: 25px;
+    padding: clamp(1.75rem, 4.5vw, 2.75rem);
+    border: 2px solid rgb(255 255 255 / 40%);
+    border-radius: 28px;
     box-shadow:
-      0 15px 35px rgb(0 0 0 / 20%),
-      0 5px 15px rgb(0 0 0 / 10%);
+      0 18px 45px rgb(0 0 0 / 25%),
+      0 6px 18px rgb(0 0 0 / 15%),
+      inset 0 1px 0 rgb(255 255 255 / 20%);
+    backdrop-filter: blur(20px);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .actionSection:hover {
+    transform: translateY(-1px);
+    box-shadow:
+      0 22px 55px rgb(0 0 0 / 30%),
+      0 8px 22px rgb(0 0 0 / 20%),
+      inset 0 1px 0 rgb(255 255 255 / 30%);
   }
 
   .continueButton {
-    min-height: 52px;
-    padding: clamp(1.1rem, 3vw, 1.5rem) clamp(1.75rem, 4.5vw, 2.5rem);
-    font-size: clamp(1.1rem, 2.8vw, 1.4rem);
+    min-height: 60px;
+    padding: clamp(1.25rem, 3.5vw, 1.75rem) clamp(2rem, 5vw, 2.75rem);
+    font-size: clamp(1.2rem, 3.2vw, 1.5rem);
     font-weight: 700;
-    letter-spacing: 0.5px;
-    border-radius: 20px;
+    letter-spacing: 0.02em;
+    border-radius: 30px;
     box-shadow:
-      0 8px 25px rgb(231 76 60 / 35%),
-      0 3px 10px rgb(0 0 0 / 15%);
+      0 12px 35px rgb(231 76 60 / 40%),
+      0 4px 15px rgb(0 0 0 / 20%),
+      inset 0 1px 0 rgb(255 255 255 / 20%);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .continueButton:hover {
+    transform: translateY(-3px);
+    box-shadow:
+      0 16px 45px rgb(231 76 60 / 50%),
+      0 6px 20px rgb(0 0 0 / 25%),
+      inset 0 1px 0 rgb(255 255 255 / 30%);
   }
 
   .interactiveName {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    min-width: 40px;
-    min-height: 36px;
-    padding: 6px 10px;
-    margin: 0 2px;
+    min-width: 48px;
+    min-height: 44px;
+    padding: 8px 14px;
+    margin: 0 3px;
     font-weight: 600;
+    font-size: clamp(1rem, 2.8vw, 1.2rem);
     border: 2px solid transparent;
-    border-radius: 8px;
-    transition: all 0.2s ease;
+    border-radius: 12px;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    will-change: transform, box-shadow;
+  }
+
+  .interactiveName:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgb(232 191 118 / 30%);
   }
 
   .buttonContent {
@@ -1288,30 +1374,45 @@
   }
 }
 
-/* Performance optimizations for mobile */
+/* Enhanced mobile performance optimizations */
 @media (width <= 768px) {
-  /* Reduce particle count on mobile */
+  /* Optimize particle animations for mobile */
   .particle {
-    animation-duration: 6s;
+    animation-duration: 8s;
+    will-change: transform, opacity;
   }
 
-  /* Optimize animations for mobile */
+  /* Optimize animations for mobile with better performance */
   .catImageCelebration {
-    animation-duration: 1.5s;
+    animation-duration: 2s;
+    will-change: transform;
   }
 
   .buttonEmoji {
-    animation-duration: 1.5s;
+    animation-duration: 2s;
+    will-change: transform;
   }
 
-  /* Reduce blur effects for better performance */
+  /* Optimized blur effects for mobile performance */
   .catNameDisplay,
   .actionSection {
-    backdrop-filter: blur(6px);
+    backdrop-filter: blur(12px);
+    will-change: transform, box-shadow;
   }
 
   .tooltipContent {
-    backdrop-filter: blur(4px);
+    backdrop-filter: blur(8px);
+  }
+
+  /* Enhanced mobile visual effects with better performance */
+  .catImageGlow {
+    animation-duration: 3s;
+    will-change: transform, opacity;
+  }
+
+  .buttonGlow {
+    animation-duration: 2.5s;
+    will-change: opacity;
   }
 
   /* Optimize transforms for mobile */
@@ -1350,15 +1451,29 @@
   }
 }
 
-/* Ultra-mobile performance optimizations */
+/* Ultra-mobile performance optimizations with enhanced UX */
 @media (width <= 480px) {
-  /* Disable expensive effects on very small screens */
+  /* Optimize expensive effects on very small screens */
   .particleContainer {
-    display: none;
+    opacity: 0.3;
   }
 
   .celebrationContainer {
-    display: none;
+    opacity: 0.7;
+  }
+
+  /* Enhanced mobile visual hierarchy */
+  .contentContainer {
+    gap: clamp(1.5rem, 4vw, 2rem);
+    padding: clamp(1.25rem, 4vw, 2rem);
+  }
+
+  .mainContent {
+    gap: clamp(1.75rem, 5vw, 2.5rem);
+  }
+
+  .catNameSection {
+    gap: clamp(1rem, 3vw, 1.5rem);
   }
 
   /* Simplify animations */
@@ -1500,39 +1615,56 @@
   }
 }
 
-/* Focus indicators for better accessibility */
+/* Enhanced focus indicators for better mobile accessibility */
 .continueButton:focus-visible {
   outline: 3px solid #e8bf76;
-  outline-offset: 2px;
+  outline-offset: 3px;
+  box-shadow: 0 0 0 6px rgb(232 191 118 / 20%);
 }
 
 .interactiveName:focus-visible {
   outline: 2px solid #e8bf76;
-  outline-offset: 1px;
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px rgb(232 191 118 / 20%);
 }
 
-/* Touch device optimizations */
+/* Enhanced mobile focus indicators */
+@media (width <= 768px) {
+  .continueButton:focus-visible {
+    outline: 4px solid #e8bf76;
+    outline-offset: 4px;
+    box-shadow: 0 0 0 8px rgb(232 191 118 / 25%);
+  }
+
+  .interactiveName:focus-visible {
+    outline: 3px solid #e8bf76;
+    outline-offset: 3px;
+    box-shadow: 0 0 0 6px rgb(232 191 118 / 25%);
+  }
+}
+
+/* Enhanced touch device optimizations */
 @media (hover: none) and (pointer: coarse) {
   .interactiveName:hover {
     background: linear-gradient(
       135deg,
-      rgb(232 191 118 / 10%),
-      rgb(241 164 56 / 10%)
+      rgb(232 191 118 / 15%),
+      rgb(241 164 56 / 15%)
     );
-    border-color: transparent;
-    box-shadow: none;
+    border-color: rgb(232 191 118 / 30%);
+    box-shadow: 0 2px 8px rgb(232 191 118 / 20%);
     transform: none;
   }
 
   .interactiveName:active {
     background: linear-gradient(
       135deg,
-      rgb(232 191 118 / 40%),
-      rgb(241 164 56 / 40%)
+      rgb(232 191 118 / 50%),
+      rgb(241 164 56 / 50%)
     );
-    border-color: rgb(232 191 118 / 60%);
-    box-shadow: 0 4px 12px rgb(232 191 118 / 30%);
-    transform: scale(0.92);
+    border-color: rgb(232 191 118 / 70%);
+    box-shadow: 0 4px 16px rgb(232 191 118 / 40%);
+    transform: scale(0.94);
   }
 
   .continueButton:hover {
@@ -1541,9 +1673,9 @@
 
   .continueButton:active {
     box-shadow:
-      0 6px 20px rgb(231 76 60 / 40%),
-      0 3px 10px rgb(0 0 0 / 20%);
-    transform: translateY(-2px) scale(0.96);
+      0 8px 25px rgb(231 76 60 / 50%),
+      0 4px 15px rgb(0 0 0 / 25%);
+    transform: translateY(-1px) scale(0.97);
   }
 
   .catImage:hover {
@@ -1551,7 +1683,23 @@
   }
 
   .catImage:active {
-    transform: scale(1.05) rotate(5deg);
+    transform: scale(1.08) rotate(3deg);
+  }
+
+  .catNameDisplay:hover {
+    transform: none;
+  }
+
+  .catNameDisplay:active {
+    transform: translateY(-1px);
+  }
+
+  .actionSection:hover {
+    transform: none;
+  }
+
+  .actionSection:active {
+    transform: translateY(-1px);
   }
 
   /* Improve touch targets for mobile */
