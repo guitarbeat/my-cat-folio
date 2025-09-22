@@ -25,21 +25,22 @@ function WelcomeScreen({
   const nameRefs = useRef({});
   const animationFrameRef = useRef(null);
 
-  // Particle system for enhanced visual appeal
+  // Enhanced particle system for mobile-first design
   const createParticle = useCallback(() => {
-    // Reduce particle count on mobile for better performance
+    // Optimize particle count and properties for mobile
     const isMobile = window.innerWidth <= 768;
+    const isSmallMobile = window.innerWidth <= 480;
 
     return {
       id: Math.random(),
       x: Math.random() * window.innerWidth,
       y: Math.random() * window.innerHeight,
-      vx: (Math.random() - 0.5) * (isMobile ? 0.3 : 0.5),
-      vy: (Math.random() - 0.5) * (isMobile ? 0.3 : 0.5),
-      size: Math.random() * (isMobile ? 2 : 3) + 1,
-      opacity: Math.random() * (isMobile ? 0.3 : 0.5) + 0.2,
+      vx: (Math.random() - 0.5) * (isSmallMobile ? 0.2 : isMobile ? 0.3 : 0.5),
+      vy: (Math.random() - 0.5) * (isSmallMobile ? 0.2 : isMobile ? 0.3 : 0.5),
+      size: Math.random() * (isSmallMobile ? 1.5 : isMobile ? 2 : 3) + 1,
+      opacity: Math.random() * (isSmallMobile ? 0.2 : isMobile ? 0.3 : 0.5) + 0.2,
       life: 1,
-      decay: Math.random() * 0.02 + 0.01
+      decay: Math.random() * (isSmallMobile ? 0.015 : 0.02) + 0.01
     };
   }, []);
 
@@ -65,9 +66,10 @@ function WelcomeScreen({
     document.body.classList.add('welcome-page');
     document.documentElement.classList.add('welcome-page');
 
-    // Initialize particles with mobile optimization
+    // Initialize particles with enhanced mobile optimization
     const isMobile = window.innerWidth <= 768;
-    const particleCount = isMobile ? 10 : 20;
+    const isSmallMobile = window.innerWidth <= 480;
+    const particleCount = isSmallMobile ? 6 : isMobile ? 12 : 20;
     const initialParticles = Array.from(
       { length: particleCount },
       createParticle
@@ -80,11 +82,14 @@ function WelcomeScreen({
       setShowCelebration(true);
     }, 100);
 
-    // Start particle animation with mobile optimization
+    // Start particle animation with enhanced mobile optimization
     const animate = () => {
-      // Reduce animation frequency on mobile
+      // Optimize animation frequency for mobile performance
       const isMobile = window.innerWidth <= 768;
-      if (!isMobile || Math.random() < 0.7) {
+      const isSmallMobile = window.innerWidth <= 480;
+      const animationThreshold = isSmallMobile ? 0.5 : isMobile ? 0.7 : 1;
+      
+      if (Math.random() < animationThreshold) {
         animateParticles();
       }
       animationFrameRef.current = requestAnimationFrame(animate);
@@ -130,17 +135,25 @@ function WelcomeScreen({
     }, 800);
   };
 
-  // Handle mobile-specific button interactions
+  // Enhanced mobile-specific button interactions
   const handleButtonTouchStart = (event) => {
-    event.target.style.transform = 'scale(0.98)';
+    event.target.style.transform = 'scale(0.97)';
+    event.target.style.transition = 'transform 0.1s ease-out';
+    
+    // Enhanced haptic feedback for mobile
+    if (navigator.vibrate) {
+      navigator.vibrate(50);
+    }
   };
 
   const handleButtonTouchEnd = (event) => {
     event.target.style.transform = 'scale(1)';
+    event.target.style.transition = 'transform 0.2s cubic-bezier(0.4, 0, 0.2, 1)';
   };
 
   const handleButtonTouchCancel = (event) => {
     event.target.style.transform = 'scale(1)';
+    event.target.style.transition = 'transform 0.2s cubic-bezier(0.4, 0, 0.2, 1)';
   };
 
   // Handle mouse events for interactive names
@@ -162,7 +175,7 @@ function WelcomeScreen({
     setHoveredName(null);
   };
 
-  // Handle touch events for mobile
+  // Enhanced touch events for mobile
   const handleNameTouchStart = (nameData, event) => {
     event.preventDefault();
     setTooltipPosition({
@@ -171,30 +184,33 @@ function WelcomeScreen({
     });
     setHoveredName(nameData);
 
-    // Add haptic feedback for touch
+    // Enhanced haptic feedback for touch
     if (navigator.vibrate) {
-      navigator.vibrate([30, 50, 30]);
+      navigator.vibrate([40, 30, 40]);
     }
 
-    // Add visual feedback
-    event.target.style.transform = 'scale(0.95)';
+    // Enhanced visual feedback
+    event.target.style.transform = 'scale(0.94)';
+    event.target.style.transition = 'transform 0.1s ease-out';
   };
 
   const handleNameTouchEnd = (event) => {
     event.preventDefault();
-    // Reset visual feedback
+    // Reset visual feedback with smooth transition
     event.target.style.transform = 'scale(1)';
+    event.target.style.transition = 'transform 0.2s cubic-bezier(0.4, 0, 0.2, 1)';
 
     // Delay hiding to allow user to see the tooltip
     setTimeout(() => {
       setHoveredName(null);
-    }, 3000);
+    }, 4000);
   };
 
   const handleNameTouchCancel = (event) => {
     event.preventDefault();
-    // Reset visual feedback
+    // Reset visual feedback with smooth transition
     event.target.style.transform = 'scale(1)';
+    event.target.style.transition = 'transform 0.2s cubic-bezier(0.4, 0, 0.2, 1)';
     setHoveredName(null);
   };
 
@@ -292,6 +308,11 @@ function WelcomeScreen({
           aria-label={`Interactive name: ${nameData.name}. Rating: ${nameData.rating}, Win rate: ${nameData.winRate}%. Tap to view detailed statistics.`}
           role="button"
           tabIndex={0}
+          style={{
+            minHeight: '44px',
+            minWidth: '48px',
+            touchAction: 'manipulation'
+          }}
           onKeyDown={(e) => {
             if (e.key === 'Enter' || e.key === ' ') {
               e.preventDefault();
@@ -439,6 +460,11 @@ function WelcomeScreen({
                 : 'Start the tournament'
             }
             aria-describedby="button-description"
+            style={{
+              minHeight: '56px',
+              minWidth: '200px',
+              touchAction: 'manipulation'
+            }}
           >
             <span className={styles.buttonContent}>
               <span className={styles.buttonText}>
