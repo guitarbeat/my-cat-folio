@@ -25,9 +25,9 @@ function WelcomeScreen({
   const nameRefs = useRef({});
   const animationFrameRef = useRef(null);
 
-  // Enhanced particle system for mobile-first design
+  // Simplified particle system with reduced animations
   const createParticle = useCallback(() => {
-    // Optimize particle count and properties for mobile
+    // Significantly reduce particle count and properties
     const isMobile = window.innerWidth <= 768;
     const isSmallMobile = window.innerWidth <= 480;
 
@@ -35,12 +35,12 @@ function WelcomeScreen({
       id: Math.random(),
       x: Math.random() * window.innerWidth,
       y: Math.random() * window.innerHeight,
-      vx: (Math.random() - 0.5) * (isSmallMobile ? 0.2 : isMobile ? 0.3 : 0.5),
-      vy: (Math.random() - 0.5) * (isSmallMobile ? 0.2 : isMobile ? 0.3 : 0.5),
-      size: Math.random() * (isSmallMobile ? 1.5 : isMobile ? 2 : 3) + 1,
-      opacity: Math.random() * (isSmallMobile ? 0.2 : isMobile ? 0.3 : 0.5) + 0.2,
+      vx: (Math.random() - 0.5) * (isSmallMobile ? 0.1 : isMobile ? 0.15 : 0.2),
+      vy: (Math.random() - 0.5) * (isSmallMobile ? 0.1 : isMobile ? 0.15 : 0.2),
+      size: Math.random() * (isSmallMobile ? 0.8 : isMobile ? 1 : 1.5) + 0.5,
+      opacity: Math.random() * (isSmallMobile ? 0.1 : isMobile ? 0.15 : 0.2) + 0.1,
       life: 1,
-      decay: Math.random() * (isSmallMobile ? 0.015 : 0.02) + 0.01
+      decay: Math.random() * (isSmallMobile ? 0.03 : 0.04) + 0.02
     };
   }, []);
 
@@ -66,28 +66,28 @@ function WelcomeScreen({
     document.body.classList.add('welcome-page');
     document.documentElement.classList.add('welcome-page');
 
-    // Initialize particles with enhanced mobile optimization
+    // Initialize particles with significantly reduced count
     const isMobile = window.innerWidth <= 768;
     const isSmallMobile = window.innerWidth <= 480;
-    const particleCount = isSmallMobile ? 6 : isMobile ? 12 : 20;
+    const particleCount = isSmallMobile ? 2 : isMobile ? 4 : 6;
     const initialParticles = Array.from(
       { length: particleCount },
       createParticle
     );
     setParticles(initialParticles);
 
-    // Animate in after a brief delay
+    // Animate in after a brief delay (disable celebration)
     const timer = setTimeout(() => {
       setIsVisible(true);
-      setShowCelebration(true);
+      setShowCelebration(false); // Disable celebration effects
     }, 100);
 
-    // Start particle animation with enhanced mobile optimization
+    // Start particle animation with significantly reduced frequency
     const animate = () => {
-      // Optimize animation frequency for mobile performance
+      // Drastically reduce animation frequency for better performance
       const isMobile = window.innerWidth <= 768;
       const isSmallMobile = window.innerWidth <= 480;
-      const animationThreshold = isSmallMobile ? 0.5 : isMobile ? 0.7 : 1;
+      const animationThreshold = isSmallMobile ? 0.1 : isMobile ? 0.15 : 0.2;
       
       if (Math.random() < animationThreshold) {
         animateParticles();

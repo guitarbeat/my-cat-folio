@@ -123,7 +123,8 @@
   position: absolute;
   background: radial-gradient(circle, #e8bf76, #f1a438);
   border-radius: 50%;
-  animation: particleFloat 8s ease-in-out infinite;
+  animation: particleFloat 12s ease-in-out infinite;
+  opacity: 0.3;
 }
 
 @keyframes particleFloat {
@@ -158,10 +159,11 @@
 
 .confetti {
   position: absolute;
-  width: 10px;
-  height: 10px;
+  width: 6px;
+  height: 6px;
   background: linear-gradient(45deg, #e8bf76, #f1a438, #e74c3c, #3498db);
-  animation: confettiFall 3s ease-in infinite;
+  animation: confettiFall 6s ease-in infinite;
+  opacity: 0.4;
 }
 
 .confetti:nth-child(1) {
@@ -263,7 +265,7 @@
   border: 4px solid rgb(255 255 255 / 90%);
   border-radius: 50%;
   box-shadow: 0 8px 32px rgb(0 0 0 / 30%);
-  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  transition: all 0.2s ease;
 }
 
 .catImage:hover {
@@ -298,9 +300,10 @@
   position: absolute;
   inset: -10px;
   z-index: 1;
-  background: radial-gradient(circle, rgb(232 191 118 / 30%), transparent 70%);
+  background: radial-gradient(circle, rgb(232 191 118 / 15%), transparent 70%);
   border-radius: 50%;
-  animation: glowPulse 3s ease-in-out infinite;
+  animation: glowPulse 6s ease-in-out infinite;
+  opacity: 0.5;
 }
 
 @keyframes glowPulse {
@@ -343,7 +346,8 @@
 
 .titleSparkle {
   font-size: 1.2em;
-  animation: sparkle 2s ease-in-out infinite;
+  animation: sparkle 4s ease-in-out infinite;
+  opacity: 0.7;
 }
 
 .catNameTitleCelebration .titleText {
@@ -585,8 +589,8 @@
   box-shadow:
     0 8px 25px rgb(231 76 60 / 40%),
     0 4px 10px rgb(0 0 0 / 20%);
-  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  animation: pulseGlow 2s ease-in-out infinite;
+  transition: all 0.2s ease;
+  animation: pulseGlow 4s ease-in-out infinite;
 }
 
 .continueButton::before {
@@ -678,7 +682,7 @@
 .buttonEmoji {
   font-size: 1.3rem;
   transition: all 0.3s ease;
-  animation: emojiBounce 2s ease-in-out infinite;
+  animation: emojiBounce 4s ease-in-out infinite;
 }
 
 .buttonEmojiCelebration {
@@ -1091,21 +1095,37 @@
     line-height: 1.6;
   }
 
-  /* Reduce animations on mobile for better performance */
+  /* Significantly reduce animations on mobile for better performance */
   .particle {
     animation: none;
+    opacity: 0.1;
   }
 
   .confetti {
-    animation-duration: 2s;
+    animation: none;
+    opacity: 0.2;
   }
 
   .catImageCelebration {
-    animation-duration: 1.5s;
+    animation: none;
   }
 
   .buttonEmoji {
-    animation-duration: 1.5s;
+    animation: none;
+  }
+
+  .titleSparkle {
+    animation: none;
+    opacity: 0.5;
+  }
+
+  .catImageGlow {
+    animation: none;
+    opacity: 0.2;
+  }
+
+  .buttonGlow {
+    animation: none;
   }
 
   /* Improve touch interactions */
@@ -1376,10 +1396,11 @@
 
 /* Enhanced mobile performance optimizations */
 @media (width <= 768px) {
-  /* Optimize particle animations for mobile */
+  /* Significantly reduce particle animations for mobile */
   .particle {
-    animation-duration: 8s;
-    will-change: transform, opacity;
+    animation: none;
+    opacity: 0.1;
+    will-change: auto;
   }
 
   /* Optimize animations for mobile with better performance */
@@ -1453,13 +1474,13 @@
 
 /* Ultra-mobile performance optimizations with enhanced UX */
 @media (width <= 480px) {
-  /* Optimize expensive effects on very small screens */
+  /* Disable expensive effects on very small screens */
   .particleContainer {
-    opacity: 0.3;
+    opacity: 0.05;
   }
 
   .celebrationContainer {
-    opacity: 0.7;
+    opacity: 0.1;
   }
 
   /* Enhanced mobile visual hierarchy */
@@ -1476,10 +1497,16 @@
     gap: clamp(1rem, 3vw, 1.5rem);
   }
 
-  /* Simplify animations */
+  /* Disable all animations for ultra-mobile performance */
   .catImageGlow,
-  .buttonGlow {
-    animation: none;
+  .buttonGlow,
+  .particle,
+  .confetti,
+  .titleSparkle,
+  .buttonEmoji,
+  .catImageCelebration,
+  .buttonCelebration {
+    animation: none !important;
   }
 
   /* Reduce backdrop blur for performance */
@@ -1541,7 +1568,7 @@
   }
 }
 
-/* Accessibility and reduced motion support */
+/* Accessibility and reduced motion support - Enhanced for better performance */
 @media (prefers-reduced-motion: reduce) {
   .particle,
   .confetti,
@@ -1583,6 +1610,19 @@
   .particleContainer,
   .celebrationContainer {
     display: none;
+  }
+
+  /* Additional performance optimizations for reduced motion */
+  .continueButton {
+    animation: none !important;
+  }
+  
+  .catImage {
+    transition: none !important;
+  }
+  
+  .interactiveName {
+    transition: none !important;
   }
 }
 
