@@ -220,8 +220,24 @@
   max-height: 100vh;
   padding: clamp(0.5rem, 2vw, 1.5rem);
   overflow: hidden;
+
+  width: 100%;
+  min-width: 320px;
+  max-width: min(90vw, 800px);
+  max-height: 90vh;
+  padding: clamp(1rem, 4vw, 3rem);
+  overflow-y: auto;
+
   scroll-behavior: smooth;
   -webkit-overflow-scrolling: touch;
+}
+
+/* Flex Cards Container */
+.cardsContainer {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(1.5rem, 3vw, 2.5rem);
+  width: 100%;
 }
 
 /* Custom scrollbar for content container */
@@ -243,13 +259,42 @@
   background: rgb(255 255 255 / 50%);
 }
 
-.mainContent {
+/* Card-specific styles */
+.catImageCard {
   display: flex;
   flex-direction: column;
   gap: clamp(0.75rem, 2vw, 1.25rem);
+
+  justify-content: center;
+
   align-items: center;
   text-align: center;
+  min-height: 200px;
 }
+
+.catNameCard {
+  text-align: center;
+  min-height: 180px;
+}
+
+.actionCard {
+  text-align: center;
+  min-height: 200px;
+}
+
+.actionCardCelebration {
+  animation: actionCardCelebration 2s ease-in-out infinite;
+}
+
+@keyframes actionCardCelebration {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.01);
+  }
+}
+
 
 .catImageContainer {
   position: relative;
@@ -697,31 +742,84 @@
 /* Large screens and ultra-wide displays */
 @media (width >= 1400px) {
   .contentContainer {
+    max-width: min(80vw, 900px);
+  }
+
+  .cardsContainer {
     gap: clamp(2rem, 4vw, 3rem);
-    max-width: 100%;
-    padding: clamp(2rem, 5vw, 4rem);
   }
 
   .catImage {
     width: clamp(120px, 12vw, 180px);
     height: clamp(120px, 12vw, 180px);
   }
+
+  /* Horizontal layout for large screens */
+  .cardsContainer {
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
+    gap: clamp(1.5rem, 3vw, 2.5rem);
+    align-items: start;
+  }
+
+  .catImageCard {
+    min-height: 250px;
+  }
+
+  .catNameCard {
+    min-height: 250px;
+  }
+
+  .actionCard {
+    min-height: 250px;
+  }
 }
 
 /* Tablets and medium screens */
 @media (width <= 1024px) and (width >= 769px) {
   .contentContainer {
-    max-width: 100%;
+    max-width: min(85vw, 700px);
     padding: clamp(1.5rem, 3vw, 2.5rem);
+  }
+
+  .cardsContainer {
+    gap: clamp(1.25rem, 2.5vw, 2rem);
+  }
+
+  .catImageCard {
+    min-height: 180px;
+  }
+
+  .catNameCard {
+    min-height: 160px;
+  }
+
+  .actionCard {
+    min-height: 180px;
   }
 }
 
 /* Mobile landscape and small tablets */
 @media (width <= 768px) {
   .contentContainer {
-    gap: clamp(1.25rem, 2.5vw, 2rem);
-    max-width: 100%;
+    max-width: min(90vw, 500px);
     padding: clamp(1rem, 3vw, 2rem);
+  }
+
+  .cardsContainer {
+    gap: clamp(1.25rem, 2.5vw, 2rem);
+  }
+
+  .catImageCard {
+    min-height: 160px;
+  }
+
+  .catNameCard {
+    min-height: 140px;
+  }
+
+  .actionCard {
+    min-height: 160px;
   }
 }
 
@@ -802,7 +900,6 @@
     gap: clamp(1rem, 3vw, 1.5rem);
     padding: clamp(0.5rem, 2vw, 1rem);
   }
-
   .catNameSection {
     gap: clamp(0.75rem, 2vw, 1rem);
     padding: clamp(0.25rem, 1vw, 0.5rem);
@@ -819,7 +916,6 @@
   .catNameTitle {
     margin-bottom: 0.5rem;
   }
-
 
   .actionSection {
     margin-top: 0.5rem;
@@ -863,7 +959,27 @@
     gap: clamp(0.75rem, 2vw, 1.25rem);
     max-width: 100%;
     padding: clamp(0.75rem, 2vw, 1.25rem);
+
+    max-width: 96vw;
+    padding: clamp(1.5rem, 4vw, 2.25rem);
+
     margin: 0 auto;
+  }
+
+  .cardsContainer {
+    gap: clamp(1.25rem, 3vw, 1.75rem);
+  }
+
+  .catImageCard {
+    min-height: 140px;
+  }
+
+  .catNameCard {
+    min-height: 120px;
+  }
+
+  .actionCard {
+    min-height: 140px;
   }
 
   .particle {
@@ -924,7 +1040,6 @@
     font-weight: 500;
     line-height: 1.4;
   }
-
   .actionSection {
     padding: clamp(1rem, 2.5vw, 1.5rem);
     border: 2px solid rgb(255 255 255 / 40%);
@@ -944,7 +1059,6 @@
       0 8px 22px rgb(0 0 0 / 20%),
       inset 0 1px 0 rgb(255 255 255 / 30%);
   }
-
   .continueButton {
     min-height: 50px;
     padding: clamp(0.875rem, 2.5vw, 1.25rem) clamp(1.5rem, 3.5vw, 2rem);
@@ -1077,6 +1191,23 @@
     gap: 0.75rem;
     max-width: 100%;
     padding: 0.75rem;
+
+  }
+
+  .cardsContainer {
+    gap: 1rem;
+  }
+
+  .catImageCard {
+    min-height: 120px;
+  }
+
+  .catNameCard {
+    min-height: 100px;
+  }
+
+  .actionCard {
+    min-height: 120px;
   }
 
   .catImage {
@@ -1158,9 +1289,6 @@
   }
 
   /* Better spacing */
-  .mainContent {
-    gap: 1.5rem;
-  }
 
   .catNameSection {
     gap: 1rem;
@@ -1205,6 +1333,7 @@
     gap: clamp(0.75rem, 2vh, 1rem);
     align-items: center;
     justify-content: space-between;
+
     max-height: 96vh;
     padding: clamp(0.75rem, 1.5vh, 1rem);
   }
@@ -1213,6 +1342,24 @@
     flex: 1;
     gap: clamp(0.75rem, 2vh, 1rem);
     max-width: 65%;
+
+  .cardsContainer {
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
+    gap: clamp(0.75rem, 2vh, 1.25rem);
+    align-items: start;
+  }
+
+  .catImageCard {
+    min-height: 120px;
+  }
+
+  .catNameCard {
+    min-height: 120px;
+  }
+
+  .actionCard {
+    min-height: 120px;
   }
 
   .catImage {
@@ -1252,7 +1399,6 @@
       0 6px 18px rgb(0 0 0 / 12%),
       0 2px 6px rgb(0 0 0 / 6%);
   }
-
   .continueButton {
     min-height: 40px;
     padding: clamp(0.625rem, 1.8vh, 0.875rem) clamp(1rem, 2.8vh, 1.25rem);
@@ -1313,10 +1459,6 @@
   }
 
   /* Optimized blur effects for mobile performance */
-  .actionSection {
-    backdrop-filter: blur(12px);
-    will-change: transform, box-shadow;
-  }
 
   .tooltipContent {
     backdrop-filter: blur(8px);
@@ -1350,12 +1492,6 @@
   }
 
   /* Optimize box shadows for mobile */
-
-  .actionSection {
-    box-shadow:
-      0 10px 25px rgb(0 0 0 / 15%),
-      0 4px 10px rgb(0 0 0 / 8%);
-  }
 
   .continueButton {
     box-shadow:
@@ -1403,9 +1539,6 @@
   }
 
   /* Reduce backdrop blur for performance */
-  .actionSection {
-    backdrop-filter: blur(3px);
-  }
 
   /* Optimize for low-end devices */
   .welcomeWrapper {
@@ -1426,15 +1559,6 @@
   }
 
   /* Better mobile contrast */
-
-  .actionSection {
-    background: linear-gradient(
-      135deg,
-      rgb(255 255 255 / 98%),
-      rgb(248 250 252 / 98%)
-    );
-    border: 2px solid rgb(255 255 255 / 40%);
-  }
 
   /* Improved mobile button styling */
   .continueButton {
@@ -1459,7 +1583,6 @@
   .catImageCelebration,
   .catNameTitleCelebration .titleSparkle,
   .catNameSubtextCelebration,
-  .actionSectionCelebration,
   .continueButtonCelebration,
   .buttonEmoji,
   .buttonEmojiCelebration,
@@ -1474,7 +1597,6 @@
   .sparkleCelebration,
   .titleCelebration,
   .subtextCelebration,
-  .actionSectionCelebration,
   .buttonCelebration,
   .emojiBounce,
   .emojiCelebration,
@@ -1511,10 +1633,6 @@
 /* stylelint-disable-next-line media-feature-name-value-no-unknown */
 @media (prefers-contrast: high) {
 
-  .actionSection {
-    background: #fff;
-    border: 3px solid #000;
-  }
 
   .continueButton {
     border: 3px solid #000;
@@ -1604,13 +1722,6 @@
   }
 
 
-  .actionSection:hover {
-    transform: none;
-  }
-
-  .actionSection:active {
-    transform: translateY(-1px);
-  }
 
   /* Improve touch targets for mobile */
   .interactiveName {
@@ -1627,9 +1738,6 @@
 
   /* Better spacing for touch */
 
-  .actionSection {
-    padding: clamp(1.75rem, 4.5vw, 2.75rem);
-  }
 
   /* Enhanced mobile visual feedback */
   .interactiveName {
@@ -1657,10 +1765,6 @@
 }
 
 /* Dark theme support */
-:global(.dark-theme) .actionSection {
-  background: linear-gradient(135deg, rgb(30 30 30 / 95%), rgb(40 40 40 / 95%));
-  border-color: rgb(255 255 255 / 10%);
-}
 
 
 :global(.dark-theme) .catNameText {
