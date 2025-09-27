@@ -429,11 +429,7 @@ function WelcomeScreen({
               <span className={styles.titleText}>My cat&apos;s name is:</span>
               <span className={styles.titleSparkle}>✨</span>
             </h2>
-            <div
-              className={`${styles.catNameDisplay} ${showCelebration ? styles.catNameDisplayCelebration : ''}`}
-            >
-              {createInteractiveNames()}
-            </div>
+            {createInteractiveNames()}
             <p
               className={`${styles.catNameSubtext} ${showCelebration ? styles.catNameSubtextCelebration : ''}`}
             >
