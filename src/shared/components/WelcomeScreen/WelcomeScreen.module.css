@@ -904,7 +904,7 @@
   .contentContainer {
     gap: clamp(1.5rem, 4vw, 2.5rem);
     padding: clamp(1.25rem, 4vw, 2.5rem);
-    max-width: min(95vw, 480px);
+    max-width: 100%;
   }
 
   /* Enhanced mobile visual hierarchy */
@@ -1510,6 +1510,7 @@
   .contentContainer {
     gap: clamp(1.5rem, 4vw, 2rem);
     padding: clamp(1.25rem, 4vw, 2rem);
+    max-width: 100%;
   }
 
   .mainContent {
