@@ -213,15 +213,22 @@
   z-index: 1;
   display: flex;
   flex-direction: column;
-  gap: clamp(1.5rem, 3vw, 2.5rem);
   width: 100%;
   min-width: 320px;
-  max-width: 100%;
+  max-width: min(90vw, 800px);
   max-height: 90vh;
   padding: clamp(1rem, 4vw, 3rem);
   overflow-y: auto;
   scroll-behavior: smooth;
   -webkit-overflow-scrolling: touch;
+}
+
+/* Flex Cards Container */
+.cardsContainer {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(1.5rem, 3vw, 2.5rem);
+  width: 100%;
 }
 
 /* Custom scrollbar for content container */
@@ -243,13 +250,38 @@
   background: rgb(255 255 255 / 50%);
 }
 
-.mainContent {
+/* Card-specific styles */
+.catImageCard {
   display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
+  justify-content: center;
   align-items: center;
   text-align: center;
+  min-height: 200px;
 }
+
+.catNameCard {
+  text-align: center;
+  min-height: 180px;
+}
+
+.actionCard {
+  text-align: center;
+  min-height: 200px;
+}
+
+.actionCardCelebration {
+  animation: actionCardCelebration 2s ease-in-out infinite;
+}
+
+@keyframes actionCardCelebration {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.01);
+  }
+}
+
 
 .catImageContainer {
   position: relative;
@@ -444,72 +476,6 @@
   }
 }
 
-.actionSection {
-  position: relative;
-  padding: clamp(1.5rem, 4vw, 2.5rem);
-  overflow: hidden;
-  text-align: center;
-  background: linear-gradient(
-    135deg,
-    rgb(255 255 255 / 95%),
-    rgb(248 250 252 / 95%)
-  );
-  border: 1px solid rgb(255 255 255 / 20%);
-  border-radius: 25px;
-  box-shadow:
-    0 25px 50px rgb(0 0 0 / 25%),
-    0 10px 20px rgb(0 0 0 / 10%);
-  backdrop-filter: blur(15px);
-  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
-
-.actionSection::before {
-  position: absolute;
-  top: 0;
-  right: 0;
-  left: 0;
-  height: 3px;
-  content: "";
-  background: linear-gradient(
-    90deg,
-    #e8bf76,
-    #f1a438,
-    #e74c3c,
-    #3498db,
-    #9b59b6
-  );
-  background-size: 200% 100%;
-  animation: gradientShift 3s ease-in-out infinite;
-}
-
-@keyframes gradientShift {
-  0%,
-  100% {
-    background-position: 0% 50%;
-  }
-
-  50% {
-    background-position: 100% 50%;
-  }
-}
-
-.actionSectionCelebration {
-  box-shadow:
-    0 30px 60px rgb(232 191 118 / 20%),
-    0 15px 30px rgb(0 0 0 / 15%);
-  animation: actionSectionCelebration 2s ease-in-out infinite;
-}
-
-@keyframes actionSectionCelebration {
-  0%,
-  100% {
-    transform: scale(1);
-  }
-
-  50% {
-    transform: scale(1.01);
-  }
-}
 
 .continueButton {
   position: relative;
@@ -697,31 +663,84 @@
 /* Large screens and ultra-wide displays */
 @media (width >= 1400px) {
   .contentContainer {
+    max-width: min(80vw, 900px);
+  }
+
+  .cardsContainer {
     gap: clamp(2rem, 4vw, 3rem);
-    max-width: 100%;
-    padding: clamp(2rem, 5vw, 4rem);
   }
 
   .catImage {
     width: clamp(120px, 12vw, 180px);
     height: clamp(120px, 12vw, 180px);
   }
+
+  /* Horizontal layout for large screens */
+  .cardsContainer {
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
+    gap: clamp(1.5rem, 3vw, 2.5rem);
+    align-items: start;
+  }
+
+  .catImageCard {
+    min-height: 250px;
+  }
+
+  .catNameCard {
+    min-height: 250px;
+  }
+
+  .actionCard {
+    min-height: 250px;
+  }
 }
 
 /* Tablets and medium screens */
 @media (width <= 1024px) and (width >= 769px) {
   .contentContainer {
-    max-width: 100%;
+    max-width: min(85vw, 700px);
     padding: clamp(1.5rem, 3vw, 2.5rem);
+  }
+
+  .cardsContainer {
+    gap: clamp(1.25rem, 2.5vw, 2rem);
+  }
+
+  .catImageCard {
+    min-height: 180px;
+  }
+
+  .catNameCard {
+    min-height: 160px;
+  }
+
+  .actionCard {
+    min-height: 180px;
   }
 }
 
 /* Mobile landscape and small tablets */
 @media (width <= 768px) {
   .contentContainer {
-    gap: clamp(1.25rem, 2.5vw, 2rem);
-    max-width: 100%;
+    max-width: min(90vw, 500px);
     padding: clamp(1rem, 3vw, 2rem);
+  }
+
+  .cardsContainer {
+    gap: clamp(1.25rem, 2.5vw, 2rem);
+  }
+
+  .catImageCard {
+    min-height: 160px;
+  }
+
+  .catNameCard {
+    min-height: 140px;
+  }
+
+  .actionCard {
+    min-height: 160px;
   }
 }
 
@@ -796,10 +815,6 @@
   }
 
   /* Enhanced mobile spacing with better visual hierarchy */
-  .mainContent {
-    gap: clamp(2rem, 5vw, 3rem);
-    padding: clamp(1rem, 3vw, 1.5rem);
-  }
 
   .catNameSection {
     gap: clamp(1.25rem, 3vw, 1.75rem);
@@ -819,12 +834,6 @@
   }
 
 
-  .actionSection {
-    margin-top: 1rem;
-    box-shadow:
-      0 10px 30px rgb(0 0 0 / 15%),
-      0 4px 12px rgb(0 0 0 / 8%);
-  }
 
   /* Enhanced mobile typography with better readability */
   .catNameTitle {
@@ -858,10 +867,25 @@
 /* Mobile portrait - Enhanced mobile-first design */
 @media (width <= 480px) {
   .contentContainer {
-    gap: clamp(1.75rem, 4vw, 2.25rem);
-    max-width: 100%;
+    max-width: 96vw;
     padding: clamp(1.5rem, 4vw, 2.25rem);
     margin: 0 auto;
+  }
+
+  .cardsContainer {
+    gap: clamp(1.25rem, 3vw, 1.75rem);
+  }
+
+  .catImageCard {
+    min-height: 140px;
+  }
+
+  .catNameCard {
+    min-height: 120px;
+  }
+
+  .actionCard {
+    min-height: 140px;
   }
 
   .particle {
@@ -923,25 +947,6 @@
     line-height: 1.6;
   }
 
-  .actionSection {
-    padding: clamp(1.75rem, 4.5vw, 2.75rem);
-    border: 2px solid rgb(255 255 255 / 40%);
-    border-radius: 28px;
-    box-shadow:
-      0 18px 45px rgb(0 0 0 / 25%),
-      0 6px 18px rgb(0 0 0 / 15%),
-      inset 0 1px 0 rgb(255 255 255 / 20%);
-    backdrop-filter: blur(20px);
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-
-  .actionSection:hover {
-    transform: translateY(-1px);
-    box-shadow:
-      0 22px 55px rgb(0 0 0 / 30%),
-      0 8px 22px rgb(0 0 0 / 20%),
-      inset 0 1px 0 rgb(255 255 255 / 30%);
-  }
 
   .continueButton {
     min-height: 60px;
@@ -1072,9 +1077,24 @@
 /* Very small screens */
 @media (width <= 320px) {
   .contentContainer {
-    gap: 1.25rem;
-    max-width: 100%;
+    max-width: 98vw;
     padding: 1rem;
+  }
+
+  .cardsContainer {
+    gap: 1rem;
+  }
+
+  .catImageCard {
+    min-height: 120px;
+  }
+
+  .catNameCard {
+    min-height: 100px;
+  }
+
+  .actionCard {
+    min-height: 120px;
   }
 
   .catImage {
@@ -1099,14 +1119,6 @@
   }
 
 
-  .actionSection {
-    padding: 1.25rem;
-    border: 2px solid rgb(255 255 255 / 25%);
-    border-radius: 20px;
-    box-shadow:
-      0 10px 25px rgb(0 0 0 / 15%),
-      0 4px 10px rgb(0 0 0 / 8%);
-  }
 
   .continueButton {
     min-height: 48px;
@@ -1156,9 +1168,6 @@
   }
 
   /* Better spacing */
-  .mainContent {
-    gap: 1.5rem;
-  }
 
   .catNameSection {
     gap: 1rem;
@@ -1199,18 +1208,27 @@
   }
 
   .contentContainer {
-    flex-direction: row;
-    gap: clamp(1rem, 2.5vh, 1.5rem);
-    align-items: center;
-    justify-content: space-between;
     max-height: 96vh;
     padding: clamp(1rem, 2vh, 1.5rem);
   }
 
-  .mainContent {
-    flex: 1;
-    gap: clamp(1rem, 2.5vh, 1.5rem);
-    max-width: 65%;
+  .cardsContainer {
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
+    gap: clamp(0.75rem, 2vh, 1.25rem);
+    align-items: start;
+  }
+
+  .catImageCard {
+    min-height: 120px;
+  }
+
+  .catNameCard {
+    min-height: 120px;
+  }
+
+  .actionCard {
+    min-height: 120px;
   }
 
   .catImage {
@@ -1241,15 +1259,6 @@
     line-height: 1.4;
   }
 
-  .actionSection {
-    flex: 0 0 32%;
-    padding: clamp(1.25rem, 3vh, 1.75rem);
-    border: 2px solid rgb(255 255 255 / 25%);
-    border-radius: 20px;
-    box-shadow:
-      0 8px 25px rgb(0 0 0 / 15%),
-      0 3px 10px rgb(0 0 0 / 8%);
-  }
 
   .continueButton {
     min-height: 44px;
@@ -1311,10 +1320,6 @@
   }
 
   /* Optimized blur effects for mobile performance */
-  .actionSection {
-    backdrop-filter: blur(12px);
-    will-change: transform, box-shadow;
-  }
 
   .tooltipContent {
     backdrop-filter: blur(8px);
@@ -1349,12 +1354,6 @@
 
   /* Optimize box shadows for mobile */
 
-  .actionSection {
-    box-shadow:
-      0 10px 25px rgb(0 0 0 / 15%),
-      0 4px 10px rgb(0 0 0 / 8%);
-  }
-
   .continueButton {
     box-shadow:
       0 6px 20px rgb(231 76 60 / 30%),
@@ -1380,9 +1379,6 @@
     max-width: 100%;
   }
 
-  .mainContent {
-    gap: clamp(1.75rem, 5vw, 2.5rem);
-  }
 
   .catNameSection {
     gap: clamp(1rem, 3vw, 1.5rem);
@@ -1401,9 +1397,6 @@
   }
 
   /* Reduce backdrop blur for performance */
-  .actionSection {
-    backdrop-filter: blur(3px);
-  }
 
   /* Optimize for low-end devices */
   .welcomeWrapper {
@@ -1424,15 +1417,6 @@
   }
 
   /* Better mobile contrast */
-
-  .actionSection {
-    background: linear-gradient(
-      135deg,
-      rgb(255 255 255 / 98%),
-      rgb(248 250 252 / 98%)
-    );
-    border: 2px solid rgb(255 255 255 / 40%);
-  }
 
   /* Improved mobile button styling */
   .continueButton {
@@ -1457,7 +1441,6 @@
   .catImageCelebration,
   .catNameTitleCelebration .titleSparkle,
   .catNameSubtextCelebration,
-  .actionSectionCelebration,
   .continueButtonCelebration,
   .buttonEmoji,
   .buttonEmojiCelebration,
@@ -1472,7 +1455,6 @@
   .sparkleCelebration,
   .titleCelebration,
   .subtextCelebration,
-  .actionSectionCelebration,
   .buttonCelebration,
   .emojiBounce,
   .emojiCelebration,
@@ -1509,10 +1491,6 @@
 /* stylelint-disable-next-line media-feature-name-value-no-unknown */
 @media (prefers-contrast: high) {
 
-  .actionSection {
-    background: #fff;
-    border: 3px solid #000;
-  }
 
   .continueButton {
     border: 3px solid #000;
@@ -1602,13 +1580,6 @@
   }
 
 
-  .actionSection:hover {
-    transform: none;
-  }
-
-  .actionSection:active {
-    transform: translateY(-1px);
-  }
 
   /* Improve touch targets for mobile */
   .interactiveName {
@@ -1625,9 +1596,6 @@
 
   /* Better spacing for touch */
 
-  .actionSection {
-    padding: clamp(1.75rem, 4.5vw, 2.75rem);
-  }
 
   /* Enhanced mobile visual feedback */
   .interactiveName {
@@ -1655,10 +1623,6 @@
 }
 
 /* Dark theme support */
-:global(.dark-theme) .actionSection {
-  background: linear-gradient(135deg, rgb(30 30 30 / 95%), rgb(40 40 40 / 95%));
-  border-color: rgb(255 255 255 / 10%);
-}
 
 
 :global(.dark-theme) .catNameText {
