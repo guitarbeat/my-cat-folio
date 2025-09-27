@@ -5,7 +5,7 @@
  */
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import PropTypes from 'prop-types';
-import { NameStatsTooltip } from '../index';
+import { NameStatsTooltip, Card } from '../index';
 import styles from './WelcomeScreen.module.css';
 
 function WelcomeScreen({
@@ -404,86 +404,105 @@ function WelcomeScreen({
 
       {/* Centered Content Container */}
       <div className={styles.contentContainer} ref={containerRef}>
-        {/* Main Content Section */}
-        <div className={styles.mainContent}>
-          <div className={styles.catImageContainer}>
-            <picture>
-              <source type="image/avif" srcSet="/assets/images/IMG_5071.avif" />
-              <source type="image/webp" srcSet="/assets/images/IMG_5071.webp" />
-              <img
-                src="/assets/images/IMG_5071.JPG"
-                alt="Cute cat avatar"
-                className={`${styles.catImage} ${showCelebration ? styles.catImageCelebration : ''}`}
-                loading="lazy"
-                decoding="async"
-                fetchPriority="low"
-              />
-            </picture>
-            <div className={styles.catImageGlow} />
-          </div>
-
-          <div className={styles.catNameSection}>
-            <h2
-              className={`${styles.catNameTitle} ${showCelebration ? styles.catNameTitleCelebration : ''}`}
-            >
-              <span className={styles.titleText}>My cat&apos;s name is:</span>
-              <span className={styles.titleSparkle}>✨</span>
-            </h2>
-            {createInteractiveNames()}
-            <p
-              className={`${styles.catNameSubtext} ${showCelebration ? styles.catNameSubtextCelebration : ''}`}
-            >
-              A name carefully crafted from all the tournament results, ranked
-              from most to least voted!
-            </p>
-          </div>
-        </div>
-
-        {/* Action Section */}
-        <div
-          className={`${styles.actionSection} ${showCelebration ? styles.actionSectionCelebration : ''}`}
-        >
-          <button
-            onClick={handleContinue}
-            onTouchStart={handleButtonTouchStart}
-            onTouchEnd={handleButtonTouchEnd}
-            onTouchCancel={handleButtonTouchCancel}
-            className={`${styles.continueButton} ${showCelebration ? styles.continueButtonCelebration : ''}`}
-            disabled={isAnimating}
-            aria-label={
-              isAnimating
-                ? 'Entering tournament, please wait'
-                : 'Start the tournament'
-            }
-            aria-describedby="button-description"
-            style={{
-              minHeight: '56px',
-              minWidth: '200px',
-              touchAction: 'manipulation'
-            }}
+        {/* Flex Cards Layout */}
+        <div className={styles.cardsContainer}>
+          {/* Cat Image Card */}
+          <Card 
+            variant="elevated" 
+            padding="large" 
+            shadow="large"
+            className={styles.catImageCard}
           >
-            <span className={styles.buttonContent}>
-              <span className={styles.buttonText}>
-                {isAnimating
-                  ? 'Entering Tournament...'
-                  : 'Start the Tournament!'}
-              </span>
-              <span
-                className={`${styles.buttonEmoji} ${showCelebration ? styles.buttonEmojiCelebration : ''}`}
-                aria-hidden="true"
-              >
-                🏆
-              </span>
-            </span>
-            <div className={styles.buttonGlow} />
-          </button>
+            <div className={styles.catImageContainer}>
+              <picture>
+                <source type="image/avif" srcSet="/assets/images/IMG_5071.avif" />
+                <source type="image/webp" srcSet="/assets/images/IMG_5071.webp" />
+                <img
+                  src="/assets/images/IMG_5071.JPG"
+                  alt="Cute cat avatar"
+                  className={`${styles.catImage} ${showCelebration ? styles.catImageCelebration : ''}`}
+                  loading="lazy"
+                  decoding="async"
+                  fetchPriority="low"
+                />
+              </picture>
+              <div className={styles.catImageGlow} />
+            </div>
+          </Card>
 
-          <div className={styles.explanationText} id="button-description">
-            <p>
-              This name represents the collective wisdom of all tournament
-              participants!
-            </p>
-          </div>
+          {/* Cat Name Card */}
+          <Card 
+            variant="filled" 
+            padding="large" 
+            shadow="medium"
+            className={styles.catNameCard}
+          >
+            <div className={styles.catNameSection}>
+              <h2
+                className={`${styles.catNameTitle} ${showCelebration ? styles.catNameTitleCelebration : ''}`}
+              >
+                <span className={styles.titleText}>My cat&apos;s name is:</span>
+                <span className={styles.titleSparkle}>✨</span>
+              </h2>
+              {createInteractiveNames()}
+              <p
+                className={`${styles.catNameSubtext} ${showCelebration ? styles.catNameSubtextCelebration : ''}`}
+              >
+                A name carefully crafted from all the tournament results, ranked
+                from most to least voted!
+              </p>
+            </div>
+          </Card>
+
+          {/* Action Card */}
+          <Card 
+            variant="elevated" 
+            padding="large" 
+            shadow="large"
+            className={`${styles.actionCard} ${showCelebration ? styles.actionCardCelebration : ''}`}
+          >
+            <button
+              onClick={handleContinue}
+              onTouchStart={handleButtonTouchStart}
+              onTouchEnd={handleButtonTouchEnd}
+              onTouchCancel={handleButtonTouchCancel}
+              className={`${styles.continueButton} ${showCelebration ? styles.continueButtonCelebration : ''}`}
+              disabled={isAnimating}
+              aria-label={
+                isAnimating
+                  ? 'Entering tournament, please wait'
+                  : 'Start the tournament'
+              }
+              aria-describedby="button-description"
+              style={{
+                minHeight: '56px',
+                minWidth: '200px',
+                touchAction: 'manipulation'
+              }}
+            >
+              <span className={styles.buttonContent}>
+                <span className={styles.buttonText}>
+                  {isAnimating
+                    ? 'Entering Tournament...'
+                    : 'Start the Tournament!'}
+                </span>
+                <span
+                  className={`${styles.buttonEmoji} ${showCelebration ? styles.buttonEmojiCelebration : ''}`}
+                  aria-hidden="true"
+                >
+                  🏆
+                </span>
+              </span>
+              <div className={styles.buttonGlow} />
+            </button>
+
+            <div className={styles.explanationText} id="button-description">
+              <p>
+                This name represents the collective wisdom of all tournament
+                participants!
+              </p>
+            </div>
+          </Card>
         </div>
       </div>
 

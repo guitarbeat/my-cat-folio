@@ -213,15 +213,22 @@
   z-index: 1;
   display: flex;
   flex-direction: column;
-  gap: clamp(1.5rem, 3vw, 2.5rem);
   width: 100%;
   min-width: 320px;
-  max-width: min(90vw, 600px);
+  max-width: min(90vw, 800px);
   max-height: 90vh;
   padding: clamp(1rem, 4vw, 3rem);
   overflow-y: auto;
   scroll-behavior: smooth;
   -webkit-overflow-scrolling: touch;
+}
+
+/* Flex Cards Container */
+.cardsContainer {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(1.5rem, 3vw, 2.5rem);
+  width: 100%;
 }
 
 /* Custom scrollbar for content container */
@@ -243,6 +250,39 @@
   background: rgb(255 255 255 / 50%);
 }
 
+/* Card-specific styles */
+.catImageCard {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  min-height: 200px;
+}
+
+.catNameCard {
+  text-align: center;
+  min-height: 180px;
+}
+
+.actionCard {
+  text-align: center;
+  min-height: 200px;
+}
+
+.actionCardCelebration {
+  animation: actionCardCelebration 2s ease-in-out infinite;
+}
+
+@keyframes actionCardCelebration {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.01);
+  }
+}
+
+/* Legacy mainContent - now handled by cards */
 .mainContent {
   display: flex;
   flex-direction: column;
@@ -444,6 +484,7 @@
   }
 }
 
+/* Action section styles - now inside card */
 .actionSection {
   position: relative;
   padding: clamp(1.5rem, 4vw, 2.5rem);
@@ -697,30 +738,84 @@
 /* Large screens and ultra-wide displays */
 @media (width >= 1400px) {
   .contentContainer {
+    max-width: min(80vw, 900px);
+  }
+
+  .cardsContainer {
     gap: clamp(2rem, 4vw, 3rem);
-    max-width: min(80vw, 800px);
   }
 
   .catImage {
     width: clamp(120px, 12vw, 180px);
     height: clamp(120px, 12vw, 180px);
   }
+
+  /* Horizontal layout for large screens */
+  .cardsContainer {
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
+    gap: clamp(1.5rem, 3vw, 2.5rem);
+    align-items: start;
+  }
+
+  .catImageCard {
+    min-height: 250px;
+  }
+
+  .catNameCard {
+    min-height: 250px;
+  }
+
+  .actionCard {
+    min-height: 250px;
+  }
 }
 
 /* Tablets and medium screens */
 @media (width <= 1024px) and (width >= 769px) {
   .contentContainer {
-    max-width: min(85vw, 550px);
+    max-width: min(85vw, 700px);
     padding: clamp(1.5rem, 3vw, 2.5rem);
+  }
+
+  .cardsContainer {
+    gap: clamp(1.25rem, 2.5vw, 2rem);
+  }
+
+  .catImageCard {
+    min-height: 180px;
+  }
+
+  .catNameCard {
+    min-height: 160px;
+  }
+
+  .actionCard {
+    min-height: 180px;
   }
 }
 
 /* Mobile landscape and small tablets */
 @media (width <= 768px) {
   .contentContainer {
-    gap: clamp(1.25rem, 2.5vw, 2rem);
     max-width: min(90vw, 500px);
     padding: clamp(1rem, 3vw, 2rem);
+  }
+
+  .cardsContainer {
+    gap: clamp(1.25rem, 2.5vw, 2rem);
+  }
+
+  .catImageCard {
+    min-height: 160px;
+  }
+
+  .catNameCard {
+    min-height: 140px;
+  }
+
+  .actionCard {
+    min-height: 160px;
   }
 }
 
@@ -857,10 +952,25 @@
 /* Mobile portrait - Enhanced mobile-first design */
 @media (width <= 480px) {
   .contentContainer {
-    gap: clamp(1.75rem, 4vw, 2.25rem);
     max-width: 96vw;
     padding: clamp(1.5rem, 4vw, 2.25rem);
     margin: 0 auto;
+  }
+
+  .cardsContainer {
+    gap: clamp(1.25rem, 3vw, 1.75rem);
+  }
+
+  .catImageCard {
+    min-height: 140px;
+  }
+
+  .catNameCard {
+    min-height: 120px;
+  }
+
+  .actionCard {
+    min-height: 140px;
   }
 
   .particle {
@@ -1071,9 +1181,24 @@
 /* Very small screens */
 @media (width <= 320px) {
   .contentContainer {
-    gap: 1.25rem;
     max-width: 98vw;
     padding: 1rem;
+  }
+
+  .cardsContainer {
+    gap: 1rem;
+  }
+
+  .catImageCard {
+    min-height: 120px;
+  }
+
+  .catNameCard {
+    min-height: 100px;
+  }
+
+  .actionCard {
+    min-height: 120px;
   }
 
   .catImage {
@@ -1198,18 +1323,27 @@
   }
 
   .contentContainer {
-    flex-direction: row;
-    gap: clamp(1rem, 2.5vh, 1.5rem);
-    align-items: center;
-    justify-content: space-between;
     max-height: 96vh;
     padding: clamp(1rem, 2vh, 1.5rem);
   }
 
-  .mainContent {
-    flex: 1;
-    gap: clamp(1rem, 2.5vh, 1.5rem);
-    max-width: 65%;
+  .cardsContainer {
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
+    gap: clamp(0.75rem, 2vh, 1.25rem);
+    align-items: start;
+  }
+
+  .catImageCard {
+    min-height: 120px;
+  }
+
+  .catNameCard {
+    min-height: 120px;
+  }
+
+  .actionCard {
+    min-height: 120px;
   }
 
   .catImage {

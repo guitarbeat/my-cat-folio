@@ -27,3 +27,4 @@ export { default as ToastContainer } from './ToastContainer';
 export { default as BongoCat } from './BongoCat/BongoCat';
 export { default as WelcomeScreen } from './WelcomeScreen/WelcomeScreen';
 export { default as NameStatsTooltip } from './NameStatsTooltip/NameStatsTooltip';
+export { default as Card } from './Card/Card';
