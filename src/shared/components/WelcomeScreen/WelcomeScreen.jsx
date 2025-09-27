@@ -408,10 +408,12 @@ function WelcomeScreen({
         <div className={styles.cardsContainer}>
           {/* Cat Image Card */}
           <Card 
+            as="section"
             variant="elevated" 
             padding="large" 
             shadow="large"
             className={styles.catImageCard}
+            aria-label="Cat avatar display"
           >
             <div className={styles.catImageContainer}>
               <picture>
@@ -432,10 +434,12 @@ function WelcomeScreen({
 
           {/* Cat Name Card */}
           <Card 
+            as="section"
             variant="filled" 
             padding="large" 
             shadow="medium"
             className={styles.catNameCard}
+            aria-label="Cat name display"
           >
             <div className={styles.catNameSection}>
               <h2
@@ -456,10 +460,12 @@ function WelcomeScreen({
 
           {/* Action Card */}
           <Card 
+            as="section"
             variant="elevated" 
             padding="large" 
             shadow="large"
             className={`${styles.actionCard} ${showCelebration ? styles.actionCardCelebration : ''}`}
+            aria-label="Tournament action controls"
           >
             <button
               onClick={handleContinue}

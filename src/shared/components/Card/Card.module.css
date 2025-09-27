@@ -107,27 +107,29 @@
   background: transparent;
 }
 
-/* Hover effects */
-.card:hover {
-  transform: translateY(-2px);
-}
+/* Hover effects - only on devices that support hover */
+@media (hover: hover) and (pointer: fine) {
+  .card:hover {
+    transform: translateY(-2px);
+  }
 
-.card:hover.shadow-medium {
-  box-shadow: 
-    0 12px 35px rgb(0 0 0 / 20%),
-    0 5px 15px rgb(0 0 0 / 12%);
-}
+  .card:hover.shadow-medium {
+    box-shadow: 
+      0 12px 35px rgb(0 0 0 / 20%),
+      0 5px 15px rgb(0 0 0 / 12%);
+  }
 
-.card:hover.shadow-large {
-  box-shadow: 
-    0 20px 45px rgb(0 0 0 / 25%),
-    0 8px 20px rgb(0 0 0 / 15%);
-}
+  .card:hover.shadow-large {
+    box-shadow: 
+      0 20px 45px rgb(0 0 0 / 25%),
+      0 8px 20px rgb(0 0 0 / 15%);
+  }
 
-.card:hover.shadow-xl {
-  box-shadow: 
-    0 30px 60px rgb(0 0 0 / 30%),
-    0 15px 30px rgb(0 0 0 / 20%);
+  .card:hover.shadow-xl {
+    box-shadow: 
+      0 30px 60px rgb(0 0 0 / 30%),
+      0 15px 30px rgb(0 0 0 / 20%);
+  }
 }
 
 /* Mobile optimizations */

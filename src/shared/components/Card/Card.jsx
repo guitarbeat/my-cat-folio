@@ -14,6 +14,7 @@ function Card({
   shadow = 'medium',
   border = false,
   background = 'solid',
+  as: Component = 'div',
   ...props
 }) {
   const cardClasses = [
@@ -27,9 +28,9 @@ function Card({
   ].filter(Boolean).join(' ');
 
   return (
-    <div className={cardClasses} {...props}>
+    <Component className={cardClasses} {...props}>
       {children}
-    </div>
+    </Component>
   );
 }
 
@@ -42,7 +43,8 @@ Card.propTypes = {
   padding: PropTypes.oneOf(['none', 'small', 'medium', 'large', 'xl']),
   shadow: PropTypes.oneOf(['none', 'small', 'medium', 'large', 'xl']),
   border: PropTypes.bool,
-  background: PropTypes.oneOf(['solid', 'glass', 'gradient', 'transparent'])
+  background: PropTypes.oneOf(['solid', 'glass', 'gradient', 'transparent']),
+  as: PropTypes.elementType
 };
 
 export default Card;
