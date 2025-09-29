@@ -218,8 +218,8 @@
   gap: clamp(var(--ws-space-lg), 3vw, var(--ws-space-2xl));
   width: 100%;
   max-width: 600px;
-  margin: 0 auto;
   padding: clamp(var(--ws-space-sm), 2vw, var(--ws-space-lg));
+  margin: 0 auto;
 }
 
 /* ==========================================================================
@@ -322,8 +322,8 @@
   z-index: 1;
   background: radial-gradient(circle, rgb(var(--ws-primary-gold) / 15%), transparent 70%);
   border-radius: var(--ws-radius-full);
-  animation: glowPulse 6s ease-in-out infinite;
   opacity: 0.5;
+  animation: glowPulse 6s ease-in-out infinite;
 }
 
 /* ==========================================================================
@@ -357,8 +357,8 @@
 
 .titleSparkle {
   font-size: 1.2em;
-  animation: sparkle 4s ease-in-out infinite;
   opacity: 0.7;
+  animation: sparkle 4s ease-in-out infinite;
 }
 
 .catNameText {
@@ -593,8 +593,8 @@
   position: absolute;
   background: radial-gradient(circle, var(--ws-primary-gold), var(--ws-secondary-gold));
   border-radius: var(--ws-radius-full);
-  animation: particleFloat 12s ease-in-out infinite;
   opacity: 0.3;
+  animation: particleFloat 12s ease-in-out infinite;
 }
 
 /* ==========================================================================
@@ -652,6 +652,7 @@
     opacity: 0.5;
     transform: scale(1);
   }
+
   50% {
     opacity: 0.8;
     transform: scale(1.1);
@@ -663,6 +664,7 @@
     opacity: 0.7;
     transform: scale(1) rotate(0deg);
   }
+
   50% {
     opacity: 1;
     transform: scale(1.2) rotate(180deg);
@@ -673,12 +675,15 @@
   0%, 100% {
     transform: translateY(0) rotate(0deg);
   }
+
   25% {
     transform: translateY(-20px) rotate(90deg);
   }
+
   50% {
     transform: translateY(-10px) rotate(180deg);
   }
+
   75% {
     transform: translateY(-30px) rotate(270deg);
   }
@@ -688,6 +693,7 @@
   0%, 100% {
     background-position: 0% 50%;
   }
+
   50% {
     background-position: 100% 50%;
   }
@@ -697,6 +703,7 @@
   0%, 100% {
     box-shadow: 0 6px 20px rgb(231 76 60 / 40%);
   }
+
   50% {
     box-shadow: 0 8px 25px rgb(231 76 60 / 60%);
   }
@@ -706,6 +713,7 @@
   0%, 100% {
     transform: scale(1) rotate(0deg);
   }
+
   50% {
     transform: scale(1.1) rotate(10deg);
   }
@@ -716,6 +724,7 @@
     opacity: 0;
     transform: translate(-50%, -50%) scale(0.9);
   }
+
   to {
     opacity: 1;
     transform: translate(-50%, -50%) scale(1);
@@ -726,9 +735,11 @@
   0% {
     width: 0%;
   }
+
   50% {
     width: 70%;
   }
+
   100% {
     width: 100%;
   }
@@ -751,12 +762,12 @@
 
   .contentContainer {
     gap: clamp(var(--ws-space-sm), 1.5vw, var(--ws-space-lg));
-    padding: clamp(var(--ws-space-sm), 1.5vw, var(--ws-space-lg));
     max-height: none;
+    padding: clamp(var(--ws-space-sm), 1.5vw, var(--ws-space-lg));
     overflow: visible;
-    -webkit-overflow-scrolling: touch;
     overscroll-behavior: contain;
     scroll-padding-top: var(--ws-space-sm);
+    -webkit-overflow-scrolling: touch;
   }
 
   .cardsContainer {
@@ -797,8 +808,8 @@
   }
 
   .actionSection {
-    margin-top: var(--ws-space-sm);
     padding: clamp(var(--ws-space-lg), 2.5vw, var(--ws-space-2xl));
+    margin-top: var(--ws-space-sm);
     box-shadow: var(--ws-shadow-lg);
   }
 
@@ -812,8 +823,8 @@
     min-width: 52px;
     min-height: 48px;
     padding: 10px 14px;
-    font-weight: 600;
     font-size: clamp(1.2rem, 3.2vw, 1.4rem);
+    font-weight: 600;
     border-radius: var(--ws-radius-md);
     transition: all var(--ws-duration-fast) cubic-bezier(0.4, 0, 0.2, 1);
   }
@@ -897,8 +908,8 @@
 
   .contentContainer {
     gap: var(--ws-space-md);
-    padding: var(--ws-space-md);
     max-height: none;
+    padding: var(--ws-space-md);
     overflow: visible;
   }
 
@@ -961,11 +972,11 @@
 @media (height <= 500px) and (orientation: landscape) {
   .welcomeWrapper {
     position: relative;
+    align-items: flex-start;
     height: auto;
     min-height: 100vh;
-    overflow: visible;
-    align-items: flex-start;
     padding-top: 0.5vh;
+    overflow: visible;
   }
 
   .contentContainer {
@@ -974,8 +985,8 @@
     align-items: center;
     justify-content: space-between;
     max-height: none;
-    overflow: visible;
     padding: clamp(var(--ws-space-md), 1.5vh, var(--ws-space-lg));
+    overflow: visible;
   }
 
   .cardsContainer {

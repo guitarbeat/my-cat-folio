@@ -88,7 +88,7 @@ function WelcomeScreen({
       const isMobile = window.innerWidth <= 768;
       const isSmallMobile = window.innerWidth <= 480;
       const animationThreshold = isSmallMobile ? 0.1 : isMobile ? 0.15 : 0.2;
-      
+
       if (Math.random() < animationThreshold) {
         animateParticles();
       }
@@ -139,7 +139,7 @@ function WelcomeScreen({
   const handleButtonTouchStart = (event) => {
     event.target.style.transform = 'scale(0.97)';
     event.target.style.transition = 'transform 0.1s ease-out';
-    
+
     // Enhanced haptic feedback for mobile
     if (navigator.vibrate) {
       navigator.vibrate(50);
@@ -407,10 +407,10 @@ function WelcomeScreen({
         {/* Flex Cards Layout */}
         <div className={styles.cardsContainer}>
           {/* Cat Image Card */}
-          <Card 
+          <Card
             as="section"
-            variant="elevated" 
-            padding="large" 
+            variant="elevated"
+            padding="large"
             shadow="large"
             className={styles.catImageCard}
             aria-label="Cat avatar display"
@@ -433,10 +433,10 @@ function WelcomeScreen({
           </Card>
 
           {/* Cat Name Card */}
-          <Card 
+          <Card
             as="section"
-            variant="filled" 
-            padding="large" 
+            variant="filled"
+            padding="large"
             shadow="medium"
             className={styles.catNameCard}
             aria-label="Cat name display"
@@ -459,10 +459,10 @@ function WelcomeScreen({
           </Card>
 
           {/* Action Card */}
-          <Card 
+          <Card
             as="section"
-            variant="elevated" 
-            padding="large" 
+            variant="elevated"
+            padding="large"
             shadow="large"
             className={`${styles.actionCard} ${showCelebration ? styles.actionCardCelebration : ''}`}
             aria-label="Tournament action controls"
