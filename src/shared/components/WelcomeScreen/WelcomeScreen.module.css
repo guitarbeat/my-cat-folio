@@ -1127,6 +1127,7 @@
 }
 
 /* High contrast mode support */
+/* stylelint-disable-next-line media-feature-name-value-no-unknown */
 @media (prefers-contrast: high) {
   .actionSection {
     background: var(--ws-white);

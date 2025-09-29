@@ -279,10 +279,89 @@ export class ErrorService {
       console.groupEnd();
     }
 
-    // * TODO: Send to error tracking service (e.g., Sentry) in production
+    // * Send to error tracking service in production
     if (process.env.NODE_ENV === 'production') {
-      // * this.sendToErrorService(logData);
+      this.sendToErrorService(logData);
     }
+  }
+
+  /**
+   * * Sends error data to external error tracking service
+   * @param {Object} logData - Error log data to send
+   * @private
+   */
+  static sendToErrorService(logData) {
+    try {
+      // TODO: Integrate with actual error tracking service (e.g., Sentry)
+      // Example Sentry integration:
+      // if (window.Sentry) {
+      //   window.Sentry.captureException(new Error(logData.message), {
+      //     tags: { context: logData.context },
+      //     extra: logData.metadata,
+      //     level: this.mapSeverityToSentryLevel(logData.severity)
+      //   });
+      // }
+
+      // For now, we'll just prepare the data structure
+      const errorData = {
+        message: logData.message,
+        level: logData.severity,
+        timestamp: logData.timestamp,
+        context: logData.context,
+        metadata: logData.metadata,
+        userAgent: navigator.userAgent,
+        url: window.location.href,
+        userId: this.getUserId() // Helper to get current user ID
+      };
+
+      // In a real implementation, this would send to your error tracking service
+      if (process.env.NODE_ENV === 'development') {
+        console.log('📊 Would send to error tracking service:', errorData);
+      }
+
+      // Example of how you might send to a custom endpoint:
+      // fetch('/api/errors', {
+      //   method: 'POST',
+      //   headers: { 'Content-Type': 'application/json' },
+      //   body: JSON.stringify(errorData)
+      // }).catch(err => console.warn('Failed to send error to tracking service:', err));
+
+    } catch (err) {
+      // Don't let error tracking itself cause more errors
+      if (process.env.NODE_ENV === 'development') {
+        console.warn('Failed to send error to tracking service:', err);
+      }
+    }
+  }
+
+  /**
+   * * Gets the current user ID for error tracking context
+   * @returns {string|null} User ID or null if not available
+   * @private
+   */
+  static getUserId() {
+    try {
+      // Get user from localStorage (matches the app's auth system)
+      return localStorage.getItem('catNamesUser') || null;
+    } catch {
+      return null;
+    }
+  }
+
+  /**
+   * * Maps internal severity levels to Sentry levels
+   * @param {string} severity - Internal severity level
+   * @returns {string} Sentry-compatible level
+   * @private
+   */
+  static mapSeverityToSentryLevel(severity) {
+    const mapping = {
+      [this.SEVERITY_LEVELS.LOW]: 'info',
+      [this.SEVERITY_LEVELS.MEDIUM]: 'warning',
+      [this.SEVERITY_LEVELS.HIGH]: 'error',
+      [this.SEVERITY_LEVELS.CRITICAL]: 'fatal'
+    };
+    return mapping[severity] || 'error';
   }
 
   /**
