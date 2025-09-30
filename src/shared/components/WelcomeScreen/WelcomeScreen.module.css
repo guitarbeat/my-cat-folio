@@ -232,10 +232,17 @@
 .catNameContainer {
   font-family: 'Waiting for the Sunrise', cursive;
   color: rgba(41, 41, 41, 0.8);
-  font-size: clamp(2.5em, 6vw, 3.5em);
+  font-size: clamp(1.8em, 4.5vw, 2.8em);
   transform: rotate(-7deg);
-  line-height: 1.2;
-  padding: 0.2em 0.5em;
+  line-height: 1.1;
+  padding: 0.1em 0.3em;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 0.1em;
+  max-width: 100%;
+  overflow: hidden;
 }
 
 .cardFooter {
@@ -421,15 +428,16 @@
 }
 
 .catNameText {
-  display: block;
+  display: inline;
   font-family: 'Waiting for the Sunrise', cursive;
   font-size: 1em;
   font-weight: 400;
-  line-height: 1.2;
+  line-height: 1.1;
   color: rgba(41, 41, 41, 0.8);
-  overflow-wrap: anywhere;
+  overflow-wrap: normal;
   text-transform: capitalize;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
 }
 
 .catNameText:first-letter {
@@ -602,10 +610,10 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 32px;
-  min-height: 28px;
-  padding: 3px 6px;
-  margin: 0 1px;
+  min-width: 24px;
+  min-height: 20px;
+  padding: 2px 4px;
+  margin: 0 0.5px;
   text-align: center;
   cursor: pointer;
   background: linear-gradient(
@@ -614,8 +622,11 @@
     rgb(var(--ws-secondary-gold) / 10%)
   );
   border: 1px solid transparent;
-  border-radius: 5px;
+  border-radius: 3px;
   transition: all var(--ws-duration-normal) ease;
+  white-space: nowrap;
+  flex-shrink: 0;
+  max-width: 100%;
 }
 
 .interactiveName:hover {
@@ -638,6 +649,14 @@
     rgb(var(--ws-secondary-gold) / 40%)
   );
   transform: scale(0.95);
+}
+
+/* Handle very long names that need to break */
+.interactiveName[data-long-name="true"] {
+  white-space: normal;
+  word-break: break-word;
+  min-width: auto;
+  max-width: 120px;
 }
 
 /* ==========================================================================
@@ -850,8 +869,9 @@
   }
 
   .catNameContainer {
-    font-size: clamp(2.2em, 5vw, 2.8em);
+    font-size: clamp(1.6em, 4vw, 2.2em);
     transform: rotate(-5deg);
+    gap: 0.05em;
   }
 
   .footerText {
@@ -881,8 +901,9 @@
   }
 
   .catNameContainer {
-    font-size: clamp(2em, 4.5vw, 2.4em);
+    font-size: clamp(1.4em, 3.5vw, 1.8em);
     transform: rotate(-4deg);
+    gap: 0.03em;
   }
 
   .footerText {
@@ -921,8 +942,18 @@
   }
 
   .catNameContainer {
-    font-size: clamp(1.8em, 4vw, 2.2em);
+    font-size: clamp(1.2em, 3vw, 1.6em);
     transform: rotate(-3deg);
+    gap: 0.02em;
+    padding: 0.05em 0.2em;
+  }
+
+  .interactiveName {
+    min-width: 20px;
+    min-height: 18px;
+    padding: 1px 3px;
+    margin: 0 0.2px;
+    font-size: 0.9em;
   }
 
   .footerText {
@@ -963,8 +994,9 @@
   }
 
   .catNameContainer {
-    font-size: clamp(2.4em, 5.5vw, 3.2em);
+    font-size: clamp(1.8em, 4.5vw, 2.6em);
     transform: rotate(-6deg);
+    gap: 0.08em;
   }
 
   .footerText {
@@ -988,8 +1020,45 @@
   }
 
   .catNameContainer {
-    font-size: clamp(2.2em, 5vw, 2.8em);
+    font-size: clamp(1.6em, 4vw, 2.2em);
     transform: rotate(-6deg);
+    gap: 0.05em;
+  }
+}
+
+/* ==========================================================================
+   ULTRA-WIDE SCREEN OPTIMIZATIONS
+   ========================================================================== */
+
+/* Large screens (≥1200px) - maximize horizontal space usage */
+@media (width >= 1200px) {
+  .catNameContainer {
+    font-size: clamp(2.2em, 3.5vw, 3.2em);
+    gap: 0.15em;
+    padding: 0.15em 0.4em;
+  }
+
+  .interactiveName {
+    min-width: 28px;
+    min-height: 24px;
+    padding: 3px 6px;
+    margin: 0 0.8px;
+  }
+}
+
+/* Extra large screens (≥1600px) - even more compact */
+@media (width >= 1600px) {
+  .catNameContainer {
+    font-size: clamp(2.5em, 3vw, 3.5em);
+    gap: 0.2em;
+    padding: 0.2em 0.5em;
+  }
+
+  .interactiveName {
+    min-width: 32px;
+    min-height: 28px;
+    padding: 4px 8px;
+    margin: 0 1px;
   }
 }
 
@@ -1116,10 +1185,10 @@
   }
 
   .interactiveName {
-    min-width: 48px;
-    min-height: 44px;
-    padding: 10px 12px;
-    border-radius: 10px;
+    min-width: 36px;
+    min-height: 32px;
+    padding: 6px 8px;
+    border-radius: 6px;
   }
 
   .continueButton {
