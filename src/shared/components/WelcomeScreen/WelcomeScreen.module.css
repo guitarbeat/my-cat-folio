@@ -185,7 +185,7 @@
   min-width: 320px;
   max-width: 100%;
   min-height: 100vh;
-  padding: clamp(var(--ws-space-lg), 3vw, var(--ws-space-3xl)) clamp(var(--ws-space-sm), 2vw, var(--ws-space-2xl));
+  padding: clamp(var(--ws-space-3xl), 5vw, var(--ws-space-4xl)) clamp(var(--ws-space-lg), 3vw, var(--ws-space-3xl));
   overflow: auto;
   scroll-behavior: smooth;
   -webkit-overflow-scrolling: touch;
@@ -244,7 +244,7 @@
 
 .rotatedCard {
   width: min(95vw, 700px);
-  margin: 0 auto;
+  margin: clamp(var(--ws-space-lg), 3vw, var(--ws-space-2xl)) auto;
   box-shadow: rgba(0, 0, 0, 0.4) 0 2px 10px, inset rgba(0, 0, 0, 0.2) 0 0 50px;
   border-radius: 1em;
   padding: 0;
@@ -898,7 +898,7 @@
 
   .contentContainer {
     max-height: none;
-    padding: clamp(var(--ws-space-sm), 1.5vw, var(--ws-space-lg));
+    padding: clamp(var(--ws-space-2xl), 4vw, var(--ws-space-3xl)) clamp(var(--ws-space-md), 2vw, var(--ws-space-xl));
     overflow: visible;
     overscroll-behavior: contain;
     scroll-padding-top: var(--ws-space-sm);
@@ -934,7 +934,7 @@
 /* Mobile Portrait (≤480px) */
 @media (width <= 480px) {
   .contentContainer {
-    padding: clamp(var(--ws-space-md), 2vw, var(--ws-space-xl));
+    padding: clamp(var(--ws-space-xl), 3vw, var(--ws-space-2xl)) clamp(var(--ws-space-sm), 1.5vw, var(--ws-space-lg));
   }
 
   .rotatedCard {
@@ -974,7 +974,7 @@
 
   .contentContainer {
     max-height: none;
-    padding: var(--ws-space-md);
+    padding: clamp(var(--ws-space-lg), 2.5vw, var(--ws-space-xl)) var(--ws-space-sm);
     overflow: visible;
   }
 
@@ -1026,7 +1026,7 @@
 
   .contentContainer {
     max-height: none;
-    padding: clamp(var(--ws-space-md), 1.5vh, var(--ws-space-lg));
+    padding: clamp(var(--ws-space-xl), 2.5vh, var(--ws-space-2xl)) clamp(var(--ws-space-sm), 1.5vw, var(--ws-space-lg));
     overflow: visible;
   }
 
