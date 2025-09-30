@@ -266,7 +266,7 @@
   background-color: rgba(254, 56, 56, 0.8);
   color: rgba(255, 255, 255, 1);
   border-radius: 1em 1em 0 0;
-  padding: 1.2em 1em;
+  padding: 0.8em 1em;
   text-align: center;
 }
 
@@ -278,7 +278,7 @@
 }
 
 .catNameSection {
-  padding: 0.3em 0;
+  padding: 0.1em 0;
   text-align: center;
   background-color: #fff;
 }
@@ -286,15 +286,15 @@
 .catNameContainer {
   font-family: 'Waiting for the Sunrise', cursive;
   color: #000000;
-  font-size: clamp(1.8em, 4.5vw, 2.8em);
+  font-size: clamp(1.2em, 3vw, 1.8em);
   transform: rotate(-3deg);
   line-height: 1.1;
-  padding: 0.1em 0.3em;
+  padding: 0.05em 0.2em;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
-  gap: 0.1em;
+  gap: 0.05em;
   max-width: 100%;
   overflow: hidden;
 }
@@ -305,7 +305,7 @@
   color: rgba(255, 255, 255, 0.6);
   font-size: clamp(0.6em, 1.5vw, 0.8em);
   font-weight: bold;
-  padding: 1.2em 1em;
+  padding: 0.8em 1em;
   text-align: center;
 }
 
@@ -664,10 +664,10 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 24px;
-  min-height: 20px;
-  padding: 2px 4px;
-  margin: 0 0.5px;
+  min-width: 20px;
+  min-height: 18px;
+  padding: 1px 3px;
+  margin: 0 0.3px;
   text-align: center;
   cursor: pointer;
   background: linear-gradient(
@@ -711,7 +711,7 @@
   word-break: break-all;
   overflow-wrap: break-word;
   min-width: auto;
-  max-width: 120px;
+  max-width: 80px;
 }
 
 /* ==========================================================================
@@ -927,9 +927,9 @@
   }
 
   .catNameContainer {
-    font-size: clamp(1.6em, 4vw, 2.2em);
+    font-size: clamp(1.1em, 2.8vw, 1.5em);
     transform: rotate(-2deg);
-    gap: 0.05em;
+    gap: 0.03em;
   }
 
   .footerText {
@@ -959,9 +959,9 @@
   }
 
   .catNameContainer {
-    font-size: clamp(1.4em, 3.5vw, 1.8em);
+    font-size: clamp(1.0em, 2.5vw, 1.3em);
     transform: rotate(-1.5deg);
-    gap: 0.03em;
+    gap: 0.02em;
   }
 
   .footerText {
@@ -1003,18 +1003,18 @@
   }
 
   .catNameContainer {
-    font-size: clamp(1.2em, 3vw, 1.6em);
+    font-size: clamp(0.9em, 2.2vw, 1.2em);
     transform: rotate(-1deg);
-    gap: 0.02em;
-    padding: 0.05em 0.2em;
+    gap: 0.01em;
+    padding: 0.03em 0.15em;
   }
 
   .interactiveName {
-    min-width: 20px;
-    min-height: 18px;
-    padding: 1px 3px;
-    margin: 0 0.2px;
-    font-size: 0.9em;
+    min-width: 18px;
+    min-height: 16px;
+    padding: 1px 2px;
+    margin: 0 0.1px;
+    font-size: 0.8em;
   }
 
   .footerText {
@@ -1058,9 +1058,9 @@
   }
 
   .catNameContainer {
-    font-size: clamp(1.8em, 4.5vw, 2.6em);
+    font-size: clamp(1.2em, 3.2vw, 1.8em);
     transform: rotate(-2deg);
-    gap: 0.08em;
+    gap: 0.05em;
   }
 
   .footerText {
@@ -1084,9 +1084,9 @@
   }
 
   .catNameContainer {
-    font-size: clamp(1.6em, 4vw, 2.2em);
+    font-size: clamp(1.1em, 2.8vw, 1.5em);
     transform: rotate(-2deg);
-    gap: 0.05em;
+    gap: 0.03em;
   }
 }
 
@@ -1097,32 +1097,32 @@
 /* Large screens (≥1200px) - maximize horizontal space usage */
 @media (width >= 1200px) {
   .catNameContainer {
-    font-size: clamp(2.2em, 3.5vw, 3.2em);
-    gap: 0.15em;
-    padding: 0.15em 0.4em;
+    font-size: clamp(1.5em, 2.5vw, 2.2em);
+    gap: 0.08em;
+    padding: 0.08em 0.25em;
   }
 
   .interactiveName {
-    min-width: 28px;
-    min-height: 24px;
-    padding: 3px 6px;
-    margin: 0 0.8px;
+    min-width: 24px;
+    min-height: 20px;
+    padding: 2px 4px;
+    margin: 0 0.4px;
   }
 }
 
 /* Extra large screens (≥1600px) - even more compact */
 @media (width >= 1600px) {
   .catNameContainer {
-    font-size: clamp(2.5em, 3vw, 3.5em);
-    gap: 0.2em;
-    padding: 0.2em 0.5em;
+    font-size: clamp(1.7em, 2.2vw, 2.5em);
+    gap: 0.1em;
+    padding: 0.1em 0.3em;
   }
 
   .interactiveName {
-    min-width: 32px;
-    min-height: 28px;
-    padding: 4px 8px;
-    margin: 0 1px;
+    min-width: 26px;
+    min-height: 22px;
+    padding: 3px 5px;
+    margin: 0 0.6px;
   }
 }
 
