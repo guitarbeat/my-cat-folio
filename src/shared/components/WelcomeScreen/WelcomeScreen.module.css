@@ -363,6 +363,7 @@
   transition: transform 0.3s ease;
   position: relative;
   z-index: 1;
+  overflow: visible;
 }
 
 .rotatedCard:hover {
@@ -388,6 +389,8 @@
   padding: 0.1em 0;
   text-align: center;
   background-color: #fff;
+  overflow: visible;
+  min-height: auto;
 }
 
 .catNameContainer {
@@ -403,8 +406,10 @@
   align-items: center;
   gap: 0.05em;
   max-width: 100%;
-  overflow: hidden;
+  overflow: visible;
   min-height: 2em;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 .cardFooter {
@@ -596,10 +601,11 @@
   font-weight: 400;
   line-height: 1.1;
   color: #000000;
-  overflow-wrap: normal;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
   text-transform: capitalize;
   letter-spacing: 0.05em;
-  white-space: nowrap;
+  white-space: normal;
 }
 
 .catNameText:first-letter {
@@ -807,9 +813,11 @@
   border: 1px solid transparent;
   border-radius: 2px;
   transition: all var(--ws-duration-normal) ease;
-  white-space: nowrap;
+  white-space: normal;
   flex-shrink: 0;
   max-width: 100%;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
 }
 
 .interactiveName:hover {
@@ -837,10 +845,11 @@
 /* Handle very long names that need to break */
 .interactiveName[data-long-name="true"] {
   white-space: normal;
-  word-break: break-all;
+  word-break: break-word;
   overflow-wrap: break-word;
   min-width: auto;
   max-width: 80px;
+  flex-wrap: wrap;
 }
 
 /* ==========================================================================
