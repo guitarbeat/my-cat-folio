@@ -246,7 +246,7 @@
    ========================================================================== */
 
 .rotatedCard {
-  width: min(95vw, 700px);
+  width: min(95vw, 900px);
   margin: clamp(var(--ws-space-lg), 3vw, var(--ws-space-2xl)) auto;
   box-shadow: rgba(0, 0, 0, 0.4) 0 2px 10px, inset rgba(0, 0, 0, 0.2) 0 0 50px;
   border-radius: 1em;
@@ -289,14 +289,15 @@
   font-size: clamp(1.2em, 3vw, 1.8em);
   transform: rotate(-3deg);
   line-height: 1.1;
-  padding: 0.05em 0.2em;
+  padding: 0.8em 1.2em;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
-  gap: 0.05em;
+  gap: 0.1em;
   max-width: 100%;
   overflow: hidden;
+  min-height: 2.5em;
 }
 
 .cardFooter {
@@ -912,7 +913,7 @@
   }
 
   .rotatedCard {
-    width: min(90vw, 450px);
+    width: min(90vw, 600px);
     margin: 0 auto;
     transform: rotate(-2deg);
   }
@@ -944,7 +945,7 @@
   }
 
   .rotatedCard {
-    width: min(85vw, 380px);
+    width: min(85vw, 500px);
     margin: 0 auto;
     transform: rotate(-1.5deg);
   }
@@ -988,7 +989,7 @@
   }
 
   .rotatedCard {
-    width: min(80vw, 320px);
+    width: min(80vw, 400px);
     margin: 0 auto;
     transform: rotate(-1deg);
   }
@@ -1043,7 +1044,7 @@
   }
 
   .rotatedCard {
-    width: min(75vw, 480px);
+    width: min(75vw, 600px);
     margin: 0 auto;
     transform: rotate(-2deg);
   }

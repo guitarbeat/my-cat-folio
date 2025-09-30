@@ -360,7 +360,7 @@ function WelcomeScreen({
           <div className={styles.rotatedCard}>
             {/* Header */}
             <div className={styles.cardHeader}>
-              <span className={styles.headerText}>Hello! I&apos;m {personalName}</span>
+              <span className={styles.headerText}>Hello! My name is</span>
             </div>
             
             {/* Cat Name - Most Prominent */}
