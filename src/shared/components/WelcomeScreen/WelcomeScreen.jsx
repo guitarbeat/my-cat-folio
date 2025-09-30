@@ -5,17 +5,14 @@
  */
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import PropTypes from 'prop-types';
-import { NameStatsTooltip, Card } from '../index';
+import { NameStatsTooltip } from '../index';
 import styles from './WelcomeScreen.module.css';
 
 function WelcomeScreen({
   catName,
-  nameStats = [],
-  isTransitioning = false
+  nameStats = []
 }) {
   const [isVisible, setIsVisible] = useState(false);
-  const [isAnimating, setIsAnimating] = useState(false);
-  const [showProgress, setShowProgress] = useState(false);
   const [hoveredName, setHoveredName] = useState(null);
   const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 });
   const [particles, setParticles] = useState([]);
@@ -302,7 +299,7 @@ function WelcomeScreen({
 
   return (
     <div
-      className={`${styles.welcomeWrapper} ${isVisible ? styles.visible : ''} ${isAnimating ? styles.animating : ''} ${isTransitioning ? styles.transitioning : ''}`}
+      className={`${styles.welcomeWrapper} ${isVisible ? styles.visible : ''}`}
       role="main"
       aria-label="Welcome screen showing your cat's tournament-generated name"
     >
@@ -348,7 +345,7 @@ function WelcomeScreen({
         <div className={styles.rotatedCard}>
           {/* Header */}
           <div className={styles.cardHeader}>
-            <span className={styles.headerText}>Hello! I'm {personalName}</span>
+            <span className={styles.headerText}>Hello! I&apos;m {personalName}</span>
           </div>
           
           {/* Cat Name - Most Prominent */}
@@ -392,8 +389,7 @@ WelcomeScreen.propTypes = {
       rank: PropTypes.number.isRequired,
       categories: PropTypes.arrayOf(PropTypes.string)
     })
-  ),
-  isTransitioning: PropTypes.bool
+  )
 };
 
 export default WelcomeScreen;

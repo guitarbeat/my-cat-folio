@@ -66,7 +66,6 @@ function App() {
 
   // * Welcome screen state
   const [showWelcomeScreen, setShowWelcomeScreen] = React.useState(true);
-  const [isTransitioning, setIsTransitioning] = React.useState(false);
   const [catName, setCatName] = React.useState('Loading...');
   const [nameStats, setNameStats] = React.useState([]);
 
@@ -370,13 +369,12 @@ function App() {
       <WelcomeScreen
         catName={catName}
         nameStats={nameStats}
-        isTransitioning={isTransitioning}
       />
     );
   }
 
   return (
-    <div className={`app ${isTransitioning ? 'transitioning' : ''}`}>
+    <div className="app">
       {/* * Skip link for keyboard navigation */}
       <a href="#main-content" className="skip-link">
         Skip to main content
