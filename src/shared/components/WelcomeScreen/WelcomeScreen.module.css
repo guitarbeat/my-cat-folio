@@ -1269,7 +1269,7 @@
 }
 
 :global(.dark-theme) .catNameText {
-  color: var(--ws-light-text);
+  color: #000000;
 }
 
 :global(.dark-theme) .explanationText {
