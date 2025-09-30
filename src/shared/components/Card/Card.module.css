@@ -4,9 +4,9 @@
   position: relative;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
   border-radius: 16px;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  overflow: hidden;
 }
 
 /* Variants */
@@ -91,8 +91,8 @@
 /* Background variants */
 .background-glass {
   background: rgb(255 255 255 / 80%);
-  backdrop-filter: blur(20px);
   border: 1px solid rgb(255 255 255 / 30%);
+  backdrop-filter: blur(20px);
 }
 
 .background-gradient {

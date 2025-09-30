@@ -27,6 +27,7 @@ import {
   validateCatName,
   validateDescription
 } from '../../shared/utils/validation';
+import { isUserAdmin } from '../../shared/utils/authUtils';
 import styles from './TournamentSetup.module.css';
 
 // Use absolute paths for better image loading compatibility
@@ -1092,9 +1093,9 @@ function TournamentSetupContent({ onStart, userName }) {
     setCategories(list);
   }, [availableNames]);
 
-  // Simple admin detection - user "aaron" gets admin features
-  // TODO: Replace with actual user authentication check
-  const isAdmin = (userName || '').toLowerCase() === 'aaron';
+  // Admin detection using centralized utility
+  // TODO: Replace with proper role-based authentication when user system is enhanced
+  const isAdmin = isUserAdmin(userName);
 
   const handleImageOpen = (image) => {
     const idx = galleryImages.indexOf(image);

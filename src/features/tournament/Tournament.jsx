@@ -526,7 +526,7 @@ function TournamentContent({
   const lastRenderLogRef = useRef(0);
   if (process.env.NODE_ENV === 'development') {
     const now = Date.now();
-    if (now - lastRenderLogRef.current > 500) {
+    if (now - lastRenderLogRef.current > 1000) { // Reduced frequency from 500ms to 1000ms
       console.debug('[DEV] 🎮 Tournament: render', {
         namesCount: names?.length || 0,
         randomizedCount: randomizedNames?.length || 0,

@@ -25,14 +25,6 @@ export function useTournament({
 }) {
   // Single Elo instance
   const elo = useMemo(() => new EloRating(), []);
-  const didLogMountRef = useRef(false);
-  if (process.env.NODE_ENV === 'development' && !didLogMountRef.current) {
-    // * Log once per component instance, even under StrictMode double-invoke
-
-    console.debug('[DEV] 🎮 useTournament: mount');
-    didLogMountRef.current = true;
-  }
-
   const { userName } = useUserSession();
 
   // * Tournament state management
