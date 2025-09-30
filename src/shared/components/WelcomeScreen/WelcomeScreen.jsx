@@ -486,7 +486,7 @@ function WelcomeScreen({
               aria-label="Continue to login screen"
             >
               <span className={styles.buttonContent}>
-                <span className={styles.buttonText}>Continue to Login</span>
+                <span className={styles.buttonText}>Continue to login screen</span>
                 <span className={styles.buttonEmoji} aria-hidden="true">
                   🚀
                 </span>
