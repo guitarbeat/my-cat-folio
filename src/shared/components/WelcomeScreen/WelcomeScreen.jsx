@@ -17,6 +17,7 @@ function WelcomeScreen({
   const [isAnimating, setIsAnimating] = useState(false);
   const [showProgress, setShowProgress] = useState(false);
   const [displayName, setDisplayName] = useState(catName || 'Gabi');
+  const [ownerName, setOwnerName] = useState('Your Name'); // Replace with your actual name
   const nameRef = useRef(null);
 
   // Update display name when catName prop changes
@@ -54,33 +55,7 @@ function WelcomeScreen({
     }, 800);
   };
 
-  // Interactive name functionality
-  const updateName = useCallback(() => {
-    const newName = requestName();
-    changeName(newName);
-  }, []);
-
-  const requestName = () => {
-    const name = prompt('What is your name?');
-    return name;
-  };
-
-  const changeName = (name) => {
-    const defaultName = 'Gabi';
-    const displayName = (name && name.length > 0) ? name : defaultName;
-    setDisplayName(displayName);
-  };
-
-  // Set up click listener for name element
-  useEffect(() => {
-    const myname = nameRef.current;
-    if (myname) {
-      myname.addEventListener('click', updateName);
-      return () => {
-        myname.removeEventListener('click', updateName);
-      };
-    }
-  }, [updateName]);
+  // No interactive editing needed - this is a personal site
 
   return (
     <div
@@ -115,7 +90,7 @@ function WelcomeScreen({
       <div className={styles.contentContainer}>
         <div className={styles.mainContent}>
           <h1 className={styles.title}>
-            Hello! My cat's name is
+            Hello! I'm {ownerName} and my cat's name is
             <span className={styles.nameSpan}>
               <p 
                 ref={nameRef}
@@ -134,10 +109,10 @@ function WelcomeScreen({
             aria-label={
               isAnimating
                 ? 'Entering tournament, please wait'
-                : 'Start the tournament'
+                : 'Enter the cat name tournament'
             }
           >
-            {isAnimating ? 'Entering Tournament...' : 'Start the Tournament!'}
+            {isAnimating ? 'Entering Tournament...' : 'Enter the Tournament!'}
           </button>
         </div>
       </div>

@@ -173,7 +173,6 @@ body * {
 
 .name {
   border: 1px solid transparent;
-  cursor: pointer;
   font-size: 3em;
   flex-grow: 1;
   flex-shrink: 1;
