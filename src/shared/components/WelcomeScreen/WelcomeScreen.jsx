@@ -341,27 +341,40 @@ function WelcomeScreen({
       </div>
 
 
-      {/* Centered Content Container */}
-      <div className={styles.contentContainer} ref={containerRef}>
-        {/* Rotated Card Layout */}
-        <div className={styles.rotatedCard}>
-          {/* Header */}
-          <div className={styles.cardHeader}>
-            <span className={styles.headerText}>Hello! I&apos;m {personalName}</span>
-          </div>
-          
-          {/* Cat Name - Most Prominent */}
-          <div className={styles.catNameSection}>
-            <div className={styles.catNameContainer}>
-              {createInteractiveNames()}
+        {/* Centered Content Container */}
+        <div className={styles.contentContainer} ref={containerRef}>
+          {/* Cat Image Section */}
+          <div className={styles.catImageSection}>
+            <div className={styles.catImageContainer}>
+              <img
+                src="/assets/images/IMG_0778.jpg"
+                alt="My cat looking adorable"
+                className={styles.catImage}
+                loading="lazy"
+              />
+              <div className={styles.catImageGlow} />
             </div>
           </div>
-          
-          {/* Footer */}
-          <div className={styles.cardFooter}>
-            <span className={styles.footerText}>Welcome to my personal site!</span>
+
+          {/* Rotated Card Layout */}
+          <div className={styles.rotatedCard}>
+            {/* Header */}
+            <div className={styles.cardHeader}>
+              <span className={styles.headerText}>Hello! I&apos;m {personalName}</span>
+            </div>
+            
+            {/* Cat Name - Most Prominent */}
+            <div className={styles.catNameSection}>
+              <div className={styles.catNameContainer}>
+                {createInteractiveNames()}
+              </div>
+            </div>
+            
+            {/* Footer */}
+            <div className={styles.cardFooter}>
+              <span className={styles.footerText}>Welcome to my personal site!</span>
+            </div>
           </div>
-        </div>
         
         {/* Continue Button */}
         {onContinue && (
