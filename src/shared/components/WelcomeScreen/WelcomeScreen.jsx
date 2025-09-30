@@ -6,6 +6,7 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { NameStatsTooltip } from '../index';
+import useTheme from '../../../core/hooks/useTheme';
 import styles from './WelcomeScreen.module.css';
 import galleryData from '../../../public/assets/images/gallery.json';
 
@@ -14,6 +15,7 @@ function WelcomeScreen({
   nameStats = [],
   onContinue
 }) {
+  const { isLightTheme, toggleTheme } = useTheme();
   const [isVisible, setIsVisible] = useState(false);
   const [hoveredName, setHoveredName] = useState(null);
   const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 });
@@ -398,6 +400,22 @@ function WelcomeScreen({
       role="main"
       aria-label="Welcome screen showing your cat's tournament-generated name"
     >
+      {/* Theme Toggle Button */}
+      <button
+        className={styles.themeToggle}
+        onClick={toggleTheme}
+        type="button"
+        aria-label={`Switch to ${isLightTheme ? 'dark' : 'light'} mode`}
+        title={`Switch to ${isLightTheme ? 'dark' : 'light'} mode`}
+      >
+        <span className={styles.themeIcon} aria-hidden="true">
+          {isLightTheme ? '🌙' : '☀️'}
+        </span>
+        <span className={styles.themeText}>
+          {isLightTheme ? 'Dark' : 'Light'}
+        </span>
+      </button>
+
       {/* Background with overlay */}
       <div className={styles.backgroundContainer}>
         <div className={styles.backgroundImage} />
@@ -517,31 +535,19 @@ function WelcomeScreen({
             
             {/* Footer */}
             <div className={styles.cardFooter}>
-              <span className={styles.footerText}>Welcome to my personal site!</span>
-            </div>
-          </div>
-        
-        {/* Continue Button */}
-        {onContinue && (
-          <div className={styles.actionSection}>
-            <button
-              className={styles.continueButton}
-              onClick={onContinue}
-              type="button"
-              aria-label="Continue to login screen"
-            >
-              <span className={styles.buttonContent}>
-                <span className={styles.buttonText}>Continue to login screen</span>
-                <span className={styles.buttonEmoji} aria-hidden="true">
-                  🚀
+              <button
+                className={styles.footerButton}
+                onClick={onContinue}
+                type="button"
+                aria-label="Discover the magic behind my name"
+              >
+                <span className={styles.footerButtonText}>Discover the magic behind my name!</span>
+                <span className={styles.footerButtonEmoji} aria-hidden="true">
+                  ✨
                 </span>
-              </span>
-            </button>
-            <div className={styles.explanationText}>
-              <p>Click to start your cat name judging adventure!</p>
+              </button>
             </div>
           </div>
-        )}
       </div>
 
       {/* Interactive tooltip */}
