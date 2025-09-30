@@ -66,7 +66,6 @@ function App() {
 
   // * Welcome screen state
   const [showWelcomeScreen, setShowWelcomeScreen] = React.useState(true);
-  const [isTransitioning, setIsTransitioning] = React.useState(false);
   const [catName, setCatName] = React.useState('Loading...');
   const [nameStats, setNameStats] = React.useState([]);
 
@@ -263,15 +262,6 @@ function App() {
     [uiActions, toggleTheme]
   );
 
-  // * Handle welcome screen completion
-  const handleWelcomeComplete = useCallback(() => {
-    setIsTransitioning(true);
-    // Add a smooth transition delay
-    setTimeout(() => {
-      setShowWelcomeScreen(false);
-      setIsTransitioning(false);
-    }, 800);
-  }, []);
 
   // * Memoize main content to prevent unnecessary re-renders
   const mainContent = useMemo(() => {
@@ -377,16 +367,14 @@ function App() {
   if (showWelcomeScreen) {
     return (
       <WelcomeScreen
-        onContinue={handleWelcomeComplete}
         catName={catName}
         nameStats={nameStats}
-        isTransitioning={isTransitioning}
       />
     );
   }
 
   return (
-    <div className={`app ${isTransitioning ? 'transitioning' : ''}`}>
+    <div className="app">
       {/* * Skip link for keyboard navigation */}
       <a href="#main-content" className="skip-link">
         Skip to main content
