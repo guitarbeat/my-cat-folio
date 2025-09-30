@@ -262,6 +262,11 @@ function App() {
     [uiActions, toggleTheme]
   );
 
+  // * Handle welcome screen continue
+  const handleWelcomeContinue = useCallback(() => {
+    setShowWelcomeScreen(false);
+  }, []);
+
 
   // * Memoize main content to prevent unnecessary re-renders
   const mainContent = useMemo(() => {
@@ -369,6 +374,7 @@ function App() {
       <WelcomeScreen
         catName={catName}
         nameStats={nameStats}
+        onContinue={handleWelcomeContinue}
       />
     );
   }
