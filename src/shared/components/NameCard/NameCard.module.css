@@ -192,12 +192,8 @@
 
   /* Enhanced visual hierarchy */
   backdrop-filter: blur(8px);
-  perspective: 1000px;
   transition: all var(--duration-normal) var(--ease-out);
   will-change: transform, box-shadow;
-
-  /* 3D Tilt Effect */
-  transform-style: preserve-3d;
 }
 
 /* Background mouse follow effect */
@@ -211,14 +207,13 @@
   transition: background 0.1s ease-out;
 }
 
-/* Enhanced 3D content positioning */
+/* Enhanced content positioning */
 .name,
 .description,
 .checkMark,
 .metadata {
   position: relative;
   z-index: 1;
-  transform: translateZ(20px);
   transition: transform var(--duration-normal) var(--ease-out);
 }
 
@@ -353,24 +348,24 @@
   --mouse-y: 50%;
 }
 
-/* Enhanced 3D depth on hover */
+/* Enhanced depth on hover */
 .card:not(.disabled):hover .name {
   color: #000; /* Keep names black on hover */
   text-shadow: 0 4px 8px rgba(var(--neon-cyan-rgb), 0.4);
-  transform: translateZ(30px) translateY(-2px);
+  transform: translateY(-2px);
 }
 
 .card:not(.disabled):hover .description {
   opacity: 1;
-  transform: translateZ(25px) translateY(-1px);
+  transform: translateY(-1px);
 }
 
 .card:not(.disabled):hover .checkMark {
   filter: drop-shadow(0 4px 8px rgb(0 0 0 / 20%));
-  transform: translateZ(35px) scale(1.1);
+  transform: scale(1.1);
 }
 
-/* Smooth tilt animation */
+/* Smooth float animation */
 .card:not(.disabled) {
   animation: float 6s ease-in-out infinite;
 }
@@ -382,11 +377,11 @@
 @keyframes float {
   0%,
   100% {
-    transform: translateY(0) rotateX(0deg) rotateY(0deg);
+    transform: translateY(0);
   }
 
   50% {
-    transform: translateY(-5px) rotateX(1deg) rotateY(1deg);
+    transform: translateY(-5px);
   }
 }
 
@@ -582,7 +577,7 @@
 
   .card:active {
     background: var(--mobile-card-hover, var(--card-hover));
-    transform: scale(0.98) rotateX(5deg) rotateY(5deg);
+    transform: scale(0.98);
   }
 
   .card:hover {
@@ -594,7 +589,7 @@
   .selected:active {
     background: var(--primary-100);
     border-color: var(--primary-400);
-    transform: scale(0.98) rotateX(2deg) rotateY(2deg);
+    transform: scale(0.98);
   }
 
   /* Dark mode adjustments - removed in favor of global theme tokens */
@@ -744,8 +739,7 @@
   box-shadow: 0 10px 40px rgb(0 0 0 / 20%);
   perspective: none;
 
-  /* * Disable complex 3D transforms when images are present */
-  transform-style: flat;
+  /* * Simplified transforms when images are present */
 }
 
 .hasImage:hover {
@@ -756,8 +750,8 @@
 }
 
 .hasImage .backgroundEffect {
-  /* * Disable tilt effect for cards with images */
-  display: none;
+  /* * Simplified background effect for cards with images */
+  opacity: 0.5;
 }
 
 /* * Ensure images are properly positioned */
