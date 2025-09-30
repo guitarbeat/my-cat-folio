@@ -300,8 +300,8 @@
 .catImage {
   position: relative;
   z-index: 2;
-  width: clamp(120px, 20vw, 200px);
-  height: clamp(120px, 20vw, 200px);
+  width: clamp(200px, 35vw, 350px);
+  height: clamp(200px, 35vw, 350px);
   object-fit: cover;
   border: 4px solid rgb(255 255 255 / 90%);
   border-radius: var(--ws-radius-full);
@@ -667,27 +667,6 @@
    CAT IMAGE SECTION
    ========================================================================== */
 
-.catImageContainer {
-  position: relative;
-  display: inline-block;
-}
-
-.catImage {
-  position: relative;
-  z-index: 2;
-  width: clamp(60px, 12vw, 120px);
-  height: clamp(60px, 12vw, 120px);
-  object-fit: cover;
-  border: 3px solid rgb(var(--ws-white) / 90%);
-  border-radius: var(--ws-radius-full);
-  box-shadow: var(--ws-shadow-xl);
-  transition: all var(--ws-duration-normal) ease;
-}
-
-.catImage:hover {
-  box-shadow: 0 12px 40px rgb(0 0 0 / 40%);
-  transform: scale(1.05) rotate(5deg);
-}
 
 .catImageGlow {
   position: absolute;
@@ -1190,6 +1169,15 @@
     -webkit-overflow-scrolling: touch;
   }
 
+  .catImageSection {
+    max-width: 280px;
+  }
+
+  .catImage {
+    width: clamp(150px, 30vw, 280px);
+    height: clamp(150px, 30vw, 280px);
+  }
+
   .rotatedCard {
     width: min(90vw, 600px);
     margin: 0 auto;
@@ -1220,6 +1208,15 @@
 @media (width <= 480px) {
   .contentContainer {
     padding: clamp(var(--ws-space-xl), 3vw, var(--ws-space-2xl)) clamp(var(--ws-space-sm), 1.5vw, var(--ws-space-lg));
+  }
+
+  .catImageSection {
+    max-width: 220px;
+  }
+
+  .catImage {
+    width: clamp(120px, 25vw, 220px);
+    height: clamp(120px, 25vw, 220px);
   }
 
   .rotatedCard {
@@ -1264,6 +1261,15 @@
     padding: clamp(var(--ws-space-lg), 2.5vw, var(--ws-space-xl)) var(--ws-space-sm);
     overflow-y: auto;
     overflow-x: hidden;
+  }
+
+  .catImageSection {
+    max-width: 180px;
+  }
+
+  .catImage {
+    width: clamp(100px, 20vw, 180px);
+    height: clamp(100px, 20vw, 180px);
   }
 
   .rotatedCard {
@@ -1347,6 +1353,15 @@
     padding: clamp(var(--ws-space-xl), 2.5vh, var(--ws-space-2xl)) clamp(var(--ws-space-sm), 1.5vw, var(--ws-space-lg));
     overflow-y: auto;
     overflow-x: hidden;
+  }
+
+  .catImageSection {
+    max-width: 200px;
+  }
+
+  .catImage {
+    width: clamp(120px, 20vh, 200px);
+    height: clamp(120px, 20vh, 200px);
   }
 
   .rotatedCard {
