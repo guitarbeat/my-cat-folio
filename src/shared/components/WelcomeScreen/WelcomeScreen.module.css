@@ -706,7 +706,8 @@
 /* Handle very long names that need to break */
 .interactiveName[data-long-name="true"] {
   white-space: normal;
-  word-break: break-word;
+  word-break: break-all;
+  overflow-wrap: break-word;
   min-width: auto;
   max-width: 120px;
 }
