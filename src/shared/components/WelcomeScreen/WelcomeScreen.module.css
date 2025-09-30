@@ -442,7 +442,7 @@
   border-radius: 1em;
   padding: 0;
   background-color: #fff;
-  transform: rotate(-3deg);
+  transform: none;
   transition: transform 0.3s ease;
   position: relative;
   z-index: 1;
@@ -450,7 +450,7 @@
 }
 
 .rotatedCard:hover {
-  transform: rotate(-1deg) scale(1.02);
+  transform: scale(1.02);
 }
 
 .cardHeader {
@@ -480,7 +480,7 @@
   font-family: 'Waiting for the Sunrise', cursive;
   color: #000000;
   font-size: clamp(0.9em, 2.2vw, 1.3em);
-  transform: rotate(-3deg);
+  transform: none;
   line-height: 1.1;
   padding: 0.6em 1em;
   display: flex;
@@ -1181,11 +1181,11 @@
   .rotatedCard {
     width: min(90vw, 600px);
     margin: 0 auto;
-    transform: rotate(-2deg);
+    transform: none;
   }
 
   .rotatedCard:hover {
-    transform: rotate(0deg) scale(1.02);
+    transform: scale(1.02);
   }
 
   .headerText {
@@ -1195,7 +1195,7 @@
 
   .catNameContainer {
     font-size: clamp(0.8em, 2.2vw, 1.2em);
-    transform: rotate(-2deg);
+    transform: none;
     gap: 0.02em;
   }
 
@@ -1222,11 +1222,11 @@
   .rotatedCard {
     width: min(85vw, 500px);
     margin: 0 auto;
-    transform: rotate(-1.5deg);
+    transform: none;
   }
 
   .rotatedCard:hover {
-    transform: rotate(0deg) scale(1.02);
+    transform: scale(1.02);
   }
 
   .headerText {
@@ -1236,7 +1236,7 @@
 
   .catNameContainer {
     font-size: clamp(0.7em, 2vw, 1.1em);
-    transform: rotate(-1.5deg);
+    transform: none;
     gap: 0.01em;
   }
 
@@ -1275,11 +1275,11 @@
   .rotatedCard {
     width: min(80vw, 400px);
     margin: 0 auto;
-    transform: rotate(-1deg);
+    transform: none;
   }
 
   .rotatedCard:hover {
-    transform: rotate(0deg) scale(1.02);
+    transform: scale(1.02);
   }
 
   .headerText {
@@ -1289,7 +1289,7 @@
 
   .catNameContainer {
     font-size: clamp(0.6em, 1.8vw, 1em);
-    transform: rotate(-1deg);
+    transform: none;
     gap: 0.005em;
     padding: 0.02em 0.1em;
   }
@@ -1367,11 +1367,11 @@
   .rotatedCard {
     width: min(75vw, 600px);
     margin: 0 auto;
-    transform: rotate(-2deg);
+    transform: none;
   }
 
   .rotatedCard:hover {
-    transform: rotate(0deg) scale(1.02);
+    transform: scale(1.02);
   }
 
   .headerText {
@@ -1381,7 +1381,7 @@
 
   .catNameContainer {
     font-size: clamp(0.9em, 2.5vw, 1.4em);
-    transform: rotate(-2deg);
+    transform: none;
     gap: 0.03em;
   }
 
@@ -1398,16 +1398,16 @@
 
   .rotatedCard {
     margin: 0 auto;
-    transform: rotate(-2deg);
+    transform: none;
   }
 
   .rotatedCard:hover {
-    transform: rotate(0deg) scale(1.02);
+    transform: scale(1.02);
   }
 
   .catNameContainer {
     font-size: clamp(0.8em, 2.2vw, 1.2em);
-    transform: rotate(-2deg);
+    transform: none;
     gap: 0.02em;
   }
 }
