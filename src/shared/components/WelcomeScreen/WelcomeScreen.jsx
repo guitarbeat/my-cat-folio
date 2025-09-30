@@ -109,7 +109,7 @@ function WelcomeScreen({
   }, [createParticle, animateParticles]);
 
   // Personal name - you can customize this
-  const personalName = "Alex"; // Replace with your actual name
+  const personalName = "Aaron"; // Replace with your actual name
 
 
   // Handle mouse events for interactive names
@@ -344,61 +344,24 @@ function WelcomeScreen({
 
       {/* Centered Content Container */}
       <div className={styles.contentContainer} ref={containerRef}>
-        {/* Flex Cards Layout */}
-        <div className={styles.cardsContainer}>
-          {/* Cat Image Card */}
-          <Card
-            as="section"
-            variant="elevated"
-            padding="large"
-            shadow="large"
-            className={styles.catImageCard}
-            aria-label="Cat avatar display"
-          >
-            <div className={styles.catImageContainer}>
-              <picture>
-                <source type="image/avif" srcSet="/assets/images/IMG_5071.avif" />
-                <source type="image/webp" srcSet="/assets/images/IMG_5071.webp" />
-                <img
-                  src="/assets/images/IMG_5071.JPG"
-                  alt="Cute cat avatar"
-                  className={`${styles.catImage} ${showCelebration ? styles.catImageCelebration : ''}`}
-                  loading="lazy"
-                  decoding="async"
-                  fetchPriority="low"
-                />
-              </picture>
-              <div className={styles.catImageGlow} />
-            </div>
-          </Card>
-
-          {/* Personal Introduction Card */}
-          <Card
-            as="section"
-            variant="filled"
-            padding="large"
-            shadow="medium"
-            className={styles.catNameCard}
-            aria-label="Personal introduction"
-          >
-            <div className={styles.catNameSection}>
-              <h1
-                className={`${styles.catNameTitle} ${showCelebration ? styles.catNameTitleCelebration : ''}`}
-              >
-                <span className={styles.titleText}>
-                  Hello! I&apos;m {personalName} and my cat&apos;s name is:
-                </span>
-                <span className={styles.titleSparkle}>✨</span>
-              </h1>
+        {/* Rotated Card Layout */}
+        <div className={styles.rotatedCard}>
+          {/* Header */}
+          <div className={styles.cardHeader}>
+            <span className={styles.headerText}>Hello! I'm {personalName}</span>
+          </div>
+          
+          {/* Cat Name - Most Prominent */}
+          <div className={styles.catNameSection}>
+            <div className={styles.catNameContainer}>
               {createInteractiveNames()}
-              <p
-                className={`${styles.catNameSubtext} ${showCelebration ? styles.catNameSubtextCelebration : ''}`}
-              >
-                Welcome to my personal site! This is where I share my cat&apos;s story and our adventures together.
-              </p>
             </div>
-          </Card>
-
+          </div>
+          
+          {/* Footer */}
+          <div className={styles.cardFooter}>
+            <span className={styles.footerText}>Welcome to my personal site!</span>
+          </div>
         </div>
       </div>
 
