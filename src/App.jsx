@@ -263,15 +263,6 @@ function App() {
     [uiActions, toggleTheme]
   );
 
-  // * Handle welcome screen completion
-  const handleWelcomeComplete = useCallback(() => {
-    setIsTransitioning(true);
-    // Add a smooth transition delay
-    setTimeout(() => {
-      setShowWelcomeScreen(false);
-      setIsTransitioning(false);
-    }, 800);
-  }, []);
 
   // * Memoize main content to prevent unnecessary re-renders
   const mainContent = useMemo(() => {
@@ -377,7 +368,6 @@ function App() {
   if (showWelcomeScreen) {
     return (
       <WelcomeScreen
-        onContinue={handleWelcomeComplete}
         catName={catName}
         nameStats={nameStats}
         isTransitioning={isTransitioning}

@@ -9,7 +9,6 @@ import { NameStatsTooltip, Card } from '../index';
 import styles from './WelcomeScreen.module.css';
 
 function WelcomeScreen({
-  onContinue,
   catName,
   nameStats = [],
   isTransitioning = false
@@ -109,52 +108,9 @@ function WelcomeScreen({
     };
   }, [createParticle, animateParticles]);
 
-  const handleContinue = () => {
-    setIsAnimating(true);
-    setShowProgress(true);
+  // Personal name - you can customize this
+  const personalName = "Alex"; // Replace with your actual name
 
-    // Enhanced haptic feedback for mobile
-    if (navigator.vibrate) {
-      navigator.vibrate([100, 50, 100, 50, 100]);
-    }
-
-    // Play sound effect if available
-    try {
-      const audio = new Audio('/assets/sounds/button-click.mp3');
-      audio.volume = 0.3;
-      audio.play().catch(() => {
-        // Silently fail if audio can't play
-      });
-    } catch {
-      // Silently fail if audio file doesn't exist
-    }
-
-    // Add a small delay for the animation before continuing
-    setTimeout(() => {
-      onContinue();
-    }, 800);
-  };
-
-  // Enhanced mobile-specific button interactions
-  const handleButtonTouchStart = (event) => {
-    event.target.style.transform = 'scale(0.97)';
-    event.target.style.transition = 'transform 0.1s ease-out';
-
-    // Enhanced haptic feedback for mobile
-    if (navigator.vibrate) {
-      navigator.vibrate(50);
-    }
-  };
-
-  const handleButtonTouchEnd = (event) => {
-    event.target.style.transform = 'scale(1)';
-    event.target.style.transition = 'transform 0.2s cubic-bezier(0.4, 0, 0.2, 1)';
-  };
-
-  const handleButtonTouchCancel = (event) => {
-    event.target.style.transform = 'scale(1)';
-    event.target.style.transition = 'transform 0.2s cubic-bezier(0.4, 0, 0.2, 1)';
-  };
 
   // Handle mouse events for interactive names
   const handleNameMouseEnter = (nameData, event) => {
@@ -385,22 +341,6 @@ function WelcomeScreen({
         )}
       </div>
 
-      {/* Progress indicator */}
-      {showProgress && (
-        <div
-          className={styles.progressContainer}
-          role="status"
-          aria-live="polite"
-          aria-label="Loading tournament"
-        >
-          <div className={styles.progressBar} aria-hidden="true">
-            <div className={styles.progressFill} />
-          </div>
-          <p className={styles.progressText}>
-            Preparing your tournament experience...
-          </p>
-        </div>
-      )}
 
       {/* Centered Content Container */}
       <div className={styles.contentContainer} ref={containerRef}>
@@ -432,83 +372,33 @@ function WelcomeScreen({
             </div>
           </Card>
 
-          {/* Cat Name Card */}
+          {/* Personal Introduction Card */}
           <Card
             as="section"
             variant="filled"
             padding="large"
             shadow="medium"
             className={styles.catNameCard}
-            aria-label="Cat name display"
+            aria-label="Personal introduction"
           >
             <div className={styles.catNameSection}>
-              <h2
+              <h1
                 className={`${styles.catNameTitle} ${showCelebration ? styles.catNameTitleCelebration : ''}`}
               >
-                <span className={styles.titleText}>My cat&apos;s name is:</span>
+                <span className={styles.titleText}>
+                  Hello! I&apos;m {personalName} and my cat&apos;s name is:
+                </span>
                 <span className={styles.titleSparkle}>✨</span>
-              </h2>
+              </h1>
               {createInteractiveNames()}
               <p
                 className={`${styles.catNameSubtext} ${showCelebration ? styles.catNameSubtextCelebration : ''}`}
               >
-                A name carefully crafted from all the tournament results, ranked
-                from most to least voted!
+                Welcome to my personal site! This is where I share my cat&apos;s story and our adventures together.
               </p>
             </div>
           </Card>
 
-          {/* Action Card */}
-          <Card
-            as="section"
-            variant="elevated"
-            padding="large"
-            shadow="large"
-            className={`${styles.actionCard} ${showCelebration ? styles.actionCardCelebration : ''}`}
-            aria-label="Tournament action controls"
-          >
-            <button
-              onClick={handleContinue}
-              onTouchStart={handleButtonTouchStart}
-              onTouchEnd={handleButtonTouchEnd}
-              onTouchCancel={handleButtonTouchCancel}
-              className={`${styles.continueButton} ${showCelebration ? styles.continueButtonCelebration : ''}`}
-              disabled={isAnimating}
-              aria-label={
-                isAnimating
-                  ? 'Entering tournament, please wait'
-                  : 'Start the tournament'
-              }
-              aria-describedby="button-description"
-              style={{
-                minHeight: '56px',
-                minWidth: '200px',
-                touchAction: 'manipulation'
-              }}
-            >
-              <span className={styles.buttonContent}>
-                <span className={styles.buttonText}>
-                  {isAnimating
-                    ? 'Entering Tournament...'
-                    : 'Start the Tournament!'}
-                </span>
-                <span
-                  className={`${styles.buttonEmoji} ${showCelebration ? styles.buttonEmojiCelebration : ''}`}
-                  aria-hidden="true"
-                >
-                  🏆
-                </span>
-              </span>
-              <div className={styles.buttonGlow} />
-            </button>
-
-            <div className={styles.explanationText} id="button-description">
-              <p>
-                This name represents the collective wisdom of all tournament
-                participants!
-              </p>
-            </div>
-          </Card>
         </div>
       </div>
 
@@ -525,7 +415,6 @@ function WelcomeScreen({
 WelcomeScreen.displayName = 'WelcomeScreen';
 
 WelcomeScreen.propTypes = {
-  onContinue: PropTypes.func.isRequired,
   catName: PropTypes.string.isRequired,
   nameStats: PropTypes.arrayOf(
     PropTypes.shape({
