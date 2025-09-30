@@ -193,7 +193,7 @@
    ========================================================================== */
 
 .rotatedCard {
-  width: 320px;
+  width: min(90vw, 500px);
   margin: 3em auto;
   margin-top: 10%;
   box-shadow: rgba(0, 0, 0, 0.4) 0 2px 10px, inset rgba(0, 0, 0, 0.2) 0 0 50px;
@@ -212,12 +212,12 @@
   background-color: rgba(254, 56, 56, 0.8);
   color: rgba(255, 255, 255, 1);
   border-radius: 1em 1em 0 0;
-  padding: 1em 0;
+  padding: 1.2em 1em;
   text-align: center;
 }
 
 .headerText {
-  font-size: 1.2em;
+  font-size: clamp(1.1em, 2.5vw, 1.4em);
   letter-spacing: 0.2em;
   font-weight: 600;
   text-transform: uppercase;
@@ -232,25 +232,26 @@
 .catNameContainer {
   font-family: 'Waiting for the Sunrise', cursive;
   color: rgba(41, 41, 41, 0.8);
-  font-size: 3em;
+  font-size: clamp(2.5em, 6vw, 3.5em);
   transform: rotate(-7deg);
   line-height: 1.2;
+  padding: 0.2em 0.5em;
 }
 
 .cardFooter {
   background-color: rgba(254, 56, 56, 0.8);
-  height: 1em;
   border-radius: 0 0 1em 1em;
   color: rgba(255, 255, 255, 0.6);
-  font-size: 0.6em;
+  font-size: clamp(0.6em, 1.5vw, 0.8em);
   font-weight: bold;
-  padding: 1em 0;
+  padding: 1.2em 1em;
   text-align: center;
 }
 
 .footerText {
   text-decoration: none;
   color: rgba(255, 255, 255, 0.6);
+  font-size: clamp(0.6em, 1.5vw, 0.8em);
 }
 
 /* ==========================================================================
@@ -834,7 +835,7 @@
   }
 
   .rotatedCard {
-    width: 280px;
+    width: min(85vw, 400px);
     margin-top: 5%;
     transform: rotate(-5deg);
   }
@@ -844,17 +845,17 @@
   }
 
   .headerText {
-    font-size: 1em;
+    font-size: clamp(0.9em, 2vw, 1.2em);
     letter-spacing: 0.15em;
   }
 
   .catNameContainer {
-    font-size: 2.5em;
+    font-size: clamp(2.2em, 5vw, 2.8em);
     transform: rotate(-5deg);
   }
 
   .footerText {
-    font-size: 0.7em;
+    font-size: clamp(0.6em, 1.2vw, 0.8em);
   }
 }
 
@@ -865,7 +866,7 @@
   }
 
   .rotatedCard {
-    width: 260px;
+    width: min(80vw, 350px);
     margin-top: 3%;
     transform: rotate(-4deg);
   }
@@ -875,17 +876,17 @@
   }
 
   .headerText {
-    font-size: 0.9em;
+    font-size: clamp(0.8em, 1.8vw, 1em);
     letter-spacing: 0.1em;
   }
 
   .catNameContainer {
-    font-size: 2.2em;
+    font-size: clamp(2em, 4.5vw, 2.4em);
     transform: rotate(-4deg);
   }
 
   .footerText {
-    font-size: 0.8em;
+    font-size: clamp(0.6em, 1vw, 0.8em);
   }
 }
 
@@ -905,7 +906,7 @@
   }
 
   .rotatedCard {
-    width: 240px;
+    width: min(75vw, 300px);
     margin-top: 2%;
     transform: rotate(-3deg);
   }
@@ -915,17 +916,17 @@
   }
 
   .headerText {
-    font-size: 0.8em;
+    font-size: clamp(0.7em, 1.5vw, 0.9em);
     letter-spacing: 0.08em;
   }
 
   .catNameContainer {
-    font-size: 2em;
+    font-size: clamp(1.8em, 4vw, 2.2em);
     transform: rotate(-3deg);
   }
 
   .footerText {
-    font-size: 0.9em;
+    font-size: clamp(0.6em, 0.9vw, 0.8em);
   }
 }
 
@@ -947,7 +948,7 @@
   }
 
   .rotatedCard {
-    width: 300px;
+    width: min(70vw, 450px);
     margin-top: 1%;
     transform: rotate(-6deg);
   }
@@ -957,17 +958,17 @@
   }
 
   .headerText {
-    font-size: 1.1em;
+    font-size: clamp(1em, 2.2vw, 1.3em);
     letter-spacing: 0.18em;
   }
 
   .catNameContainer {
-    font-size: 2.8em;
+    font-size: clamp(2.4em, 5.5vw, 3.2em);
     transform: rotate(-6deg);
   }
 
   .footerText {
-    font-size: 0.65em;
+    font-size: clamp(0.6em, 1.1vw, 0.75em);
   }
 }
 
@@ -987,7 +988,7 @@
   }
 
   .catNameContainer {
-    font-size: 2.6em;
+    font-size: clamp(2.2em, 5vw, 2.8em);
     transform: rotate(-6deg);
   }
 }
