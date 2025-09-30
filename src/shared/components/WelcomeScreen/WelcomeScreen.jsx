@@ -517,31 +517,19 @@ function WelcomeScreen({
             
             {/* Footer */}
             <div className={styles.cardFooter}>
-              <span className={styles.footerText}>Discover the magic behind my name!</span>
-            </div>
-          </div>
-        
-        {/* Continue Button */}
-        {onContinue && (
-          <div className={styles.actionSection}>
-            <button
-              className={styles.continueButton}
-              onClick={onContinue}
-              type="button"
-              aria-label="Continue to login screen"
-            >
-              <span className={styles.buttonContent}>
-                <span className={styles.buttonText}>Continue to login screen</span>
-                <span className={styles.buttonEmoji} aria-hidden="true">
-                  🚀
+              <button
+                className={styles.footerButton}
+                onClick={onContinue}
+                type="button"
+                aria-label="Discover the magic behind my name"
+              >
+                <span className={styles.footerButtonText}>Discover the magic behind my name!</span>
+                <span className={styles.footerButtonEmoji} aria-hidden="true">
+                  ✨
                 </span>
-              </span>
-            </button>
-            <div className={styles.explanationText}>
-              <p>Click to start your cat name judging adventure!</p>
+              </button>
             </div>
           </div>
-        )}
       </div>
 
       {/* Interactive tooltip */}
