@@ -76,7 +76,7 @@
   padding: 0;
   margin: 0;
   contain: layout style paint;
-  overflow: auto;
+  overflow: hidden;
 }
 
 :global(body.welcome-page::-webkit-scrollbar) {
@@ -88,7 +88,7 @@
   padding: 0;
   margin: 0;
   contain: layout style;
-  overflow: auto;
+  overflow: hidden;
 }
 
 /* ==========================================================================
@@ -106,7 +106,8 @@
   width: 100vw;
   height: 100vh;
   min-height: 100vh;
-  overflow: auto;
+  max-height: 100vh;
+  overflow: hidden;
   opacity: 0;
   transform: translateY(20px);
   transition: 
@@ -184,9 +185,11 @@
   width: 100%;
   min-width: 320px;
   max-width: 100%;
-  min-height: 100vh;
+  height: 100vh;
+  max-height: 100vh;
   padding: clamp(var(--ws-space-3xl), 5vw, var(--ws-space-4xl)) clamp(var(--ws-space-lg), 3vw, var(--ws-space-3xl));
-  overflow: auto;
+  overflow-y: auto;
+  overflow-x: hidden;
   scroll-behavior: smooth;
   -webkit-overflow-scrolling: touch;
   background: transparent;
@@ -890,16 +893,19 @@
 /* Mobile (≤768px) */
 @media (width <= 768px) {
   .welcomeWrapper {
-    position: relative;
-    height: auto;
+    position: fixed;
+    height: 100vh;
     min-height: 100vh;
-    overflow: visible;
+    max-height: 100vh;
+    overflow: hidden;
   }
 
   .contentContainer {
-    max-height: none;
+    height: 100vh;
+    max-height: 100vh;
     padding: clamp(var(--ws-space-2xl), 4vw, var(--ws-space-3xl)) clamp(var(--ws-space-md), 2vw, var(--ws-space-xl));
-    overflow: visible;
+    overflow-y: auto;
+    overflow-x: hidden;
     overscroll-behavior: contain;
     scroll-padding-top: var(--ws-space-sm);
     -webkit-overflow-scrolling: touch;
@@ -966,16 +972,19 @@
 /* Very Small Screens (≤320px) */
 @media (width <= 320px) {
   .welcomeWrapper {
-    position: relative;
-    height: auto;
+    position: fixed;
+    height: 100vh;
     min-height: 100vh;
-    overflow: visible;
+    max-height: 100vh;
+    overflow: hidden;
   }
 
   .contentContainer {
-    max-height: none;
+    height: 100vh;
+    max-height: 100vh;
     padding: clamp(var(--ws-space-lg), 2.5vw, var(--ws-space-xl)) var(--ws-space-sm);
-    overflow: visible;
+    overflow-y: auto;
+    overflow-x: hidden;
   }
 
   .rotatedCard {
@@ -1016,18 +1025,21 @@
 /* Landscape Mobile (≤500px height) */
 @media (height <= 500px) and (orientation: landscape) {
   .welcomeWrapper {
-    position: relative;
+    position: fixed;
     align-items: flex-start;
-    height: auto;
+    height: 100vh;
     min-height: 100vh;
+    max-height: 100vh;
     padding-top: 0.5vh;
-    overflow: visible;
+    overflow: hidden;
   }
 
   .contentContainer {
-    max-height: none;
+    height: 100vh;
+    max-height: 100vh;
     padding: clamp(var(--ws-space-xl), 2.5vh, var(--ws-space-2xl)) clamp(var(--ws-space-sm), 1.5vw, var(--ws-space-lg));
-    overflow: visible;
+    overflow-y: auto;
+    overflow-x: hidden;
   }
 
   .rotatedCard {
