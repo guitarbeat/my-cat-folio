@@ -252,6 +252,7 @@ function WelcomeScreen({
             if (el) nameRefs.current[nameData.name] = el;
           }}
           className={`${styles.catNameText} ${styles.interactiveName}`}
+          data-long-name={nameData.name.length > 12 ? "true" : "false"}
           onMouseEnter={(e) => handleNameMouseEnter(nameData, e)}
           onMouseLeave={handleNameMouseLeave}
           onTouchStart={(e) => handleNameTouchStart(nameData, e)}
