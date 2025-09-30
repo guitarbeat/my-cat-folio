@@ -173,7 +173,7 @@
   flex: 1;
   flex-direction: column;
   gap: var(--space-4);
-  height: 100%;
+  height: auto; /* Allow height to grow with content */
   min-height: 200px; /* Increased from 140px for better description space */
   max-height: none; /* Remove max-height constraint to allow descriptions to expand */
   padding: var(--space-5);
@@ -229,17 +229,15 @@
   font-size: var(--text-xl);
   font-weight: 700;
   line-height: 1.2;
-  color: var(--text-primary);
+  color: #000; /* Force black color for names */
 }
 
 /* Description styling - Enhanced for better readability and space */
 .description {
-  display: -webkit-box;
   flex: 1; /* Take remaining space */
   min-height: 4.8em; /* Ensure minimum height for description (6 lines * 1.6 line-height * 0.5em) */
   margin: 0;
-  overflow: hidden;
-  -webkit-line-clamp: 6; /* Increased from 3 to 6 lines for better description visibility */
+  overflow: visible; /* Allow text to expand naturally */
   font-size: var(
     --text-base
   ); /* Increased from text-sm for better readability */
@@ -249,12 +247,10 @@
   color: var(--text-secondary);
   opacity: 0.9; /* Increased from 0.85 for better visibility */
   transition: opacity var(--duration-normal) var(--ease-out);
-  -webkit-box-orient: vertical;
 }
 
 .small .description {
   min-height: 3.2em; /* Minimum height for small cards */
-  -webkit-line-clamp: 4; /* Increased from 2 to 4 for small cards */
   font-size: var(--text-sm);
 }
 
@@ -337,9 +333,6 @@
 
 /* Enhanced hover effects for better description visibility */
 .card:hover .description {
-  max-height: none; /* Allow full expansion on hover */
-  overflow: visible; /* Show overflow content on hover */
-  -webkit-line-clamp: unset; /* Show full description on hover */
   color: var(--text-primary);
   opacity: 1;
 }
@@ -362,7 +355,7 @@
 
 /* Enhanced 3D depth on hover */
 .card:not(.disabled):hover .name {
-  color: var(--neon-cyan);
+  color: #000; /* Keep names black on hover */
   text-shadow: 0 4px 8px rgba(var(--neon-cyan-rgb), 0.4);
   transform: translateZ(30px) translateY(-2px);
 }
@@ -410,14 +403,14 @@
 }
 
 .selected .name {
-  color: var(--hot-pink);
+  color: #000; /* Keep names black even when selected */
   text-shadow: 0 0 6px rgba(var(--hot-pink-rgb), 0.4);
   transform: translateY(-1px);
 }
 
 /* * Enhanced hover effect for selected state */
 .selected:hover .name {
-  color: var(--hot-pink-600);
+  color: #000; /* Keep names black even when hovered */
   text-shadow: 0 0 8px rgba(var(--hot-pink-rgb), 0.6);
   transform: translateY(-2px);
 }
