@@ -8,7 +8,7 @@ import PropTypes from 'prop-types';
 import { NameStatsTooltip } from '../index';
 import useTheme from '../../../core/hooks/useTheme';
 import styles from './WelcomeScreen.module.css';
-import galleryData from '../../../public/assets/images/gallery.json';
+// Gallery data will be loaded dynamically
 
 function WelcomeScreen({
   catName,
@@ -23,6 +23,7 @@ function WelcomeScreen({
   const [showCelebration, setShowCelebration] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isImageTransitioning, setIsImageTransitioning] = useState(false);
+  const [galleryData, setGalleryData] = useState([]);
   const containerRef = useRef(null);
   const nameRefs = useRef({});
   const animationFrameRef = useRef(null);
@@ -63,6 +64,28 @@ function WelcomeScreen({
         )
     );
   }, [createParticle]);
+
+  // Load gallery data
+  useEffect(() => {
+    const loadGalleryData = async () => {
+      try {
+        const response = await fetch('/assets/images/gallery.json');
+        if (response.ok) {
+          const data = await response.json();
+          setGalleryData(data);
+        } else {
+          // Fallback to default images if gallery.json is not available
+          setGalleryData(['/assets/images/IMG_0778.jpg']);
+        }
+      } catch (error) {
+        console.error('Error loading gallery data:', error);
+        // Fallback to default images
+        setGalleryData(['/assets/images/IMG_0778.jpg']);
+      }
+    };
+
+    loadGalleryData();
+  }, []);
 
   // Add welcome-page class to body and html when component mounts
   useEffect(() => {
@@ -112,8 +135,6 @@ function WelcomeScreen({
     };
   }, [createParticle, animateParticles]);
 
-  // Personal name - you can customize this
-  const personalName = "Aaron"; // Replace with your actual name
 
   // Image rotation functionality
   const rotateImage = useCallback(() => {
