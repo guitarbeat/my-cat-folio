@@ -306,7 +306,9 @@ function WelcomeScreen({
           });
         }
         
-        searchIndex = index + 1; // Move past this match to find overlapping ones
+        // Move past the entire match to avoid finding overlapping substrings
+        // (e.g., if catName is "Fluffy" and we found "Fluff", don't also find "luff")
+        searchIndex = index + stat.name.length;
       }
     }
 
