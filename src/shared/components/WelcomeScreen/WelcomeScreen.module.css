@@ -193,19 +193,19 @@
    ========================================================================== */
 
 .rotatedCard {
-  width: min(90vw, 500px);
-  margin: 3em auto;
-  margin-top: 10%;
+  width: min(95vw, 550px);
+  margin: 2em auto;
+  margin-top: 5%;
   box-shadow: rgba(0, 0, 0, 0.4) 0 2px 10px, inset rgba(0, 0, 0, 0.2) 0 0 50px;
   border-radius: 1em;
   padding: 0;
   background-color: #fff;
-  transform: rotate(-7deg);
+  transform: rotate(-3deg);
   transition: transform 0.3s ease;
 }
 
 .rotatedCard:hover {
-  transform: rotate(-5deg) scale(1.02);
+  transform: rotate(-1deg) scale(1.02);
 }
 
 .cardHeader {
@@ -231,9 +231,9 @@
 
 .catNameContainer {
   font-family: 'Waiting for the Sunrise', cursive;
-  color: rgba(41, 41, 41, 0.8);
+  color: #000000;
   font-size: clamp(1.8em, 4.5vw, 2.8em);
-  transform: rotate(-7deg);
+  transform: rotate(-3deg);
   line-height: 1.1;
   padding: 0.1em 0.3em;
   display: flex;
@@ -433,7 +433,7 @@
   font-size: 1em;
   font-weight: 400;
   line-height: 1.1;
-  color: rgba(41, 41, 41, 0.8);
+  color: #000000;
   overflow-wrap: normal;
   text-transform: capitalize;
   letter-spacing: 0.05em;
@@ -854,13 +854,13 @@
   }
 
   .rotatedCard {
-    width: min(85vw, 400px);
-    margin-top: 5%;
-    transform: rotate(-5deg);
+    width: min(90vw, 450px);
+    margin-top: 3%;
+    transform: rotate(-2deg);
   }
 
   .rotatedCard:hover {
-    transform: rotate(-3deg) scale(1.02);
+    transform: rotate(0deg) scale(1.02);
   }
 
   .headerText {
@@ -870,7 +870,7 @@
 
   .catNameContainer {
     font-size: clamp(1.6em, 4vw, 2.2em);
-    transform: rotate(-5deg);
+    transform: rotate(-2deg);
     gap: 0.05em;
   }
 
@@ -886,13 +886,13 @@
   }
 
   .rotatedCard {
-    width: min(80vw, 350px);
-    margin-top: 3%;
-    transform: rotate(-4deg);
+    width: min(85vw, 380px);
+    margin-top: 2%;
+    transform: rotate(-1.5deg);
   }
 
   .rotatedCard:hover {
-    transform: rotate(-2deg) scale(1.02);
+    transform: rotate(0deg) scale(1.02);
   }
 
   .headerText {
@@ -902,7 +902,7 @@
 
   .catNameContainer {
     font-size: clamp(1.4em, 3.5vw, 1.8em);
-    transform: rotate(-4deg);
+    transform: rotate(-1.5deg);
     gap: 0.03em;
   }
 
@@ -927,13 +927,13 @@
   }
 
   .rotatedCard {
-    width: min(75vw, 300px);
-    margin-top: 2%;
-    transform: rotate(-3deg);
+    width: min(80vw, 320px);
+    margin-top: 1%;
+    transform: rotate(-1deg);
   }
 
   .rotatedCard:hover {
-    transform: rotate(-1deg) scale(1.02);
+    transform: rotate(0deg) scale(1.02);
   }
 
   .headerText {
@@ -943,7 +943,7 @@
 
   .catNameContainer {
     font-size: clamp(1.2em, 3vw, 1.6em);
-    transform: rotate(-3deg);
+    transform: rotate(-1deg);
     gap: 0.02em;
     padding: 0.05em 0.2em;
   }
@@ -979,13 +979,13 @@
   }
 
   .rotatedCard {
-    width: min(70vw, 450px);
-    margin-top: 1%;
-    transform: rotate(-6deg);
+    width: min(75vw, 480px);
+    margin-top: 0.5%;
+    transform: rotate(-2deg);
   }
 
   .rotatedCard:hover {
-    transform: rotate(-4deg) scale(1.02);
+    transform: rotate(0deg) scale(1.02);
   }
 
   .headerText {
@@ -995,7 +995,7 @@
 
   .catNameContainer {
     font-size: clamp(1.8em, 4.5vw, 2.6em);
-    transform: rotate(-6deg);
+    transform: rotate(-2deg);
     gap: 0.08em;
   }
 
@@ -1012,16 +1012,16 @@
 
   .rotatedCard {
     margin-top: 2%;
-    transform: rotate(-6deg);
+    transform: rotate(-2deg);
   }
 
   .rotatedCard:hover {
-    transform: rotate(-4deg) scale(1.02);
+    transform: rotate(0deg) scale(1.02);
   }
 
   .catNameContainer {
     font-size: clamp(1.6em, 4vw, 2.2em);
-    transform: rotate(-6deg);
+    transform: rotate(-2deg);
     gap: 0.05em;
   }
 }
