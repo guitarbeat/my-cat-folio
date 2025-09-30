@@ -58,21 +58,27 @@ export const useImageGallery = ({
     }
   }, [initialImages]);
 
-  // Rotate to next image
+  // Rotate to next image with optimized transitions
   const rotateImage = useCallback(() => {
     if (galleryData.length <= 1 || isImageTransitioning) return;
     
-    setIsImageTransitioning(true);
-    
-    // Clear any existing timeout
-    if (transitionTimeoutRef.current) {
-      clearTimeout(transitionTimeoutRef.current);
-    }
-    
-    transitionTimeoutRef.current = setTimeout(() => {
-      setCurrentImageIndex(prevIndex => (prevIndex + 1) % galleryData.length);
-      setIsImageTransitioning(false);
-    }, 300);
+    // Use requestAnimationFrame for smoother transitions
+    requestAnimationFrame(() => {
+      setIsImageTransitioning(true);
+      
+      // Clear any existing timeout
+      if (transitionTimeoutRef.current) {
+        clearTimeout(transitionTimeoutRef.current);
+      }
+      
+      transitionTimeoutRef.current = setTimeout(() => {
+        setCurrentImageIndex(prevIndex => (prevIndex + 1) % galleryData.length);
+        // Use requestAnimationFrame to ensure DOM update before setting transition to false
+        requestAnimationFrame(() => {
+          setIsImageTransitioning(false);
+        });
+      }, 200); // Reduced transition time
+    });
   }, [galleryData.length, isImageTransitioning]);
 
   // Go to next image
@@ -81,42 +87,54 @@ export const useImageGallery = ({
     rotateImage();
   }, [rotateImage, galleryData.length, isImageTransitioning]);
 
-  // Go to previous image
+  // Go to previous image with optimized transitions
   const goToPreviousImage = useCallback(() => {
     if (galleryData.length <= 1 || isImageTransitioning) return;
     
-    setIsImageTransitioning(true);
-    
-    // Clear any existing timeout
-    if (transitionTimeoutRef.current) {
-      clearTimeout(transitionTimeoutRef.current);
-    }
-    
-    transitionTimeoutRef.current = setTimeout(() => {
-      setCurrentImageIndex(prevIndex => 
-        prevIndex === 0 ? galleryData.length - 1 : prevIndex - 1
-      );
-      setIsImageTransitioning(false);
-    }, 300);
+    // Use requestAnimationFrame for smoother transitions
+    requestAnimationFrame(() => {
+      setIsImageTransitioning(true);
+      
+      // Clear any existing timeout
+      if (transitionTimeoutRef.current) {
+        clearTimeout(transitionTimeoutRef.current);
+      }
+      
+      transitionTimeoutRef.current = setTimeout(() => {
+        setCurrentImageIndex(prevIndex => 
+          prevIndex === 0 ? galleryData.length - 1 : prevIndex - 1
+        );
+        // Use requestAnimationFrame to ensure DOM update before setting transition to false
+        requestAnimationFrame(() => {
+          setIsImageTransitioning(false);
+        });
+      }, 200); // Reduced transition time
+    });
   }, [galleryData.length, isImageTransitioning]);
 
-  // Go to specific image
+  // Go to specific image with optimized transitions
   const goToImage = useCallback((index) => {
     if (galleryData.length <= 1 || isImageTransitioning || index === currentImageIndex) return;
     
     if (index < 0 || index >= galleryData.length) return;
     
-    setIsImageTransitioning(true);
-    
-    // Clear any existing timeout
-    if (transitionTimeoutRef.current) {
-      clearTimeout(transitionTimeoutRef.current);
-    }
-    
-    transitionTimeoutRef.current = setTimeout(() => {
-      setCurrentImageIndex(index);
-      setIsImageTransitioning(false);
-    }, 300);
+    // Use requestAnimationFrame for smoother transitions
+    requestAnimationFrame(() => {
+      setIsImageTransitioning(true);
+      
+      // Clear any existing timeout
+      if (transitionTimeoutRef.current) {
+        clearTimeout(transitionTimeoutRef.current);
+      }
+      
+      transitionTimeoutRef.current = setTimeout(() => {
+        setCurrentImageIndex(index);
+        // Use requestAnimationFrame to ensure DOM update before setting transition to false
+        requestAnimationFrame(() => {
+          setIsImageTransitioning(false);
+        });
+      }, 200); // Reduced transition time
+    });
   }, [galleryData.length, isImageTransitioning, currentImageIndex]);
 
   // Start auto-rotation

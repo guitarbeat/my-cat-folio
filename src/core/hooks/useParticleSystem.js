@@ -60,38 +60,49 @@ export const useParticleSystem = ({ enabled = true, maxParticles = 6 } = {}) => 
     };
   }, []);
 
-  // Animate particles
+  // Animate particles with optimized performance
   const animateParticles = useCallback(() => {
     if (!enabled || prefersReducedMotion) return;
 
     const now = Date.now();
     const deltaTime = now - lastUpdateRef.current;
     
-    // Throttle animation updates for better performance
-    if (deltaTime < 100) return;
+    // Throttle animation updates more aggressively for better performance
+    if (deltaTime < 200) return;
     
     lastUpdateRef.current = now;
 
     setParticles(prevParticles => {
       const deviceInfo = getDeviceInfo();
-      const animationThreshold = deviceInfo.isSmallMobile ? 0.1 : 
-                                deviceInfo.isMobile ? 0.15 : 0.2;
+      const animationThreshold = deviceInfo.isSmallMobile ? 0.05 : 
+                                deviceInfo.isMobile ? 0.08 : 0.1;
 
-      return prevParticles
-        .map(particle => ({
-          ...particle,
-          x: particle.x + particle.vx,
-          y: particle.y + particle.vy,
-          life: particle.life - particle.decay,
-          opacity: particle.opacity * particle.life
-        }))
-        .filter(particle => particle.life > 0)
-        .concat(
-          Math.random() < animationThreshold ? 
-            [createParticle(deviceInfo)] : 
-            []
-        )
-        .slice(0, maxParticles);
+      // Use more efficient array operations
+      const updatedParticles = prevParticles
+        .map(particle => {
+          const newX = particle.x + particle.vx;
+          const newY = particle.y + particle.vy;
+          const newLife = particle.life - particle.decay;
+          
+          // Only update if particle is still alive
+          if (newLife <= 0) return null;
+          
+          return {
+            ...particle,
+            x: newX,
+            y: newY,
+            life: newLife,
+            opacity: particle.opacity * newLife
+          };
+        })
+        .filter(particle => particle !== null);
+
+      // Add new particles less frequently
+      if (Math.random() < animationThreshold && updatedParticles.length < maxParticles) {
+        updatedParticles.push(createParticle(deviceInfo));
+      }
+
+      return updatedParticles;
     });
   }, [enabled, prefersReducedMotion, getDeviceInfo, maxParticles]);
 
