@@ -517,7 +517,7 @@ function WelcomeScreen({
             
             {/* Footer */}
             <div className={styles.cardFooter}>
-              <span className={styles.footerText}>Welcome to my personal site!</span>
+              <span className={styles.footerText}>Discover the magic behind my name!</span>
             </div>
           </div>
         
