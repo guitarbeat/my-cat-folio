@@ -10,7 +10,8 @@ import styles from './WelcomeScreen.module.css';
 
 function WelcomeScreen({
   catName,
-  nameStats = []
+  nameStats = [],
+  onContinue
 }) {
   const [isVisible, setIsVisible] = useState(false);
   const [hoveredName, setHoveredName] = useState(null);
@@ -361,6 +362,28 @@ function WelcomeScreen({
             <span className={styles.footerText}>Welcome to my personal site!</span>
           </div>
         </div>
+        
+        {/* Continue Button */}
+        {onContinue && (
+          <div className={styles.actionSection}>
+            <button
+              className={styles.continueButton}
+              onClick={onContinue}
+              type="button"
+              aria-label="Continue to login screen"
+            >
+              <span className={styles.buttonContent}>
+                <span className={styles.buttonText}>Continue to Login</span>
+                <span className={styles.buttonEmoji} aria-hidden="true">
+                  🚀
+                </span>
+              </span>
+            </button>
+            <div className={styles.explanationText}>
+              <p>Click to start your cat name judging adventure!</p>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Interactive tooltip */}
@@ -390,7 +413,8 @@ WelcomeScreen.propTypes = {
       rank: PropTypes.number.isRequired,
       categories: PropTypes.arrayOf(PropTypes.string)
     })
-  )
+  ),
+  onContinue: PropTypes.func
 };
 
 export default WelcomeScreen;
