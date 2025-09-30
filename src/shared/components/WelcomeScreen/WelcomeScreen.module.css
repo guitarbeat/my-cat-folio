@@ -241,6 +241,113 @@
   animation: glowPulse 6s ease-in-out infinite;
 }
 
+/* Image transition animation */
+.imageTransitioning {
+  opacity: 0.7;
+  transform: scale(0.95);
+  transition: all 0.3s ease-in-out;
+}
+
+/* Image Navigation Controls */
+.imageNavButton {
+  position: absolute;
+  top: 50%;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  margin: 0;
+  font-size: 24px;
+  font-weight: bold;
+  color: var(--ws-white);
+  cursor: pointer;
+  background: rgb(0 0 0 / 60%);
+  border: 2px solid rgb(var(--ws-white) / 30%);
+  border-radius: var(--ws-radius-full);
+  transform: translateY(-50%);
+  transition: all var(--ws-duration-normal) ease;
+  backdrop-filter: blur(10px);
+}
+
+.imageNavButton:hover:not(:disabled) {
+  background: rgb(0 0 0 / 80%);
+  border-color: rgb(var(--ws-primary-gold) / 80%);
+  transform: translateY(-50%) scale(1.1);
+  box-shadow: 0 4px 12px rgb(0 0 0 / 40%);
+}
+
+.imageNavButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: translateY(-50%);
+}
+
+.imageNavButton:first-of-type {
+  left: -20px;
+}
+
+.imageNavButton:last-of-type {
+  right: -20px;
+}
+
+/* Image Counter */
+.imageCounter {
+  position: absolute;
+  bottom: -35px;
+  left: 50%;
+  z-index: 10;
+  padding: 4px 12px;
+  font-size: var(--ws-text-xs);
+  font-weight: 600;
+  color: var(--ws-white);
+  background: rgb(0 0 0 / 70%);
+  border: 1px solid rgb(var(--ws-white) / 30%);
+  border-radius: var(--ws-radius-md);
+  transform: translateX(-50%);
+  backdrop-filter: blur(10px);
+}
+
+/* Image Dots Indicator */
+.imageDots {
+  position: absolute;
+  bottom: -60px;
+  left: 50%;
+  z-index: 10;
+  display: flex;
+  gap: 8px;
+  transform: translateX(-50%);
+}
+
+.imageDot {
+  width: 8px;
+  height: 8px;
+  padding: 0;
+  cursor: pointer;
+  background: rgb(var(--ws-white) / 40%);
+  border: 1px solid rgb(var(--ws-white) / 60%);
+  border-radius: var(--ws-radius-full);
+  transition: all var(--ws-duration-normal) ease;
+}
+
+.imageDot:hover:not(:disabled) {
+  background: rgb(var(--ws-primary-gold) / 80%);
+  border-color: rgb(var(--ws-primary-gold));
+  transform: scale(1.2);
+}
+
+.imageDot.activeDot {
+  background: var(--ws-primary-gold);
+  border-color: var(--ws-secondary-gold);
+  box-shadow: 0 0 8px rgb(var(--ws-primary-gold) / 60%);
+}
+
+.imageDot:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 /* ==========================================================================
    ROTATED CARD LAYOUT
    ========================================================================== */
@@ -1259,6 +1366,37 @@
   .continueButton {
     min-height: 56px;
     border-radius: 22px;
+  }
+
+  /* Mobile image gallery adjustments */
+  .imageNavButton {
+    width: 36px;
+    height: 36px;
+    font-size: 20px;
+  }
+
+  .imageNavButton:first-of-type {
+    left: -18px;
+  }
+
+  .imageNavButton:last-of-type {
+    right: -18px;
+  }
+
+  .imageCounter {
+    bottom: -30px;
+    font-size: 0.7rem;
+    padding: 3px 10px;
+  }
+
+  .imageDots {
+    bottom: -50px;
+    gap: 6px;
+  }
+
+  .imageDot {
+    width: 6px;
+    height: 6px;
   }
 }
 
