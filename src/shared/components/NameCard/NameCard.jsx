@@ -72,7 +72,6 @@ function NameCard({
 }) {
   const [rippleStyle, setRippleStyle] = useState({});
   const [isRippling, setIsRippling] = useState(false);
-  const [tiltStyle, setTiltStyle] = useState({});
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const cardRef = useRef(null);
   const imgRef = useRef(null);
@@ -154,7 +153,7 @@ function NameCard({
     }
   }, [isRippling]);
 
-  // Tilt effect and mouse follow
+  // Mouse follow effect for background
   useEffect(() => {
     const card = cardRef.current;
     if (!card || disabled) return;
@@ -164,22 +163,9 @@ function NameCard({
       const x = e.clientX - rect.left;
       const y = e.clientY - rect.top;
 
-      // Calculate center of card
-      const centerX = rect.width / 2;
-      const centerY = rect.height / 2;
-
-      // Calculate tilt angles (max 15 degrees)
-      const tiltX = ((y - centerY) / centerY) * -15;
-      const tiltY = ((x - centerX) / centerX) * 15;
-
       // Calculate mouse position for background effect
       const mouseX = (x / rect.width) * 100;
       const mouseY = (y / rect.height) * 100;
-
-      setTiltStyle({
-        transform: `perspective(1000px) rotateX(${tiltX}deg) rotateY(${tiltY}deg) scale3d(1.05, 1.05, 1.05)`,
-        transition: 'transform 0.1s ease-out'
-      });
 
       setMousePosition({ x: mouseX, y: mouseY });
 
@@ -191,11 +177,6 @@ function NameCard({
     };
 
     const handleMouseLeave = () => {
-      setTiltStyle({
-        transform:
-          'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)',
-        transition: 'transform 0.5s ease-out'
-      });
       setMousePosition({ x: 50, y: 50 });
 
       // Reset CSS custom properties
@@ -305,7 +286,6 @@ function NameCard({
         }
         aria-labelledby={`${getSafeId(name)}-title`}
         type="button"
-        style={tiltStyle}
       >
         {/* Background mouse follow effect */}
         <div
