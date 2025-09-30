@@ -245,7 +245,21 @@ function WelcomeScreen({
 
     // Find all matches in the original name without modifying it
     const matchedNames = [];
-    const sortedStats = [...nameStats].sort((a, b) => b.rating - a.rating);
+    
+    // Remove duplicate names from nameStats (in case there are duplicates in the data)
+    const uniqueNameStats = nameStats.reduce((acc, stat) => {
+      const existing = acc.find(item => item.name === stat.name);
+      if (!existing) {
+        acc.push(stat);
+      } else if (stat.rating > existing.rating) {
+        // Keep the one with higher rating
+        const index = acc.indexOf(existing);
+        acc[index] = stat;
+      }
+      return acc;
+    }, []);
+    
+    const sortedStats = [...uniqueNameStats].sort((a, b) => b.rating - a.rating);
 
     // Find all occurrences of each name in the cat name
     for (const stat of sortedStats) {
@@ -254,16 +268,34 @@ function WelcomeScreen({
         const index = catName.indexOf(stat.name, searchIndex);
         if (index === -1) break;
 
-        matchedNames.push({
-          ...stat,
-          startIndex: index,
-          endIndex: index + stat.name.length
-        });
+        // Only add if this exact match doesn't already exist
+        const isDuplicate = matchedNames.some(existing => 
+          existing.name === stat.name && 
+          existing.startIndex === index && 
+          existing.endIndex === index + stat.name.length
+        );
+        
+        if (!isDuplicate) {
+          matchedNames.push({
+            ...stat,
+            startIndex: index,
+            endIndex: index + stat.name.length
+          });
+        }
+        
         searchIndex = index + 1; // Move past this match to find overlapping ones
       }
     }
 
     // Remove overlapping matches (keep the one with higher rating)
+    // Sort by rating first (highest first), then by position
+    matchedNames.sort((a, b) => {
+      if (b.rating !== a.rating) {
+        return b.rating - a.rating;
+      }
+      return a.startIndex - b.startIndex;
+    });
+
     const filteredMatches = [];
     for (const match of matchedNames) {
       const hasOverlap = filteredMatches.some(
@@ -278,6 +310,19 @@ function WelcomeScreen({
 
     // Sort by position in the original name
     filteredMatches.sort((a, b) => a.startIndex - b.startIndex);
+
+    // Debug logging to help identify any remaining duplicates
+    if (process.env.NODE_ENV === 'development') {
+      console.log('WelcomeScreen Debug:', {
+        catName,
+        nameStatsCount: nameStats.length,
+        uniqueNameStatsCount: uniqueNameStats.length,
+        matchedNamesCount: matchedNames.length,
+        filteredMatchesCount: filteredMatches.length,
+        matchedNames: matchedNames.map(m => ({ name: m.name, start: m.startIndex, end: m.endIndex, rating: m.rating })),
+        filteredMatches: filteredMatches.map(m => ({ name: m.name, start: m.startIndex, end: m.endIndex, rating: m.rating }))
+      });
+    }
 
     const nameComponents = [];
     let lastIndex = 0;
