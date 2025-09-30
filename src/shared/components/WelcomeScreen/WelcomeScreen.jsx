@@ -6,6 +6,7 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { NameStatsTooltip } from '../index';
+import useTheme from '../../../core/hooks/useTheme';
 import styles from './WelcomeScreen.module.css';
 import galleryData from '../../../public/assets/images/gallery.json';
 
@@ -14,6 +15,7 @@ function WelcomeScreen({
   nameStats = [],
   onContinue
 }) {
+  const { isLightTheme, toggleTheme } = useTheme();
   const [isVisible, setIsVisible] = useState(false);
   const [hoveredName, setHoveredName] = useState(null);
   const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 });
@@ -398,6 +400,22 @@ function WelcomeScreen({
       role="main"
       aria-label="Welcome screen showing your cat's tournament-generated name"
     >
+      {/* Theme Toggle Button */}
+      <button
+        className={styles.themeToggle}
+        onClick={toggleTheme}
+        type="button"
+        aria-label={`Switch to ${isLightTheme ? 'dark' : 'light'} mode`}
+        title={`Switch to ${isLightTheme ? 'dark' : 'light'} mode`}
+      >
+        <span className={styles.themeIcon} aria-hidden="true">
+          {isLightTheme ? '🌙' : '☀️'}
+        </span>
+        <span className={styles.themeText}>
+          {isLightTheme ? 'Dark' : 'Light'}
+        </span>
+      </button>
+
       {/* Background with overlay */}
       <div className={styles.backgroundContainer}>
         <div className={styles.backgroundImage} />
