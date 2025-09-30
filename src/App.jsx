@@ -201,10 +201,9 @@ function App() {
   // * Handle tournament setup
   const handleTournamentSetup = useCallback(
     (names) => {
-      // * Only set loading if we don't already have names
-      if (!tournament.names) {
-        tournamentActions.setLoading(true);
-      }
+      // * Reset tournament state and set loading
+      tournamentActions.resetTournament();
+      tournamentActions.setLoading(true);
 
       const processedNames = TournamentService.createTournament(
         names,
@@ -220,7 +219,7 @@ function App() {
         tournamentActions.setLoading(false);
       }, 100);
     },
-    [tournament.ratings, tournament.names, tournamentActions]
+    [tournament.ratings, tournamentActions]
   );
 
   // * Handle ratings update
@@ -249,7 +248,10 @@ function App() {
   const handleLogout = useCallback(async () => {
     logout();
     userActions.logout();
-  }, [logout, userActions]);
+    // Reset tournament state and go back to welcome screen
+    tournamentActions.resetTournament();
+    setShowWelcomeScreen(true);
+  }, [logout, userActions, tournamentActions]);
 
   // * Handle theme change
   const handleThemeChange = useCallback(
@@ -277,72 +279,66 @@ function App() {
       return <Login onLogin={login} />;
     }
 
-    switch (tournament.currentView) {
-      case 'profile':
-        return (
-          <Profile
-            userName={userName}
-            onStartNewTournament={handleStartNewTournament}
-            ratings={tournament.ratings}
-            onUpdateRatings={handleUpdateRatings}
-          />
-        );
-      case 'loading':
-        return (
-          <div className="fullScreenCenter">
-            <LoadingSpinner size="large" text="Testing Loading Spinner..." />
-          </div>
-        );
-      case 'tournament':
-        if (tournament.isComplete) {
-          return (
-            <Results
-              ratings={tournament.ratings}
-              onStartNew={handleStartNewTournament}
-              userName={userName}
-              onUpdateRatings={handleUpdateRatings}
-              currentTournamentNames={tournament.names}
-              voteHistory={tournament.voteHistory}
-            />
-          );
-        }
-
-        if (tournament.names === null) {
-          return (
-            <TournamentSetup
-              onStart={handleTournamentSetup}
-              userName={userName}
-              existingRatings={tournament.ratings}
-            />
-          );
-        }
-
-        return (
-          <ErrorBoundary>
-            <Tournament
-              names={tournament.names}
-              existingRatings={tournament.ratings}
-              onComplete={handleTournamentComplete}
-              userName={userName}
-              onVote={(vote) => tournamentActions.addVote(vote)}
-            />
-          </ErrorBoundary>
-        );
-      default:
-        return null;
+    // * Handle profile view
+    if (tournament.currentView === 'profile') {
+      return (
+        <Profile
+          userName={userName}
+          onStartNewTournament={handleStartNewTournament}
+          ratings={tournament.ratings}
+          onUpdateRatings={handleUpdateRatings}
+        />
+      );
     }
+
+    // * Show tournament setup if no names selected, otherwise show tournament
+    if (tournament.names === null) {
+      return (
+        <TournamentSetup
+          onStart={handleTournamentSetup}
+          userName={userName}
+          existingRatings={tournament.ratings}
+        />
+      );
+    }
+
+    // * Show tournament if names are selected
+    if (tournament.isComplete) {
+      return (
+        <Results
+          ratings={tournament.ratings}
+          onStartNew={handleStartNewTournament}
+          userName={userName}
+          onUpdateRatings={handleUpdateRatings}
+          currentTournamentNames={tournament.names}
+          voteHistory={tournament.voteHistory}
+        />
+      );
+    }
+
+    return (
+      <ErrorBoundary>
+        <Tournament
+          names={tournament.names}
+          existingRatings={tournament.ratings}
+          onComplete={handleTournamentComplete}
+          userName={userName}
+          onVote={(vote) => tournamentActions.addVote(vote)}
+        />
+      </ErrorBoundary>
+    );
   }, [
     isLoggedIn,
     login,
     tournament.currentView,
-    tournament.ratings,
-    tournament.isComplete,
     tournament.names,
+    tournament.isComplete,
+    tournament.ratings,
     tournament.voteHistory,
     userName,
+    handleTournamentSetup,
     handleStartNewTournament,
     handleUpdateRatings,
-    handleTournamentSetup,
     handleTournamentComplete,
     tournamentActions
   ]);
@@ -350,8 +346,14 @@ function App() {
   // * Memoize NavBar props to prevent unnecessary re-renders
   const navBarProps = useMemo(
     () => ({
-      view: tournament.currentView,
-      setView: (view) => tournamentActions.setView(view),
+      view: tournament.currentView || 'tournament',
+      setView: (view) => {
+        tournamentActions.setView(view);
+        // If going to profile, reset tournament to show setup
+        if (view === 'profile') {
+          tournamentActions.resetTournament();
+        }
+      },
       isLoggedIn,
       userName,
       onLogout: handleLogout,
