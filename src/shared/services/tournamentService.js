@@ -415,7 +415,7 @@ export class TournamentService {
       }
 
       // Process and return the data with stats
-      return visibleNames.map((name, index) => {
+      const processedNames = visibleNames.map((name, index) => {
         const ratingData = ratingsMap.get(name.id);
 
         if (ratingData) {
@@ -454,6 +454,21 @@ export class TournamentService {
           };
         }
       });
+
+      // Remove any potential duplicates by name (safety check)
+      const uniqueNames = processedNames.reduce((acc, name) => {
+        const existing = acc.find(item => item.name === name.name);
+        if (!existing) {
+          acc.push(name);
+        } else if (name.rating > existing.rating) {
+          // Keep the one with higher rating
+          const index = acc.indexOf(existing);
+          acc[index] = name;
+        }
+        return acc;
+      }, []);
+
+      return uniqueNames;
     } catch (error) {
       console.error('Error fetching cat name stats:', error);
       return [];
