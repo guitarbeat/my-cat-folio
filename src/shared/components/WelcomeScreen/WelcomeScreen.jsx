@@ -7,6 +7,7 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { NameStatsTooltip } from '../index';
 import styles from './WelcomeScreen.module.css';
+import galleryData from '../../../public/assets/images/gallery.json';
 
 function WelcomeScreen({
   catName,
@@ -18,9 +19,12 @@ function WelcomeScreen({
   const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 });
   const [particles, setParticles] = useState([]);
   const [showCelebration, setShowCelebration] = useState(false);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [isImageTransitioning, setIsImageTransitioning] = useState(false);
   const containerRef = useRef(null);
   const nameRefs = useRef({});
   const animationFrameRef = useRef(null);
+  const imageRotationRef = useRef(null);
 
   // Simplified particle system with reduced animations
   const createParticle = useCallback(() => {
@@ -108,6 +112,50 @@ function WelcomeScreen({
 
   // Personal name - you can customize this
   const personalName = "Aaron"; // Replace with your actual name
+
+  // Image rotation functionality
+  const rotateImage = useCallback(() => {
+    if (galleryData.length <= 1) return;
+    
+    setIsImageTransitioning(true);
+    setTimeout(() => {
+      setCurrentImageIndex((prevIndex) => 
+        (prevIndex + 1) % galleryData.length
+      );
+      setIsImageTransitioning(false);
+    }, 300);
+  }, []);
+
+  // Start image rotation on component mount
+  useEffect(() => {
+    if (galleryData.length > 1) {
+      imageRotationRef.current = setInterval(rotateImage, 4000); // Rotate every 4 seconds
+    }
+
+    return () => {
+      if (imageRotationRef.current) {
+        clearInterval(imageRotationRef.current);
+      }
+    };
+  }, [rotateImage]);
+
+  // Manual image navigation
+  const goToNextImage = useCallback(() => {
+    if (galleryData.length <= 1 || isImageTransitioning) return;
+    rotateImage();
+  }, [rotateImage, isImageTransitioning]);
+
+  const goToPreviousImage = useCallback(() => {
+    if (galleryData.length <= 1 || isImageTransitioning) return;
+    
+    setIsImageTransitioning(true);
+    setTimeout(() => {
+      setCurrentImageIndex((prevIndex) => 
+        prevIndex === 0 ? galleryData.length - 1 : prevIndex - 1
+      );
+      setIsImageTransitioning(false);
+    }, 300);
+  }, [isImageTransitioning]);
 
 
   // Handle mouse events for interactive names
@@ -347,12 +395,64 @@ function WelcomeScreen({
           <div className={styles.catImageSection}>
             <div className={styles.catImageContainer}>
               <img
-                src="/assets/images/IMG_0778.jpg"
-                alt="My cat looking adorable"
-                className={styles.catImage}
+                src={galleryData[currentImageIndex] || "/assets/images/IMG_0778.jpg"}
+                alt={`My cat looking adorable - Image ${currentImageIndex + 1} of ${galleryData.length}`}
+                className={`${styles.catImage} ${isImageTransitioning ? styles.imageTransitioning : ''}`}
                 loading="lazy"
+                onLoad={() => setIsImageTransitioning(false)}
               />
               <div className={styles.catImageGlow} />
+              
+              {/* Image Navigation Controls */}
+              {galleryData.length > 1 && (
+                <>
+                  <button
+                    className={styles.imageNavButton}
+                    onClick={goToPreviousImage}
+                    disabled={isImageTransitioning}
+                    aria-label="Previous cat image"
+                    type="button"
+                  >
+                    ‹
+                  </button>
+                  <button
+                    className={styles.imageNavButton}
+                    onClick={goToNextImage}
+                    disabled={isImageTransitioning}
+                    aria-label="Next cat image"
+                    type="button"
+                  >
+                    ›
+                  </button>
+                  
+                  {/* Image Counter */}
+                  <div className={styles.imageCounter}>
+                    {currentImageIndex + 1} / {galleryData.length}
+                  </div>
+                  
+                  {/* Image Dots Indicator */}
+                  <div className={styles.imageDots}>
+                    {galleryData.map((_, index) => (
+                      <button
+                        key={index}
+                        className={`${styles.imageDot} ${index === currentImageIndex ? styles.activeDot : ''}`}
+                        onClick={() => {
+                          if (!isImageTransitioning) {
+                            setIsImageTransitioning(true);
+                            setTimeout(() => {
+                              setCurrentImageIndex(index);
+                              setIsImageTransitioning(false);
+                            }, 300);
+                          }
+                        }}
+                        disabled={isImageTransitioning}
+                        aria-label={`Go to image ${index + 1}`}
+                        type="button"
+                      />
+                    ))}
+                  </div>
+                </>
+              )}
             </div>
           </div>
 
