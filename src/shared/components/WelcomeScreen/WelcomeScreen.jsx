@@ -28,7 +28,8 @@ function WelcomeScreen({
   // Custom hooks for better performance and organization
   const { particles, isEnabled: particlesEnabled } = useParticleSystem({
     enabled: true,
-    maxParticles: 6
+    maxParticles: 6,
+    isVisible: isVisible
   });
 
   const {
@@ -43,7 +44,7 @@ function WelcomeScreen({
     handleImageLoad
   } = useImageGallery({
     initialImages: [],
-    rotationInterval: 4000,
+    rotationInterval: 6000, // Increased for better performance
     autoRotate: true
   });
 
