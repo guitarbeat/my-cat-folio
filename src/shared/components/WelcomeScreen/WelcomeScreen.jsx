@@ -9,6 +9,8 @@ import { NameStatsTooltip } from '../index';
 import useTheme from '../../../core/hooks/useTheme';
 import useParticleSystem from '../../../core/hooks/useParticleSystem';
 import useImageGallery from '../../../core/hooks/useImageGallery';
+import performanceMonitor from '../../utils/performanceMonitor';
+import { injectCriticalCSS, removeCriticalCSS } from '../../utils/criticalCSS';
 import ThemeToggle from './components/ThemeToggle';
 import CatImageGallery from './components/CatImageGallery';
 import WelcomeCard from './components/WelcomeCard';
@@ -63,15 +65,27 @@ function WelcomeScreen({
     document.body.classList.add('welcome-page');
     document.documentElement.classList.add('welcome-page');
 
+    // Inject critical CSS for faster rendering
+    injectCriticalCSS();
+
+    // Track Welcome Screen performance
+    performanceMonitor.trackWelcomeScreenMetrics();
+
     // Animate in after a brief delay
     const timer = setTimeout(() => {
       setIsVisible(true);
     }, 100);
 
+    // Remove critical CSS after main stylesheet loads
+    const removeTimer = setTimeout(() => {
+      removeCriticalCSS();
+    }, 2000);
+
     return () => {
       document.body.classList.remove('welcome-page');
       document.documentElement.classList.remove('welcome-page');
       clearTimeout(timer);
+      clearTimeout(removeTimer);
     };
   }, []);
 
