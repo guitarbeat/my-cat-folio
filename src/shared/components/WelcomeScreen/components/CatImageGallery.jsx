@@ -45,7 +45,7 @@ const CatImageGallery = ({
           onLoad={onImageLoad}
         />
         <div className={styles.catImageGlow} />
-        
+
         {/* Image Navigation Controls */}
         {hasMultipleImages && (
           <>
@@ -67,12 +67,12 @@ const CatImageGallery = ({
             >
               ›
             </button>
-            
+
             {/* Image Counter */}
             <div className={styles.imageCounter}>
               {currentIndex + 1} / {totalImages}
             </div>
-            
+
             {/* Image Dots Indicator */}
             <div className={styles.imageDots}>
               {Array.from({ length: totalImages }, (_, index) => (

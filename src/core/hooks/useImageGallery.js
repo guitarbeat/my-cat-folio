@@ -14,17 +14,17 @@ import { useState, useEffect, useCallback, useRef } from 'react';
  * @param {boolean} options.autoRotate - Whether to enable auto-rotation
  * @returns {Object} Gallery state and controls
  */
-export const useImageGallery = ({ 
-  initialImages = [], 
-  rotationInterval = 4000, 
-  autoRotate = true 
+export const useImageGallery = ({
+  initialImages = [],
+  rotationInterval = 4000,
+  autoRotate = true
 } = {}) => {
   const [galleryData, setGalleryData] = useState(initialImages);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isImageTransitioning, setIsImageTransitioning] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
-  
+
   const imageRotationRef = useRef(null);
   const transitionTimeoutRef = useRef(null);
 
@@ -39,7 +39,7 @@ export const useImageGallery = ({
     try {
       setIsLoading(true);
       setError(null);
-      
+
       const response = await fetch('/assets/images/gallery.json');
       if (response.ok) {
         const data = await response.json();
@@ -61,16 +61,16 @@ export const useImageGallery = ({
   // Rotate to next image with optimized transitions
   const rotateImage = useCallback(() => {
     if (galleryData.length <= 1 || isImageTransitioning) return;
-    
+
     // Use requestAnimationFrame for smoother transitions
     requestAnimationFrame(() => {
       setIsImageTransitioning(true);
-      
+
       // Clear any existing timeout
       if (transitionTimeoutRef.current) {
         clearTimeout(transitionTimeoutRef.current);
       }
-      
+
       transitionTimeoutRef.current = setTimeout(() => {
         setCurrentImageIndex(prevIndex => (prevIndex + 1) % galleryData.length);
         // Use requestAnimationFrame to ensure DOM update before setting transition to false
@@ -90,18 +90,18 @@ export const useImageGallery = ({
   // Go to previous image with optimized transitions
   const goToPreviousImage = useCallback(() => {
     if (galleryData.length <= 1 || isImageTransitioning) return;
-    
+
     // Use requestAnimationFrame for smoother transitions
     requestAnimationFrame(() => {
       setIsImageTransitioning(true);
-      
+
       // Clear any existing timeout
       if (transitionTimeoutRef.current) {
         clearTimeout(transitionTimeoutRef.current);
       }
-      
+
       transitionTimeoutRef.current = setTimeout(() => {
-        setCurrentImageIndex(prevIndex => 
+        setCurrentImageIndex(prevIndex =>
           prevIndex === 0 ? galleryData.length - 1 : prevIndex - 1
         );
         // Use requestAnimationFrame to ensure DOM update before setting transition to false
@@ -115,18 +115,18 @@ export const useImageGallery = ({
   // Go to specific image with optimized transitions
   const goToImage = useCallback((index) => {
     if (galleryData.length <= 1 || isImageTransitioning || index === currentImageIndex) return;
-    
+
     if (index < 0 || index >= galleryData.length) return;
-    
+
     // Use requestAnimationFrame for smoother transitions
     requestAnimationFrame(() => {
       setIsImageTransitioning(true);
-      
+
       // Clear any existing timeout
       if (transitionTimeoutRef.current) {
         clearTimeout(transitionTimeoutRef.current);
       }
-      
+
       transitionTimeoutRef.current = setTimeout(() => {
         setCurrentImageIndex(index);
         // Use requestAnimationFrame to ensure DOM update before setting transition to false
@@ -140,11 +140,11 @@ export const useImageGallery = ({
   // Start auto-rotation
   const startAutoRotation = useCallback(() => {
     if (!autoRotate || galleryData.length <= 1) return;
-    
+
     if (imageRotationRef.current) {
       clearInterval(imageRotationRef.current);
     }
-    
+
     imageRotationRef.current = setInterval(rotateImage, rotationInterval);
   }, [autoRotate, galleryData.length, rotateImage, rotationInterval]);
 

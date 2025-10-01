@@ -244,7 +244,7 @@ export const criticalCSS = `
  */
 export const injectCriticalCSS = () => {
   if (typeof document === 'undefined') return;
-  
+
   const style = document.createElement('style');
   style.textContent = criticalCSS;
   style.setAttribute('data-critical', 'true');
@@ -256,7 +256,7 @@ export const injectCriticalCSS = () => {
  */
 export const removeCriticalCSS = () => {
   if (typeof document === 'undefined') return;
-  
+
   const criticalStyle = document.querySelector('style[data-critical="true"]');
   if (criticalStyle) {
     criticalStyle.remove();
