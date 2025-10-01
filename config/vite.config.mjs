@@ -55,22 +55,26 @@ export default defineConfig({
     css: {
         postcss: {
             plugins: [
-                purgecss.default({
-                    content: ['./src/**/*.{js,jsx,ts,tsx}'],
-                    safelist: [
-                        'welcome-page',
-                        'dark-theme',
-                        'light-theme',
-                        'cat-background',
-                        'cat-background__stars',
-                        'cat-background__nebula',
-                        'cat-background__floating-cats',
-                        'cat-background__cat',
-                        'skip-link',
-                        'main-content',
-                        'global-loading-overlay'
+                ...(process.env.NODE_ENV === 'production'
+                    ? [
+                        purgecss.default({
+                            content: ['./src/**/*.{js,jsx,ts,tsx}'],
+                            safelist: [
+                                'welcome-page',
+                                'dark-theme',
+                                'light-theme',
+                                'cat-background',
+                                'cat-background__stars',
+                                'cat-background__nebula',
+                                'cat-background__floating-cats',
+                                'cat-background__cat',
+                                'skip-link',
+                                'main-content',
+                                'global-loading-overlay'
+                            ]
+                        })
                     ]
-                })
+                    : [])
             ]
         }
     },
