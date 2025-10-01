@@ -36,20 +36,16 @@ const CatImageGallery = ({
   return (
     <div className={styles.catImageSection}>
       <div className={styles.catImageContainer}>
-        <picture>
-          <source srcSet={`${currentImage}.avif`} type="image/avif" />
-          <source srcSet={`${currentImage}.webp`} type="image/webp" />
-          <img
-            src={`${currentImage}.jpg`}
-            alt={`My cat looking adorable - Image ${currentIndex + 1} of ${totalImages}`}
-            className={`${styles.catImage} ${isTransitioning ? styles.imageTransitioning : ''}`}
-            loading="lazy"
-            decoding="async"
-            onLoad={onImageLoad}
-          />
-        </picture>
+        <img
+          src={currentImage}
+          alt={`My cat looking adorable - Image ${currentIndex + 1} of ${totalImages}`}
+          className={`${styles.catImage} ${isTransitioning ? styles.imageTransitioning : ''}`}
+          loading="lazy"
+          decoding="async"
+          onLoad={onImageLoad}
+        />
         <div className={styles.catImageGlow} />
-        
+
         {/* Image Navigation Controls */}
         {hasMultipleImages && (
           <>
@@ -71,12 +67,12 @@ const CatImageGallery = ({
             >
               ›
             </button>
-            
+
             {/* Image Counter */}
             <div className={styles.imageCounter}>
               {currentIndex + 1} / {totalImages}
             </div>
-            
+
             {/* Image Dots Indicator */}
             <div className={styles.imageDots}>
               {Array.from({ length: totalImages }, (_, index) => (

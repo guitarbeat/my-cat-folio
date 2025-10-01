@@ -3,7 +3,7 @@
  * @description Refactored welcome screen with improved performance and maintainability.
  * Uses custom hooks and smaller components for better code organization.
  */
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { NameStatsTooltip } from '../index';
 import useTheme from '../../../core/hooks/useTheme';
@@ -26,6 +26,8 @@ function WelcomeScreen({
   const [isVisible, setIsVisible] = useState(false);
   const [hoveredName, setHoveredName] = useState(null);
   const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 });
+  const [showCelebration] = useState(false);
+  const containerRef = useRef(null);
 
   // Custom hooks for better performance and organization
   const { particles, isEnabled: particlesEnabled } = useParticleSystem({
@@ -33,6 +35,13 @@ function WelcomeScreen({
     maxParticles: 6,
     isVisible: isVisible
   });
+
+  // Define gallery data - this should come from props or context in a real app
+  const galleryData = [
+    '/assets/images/IMG_0778.jpg',
+    '/assets/images/IMG_0779.jpg',
+    '/assets/images/IMG_0780.jpg'
+  ];
 
   const {
     currentImage,
@@ -45,7 +54,7 @@ function WelcomeScreen({
     goToImage,
     handleImageLoad
   } = useImageGallery({
-    initialImages: [],
+    initialImages: galleryData,
     rotationInterval: 6000, // Increased for better performance
     autoRotate: true
   });
@@ -105,10 +114,21 @@ function WelcomeScreen({
 
         {/* Particle effects */}
         <ParticleBackground particles={particles} isEnabled={particlesEnabled} />
+
+        {/* Celebration effects */}
+        {showCelebration && (
+          <div className={styles.celebrationContainer}>
+            <div className={styles.confetti} />
+            <div className={styles.confetti} />
+            <div className={styles.confetti} />
+            <div className={styles.confetti} />
+            <div className={styles.confetti} />
+          </div>
+        )}
       </div>
 
       {/* Centered Content Container */}
-      <div className={styles.contentContainer}>
+      <div className={styles.contentContainer} ref={containerRef}>
         {/* Cat Image Gallery */}
         <CatImageGallery
           currentImage={currentImage}

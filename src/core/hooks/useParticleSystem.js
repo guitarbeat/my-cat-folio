@@ -40,8 +40,8 @@ export const useParticleSystem = ({ enabled = true, maxParticles = 6, isVisible 
   const lastUpdateRef = useRef(0);
 
   // Check if user prefers reduced motion
-  const prefersReducedMotion = typeof window !== 'undefined' && 
-    window.matchMedia && 
+  const prefersReducedMotion = typeof window !== 'undefined' &&
+    window.matchMedia &&
     window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   // Get device capabilities
@@ -49,7 +49,7 @@ export const useParticleSystem = ({ enabled = true, maxParticles = 6, isVisible 
     if (typeof window === 'undefined') {
       return { isMobile: false, isSmallMobile: false, maxWidth: 1920, maxHeight: 1080 };
     }
-    
+
     const isMobile = window.innerWidth <= 768;
     const isSmallMobile = window.innerWidth <= 480;
     return {
@@ -66,15 +66,15 @@ export const useParticleSystem = ({ enabled = true, maxParticles = 6, isVisible 
 
     const now = Date.now();
     const deltaTime = now - lastUpdateRef.current;
-    
+
     // Throttle animation updates more aggressively for better performance
     if (deltaTime < 300) return; // Increased throttling for better performance
-    
+
     lastUpdateRef.current = now;
 
     setParticles(prevParticles => {
       const deviceInfo = getDeviceInfo();
-      const animationThreshold = deviceInfo.isSmallMobile ? 0.05 : 
+      const animationThreshold = deviceInfo.isSmallMobile ? 0.05 :
                                 deviceInfo.isMobile ? 0.08 : 0.1;
 
       // Use more efficient array operations
@@ -83,10 +83,10 @@ export const useParticleSystem = ({ enabled = true, maxParticles = 6, isVisible 
           const newX = particle.x + particle.vx;
           const newY = particle.y + particle.vy;
           const newLife = particle.life - particle.decay;
-          
+
           // Only update if particle is still alive
           if (newLife <= 0) return null;
-          
+
           return {
             ...particle,
             x: newX,
@@ -114,14 +114,14 @@ export const useParticleSystem = ({ enabled = true, maxParticles = 6, isVisible 
     }
 
     const deviceInfo = getDeviceInfo();
-    const particleCount = deviceInfo.isSmallMobile ? 2 : 
+    const particleCount = deviceInfo.isSmallMobile ? 2 :
                          deviceInfo.isMobile ? 4 : maxParticles;
-    
+
     const initialParticles = Array.from(
       { length: particleCount },
       () => createParticle(deviceInfo)
     );
-    
+
     setParticles(initialParticles);
   }, [enabled, prefersReducedMotion, getDeviceInfo, maxParticles]);
 
@@ -133,7 +133,7 @@ export const useParticleSystem = ({ enabled = true, maxParticles = 6, isVisible 
       animateParticles();
       animationFrameRef.current = requestAnimationFrame(animate);
     };
-    
+
     animationFrameRef.current = requestAnimationFrame(animate);
   }, [enabled, prefersReducedMotion, animateParticles]);
 

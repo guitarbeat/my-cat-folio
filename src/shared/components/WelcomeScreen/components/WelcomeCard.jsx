@@ -19,12 +19,12 @@ import styles from '../WelcomeScreen.module.css';
  * @param {Function} props.onNameLeave - Name leave callback
  * @returns {JSX.Element} Welcome card
  */
-const WelcomeCard = ({ 
-  catName, 
-  nameStats, 
-  onContinue, 
-  onNameHover, 
-  onNameLeave 
+const WelcomeCard = ({
+  catName,
+  nameStats,
+  onContinue,
+  onNameHover,
+  onNameLeave
 }) => {
   return (
     <div className={styles.rotatedCard}>
@@ -32,7 +32,7 @@ const WelcomeCard = ({
       <div className={styles.cardHeader}>
         <span className={styles.headerText}>Hello! My name is</span>
       </div>
-      
+
       {/* Cat Name - Most Prominent */}
       <div className={styles.catNameSection}>
         <InteractiveCatName
@@ -42,7 +42,7 @@ const WelcomeCard = ({
           onNameLeave={onNameLeave}
         />
       </div>
-      
+
       {/* Footer */}
       <div className={styles.cardFooter}>
         <button
