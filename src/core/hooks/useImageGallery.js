@@ -46,13 +46,13 @@ export const useImageGallery = ({
         setGalleryData(data);
       } else {
         // Fallback to default images
-        setGalleryData(['/assets/images/IMG_0778.jpg']);
+        setGalleryData(['/assets/images/IMG_0778']);
       }
     } catch (err) {
       console.error('Error loading gallery data:', err);
       setError(err);
       // Fallback to default images
-      setGalleryData(['/assets/images/IMG_0778.jpg']);
+      setGalleryData(['/assets/images/IMG_0778']);
     } finally {
       setIsLoading(false);
     }
@@ -194,7 +194,7 @@ export const useImageGallery = ({
     isLoading,
     error,
     hasMultipleImages: galleryData.length > 1,
-    currentImage: galleryData[currentImageIndex] || '/assets/images/IMG_0778.jpg',
+    currentImage: galleryData[currentImageIndex] || '/assets/images/IMG_0778',
     goToNextImage,
     goToPreviousImage,
     goToImage,

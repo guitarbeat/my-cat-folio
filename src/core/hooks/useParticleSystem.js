@@ -34,7 +34,7 @@ const createParticle = ({ maxWidth, maxHeight, isMobile, isSmallMobile }) => ({
  * @param {number} options.maxParticles - Maximum number of particles
  * @returns {Object} Particle system state and controls
  */
-export const useParticleSystem = ({ enabled = true, maxParticles = 6 } = {}) => {
+export const useParticleSystem = ({ enabled = true, maxParticles = 6, isVisible = true } = {}) => {
   const [particles, setParticles] = useState([]);
   const animationFrameRef = useRef(null);
   const lastUpdateRef = useRef(0);
@@ -62,13 +62,13 @@ export const useParticleSystem = ({ enabled = true, maxParticles = 6 } = {}) => 
 
   // Animate particles with optimized performance
   const animateParticles = useCallback(() => {
-    if (!enabled || prefersReducedMotion) return;
+    if (!enabled || prefersReducedMotion || !isVisible) return;
 
     const now = Date.now();
     const deltaTime = now - lastUpdateRef.current;
     
     // Throttle animation updates more aggressively for better performance
-    if (deltaTime < 200) return;
+    if (deltaTime < 300) return; // Increased throttling for better performance
     
     lastUpdateRef.current = now;
 
@@ -104,7 +104,7 @@ export const useParticleSystem = ({ enabled = true, maxParticles = 6 } = {}) => 
 
       return updatedParticles;
     });
-  }, [enabled, prefersReducedMotion, getDeviceInfo, maxParticles]);
+  }, [enabled, prefersReducedMotion, isVisible, getDeviceInfo, maxParticles]);
 
   // Initialize particles
   const initializeParticles = useCallback(() => {

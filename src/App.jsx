@@ -15,6 +15,10 @@ import {
   ToastContainer,
   WelcomeScreen
 } from './shared/components';
+import Tournament from './features/tournament/Tournament';
+import TournamentSetup from './features/tournament/TournamentSetup';
+import Results from './features/tournament/Results';
+import Profile from './features/profile/Profile';
 import NavBar from './shared/components/NavBar/NavBar';
 import useUserSession from './core/hooks/useUserSession';
 import useTheme from './core/hooks/useTheme';
@@ -24,13 +28,7 @@ import { TournamentService } from './shared/services/tournamentService';
 import { ErrorService } from './shared/services/errorService';
 import LoadingSpinner from './shared/components/LoadingSpinner/LoadingSpinner';
 
-// * Lazy-loaded components for performance
-const Results = React.lazy(() => import('./features/tournament/Results'));
-const Profile = React.lazy(() => import('./features/profile/Profile'));
-const TournamentSetup = React.lazy(
-  () => import('./features/tournament/TournamentSetup')
-);
-const Tournament = React.lazy(() => import('./features/tournament/Tournament'));
+// * Components imported directly for better code splitting
 
 /**
  * Generate a cat background video element
@@ -87,6 +85,19 @@ function App() {
     };
 
     loadCatData();
+  }, []);
+
+  // * Register service worker for caching
+  React.useEffect(() => {
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/sw.js')
+        .then((registration) => {
+          console.log('✅ Service Worker registered:', registration);
+        })
+        .catch((error) => {
+          console.error('❌ Service Worker registration failed:', error);
+        });
+    }
   }, []);
 
   // * Parallax for galaxy background (respects reduced motion)
