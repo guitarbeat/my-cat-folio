@@ -26,7 +26,7 @@ function WelcomeScreen({
   const [isVisible, setIsVisible] = useState(false);
   const [hoveredName, setHoveredName] = useState(null);
   const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 });
-  const [showCelebration, setShowCelebration] = useState(false);
+  const [showCelebration] = useState(false);
   const containerRef = useRef(null);
 
   // Custom hooks for better performance and organization
@@ -38,9 +38,9 @@ function WelcomeScreen({
 
   // Define gallery data - this should come from props or context in a real app
   const galleryData = [
-    "/assets/images/IMG_0778.jpg",
-    "/assets/images/IMG_0779.jpg",
-    "/assets/images/IMG_0780.jpg"
+    '/assets/images/IMG_0778.jpg',
+    '/assets/images/IMG_0779.jpg',
+    '/assets/images/IMG_0780.jpg'
   ];
 
   const {

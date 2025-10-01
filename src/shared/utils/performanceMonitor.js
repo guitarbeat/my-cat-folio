@@ -22,7 +22,7 @@ class PerformanceMonitor {
 
     const scripts = Array.from(document.querySelectorAll('script[src]'));
     const stylesheets = Array.from(document.querySelectorAll('link[rel="stylesheet"]'));
-    
+
     let totalJS = 0;
     let totalCSS = 0;
 
@@ -54,7 +54,7 @@ class PerformanceMonitor {
 
     window.addEventListener('load', () => {
       const navigation = performance.getEntriesByType('navigation')[0];
-      
+
       this.metrics.loadTimes = {
         domContentLoaded: navigation.domContentLoadedEventEnd - navigation.domContentLoadedEventStart,
         loadComplete: navigation.loadEventEnd - navigation.loadEventStart,
@@ -97,7 +97,7 @@ class PerformanceMonitor {
           }
         });
       });
-      
+
       observer.observe({ entryTypes: ['longtask'] });
       this.observers.push(observer);
     }
@@ -110,7 +110,7 @@ class PerformanceMonitor {
     if (typeof window === 'undefined') return;
 
     const startTime = performance.now();
-    
+
     // Track particle system performance
     const particleObserver = new PerformanceObserver((list) => {
       list.getEntries().forEach((entry) => {
@@ -147,7 +147,7 @@ class PerformanceMonitor {
       xhr.open('HEAD', url, false);
       xhr.send();
       return parseInt(xhr.getResponseHeader('Content-Length') || '0');
-    } catch (error) {
+    } catch {
       return 0;
     }
   }

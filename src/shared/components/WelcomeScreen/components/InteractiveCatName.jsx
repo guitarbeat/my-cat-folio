@@ -18,7 +18,7 @@ import styles from '../WelcomeScreen.module.css';
  * @returns {JSX.Element} Interactive cat name
  */
 const InteractiveCatName = ({ catName, nameStats, onNameHover, onNameLeave }) => {
-  const [hoveredName, setHoveredName] = useState(null);
+  const [, setHoveredName] = useState(null);
   const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 });
   const nameRefs = useRef({});
 
@@ -114,7 +114,7 @@ const InteractiveCatName = ({ catName, nameStats, onNameHover, onNameLeave }) =>
 
     // Find all matches in the original name without modifying it
     const matchedNames = [];
-    
+
     // Remove duplicate names from nameStats (in case there are duplicates in the data)
     const uniqueNameStats = nameStats.reduce((acc, stat) => {
       const existing = acc.find(item => item.name === stat.name);
@@ -127,7 +127,7 @@ const InteractiveCatName = ({ catName, nameStats, onNameHover, onNameLeave }) =>
       }
       return acc;
     }, []);
-    
+
     const sortedStats = [...uniqueNameStats].sort((a, b) => b.rating - a.rating);
 
     // Find all occurrences of each name in the cat name
@@ -138,12 +138,12 @@ const InteractiveCatName = ({ catName, nameStats, onNameHover, onNameLeave }) =>
         if (index === -1) break;
 
         // Only add if this exact match doesn't already exist
-        const isDuplicate = matchedNames.some(existing => 
-          existing.name === stat.name && 
-          existing.startIndex === index && 
+        const isDuplicate = matchedNames.some(existing =>
+          existing.name === stat.name &&
+          existing.startIndex === index &&
           existing.endIndex === index + stat.name.length
         );
-        
+
         if (!isDuplicate) {
           matchedNames.push({
             ...stat,
@@ -151,7 +151,7 @@ const InteractiveCatName = ({ catName, nameStats, onNameHover, onNameLeave }) =>
             endIndex: index + stat.name.length
           });
         }
-        
+
         // Move past the entire match to avoid finding overlapping substrings
         searchIndex = index + stat.name.length;
       }
@@ -202,7 +202,7 @@ const InteractiveCatName = ({ catName, nameStats, onNameHover, onNameLeave }) =>
             if (el) nameRefs.current[nameData.name] = el;
           }}
           className={`${styles.catNameText} ${styles.interactiveName}`}
-          data-long-name={nameData.name.length > 12 ? "true" : "false"}
+          data-long-name={nameData.name.length > 12 ? 'true' : 'false'}
           onMouseEnter={(e) => handleNameMouseEnter(nameData, e)}
           onMouseLeave={handleNameMouseLeave}
           onTouchStart={(e) => handleNameTouchStart(nameData, e)}
