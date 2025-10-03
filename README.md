@@ -46,7 +46,7 @@ npm run dev
 
 ## 📁 Project Structure
 
-```
+```text
 meow-namester-react/
 ├── 📁 config/              # Configuration files
 ├── 📁 docs/                # Documentation

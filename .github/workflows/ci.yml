@@ -29,16 +29,16 @@ jobs:
         run: npm test
 
       - name: Build
-        env:
-          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
-          VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
-        run: npm run build
+        run: |
+          export VITE_SUPABASE_URL="${{ secrets.VITE_SUPABASE_URL }}"
+          export VITE_SUPABASE_ANON_KEY="${{ secrets.VITE_SUPABASE_ANON_KEY }}"
+          npm run build
 
       - name: Bundle analyze (optional)
         if: ${{ github.event_name == 'workflow_dispatch' }}
-        env:
-          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
-          VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
-        run: npm run build:analyze
+        run: |
+          export VITE_SUPABASE_URL="${{ secrets.VITE_SUPABASE_URL }}"
+          export VITE_SUPABASE_ANON_KEY="${{ secrets.VITE_SUPABASE_ANON_KEY }}"
+          npm run build:analyze
 
 

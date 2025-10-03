@@ -338,8 +338,8 @@ function SuccessAnimation({ message }) {
 
 ### **Performance Budget**
 
-| Metric                       | Target | Current | Status       |
-| ---------------------------- | ------ | ------- | ------------ |
+| Metric                       | Target | Current | Status      |
+| ---------------------------- | ------ | ------- | ----------- |
 | **First Paint**              | < 1.5s | 0.8s    | ✅ Excellent |
 | **First Contentful Paint**   | < 2.0s | 1.2s    | ✅ Excellent |
 | **Largest Contentful Paint** | < 2.5s | 1.8s    | ✅ Excellent |
@@ -482,4 +482,4 @@ function Button({ children, variant = "primary", size = "medium", ...props }) {
 
 ---
 
-_Developer Guide - Last updated: October 2025_
+Developer Guide - Last updated: October 2025

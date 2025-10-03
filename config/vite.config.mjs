@@ -108,7 +108,32 @@ export default defineConfig({
                                 'cat-background__cat',
                                 'skip-link',
                                 'main-content',
-                                'global-loading-overlay'
+                                'global-loading-overlay',
+                                // WelcomeScreen classes
+                                'welcomeWrapper',
+                                'welcomeWrapper.visible',
+                                'welcomeWrapper.animating',
+                                'welcomeWrapper.transitioning',
+                                'backgroundContainer',
+                                'backgroundImage',
+                                'overlay',
+                                'contentContainer',
+                                'themeToggle',
+                                'themeIcon',
+                                'themeText',
+                                'particleContainer',
+                                'particle',
+                                'celebrationContainer',
+                                'confetti',
+                                // WelcomeCard classes
+                                'rotatedCard',
+                                'cardHeader',
+                                'headerText',
+                                'catNameSection',
+                                'cardFooter',
+                                'footerButton',
+                                'footerButtonText',
+                                'footerButtonEmoji'
                             ]
                         })
                     ]

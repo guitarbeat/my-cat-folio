@@ -24,6 +24,7 @@ Run the SQL migration to add the missing columns to your database.
    ```
 
 2. **Run the migration:**
+
    ```bash
    supabase db reset
    # OR manually run the SQL:

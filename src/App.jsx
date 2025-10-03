@@ -170,7 +170,9 @@ function App() {
       typeof window !== "undefined" &&
       window.matchMedia &&
       window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (prefersReduced) return;
+    if (prefersReduced) {
+      return;
+    }
 
     const stars = document.querySelector(".cat-background__stars");
     const nebula = document.querySelector(".cat-background__nebula");
@@ -180,7 +182,9 @@ function App() {
     let mouseY = 0;
 
     const onScroll = () => {
-      if (ticking) return;
+      if (ticking) {
+        return;
+      }
       ticking = true;
       requestAnimationFrame(() => {
         const y = window.scrollY || 0;
@@ -215,7 +219,9 @@ function App() {
       mouseX = e.clientX;
       mouseY = e.clientY;
       // schedule a frame if none pending to reflect latest mouse
-      if (!ticking) onScroll();
+      if (!ticking) {
+        onScroll();
+      }
     };
 
     window.addEventListener("scroll", onScroll, { passive: true });
@@ -507,7 +513,9 @@ function App() {
               typeof navigator !== "undefined" &&
               navigator.connection &&
               navigator.connection.saveData;
-            if (prefersReducedMotion || saveData) return null;
+            if (prefersReducedMotion || saveData) {
+              return null;
+            }
             return (
               <>
                 {createCatVideo(1)}
