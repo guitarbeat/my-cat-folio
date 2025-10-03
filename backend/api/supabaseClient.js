@@ -88,7 +88,7 @@ export const catNamesAPI = {
         hiddenIds = hiddenData?.map((item) => item.name_id) || [];
       }
 
-      // Build query
+      // Build query - get names without JOIN to avoid duplicates
       let query = supabase.from('cat_name_options').select(`
         id,
         name,
@@ -97,14 +97,7 @@ export const catNamesAPI = {
         avg_rating,
         popularity_score,
         total_tournaments,
-        is_active,
-        cat_name_ratings (
-          rating,
-          wins,
-          losses,
-          is_hidden,
-          updated_at
-        )
+        is_active
       `);
 
       // Filter out ALL hidden names globally
@@ -120,16 +113,16 @@ export const catNamesAPI = {
         return [];
       }
 
-      // Process data to include latest updated_at and user-specific info
+      // Process data to include default values (no user-specific data in this view)
       return (
         data.map((item) => ({
           ...item,
-          updated_at: item.cat_name_ratings?.[0]?.updated_at || null,
-          user_rating: item.cat_name_ratings?.[0]?.rating || null,
-          user_wins: item.cat_name_ratings?.[0]?.wins || 0,
-          user_losses: item.cat_name_ratings?.[0]?.losses || 0,
-          isHidden: item.cat_name_ratings?.[0]?.is_hidden || false,
-          has_user_rating: !!item.cat_name_ratings?.[0]
+          updated_at: null,
+          user_rating: null,
+          user_wins: 0,
+          user_losses: 0,
+          isHidden: false,
+          has_user_rating: false
         })) || []
       );
     } catch (error) {
