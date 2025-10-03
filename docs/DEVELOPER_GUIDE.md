@@ -1,12 +1,116 @@
-# 🎨 **Meow Namester - User Experience Guide**
+# 🛠️ **Meow Namester - Developer Guide**
 
-*Comprehensive UX design system and user interface guidelines*
+> **Complete developer guide with troubleshooting, UX patterns, and technical implementation details**
 
 ---
 
-## 🎯 **UX Philosophy**
+## 🎯 **Quick Start for Developers**
 
-Meow Namester prioritizes **accessibility**, **performance**, and **delightful interactions**. The design system balances modern aesthetics with functional usability, ensuring every user can enjoy the cat name tournament experience.
+### **Prerequisites**
+- Node.js 18+
+- npm or yarn
+- Git
+- Modern IDE (VS Code, Cursor, etc.)
+
+### **Development Setup**
+```bash
+# Clone and setup
+git clone <repository-url>
+cd meow-namester-react
+npm install
+
+# Start development
+npm run dev
+
+# Run tests
+npm run test
+
+# Build for production
+npm run build
+```
+
+---
+
+## 🔧 **Troubleshooting Guide**
+
+### **Quick Diagnosis**
+
+#### **Application Won't Load**
+**Symptoms**: Blank screen, loading errors, or "Failed to load" messages
+
+**Solutions**:
+1. **Check Browser Console**: Open DevTools (F12) and look for errors
+2. **Clear Cache**: Hard refresh (Ctrl+F5) or clear browser cache
+3. **Check Network**: Ensure internet connection and firewall settings
+4. **Verify Environment**: Confirm `.env.local` file exists with correct variables
+
+#### **Service Worker Issues (Development)**
+**Symptoms**: HMR not working, stale assets, WebSocket errors
+
+**Solutions**:
+- Service worker automatically unregisters in development mode
+- If issues persist, manually clear browser cache and storage
+- Restart development server: `npm run dev`
+
+#### **Database Connection Issues**
+**Symptoms**: "Failed to fetch" errors, missing data, authentication problems
+
+**Solutions**:
+1. **Check Environment Variables**:
+   ```bash
+   # Ensure .env.local exists with:
+   VITE_SUPABASE_URL=your_supabase_url
+   VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
+   ```
+
+2. **Verify Database Status**: Check Supabase dashboard for service status
+3. **Run Migrations**: Execute database migrations if needed
+
+---
+
+### **Common Error Messages**
+
+#### **"Failed to fetch" / Network Errors**
+**Possible Causes**:
+- Supabase service outage
+- Network connectivity issues
+- CORS configuration problems
+- Environment variable misconfiguration
+
+**Solutions**:
+```javascript
+// Check environment variables in console
+console.log('Supabase URL:', import.meta.env.VITE_SUPABASE_URL);
+console.log('Supabase Key exists:', !!import.meta.env.VITE_SUPABASE_ANON_KEY);
+```
+
+#### **"Column does not exist" Database Errors**
+**Cause**: Missing database migrations or schema changes
+
+**Solution**:
+1. Navigate to `backend/supabase/MIGRATION_README.md`
+2. Follow the migration instructions
+3. Restart the application
+
+#### **Hot Module Replacement (HMR) Not Working**
+**Symptoms**: Changes not reflecting, WebSocket connection errors
+
+**Troubleshooting Steps**:
+1. **Check Development Server**:
+   ```bash
+   # Kill and restart dev server
+   Ctrl+C
+   npm run dev
+   ```
+
+2. **Clear Development Cache**:
+   - Clear browser cache and storage
+   - Delete `node_modules/.vite-temp` if it exists
+   - Restart development server
+
+---
+
+## 🎨 **UX Design System**
 
 ### **Core Principles**
 - **Inclusive Design**: WCAG 2.1 AA compliance
@@ -14,35 +118,28 @@ Meow Namester prioritizes **accessibility**, **performance**, and **delightful i
 - **Performance-Driven**: Fast, responsive, and efficient
 - **Accessible**: Keyboard navigation, screen readers, reduced motion
 
----
+### **Mobile Experience**
 
-## 📱 **Mobile Experience**
-
-### **Touch Target Standards**
+#### **Touch Target Standards**
 - **Minimum Size**: 48×48px (Google Material Design standard)
 - **Visual Feedback**: Immediate response to touch interactions
 - **Haptic Feedback**: Vibration support for enhanced feedback
 
-### **Mobile Optimizations**
+#### **Mobile Optimizations**
 - **Responsive Images**: WebP/AVIF fallbacks with progressive loading
 - **Touch Gestures**: Swipe navigation for image galleries
 - **Safe Areas**: Support for notches, rounded corners, and dynamic islands
 - **Battery Optimization**: Reduced animations for power efficiency
 
-### **Implementation Details**
-See [`features/MOBILE_ERGONOMICS_IMPROVEMENTS.md`](./features/MOBILE_ERGONOMICS_IMPROVEMENTS.md) for detailed mobile improvements.
+### **Theme System**
 
----
-
-## 🌙 **Theme System**
-
-### **Dark/Light Mode Toggle**
+#### **Dark/Light Mode Toggle**
 - **Persistent Storage**: User preferences saved in localStorage
 - **Smooth Transitions**: CSS animations for theme switching
 - **System Integration**: Respects user's system preference
 - **Accessibility**: High contrast ratios in both themes
 
-### **Theme Variables**
+#### **Theme Variables**
 ```css
 :root {
   /* Light theme */
@@ -54,7 +151,6 @@ See [`features/MOBILE_ERGONOMICS_IMPROVEMENTS.md`](./features/MOBILE_ERGONOMICS_
   --accent-secondary: #6c757d;
 }
 
-/* Dark theme overrides */
 [data-theme="dark"] {
   --primary-bg: #1a1a1a;
   --secondary-bg: #2d2d2d;
@@ -64,9 +160,6 @@ See [`features/MOBILE_ERGONOMICS_IMPROVEMENTS.md`](./features/MOBILE_ERGONOMICS_
   --accent-secondary: #8b949e;
 }
 ```
-
-### **Implementation Details**
-See [`features/DARK_MODE_README.md`](./features/DARK_MODE_README.md) for complete theme system documentation.
 
 ---
 
@@ -84,7 +177,7 @@ See [`features/DARK_MODE_README.md`](./features/DARK_MODE_README.md) for complet
 - **Pause Controls**: Option to disable animations
 - **Essential Motion**: Only functional animations enabled
 
-### **Semantic HTML**
+### **Semantic HTML Example**
 ```html
 <!-- Accessible button -->
 <button
@@ -100,7 +193,7 @@ See [`features/DARK_MODE_README.md`](./features/DARK_MODE_README.md) for complet
 
 ---
 
-## 🎨 **Design System**
+## 🎨 **Design System Implementation**
 
 ### **Typography Scale**
 ```css
@@ -197,7 +290,7 @@ function SuccessAnimation({ message }) {
 
 ---
 
-## 📊 **Performance UX**
+## 📊 **Performance Optimization**
 
 ### **Progressive Enhancement**
 - **Core Functionality**: Works without JavaScript
@@ -207,7 +300,7 @@ function SuccessAnimation({ message }) {
 ### **Loading Strategies**
 - **Critical CSS**: Above-the-fold content renders immediately
 - **Lazy Loading**: Components load as needed
-- **Image Optimization**: Progressive loading with fallbacks
+- **Image Optimization**: Progressive loading with WebP/AVIF fallbacks
 - **Service Worker**: Offline functionality and caching
 
 ### **Performance Budget**
@@ -220,23 +313,7 @@ function SuccessAnimation({ message }) {
 
 ---
 
-## 🧪 **User Testing & Feedback**
-
-### **Usability Testing Results**
-- **Task Completion Rate**: 95%+ for core workflows
-- **Error Rate**: < 2% for common tasks
-- **Time to Complete**: < 30 seconds for tournament setup
-- **User Satisfaction**: 4.7/5 average rating
-
-### **Accessibility Testing**
-- **WCAG 2.1 AA Compliance**: 100% pass rate
-- **Screen Reader Compatibility**: Tested with NVDA, JAWS, VoiceOver
-- **Keyboard Navigation**: Full functionality without mouse
-- **Color Contrast**: All text meets minimum ratios
-
----
-
-## 🛠️ **Developer Guidelines**
+## 🛠️ **Development Guidelines**
 
 ### **Component Patterns**
 ```jsx
@@ -289,72 +366,73 @@ function Button({ children, variant = 'primary', size = 'medium', ...props }) {
 
 ---
 
-## 📈 **Metrics & Analytics**
+## 🧪 **Testing & Quality Assurance**
 
-### **User Experience KPIs**
-- **Engagement**: Tournament completion rate > 80%
-- **Performance**: Page load time < 2 seconds
-- **Accessibility**: Screen reader compatibility 100%
-- **Mobile**: Touch target compliance 100%
+### **Code Quality**
+- **Linting**: ESLint with Airbnb configuration
+- **Testing**: Unit tests for critical functionality
+- **Performance**: Build-time bundle analysis
+- **Security**: Dependency vulnerability scanning
 
-### **Technical Metrics**
-- **Lighthouse Score**: > 95 overall
-- **Bundle Size**: < 400KB gzipped
-- **Runtime Performance**: < 50ms for interactions
-- **Memory Usage**: < 50MB for typical sessions
+### **Browser Support**
+**Supported Browsers**:
+- ✅ Chrome 90+
+- ✅ Firefox 88+
+- ✅ Safari 14+
+- ✅ Edge 90+
 
----
-
-## 🔄 **Continuous Improvement**
-
-### **User Feedback Integration**
-- **Analytics Tracking**: User behavior insights
-- **A/B Testing**: Feature comparison and optimization
-- **Usability Studies**: Regular user testing sessions
-- **Accessibility Audits**: Quarterly compliance reviews
-
-### **Design System Evolution**
-- **Component Library**: Reusable, accessible components
-- **Design Tokens**: Consistent spacing, colors, typography
-- **Pattern Library**: Documented interaction patterns
-- **Style Guide**: Comprehensive visual guidelines
+**Common Fixes**:
+- Use CSS Grid fallbacks for older browsers
+- Ensure ES2020+ features have polyfills
+- Test responsive design across device sizes
 
 ---
 
-## 📚 **Related Documentation**
+## 📈 **Development Workflow**
 
-### **Technical Implementation**
-- [`architecture/COMPREHENSIVE_SYSTEM_REFERENCE.md`](./architecture/COMPREHENSIVE_SYSTEM_REFERENCE.md) - System architecture
-- [`features/ERROR_HANDLING_README.md`](./features/ERROR_HANDLING_README.md) - Error handling patterns
-- [`TROUBLESHOOTING.md`](./TROUBLESHOOTING.md) - Common issues and solutions
+### **Contributing**
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Make your changes
+4. Add tests for new functionality
+5. Commit your changes (`git commit -m 'Add amazing feature'`)
+6. Push to the branch (`git push origin feature/amazing-feature`)
+7. Open a Pull Request
 
-### **Development Resources**
-- [`DOCUMENTATION_INDEX.md`](./DOCUMENTATION_INDEX.md) - Complete documentation guide
-- [`PROJECT_STATUS.md`](./PROJECT_STATUS.md) - Current project health
-- [`history/DEVELOPMENT_HISTORY.md`](./history/DEVELOPMENT_HISTORY.md) - Project evolution
+### **Code Standards**
+- Follow ESLint configuration
+- Write meaningful commit messages
+- Add documentation for new features
+- Test your changes thoroughly
 
----
-
-## 🎯 **UX Success Criteria**
-
-### **User Satisfaction**
-- [x] Intuitive navigation and clear information hierarchy
-- [x] Fast, responsive interactions (< 100ms)
-- [x] Accessible to users with disabilities
-- [x] Consistent visual design and branding
-
-### **Technical Excellence**
-- [x] Performance budget compliance
-- [x] Cross-browser compatibility
-- [x] Mobile-first responsive design
-- [x] Progressive enhancement support
-
-### **Business Impact**
-- [x] High user engagement and retention
-- [x] Positive user feedback and reviews
-- [x] Measurable task completion rates
-- [x] Low support ticket volume
+### **Available Scripts**
+| Command                 | Description                        |
+| ----------------------- | ---------------------------------- |
+| `npm run dev`           | Start development server with HMR  |
+| `npm run build`         | Production build with optimization |
+| `npm run preview`       | Preview production build           |
+| `npm run test`          | Run test suite                     |
+| `npm run test:watch`    | Run tests in watch mode            |
+| `npm run test:coverage` | Run tests with coverage report     |
+| `npm run lint`          | Run ESLint checks                  |
+| `npm run lint:css`      | Run Stylelint checks               |
+| `npm run format`        | Format code with Prettier          |
 
 ---
 
-*User Experience Guide - Last updated: October 2025*
+## 📚 **Additional Resources**
+
+### **Technical Reference**
+- **[Technical Reference](./TECHNICAL_REFERENCE.md)** - System architecture and API docs
+- **[Development History](./DEVELOPMENT_HISTORY.md)** - Project evolution and milestones
+- **[Project Status](./PROJECT_STATUS.md)** - Current project health dashboard
+
+### **External Links**
+- [React Documentation](https://react.dev)
+- [Vite Guide](https://vitejs.dev)
+- [Supabase Documentation](https://supabase.com/docs)
+- [CSS Modules Guide](https://github.com/css-modules/css-modules)
+
+---
+
+*Developer Guide - Last updated: October 2025*
