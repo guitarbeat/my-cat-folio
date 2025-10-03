@@ -379,31 +379,27 @@ export class TournamentService {
         return [];
       }
 
-      // Get ratings for visible names (we'll aggregate in JavaScript)
+      // Get ratings for visible names (no JOIN to avoid duplicates)
       const { data: ratingsData, error: ratingsError } = await supabase
         .from('cat_name_ratings')
-        .select(
-          `
-          name_id,
-          rating,
-          wins,
-          losses,
-          cat_name_options (
-            name,
-            description,
-            categories
-          )
-        `
-        )
-        .in(
-          'name_id',
-          visibleNames.map((n) => n.id)
-        )
+        .select('name_id, rating, wins, losses')
+        .in('name_id', visibleNames.map((n) => n.id))
         .or('is_hidden.is.null,is_hidden.eq.false');
 
       if (ratingsError) {
         throw ratingsError;
       }
+
+      // Create a map of name data for quick lookup
+      const nameDataMap = new Map();
+      visibleNames.forEach(name => {
+        nameDataMap.set(name.id, {
+          id: name.id,
+          name: name.name,
+          description: name.description,
+          categories: name.categories || []
+        });
+      });
 
       // Aggregate ratings by name_id (combine stats from all users)
       const aggregatedRatings = new Map();
@@ -411,14 +407,16 @@ export class TournamentService {
       if (ratingsData && ratingsData.length > 0) {
         ratingsData.forEach((item) => {
           const nameId = item.name_id;
-          const nameInfo = item.cat_name_options;
+          const nameInfo = nameDataMap.get(nameId);
+
+          if (!nameInfo) return; // Skip if name not found
 
           if (!aggregatedRatings.has(nameId)) {
             aggregatedRatings.set(nameId, {
               id: nameId,
-              name: nameInfo?.name || 'Unknown',
-              description: nameInfo?.description || '',
-              categories: nameInfo?.categories || [],
+              name: nameInfo.name,
+              description: nameInfo.description,
+              categories: nameInfo.categories,
               totalRating: 0,
               totalWins: 0,
               totalLosses: 0,
