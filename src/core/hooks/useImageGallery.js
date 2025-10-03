@@ -28,35 +28,6 @@ export const useImageGallery = ({
   const imageRotationRef = useRef(null);
   const transitionTimeoutRef = useRef(null);
 
-  // Load gallery data from external source
-  const loadGalleryData = useCallback(async () => {
-    if (initialImages.length > 0) {
-      setGalleryData(initialImages);
-      setIsLoading(false);
-      return;
-    }
-
-    try {
-      setIsLoading(true);
-      setError(null);
-
-      const response = await fetch('/assets/images/gallery.json');
-      if (response.ok) {
-        const data = await response.json();
-        setGalleryData(data);
-      } else {
-        // Fallback to default images
-        setGalleryData(['/assets/images/IMG_0778']);
-      }
-    } catch (err) {
-      console.error('Error loading gallery data:', err);
-      setError(err);
-      // Fallback to default images
-      setGalleryData(['/assets/images/IMG_0778']);
-    } finally {
-      setIsLoading(false);
-    }
-  }, [initialImages]);
 
   // Rotate to next image with optimized transitions
   const rotateImage = useCallback(() => {
@@ -163,8 +134,45 @@ export const useImageGallery = ({
 
   // Initialize gallery
   useEffect(() => {
-    loadGalleryData();
-  }, [loadGalleryData]);
+    const initializeGallery = async () => {
+      if (initialImages && initialImages.length > 0) {
+        setGalleryData(initialImages);
+        setIsLoading(false);
+        return;
+      }
+
+      try {
+        setIsLoading(true);
+        setError(null);
+
+        const response = await fetch('/assets/images/gallery.json');
+        if (response.ok) {
+          const data = await response.json();
+          setGalleryData(data);
+        } else {
+          // Fallback to default images
+          setGalleryData(['/assets/images/IMG_0778']);
+        }
+      } catch (err) {
+        console.error('Error loading gallery data:', err);
+        setError(err);
+        // Fallback to default images
+        setGalleryData(['/assets/images/IMG_0778']);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    initializeGallery();
+  }, []); // Empty dependency array to run only once on mount
+
+  // Handle initialImages changes separately
+  useEffect(() => {
+    if (initialImages && initialImages.length > 0) {
+      setGalleryData(initialImages);
+      setIsLoading(false);
+    }
+  }, [initialImages]);
 
   // Start auto-rotation when gallery is ready
   useEffect(() => {

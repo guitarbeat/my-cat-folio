@@ -20,7 +20,14 @@ export default function useLocalStorage(key, initialValue) {
     }
     try {
       const item = window.localStorage.getItem(key);
-      return item ? JSON.parse(item) : initialValue;
+      // Try to parse as JSON, but fallback to raw value if parsing fails
+      return item ? (() => {
+        try {
+          return JSON.parse(item);
+        } catch {
+          return item;
+        }
+      })() : initialValue;
     } catch (error) {
       // Silently handle parsing errors in production
       if (process.env.NODE_ENV === 'development') {

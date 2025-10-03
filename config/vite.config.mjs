@@ -83,5 +83,8 @@ export default defineConfig({
         // Surface Vercel-provided envs (from legacy Next.js naming) to the client build
         'import.meta.env.BAG_NEXT_PUBLIC_SUPABASE_URL': JSON.stringify(process.env.BAG_NEXT_PUBLIC_SUPABASE_URL || ''),
         'import.meta.env.BAG_NEXT_PUBLIC_SUPABASE_ANON_KEY': JSON.stringify(process.env.BAG_NEXT_PUBLIC_SUPABASE_ANON_KEY || ''),
+        // Also expose VITE_ prefixed variables
+        'import.meta.env.VITE_SUPABASE_URL': JSON.stringify(process.env.VITE_SUPABASE_URL || process.env.BAG_NEXT_PUBLIC_SUPABASE_URL || ''),
+        'import.meta.env.VITE_SUPABASE_ANON_KEY': JSON.stringify(process.env.VITE_SUPABASE_ANON_KEY || process.env.BAG_NEXT_PUBLIC_SUPABASE_ANON_KEY || ''),
     },
 });
