@@ -1,6 +1,7 @@
 # Welcome Screen Compilation & Deployment Issues
 
 ## Overview
+
 This document outlines critical issues identified in the Welcome Screen component that affect compilation, deployment, and runtime performance. The analysis covers build warnings, dependency vulnerabilities, CSS optimization problems, and deployment configuration issues.
 
 ## 🚨 Critical Issues
@@ -8,22 +9,26 @@ This document outlines critical issues identified in the Welcome Screen componen
 ### 1. Build Warnings - Dynamic Import Conflicts
 
 **Issue**: Vite build warnings about dynamic imports conflicting with static imports
+
 ```
 (!) /workspace/src/features/tournament/Tournament.jsx is dynamically imported by
  /workspace/src/App.jsx but also statically imported by /workspace/src/shared/co
 mponents/index.js, dynamic import will not move module into another chunk.
 ```
 
-**Impact**: 
+**Impact**:
+
 - Code splitting is not working as intended
 - Bundle size optimization is compromised
 - Lazy loading benefits are lost
 
 **Root Cause**: Components are both:
+
 - Dynamically imported in `App.jsx` using `React.lazy()`
 - Statically exported in `src/shared/components/index.js`
 
 **Files Affected**:
+
 - `src/App.jsx` (lines 28-33)
 - `src/shared/components/index.js` (lines 7-9, 13)
 - `src/features/tournament/Tournament.jsx`
@@ -36,6 +41,7 @@ mponents/index.js, dynamic import will not move module into another chunk.
 ### 2. Security Vulnerabilities
 
 **Issue**: 5 moderate severity vulnerabilities in dependencies
+
 ```
 esbuild  <=0.24.2
 Severity: moderate
@@ -43,11 +49,13 @@ esbuild enables any website to send any requests to the development server and r
 ```
 
 **Impact**:
+
 - Development server security risk
 - Potential data exposure during development
 - Production builds may be affected
 
 **Affected Dependencies**:
+
 - `esbuild` (vulnerable version)
 - `vite` (depends on vulnerable esbuild)
 - `@vitest/mocker` (depends on vulnerable vite)
@@ -58,17 +66,20 @@ esbuild enables any website to send any requests to the development server and r
 ### 3. Bundle Size Issues
 
 **Issue**: Large bundle sizes affecting performance
+
 - Main bundle: `478.73 kB` (148.54 kB gzipped)
 - CSS bundle: `281.75 kB` (46.51 kB gzipped)
 - Total uncompressed: ~760 kB
 
 **Impact**:
+
 - Slow initial page load
 - Poor mobile performance
 - High bandwidth usage
 - Poor Core Web Vitals scores
 
 **Root Causes**:
+
 - Large CSS file with extensive responsive design rules
 - Unoptimized image assets
 - No tree shaking for unused code
@@ -81,12 +92,14 @@ esbuild enables any website to send any requests to the development server and r
 **Issue**: CSS file is 281.75 kB (46.51 kB gzipped)
 
 **Problems**:
+
 - Excessive use of CSS custom properties (67 variables)
 - Redundant responsive breakpoints
 - Unused CSS rules not being purged
 - Complex animation keyframes
 
 **Specific Issues**:
+
 ```css
 /* 67 CSS custom properties in :root */
 :root {
@@ -99,12 +112,14 @@ esbuild enables any website to send any requests to the development server and r
 ### 2. CSS Optimization Problems
 
 **Issues**:
+
 - No CSS purging for unused styles
 - Redundant media queries
 - Complex nested selectors
 - Large number of animation keyframes (8 different animations)
 
 **Performance Impact**:
+
 - Slower CSS parsing
 - Increased memory usage
 - Poor mobile performance
@@ -112,6 +127,7 @@ esbuild enables any website to send any requests to the development server and r
 ### 3. CSS Module Issues
 
 **Issue**: CSS modules not properly optimized
+
 - Large number of class names
 - Complex selector specificity
 - No CSS minification beyond basic compression
@@ -121,12 +137,14 @@ esbuild enables any website to send any requests to the development server and r
 ### 1. Welcome Screen Performance
 
 **Issues Identified**:
+
 - Particle system running on every render
 - Image gallery with auto-rotation causing constant re-renders
 - Complex CSS animations not hardware accelerated
 - No lazy loading for images
 
 **Code Issues**:
+
 ```javascript
 // Particle system runs continuously
 const animateParticles = useCallback(() => {
@@ -141,6 +159,7 @@ imageRotationRef.current = setInterval(rotateImage, rotationInterval);
 ### 2. Memory Leaks
 
 **Potential Issues**:
+
 - Animation frames not properly cleaned up
 - Event listeners not removed
 - Timeouts not cleared
@@ -149,6 +168,7 @@ imageRotationRef.current = setInterval(rotateImage, rotationInterval);
 ### 3. Mobile Performance
 
 **Issues**:
+
 - Complex CSS animations on mobile
 - Large bundle size affects mobile loading
 - Touch interactions not optimized
@@ -159,6 +179,7 @@ imageRotationRef.current = setInterval(rotateImage, rotationInterval);
 ### 1. Environment Variables
 
 **Issue**: Hardcoded environment variables in Vite config
+
 ```javascript
 define: {
   'import.meta.env.BAG_NEXT_PUBLIC_SUPABASE_URL': JSON.stringify(process.env.BAG_NEXT_PUBLIC_SUPABASE_URL || ''),
@@ -167,6 +188,7 @@ define: {
 ```
 
 **Problems**:
+
 - Variables not properly configured for production
 - Missing fallback values
 - No validation of required environment variables
@@ -174,6 +196,7 @@ define: {
 ### 2. Build Configuration
 
 **Issues**:
+
 - No source maps in production
 - Manual chunk splitting not optimized
 - No bundle analysis
@@ -182,6 +205,7 @@ define: {
 ### 3. Asset Optimization
 
 **Issues**:
+
 - Images not properly optimized
 - No WebP/AVIF fallbacks
 - Large number of image formats (JPG, WebP, AVIF for each image)
@@ -192,6 +216,7 @@ define: {
 ### 1. Mobile Performance
 
 **Issues**:
+
 - Complex CSS animations on mobile devices
 - Large bundle size affects mobile loading
 - Touch interactions not optimized
@@ -200,6 +225,7 @@ define: {
 ### 2. Accessibility Issues
 
 **Issues**:
+
 - Complex animations may cause motion sickness
 - No reduced motion support in some areas
 - Focus management issues
@@ -210,6 +236,7 @@ define: {
 ### 1. Import/Export Structure
 
 **Issues**:
+
 - Circular dependencies
 - Mixed static and dynamic imports
 - Unused exports
@@ -218,6 +245,7 @@ define: {
 ### 2. Component Architecture
 
 **Issues**:
+
 - Large components with multiple responsibilities
 - Complex prop drilling
 - No proper error boundaries
@@ -226,6 +254,7 @@ define: {
 ### 3. Performance Anti-patterns
 
 **Issues**:
+
 - Unnecessary re-renders
 - Missing memoization
 - Complex state management
@@ -281,12 +310,14 @@ define: {
 ## 📊 Metrics & Monitoring
 
 ### Current Metrics
+
 - Bundle size: 760 kB (uncompressed)
 - CSS size: 281.75 kB
 - Build time: 12.06s
 - Security vulnerabilities: 5 moderate
 
 ### Target Metrics
+
 - Bundle size: < 200 kB (uncompressed)
 - CSS size: < 50 kB
 - Build time: < 5s
@@ -308,4 +339,4 @@ define: {
 
 ---
 
-*This document was generated on $(date) and should be updated as issues are resolved.*
+_This document was generated on $(date) and should be updated as issues are resolved._

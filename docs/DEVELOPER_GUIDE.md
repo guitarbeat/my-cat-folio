@@ -7,12 +7,14 @@
 ## 🎯 **Quick Start for Developers**
 
 ### **Prerequisites**
+
 - Node.js 18+
 - npm or yarn
 - Git
 - Modern IDE (VS Code, Cursor, etc.)
 
 ### **Development Setup**
+
 ```bash
 # Clone and setup
 git clone <repository-url>
@@ -36,27 +38,34 @@ npm run build
 ### **Quick Diagnosis**
 
 #### **Application Won't Load**
+
 **Symptoms**: Blank screen, loading errors, or "Failed to load" messages
 
 **Solutions**:
+
 1. **Check Browser Console**: Open DevTools (F12) and look for errors
 2. **Clear Cache**: Hard refresh (Ctrl+F5) or clear browser cache
 3. **Check Network**: Ensure internet connection and firewall settings
 4. **Verify Environment**: Confirm `.env.local` file exists with correct variables
 
 #### **Service Worker Issues (Development)**
+
 **Symptoms**: HMR not working, stale assets, WebSocket errors
 
 **Solutions**:
+
 - Service worker automatically unregisters in development mode
 - If issues persist, manually clear browser cache and storage
 - Restart development server: `npm run dev`
 
 #### **Database Connection Issues**
+
 **Symptoms**: "Failed to fetch" errors, missing data, authentication problems
 
 **Solutions**:
+
 1. **Check Environment Variables**:
+
    ```bash
    # Ensure .env.local exists with:
    VITE_SUPABASE_URL=your_supabase_url
@@ -71,32 +80,40 @@ npm run build
 ### **Common Error Messages**
 
 #### **"Failed to fetch" / Network Errors**
+
 **Possible Causes**:
+
 - Supabase service outage
 - Network connectivity issues
 - CORS configuration problems
 - Environment variable misconfiguration
 
 **Solutions**:
+
 ```javascript
 // Check environment variables in console
-console.log('Supabase URL:', import.meta.env.VITE_SUPABASE_URL);
-console.log('Supabase Key exists:', !!import.meta.env.VITE_SUPABASE_ANON_KEY);
+console.log("Supabase URL:", import.meta.env.VITE_SUPABASE_URL);
+console.log("Supabase Key exists:", !!import.meta.env.VITE_SUPABASE_ANON_KEY);
 ```
 
 #### **"Column does not exist" Database Errors**
+
 **Cause**: Missing database migrations or schema changes
 
 **Solution**:
+
 1. Navigate to `backend/supabase/MIGRATION_README.md`
 2. Follow the migration instructions
 3. Restart the application
 
 #### **Hot Module Replacement (HMR) Not Working**
+
 **Symptoms**: Changes not reflecting, WebSocket connection errors
 
 **Troubleshooting Steps**:
+
 1. **Check Development Server**:
+
    ```bash
    # Kill and restart dev server
    Ctrl+C
@@ -113,6 +130,7 @@ console.log('Supabase Key exists:', !!import.meta.env.VITE_SUPABASE_ANON_KEY);
 ## 🎨 **UX Design System**
 
 ### **Core Principles**
+
 - **Inclusive Design**: WCAG 2.1 AA compliance
 - **Mobile-First**: Optimized for touch interactions
 - **Performance-Driven**: Fast, responsive, and efficient
@@ -121,11 +139,13 @@ console.log('Supabase Key exists:', !!import.meta.env.VITE_SUPABASE_ANON_KEY);
 ### **Mobile Experience**
 
 #### **Touch Target Standards**
+
 - **Minimum Size**: 48×48px (Google Material Design standard)
 - **Visual Feedback**: Immediate response to touch interactions
 - **Haptic Feedback**: Vibration support for enhanced feedback
 
 #### **Mobile Optimizations**
+
 - **Responsive Images**: WebP/AVIF fallbacks with progressive loading
 - **Touch Gestures**: Swipe navigation for image galleries
 - **Safe Areas**: Support for notches, rounded corners, and dynamic islands
@@ -134,12 +154,14 @@ console.log('Supabase Key exists:', !!import.meta.env.VITE_SUPABASE_ANON_KEY);
 ### **Theme System**
 
 #### **Dark/Light Mode Toggle**
+
 - **Persistent Storage**: User preferences saved in localStorage
 - **Smooth Transitions**: CSS animations for theme switching
 - **System Integration**: Respects user's system preference
 - **Accessibility**: High contrast ratios in both themes
 
 #### **Theme Variables**
+
 ```css
 :root {
   /* Light theme */
@@ -166,18 +188,21 @@ console.log('Supabase Key exists:', !!import.meta.env.VITE_SUPABASE_ANON_KEY);
 ## ♿ **Accessibility Standards**
 
 ### **WCAG 2.1 AA Compliance**
+
 - **Color Contrast**: Minimum 4.5:1 ratio for normal text
 - **Focus Indicators**: Clear, visible focus outlines
 - **Keyboard Navigation**: Full keyboard accessibility
 - **Screen Reader Support**: Proper ARIA labels and semantic HTML
 
 ### **Motion & Animation**
+
 - **Reduced Motion**: Respects `prefers-reduced-motion` setting
 - **Animation Duration**: Limited to 0.3s for accessibility
 - **Pause Controls**: Option to disable animations
 - **Essential Motion**: Only functional animations enabled
 
 ### **Semantic HTML Example**
+
 ```html
 <!-- Accessible button -->
 <button
@@ -196,29 +221,32 @@ console.log('Supabase Key exists:', !!import.meta.env.VITE_SUPABASE_ANON_KEY);
 ## 🎨 **Design System Implementation**
 
 ### **Typography Scale**
+
 ```css
---text-xs: clamp(0.75rem, 1.8vw, 0.9rem);   /* 12px - 14px */
---text-sm: clamp(0.8rem, 1.8vw, 0.95rem);   /* 13px - 15px */
---text-base: clamp(0.9rem, 2.2vw, 1.1rem);  /* 14px - 18px */
---text-lg: clamp(1rem, 2.2vw, 1.3rem);      /* 16px - 21px */
---text-xl: clamp(1.1rem, 2.8vw, 1.6rem);    /* 18px - 26px */
---text-2xl: clamp(1.2rem, 3.2vw, 1.8rem);   /* 19px - 29px */
---text-3xl: clamp(1.3rem, 3.5vw, 2rem);     /* 21px - 32px */
+--text-xs: clamp(0.75rem, 1.8vw, 0.9rem); /* 12px - 14px */
+--text-sm: clamp(0.8rem, 1.8vw, 0.95rem); /* 13px - 15px */
+--text-base: clamp(0.9rem, 2.2vw, 1.1rem); /* 14px - 18px */
+--text-lg: clamp(1rem, 2.2vw, 1.3rem); /* 16px - 21px */
+--text-xl: clamp(1.1rem, 2.8vw, 1.6rem); /* 18px - 26px */
+--text-2xl: clamp(1.2rem, 3.2vw, 1.8rem); /* 19px - 29px */
+--text-3xl: clamp(1.3rem, 3.5vw, 2rem); /* 21px - 32px */
 ```
 
 ### **Spacing Scale**
+
 ```css
---space-xs: 0.25rem;     /* 4px */
---space-sm: 0.5rem;      /* 8px */
---space-md: 0.75rem;     /* 12px */
---space-lg: 1rem;        /* 16px */
---space-xl: 1.25rem;     /* 20px */
---space-2xl: 1.5rem;     /* 24px */
---space-3xl: 2rem;       /* 32px */
---space-4xl: 2.5rem;     /* 40px */
+--space-xs: 0.25rem; /* 4px */
+--space-sm: 0.5rem; /* 8px */
+--space-md: 0.75rem; /* 12px */
+--space-lg: 1rem; /* 16px */
+--space-xl: 1.25rem; /* 20px */
+--space-2xl: 1.5rem; /* 24px */
+--space-3xl: 2rem; /* 32px */
+--space-4xl: 2.5rem; /* 40px */
 ```
 
 ### **Color Palette**
+
 ```css
 /* Primary Colors */
 --primary-gold: #e8bf76;
@@ -245,6 +273,7 @@ console.log('Supabase Key exists:', !!import.meta.env.VITE_SUPABASE_ANON_KEY);
 ## 🔄 **Interaction Patterns**
 
 ### **Loading States**
+
 ```jsx
 // Skeleton loading for better perceived performance
 function TournamentSkeleton() {
@@ -262,6 +291,7 @@ function TournamentSkeleton() {
 ```
 
 ### **Error States**
+
 ```jsx
 // User-friendly error messages with recovery options
 function ErrorState({ error, onRetry }) {
@@ -276,6 +306,7 @@ function ErrorState({ error, onRetry }) {
 ```
 
 ### **Success Feedback**
+
 ```jsx
 // Celebratory animations for positive actions
 function SuccessAnimation({ message }) {
@@ -293,19 +324,22 @@ function SuccessAnimation({ message }) {
 ## 📊 **Performance Optimization**
 
 ### **Progressive Enhancement**
+
 - **Core Functionality**: Works without JavaScript
 - **Enhanced Experience**: JavaScript provides rich interactions
 - **Graceful Degradation**: Maintains usability in low-connectivity environments
 
 ### **Loading Strategies**
+
 - **Critical CSS**: Above-the-fold content renders immediately
 - **Lazy Loading**: Components load as needed
 - **Image Optimization**: Progressive loading with WebP/AVIF fallbacks
 - **Service Worker**: Offline functionality and caching
 
 ### **Performance Budget**
-| Metric                       | Target | Current | Status      |
-| ---------------------------- | ------ | ------- | ----------- |
+
+| Metric                       | Target | Current | Status       |
+| ---------------------------- | ------ | ------- | ------------ |
 | **First Paint**              | < 1.5s | 0.8s    | ✅ Excellent |
 | **First Contentful Paint**   | < 2.0s | 1.2s    | ✅ Excellent |
 | **Largest Contentful Paint** | < 2.5s | 1.8s    | ✅ Excellent |
@@ -316,14 +350,12 @@ function SuccessAnimation({ message }) {
 ## 🛠️ **Development Guidelines**
 
 ### **Component Patterns**
+
 ```jsx
 // Consistent prop structure
-function Button({ children, variant = 'primary', size = 'medium', ...props }) {
+function Button({ children, variant = "primary", size = "medium", ...props }) {
   return (
-    <button
-      className={`btn btn-${variant} btn-${size}`}
-      {...props}
-    >
+    <button className={`btn btn-${variant} btn-${size}`} {...props}>
       {children}
     </button>
   );
@@ -331,6 +363,7 @@ function Button({ children, variant = 'primary', size = 'medium', ...props }) {
 ```
 
 ### **CSS Architecture**
+
 ```css
 /* Component-scoped styles with CSS Modules */
 .button {
@@ -351,11 +384,16 @@ function Button({ children, variant = 'primary', size = 'medium', ...props }) {
 ```
 
 ### **Animation Guidelines**
+
 ```css
 /* Performance-optimized animations */
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 .fadeIn {
@@ -369,19 +407,23 @@ function Button({ children, variant = 'primary', size = 'medium', ...props }) {
 ## 🧪 **Testing & Quality Assurance**
 
 ### **Code Quality**
+
 - **Linting**: ESLint with Airbnb configuration
 - **Testing**: Unit tests for critical functionality
 - **Performance**: Build-time bundle analysis
 - **Security**: Dependency vulnerability scanning
 
 ### **Browser Support**
+
 **Supported Browsers**:
+
 - ✅ Chrome 90+
 - ✅ Firefox 88+
 - ✅ Safari 14+
 - ✅ Edge 90+
 
 **Common Fixes**:
+
 - Use CSS Grid fallbacks for older browsers
 - Ensure ES2020+ features have polyfills
 - Test responsive design across device sizes
@@ -391,6 +433,7 @@ function Button({ children, variant = 'primary', size = 'medium', ...props }) {
 ## 📈 **Development Workflow**
 
 ### **Contributing**
+
 1. Fork the repository
 2. Create a feature branch (`git checkout -b feature/amazing-feature`)
 3. Make your changes
@@ -400,12 +443,14 @@ function Button({ children, variant = 'primary', size = 'medium', ...props }) {
 7. Open a Pull Request
 
 ### **Code Standards**
+
 - Follow ESLint configuration
 - Write meaningful commit messages
 - Add documentation for new features
 - Test your changes thoroughly
 
 ### **Available Scripts**
+
 | Command                 | Description                        |
 | ----------------------- | ---------------------------------- |
 | `npm run dev`           | Start development server with HMR  |
@@ -423,11 +468,13 @@ function Button({ children, variant = 'primary', size = 'medium', ...props }) {
 ## 📚 **Additional Resources**
 
 ### **Technical Reference**
+
 - **[Technical Reference](./TECHNICAL_REFERENCE.md)** - System architecture and API docs
 - **[Development History](./DEVELOPMENT_HISTORY.md)** - Project evolution and milestones
 - **[Project Status](./PROJECT_STATUS.md)** - Current project health dashboard
 
 ### **External Links**
+
 - [React Documentation](https://react.dev)
 - [Vite Guide](https://vitejs.dev)
 - [Supabase Documentation](https://supabase.com/docs)
@@ -435,4 +482,4 @@ function Button({ children, variant = 'primary', size = 'medium', ...props }) {
 
 ---
 
-*Developer Guide - Last updated: October 2025*
+_Developer Guide - Last updated: October 2025_

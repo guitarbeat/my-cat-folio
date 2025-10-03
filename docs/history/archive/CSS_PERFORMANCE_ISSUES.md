@@ -1,6 +1,7 @@
 # CSS & Performance Issues
 
 ## Overview
+
 Detailed analysis of CSS compilation, performance bottlenecks, and optimization opportunities in the Welcome Screen component.
 
 ## 🚨 Critical CSS Issues
@@ -10,12 +11,14 @@ Detailed analysis of CSS compilation, performance bottlenecks, and optimization 
 **Current CSS Bundle**: 281.75 kB (46.51 kB gzipped)
 
 **Issues**:
+
 - Excessive file size for a single component
 - No CSS purging implemented
 - Redundant styles and rules
 - Complex responsive design overkill
 
 **Root Causes**:
+
 ```css
 /* 67 CSS custom properties - excessive */
 :root {
@@ -37,12 +40,14 @@ Detailed analysis of CSS compilation, performance bottlenecks, and optimization 
 ### 2. CSS Architecture Problems
 
 **Current Structure Issues**:
+
 - Single massive CSS file (1,669 lines)
 - No modular CSS architecture
 - Complex nested selectors
 - Redundant media queries
 
 **File Structure**:
+
 ```
 src/shared/components/WelcomeScreen/
 ├── WelcomeScreen.module.css (1,669 lines)
@@ -55,6 +60,7 @@ src/shared/components/WelcomeScreen/
 ```
 
 **Problems**:
+
 - All styles in one file
 - No component-specific CSS modules
 - Difficult to maintain
@@ -65,6 +71,7 @@ src/shared/components/WelcomeScreen/
 **Current Custom Properties**: 67 variables
 
 **Issues**:
+
 ```css
 /* Spacing Scale - 8 variables */
 --ws-space-xs: 0.25rem;
@@ -95,6 +102,7 @@ src/shared/components/WelcomeScreen/
 ```
 
 **Optimization Strategy**:
+
 - Reduce to essential variables only
 - Use CSS calc() for derived values
 - Implement CSS-in-JS for dynamic values
@@ -106,33 +114,59 @@ src/shared/components/WelcomeScreen/
 **Current Animations**: 8 different keyframe animations
 
 **Issues**:
+
 ```css
 /* Complex animations causing performance issues */
 @keyframes glowPulse {
-  0%, 100% { opacity: 0.5; transform: scale(1); }
-  50% { opacity: 0.8; transform: scale(1.1); }
+  0%,
+  100% {
+    opacity: 0.5;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.1);
+  }
 }
 
 @keyframes sparkle {
-  0%, 100% { opacity: 0.7; transform: scale(1) rotate(0deg); }
-  50% { opacity: 1; transform: scale(1.2) rotate(180deg); }
+  0%,
+  100% {
+    opacity: 0.7;
+    transform: scale(1) rotate(0deg);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.2) rotate(180deg);
+  }
 }
 
 @keyframes particleFloat {
-  0%, 100% { transform: translateY(0) rotate(0deg); }
-  25% { transform: translateY(-20px) rotate(90deg); }
-  50% { transform: translateY(-10px) rotate(180deg); }
-  75% { transform: translateY(-30px) rotate(270deg); }
+  0%,
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  25% {
+    transform: translateY(-20px) rotate(90deg);
+  }
+  50% {
+    transform: translateY(-10px) rotate(180deg);
+  }
+  75% {
+    transform: translateY(-30px) rotate(270deg);
+  }
 }
 ```
 
 **Performance Problems**:
+
 - No hardware acceleration
 - Complex transform operations
 - Continuous animations
 - No reduced motion support
 
 **Optimization**:
+
 ```css
 /* Hardware accelerated animations */
 .particle {
@@ -142,8 +176,13 @@ src/shared/components/WelcomeScreen/
 
 /* Simplified animations */
 @keyframes simpleFloat {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-10px); }
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
 }
 ```
 
@@ -152,24 +191,41 @@ src/shared/components/WelcomeScreen/
 **Current Media Queries**: 15+ breakpoints
 
 **Issues**:
+
 ```css
 /* Excessive responsive breakpoints */
-@media (width <= 768px) { /* ... */ }
-@media (width <= 480px) { /* ... */ }
-@media (width <= 320px) { /* ... */ }
-@media (height <= 500px) and (orientation: landscape) { /* ... */ }
-@media (height <= 600px) and (orientation: portrait) { /* ... */ }
-@media (width >= 1200px) { /* ... */ }
-@media (width >= 1600px) { /* ... */ }
+@media (width <= 768px) {
+  /* ... */
+}
+@media (width <= 480px) {
+  /* ... */
+}
+@media (width <= 320px) {
+  /* ... */
+}
+@media (height <= 500px) and (orientation: landscape) {
+  /* ... */
+}
+@media (height <= 600px) and (orientation: portrait) {
+  /* ... */
+}
+@media (width >= 1200px) {
+  /* ... */
+}
+@media (width >= 1600px) {
+  /* ... */
+}
 ```
 
 **Problems**:
+
 - Too many breakpoints
 - Redundant styles
 - Complex media query logic
 - Poor maintainability
 
 **Optimization Strategy**:
+
 - Use mobile-first approach
 - Consolidate breakpoints
 - Use CSS Grid and Flexbox
@@ -178,12 +234,15 @@ src/shared/components/WelcomeScreen/
 ### 3. CSS Selector Complexity
 
 **Current Selector Issues**:
+
 ```css
 /* Complex nested selectors */
 .welcomeWrapper.visible.animating.transitioning {
   opacity: 0.7;
   transform: scale(0.95);
-  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+  transition:
+    opacity 0.8s ease-out,
+    transform 0.8s ease-out;
 }
 
 /* Deep nesting */
@@ -198,6 +257,7 @@ src/shared/components/WelcomeScreen/
 ```
 
 **Problems**:
+
 - High specificity
 - Difficult to override
 - Poor performance
@@ -208,6 +268,7 @@ src/shared/components/WelcomeScreen/
 ### 1. CSS Architecture Refactoring
 
 **Recommended Structure**:
+
 ```
 src/shared/components/WelcomeScreen/
 ├── WelcomeScreen.module.css (base styles)
@@ -239,6 +300,7 @@ src/shared/components/WelcomeScreen/
 **Target**: 15-20 essential variables
 
 **Essential Variables**:
+
 ```css
 :root {
   /* Colors - 8 variables */
@@ -274,21 +336,38 @@ src/shared/components/WelcomeScreen/
 **Target**: 3-4 optimized animations
 
 **Optimized Animations**:
+
 ```css
 /* Hardware accelerated animations */
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes pulse {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.05); }
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
 }
 
 @keyframes float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-10px); }
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
 }
 
 /* Apply hardware acceleration */
@@ -304,6 +383,7 @@ src/shared/components/WelcomeScreen/
 **Target**: 3-4 breakpoints
 
 **Optimized Breakpoints**:
+
 ```css
 /* Mobile-first approach */
 .container {
@@ -334,12 +414,14 @@ src/shared/components/WelcomeScreen/
 ### 1. CSS Performance Metrics
 
 **Current Metrics**:
+
 - CSS file size: 281.75 kB
 - Gzipped size: 46.51 kB
 - Number of rules: 500+
 - Number of selectors: 1000+
 
 **Target Metrics**:
+
 - CSS file size: < 50 kB
 - Gzipped size: < 15 kB
 - Number of rules: < 200
@@ -351,15 +433,15 @@ src/shared/components/WelcomeScreen/
 // CSS performance testing
 const testCSSPerformance = () => {
   const start = performance.now();
-  
+
   // Test CSS parsing
-  const style = document.createElement('style');
+  const style = document.createElement("style");
   style.textContent = cssContent;
   document.head.appendChild(style);
-  
+
   const end = performance.now();
   console.log(`CSS parsing time: ${end - start}ms`);
-  
+
   document.head.removeChild(style);
 };
 ```
@@ -380,18 +462,21 @@ npx bundle-analyzer build/assets/*.css
 ## 🛠️ Implementation Plan
 
 ### Phase 1: Critical Fixes (Week 1)
+
 1. Implement CSS purging
 2. Reduce custom properties
 3. Optimize animations
 4. Fix performance issues
 
 ### Phase 2: Architecture Refactoring (Week 2)
+
 1. Split CSS into modules
 2. Implement component-specific styles
 3. Optimize responsive design
 4. Add performance monitoring
 
 ### Phase 3: Advanced Optimization (Week 3)
+
 1. Implement CSS-in-JS for dynamic styles
 2. Add critical CSS extraction
 3. Optimize font loading
@@ -400,12 +485,14 @@ npx bundle-analyzer build/assets/*.css
 ## 📊 Performance Targets
 
 ### Current Performance
+
 - CSS bundle: 281.75 kB
 - Parse time: ~50ms
 - Render time: ~100ms
 - Memory usage: ~2MB
 
 ### Target Performance
+
 - CSS bundle: < 50 kB
 - Parse time: < 10ms
 - Render time: < 20ms
@@ -421,4 +508,4 @@ npx bundle-analyzer build/assets/*.css
 
 ---
 
-*This document provides comprehensive CSS and performance optimization strategies for the Welcome Screen component.*
+_This document provides comprehensive CSS and performance optimization strategies for the Welcome Screen component._

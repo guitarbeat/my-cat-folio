@@ -15,10 +15,12 @@ A React application for managing cat names and related data with tournament-styl
 ## 🚀 Quick Start
 
 ### Prerequisites
-- Node.js 18+ 
+
+- Node.js 18+
 - npm or yarn
 
 ### Installation
+
 ```bash
 # Clone the repository
 git clone <repository-url>
@@ -33,14 +35,14 @@ npm run dev
 
 ### Available Scripts
 
-| Script | Description |
-|--------|-------------|
-| `npm run dev` | Start development server |
-| `npm run build` | Build for production |
-| `npm run preview` | Preview production build |
-| `npm run test` | Run tests |
-| `npm run lint` | Run linters |
-| `npm run compress:images` | Compress images |
+| Script                    | Description              |
+| ------------------------- | ------------------------ |
+| `npm run dev`             | Start development server |
+| `npm run build`           | Build for production     |
+| `npm run preview`         | Preview production build |
+| `npm run test`            | Run tests                |
+| `npm run lint`            | Run linters              |
+| `npm run compress:images` | Compress images          |
 
 ## 📁 Project Structure
 
@@ -97,6 +99,7 @@ This project is licensed under the terms specified in [LICENSE](./docs/LICENSE).
 ## 🐛 Issues & Support
 
 If you encounter any issues or have questions, please:
+
 1. Check the [documentation](./docs/)
 2. Search existing issues
 3. Create a new issue with detailed information

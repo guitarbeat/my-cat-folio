@@ -1,6 +1,7 @@
 # Dependency & Security Issues
 
 ## Overview
+
 Analysis of security vulnerabilities, dependency conflicts, and compatibility issues affecting the Welcome Screen and overall application.
 
 ## 🚨 Security Vulnerabilities
@@ -10,6 +11,7 @@ Analysis of security vulnerabilities, dependency conflicts, and compatibility is
 **Current Vulnerabilities**: 5 moderate severity vulnerabilities
 
 #### esbuild Vulnerability
+
 ```
 esbuild  <=0.24.2
 Severity: moderate
@@ -17,18 +19,21 @@ esbuild enables any website to send any requests to the development server and r
 ```
 
 **Impact**:
+
 - Development server security risk
 - Potential data exposure during development
 - Production builds may be affected
 - CVE: GHSA-67mh-4wv8-2f99
 
 **Affected Dependencies**:
+
 - `esbuild` (vulnerable version)
 - `vite` (depends on vulnerable esbuild)
 - `@vitest/mocker` (depends on vulnerable vite)
 - `vitest` (depends on vulnerable vite)
 
 **Solution**:
+
 ```bash
 # Update to latest Vite (breaking change)
 npm install vite@latest
@@ -38,8 +43,9 @@ npm audit fix --force
 ```
 
 #### Dependency Chain Analysis
+
 ```
-esbuild (vulnerable) 
+esbuild (vulnerable)
   └── vite@5.4.10
       ├── @vitest/mocker
       └── vitest@2.1.4
@@ -48,6 +54,7 @@ esbuild (vulnerable)
 ### 2. Dependency Version Conflicts
 
 **Current Package.json Issues**:
+
 ```json
 {
   "dependencies": {
@@ -62,6 +69,7 @@ esbuild (vulnerable)
 ```
 
 **Problems**:
+
 - React 19 is very new and may have compatibility issues
 - Vite 5.4.10 is not the latest version
 - Some dependencies may not support React 19
@@ -69,6 +77,7 @@ esbuild (vulnerable)
 ### 3. Override Configuration Issues
 
 **Current Overrides**:
+
 ```json
 {
   "overrides": {
@@ -81,6 +90,7 @@ esbuild (vulnerable)
 ```
 
 **Issues**:
+
 - Overrides may mask security vulnerabilities
 - Some overrides are for webpack (not used in Vite)
 - PostCSS version may be outdated
@@ -90,6 +100,7 @@ esbuild (vulnerable)
 ### 1. Production Dependencies
 
 **Current Production Dependencies**:
+
 ```json
 {
   "@hello-pangea/dnd": "^18.0.1",
@@ -104,6 +115,7 @@ esbuild (vulnerable)
 ```
 
 **Issues**:
+
 - `@testing-library/dom` in production dependencies (should be dev)
 - React 19 compatibility concerns
 - Some dependencies may not support React 19
@@ -111,6 +123,7 @@ esbuild (vulnerable)
 ### 2. Development Dependencies
 
 **Current Dev Dependencies**:
+
 ```json
 {
   "@babel/plugin-transform-private-property-in-object": "^7.21.11",
@@ -142,6 +155,7 @@ esbuild (vulnerable)
 ```
 
 **Issues**:
+
 - Vite version is not latest
 - Some stylelint plugins may be outdated
 - Sharp version may have security issues
@@ -149,6 +163,7 @@ esbuild (vulnerable)
 ### 3. Peer Dependencies
 
 **Missing Peer Dependencies**:
+
 - No explicit peer dependency declarations
 - React 19 may require specific peer dependencies
 - Some packages may not support React 19
@@ -158,11 +173,13 @@ esbuild (vulnerable)
 ### 1. React 19 Compatibility
 
 **Potential Issues**:
+
 - React 19 is very new (released recently)
 - Some dependencies may not support React 19
 - Breaking changes in React 19 may affect components
 
 **Dependencies to Check**:
+
 - `@hello-pangea/dnd` - May not support React 19
 - `@heroicons/react` - May not support React 19
 - `@supabase/supabase-js` - May not support React 19
@@ -174,6 +191,7 @@ esbuild (vulnerable)
 **Latest Vite Version**: 7.1.7
 
 **Issues**:
+
 - Vite 5.4.10 has security vulnerabilities
 - Newer Vite versions have breaking changes
 - Some plugins may not support newer Vite versions
@@ -181,10 +199,12 @@ esbuild (vulnerable)
 ### 3. Node.js Compatibility
 
 **Current Node.js Requirements**:
+
 - No explicit Node.js version specified
 - Some dependencies may require specific Node.js versions
 
 **Recommended Node.js Version**:
+
 - Node.js 18+ (LTS)
 - Node.js 20+ (Current LTS)
 
@@ -223,7 +243,7 @@ npm outdated
     "@testing-library/dom": "^10.4.1",
     "@testing-library/jest-dom": "^6.7.0",
     "@testing-library/react": "^16.3.0",
-    "@testing-library/user-event": "^14.6.1",
+    "@testing-library/user-event": "^14.6.1"
     // ... other dev dependencies
   }
 }
@@ -249,11 +269,7 @@ npm outdated
     "npm": ">=8.0.0"
   },
   "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
+    "production": [">0.2%", "not dead", "not op_mini all"],
     "development": [
       "last 1 chrome version",
       "last 1 firefox version",
@@ -284,6 +300,7 @@ npm audit fix --force
 ### 2. Environment Variables
 
 **Current Issues**:
+
 ```javascript
 // vite.config.mjs
 define: {
@@ -293,11 +310,13 @@ define: {
 ```
 
 **Security Concerns**:
+
 - Environment variables not validated
 - No fallback security measures
 - Potential exposure of sensitive data
 
 **Recommended Approach**:
+
 ```javascript
 // Validate environment variables
 const requiredEnvVars = {
@@ -321,30 +340,37 @@ define: {
 ### 3. Content Security Policy
 
 **Missing CSP Headers**:
+
 - No Content Security Policy defined
 - No security headers configured
 - Potential XSS vulnerabilities
 
 **Recommended CSP**:
+
 ```html
-<meta http-equiv="Content-Security-Policy" content="
+<meta
+  http-equiv="Content-Security-Policy"
+  content="
   default-src 'self';
   script-src 'self' 'unsafe-inline' 'unsafe-eval';
   style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
   font-src 'self' https://fonts.gstatic.com;
   img-src 'self' data: https:;
   connect-src 'self' https://*.supabase.co;
-">
+"
+/>
 ```
 
 ## 📊 Security Metrics
 
 ### Current Security Status
+
 - Vulnerabilities: 5 moderate
 - Outdated packages: Multiple
 - Security score: Poor
 
 ### Target Security Status
+
 - Vulnerabilities: 0
 - Outdated packages: 0
 - Security score: Excellent
@@ -400,4 +426,4 @@ npm ls --depth=0 | grep -E '^├─|^└─' | sort | uniq -d
 
 ---
 
-*This document provides comprehensive security and dependency analysis for the Welcome Screen component.*
+_This document provides comprehensive security and dependency analysis for the Welcome Screen component._
