@@ -41,9 +41,9 @@ export class TournamentService {
       const ratingsArray = Array.isArray(finalRatings)
         ? finalRatings
         : Object.entries(finalRatings).map(([name, rating]) => ({
-            name,
-            rating
-          }));
+          name,
+          rating
+        }));
 
       // Build a quick lookup map for final ratings to avoid repeated .find calls
       const ratingMap = new Map(ratingsArray.map((r) => [r.name, r.rating]));
@@ -460,8 +460,8 @@ export class TournamentService {
         };
       });
 
-      // Sort by average rating (highest first)
-      processedNames.sort((a, b) => b.rating - a.rating);
+      // Sort alphabetically by name
+      processedNames.sort((a, b) => a.name.localeCompare(b.name));
 
       // Update ranks after sorting
       processedNames.forEach((name, index) => {
@@ -485,6 +485,14 @@ export class TournamentService {
           rank: processedNames.length + index + 1,
           userCount: 0
         }));
+
+      // Sort names without data alphabetically as well
+      namesWithoutData.sort((a, b) => a.name.localeCompare(b.name));
+
+      // Update ranks for names without data
+      namesWithoutData.forEach((name, index) => {
+        name.rank = processedNames.length + index + 1;
+      });
 
       return [...processedNames, ...namesWithoutData];
     } catch (error) {
@@ -521,15 +529,15 @@ export class TournamentService {
     const avgRating =
       ratingsWithValues.length > 0
         ? Math.round(
-            ratingsWithValues.reduce((sum, r) => sum + (r.rating || 0), 0) /
-              ratingsWithValues.length
-          )
+          ratingsWithValues.reduce((sum, r) => sum + (r.rating || 0), 0) /
+          ratingsWithValues.length
+        )
         : 0;
 
     const ratingSpread =
       ratingsWithValues.length > 0
         ? Math.max(...ratingsWithValues.map((r) => r.rating || 0)) -
-          Math.min(...ratingsWithValues.map((r) => r.rating || 0))
+        Math.min(...ratingsWithValues.map((r) => r.rating || 0))
         : 0;
 
     const totalMatches = wins + losses;
