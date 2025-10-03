@@ -33,15 +33,53 @@ export default defineConfig({
         minify: 'terser',
         rollupOptions: {
             output: {
-                manualChunks: {
-                    vendor: ['react', 'react-dom'],
-                    ui: ['@heroicons/react'],
-                    utils: ['zustand', 'prop-types'],
-                    welcome: [
-                        './src/shared/components/WelcomeScreen',
-                        './src/core/hooks/useParticleSystem.js',
-                        './src/core/hooks/useImageGallery.js'
-                    ]
+                manualChunks: (id) => {
+                    // Vendor libraries
+                    if (id.includes('node_modules')) {
+                        if (id.includes('react') || id.includes('react-dom')) {
+                            return 'vendor-react';
+                        }
+                        if (id.includes('@supabase')) {
+                            return 'vendor-supabase';
+                        }
+                        if (id.includes('@hello-pangea/dnd') || id.includes('@dnd-kit')) {
+                            return 'vendor-dnd';
+                        }
+                        if (id.includes('@heroicons') || id.includes('heroicons')) {
+                            return 'vendor-icons';
+                        }
+                        if (id.includes('zustand') || id.includes('prop-types')) {
+                            return 'vendor-state';
+                        }
+                        // Other node_modules go to vendor
+                        return 'vendor';
+                    }
+
+                    // Feature-specific chunks
+                    if (id.includes('/features/auth/') || id.includes('/features/auth')) {
+                        return 'feature-auth';
+                    }
+                    if (id.includes('/features/tournament/') || id.includes('/features/tournament')) {
+                        return 'feature-tournament';
+                    }
+                    if (id.includes('/features/profile/') || id.includes('/features/profile')) {
+                        return 'feature-profile';
+                    }
+
+                    // Core utilities
+                    if (id.includes('/core/hooks/') || id.includes('/core/store/')) {
+                        return 'core-utils';
+                    }
+
+                    // Services
+                    if (id.includes('/shared/services/')) {
+                        return 'services';
+                    }
+
+                    // Shared components
+                    if (id.includes('/shared/components/')) {
+                        return 'shared-components';
+                    }
                 },
             },
         },

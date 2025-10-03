@@ -7,19 +7,21 @@
  * @returns {JSX.Element} The complete application UI
  */
 
-import React, { useCallback, useMemo } from "react";
+import React, { useCallback, useMemo, lazy, Suspense } from "react";
 import {
   ErrorBoundary,
-  Login,
   ErrorDisplay,
   ToastContainer,
   WelcomeScreen,
 } from "./shared/components";
-import Tournament from "./features/tournament/Tournament";
-import TournamentSetup from "./features/tournament/TournamentSetup";
-import Results from "./features/tournament/Results";
-import Profile from "./features/profile/Profile";
 import NavBar from "./shared/components/NavBar/NavBar";
+
+// * Lazy load heavy components for better code splitting
+const Login = lazy(() => import("./features/auth/Login"));
+const Tournament = lazy(() => import("./features/tournament/Tournament"));
+const TournamentSetup = lazy(() => import("./features/tournament/TournamentSetup"));
+const Results = lazy(() => import("./features/tournament/Results"));
+const Profile = lazy(() => import("./features/profile/Profile"));
 import useUserSession from "./core/hooks/useUserSession";
 import useTheme from "./core/hooks/useTheme";
 import useToast from "./core/hooks/useToast";
@@ -341,55 +343,67 @@ function App() {
   // * Memoize main content to prevent unnecessary re-renders
   const mainContent = useMemo(() => {
     if (!isLoggedIn) {
-      return <Login onLogin={login} />;
+      return (
+        <Suspense fallback={<div className="loading-placeholder">Loading...</div>}>
+          <Login onLogin={login} />
+        </Suspense>
+      );
     }
 
     // * Handle profile view
     if (tournament.currentView === "profile") {
       return (
-        <Profile
-          userName={userName}
-          onStartNewTournament={handleStartNewTournament}
-          ratings={tournament.ratings}
-          onUpdateRatings={handleUpdateRatings}
-        />
+        <Suspense fallback={<div className="loading-placeholder">Loading Profile...</div>}>
+          <Profile
+            userName={userName}
+            onStartNewTournament={handleStartNewTournament}
+            ratings={tournament.ratings}
+            onUpdateRatings={handleUpdateRatings}
+          />
+        </Suspense>
       );
     }
 
     // * Show tournament setup if no names selected, otherwise show tournament
     if (tournament.names === null) {
       return (
-        <TournamentSetup
-          onStart={handleTournamentSetup}
-          userName={userName}
-          existingRatings={tournament.ratings}
-        />
+        <Suspense fallback={<div className="loading-placeholder">Loading Tournament Setup...</div>}>
+          <TournamentSetup
+            onStart={handleTournamentSetup}
+            userName={userName}
+            existingRatings={tournament.ratings}
+          />
+        </Suspense>
       );
     }
 
     // * Show tournament if names are selected
     if (tournament.isComplete) {
       return (
-        <Results
-          ratings={tournament.ratings}
-          onStartNew={handleStartNewTournament}
-          userName={userName}
-          onUpdateRatings={handleUpdateRatings}
-          currentTournamentNames={tournament.names}
-          voteHistory={tournament.voteHistory}
-        />
+        <Suspense fallback={<div className="loading-placeholder">Loading Results...</div>}>
+          <Results
+            ratings={tournament.ratings}
+            onStartNew={handleStartNewTournament}
+            userName={userName}
+            onUpdateRatings={handleUpdateRatings}
+            currentTournamentNames={tournament.names}
+            voteHistory={tournament.voteHistory}
+          />
+        </Suspense>
       );
     }
 
     return (
       <ErrorBoundary>
-        <Tournament
-          names={tournament.names}
-          existingRatings={tournament.ratings}
-          onComplete={handleTournamentComplete}
-          userName={userName}
-          onVote={(vote) => tournamentActions.addVote(vote)}
-        />
+        <Suspense fallback={<div className="loading-placeholder">Loading Tournament...</div>}>
+          <Tournament
+            names={tournament.names}
+            existingRatings={tournament.ratings}
+            onComplete={handleTournamentComplete}
+            userName={userName}
+            onVote={(vote) => tournamentActions.addVote(vote)}
+          />
+        </Suspense>
       </ErrorBoundary>
     );
   }, [

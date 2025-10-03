@@ -3492,3 +3492,14 @@ h1 {
 .main-content button {
   /* move previous global button declarations here if needed */
 }
+
+/* ===== Loading Placeholder for Code Splitting ===== */
+.loading-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+  font-size: 1.1rem;
+  color: var(--text-secondary);
+  background: var(--background-color);
+}
