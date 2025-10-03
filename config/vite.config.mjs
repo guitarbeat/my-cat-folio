@@ -14,7 +14,7 @@ export default defineConfig({
     ],
     root: '.',
     publicDir: 'public',
-  assetsInclude: ['**/*.avif', '**/*.webp', '**/*.jpg', '**/*.jpeg', '**/*.png', '**/*.gif', '**/*.webm', '**/*.mp3'],
+    assetsInclude: ['**/*.avif', '**/*.webp', '**/*.jpg', '**/*.jpeg', '**/*.png', '**/*.gif', '**/*.webm', '**/*.mp3'],
     resolve: {
         alias: {
             '@': resolve(__dirname, 'src'),

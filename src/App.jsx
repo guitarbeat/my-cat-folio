@@ -19,7 +19,9 @@ import NavBar from "./shared/components/NavBar/NavBar";
 // * Lazy load heavy components for better code splitting
 const Login = lazy(() => import("./features/auth/Login"));
 const Tournament = lazy(() => import("./features/tournament/Tournament"));
-const TournamentSetup = lazy(() => import("./features/tournament/TournamentSetup"));
+const TournamentSetup = lazy(
+  () => import("./features/tournament/TournamentSetup")
+);
 const Results = lazy(() => import("./features/tournament/Results"));
 const Profile = lazy(() => import("./features/profile/Profile"));
 import useUserSession from "./core/hooks/useUserSession";
@@ -344,7 +346,9 @@ function App() {
   const mainContent = useMemo(() => {
     if (!isLoggedIn) {
       return (
-        <Suspense fallback={<div className="loading-placeholder">Loading...</div>}>
+        <Suspense
+          fallback={<div className="loading-placeholder">Loading...</div>}
+        >
           <Login onLogin={login} />
         </Suspense>
       );
@@ -353,7 +357,11 @@ function App() {
     // * Handle profile view
     if (tournament.currentView === "profile") {
       return (
-        <Suspense fallback={<div className="loading-placeholder">Loading Profile...</div>}>
+        <Suspense
+          fallback={
+            <div className="loading-placeholder">Loading Profile...</div>
+          }
+        >
           <Profile
             userName={userName}
             onStartNewTournament={handleStartNewTournament}
@@ -367,7 +375,13 @@ function App() {
     // * Show tournament setup if no names selected, otherwise show tournament
     if (tournament.names === null) {
       return (
-        <Suspense fallback={<div className="loading-placeholder">Loading Tournament Setup...</div>}>
+        <Suspense
+          fallback={
+            <div className="loading-placeholder">
+              Loading Tournament Setup...
+            </div>
+          }
+        >
           <TournamentSetup
             onStart={handleTournamentSetup}
             userName={userName}
@@ -380,7 +394,11 @@ function App() {
     // * Show tournament if names are selected
     if (tournament.isComplete) {
       return (
-        <Suspense fallback={<div className="loading-placeholder">Loading Results...</div>}>
+        <Suspense
+          fallback={
+            <div className="loading-placeholder">Loading Results...</div>
+          }
+        >
           <Results
             ratings={tournament.ratings}
             onStartNew={handleStartNewTournament}
@@ -395,7 +413,11 @@ function App() {
 
     return (
       <ErrorBoundary>
-        <Suspense fallback={<div className="loading-placeholder">Loading Tournament...</div>}>
+        <Suspense
+          fallback={
+            <div className="loading-placeholder">Loading Tournament...</div>
+          }
+        >
           <Tournament
             names={tournament.names}
             existingRatings={tournament.ratings}
