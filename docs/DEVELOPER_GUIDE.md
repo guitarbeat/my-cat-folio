@@ -1,6 +1,13 @@
-# 🛠️ **Meow Namester - Developer Guide**
+# 🛠️ **Meow Namester - Elite Developer Handbook**
 
-> **Complete developer guide with troubleshooting, UX patterns, and technical implementation details**
+> **Enterprise-grade development practices for a production-ready React application with advanced optimization techniques**
+
+[![Architecture](https://img.shields.io/badge/Architecture-React_19%2BVite-28a745.svg)](https://meow-namester-adl2xiz1n-guitarbeats-projects.vercel.app)
+[![Testing](https://img.shields.io/badge/Testing-Vitest%2BRTL-28a745.svg)](https://meow-namester-adl2xiz1n-guitarbeats-projects.vercel.app)
+[![State Management](https://img.shields.io/badge/State-Zustand-28a745.svg)](https://meow-namester-adl2xiz1n-guitarbeats-projects.vercel.app)
+[![Database](https://img.shields.io/badge/Database-Supabase-28a745.svg)](https://meow-namester-adl2xiz1n-guitarbeats-projects.vercel.app)
+
+**📚 Developer Portal:** [Live Application](https://meow-namester-adl2xiz1n-guitarbeats-projects.vercel.app)
 
 ---
 
