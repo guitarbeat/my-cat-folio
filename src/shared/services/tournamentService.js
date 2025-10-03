@@ -379,7 +379,7 @@ export class TournamentService {
         return [];
       }
 
-      // Get ratings for visible names
+      // Get ratings for visible names (we'll aggregate in JavaScript)
       const { data: ratingsData, error: ratingsError } = await supabase
         .from('cat_name_ratings')
         .select(
@@ -399,76 +399,96 @@ export class TournamentService {
           'name_id',
           visibleNames.map((n) => n.id)
         )
-        .or('is_hidden.is.null,is_hidden.eq.false')
-        .order('rating', { ascending: false });
+        .or('is_hidden.is.null,is_hidden.eq.false');
 
       if (ratingsError) {
         throw ratingsError;
       }
 
-      // Create a map of ratings data for quick lookup
-      const ratingsMap = new Map();
+      // Aggregate ratings by name_id (combine stats from all users)
+      const aggregatedRatings = new Map();
+
       if (ratingsData && ratingsData.length > 0) {
         ratingsData.forEach((item) => {
-          ratingsMap.set(item.name_id, item);
+          const nameId = item.name_id;
+          const nameInfo = item.cat_name_options;
+
+          if (!aggregatedRatings.has(nameId)) {
+            aggregatedRatings.set(nameId, {
+              id: nameId,
+              name: nameInfo?.name || 'Unknown',
+              description: nameInfo?.description || '',
+              categories: nameInfo?.categories || [],
+              totalRating: 0,
+              totalWins: 0,
+              totalLosses: 0,
+              userCount: 0,
+              ratings: []
+            });
+          }
+
+          const entry = aggregatedRatings.get(nameId);
+          entry.totalRating += item.rating || 1500;
+          entry.totalWins += item.wins || 0;
+          entry.totalLosses += item.losses || 0;
+          entry.userCount += 1;
+          entry.ratings.push(item.rating || 1500);
         });
       }
 
-      // Process and return the data with stats
-      const processedNames = visibleNames.map((name, index) => {
-        const ratingData = ratingsMap.get(name.id);
+      // Convert aggregated data to final format
+      const processedNames = Array.from(aggregatedRatings.values()).map((entry, index) => {
+        const avgRating = entry.userCount > 0
+          ? entry.totalRating / entry.userCount
+          : 1500;
 
-        if (ratingData) {
-          const totalMatches =
-            (ratingData.wins || 0) + (ratingData.losses || 0);
-          const winRate =
-            totalMatches > 0
-              ? Math.round(((ratingData.wins || 0) / totalMatches) * 100)
-              : 0;
+        const totalMatches = entry.totalWins + entry.totalLosses;
+        const winRate = totalMatches > 0
+          ? Math.round((entry.totalWins / totalMatches) * 100)
+          : 0;
 
-          return {
-            id: name.id,
-            name: name.name,
-            description: name.description,
-            categories: name.categories || [],
-            rating: ratingData.rating || 1500,
-            wins: ratingData.wins || 0,
-            losses: ratingData.losses || 0,
-            totalMatches,
-            winRate,
-            rank: index + 1
-          };
-        } else {
-          // For names without ratings, use default values
-          return {
-            id: name.id,
-            name: name.name,
-            description: name.description,
-            categories: name.categories || [],
-            rating: 1500,
-            wins: 0,
-            losses: 0,
-            totalMatches: 0,
-            winRate: 0,
-            rank: index + 1
-          };
-        }
+        return {
+          id: entry.id,
+          name: entry.name,
+          description: entry.description,
+          categories: entry.categories,
+          rating: Math.round(avgRating),
+          wins: entry.totalWins,
+          losses: entry.totalLosses,
+          totalMatches,
+          winRate,
+          rank: index + 1,
+          userCount: entry.userCount
+        };
       });
 
-      // Remove any potential duplicates by name (safety check)
-      const uniqueNames = processedNames.reduce((acc, name) => {
-        const existing = acc.find(item => item.name === name.name);
-        if (!existing) {
-          acc.push(name);
-        } else if (name.rating > existing.rating) {
-          // Keep the one with higher rating
-          const index = acc.indexOf(existing);
-          acc[index] = name;
-        }
-        return acc;
-      }, []);
+      // Sort by average rating (highest first)
+      processedNames.sort((a, b) => b.rating - a.rating);
 
-      return uniqueNames;
+      // Update ranks after sorting
+      processedNames.forEach((name, index) => {
+        name.rank = index + 1;
+      });
+
+      // Handle names without any ratings data
+      const namesWithData = new Set(processedNames.map(n => n.id));
+      const namesWithoutData = visibleNames
+        .filter(name => !namesWithData.has(name.id))
+        .map((name, index) => ({
+          id: name.id,
+          name: name.name,
+          description: name.description,
+          categories: name.categories || [],
+          rating: 1500,
+          wins: 0,
+          losses: 0,
+          totalMatches: 0,
+          winRate: 0,
+          rank: processedNames.length + index + 1,
+          userCount: 0
+        }));
+
+      return [...processedNames, ...namesWithoutData];
     } catch (error) {
       console.error('Error fetching cat name stats:', error);
       return [];
