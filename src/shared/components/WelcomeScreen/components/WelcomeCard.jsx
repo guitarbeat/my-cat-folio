@@ -6,7 +6,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import InteractiveCatName from './InteractiveCatName';
+import SimpleCatName from './SimpleCatName';
 import styles from '../WelcomeScreen.module.css';
 
 /**
@@ -35,7 +35,7 @@ const WelcomeCard = ({
 
       {/* Cat Name - Most Prominent */}
       <div className={styles.catNameSection}>
-        <InteractiveCatName
+        <SimpleCatName
           catName={catName}
           nameStats={nameStats}
           onNameHover={onNameHover}

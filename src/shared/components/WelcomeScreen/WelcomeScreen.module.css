@@ -1663,3 +1663,156 @@
 :global(.dark-theme) .buttonGlow {
   background: linear-gradient(135deg, var(--ws-secondary-gold), var(--ws-primary-gold), var(--ws-primary-red));
 }
+
+/* ==========================================================================
+   GRID-BASED CAT NAME STYLES (NEW APPROACH)
+   ========================================================================== */
+
+.welcomeGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--ws-space-lg);
+  max-width: 800px;
+  margin: 0 auto;
+  padding: var(--ws-space-lg);
+}
+
+.welcomeCard {
+  background: linear-gradient(135deg, var(--ws-primary-gold), var(--ws-secondary-gold));
+  border-radius: var(--ws-radius-lg);
+  padding: var(--ws-space-xl);
+  text-align: center;
+  box-shadow: var(--ws-shadow-lg);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  animation: welcomeCardFadeIn 0.6s ease-out;
+}
+
+.welcomeNameCard {
+  animation: welcomeCardSlideIn 0.6s ease-out forwards;
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.welcomeNameCardContent {
+  background: rgba(255, 255, 255, 0.95) !important;
+  border: 2px solid var(--ws-primary-gold) !important;
+  box-shadow: var(--ws-shadow-md) !important;
+  transition: all 0.3s ease !important;
+}
+
+.welcomeNameCardContent:hover {
+  transform: translateY(-4px) !important;
+  box-shadow: var(--ws-shadow-lg) !important;
+  border-color: var(--ws-secondary-gold) !important;
+}
+
+.fullNameCard {
+  grid-column: 1 / -1;
+  background: linear-gradient(135deg, var(--ws-primary-red), var(--ws-secondary-red));
+  color: var(--ws-white);
+  animation: fullNameCardPulse 2s ease-in-out infinite;
+}
+
+.fullNameContent {
+  text-align: center;
+}
+
+.catNameSubtext {
+  font-size: var(--ws-text-sm);
+  opacity: 0.8;
+  margin-top: var(--ws-space-sm);
+  font-style: italic;
+}
+
+@keyframes welcomeCardFadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes welcomeCardSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fullNameCardPulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: var(--ws-shadow-lg);
+  }
+  50% {
+    transform: scale(1.02);
+    box-shadow: 0 8px 25px rgba(231, 76, 60, 0.3);
+  }
+}
+
+/* ==========================================================================
+   DEMO COMPONENT STYLES
+   ========================================================================== */
+
+.demoContainer {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: var(--ws-space-xl);
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: var(--ws-radius-lg);
+  backdrop-filter: blur(10px);
+}
+
+.demoTitle {
+  text-align: center;
+  font-size: var(--ws-text-2xl);
+  color: var(--ws-white);
+  margin-bottom: var(--ws-space-2xl);
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.demoGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: var(--ws-space-xl);
+}
+
+.demoSection {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: var(--ws-radius-md);
+  padding: var(--ws-space-lg);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.demoSectionTitle {
+  font-size: var(--ws-text-lg);
+  color: var(--ws-primary-gold);
+  margin-bottom: var(--ws-space-md);
+  text-align: center;
+}
+
+.demoCard {
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: var(--ws-radius-sm);
+  padding: var(--ws-space-lg);
+  margin-bottom: var(--ws-space-md);
+  min-height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.demoDescription {
+  font-size: var(--ws-text-sm);
+  color: var(--ws-light-text);
+  line-height: 1.5;
+  margin: 0;
+}
