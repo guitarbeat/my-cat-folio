@@ -15,6 +15,12 @@ const PerformanceDashboard = ({ userName, isVisible = false, onClose }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [refreshInterval, setRefreshInterval] = useState(null);
 
+  // Update metrics
+  const updateMetrics = useCallback(() => {
+    const currentMetrics = performanceMonitor.getAllMetrics();
+    setMetrics(currentMetrics);
+  }, []);
+
   // Check admin status
   useEffect(() => {
     const checkAdminStatus = async () => {
@@ -27,6 +33,10 @@ const PerformanceDashboard = ({ userName, isVisible = false, onClose }) => {
       try {
         const adminStatus = await isUserAdmin(userName);
         setIsAdmin(adminStatus);
+        // Load metrics immediately after admin check
+        if (adminStatus && isVisible) {
+          updateMetrics();
+        }
       } catch (error) {
         console.error('Error checking admin status:', error);
         setIsAdmin(false);
@@ -36,18 +46,15 @@ const PerformanceDashboard = ({ userName, isVisible = false, onClose }) => {
     };
 
     checkAdminStatus();
-  }, [userName]);
-
-  // Update metrics
-  const updateMetrics = useCallback(() => {
-    const currentMetrics = performanceMonitor.getAllMetrics();
-    setMetrics(currentMetrics);
-  }, []);
+  }, [userName, isVisible, updateMetrics]);
 
   // Set up refresh interval
   useEffect(() => {
     if (isVisible && isAdmin) {
-      updateMetrics();
+      // Only set up interval if metrics aren't already loaded
+      if (!metrics) {
+        updateMetrics();
+      }
       const interval = setInterval(updateMetrics, 5000); // Update every 5 seconds
       setRefreshInterval(interval);
     } else if (refreshInterval) {
@@ -60,7 +67,7 @@ const PerformanceDashboard = ({ userName, isVisible = false, onClose }) => {
         clearInterval(refreshInterval);
       }
     };
-  }, [isVisible, isAdmin, updateMetrics, refreshInterval]);
+  }, [isVisible, isAdmin, updateMetrics, refreshInterval, metrics]);
 
   // Cleanup on unmount
   useEffect(() => {
