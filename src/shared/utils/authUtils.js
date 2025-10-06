@@ -10,7 +10,7 @@ import { supabase } from '../../../backend/api/supabaseClient';
  */
 export const USER_ROLES = {
   USER: 'user',
-  MODERATOR: 'moderator', 
+  MODERATOR: 'moderator',
   ADMIN: 'admin'
 };
 

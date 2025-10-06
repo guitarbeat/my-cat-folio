@@ -25,7 +25,7 @@ class MobileGestures {
    */
   register(gestureType, callback, options = {}) {
     const gestureId = `${gestureType}_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-    
+
     this.gestureCallbacks.set(gestureId, {
       type: gestureType,
       callback,
@@ -69,7 +69,7 @@ class MobileGestures {
     if (!this.isEnabled) return;
 
     const touches = Array.from(event.touches);
-    
+
     touches.forEach((touch, index) => {
       const touchId = `${touch.identifier}_${index}`;
       this.activeTouches.set(touchId, {
@@ -103,25 +103,25 @@ class MobileGestures {
     if (!this.isEnabled) return;
 
     const touches = Array.from(event.touches);
-    
+
     touches.forEach((touch, index) => {
       const touchId = `${touch.identifier}_${index}`;
       const activeTouch = this.activeTouches.get(touchId);
-      
+
       if (activeTouch) {
         const deltaTime = Date.now() - activeTouch.lastTime;
         const deltaX = touch.clientX - activeTouch.lastX;
         const deltaY = touch.clientY - activeTouch.lastY;
-        
+
         // Update velocity
         activeTouch.velocity.x = deltaTime > 0 ? deltaX / deltaTime : 0;
         activeTouch.velocity.y = deltaTime > 0 ? deltaY / deltaTime : 0;
-        
+
         // Update position
         activeTouch.lastX = touch.clientX;
         activeTouch.lastY = touch.clientY;
         activeTouch.lastTime = Date.now();
-        
+
         // Calculate total distance
         activeTouch.distance = Math.sqrt(
           Math.pow(touch.clientX - activeTouch.startX, 2) +
@@ -149,11 +149,11 @@ class MobileGestures {
 
     const touches = Array.from(event.touches);
     const endedTouches = Array.from(event.changedTouches);
-    
+
     endedTouches.forEach((touch, index) => {
       const touchId = `${touch.identifier}_${index}`;
       const activeTouch = this.activeTouches.get(touchId);
-      
+
       if (activeTouch) {
         this.handleTouchEndForTouch(activeTouch, touch, event);
         this.activeTouches.delete(touchId);
@@ -210,7 +210,7 @@ class MobileGestures {
     if (distance > this.thresholds.swipe) {
       const angle = Math.atan2(deltaY, deltaX) * 180 / Math.PI;
       const direction = this.getSwipeDirection(angle);
-      
+
       this.triggerGesture('swipe', {
         touch,
         event,
@@ -225,13 +225,13 @@ class MobileGestures {
   /**
    * Handle multi-touch start
    * @param {Touch[]} touches - Array of touch objects
-   * @param {TouchEvent} event - Touch event
+   * @param {TouchEvent} _event - Touch event
    */
-  handleMultiTouchStart(touches, event) {
+  handleMultiTouchStart(touches, _event) {
     if (touches.length === 2) {
       const touch1 = touches[0];
       const touch2 = touches[1];
-      
+
       const initialDistance = Math.sqrt(
         Math.pow(touch2.clientX - touch1.clientX, 2) +
         Math.pow(touch2.clientY - touch1.clientY, 2)
@@ -252,7 +252,7 @@ class MobileGestures {
     if (touches.length === 2) {
       const touch1 = touches[0];
       const touch2 = touches[1];
-      
+
       const currentDistance = Math.sqrt(
         Math.pow(touch2.clientX - touch1.clientX, 2) +
         Math.pow(touch2.clientY - touch1.clientY, 2)
@@ -260,7 +260,7 @@ class MobileGestures {
 
       const activeTouch1 = this.activeTouches.get(`${touch1.identifier}_0`);
       const activeTouch2 = this.activeTouches.get(`${touch2.identifier}_1`);
-      
+
       if (activeTouch1 && activeTouch2) {
         const initialDistance = activeTouch1.initialPinchDistance || currentDistance;
         const scale = currentDistance / initialDistance;
@@ -287,7 +287,7 @@ class MobileGestures {
    */
   handleTouchEndForTouch(activeTouch, touch, event) {
     const duration = Date.now() - activeTouch.startTime;
-    
+
     // Clear long press timer
     if (activeTouch.longPressTimer) {
       clearTimeout(activeTouch.longPressTimer);
@@ -308,7 +308,7 @@ class MobileGestures {
   handleTap(activeTouch, touch, event) {
     const now = Date.now();
     const lastTap = activeTouch.lastTapTime || 0;
-    
+
     if (now - lastTap < this.thresholds.doubleTap) {
       // Double tap
       this.triggerGesture('doubleTap', {
@@ -323,17 +323,17 @@ class MobileGestures {
         event
       });
     }
-    
+
     activeTouch.lastTapTime = now;
   }
 
   /**
    * Handle all touches ended
-   * @param {TouchEvent} event - Touch event
+   * @param {TouchEvent} _event - Touch event
    */
-  handleAllTouchesEnded(event) {
+  handleAllTouchesEnded(_event) {
     this.triggerGesture('allTouchesEnded', {
-      event,
+      event: _event,
       touchCount: this.activeTouches.size
     });
   }
@@ -384,7 +384,7 @@ class MobileGestures {
         error: [100],
         warning: [50, 50]
       };
-      
+
       navigator.vibrate(patterns[type] || patterns.light);
     }
   }

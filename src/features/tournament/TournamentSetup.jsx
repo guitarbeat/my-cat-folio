@@ -338,13 +338,13 @@ const SwipeableNameCards = ({
         }
       }
     },
-    onLongPress: (_data) => {
+    onLongPress: () => {
       setIsLongPressing(true);
       addHapticFeedback('heavy');
       // Show additional info or context menu
       setTimeout(() => setIsLongPressing(false), 1000);
     },
-    onDoubleTap: (_data) => {
+    onDoubleTap: () => {
       // Double tap to toggle selection
       onToggleName(currentName);
       addHapticFeedback('success');

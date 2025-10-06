@@ -328,7 +328,7 @@ export class ErrorService {
       if (window.Sentry && typeof window.Sentry.captureException === 'function') {
         const error = new Error(errorData.message);
         error.name = errorData.context || 'ApplicationError';
-        
+
         window.Sentry.captureException(error, {
           tags: {
             context: errorData.context,
