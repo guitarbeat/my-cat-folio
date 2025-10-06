@@ -484,8 +484,6 @@ function App() {
   if (showWelcomeScreen) {
     return (
       <WelcomeScreen
-        catName={catName}
-        nameStats={nameStats}
         onContinue={handleWelcomeContinue}
       />
     );

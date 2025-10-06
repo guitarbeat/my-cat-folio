@@ -6,6 +6,7 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { NameStatsTooltip } from '../index';
+import { catNamesAPI } from '../../../../backend/api/supabaseClient';
 import useTheme from '../../../core/hooks/useTheme';
 import useParticleSystem from '../../../core/hooks/useParticleSystem';
 import useImageGallery from '../../../core/hooks/useImageGallery';
@@ -18,8 +19,6 @@ import ParticleBackground from './components/ParticleBackground';
 import styles from './WelcomeScreen.module.css';
 
 function WelcomeScreen({
-  catName,
-  nameStats = [],
   onContinue
 }) {
   const { isLightTheme, toggleTheme } = useTheme();
@@ -27,6 +26,9 @@ function WelcomeScreen({
   const [hoveredName, setHoveredName] = useState(null);
   const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 });
   const [showCelebration] = useState(false);
+  const [activeNames, setActiveNames] = useState([]);
+  const [namesLoading, setNamesLoading] = useState(true);
+  const [namesError, setNamesError] = useState(null);
   const containerRef = useRef(null);
 
   // Custom hooks for better performance and organization
@@ -59,6 +61,21 @@ function WelcomeScreen({
     autoRotate: true
   });
 
+  // Fetch active names from backend
+  const fetchActiveNames = useCallback(async () => {
+    try {
+      setNamesLoading(true);
+      setNamesError(null);
+      const names = await catNamesAPI.getNamesWithDescriptions();
+      setActiveNames(names);
+    } catch (err) {
+      console.error('Error fetching active names:', err);
+      setNamesError(err);
+    } finally {
+      setNamesLoading(false);
+    }
+  }, []);
+
   // Handle name hover events
   const handleNameHover = useCallback((nameData, position) => {
     setHoveredName(nameData);
@@ -80,6 +97,9 @@ function WelcomeScreen({
     // Track Welcome Screen performance
     performanceMonitor.trackWelcomeScreenMetrics();
 
+    // Fetch active names
+    fetchActiveNames();
+
     // Animate in after a brief delay
     const timer = setTimeout(() => {
       setIsVisible(true);
@@ -96,7 +116,7 @@ function WelcomeScreen({
       clearTimeout(timer);
       clearTimeout(removeTimer);
     };
-  }, []);
+  }, [fetchActiveNames]);
 
   return (
     <div
@@ -144,8 +164,9 @@ function WelcomeScreen({
 
         {/* Welcome Card */}
         <WelcomeCard
-          catName={catName}
-          nameStats={nameStats}
+          activeNames={activeNames}
+          namesLoading={namesLoading}
+          namesError={namesError}
           onContinue={onContinue}
           onNameHover={handleNameHover}
           onNameLeave={handleNameLeave}
@@ -165,21 +186,6 @@ function WelcomeScreen({
 WelcomeScreen.displayName = 'WelcomeScreen';
 
 WelcomeScreen.propTypes = {
-  catName: PropTypes.string.isRequired,
-  nameStats: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.string.isRequired,
-      name: PropTypes.string.isRequired,
-      description: PropTypes.string,
-      rating: PropTypes.number.isRequired,
-      wins: PropTypes.number.isRequired,
-      losses: PropTypes.number.isRequired,
-      totalMatches: PropTypes.number.isRequired,
-      winRate: PropTypes.number.isRequired,
-      rank: PropTypes.number.isRequired,
-      categories: PropTypes.arrayOf(PropTypes.string)
-    })
-  ),
   onContinue: PropTypes.func
 };
 

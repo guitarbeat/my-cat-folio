@@ -1663,3 +1663,78 @@
 :global(.dark-theme) .buttonGlow {
   background: linear-gradient(135deg, var(--ws-secondary-gold), var(--ws-primary-gold), var(--ws-primary-red));
 }
+
+
+/* ==========================================================================
+   WELCOME SCREEN NAMES GRID STYLES
+   ========================================================================== */
+
+.namesGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: var(--ws-space-md);
+  max-width: 600px;
+  margin: 0 auto;
+  padding: var(--ws-space-sm);
+}
+
+.nameCardWrapper {
+  transition: transform 0.2s ease;
+}
+
+.nameCardWrapper:hover {
+  transform: translateY(-2px);
+}
+
+.welcomeNameCard {
+  background: rgba(255, 255, 255, 0.95) !important;
+  border: 2px solid var(--ws-primary-gold) !important;
+  box-shadow: var(--ws-shadow-md) !important;
+  transition: all 0.3s ease !important;
+  animation: nameCardFadeIn 0.6s ease-out forwards;
+  opacity: 0;
+}
+
+.welcomeNameCard:hover {
+  transform: translateY(-4px) !important;
+  box-shadow: var(--ws-shadow-lg) !important;
+  border-color: var(--ws-secondary-gold) !important;
+}
+
+.loadingContainer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ws-space-md);
+  align-items: center;
+}
+
+.errorContainer,
+.emptyContainer {
+  text-align: center;
+  padding: var(--ws-space-lg);
+  color: var(--ws-white);
+}
+
+.errorContainer h3,
+.emptyContainer h3 {
+  font-size: var(--ws-text-lg);
+  margin-bottom: var(--ws-space-sm);
+  color: var(--ws-primary-gold);
+}
+
+.errorContainer p,
+.emptyContainer p {
+  font-size: var(--ws-text-sm);
+  opacity: 0.8;
+}
+
+@keyframes nameCardFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
