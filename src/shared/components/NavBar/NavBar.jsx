@@ -15,7 +15,8 @@ function NavBar({
   onLogout,
   onStartNewTournament,
   isLightTheme,
-  onThemeChange
+  onThemeChange,
+  onTogglePerformanceDashboard
 }) {
   const [showScrollTop, setShowScrollTop] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -228,6 +229,21 @@ function NavBar({
               </button>
             </li>
 
+            {/* Performance Dashboard Button - Admin Only */}
+            {isLoggedIn && onTogglePerformanceDashboard && (
+              <li className="navbar__item navbar__item--performance-dashboard">
+                <button
+                  type="button"
+                  className="navbar__action-button navbar__performance-dashboard"
+                  onClick={onTogglePerformanceDashboard}
+                  aria-label="Open performance dashboard"
+                  title="Performance Dashboard (Ctrl+Shift+P)"
+                >
+                  📊
+                </button>
+              </li>
+            )}
+
             {/* Right Side Elements */}
             {logoItem}
             {userInfo}
@@ -368,7 +384,8 @@ NavBar.propTypes = {
   onLogout: PropTypes.func.isRequired,
   onStartNewTournament: PropTypes.func,
   isLightTheme: PropTypes.bool.isRequired,
-  onThemeChange: PropTypes.func.isRequired
+  onThemeChange: PropTypes.func.isRequired,
+  onTogglePerformanceDashboard: PropTypes.func
 };
 
 export default NavBar;

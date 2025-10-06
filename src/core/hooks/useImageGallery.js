@@ -164,7 +164,7 @@ export const useImageGallery = ({
     };
 
     initializeGallery();
-  }, []); // Empty dependency array to run only once on mount
+  }, [initialImages]); // Add initialImages to dependency array
 
   // Handle initialImages changes separately
   useEffect(() => {

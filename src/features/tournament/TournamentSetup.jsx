@@ -23,6 +23,7 @@ import {
 } from '../../shared/components';
 import useErrorHandler from '../../core/hooks/useErrorHandler';
 import useToast from '../../core/hooks/useToast';
+import useMobileGestures from '../../core/hooks/useMobileGestures';
 import {
   validateCatName,
   validateDescription
@@ -301,6 +302,7 @@ const SwipeableNameCards = ({
   const [isDragging, setIsDragging] = useState(false);
   const [swipeDirection, setSwipeDirection] = useState(null);
   const [swipeProgress, setSwipeProgress] = useState(0);
+  const [isLongPressing, setIsLongPressing] = useState(false);
 
   const currentName = names[currentIndex];
   const isSelected = selectedNames.some((n) => n.id === currentName?.id);
@@ -308,6 +310,46 @@ const SwipeableNameCards = ({
     showCatPictures && currentName
       ? getRandomCatImage(currentName.id, imageList)
       : null;
+
+  // Enhanced mobile gestures
+  const { elementRef: gestureRef, addHapticFeedback } = useMobileGestures({
+    enableSwipe: true,
+    enableLongPress: true,
+    enableDoubleTap: true,
+    onSwipe: (data) => {
+      const { direction, distance } = data;
+      if (distance > 100) {
+        if (direction === 'right') {
+          // Swipe right = select
+          if (!isSelected) {
+            onToggleName(currentName);
+            addHapticFeedback('success');
+          }
+        } else if (direction === 'left') {
+          // Swipe left = deselect
+          if (isSelected) {
+            onToggleName(currentName);
+            addHapticFeedback('light');
+          }
+        }
+        // Move to next card
+        if (currentIndex < names.length - 1) {
+          setCurrentIndex(currentIndex + 1);
+        }
+      }
+    },
+    onLongPress: () => {
+      setIsLongPressing(true);
+      addHapticFeedback('heavy');
+      // Show additional info or context menu
+      setTimeout(() => setIsLongPressing(false), 1000);
+    },
+    onDoubleTap: () => {
+      // Double tap to toggle selection
+      onToggleName(currentName);
+      addHapticFeedback('success');
+    }
+  });
 
   const handleDragStart = (e) => {
     const touch = e.touches ? e.touches[0] : e;
@@ -474,7 +516,8 @@ const SwipeableNameCards = ({
         className={`${styles.swipeCardWrapper} ${showCatPictures ? styles.withCatPictures : ''}`}
       >
         <div
-          className={`${styles.swipeCard} ${isSelected ? styles.selected : ''} ${showCatPictures ? styles.withCatPictures : ''}`}
+          ref={gestureRef}
+          className={`${styles.swipeCard} ${isSelected ? styles.selected : ''} ${showCatPictures ? styles.withCatPictures : ''} ${isLongPressing ? styles.longPressing : ''}`}
           style={cardStyle}
           onMouseDown={handleDragStart}
           onMouseMove={handleDragMove}
@@ -1093,9 +1136,27 @@ function TournamentSetupContent({ onStart, userName }) {
     setCategories(list);
   }, [availableNames]);
 
-  // Admin detection using centralized utility
-  // TODO: Replace with proper role-based authentication when user system is enhanced
-  const isAdmin = isUserAdmin(userName);
+  // Admin detection using role-based authentication
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  useEffect(() => {
+    const checkAdminStatus = async () => {
+      if (!userName) {
+        setIsAdmin(false);
+        return;
+      }
+
+      try {
+        const adminStatus = await isUserAdmin(userName);
+        setIsAdmin(adminStatus);
+      } catch (error) {
+        console.error('Error checking admin status:', error);
+        setIsAdmin(false);
+      }
+    };
+
+    checkAdminStatus();
+  }, [userName]);
 
   const handleImageOpen = (image) => {
     const idx = galleryImages.indexOf(image);

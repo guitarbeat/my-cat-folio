@@ -7,30 +7,31 @@
  * @returns {JSX.Element} The complete application UI
  */
 
-import React, { useCallback, useMemo, lazy, Suspense } from "react";
+import React, { useCallback, useMemo, lazy, Suspense, useState } from 'react';
 import {
   ErrorBoundary,
   ErrorDisplay,
   ToastContainer,
-  WelcomeScreen,
-} from "./shared/components";
-import NavBar from "./shared/components/NavBar/NavBar";
+  WelcomeScreen
+} from './shared/components';
+import NavBar from './shared/components/NavBar/NavBar';
+import PerformanceDashboard from './shared/components/PerformanceDashboard';
 
 // * Lazy load heavy components for better code splitting
-const Login = lazy(() => import("./features/auth/Login"));
-const Tournament = lazy(() => import("./features/tournament/Tournament"));
+const Login = lazy(() => import('./features/auth/Login'));
+const Tournament = lazy(() => import('./features/tournament/Tournament'));
 const TournamentSetup = lazy(
-  () => import("./features/tournament/TournamentSetup")
+  () => import('./features/tournament/TournamentSetup')
 );
-const Results = lazy(() => import("./features/tournament/Results"));
-const Profile = lazy(() => import("./features/profile/Profile"));
-import useUserSession from "./core/hooks/useUserSession";
-import useTheme from "./core/hooks/useTheme";
-import useToast from "./core/hooks/useToast";
-import useAppStore from "./core/store/useAppStore";
-import { TournamentService } from "./shared/services/tournamentService";
-import { ErrorService } from "./shared/services/errorService";
-import LoadingSpinner from "./shared/components/LoadingSpinner/LoadingSpinner";
+const Results = lazy(() => import('./features/tournament/Results'));
+const Profile = lazy(() => import('./features/profile/Profile'));
+import useUserSession from './core/hooks/useUserSession';
+import useTheme from './core/hooks/useTheme';
+import useToast from './core/hooks/useToast';
+import useAppStore from './core/store/useAppStore';
+import { TournamentService } from './shared/services/tournamentService';
+import { ErrorService } from './shared/services/errorService';
+import LoadingSpinner from './shared/components/LoadingSpinner/LoadingSpinner';
 
 // * Components imported directly for better code splitting
 
@@ -68,77 +69,36 @@ function App() {
 
   // * Welcome screen state
   const [showWelcomeScreen, setShowWelcomeScreen] = React.useState(true);
-  const [catName, setCatName] = React.useState("Loading...");
-  const [nameStats, setNameStats] = React.useState([]);
 
-  // * Load cat name and stats on component mount
+  // * Performance dashboard state
+  const [showPerformanceDashboard, setShowPerformanceDashboard] = useState(false);
+
+  // * Keyboard shortcut for performance dashboard (Ctrl+Shift+P)
   React.useEffect(() => {
-    const loadCatData = async () => {
-      try {
-        // * One-time Supabase smoke check
-        if (import.meta.env.DEV) {
-          console.log("🔍 Supabase smoke check:", {
-            hasSupabaseUrl: !!(
-              import.meta.env.VITE_SUPABASE_URL ||
-              import.meta.env.BAG_NEXT_PUBLIC_SUPABASE_URL
-            ),
-            hasSupabaseAnonKey: !!(
-              import.meta.env.VITE_SUPABASE_ANON_KEY ||
-              import.meta.env.BAG_NEXT_PUBLIC_SUPABASE_ANON_KEY
-            ),
-            supabaseClientCreated: !!window.__supabaseClient,
-          });
-        }
-
-        if (import.meta.env.DEV) {
-          console.log("🔍 Loading cat data...");
-          console.log("🔍 Environment variables:", {
-            supabaseUrl:
-              import.meta.env.VITE_SUPABASE_URL ||
-              import.meta.env.BAG_NEXT_PUBLIC_SUPABASE_URL,
-            hasAnonKey: !!(
-              import.meta.env.VITE_SUPABASE_ANON_KEY ||
-              import.meta.env.BAG_NEXT_PUBLIC_SUPABASE_ANON_KEY
-            ),
-          });
-        }
-
-        const [generatedName, stats] = await Promise.all([
-          TournamentService.generateCatName(),
-          TournamentService.getCatNameStats(),
-        ]);
-
-        if (import.meta.env.DEV) {
-          console.log("✅ Cat data loaded:", {
-            generatedName,
-            statsCount: stats.length,
-          });
-        }
-        setCatName(generatedName);
-        setNameStats(stats);
-      } catch (error) {
-        console.error("❌ Error loading cat data:", error);
-        // * Ensure fallback UI shows instead of crashing
-        setCatName("Mystery Cat");
-        setNameStats([]);
+    const handleKeyDown = (event) => {
+      if (event.ctrlKey && event.shiftKey && event.key === 'P') {
+        event.preventDefault();
+        setShowPerformanceDashboard(prev => !prev);
       }
     };
 
-    loadCatData();
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
+
 
   // * Register service worker for caching (production only)
   React.useEffect(() => {
-    if (import.meta.env.PROD && "serviceWorker" in navigator) {
+    if (import.meta.env.PROD && 'serviceWorker' in navigator) {
       navigator.serviceWorker
-        .register("/sw.js")
+        .register('/sw.js')
         .then((registration) => {
-          console.log("✅ Service Worker registered:", registration);
+          console.log('✅ Service Worker registered:', registration);
         })
         .catch((error) => {
-          console.error("❌ Service Worker registration failed:", error);
+          console.error('❌ Service Worker registration failed:', error);
         });
-    } else if (import.meta.env.DEV && "serviceWorker" in navigator) {
+    } else if (import.meta.env.DEV && 'serviceWorker' in navigator) {
       // * In dev, unregister any existing SW and clear caches to prevent stale assets
       const cleanupDevCaches = async () => {
         try {
@@ -151,10 +111,10 @@ function App() {
             await Promise.all(cacheKeys.map((k) => caches.delete(k)));
           }
 
-          console.log("✅ Dev: Service Worker unregistered and caches cleared");
+          console.log('✅ Dev: Service Worker unregistered and caches cleared');
         } catch (error) {
           console.error(
-            "❌ Dev: Failed to clean up service worker/caches:",
+            '❌ Dev: Failed to clean up service worker/caches:',
             error
           );
         }
@@ -167,16 +127,16 @@ function App() {
   // * Parallax for galaxy background (respects reduced motion)
   React.useEffect(() => {
     const prefersReduced =
-      typeof window !== "undefined" &&
+      typeof window !== 'undefined' &&
       window.matchMedia &&
-      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (prefersReduced) {
       return;
     }
 
-    const stars = document.querySelector(".cat-background__stars");
-    const nebula = document.querySelector(".cat-background__nebula");
-    const cats = Array.from(document.querySelectorAll(".cat-background__cat"));
+    const stars = document.querySelector('.cat-background__stars');
+    const nebula = document.querySelector('.cat-background__nebula');
+    const cats = Array.from(document.querySelectorAll('.cat-background__cat'));
     let ticking = false;
     let mouseX = 0;
     let mouseY = 0;
@@ -224,12 +184,12 @@ function App() {
       }
     };
 
-    window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("mousemove", onMouseMove, { passive: true });
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('mousemove', onMouseMove, { passive: true });
     onScroll();
     return () => {
-      window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("mousemove", onMouseMove);
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('mousemove', onMouseMove);
     };
   }, []);
 
@@ -240,7 +200,7 @@ function App() {
     tournamentActions,
     userActions,
     uiActions,
-    errorActions,
+    errorActions
   } = useAppStore();
 
   // * Handle tournament completion
@@ -248,7 +208,7 @@ function App() {
     async (finalRatings) => {
       try {
         if (!userName) {
-          throw new Error("No user name available");
+          throw new Error('No user name available');
         }
 
         const updatedRatings =
@@ -263,10 +223,10 @@ function App() {
         tournamentActions.setRatings(updatedRatings);
         tournamentActions.setComplete(true);
       } catch (error) {
-        ErrorService.handleError(error, "Tournament Completion", {
+        ErrorService.handleError(error, 'Tournament Completion', {
           isRetryable: true,
           affectsUserData: true,
-          isCritical: false,
+          isCritical: false
         });
       }
     },
@@ -292,7 +252,7 @@ function App() {
 
       tournamentActions.setNames(processedNames);
       // Ensure we are on the tournament view after starting
-      tournamentActions.setView("tournament");
+      tournamentActions.setView('tournament');
 
       // * Use setTimeout to ensure the loading state is visible and prevent flashing
       setTimeout(() => {
@@ -313,10 +273,10 @@ function App() {
         tournamentActions.setRatings(updatedRatings);
         return true;
       } catch (error) {
-        ErrorService.handleError(error, "Rating Update", {
+        ErrorService.handleError(error, 'Rating Update', {
           isRetryable: true,
           affectsUserData: true,
-          isCritical: false,
+          isCritical: false
         });
         throw error;
       }
@@ -336,7 +296,7 @@ function App() {
   // * Handle theme change
   const handleThemeChange = useCallback(
     (isLight) => {
-      const theme = isLight ? "light" : "dark";
+      const theme = isLight ? 'light' : 'dark';
       uiActions.setTheme(theme);
       toggleTheme();
     },
@@ -361,7 +321,7 @@ function App() {
     }
 
     // * Handle profile view
-    if (tournament.currentView === "profile") {
+    if (tournament.currentView === 'profile') {
       return (
         <Suspense
           fallback={
@@ -447,17 +407,17 @@ function App() {
     handleStartNewTournament,
     handleUpdateRatings,
     handleTournamentComplete,
-    tournamentActions,
+    tournamentActions
   ]);
 
   // * Memoize NavBar props to prevent unnecessary re-renders
   const navBarProps = useMemo(
     () => ({
-      view: tournament.currentView || "tournament",
+      view: tournament.currentView || 'tournament',
       setView: (view) => {
         tournamentActions.setView(view);
         // If going to profile, reset tournament to show setup
-        if (view === "profile") {
+        if (view === 'profile') {
           tournamentActions.resetTournament();
         }
       },
@@ -467,6 +427,7 @@ function App() {
       onStartNewTournament: handleStartNewTournament,
       isLightTheme,
       onThemeChange: handleThemeChange,
+      onTogglePerformanceDashboard: () => setShowPerformanceDashboard(prev => !prev)
     }),
     [
       tournament.currentView,
@@ -476,7 +437,7 @@ function App() {
       handleLogout,
       handleStartNewTournament,
       isLightTheme,
-      handleThemeChange,
+      handleThemeChange
     ]
   );
 
@@ -504,11 +465,11 @@ function App() {
           {(() => {
             // Respect user preferences: avoid heavy GIFs for reduced motion or data-saver
             const prefersReducedMotion =
-              typeof window !== "undefined" &&
+              typeof window !== 'undefined' &&
               window.matchMedia &&
-              window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+              window.matchMedia('(prefers-reduced-motion: reduce)').matches;
             const saveData =
-              typeof navigator !== "undefined" &&
+              typeof navigator !== 'undefined' &&
               navigator.connection &&
               navigator.connection.saveData;
             if (prefersReducedMotion || saveData) {
@@ -567,6 +528,13 @@ function App() {
         removeToast={removeToast}
         position="top-right"
         maxToasts={5}
+      />
+
+      {/* * Performance Dashboard - Admin Only */}
+      <PerformanceDashboard
+        userName={userName}
+        isVisible={showPerformanceDashboard}
+        onClose={() => setShowPerformanceDashboard(false)}
       />
     </div>
   );
