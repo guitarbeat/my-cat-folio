@@ -14,7 +14,6 @@
  *     - getName(item) (line 51)
  *     - addPreference(item1, item2, value) (line 55)
  *   - getPreference(item1, item2) (line 60)
- *   - if (this.preferenceCache.has(cacheKey)) (line 62)
  *   - if (this.preferences.has(key)) (line 70)
  *   - getCurrentRankings() (line 82)
  *   - if (this.ranks.length > 0) (line 83)
@@ -43,7 +42,6 @@ export class PreferenceSorter {
     this.currentRankings = [...items];
     this.ranks = [];
     this.rec = new Array(items.length).fill(0);
-    this.preferenceCache = new Map();
     // Pairwise comparison queue (simple, reliable fallback)
     this.pairs = [];
     for (let i = 0; i < items.length - 1; i++) {
@@ -53,8 +51,6 @@ export class PreferenceSorter {
     }
     this.currentIndex = 0;
     this.history = [];
-    // Consider adding: this.maxCacheSize = 1000;
-    // Implement LRU eviction when cache exceeds max size
   }
 
   getName(item) {
@@ -64,7 +60,6 @@ export class PreferenceSorter {
   addPreference(item1, item2, value) {
     const key = `${this.getName(item1)}-${this.getName(item2)}`;
     this.preferences.set(key, value);
-    this.preferenceCache.set(key, value);
     // Record history for undo support
     this.history.push({
       a: this.getName(item1),
@@ -74,25 +69,16 @@ export class PreferenceSorter {
   }
 
   getPreference(item1, item2) {
-    const cacheKey = `${this.getName(item1)}-${this.getName(item2)}`;
-    if (this.preferenceCache.has(cacheKey)) {
-      return this.preferenceCache.get(cacheKey);
-    }
-
     const key = `${this.getName(item1)}-${this.getName(item2)}`;
     const reverseKey = `${this.getName(item2)}-${this.getName(item1)}`;
-    let result;
 
     if (this.preferences.has(key)) {
-      result = this.preferences.get(key);
+      return this.preferences.get(key);
     } else if (this.preferences.has(reverseKey)) {
-      result = -this.preferences.get(reverseKey);
+      return -this.preferences.get(reverseKey);
     } else {
-      result = 0;
+      return 0;
     }
-
-    this.preferenceCache.set(cacheKey, result);
-    return result;
   }
 
   getCurrentRankings() {
@@ -193,8 +179,6 @@ export class PreferenceSorter {
     const reverseKey = `${last.b}-${last.a}`;
     this.preferences.delete(key);
     this.preferences.delete(reverseKey);
-    this.preferenceCache.delete(key);
-    this.preferenceCache.delete(reverseKey);
     // Step back at least one index to revisit the undone pair if needed
     this.currentIndex = Math.max(0, this.currentIndex - 1);
   }

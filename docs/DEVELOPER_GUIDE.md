@@ -51,7 +51,7 @@ npm run build
 **Solutions**:
 
 1. **Check Browser Console**: Open DevTools (F12) and look for errors
-2. **Clear Cache**: Hard refresh (Ctrl+F5) or clear browser cache
+2. **Hard Refresh**: Hard refresh (Ctrl+F5) to reload all resources
 3. **Check Network**: Ensure internet connection and firewall settings
 4. **Verify Environment**: Confirm `.env.local` file exists with correct variables
 
@@ -61,8 +61,7 @@ npm run build
 
 **Solutions**:
 
-- Service worker automatically unregisters in development mode
-- If issues persist, manually clear browser cache and storage
+- Service worker functionality has been removed for simplicity
 - Restart development server: `npm run dev`
 
 #### **Database Connection Issues**
@@ -127,8 +126,7 @@ console.log("Supabase Key exists:", !!import.meta.env.VITE_SUPABASE_ANON_KEY);
    npm run dev
    ```
 
-2. **Clear Development Cache**:
-   - Clear browser cache and storage
+2. **Clear Development Files**:
    - Delete `node_modules/.vite-temp` if it exists
    - Restart development server
 

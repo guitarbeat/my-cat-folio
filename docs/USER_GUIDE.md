@@ -118,7 +118,6 @@ npm run dev
 - **Progressive Loading**: Images load efficiently with WebP/AVIF fallbacks
 - **Battery Optimization**: Reduced animations for power efficiency
 - **Data Saver Support**: Respects user's data-saving preferences
-- **Offline Capability**: Service worker caches for offline use
 
 ---
 
@@ -150,7 +149,7 @@ npm run dev
 **Solutions**:
 
 1. **Check Browser Console**: Open DevTools (F12) and look for errors
-2. **Clear Cache**: Hard refresh (Ctrl+F5) or clear browser cache
+2. **Hard Refresh**: Hard refresh (Ctrl+F5) to reload all resources
 3. **Check Network**: Ensure internet connection and firewall settings
 4. **Verify Environment**: Confirm `.env.local` file exists with correct variables
 
@@ -159,8 +158,7 @@ npm run dev
 **Symptoms**: HMR not working, stale assets, WebSocket errors
 **Solutions**:
 
-- Service worker automatically unregisters in development mode
-- If issues persist, manually clear browser cache and storage
+- Service worker functionality has been removed for simplicity
 - Restart development server: `npm run dev`
 
 #### **Database Connection Issues**

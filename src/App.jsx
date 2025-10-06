@@ -87,42 +87,6 @@ function App() {
   }, []);
 
 
-  // * Register service worker for caching (production only)
-  React.useEffect(() => {
-    if (import.meta.env.PROD && 'serviceWorker' in navigator) {
-      navigator.serviceWorker
-        .register('/sw.js')
-        .then((registration) => {
-          console.log('✅ Service Worker registered:', registration);
-        })
-        .catch((error) => {
-          console.error('❌ Service Worker registration failed:', error);
-        });
-    } else if (import.meta.env.DEV && 'serviceWorker' in navigator) {
-      // * In dev, unregister any existing SW and clear caches to prevent stale assets
-      const cleanupDevCaches = async () => {
-        try {
-          const registrations =
-            await navigator.serviceWorker.getRegistrations();
-          await Promise.all(registrations.map((r) => r.unregister()));
-
-          if (window.caches?.keys) {
-            const cacheKeys = await caches.keys();
-            await Promise.all(cacheKeys.map((k) => caches.delete(k)));
-          }
-
-          console.log('✅ Dev: Service Worker unregistered and caches cleared');
-        } catch (error) {
-          console.error(
-            '❌ Dev: Failed to clean up service worker/caches:',
-            error
-          );
-        }
-      };
-
-      cleanupDevCaches();
-    }
-  }, []);
 
   // * Parallax for galaxy background (respects reduced motion)
   React.useEffect(() => {
