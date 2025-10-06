@@ -224,7 +224,7 @@
   font-size: var(--text-xl);
   font-weight: 700;
   line-height: 1.2;
-  color: #000; /* Force black color for names */
+  color: var(--text-primary);
 }
 
 /* Description styling - Enhanced for better readability and space */
@@ -350,7 +350,7 @@
 
 /* Enhanced depth on hover */
 .card:not(.disabled):hover .name {
-  color: #000; /* Keep names black on hover */
+  color: var(--text-primary);
   text-shadow: 0 4px 8px rgba(var(--neon-cyan-rgb), 0.4);
   transform: translateY(-2px);
 }
@@ -398,14 +398,14 @@
 }
 
 .selected .name {
-  color: #000; /* Keep names black even when selected */
+  color: var(--text-primary);
   text-shadow: 0 0 6px rgba(var(--hot-pink-rgb), 0.4);
   transform: translateY(-1px);
 }
 
 /* * Enhanced hover effect for selected state */
 .selected:hover .name {
-  color: #000; /* Keep names black even when hovered */
+  color: var(--text-primary);
   text-shadow: 0 0 8px rgba(var(--hot-pink-rgb), 0.6);
   transform: translateY(-2px);
 }
