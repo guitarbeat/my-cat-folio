@@ -4,7 +4,7 @@
  */
 
 import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import { describe, test, expect, vi } from 'vitest';
 import PerformanceDashboard from '../PerformanceDashboard';
 
@@ -57,9 +57,9 @@ describe('PerformanceDashboard', () => {
   test('shows unauthorized message for non-admin users', async () => {
     const { isUserAdmin } = await import('../../../utils/authUtils');
     isUserAdmin.mockResolvedValue(false);
-    
+
     render(<PerformanceDashboard {...defaultProps} />);
-    
+
     await waitFor(() => {
       expect(screen.getByText('🔒 Access Denied')).toBeInTheDocument();
       expect(screen.getByText('Performance dashboard is only available to administrators.')).toBeInTheDocument();
@@ -79,9 +79,9 @@ describe('PerformanceDashboard', () => {
   test('handles authentication errors gracefully', async () => {
     const { isUserAdmin } = await import('../../../utils/authUtils');
     isUserAdmin.mockRejectedValue(new Error('Auth error'));
-    
+
     render(<PerformanceDashboard {...defaultProps} />);
-    
+
     await waitFor(() => {
       expect(screen.getByText('🔒 Access Denied')).toBeInTheDocument();
     });
