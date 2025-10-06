@@ -488,8 +488,6 @@ npm run preview
 ### **CDN & Caching**
 
 - Static asset optimization with Vite
-- Service worker for offline functionality
-- Cache-busting for asset updates
 
 ---
 

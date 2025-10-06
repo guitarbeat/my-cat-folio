@@ -1519,8 +1519,7 @@ export const imagesAPI = {
     // Store at bucket root to simplify listing (no recursion needed)
     const objectPath = `${prefix ? `${prefix}/` : ''}${Date.now()}-${safe}`;
     const { error } = await supabase.storage.from('cat-images').upload(objectPath, file, {
-      upsert: false,
-      cacheControl: '3600'
+      upsert: false
     });
     if (error) throw error;
     const { data } = supabase.storage.from('cat-images').getPublicUrl(objectPath);

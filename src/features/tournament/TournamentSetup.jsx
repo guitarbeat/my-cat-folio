@@ -1080,9 +1080,7 @@ function TournamentSetupContent({ onStart, userName }) {
 
     const tryStaticManifest = async () => {
       try {
-        const res = await fetch('/assets/images/gallery.json', {
-          cache: 'no-cache'
-        });
+        const res = await fetch('/assets/images/gallery.json');
         if (!res.ok) return [];
         const data = await res.json();
         if (Array.isArray(data) && data.length) return data;
