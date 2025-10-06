@@ -317,7 +317,7 @@ const SwipeableNameCards = ({
     enableLongPress: true,
     enableDoubleTap: true,
     onSwipe: (data) => {
-      const { direction, distance, velocity } = data;
+      const { direction, distance } = data;
       if (distance > 100) {
         if (direction === 'right') {
           // Swipe right = select
@@ -332,16 +332,19 @@ const SwipeableNameCards = ({
             addHapticFeedback('light');
           }
         }
-        nextCard();
+        // Move to next card
+        if (currentIndex < names.length - 1) {
+          setCurrentIndex(currentIndex + 1);
+        }
       }
     },
-    onLongPress: (data) => {
+    onLongPress: (_data) => {
       setIsLongPressing(true);
       addHapticFeedback('heavy');
       // Show additional info or context menu
       setTimeout(() => setIsLongPressing(false), 1000);
     },
-    onDoubleTap: (data) => {
+    onDoubleTap: (_data) => {
       // Double tap to toggle selection
       onToggleName(currentName);
       addHapticFeedback('success');
@@ -1135,13 +1138,11 @@ function TournamentSetupContent({ onStart, userName }) {
 
   // Admin detection using role-based authentication
   const [isAdmin, setIsAdmin] = useState(false);
-  const [isCheckingAdmin, setIsCheckingAdmin] = useState(true);
 
   useEffect(() => {
     const checkAdminStatus = async () => {
       if (!userName) {
         setIsAdmin(false);
-        setIsCheckingAdmin(false);
         return;
       }
 
@@ -1151,8 +1152,6 @@ function TournamentSetupContent({ onStart, userName }) {
       } catch (error) {
         console.error('Error checking admin status:', error);
         setIsAdmin(false);
-      } finally {
-        setIsCheckingAdmin(false);
       }
     };
 

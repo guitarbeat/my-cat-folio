@@ -406,7 +406,7 @@ export class ErrorService {
         sessionStorage.setItem('errorSessionId', sessionId);
       }
       return sessionId;
-    } catch (error) {
+    } catch {
       return `session_${Date.now()}`;
     }
   }

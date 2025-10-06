@@ -69,8 +69,6 @@ function App() {
 
   // * Welcome screen state
   const [showWelcomeScreen, setShowWelcomeScreen] = React.useState(true);
-  const [catName, setCatName] = React.useState("Loading...");
-  const [nameStats, setNameStats] = React.useState([]);
 
   // * Performance dashboard state
   const [showPerformanceDashboard, setShowPerformanceDashboard] = useState(false);
@@ -88,61 +86,6 @@ function App() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
-  // * Load cat name and stats on component mount
-  React.useEffect(() => {
-    const loadCatData = async () => {
-      try {
-        // * One-time Supabase smoke check
-        if (import.meta.env.DEV) {
-          console.log("🔍 Supabase smoke check:", {
-            hasSupabaseUrl: !!(
-              import.meta.env.VITE_SUPABASE_URL ||
-              import.meta.env.BAG_NEXT_PUBLIC_SUPABASE_URL
-            ),
-            hasSupabaseAnonKey: !!(
-              import.meta.env.VITE_SUPABASE_ANON_KEY ||
-              import.meta.env.BAG_NEXT_PUBLIC_SUPABASE_ANON_KEY
-            ),
-            supabaseClientCreated: !!window.__supabaseClient,
-          });
-        }
-
-        if (import.meta.env.DEV) {
-          console.log("🔍 Loading cat data...");
-          console.log("🔍 Environment variables:", {
-            supabaseUrl:
-              import.meta.env.VITE_SUPABASE_URL ||
-              import.meta.env.BAG_NEXT_PUBLIC_SUPABASE_URL,
-            hasAnonKey: !!(
-              import.meta.env.VITE_SUPABASE_ANON_KEY ||
-              import.meta.env.BAG_NEXT_PUBLIC_SUPABASE_ANON_KEY
-            ),
-          });
-        }
-
-        const [generatedName, stats] = await Promise.all([
-          TournamentService.generateCatName(),
-          TournamentService.getCatNameStats(),
-        ]);
-
-        if (import.meta.env.DEV) {
-          console.log("✅ Cat data loaded:", {
-            generatedName,
-            statsCount: stats.length,
-          });
-        }
-        setCatName(generatedName);
-        setNameStats(stats);
-      } catch (error) {
-        console.error("❌ Error loading cat data:", error);
-        // * Ensure fallback UI shows instead of crashing
-        setCatName("Mystery Cat");
-        setNameStats([]);
-      }
-    };
-
-    loadCatData();
-  }, []);
 
   // * Register service worker for caching (production only)
   React.useEffect(() => {

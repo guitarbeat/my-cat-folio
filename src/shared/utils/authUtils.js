@@ -162,5 +162,7 @@ export function getAuthConfig() {
 
 export default {
   isUserAdmin,
-  getAdminConfig
+  hasRole,
+  getUserRole,
+  getAuthConfig
 };

@@ -356,7 +356,7 @@ class MobileGestures {
    * @param {Object} data - Gesture data
    */
   triggerGesture(gestureType, data) {
-    this.gestureCallbacks.forEach((gesture, gestureId) => {
+    this.gestureCallbacks.forEach((gesture, _gestureId) => {
       if (gesture.type === gestureType) {
         try {
           if (gesture.options.preventDefault) {
