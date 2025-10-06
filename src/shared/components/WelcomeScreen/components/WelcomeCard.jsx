@@ -6,22 +6,25 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import SimpleCatName from './SimpleCatName';
+import NameCard from '../../NameCard/NameCard';
+import { SkeletonLoader } from '../../LoadingSpinner';
 import styles from '../WelcomeScreen.module.css';
 
 /**
  * Welcome card component
  * @param {Object} props - Component props
- * @param {string} props.catName - The cat's name
- * @param {Array} props.nameStats - Array of name statistics
+ * @param {Array} props.activeNames - Array of active names from backend
+ * @param {boolean} props.namesLoading - Whether names are loading
+ * @param {Error} props.namesError - Error if names failed to load
  * @param {Function} props.onContinue - Continue button callback
  * @param {Function} props.onNameHover - Name hover callback
  * @param {Function} props.onNameLeave - Name leave callback
  * @returns {JSX.Element} Welcome card
  */
 const WelcomeCard = ({
-  catName,
-  nameStats,
+  activeNames = [],
+  namesLoading = false,
+  namesError = null,
   onContinue,
   onNameHover,
   onNameLeave
@@ -33,14 +36,50 @@ const WelcomeCard = ({
         <span className={styles.headerText}>Hello! My name is</span>
       </div>
 
-      {/* Cat Name - Most Prominent */}
+      {/* Active Names Display */}
       <div className={styles.catNameSection}>
-        <SimpleCatName
-          catName={catName}
-          nameStats={nameStats}
-          onNameHover={onNameHover}
-          onNameLeave={onNameLeave}
-        />
+        {namesLoading ? (
+          <div className={styles.loadingContainer}>
+            <SkeletonLoader height={60} />
+            <SkeletonLoader height={60} />
+            <SkeletonLoader height={60} />
+          </div>
+        ) : namesError ? (
+          <div className={styles.errorContainer}>
+            <h3>Unable to load names</h3>
+            <p>Please try again later</p>
+          </div>
+        ) : activeNames.length === 0 ? (
+          <div className={styles.emptyContainer}>
+            <h3>No names available</h3>
+            <p>Check back later for new names!</p>
+          </div>
+        ) : (
+          <div className={styles.namesGrid}>
+            {activeNames.slice(0, 6).map((name) => (
+              <div
+                key={name.id}
+                className={styles.nameCardWrapper}
+                onMouseEnter={(e) => onNameHover?.(name, e)}
+                onMouseLeave={onNameLeave}
+              >
+                <NameCard
+                  name={name.name}
+                  description={name.description || `Rating: ${name.avg_rating || 0}`}
+                  size="small"
+                  metadata={{
+                    rating: name.avg_rating || 0,
+                    popularity: name.popularity_score,
+                    tournaments: name.total_tournaments,
+                    categories: name.categories
+                  }}
+                  className={styles.welcomeNameCard}
+                  disabled={false}
+                />
+              </div>
+            ))}
+          </div>
+        )}
       </div>
 
       {/* Footer */}
@@ -64,21 +103,19 @@ const WelcomeCard = ({
 WelcomeCard.displayName = 'WelcomeCard';
 
 WelcomeCard.propTypes = {
-  catName: PropTypes.string.isRequired,
-  nameStats: PropTypes.arrayOf(
+  activeNames: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.string.isRequired,
       name: PropTypes.string.isRequired,
       description: PropTypes.string,
-      rating: PropTypes.number.isRequired,
-      wins: PropTypes.number.isRequired,
-      losses: PropTypes.number.isRequired,
-      totalMatches: PropTypes.number.isRequired,
-      winRate: PropTypes.number.isRequired,
-      rank: PropTypes.number.isRequired,
+      avg_rating: PropTypes.number,
+      popularity_score: PropTypes.number,
+      total_tournaments: PropTypes.number,
       categories: PropTypes.arrayOf(PropTypes.string)
     })
   ),
+  namesLoading: PropTypes.bool,
+  namesError: PropTypes.instanceOf(Error),
   onContinue: PropTypes.func.isRequired,
   onNameHover: PropTypes.func,
   onNameLeave: PropTypes.func
