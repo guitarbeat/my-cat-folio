@@ -7,7 +7,7 @@
  * @returns {JSX.Element} The complete application UI
  */
 
-import React, { useCallback, useMemo, lazy, Suspense } from "react";
+import React, { useCallback, useMemo, lazy, Suspense, useState } from "react";
 import {
   ErrorBoundary,
   ErrorDisplay,
@@ -15,6 +15,7 @@ import {
   WelcomeScreen,
 } from "./shared/components";
 import NavBar from "./shared/components/NavBar/NavBar";
+import PerformanceDashboard from "./shared/components/PerformanceDashboard";
 
 // * Lazy load heavy components for better code splitting
 const Login = lazy(() => import("./features/auth/Login"));
@@ -70,6 +71,22 @@ function App() {
   const [showWelcomeScreen, setShowWelcomeScreen] = React.useState(true);
   const [catName, setCatName] = React.useState("Loading...");
   const [nameStats, setNameStats] = React.useState([]);
+
+  // * Performance dashboard state
+  const [showPerformanceDashboard, setShowPerformanceDashboard] = useState(false);
+
+  // * Keyboard shortcut for performance dashboard (Ctrl+Shift+P)
+  React.useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (event.ctrlKey && event.shiftKey && event.key === 'P') {
+        event.preventDefault();
+        setShowPerformanceDashboard(prev => !prev);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
 
   // * Load cat name and stats on component mount
   React.useEffect(() => {
@@ -467,6 +484,7 @@ function App() {
       onStartNewTournament: handleStartNewTournament,
       isLightTheme,
       onThemeChange: handleThemeChange,
+      onTogglePerformanceDashboard: () => setShowPerformanceDashboard(prev => !prev),
     }),
     [
       tournament.currentView,
@@ -567,6 +585,13 @@ function App() {
         removeToast={removeToast}
         position="top-right"
         maxToasts={5}
+      />
+
+      {/* * Performance Dashboard - Admin Only */}
+      <PerformanceDashboard
+        userName={userName}
+        isVisible={showPerformanceDashboard}
+        onClose={() => setShowPerformanceDashboard(false)}
       />
     </div>
   );

@@ -292,17 +292,6 @@ export class ErrorService {
    */
   static sendToErrorService(logData) {
     try {
-      // TODO: Integrate with actual error tracking service (e.g., Sentry)
-      // Example Sentry integration:
-      // if (window.Sentry) {
-      //   window.Sentry.captureException(new Error(logData.message), {
-      //     tags: { context: logData.context },
-      //     extra: logData.metadata,
-      //     level: this.mapSeverityToSentryLevel(logData.severity)
-      //   });
-      // }
-
-      // For now, we'll just prepare the data structure
       const errorData = {
         message: logData.message,
         level: logData.severity,
@@ -311,26 +300,114 @@ export class ErrorService {
         metadata: logData.metadata,
         userAgent: navigator.userAgent,
         url: window.location.href,
-        userId: this.getUserId() // Helper to get current user ID
+        userId: this.getUserId(),
+        sessionId: this.getSessionId(),
+        buildVersion: process.env.REACT_APP_VERSION || '1.0.0'
       };
 
-      // In a real implementation, this would send to your error tracking service
-      if (process.env.NODE_ENV === 'development') {
-        console.log('📊 Would send to error tracking service:', errorData);
-      }
-
-      // Example of how you might send to a custom endpoint:
-      // fetch('/api/errors', {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify(errorData)
-      // }).catch(err => console.warn('Failed to send error to tracking service:', err));
+      // Send to multiple error tracking services
+      this.sendToSentry(errorData);
+      this.sendToCustomEndpoint(errorData);
+      this.sendToConsole(errorData);
 
     } catch (err) {
       // Don't let error tracking itself cause more errors
       if (process.env.NODE_ENV === 'development') {
         console.warn('Failed to send error to tracking service:', err);
       }
+    }
+  }
+
+  /**
+   * Sends error to Sentry if available
+   * @param {Object} errorData - Error data to send
+   * @private
+   */
+  static sendToSentry(errorData) {
+    try {
+      if (window.Sentry && typeof window.Sentry.captureException === 'function') {
+        const error = new Error(errorData.message);
+        error.name = errorData.context || 'ApplicationError';
+        
+        window.Sentry.captureException(error, {
+          tags: {
+            context: errorData.context,
+            level: errorData.level,
+            userId: errorData.userId
+          },
+          extra: {
+            ...errorData.metadata,
+            url: errorData.url,
+            userAgent: errorData.userAgent,
+            sessionId: errorData.sessionId,
+            buildVersion: errorData.buildVersion
+          },
+          level: this.mapSeverityToSentryLevel(errorData.level)
+        });
+      }
+    } catch (err) {
+      console.warn('Failed to send to Sentry:', err);
+    }
+  }
+
+  /**
+   * Sends error to custom endpoint
+   * @param {Object} errorData - Error data to send
+   * @private
+   */
+  static sendToCustomEndpoint(errorData) {
+    try {
+      // Check if we have a custom error endpoint configured
+      const errorEndpoint = process.env.REACT_APP_ERROR_ENDPOINT;
+      if (errorEndpoint) {
+        fetch(errorEndpoint, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-Error-Source': 'meow-namester'
+          },
+          body: JSON.stringify(errorData)
+        }).catch(err => {
+          if (process.env.NODE_ENV === 'development') {
+            console.warn('Failed to send error to custom endpoint:', err);
+          }
+        });
+      }
+    } catch (err) {
+      console.warn('Failed to send to custom endpoint:', err);
+    }
+  }
+
+  /**
+   * Sends error to console for development
+   * @param {Object} errorData - Error data to send
+   * @private
+   */
+  static sendToConsole(errorData) {
+    if (process.env.NODE_ENV === 'development') {
+      console.group('🚨 Error Tracking Service');
+      console.log('Error Data:', errorData);
+      console.log('Sentry Available:', !!window.Sentry);
+      console.log('Custom Endpoint:', process.env.REACT_APP_ERROR_ENDPOINT || 'Not configured');
+      console.groupEnd();
+    }
+  }
+
+  /**
+   * Gets the current session ID for error tracking context
+   * @returns {string} Session ID
+   * @private
+   */
+  static getSessionId() {
+    try {
+      let sessionId = sessionStorage.getItem('errorSessionId');
+      if (!sessionId) {
+        sessionId = `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+        sessionStorage.setItem('errorSessionId', sessionId);
+      }
+      return sessionId;
+    } catch (error) {
+      return `session_${Date.now()}`;
     }
   }
 
