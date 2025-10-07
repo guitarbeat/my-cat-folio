@@ -4,7 +4,7 @@
  * Handles image display, rotation, and user interactions.
  */
 
-import React from 'react';
+import React, { useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import styles from '../WelcomeScreen.module.css';
 
@@ -20,6 +20,7 @@ import styles from '../WelcomeScreen.module.css';
  * @param {Function} props.onNext - Next image callback
  * @param {Function} props.onImageSelect - Image selection callback
  * @param {Function} props.onImageLoad - Image load callback
+ * @param {Function} props.onImageError - Image error callback
  * @returns {JSX.Element} Cat image gallery
  */
 const CatImageGallery = ({
@@ -31,19 +32,67 @@ const CatImageGallery = ({
   onPrevious,
   onNext,
   onImageSelect,
-  onImageLoad
+  onImageLoad,
+  onImageError
 }) => {
+  const [imageError, setImageError] = useState(false);
+  const [imageLoading, setImageLoading] = useState(true);
+
+  // * Handle image load success
+  const handleImageLoad = useCallback(() => {
+    setImageLoading(false);
+    setImageError(false);
+    if (onImageLoad) {
+      onImageLoad();
+    }
+  }, [onImageLoad]);
+
+  // * Handle image load error with fallback
+  const handleImageError = useCallback((event) => {
+    console.error('Image failed to load:', event.target.src);
+    setImageError(true);
+    setImageLoading(false);
+    
+    if (onImageError) {
+      onImageError(event);
+    }
+  }, [onImageError]);
+
+  // * Reset loading state when image changes
+  React.useEffect(() => {
+    setImageLoading(true);
+    setImageError(false);
+  }, [currentImage]);
+
   return (
     <div className={styles.catImageSection}>
       <div className={styles.catImageContainer}>
-        <img
-          src={currentImage}
-          alt={`My cat looking adorable - Image ${currentIndex + 1} of ${totalImages}`}
-          className={`${styles.catImage} ${isTransitioning ? styles.imageTransitioning : ''}`}
-          loading="lazy"
-          decoding="async"
-          onLoad={onImageLoad}
-        />
+        {imageError ? (
+          // * Fallback content when image fails to load
+          <div className={`${styles.catImage} ${styles.imageError}`}>
+            <div className={styles.errorContent}>
+              <span className={styles.errorIcon}>🐱</span>
+              <span className={styles.errorText}>Image unavailable</span>
+            </div>
+          </div>
+        ) : (
+          <>
+            <img
+              src={currentImage}
+              alt={`My cat looking adorable - Image ${currentIndex + 1} of ${totalImages}`}
+              className={`${styles.catImage} ${isTransitioning ? styles.imageTransitioning : ''} ${imageLoading ? styles.imageLoading : ''}`}
+              loading="lazy"
+              decoding="async"
+              onLoad={handleImageLoad}
+              onError={handleImageError}
+            />
+            {imageLoading && (
+              <div className={styles.imageLoadingOverlay}>
+                <div className={styles.loadingSpinner} />
+              </div>
+            )}
+          </>
+        )}
         <div className={styles.catImageGlow} />
 
         {/* Image Navigation Controls */}
@@ -104,7 +153,8 @@ CatImageGallery.propTypes = {
   onPrevious: PropTypes.func.isRequired,
   onNext: PropTypes.func.isRequired,
   onImageSelect: PropTypes.func.isRequired,
-  onImageLoad: PropTypes.func.isRequired
+  onImageLoad: PropTypes.func.isRequired,
+  onImageError: PropTypes.func
 };
 
 export default CatImageGallery;

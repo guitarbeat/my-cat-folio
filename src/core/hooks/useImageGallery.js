@@ -24,6 +24,8 @@ export const useImageGallery = ({
   const [isImageTransitioning, setIsImageTransitioning] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [loadedImages, setLoadedImages] = useState(new Set());
+  const [failedImages, setFailedImages] = useState(new Set());
 
   const imageRotationRef = useRef(null);
   const transitionTimeoutRef = useRef(null);
@@ -127,8 +129,45 @@ export const useImageGallery = ({
     }
   }, []);
 
+  // * Preload images for better performance
+  const preloadImage = useCallback((src) => {
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      img.onload = () => {
+        setLoadedImages(prev => new Set([...prev, src]));
+        resolve(img);
+      };
+      img.onerror = () => {
+        setFailedImages(prev => new Set([...prev, src]));
+        reject(new Error(`Failed to load image: ${src}`));
+      };
+      img.src = src;
+    });
+  }, []);
+
+  // * Preload all images when gallery data changes
+  const preloadAllImages = useCallback(async () => {
+    if (!galleryData || galleryData.length === 0) return;
+    
+    const preloadPromises = galleryData.map(src => 
+      preloadImage(src).catch(err => {
+        console.warn('Image preload failed:', err.message);
+        return null;
+      })
+    );
+    
+    await Promise.allSettled(preloadPromises);
+  }, [galleryData, preloadImage]);
+
   // Handle image load
   const handleImageLoad = useCallback(() => {
+    setIsImageTransitioning(false);
+  }, []);
+
+  // * Handle image error
+  const handleImageError = useCallback((event) => {
+    console.error('Image failed to load:', event.target.src);
+    setFailedImages(prev => new Set([...prev, event.target.src]));
     setIsImageTransitioning(false);
   }, []);
 
@@ -151,13 +190,13 @@ export const useImageGallery = ({
           setGalleryData(data);
         } else {
           // Fallback to default images
-          setGalleryData(['/assets/images/IMG_0778']);
+          setGalleryData(['/assets/images/IMG_0778.jpg']);
         }
       } catch (err) {
         console.error('Error loading gallery data:', err);
         setError(err);
         // Fallback to default images
-        setGalleryData(['/assets/images/IMG_0778']);
+        setGalleryData(['/assets/images/IMG_0778.jpg']);
       } finally {
         setIsLoading(false);
       }
@@ -173,6 +212,13 @@ export const useImageGallery = ({
       setIsLoading(false);
     }
   }, [initialImages]);
+
+  // * Preload images when gallery data is ready
+  useEffect(() => {
+    if (galleryData.length > 0 && !isLoading) {
+      preloadAllImages();
+    }
+  }, [galleryData, isLoading, preloadAllImages]);
 
   // Start auto-rotation when gallery is ready
   useEffect(() => {
@@ -201,12 +247,15 @@ export const useImageGallery = ({
     isImageTransitioning,
     isLoading,
     error,
+    loadedImages,
+    failedImages,
     hasMultipleImages: galleryData.length > 1,
-    currentImage: galleryData[currentImageIndex] || '/assets/images/IMG_0778',
+    currentImage: galleryData[currentImageIndex] || '/assets/images/IMG_0778.jpg',
     goToNextImage,
     goToPreviousImage,
     goToImage,
     handleImageLoad,
+    handleImageError,
     startAutoRotation,
     stopAutoRotation
   };

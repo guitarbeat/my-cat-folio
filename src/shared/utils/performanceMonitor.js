@@ -139,6 +139,37 @@ class PerformanceMonitor {
   }
 
   /**
+   * * Track image loading metrics
+   * @param {Object} metrics - Image loading metrics
+   * @param {number} metrics.loadedCount - Number of successfully loaded images
+   * @param {number} metrics.failedCount - Number of failed image loads
+   * @param {number} metrics.totalImages - Total number of images
+   */
+  trackImageLoadMetrics({ loadedCount, failedCount, totalImages }) {
+    const successRate = totalImages > 0 ? (loadedCount / totalImages) * 100 : 0;
+    
+    this.metrics.imageLoading = {
+      loadedCount,
+      failedCount,
+      totalImages,
+      successRate: Math.round(successRate * 100) / 100,
+      timestamp: Date.now()
+    };
+
+    console.log('🖼️ Image Loading Metrics:', {
+      loaded: loadedCount,
+      failed: failedCount,
+      total: totalImages,
+      successRate: `${successRate.toFixed(1)}%`
+    });
+
+    // * Warn if success rate is low
+    if (successRate < 80 && totalImages > 0) {
+      console.warn('⚠️ Low image loading success rate:', `${successRate.toFixed(1)}%`);
+    }
+  }
+
+  /**
    * Get resource size from URL
    */
   getResourceSize(url) {
