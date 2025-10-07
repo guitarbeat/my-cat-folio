@@ -23,6 +23,44 @@ async function loadImageFromFile(file) {
 }
 
 /**
+ * * Validate if an image URL is accessible
+ * @param {string} url - Image URL to validate
+ * @returns {Promise<boolean>} True if image is accessible
+ */
+export async function validateImageUrl(url) {
+  return new Promise((resolve) => {
+    const img = new Image();
+    img.onload = () => resolve(true);
+    img.onerror = () => resolve(false);
+    img.src = url;
+  });
+}
+
+/**
+ * * Preload an image with error handling
+ * @param {string} src - Image source URL
+ * @returns {Promise<HTMLImageElement>} Loaded image element
+ */
+export async function preloadImage(src) {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.onload = () => resolve(img);
+    img.onerror = (error) => reject(new Error(`Failed to load image: ${src}`));
+    img.src = src;
+  });
+}
+
+/**
+ * * Get fallback image URL when primary image fails
+ * @param {string} originalSrc - Original image source
+ * @returns {string} Fallback image URL
+ */
+export function getFallbackImageUrl(originalSrc) {
+  // Return a placeholder or default cat image
+  return '/assets/images/IMG_0778.jpg';
+}
+
+/**
  * Compress an image file to WebP using a canvas
  * @param {File} file - Original image file
  * @param {Object} options - { maxWidth, maxHeight, quality }

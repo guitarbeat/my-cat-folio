@@ -38,11 +38,14 @@ function WelcomeScreen({
     isVisible: isVisible
   });
 
-  // Define gallery data - this should come from props or context in a real app
+  // * Define gallery data with proper fallbacks
   const galleryData = [
     '/assets/images/IMG_0778.jpg',
     '/assets/images/IMG_0779.jpg',
-    '/assets/images/IMG_0780.jpg'
+    '/assets/images/IMG_0865.jpg',
+    '/assets/images/IMG_0884.jpg',
+    '/assets/images/IMG_0923.jpg',
+    '/assets/images/IMG_1116.jpg'
   ];
 
   const {
@@ -51,10 +54,13 @@ function WelcomeScreen({
     hasMultipleImages,
     currentImageIndex,
     totalImages: galleryDataLength,
+    loadedImages,
+    failedImages,
     goToNextImage,
     goToPreviousImage,
     goToImage,
-    handleImageLoad
+    handleImageLoad,
+    handleImageError
   } = useImageGallery({
     initialImages: galleryData,
     rotationInterval: 6000, // Increased for better performance
@@ -97,6 +103,20 @@ function WelcomeScreen({
     // Track Welcome Screen performance
     performanceMonitor.trackWelcomeScreenMetrics();
 
+    // * Track image loading performance
+    const trackImagePerformance = () => {
+      if (loadedImages.size > 0) {
+        performanceMonitor.trackImageLoadMetrics({
+          loadedCount: loadedImages.size,
+          failedCount: failedImages.size,
+          totalImages: galleryDataLength
+        });
+      }
+    };
+
+    // Track image performance when loaded images change
+    trackImagePerformance();
+
     // Fetch active names
     fetchActiveNames();
 
@@ -116,7 +136,7 @@ function WelcomeScreen({
       clearTimeout(timer);
       clearTimeout(removeTimer);
     };
-  }, [fetchActiveNames]);
+  }, [fetchActiveNames, loadedImages.size, failedImages.size, galleryDataLength]);
 
   return (
     <div
@@ -160,6 +180,7 @@ function WelcomeScreen({
           onNext={goToNextImage}
           onImageSelect={goToImage}
           onImageLoad={handleImageLoad}
+          onImageError={handleImageError}
         />
 
         {/* Welcome Card */}
