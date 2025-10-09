@@ -147,7 +147,7 @@ class PerformanceMonitor {
    */
   trackImageLoadMetrics({ loadedCount, failedCount, totalImages }) {
     const successRate = totalImages > 0 ? (loadedCount / totalImages) * 100 : 0;
-    
+
     this.metrics.imageLoading = {
       loadedCount,
       failedCount,
