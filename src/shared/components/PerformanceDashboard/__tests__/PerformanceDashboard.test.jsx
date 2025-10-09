@@ -4,7 +4,7 @@
  */
 
 import React from 'react';
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor, act } from '@testing-library/react';
 import { describe, test, expect, vi } from 'vitest';
 import PerformanceDashboard from '../PerformanceDashboard';
 
@@ -49,8 +49,13 @@ describe('PerformanceDashboard', () => {
     onClose: vi.fn()
   };
 
-  test('renders loading state initially', () => {
-    render(<PerformanceDashboard {...defaultProps} />);
+  test('renders loading state initially', async () => {
+    const { isUserAdmin } = await import('../../../utils/authUtils');
+    isUserAdmin.mockImplementation(() => new Promise(() => {})); // Never resolves
+
+    await act(async () => {
+      render(<PerformanceDashboard {...defaultProps} />);
+    });
     expect(screen.getByText('Loading performance data...')).toBeInTheDocument();
   });
 
@@ -58,7 +63,9 @@ describe('PerformanceDashboard', () => {
     const { isUserAdmin } = await import('../../../utils/authUtils');
     isUserAdmin.mockResolvedValue(false);
 
-    render(<PerformanceDashboard {...defaultProps} />);
+    await act(async () => {
+      render(<PerformanceDashboard {...defaultProps} />);
+    });
 
     await waitFor(() => {
       expect(screen.getByText('🔒 Access Denied')).toBeInTheDocument();
@@ -66,13 +73,17 @@ describe('PerformanceDashboard', () => {
     });
   });
 
-  test('does not render when isVisible is false', () => {
-    render(<PerformanceDashboard {...defaultProps} isVisible={false} />);
+  test('does not render when isVisible is false', async () => {
+    await act(async () => {
+      render(<PerformanceDashboard {...defaultProps} isVisible={false} />);
+    });
     expect(screen.queryByText('📊 Performance Dashboard')).not.toBeInTheDocument();
   });
 
-  test('handles missing userName gracefully', () => {
-    render(<PerformanceDashboard {...defaultProps} userName="" />);
+  test('handles missing userName gracefully', async () => {
+    await act(async () => {
+      render(<PerformanceDashboard {...defaultProps} userName="" />);
+    });
     expect(screen.getByText('🔒 Access Denied')).toBeInTheDocument();
   });
 
@@ -80,7 +91,9 @@ describe('PerformanceDashboard', () => {
     const { isUserAdmin } = await import('../../../utils/authUtils');
     isUserAdmin.mockRejectedValue(new Error('Auth error'));
 
-    render(<PerformanceDashboard {...defaultProps} />);
+    await act(async () => {
+      render(<PerformanceDashboard {...defaultProps} />);
+    });
 
     await waitFor(() => {
       expect(screen.getByText('🔒 Access Denied')).toBeInTheDocument();
