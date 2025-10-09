@@ -87,7 +87,6 @@ function App() {
   }, []);
 
 
-
   // * Parallax for galaxy background (respects reduced motion)
   React.useEffect(() => {
     const prefersReduced =

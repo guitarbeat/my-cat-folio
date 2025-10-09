@@ -1451,18 +1451,19 @@
 
 /* Long Press State */
 .swipeCard.longPressing {
-  transform: scale(1.05);
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
   border: 2px solid var(--mimosa, #e8bf76);
+  box-shadow: 0 8px 30px rgb(0 0 0 / 20%);
+  transform: scale(1.05);
   animation: longPressPulse 0.5s ease-in-out infinite alternate;
 }
 
 @keyframes longPressPulse {
   0% {
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 8px 30px rgb(0 0 0 / 20%);
   }
+
   100% {
-    box-shadow: 0 12px 40px rgba(232, 191, 118, 0.4);
+    box-shadow: 0 12px 40px rgb(232 191 118 / 40%);
   }
 }
 

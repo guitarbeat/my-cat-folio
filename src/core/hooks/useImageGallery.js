@@ -148,14 +148,14 @@ export const useImageGallery = ({
   // * Preload all images when gallery data changes
   const preloadAllImages = useCallback(async () => {
     if (!galleryData || galleryData.length === 0) return;
-    
-    const preloadPromises = galleryData.map(src => 
+
+    const preloadPromises = galleryData.map(src =>
       preloadImage(src).catch(err => {
         console.warn('Image preload failed:', err.message);
         return null;
       })
     );
-    
+
     await Promise.allSettled(preloadPromises);
   }, [galleryData, preloadImage]);
 

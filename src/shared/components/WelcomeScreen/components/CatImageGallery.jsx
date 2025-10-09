@@ -52,7 +52,7 @@ const CatImageGallery = ({
     console.error('Image failed to load:', event.target.src);
     setImageError(true);
     setImageLoading(false);
-    
+
     if (onImageError) {
       onImageError(event);
     }

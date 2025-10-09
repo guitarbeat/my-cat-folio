@@ -135,14 +135,14 @@ const PerformanceDashboard = ({ userName, isVisible = false, onClose }) => {
       <div className={styles.header}>
         <h2>📊 Performance Dashboard</h2>
         <div className={styles.controls}>
-          <button 
+          <button
             className={styles.refreshBtn}
             onClick={updateMetrics}
             title="Refresh metrics"
           >
             🔄
           </button>
-          <button 
+          <button
             className={styles.closeBtn}
             onClick={onClose}
             title="Close dashboard"
@@ -175,10 +175,10 @@ const PerformanceDashboard = ({ userName, isVisible = false, onClose }) => {
                 <span className={styles.value}>
                   {formatBytes(metrics.bundleSize.total || 0)}
                 </span>
-                <span 
+                <span
                   className={styles.grade}
-                  style={{ 
-                    color: getBundleGrade(metrics.bundleSize.total || 0).color 
+                  style={{
+                    color: getBundleGrade(metrics.bundleSize.total || 0).color
                   }}
                 >
                   {getBundleGrade(metrics.bundleSize.total || 0).grade}
@@ -208,10 +208,10 @@ const PerformanceDashboard = ({ userName, isVisible = false, onClose }) => {
                 <span className={styles.value}>
                   {formatTime(metrics.loadTimes.totalLoadTime || 0)}
                 </span>
-                <span 
+                <span
                   className={styles.grade}
-                  style={{ 
-                    color: getPerformanceGrade(metrics.loadTimes.totalLoadTime || 0).color 
+                  style={{
+                    color: getPerformanceGrade(metrics.loadTimes.totalLoadTime || 0).color
                   }}
                 >
                   {getPerformanceGrade(metrics.loadTimes.totalLoadTime || 0).grade}
