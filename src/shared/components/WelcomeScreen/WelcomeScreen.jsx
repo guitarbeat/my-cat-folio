@@ -67,15 +67,15 @@ function WelcomeScreen({
     autoRotate: true
   });
 
-  // Fetch active names from backend
+  // Fetch Aaron's top names from backend
   const fetchActiveNames = useCallback(async () => {
     try {
       setNamesLoading(true);
       setNamesError(null);
-      const names = await catNamesAPI.getNamesWithDescriptions();
+      const names = await catNamesAPI.getAaronsTopNames(6); // Get top 6 names
       setActiveNames(names);
     } catch (err) {
-      console.error('Error fetching active names:', err);
+      console.error('Error fetching Aaron\'s top names:', err);
       setNamesError(err);
     } finally {
       setNamesLoading(false);

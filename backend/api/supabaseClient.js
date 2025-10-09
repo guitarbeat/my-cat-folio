@@ -223,6 +223,63 @@ export const catNamesAPI = {
       }
       return [];
     }
+  },
+
+  /**
+   * Get Aaron's top names with his ratings
+   */
+  async getAaronsTopNames(limit = 10) {
+    try {
+      if (!isSupabaseAvailable()) {
+        return [];
+      }
+
+      // Get names with Aaron's ratings, ordered by his rating (highest first)
+      const { data, error } = await supabase
+        .from('cat_name_options')
+        .select(`
+          id,
+          name,
+          description,
+          created_at,
+          avg_rating,
+          popularity_score,
+          total_tournaments,
+          is_active,
+          cat_name_ratings!inner (
+            user_name,
+            rating,
+            wins,
+            losses,
+            updated_at
+          )
+        `)
+        .eq('cat_name_ratings.user_name', 'aaron')
+        .not('cat_name_ratings.rating', 'is', null)
+        .order('cat_name_ratings.rating', { ascending: false })
+        .limit(limit);
+
+      if (error) {
+        console.error('Error fetching Aaron\'s top names:', error);
+        return [];
+      }
+
+      // Process data to include Aaron's specific ratings
+      return data?.map((item) => ({
+        ...item,
+        user_rating: item.cat_name_ratings[0]?.rating || 0,
+        user_wins: item.cat_name_ratings[0]?.wins || 0,
+        user_losses: item.cat_name_ratings[0]?.losses || 0,
+        updated_at: item.cat_name_ratings[0]?.updated_at || null,
+        isHidden: false,
+        has_user_rating: true
+      })) || [];
+    } catch (error) {
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Error fetching Aaron\'s top names:', error);
+      }
+      return [];
+    }
   }
 };
 
