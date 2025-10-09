@@ -33,7 +33,7 @@ const WelcomeCard = ({
     <div className={styles.rotatedCard}>
       {/* Header */}
       <div className={styles.cardHeader}>
-        <span className={styles.headerText}>Hello! My name is</span>
+        <span className={styles.headerText}>Aaron's Top Cat Names</span>
       </div>
 
       {/* Active Names Display */}
@@ -46,13 +46,13 @@ const WelcomeCard = ({
           </div>
         ) : namesError ? (
           <div className={styles.errorContainer}>
-            <h3>Unable to load names</h3>
+            <h3>Unable to load Aaron's top names</h3>
             <p>Please try again later</p>
           </div>
         ) : activeNames.length === 0 ? (
           <div className={styles.emptyContainer}>
-            <h3>No names available</h3>
-            <p>Check back later for new names!</p>
+            <h3>No top names available</h3>
+            <p>Check back later for Aaron's top rated names!</p>
           </div>
         ) : (
           <div className={styles.namesGrid}>
@@ -65,13 +65,17 @@ const WelcomeCard = ({
               >
                 <NameCard
                   name={name.name}
-                  description={name.description || `Rating: ${name.avg_rating || 0}`}
+                  description={name.description || `Aaron's Rating: ${name.user_rating || 0}`}
                   size="small"
                   metadata={{
-                    rating: name.avg_rating || 0,
+                    rating: name.user_rating || 0,
                     popularity: name.popularity_score,
                     tournaments: name.total_tournaments,
-                    categories: name.categories
+                    categories: name.categories,
+                    winRate: name.user_wins && name.user_losses
+                      ? Math.round((name.user_wins / (name.user_wins + name.user_losses)) * 100)
+                      : 0,
+                    totalMatches: (name.user_wins || 0) + (name.user_losses || 0)
                   }}
                   className={styles.welcomeNameCard}
                   disabled={false}
