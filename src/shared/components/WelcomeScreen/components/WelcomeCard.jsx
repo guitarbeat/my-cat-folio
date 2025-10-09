@@ -33,7 +33,7 @@ const WelcomeCard = ({
     <div className={styles.rotatedCard}>
       {/* Header */}
       <div className={styles.cardHeader}>
-        <span className={styles.headerText}>Aaron's Top Cat Names</span>
+        <span className={styles.headerText}>Aaron&apos;s Top Cat Names</span>
       </div>
 
       {/* Active Names Display */}
@@ -46,13 +46,13 @@ const WelcomeCard = ({
           </div>
         ) : namesError ? (
           <div className={styles.errorContainer}>
-            <h3>Unable to load Aaron's top names</h3>
+            <h3>Unable to load Aaron&apos;s top names</h3>
             <p>Please try again later</p>
           </div>
         ) : activeNames.length === 0 ? (
           <div className={styles.emptyContainer}>
             <h3>No top names available</h3>
-            <p>Check back later for Aaron's top rated names!</p>
+            <p>Check back later for Aaron&apos;s top rated names!</p>
           </div>
         ) : (
           <div className={styles.namesGrid}>

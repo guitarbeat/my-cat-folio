@@ -353,8 +353,8 @@
 .errorContent {
   display: flex;
   flex-direction: column;
-  align-items: center;
   gap: var(--ws-space-sm);
+  align-items: center;
   text-align: center;
 }
 
@@ -373,10 +373,7 @@
 /* Image loading overlay */
 .imageLoadingOverlay {
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  inset: 0;
   z-index: 3;
   display: flex;
   align-items: center;
@@ -511,33 +508,33 @@
   margin: clamp(var(--ws-space-lg), 3vw, var(--ws-space-2xl)) auto;
   overflow: visible;
   background: linear-gradient(135deg, 
-    rgba(255, 255, 255, 0.95) 0%, 
-    rgba(248, 250, 252, 0.9) 50%, 
-    rgba(255, 255, 255, 0.95) 100%);
-  border: 1px solid rgba(255, 255, 255, 0.3);
+    rgb(255 255 255 / 95%) 0%, 
+    rgb(248 250 252 / 90%) 50%, 
+    rgb(255 255 255 / 95%) 100%);
+  border: 1px solid rgb(255 255 255 / 30%);
   border-radius: 24px;
   box-shadow: 
-    0 20px 40px rgba(0, 0, 0, 0.1),
-    0 8px 16px rgba(0, 0, 0, 0.06),
-    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+    0 20px 40px rgb(0 0 0 / 10%),
+    0 8px 16px rgb(0 0 0 / 6%),
+    inset 0 1px 0 rgb(255 255 255 / 80%);
   backdrop-filter: blur(20px);
   transform: none;
   transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 .rotatedCard:hover {
-  transform: translateY(-8px) scale(1.02);
   box-shadow: 
-    0 32px 64px rgba(0, 0, 0, 0.15),
-    0 12px 24px rgba(0, 0, 0, 0.1),
-    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+    0 32px 64px rgb(0 0 0 / 15%),
+    0 12px 24px rgb(0 0 0 / 10%),
+    inset 0 1px 0 rgb(255 255 255 / 90%);
+  transform: translateY(-8px) scale(1.02);
 }
 
 .rotatedCard::before {
   position: absolute;
   top: 0;
-  left: 0;
   right: 0;
+  left: 0;
   height: 3px;
   content: "";
   background: linear-gradient(90deg, 
@@ -555,6 +552,7 @@
   0%, 100% {
     background-position: 0% 50%;
   }
+
   50% {
     background-position: 100% 50%;
   }
@@ -563,6 +561,7 @@
 .cardHeader {
   position: relative;
   padding: 1.2em 1.5em;
+  overflow: hidden;
   color: #fff;
   text-align: center;
   background: linear-gradient(135deg, 
@@ -570,7 +569,6 @@
     var(--ws-secondary-red) 50%, 
     var(--ws-dark-red) 100%);
   border-radius: 24px 24px 0 0;
-  overflow: hidden;
 }
 
 .cardHeader::before {
@@ -582,7 +580,7 @@
   content: "";
   background: linear-gradient(90deg, 
     transparent 0%, 
-    rgba(255, 255, 255, 0.2) 50%, 
+    rgb(255 255 255 / 20%) 50%, 
     transparent 100%);
   animation: shimmer 3s ease-in-out infinite;
 }
@@ -591,9 +589,11 @@
   0% {
     left: -100%;
   }
+
   50% {
     left: 100%;
   }
+
   100% {
     left: 100%;
   }
@@ -607,24 +607,25 @@
   text-transform: uppercase;
   letter-spacing: 0.15em;
   text-shadow: 
-    0 2px 4px rgba(0, 0, 0, 0.3),
-    0 1px 2px rgba(0, 0, 0, 0.2);
+    0 2px 4px rgb(0 0 0 / 30%),
+    0 1px 2px rgb(0 0 0 / 20%);
   background: linear-gradient(135deg, 
     #fff 0%, 
-    rgba(255, 255, 255, 0.9) 50%, 
+    rgb(255 255 255 / 90%) 50%, 
     #fff 100%);
   background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  background-clip: text;
   animation: textGlow 2s ease-in-out infinite alternate;
+  -webkit-text-fill-color: transparent;
 }
 
 @keyframes textGlow {
   0% {
-    filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.5));
+    filter: drop-shadow(0 0 5px rgb(255 255 255 / 50%));
   }
+
   100% {
-    filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.8));
+    filter: drop-shadow(0 0 15px rgb(255 255 255 / 80%));
   }
 }
 
@@ -634,8 +635,8 @@
   overflow: visible;
   text-align: center;
   background: linear-gradient(180deg, 
-    rgba(255, 255, 255, 0.95) 0%, 
-    rgba(248, 250, 252, 0.9) 100%);
+    rgb(255 255 255 / 95%) 0%, 
+    rgb(248 250 252 / 90%) 100%);
   border-radius: 0 0 24px 24px;
 }
 
@@ -659,27 +660,27 @@
 }
 
 .cardFooter {
+  position: relative;
   padding: 1.5em 2em;
+  overflow: hidden;
   text-align: center;
   background: linear-gradient(135deg, 
     var(--ws-primary-red) 0%, 
     var(--ws-secondary-red) 50%, 
     var(--ws-dark-red) 100%);
   border-radius: 0 0 24px 24px;
-  position: relative;
-  overflow: hidden;
 }
 
 .cardFooter::before {
   position: absolute;
   top: 0;
-  left: 0;
   right: 0;
+  left: 0;
   height: 1px;
   content: "";
   background: linear-gradient(90deg, 
     transparent 0%, 
-    rgba(255, 255, 255, 0.3) 50%, 
+    rgb(255 255 255 / 30%) 50%, 
     transparent 100%);
 }
 
@@ -698,19 +699,19 @@
   justify-content: center;
   width: 100%;
   padding: 1em 2em;
+  overflow: hidden;
   font-size: clamp(0.9em, 2.2vw, 1.1em);
   font-weight: 700;
   color: #fff;
   text-decoration: none;
   cursor: pointer;
   background: linear-gradient(135deg, 
-    rgba(255, 255, 255, 0.15) 0%, 
-    rgba(255, 255, 255, 0.05) 100%);
-  border: 2px solid rgba(255, 255, 255, 0.3);
+    rgb(255 255 255 / 15%) 0%, 
+    rgb(255 255 255 / 5%) 100%);
+  border: 2px solid rgb(255 255 255 / 30%);
   border-radius: 16px;
   backdrop-filter: blur(10px);
   transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  overflow: hidden;
 }
 
 .footerButton::before {
@@ -722,7 +723,7 @@
   content: "";
   background: linear-gradient(90deg, 
     transparent 0%, 
-    rgba(255, 255, 255, 0.2) 50%, 
+    rgb(255 255 255 / 20%) 50%, 
     transparent 100%);
   transition: left 0.6s ease;
 }
@@ -734,27 +735,27 @@
 .footerButton:hover:not(:disabled) {
   color: #fff;
   background: linear-gradient(135deg, 
-    rgba(255, 255, 255, 0.25) 0%, 
-    rgba(255, 255, 255, 0.1) 100%);
-  border-color: rgba(255, 255, 255, 0.6);
+    rgb(255 255 255 / 25%) 0%, 
+    rgb(255 255 255 / 10%) 100%);
+  border-color: rgb(255 255 255 / 60%);
   box-shadow: 
-    0 8px 25px rgba(0, 0, 0, 0.2),
-    0 4px 10px rgba(0, 0, 0, 0.1),
-    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    0 8px 25px rgb(0 0 0 / 20%),
+    0 4px 10px rgb(0 0 0 / 10%),
+    inset 0 1px 0 rgb(255 255 255 / 30%);
   transform: translateY(-3px) scale(1.02);
 }
 
 .footerButton:active:not(:disabled) {
   box-shadow: 
-    0 4px 15px rgba(0, 0, 0, 0.15),
-    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    0 4px 15px rgb(0 0 0 / 15%),
+    inset 0 1px 0 rgb(255 255 255 / 20%);
   transform: translateY(-1px) scale(1.01);
 }
 
 .footerButton:focus-visible {
   outline: 3px solid var(--ws-primary-gold);
   outline-offset: 3px;
-  box-shadow: 0 0 0 6px rgba(232, 191, 118, 0.2);
+  box-shadow: 0 0 0 6px rgb(232 191 118 / 20%);
 }
 
 .footerButtonText {
@@ -762,8 +763,8 @@
   z-index: 1;
   font-weight: 700;
   text-shadow: 
-    0 2px 4px rgba(0, 0, 0, 0.3),
-    0 1px 2px rgba(0, 0, 0, 0.2);
+    0 2px 4px rgb(0 0 0 / 30%),
+    0 1px 2px rgb(0 0 0 / 20%);
   transition: all 0.3s ease;
 }
 
@@ -771,19 +772,19 @@
   position: relative;
   z-index: 1;
   font-size: 1.3em;
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+  filter: drop-shadow(0 2px 4px rgb(0 0 0 / 30%));
   transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 .footerButton:hover .footerButtonEmoji {
+  filter: drop-shadow(0 4px 8px rgb(0 0 0 / 40%));
   transform: scale(1.2) rotate(15deg);
-  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.4));
 }
 
 .footerButton:hover .footerButtonText {
   text-shadow: 
-    0 3px 6px rgba(0, 0, 0, 0.4),
-    0 2px 4px rgba(0, 0, 0, 0.3);
+    0 3px 6px rgb(0 0 0 / 40%),
+    0 2px 4px rgb(0 0 0 / 30%);
   transform: translateY(-1px);
 }
 
@@ -1406,20 +1407,20 @@
   .rotatedCard {
     width: min(90vw, 600px);
     margin: 0 auto;
-    transform: none;
     border-radius: 20px;
     box-shadow: 
-      0 15px 30px rgba(0, 0, 0, 0.08),
-      0 6px 12px rgba(0, 0, 0, 0.04),
-      inset 0 1px 0 rgba(255, 255, 255, 0.8);
+      0 15px 30px rgb(0 0 0 / 8%),
+      0 6px 12px rgb(0 0 0 / 4%),
+      inset 0 1px 0 rgb(255 255 255 / 80%);
+    transform: none;
   }
 
   .rotatedCard:hover {
-    transform: translateY(-4px) scale(1.01);
     box-shadow: 
-      0 20px 40px rgba(0, 0, 0, 0.12),
-      0 8px 16px rgba(0, 0, 0, 0.06),
-      inset 0 1px 0 rgba(255, 255, 255, 0.9);
+      0 20px 40px rgb(0 0 0 / 12%),
+      0 8px 16px rgb(0 0 0 / 6%),
+      inset 0 1px 0 rgb(255 255 255 / 90%);
+    transform: translateY(-4px) scale(1.01);
   }
 
   .headerText {
@@ -1437,17 +1438,17 @@
   .welcomeNameCard {
     border-radius: 12px !important;
     box-shadow: 
-      0 6px 20px rgba(0, 0, 0, 0.08),
-      0 3px 8px rgba(0, 0, 0, 0.04),
-      inset 0 1px 0 rgba(255, 255, 255, 0.8) !important;
+      0 6px 20px rgb(0 0 0 / 8%),
+      0 3px 8px rgb(0 0 0 / 4%),
+      inset 0 1px 0 rgb(255 255 255 / 80%) !important;
   }
 
   .welcomeNameCard:hover {
-    transform: translateY(-4px) scale(1.02) !important;
     box-shadow: 
-      0 12px 30px rgba(0, 0, 0, 0.12),
-      0 6px 12px rgba(0, 0, 0, 0.08),
-      inset 0 1px 0 rgba(255, 255, 255, 0.9) !important;
+      0 12px 30px rgb(0 0 0 / 12%),
+      0 6px 12px rgb(0 0 0 / 8%),
+      inset 0 1px 0 rgb(255 255 255 / 90%) !important;
+    transform: translateY(-4px) scale(1.02) !important;
   }
 
   .footerButton {
@@ -1489,20 +1490,20 @@
   .rotatedCard {
     width: min(85vw, 500px);
     margin: 0 auto;
-    transform: none;
     border-radius: 16px;
     box-shadow: 
-      0 12px 24px rgba(0, 0, 0, 0.06),
-      0 4px 8px rgba(0, 0, 0, 0.03),
-      inset 0 1px 0 rgba(255, 255, 255, 0.8);
+      0 12px 24px rgb(0 0 0 / 6%),
+      0 4px 8px rgb(0 0 0 / 3%),
+      inset 0 1px 0 rgb(255 255 255 / 80%);
+    transform: none;
   }
 
   .rotatedCard:hover {
-    transform: translateY(-2px) scale(1.01);
     box-shadow: 
-      0 16px 32px rgba(0, 0, 0, 0.1),
-      0 6px 12px rgba(0, 0, 0, 0.05),
-      inset 0 1px 0 rgba(255, 255, 255, 0.9);
+      0 16px 32px rgb(0 0 0 / 10%),
+      0 6px 12px rgb(0 0 0 / 5%),
+      inset 0 1px 0 rgb(255 255 255 / 90%);
+    transform: translateY(-2px) scale(1.01);
   }
 
   .headerText {
@@ -1520,17 +1521,17 @@
   .welcomeNameCard {
     border-radius: 10px !important;
     box-shadow: 
-      0 4px 16px rgba(0, 0, 0, 0.06),
-      0 2px 6px rgba(0, 0, 0, 0.03),
-      inset 0 1px 0 rgba(255, 255, 255, 0.8) !important;
+      0 4px 16px rgb(0 0 0 / 6%),
+      0 2px 6px rgb(0 0 0 / 3%),
+      inset 0 1px 0 rgb(255 255 255 / 80%) !important;
   }
 
   .welcomeNameCard:hover {
-    transform: translateY(-3px) scale(1.02) !important;
     box-shadow: 
-      0 8px 24px rgba(0, 0, 0, 0.1),
-      0 4px 8px rgba(0, 0, 0, 0.05),
-      inset 0 1px 0 rgba(255, 255, 255, 0.9) !important;
+      0 8px 24px rgb(0 0 0 / 10%),
+      0 4px 8px rgb(0 0 0 / 5%),
+      inset 0 1px 0 rgb(255 255 255 / 90%) !important;
+    transform: translateY(-3px) scale(1.02) !important;
   }
 
   .footerButton {
@@ -1986,56 +1987,56 @@
 /* Dark theme support for WelcomeScreen components */
 :global(.dark-theme) .rotatedCard {
   background: linear-gradient(135deg, 
-    rgba(15, 23, 42, 0.95) 0%, 
-    rgba(30, 41, 59, 0.9) 50%, 
-    rgba(15, 23, 42, 0.95) 100%);
-  border: 1px solid rgba(71, 85, 105, 0.3);
+    rgb(15 23 42 / 95%) 0%, 
+    rgb(30 41 59 / 90%) 50%, 
+    rgb(15 23 42 / 95%) 100%);
+  border: 1px solid rgb(71 85 105 / 30%);
   box-shadow: 
-    0 20px 40px rgba(0, 0, 0, 0.3),
-    0 8px 16px rgba(0, 0, 0, 0.2),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    0 20px 40px rgb(0 0 0 / 30%),
+    0 8px 16px rgb(0 0 0 / 20%),
+    inset 0 1px 0 rgb(255 255 255 / 10%);
 }
 
 :global(.dark-theme) .catNameSection {
   background: linear-gradient(180deg, 
-    rgba(15, 23, 42, 0.95) 0%, 
-    rgba(30, 41, 59, 0.9) 100%);
+    rgb(15 23 42 / 95%) 0%, 
+    rgb(30 41 59 / 90%) 100%);
 }
 
 :global(.dark-theme) .welcomeNameCard {
   background: linear-gradient(135deg, 
-    rgba(15, 23, 42, 0.95) 0%, 
-    rgba(30, 41, 59, 0.9) 100%) !important;
+    rgb(15 23 42 / 95%) 0%, 
+    rgb(30 41 59 / 90%) 100%) !important;
   border: 2px solid var(--ws-primary-gold) !important;
   box-shadow: 
-    0 8px 25px rgba(0, 0, 0, 0.3),
-    0 4px 10px rgba(0, 0, 0, 0.2),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
+    0 8px 25px rgb(0 0 0 / 30%),
+    0 4px 10px rgb(0 0 0 / 20%),
+    inset 0 1px 0 rgb(255 255 255 / 10%) !important;
 }
 
 :global(.dark-theme) .welcomeNameCard:hover {
   box-shadow: 
-    0 20px 40px rgba(0, 0, 0, 0.4),
-    0 8px 16px rgba(0, 0, 0, 0.3),
-    inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
+    0 20px 40px rgb(0 0 0 / 40%),
+    0 8px 16px rgb(0 0 0 / 30%),
+    inset 0 1px 0 rgb(255 255 255 / 20%) !important;
 }
 
 :global(.dark-theme) .footerButton {
   background: linear-gradient(135deg, 
-    rgba(255, 255, 255, 0.1) 0%, 
-    rgba(255, 255, 255, 0.05) 100%);
-  border: 2px solid rgba(255, 255, 255, 0.2);
+    rgb(255 255 255 / 10%) 0%, 
+    rgb(255 255 255 / 5%) 100%);
+  border: 2px solid rgb(255 255 255 / 20%);
 }
 
 :global(.dark-theme) .footerButton:hover:not(:disabled) {
   background: linear-gradient(135deg, 
-    rgba(255, 255, 255, 0.2) 0%, 
-    rgba(255, 255, 255, 0.1) 100%);
-  border-color: rgba(255, 255, 255, 0.4);
+    rgb(255 255 255 / 20%) 0%, 
+    rgb(255 255 255 / 10%) 100%);
+  border-color: rgb(255 255 255 / 40%);
   box-shadow: 
-    0 8px 25px rgba(0, 0, 0, 0.4),
-    0 4px 10px rgba(0, 0, 0, 0.2),
-    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    0 8px 25px rgb(0 0 0 / 40%),
+    0 4px 10px rgb(0 0 0 / 20%),
+    inset 0 1px 0 rgb(255 255 255 / 20%);
 }
 
 /* ==========================================================================
@@ -2048,8 +2049,8 @@
   .welcomeNameCard,
   .footerButton,
   .nameCardWrapper {
-    animation: none !important;
     transition: none !important;
+    animation: none !important;
   }
 
   .rotatedCard:hover,
@@ -2109,7 +2110,7 @@
     color: var(--text-primary) !important;
     text-shadow: none !important;
     background: none !important;
-    -webkit-background-clip: unset !important;
+    background-clip: unset !important;
     -webkit-text-fill-color: unset !important;
   }
 
@@ -2125,14 +2126,14 @@
   }
 
   .footerButton {
+    color: var(--text-primary) !important;
     background: var(--card-background) !important;
     border: 3px solid var(--border-color) !important;
-    color: var(--text-primary) !important;
   }
 
   .footerButton:hover:not(:disabled) {
-    background: var(--accent-color) !important;
     color: var(--background-color) !important;
+    background: var(--accent-color) !important;
     border-color: var(--accent-color) !important;
   }
 }
@@ -2147,8 +2148,8 @@
   grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
   gap: 1.2em;
   max-width: 700px;
-  margin: 0 auto;
   padding: 0.5em;
+  margin: 0 auto;
   animation: gridFadeIn 0.8s ease-out forwards;
 }
 
@@ -2157,6 +2158,7 @@
     opacity: 0;
     transform: translateY(20px);
   }
+
   100% {
     opacity: 1;
     transform: translateY(0);
@@ -2164,9 +2166,9 @@
 }
 
 .nameCardWrapper {
+  opacity: 0;
   transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   animation: cardStagger 0.6s ease-out forwards;
-  opacity: 0;
 }
 
 .nameCardWrapper:nth-child(1) { animation-delay: 0.1s; }
@@ -2181,6 +2183,7 @@
     opacity: 0;
     transform: translateY(30px) scale(0.9);
   }
+
   100% {
     opacity: 1;
     transform: translateY(0) scale(1);
@@ -2188,24 +2191,24 @@
 }
 
 .nameCardWrapper:hover {
-  transform: translateY(-8px) scale(1.05);
   z-index: 10;
+  transform: translateY(-8px) scale(1.05);
 }
 
 .welcomeNameCard {
+  position: relative !important;
+  overflow: hidden !important;
   background: linear-gradient(135deg, 
-    rgba(255, 255, 255, 0.95) 0%, 
-    rgba(248, 250, 252, 0.9) 100%) !important;
+    rgb(255 255 255 / 95%) 0%, 
+    rgb(248 250 252 / 90%) 100%) !important;
   border: 2px solid var(--ws-primary-gold) !important;
   border-radius: 16px !important;
   box-shadow: 
-    0 8px 25px rgba(0, 0, 0, 0.1),
-    0 4px 10px rgba(0, 0, 0, 0.05),
-    inset 0 1px 0 rgba(255, 255, 255, 0.8) !important;
+    0 8px 25px rgb(0 0 0 / 10%),
+    0 4px 10px rgb(0 0 0 / 5%),
+    inset 0 1px 0 rgb(255 255 255 / 80%) !important;
   backdrop-filter: blur(10px) !important;
   transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
-  position: relative !important;
-  overflow: hidden !important;
 }
 
 .welcomeNameCard::before {
@@ -2217,7 +2220,7 @@
   content: "";
   background: linear-gradient(90deg, 
     transparent 0%, 
-    rgba(255, 255, 255, 0.3) 50%, 
+    rgb(255 255 255 / 30%) 50%, 
     transparent 100%);
   transition: left 0.6s ease;
 }
@@ -2227,12 +2230,12 @@
 }
 
 .welcomeNameCard:hover {
-  transform: translateY(-6px) scale(1.02) !important;
-  box-shadow: 
-    0 20px 40px rgba(0, 0, 0, 0.15),
-    0 8px 16px rgba(0, 0, 0, 0.1),
-    inset 0 1px 0 rgba(255, 255, 255, 0.9) !important;
   border-color: var(--ws-secondary-gold) !important;
+  box-shadow: 
+    0 20px 40px rgb(0 0 0 / 15%),
+    0 8px 16px rgb(0 0 0 / 10%),
+    inset 0 1px 0 rgb(255 255 255 / 90%) !important;
+  transform: translateY(-6px) scale(1.02) !important;
 }
 
 .loadingContainer {
@@ -2244,15 +2247,15 @@
 
 .errorContainer,
 .emptyContainer {
-  text-align: center;
   padding: var(--ws-space-lg);
   color: var(--ws-white);
+  text-align: center;
 }
 
 .errorContainer h3,
 .emptyContainer h3 {
-  font-size: var(--ws-text-lg);
   margin-bottom: var(--ws-space-sm);
+  font-size: var(--ws-text-lg);
   color: var(--ws-primary-gold);
 }
 
@@ -2267,6 +2270,7 @@
     opacity: 0;
     transform: translateY(20px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);

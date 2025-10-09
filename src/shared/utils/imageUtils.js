@@ -45,7 +45,7 @@ export async function preloadImage(src) {
   return new Promise((resolve, reject) => {
     const img = new Image();
     img.onload = () => resolve(img);
-    img.onerror = (error) => reject(new Error(`Failed to load image: ${src}`));
+    img.onerror = (_error) => reject(new Error(`Failed to load image: ${src}`));
     img.src = src;
   });
 }
@@ -55,7 +55,7 @@ export async function preloadImage(src) {
  * @param {string} originalSrc - Original image source
  * @returns {string} Fallback image URL
  */
-export function getFallbackImageUrl(originalSrc) {
+export function getFallbackImageUrl(_originalSrc) {
   // Return a placeholder or default cat image
   return '/assets/images/IMG_0778.jpg';
 }
