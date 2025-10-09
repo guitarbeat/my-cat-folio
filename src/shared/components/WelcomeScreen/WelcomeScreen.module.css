@@ -614,7 +614,6 @@
     rgb(255 255 255 / 90%) 50%, 
     #fff 100%);
   background-clip: text;
-  background-clip: text;
   animation: textGlow 2s ease-in-out infinite alternate;
   -webkit-text-fill-color: transparent;
 }
