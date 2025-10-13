@@ -7,5 +7,4 @@
 export { default as ThemeToggle } from './ThemeToggle';
 export { default as CatImageGallery } from './CatImageGallery';
 export { default as InteractiveCatName } from './InteractiveCatName';
-export { default as ParticleBackground } from './ParticleBackground';
 export { default as WelcomeCard } from './WelcomeCard';

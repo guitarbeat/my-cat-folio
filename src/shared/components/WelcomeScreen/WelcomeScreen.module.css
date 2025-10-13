@@ -1,4 +1,4 @@
-/* WelcomeScreen.module.css - Refactored for better maintainability */
+/* WelcomeScreen.module.css - Simplified and optimized styles */
 
 /* ==========================================================================
    CSS CUSTOM PROPERTIES (VARIABLES)
@@ -62,7 +62,6 @@
   --ws-z-overlay: -1;
   --ws-z-content: 1;
   --ws-z-modal: 1000;
-  --ws-z-progress: 2000;
 }
 
 /* ==========================================================================
@@ -77,10 +76,6 @@
   margin: 0;
   contain: layout style paint;
   overflow: hidden;
-}
-
-:global(body.welcome-page::-webkit-scrollbar) {
-  display: none;
 }
 
 :global(html.welcome-page) {
@@ -122,11 +117,6 @@
   transform: translateY(-2px);
 }
 
-.themeToggle:active:not(:disabled) {
-  box-shadow: 0 2px 8px rgb(0 0 0 / 30%);
-  transform: translateY(0);
-}
-
 .themeToggle:focus-visible {
   outline: 3px solid var(--ws-primary-gold);
   outline-offset: 3px;
@@ -145,33 +135,6 @@
 .themeText {
   font-weight: 600;
   text-shadow: 0 1px 2px rgb(0 0 0 / 30%);
-}
-
-/* Mobile adjustments for theme toggle */
-@media (width <= 768px) {
-  .themeToggle {
-    top: 15px;
-    right: 15px;
-    padding: var(--ws-space-xs) var(--ws-space-sm);
-    font-size: var(--ws-text-xs);
-  }
-  
-  .themeIcon {
-    font-size: 1.1em;
-  }
-}
-
-@media (width <= 480px) {
-  .themeToggle {
-    top: 10px;
-    right: 10px;
-    padding: 6px 8px;
-    font-size: 0.7rem;
-  }
-  
-  .themeText {
-    display: none; /* Hide text on very small screens */
-  }
 }
 
 /* ==========================================================================
@@ -201,22 +164,6 @@
 .welcomeWrapper.visible {
   opacity: 1;
   transform: translateY(0);
-}
-
-.welcomeWrapper.animating {
-  opacity: 0;
-  transform: translateY(-20px);
-  transition: 
-    opacity 0.5s ease-in,
-    transform 0.5s ease-in;
-}
-
-.welcomeWrapper.transitioning {
-  opacity: 0.7;
-  transform: scale(0.95);
-  transition: 
-    opacity 0.8s ease-out,
-    transform 0.8s ease-out;
 }
 
 /* ==========================================================================
@@ -571,34 +518,6 @@
   border-radius: 24px 24px 0 0;
 }
 
-.cardHeader::before {
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  content: "";
-  background: linear-gradient(90deg, 
-    transparent 0%, 
-    rgb(255 255 255 / 20%) 50%, 
-    transparent 100%);
-  animation: shimmer 3s ease-in-out infinite;
-}
-
-@keyframes shimmer {
-  0% {
-    left: -100%;
-  }
-
-  50% {
-    left: 100%;
-  }
-
-  100% {
-    left: 100%;
-  }
-}
-
 .headerText {
   position: relative;
   z-index: 1;
@@ -614,19 +533,7 @@
     rgb(255 255 255 / 90%) 50%, 
     #fff 100%);
   background-clip: text;
-  background-clip: text;
-  animation: textGlow 2s ease-in-out infinite alternate;
   -webkit-text-fill-color: transparent;
-}
-
-@keyframes textGlow {
-  0% {
-    filter: drop-shadow(0 0 5px rgb(255 255 255 / 50%));
-  }
-
-  100% {
-    filter: drop-shadow(0 0 15px rgb(255 255 255 / 80%));
-  }
 }
 
 .catNameSection {
@@ -640,25 +547,6 @@
   border-radius: 0 0 24px 24px;
 }
 
-.catNameContainer {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.05em;
-  align-items: center;
-  justify-content: center;
-  max-width: 100%;
-  min-height: 2em;
-  padding: 0.6em 1em;
-  overflow: visible;
-  font-family: 'Waiting for the Sunrise', cursive;
-  font-size: clamp(0.9em, 2.2vw, 1.3em);
-  line-height: 1.1;
-  color: #000;
-  word-wrap: break-word;
-  overflow-wrap: break-word;
-  transform: none;
-}
-
 .cardFooter {
   position: relative;
   padding: 1.5em 2em;
@@ -669,25 +557,6 @@
     var(--ws-secondary-red) 50%, 
     var(--ws-dark-red) 100%);
   border-radius: 0 0 24px 24px;
-}
-
-.cardFooter::before {
-  position: absolute;
-  top: 0;
-  right: 0;
-  left: 0;
-  height: 1px;
-  content: "";
-  background: linear-gradient(90deg, 
-    transparent 0%, 
-    rgb(255 255 255 / 30%) 50%, 
-    transparent 100%);
-}
-
-.footerText {
-  font-size: clamp(0.6em, 1.5vw, 0.8em);
-  color: rgb(255 255 255 / 60%);
-  text-decoration: none;
 }
 
 /* Footer Button Styles */
@@ -714,24 +583,6 @@
   transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
-.footerButton::before {
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  content: "";
-  background: linear-gradient(90deg, 
-    transparent 0%, 
-    rgb(255 255 255 / 20%) 50%, 
-    transparent 100%);
-  transition: left 0.6s ease;
-}
-
-.footerButton:hover::before {
-  left: 100%;
-}
-
 .footerButton:hover:not(:disabled) {
   color: #fff;
   background: linear-gradient(135deg, 
@@ -743,13 +594,6 @@
     0 4px 10px rgb(0 0 0 / 10%),
     inset 0 1px 0 rgb(255 255 255 / 30%);
   transform: translateY(-3px) scale(1.02);
-}
-
-.footerButton:active:not(:disabled) {
-  box-shadow: 
-    0 4px 15px rgb(0 0 0 / 15%),
-    inset 0 1px 0 rgb(255 255 255 / 20%);
-  transform: translateY(-1px) scale(1.01);
 }
 
 .footerButton:focus-visible {
@@ -781,490 +625,112 @@
   transform: scale(1.2) rotate(15deg);
 }
 
-.footerButton:hover .footerButtonText {
-  text-shadow: 
-    0 3px 6px rgb(0 0 0 / 40%),
-    0 2px 4px rgb(0 0 0 / 30%);
-  transform: translateY(-1px);
-}
-
 /* ==========================================================================
-   MAIN CONTENT AREA
+   WELCOME SCREEN NAMES GRID STYLES
    ========================================================================== */
 
-.mainContent {
-  display: flex;
-  flex-direction: column;
-  gap: clamp(var(--ws-space-md), 2vw, var(--ws-space-xl));
-  align-items: center;
-  text-align: center;
-}
-
-/* ==========================================================================
-   CARDS CONTAINER
-   ========================================================================== */
-
-.cardsContainer {
-  display: flex;
-  flex-direction: column;
-  gap: clamp(var(--ws-space-lg), 3vw, var(--ws-space-2xl));
-  width: 100%;
-  max-width: 600px;
-  padding: clamp(var(--ws-space-sm), 2vw, var(--ws-space-lg));
+.namesGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 1.2em;
+  max-width: 700px;
+  padding: 0.5em;
   margin: 0 auto;
+  animation: gridFadeIn 0.8s ease-out forwards;
 }
 
-/* ==========================================================================
-   CARD COMPONENTS
-   ========================================================================== */
+@keyframes gridFadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
 
-.catImageCard {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: clamp(var(--ws-space-lg), 3vw, var(--ws-space-2xl));
-  background: linear-gradient(
-    135deg,
-    rgb(var(--ws-white) / 95%),
-    rgb(248 250 252 / 95%)
-  );
-  border: 1px solid rgb(var(--ws-white) / 20%);
-  border-radius: var(--ws-radius-xl);
-  box-shadow: var(--ws-shadow-2xl);
-  backdrop-filter: blur(15px);
-  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-.catNameCard {
-  padding: clamp(var(--ws-space-lg), 3vw, var(--ws-space-2xl));
-  background: linear-gradient(
-    135deg,
-    rgb(var(--ws-white) / 95%),
-    rgb(248 250 252 / 95%)
-  );
-  border: 1px solid rgb(var(--ws-white) / 20%);
-  border-radius: var(--ws-radius-xl);
-  box-shadow: var(--ws-shadow-2xl);
-  backdrop-filter: blur(15px);
-  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
-
-.actionCard {
-  padding: clamp(var(--ws-space-lg), 3vw, var(--ws-space-2xl));
-  background: linear-gradient(
-    135deg,
-    rgb(var(--ws-white) / 95%),
-    rgb(248 250 252 / 95%)
-  );
-  border: 1px solid rgb(var(--ws-white) / 20%);
-  border-radius: var(--ws-radius-xl);
-  box-shadow: var(--ws-shadow-2xl);
-  backdrop-filter: blur(15px);
-  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
-
-.actionCard::before {
-  position: absolute;
-  top: 0;
-  right: 0;
-  left: 0;
-  height: 3px;
-  content: "";
-  background: linear-gradient(
-    90deg,
-    var(--ws-primary-gold),
-    var(--ws-secondary-gold),
-    var(--ws-primary-red),
-    var(--ws-primary-blue),
-    var(--ws-purple)
-  );
-  background-size: 200% 100%;
-  animation: gradientShift 3s ease-in-out infinite;
-}
-
-/* ==========================================================================
-   CAT IMAGE SECTION
-   ========================================================================== */
-
-
-.catImageGlow {
-  position: absolute;
-  inset: -10px;
-  z-index: 1;
-  background: radial-gradient(circle, rgb(var(--ws-primary-gold) / 15%), transparent 70%);
-  border-radius: var(--ws-radius-full);
-  opacity: 0.5;
-  animation: glowPulse 6s ease-in-out infinite;
-}
-
-/* ==========================================================================
-   CAT NAME SECTION
-   ========================================================================== */
-
-.catNameSection {
-  display: flex;
-  flex-direction: column;
-  gap: clamp(var(--ws-space-sm), 1.5vw, var(--ws-space-md));
-  text-align: center;
-}
-
-.catNameTitle {
-  position: relative;
-  display: flex;
-  gap: var(--ws-space-sm);
-  align-items: center;
-  justify-content: center;
-  margin: 0;
-  font-family: "Josefin Slab", serif;
-  font-size: clamp(1.8rem, 4.5vw, 2.8rem);
-  font-weight: 700;
-  line-height: 1.2;
-  color: var(--ws-white);
-  text-shadow: 2px 2px 4px rgb(0 0 0 / 80%);
-}
-
-.titleText {
-  transition: all var(--ws-duration-normal) ease;
-}
-
-.titleSparkle {
-  font-size: 1.2em;
-  opacity: 0.7;
-  animation: sparkle 4s ease-in-out infinite;
-}
-
-.catNameText {
-  display: inline;
-  font-family: 'Waiting for the Sunrise', cursive;
-  font-size: 1em;
-  font-weight: 400;
-  line-height: 1.1;
-  color: #000;
-  text-transform: capitalize;
-  letter-spacing: 0.05em;
-  word-wrap: break-word;
-  overflow-wrap: break-word;
-  white-space: normal;
-}
-
-.catNameText::first-letter {
-  font-size: 1.3em;
-}
-
-.catNameSubtext {
-  margin: 0;
-  font-size: var(--ws-text-sm);
-  line-height: 1.3;
-  color: rgb(var(--ws-white) / 90%);
-  text-shadow: 1px 1px 2px rgb(0 0 0 / 60%);
-  transition: all var(--ws-duration-normal) ease;
-}
-
-/* ==========================================================================
-   ACTION SECTION
-   ========================================================================== */
-
-.actionSection {
-  position: relative;
-  width: 100%;
-  max-width: 500px;
-  padding: clamp(var(--ws-space-xl), 3vw, var(--ws-space-3xl));
-  margin: 0 auto;
-  overflow: hidden;
-  text-align: center;
-  background: linear-gradient(
-    135deg,
-    rgb(var(--ws-white) / 95%),
-    rgb(248 250 252 / 95%)
-  );
-  border: 1px solid rgb(var(--ws-white) / 20%);
-  border-radius: var(--ws-radius-xl);
-  box-shadow: var(--ws-shadow-2xl);
-  backdrop-filter: blur(15px);
-  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
-
-.actionSection::before {
-  position: absolute;
-  top: 0;
-  right: 0;
-  left: 0;
-  height: 3px;
-  content: "";
-  background: linear-gradient(
-    90deg,
-    var(--ws-primary-gold),
-    var(--ws-secondary-gold),
-    var(--ws-primary-red),
-    var(--ws-primary-blue),
-    var(--ws-purple)
-  );
-  background-size: 200% 100%;
-  animation: gradientShift 3s ease-in-out infinite;
-}
-
-/* ==========================================================================
-   BUTTON STYLES
-   ========================================================================== */
-
-.continueButton {
-  position: relative;
-  width: 100%;
-  max-width: 400px;
-  padding: clamp(var(--ws-space-lg), 2.5vw, var(--ws-space-2xl)) clamp(var(--ws-space-xl), 3.5vw, var(--ws-space-4xl));
-  margin: clamp(var(--ws-space-md), 2vw, var(--ws-space-xl)) auto;
-  overflow: hidden;
-  font-size: var(--ws-text-lg);
-  font-weight: 700;
-  color: var(--ws-white);
-  text-transform: none;
-  letter-spacing: 0.5px;
-  cursor: pointer;
-  background: linear-gradient(135deg, var(--ws-primary-red), var(--ws-secondary-red), var(--ws-dark-red));
-  border: 2px solid transparent;
-  border-radius: var(--ws-radius-xl);
-  box-shadow: var(--ws-shadow-2xl);
-  transition: all var(--ws-duration-normal) ease;
-  animation: pulseGlow 4s ease-in-out infinite;
-}
-
-.continueButton::before {
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  content: "";
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgb(var(--ws-white) / 20%),
-    transparent
-  );
-  transition: left 0.6s ease;
-}
-
-.continueButton:hover::before {
-  left: 100%;
-}
-
-.continueButton:hover:not(:disabled) {
-  background: linear-gradient(135deg, var(--ws-secondary-red), var(--ws-dark-red));
-  border-color: rgb(var(--ws-white) / 20%);
-  box-shadow: 0 12px 30px rgb(231 76 60 / 60%), 0 0 20px rgb(231 76 60 / 30%);
-  transform: translateY(-4px) scale(1.02);
-}
-
-.continueButton:active:not(:disabled) {
-  background: linear-gradient(135deg, var(--ws-dark-red), var(--ws-secondary-red));
-  border-color: rgb(var(--ws-white) / 30%);
-  box-shadow: 0 6px 20px rgb(231 76 60 / 50%), 0 0 15px rgb(231 76 60 / 25%);
-  transform: translateY(-2px) scale(1.01);
-}
-
-.continueButton:disabled {
-  cursor: not-allowed;
-  opacity: 0.7;
-  transform: none;
-}
-
-.buttonContent {
-  position: relative;
-  z-index: 2;
-  display: flex;
-  gap: var(--ws-space-lg);
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-}
-
-.buttonText {
-  font-weight: 700;
-  text-shadow: 0 1px 2px rgb(0 0 0 / 30%);
-  transition: all var(--ws-duration-normal) ease;
-}
-
-.buttonEmoji {
-  font-size: 1.4rem;
-  filter: drop-shadow(0 1px 2px rgb(0 0 0 / 30%));
-  transition: all var(--ws-duration-normal) ease;
-  animation: emojiBounce 4s ease-in-out infinite;
-}
-
-.buttonGlow {
-  position: absolute;
-  inset: -2px;
-  z-index: 1;
-  background: linear-gradient(135deg, var(--ws-primary-gold), var(--ws-secondary-gold), var(--ws-primary-red));
-  border-radius: 20px;
+.nameCardWrapper {
   opacity: 0;
-  filter: blur(8px);
-  transition: opacity var(--ws-duration-normal) ease;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  animation: cardStagger 0.6s ease-out forwards;
 }
 
-.continueButton:hover .buttonGlow {
-  opacity: 0.6;
+.nameCardWrapper:nth-child(1) { animation-delay: 0.1s; }
+.nameCardWrapper:nth-child(2) { animation-delay: 0.2s; }
+.nameCardWrapper:nth-child(3) { animation-delay: 0.3s; }
+.nameCardWrapper:nth-child(4) { animation-delay: 0.4s; }
+.nameCardWrapper:nth-child(5) { animation-delay: 0.5s; }
+.nameCardWrapper:nth-child(6) { animation-delay: 0.6s; }
+
+@keyframes cardStagger {
+  0% {
+    opacity: 0;
+    transform: translateY(30px) scale(0.9);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 
-.explanationText {
-  padding: clamp(var(--ws-space-md), 2vw, var(--ws-space-lg));
-  margin-top: clamp(var(--ws-space-lg), 2vw, var(--ws-space-xl));
-  background: linear-gradient(
-    135deg,
-    rgb(var(--ws-primary-blue) / 8%),
-    rgb(var(--ws-primary-gold) / 8%)
-  );
-  border: 1px solid rgb(var(--ws-primary-blue) / 25%);
-  border-radius: var(--ws-radius-lg);
-  backdrop-filter: blur(5px);
+.nameCardWrapper:hover {
+  z-index: 10;
+  transform: translateY(-8px) scale(1.05);
 }
 
-.explanationText p {
-  margin: 0;
-  font-size: var(--ws-text-sm);
-  font-style: italic;
-  font-weight: 500;
-  line-height: 1.4;
-  color: var(--ws-dark-bg);
-  text-shadow: 0 1px 2px rgb(255 255 255 / 50%);
+.welcomeNameCard {
+  position: relative !important;
+  overflow: hidden !important;
+  background: linear-gradient(135deg, 
+    rgb(255 255 255 / 95%) 0%, 
+    rgb(248 250 252 / 90%) 100%) !important;
+  border: 2px solid var(--ws-primary-gold) !important;
+  border-radius: 16px !important;
+  box-shadow: 
+    0 8px 25px rgb(0 0 0 / 10%),
+    0 4px 10px rgb(0 0 0 / 5%),
+    inset 0 1px 0 rgb(255 255 255 / 80%) !important;
+  backdrop-filter: blur(10px) !important;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
 }
 
-/* ==========================================================================
-   INTERACTIVE ELEMENTS
-   ========================================================================== */
-
-.interactiveName {
-  position: relative;
-  display: inline-flex;
-  flex-shrink: 0;
-  align-items: center;
-  justify-content: center;
-  min-width: 16px;
-  max-width: 100%;
-  min-height: 14px;
-  padding: 1px 2px;
-  margin: 0 0.2px;
-  text-align: center;
-  word-wrap: break-word;
-  overflow-wrap: break-word;
-  white-space: normal;
-  cursor: pointer;
-  background: linear-gradient(
-    135deg,
-    rgb(var(--ws-primary-gold) / 10%),
-    rgb(var(--ws-secondary-gold) / 10%)
-  );
-  border: 1px solid transparent;
-  border-radius: 2px;
-  transform: translateZ(0); /* Force hardware acceleration */
-  transition: transform var(--ws-duration-normal) ease, 
-              background var(--ws-duration-normal) ease,
-              border-color var(--ws-duration-normal) ease,
-              box-shadow var(--ws-duration-normal) ease,
-              color var(--ws-duration-normal) ease;
-  will-change: transform, background, border-color, box-shadow, color;
+.welcomeNameCard:hover {
+  border-color: var(--ws-secondary-gold) !important;
+  box-shadow: 
+    0 20px 40px rgb(0 0 0 / 15%),
+    0 8px 16px rgb(0 0 0 / 10%),
+    inset 0 1px 0 rgb(255 255 255 / 90%) !important;
+  transform: translateY(-6px) scale(1.02) !important;
 }
 
-.interactiveName:hover {
-  color: var(--ws-primary-gold);
-  text-shadow: 0 1px 3px rgb(0 0 0 / 30%);
-  background: linear-gradient(
-    135deg,
-    rgb(var(--ws-primary-gold) / 30%),
-    rgb(var(--ws-secondary-gold) / 30%)
-  );
-  border-color: rgb(var(--ws-primary-gold) / 50%);
-  box-shadow: 0 4px 12px rgb(var(--ws-primary-gold) / 30%);
-  transform: translateY(-1px);
-}
-
-.interactiveName:active {
-  background: linear-gradient(
-    135deg,
-    rgb(var(--ws-primary-gold) / 40%),
-    rgb(var(--ws-secondary-gold) / 40%)
-  );
-  transform: scale(0.95);
-}
-
-/* Handle very long names that need to break */
-.interactiveName[data-long-name="true"] {
-  flex-wrap: wrap;
-  min-width: auto;
-  max-width: 80px;
-  word-break: break-all;
-  overflow-wrap: break-word;
-  white-space: normal;
-}
-
-/* ==========================================================================
-   PARTICLE EFFECTS
-   ========================================================================== */
-
-.particleContainer {
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-}
-
-.particle {
-  position: absolute;
-  background: radial-gradient(circle, var(--ws-primary-gold), var(--ws-secondary-gold));
-  border-radius: var(--ws-radius-full);
-  opacity: 0.3;
-  transform: translateZ(0); /* Force hardware acceleration */
-  animation: particleFloat 12s ease-in-out infinite;
-  will-change: transform, opacity;
-}
-
-/* ==========================================================================
-   PROGRESS INDICATOR
-   ========================================================================== */
-
-.progressContainer {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  z-index: var(--ws-z-progress);
+.loadingContainer {
   display: flex;
   flex-direction: column;
-  gap: var(--ws-space-lg);
+  gap: var(--ws-space-md);
   align-items: center;
-  padding: var(--ws-space-3xl);
-  background: rgb(0 0 0 / 80%);
-  border: 1px solid rgb(var(--ws-white) / 20%);
-  border-radius: var(--ws-radius-lg);
-  backdrop-filter: blur(10px);
-  transform: translate(-50%, -50%);
-  animation: progressFadeIn 0.5s ease-out;
 }
 
-.progressBar {
-  position: relative;
-  width: 200px;
-  height: 6px;
-  overflow: hidden;
-  background: rgb(var(--ws-white) / 20%);
-  border-radius: 3px;
-}
-
-.progressFill {
-  height: 100%;
-  background: linear-gradient(90deg, var(--ws-primary-gold), var(--ws-secondary-gold));
-  border-radius: 3px;
-  animation: progressFill 2s ease-in-out infinite;
-}
-
-.progressText {
-  margin: 0;
-  font-size: var(--ws-text-sm);
-  font-weight: 500;
+.errorContainer,
+.emptyContainer {
+  padding: var(--ws-space-lg);
   color: var(--ws-white);
   text-align: center;
+}
+
+.errorContainer h3,
+.emptyContainer h3 {
+  margin-bottom: var(--ws-space-sm);
+  font-size: var(--ws-text-lg);
+  color: var(--ws-primary-gold);
+}
+
+.errorContainer p,
+.emptyContainer p {
+  font-size: var(--ws-text-sm);
+  opacity: 0.8;
 }
 
 /* ==========================================================================
@@ -1283,97 +749,9 @@
   }
 }
 
-@keyframes sparkle {
-  0%, 100% {
-    opacity: 0.7;
-    transform: scale(1) rotate(0deg);
-  }
-
-  50% {
-    opacity: 1;
-    transform: scale(1.2) rotate(180deg);
-  }
-}
-
-@keyframes particleFloat {
-  0%, 100% {
-    transform: translateY(0) rotate(0deg);
-  }
-
-  25% {
-    transform: translateY(-20px) rotate(90deg);
-  }
-
-  50% {
-    transform: translateY(-10px) rotate(180deg);
-  }
-
-  75% {
-    transform: translateY(-30px) rotate(270deg);
-  }
-}
-
-@keyframes gradientShift {
-  0%, 100% {
-    background-position: 0% 50%;
-  }
-
-  50% {
-    background-position: 100% 50%;
-  }
-}
-
-@keyframes pulseGlow {
-  0%, 100% {
-    box-shadow: 0 6px 20px rgb(231 76 60 / 40%);
-  }
-
-  50% {
-    box-shadow: 0 8px 25px rgb(231 76 60 / 60%);
-  }
-}
-
-@keyframes emojiBounce {
-  0%, 100% {
-    transform: scale(1) rotate(0deg);
-  }
-
-  50% {
-    transform: scale(1.1) rotate(10deg);
-  }
-}
-
-@keyframes progressFadeIn {
-  from {
-    opacity: 0;
-    transform: translate(-50%, -50%) scale(0.9);
-  }
-
-  to {
-    opacity: 1;
-    transform: translate(-50%, -50%) scale(1);
-  }
-}
-
-@keyframes progressFill {
-  0% {
-    width: 0%;
-  }
-
-  50% {
-    width: 70%;
-  }
-
-  100% {
-    width: 100%;
-  }
-}
-
 /* ==========================================================================
    RESPONSIVE DESIGN
    ========================================================================== */
-
-/* Mobile-first approach with progressive enhancement */
 
 /* Mobile (≤768px) */
 @media (width <= 768px) {
@@ -1460,16 +838,6 @@
   .footerButton:hover:not(:disabled) {
     transform: translateY(-2px) scale(1.01);
   }
-
-  .catNameContainer {
-    gap: 0.02em;
-    font-size: clamp(0.8em, 2.2vw, 1.2em);
-    transform: none;
-  }
-
-  .footerText {
-    font-size: clamp(0.6em, 1.2vw, 0.8em);
-  }
 }
 
 /* Mobile Portrait (≤480px) */
@@ -1543,217 +911,6 @@
   .footerButton:hover:not(:disabled) {
     transform: translateY(-1px) scale(1.01);
   }
-
-  .catNameContainer {
-    gap: 0.01em;
-    font-size: clamp(0.7em, 2vw, 1.1em);
-    transform: none;
-  }
-
-  .footerText {
-    font-size: clamp(0.6em, 1vw, 0.8em);
-  }
-}
-
-/* Very Small Screens (≤320px) */
-@media (width <= 320px) {
-  .welcomeWrapper {
-    position: fixed;
-    height: 100vh;
-    min-height: 100vh;
-    max-height: 100vh;
-    overflow: hidden;
-  }
-
-  .contentContainer {
-    height: 100vh;
-    max-height: 100vh;
-    padding: clamp(var(--ws-space-lg), 2.5vw, var(--ws-space-xl)) var(--ws-space-sm);
-    overflow: hidden auto;
-  }
-
-  .catImageSection {
-    max-width: 180px;
-  }
-
-  .catImage {
-    width: clamp(100px, 20vw, 180px);
-    height: clamp(100px, 20vw, 180px);
-  }
-
-  .rotatedCard {
-    width: min(80vw, 400px);
-    margin: 0 auto;
-    transform: none;
-  }
-
-  .rotatedCard:hover {
-    transform: scale(1.02);
-  }
-
-  .headerText {
-    font-size: clamp(0.7em, 1.5vw, 0.9em);
-    letter-spacing: 0.08em;
-  }
-
-  .catNameContainer {
-    gap: 0.005em;
-    padding: 0.02em 0.1em;
-    font-size: clamp(0.6em, 1.8vw, 1em);
-    transform: none;
-  }
-
-  .interactiveName {
-    min-width: 14px;
-    min-height: 12px;
-    padding: 1px;
-    margin: 0 0.05px;
-    font-size: 0.7em;
-  }
-
-  .footerText {
-    font-size: clamp(0.6em, 0.9vw, 0.8em);
-  }
-
-  .actionSection {
-    max-width: 100%;
-    padding: var(--ws-space-lg);
-  }
-
-  .continueButton {
-    min-height: 48px;
-    padding: var(--ws-space-md) var(--ws-space-lg);
-    font-size: var(--ws-text-sm);
-  }
-
-  .buttonText {
-    font-size: var(--ws-text-sm);
-  }
-
-  .buttonEmoji {
-    font-size: 1.1rem;
-  }
-
-  .explanationText {
-    padding: var(--ws-space-sm);
-    margin-top: var(--ws-space-md);
-  }
-
-  .explanationText p {
-    font-size: var(--ws-text-xs);
-  }
-}
-
-/* Landscape Mobile (≤500px height) */
-@media (height <= 500px) and (orientation: landscape) {
-  .welcomeWrapper {
-    position: fixed;
-    align-items: flex-start;
-    height: 100vh;
-    min-height: 100vh;
-    max-height: 100vh;
-    padding-top: 0.5vh;
-    overflow: hidden;
-  }
-
-  .contentContainer {
-    height: 100vh;
-    max-height: 100vh;
-    padding: clamp(var(--ws-space-xl), 2.5vh, var(--ws-space-2xl)) clamp(var(--ws-space-sm), 1.5vw, var(--ws-space-lg));
-    overflow: hidden auto;
-  }
-
-  .catImageSection {
-    max-width: 200px;
-  }
-
-  .catImage {
-    width: clamp(120px, 20vh, 200px);
-    height: clamp(120px, 20vh, 200px);
-  }
-
-  .rotatedCard {
-    width: min(75vw, 600px);
-    margin: 0 auto;
-    transform: none;
-  }
-
-  .rotatedCard:hover {
-    transform: scale(1.02);
-  }
-
-  .headerText {
-    font-size: clamp(1em, 2.2vw, 1.3em);
-    letter-spacing: 0.18em;
-  }
-
-  .catNameContainer {
-    gap: 0.03em;
-    font-size: clamp(0.9em, 2.5vw, 1.4em);
-    transform: none;
-  }
-
-  .footerText {
-    font-size: clamp(0.6em, 1.1vw, 0.75em);
-  }
-}
-
-/* Tall Screens (≤600px height) */
-@media (height <= 600px) and (orientation: portrait) {
-  .contentContainer {
-    max-height: 95vh;
-  }
-
-  .rotatedCard {
-    margin: 0 auto;
-    transform: none;
-  }
-
-  .rotatedCard:hover {
-    transform: scale(1.02);
-  }
-
-  .catNameContainer {
-    gap: 0.02em;
-    font-size: clamp(0.8em, 2.2vw, 1.2em);
-    transform: none;
-  }
-}
-
-/* ==========================================================================
-   ULTRA-WIDE SCREEN OPTIMIZATIONS
-   ========================================================================== */
-
-/* Large screens (≥1200px) - maximize horizontal space usage */
-@media (width >= 1200px) {
-  .catNameContainer {
-    gap: 0.05em;
-    padding: 0.05em 0.15em;
-    font-size: clamp(1.1em, 2vw, 1.6em);
-  }
-
-  .interactiveName {
-    min-width: 20px;
-    min-height: 16px;
-    padding: 1px 3px;
-    margin: 0 0.3px;
-  }
-}
-
-/* Extra large screens (≥1600px) - even more compact */
-@media (width >= 1600px) {
-  .catNameContainer {
-    gap: 0.06em;
-    padding: 0.06em 0.2em;
-    font-size: clamp(1.2em, 1.8vw, 1.8em);
-  }
-
-  .interactiveName {
-    min-width: 22px;
-    min-height: 18px;
-    padding: 2px 4px;
-    margin: 0 0.4px;
-  }
 }
 
 /* ==========================================================================
@@ -1762,229 +919,30 @@
 
 /* Reduced motion support */
 @media (prefers-reduced-motion: reduce) {
-  .particle,
-  .confetti,
   .catImageGlow,
-  .buttonGlow,
-  .buttonEmoji,
-  .titleSparkle,
-  .pulseGlow,
-  .particleFloat,
+  .glowPulse,
   .gradientShift,
-  .emojiBounce,
-  .glowPulse {
+  .gridFadeIn,
+  .cardStagger {
     animation: none !important;
   }
 
-  .continueButton::before {
-    display: none;
-  }
-
-  .particleContainer,
-  .celebrationContainer {
-    display: none;
-  }
-
-  .continueButton,
-  .catImage,
-  .interactiveName {
+  .rotatedCard,
+  .welcomeNameCard,
+  .footerButton,
+  .nameCardWrapper {
     transition: none !important;
   }
-}
 
-/* High contrast mode support */
-/* stylelint-disable-next-line media-feature-name-value-no-unknown */
-@media (prefers-contrast: high) {
-  .actionSection {
-    background: var(--ws-white);
-    border: 3px solid var(--ws-black);
-  }
-
-  .continueButton {
-    border: 3px solid var(--ws-black);
-  }
-
-  .interactiveName {
-    color: var(--ws-black);
-    background: var(--ws-white);
-    border: 2px solid var(--ws-black);
-  }
-
-  .interactiveName:hover {
-    color: var(--ws-white);
-    background: var(--ws-black);
-  }
-}
-
-/* Focus indicators */
-.continueButton:focus-visible {
-  outline: 3px solid var(--ws-primary-gold);
-  outline-offset: 3px;
-  box-shadow: 0 0 0 6px rgb(var(--ws-primary-gold) / 20%), var(--ws-shadow-2xl);
-  transform: translateY(-2px);
-}
-
-.interactiveName:focus-visible {
-  outline: 2px solid var(--ws-primary-gold);
-  outline-offset: 2px;
-  box-shadow: 0 0 0 4px rgb(var(--ws-primary-gold) / 20%);
-}
-
-/* Touch device optimizations */
-@media (hover: none) and (pointer: coarse) {
-  .interactiveName:hover {
-    background: linear-gradient(
-      135deg,
-      rgb(var(--ws-primary-gold) / 15%),
-      rgb(var(--ws-secondary-gold) / 15%)
-    );
-    border-color: rgb(var(--ws-primary-gold) / 30%);
-    box-shadow: 0 2px 8px rgb(var(--ws-primary-gold) / 20%);
-    transform: none;
-  }
-
-  .interactiveName:active {
-    background: linear-gradient(
-      135deg,
-      rgb(var(--ws-primary-gold) / 50%),
-      rgb(var(--ws-secondary-gold) / 50%)
-    );
-    border-color: rgb(var(--ws-primary-gold) / 70%);
-    box-shadow: 0 4px 16px rgb(var(--ws-primary-gold) / 40%);
-    transform: scale(0.94);
-  }
-
-  .continueButton:hover {
-    transform: none;
-  }
-
-  .continueButton:active {
-    box-shadow: 0 8px 25px rgb(231 76 60 / 50%);
-    transform: translateY(-1px) scale(0.97);
-  }
-
-  .catImage:hover {
-    transform: none;
-  }
-
-  .catImage:active {
-    transform: scale(1.08) rotate(3deg);
-  }
-
-  .actionSection:hover {
-    transform: none;
-  }
-
-  .actionSection:active {
-    transform: translateY(-1px);
-  }
-
-  .interactiveName {
-    min-width: 28px;
-    min-height: 24px;
-    padding: 4px 6px;
-    border-radius: 4px;
-  }
-
-  .continueButton {
-    max-width: 100%;
-    min-height: 56px;
-    padding: var(--ws-space-lg) var(--ws-space-2xl);
-    font-size: var(--ws-text-base);
-    border-radius: 22px;
-  }
-
-  .buttonContent {
-    gap: var(--ws-space-md);
-  }
-
-  .buttonText {
-    font-size: var(--ws-text-base);
-  }
-
-  .buttonEmoji {
-    font-size: 1.2rem;
-  }
-
-  /* Mobile image gallery adjustments */
-  .imageNavButton {
-    width: 36px;
-    height: 36px;
-    font-size: 20px;
-  }
-
-  .imageNavButton:first-of-type {
-    left: -18px;
-  }
-
-  .imageNavButton:last-of-type {
-    right: -18px;
-  }
-
-  .imageCounter {
-    bottom: -30px;
-    padding: 3px 10px;
-    font-size: 0.7rem;
-  }
-
-  .imageDots {
-    bottom: -50px;
-    gap: 6px;
-  }
-
-  .imageDot {
-    width: 6px;
-    height: 6px;
-  }
-
-  /* Mobile error state adjustments */
-  .errorContent {
-    gap: var(--ws-space-xs);
-  }
-
-  .errorIcon {
-    font-size: 1.5rem;
-  }
-
-  .errorText {
-    font-size: var(--ws-text-xs);
-  }
-
-  .loadingSpinner {
-    width: 24px;
-    height: 24px;
-    border-width: 2px;
+  .rotatedCard:hover,
+  .welcomeNameCard:hover,
+  .footerButton:hover,
+  .nameCardWrapper:hover {
+    transform: none !important;
   }
 }
 
 /* Dark theme support */
-:global(.dark-theme) .actionSection {
-  background: linear-gradient(135deg, rgb(30 30 30 / 95%), rgb(40 40 40 / 95%));
-  border-color: rgb(var(--ws-white) / 10%);
-}
-
-:global(.dark-theme) .catNameText {
-  color: var(--text-primary);
-}
-
-:global(.dark-theme) .explanationText {
-  background: rgb(var(--ws-primary-blue) / 15%);
-  border-color: rgb(var(--ws-primary-blue) / 30%);
-}
-
-:global(.dark-theme) .explanationText p {
-  color: var(--ws-light-text);
-}
-
-:global(.dark-theme) .particle {
-  background: radial-gradient(circle, var(--ws-secondary-gold), var(--ws-primary-gold));
-}
-
-:global(.dark-theme) .buttonGlow {
-  background: linear-gradient(135deg, var(--ws-secondary-gold), var(--ws-primary-gold), var(--ws-primary-red));
-}
-
-/* Dark theme support for WelcomeScreen components */
 :global(.dark-theme) .rotatedCard {
   background: linear-gradient(135deg, 
     rgb(15 23 42 / 95%) 0%, 
@@ -2037,242 +995,4 @@
     0 8px 25px rgb(0 0 0 / 40%),
     0 4px 10px rgb(0 0 0 / 20%),
     inset 0 1px 0 rgb(255 255 255 / 20%);
-}
-
-/* ==========================================================================
-   REDUCED MOTION SUPPORT
-   ========================================================================== */
-
-@media (prefers-reduced-motion: reduce) {
-  .rotatedCard,
-  .headerText,
-  .welcomeNameCard,
-  .footerButton,
-  .nameCardWrapper {
-    transition: none !important;
-    animation: none !important;
-  }
-
-  .rotatedCard:hover,
-  .welcomeNameCard:hover,
-  .footerButton:hover,
-  .nameCardWrapper:hover {
-    transform: none !important;
-  }
-
-  .rotatedCard::before,
-  .cardHeader::before,
-  .welcomeNameCard::before,
-  .footerButton::before {
-    animation: none !important;
-  }
-
-  .headerText {
-    animation: none !important;
-  }
-
-  .card,
-  .checkMark,
-  .description {
-    transition: none;
-  }
-
-  .card:hover {
-    transform: none;
-  }
-
-  .card:active {
-    transform: none;
-  }
-
-  /* Disable tilt effects for reduced motion */
-  .backgroundEffect {
-    opacity: 0;
-  }
-
-  .card:not(.disabled) {
-    transition: none;
-  }
-}
-
-/* ==========================================================================
-   HIGH CONTRAST MODE SUPPORT
-   ========================================================================== */
-
-@media (prefers-contrast: more) {
-  .rotatedCard {
-    background: var(--card-background) !important;
-    border: 3px solid var(--border-color) !important;
-    box-shadow: none !important;
-  }
-
-  .headerText {
-    color: var(--text-primary) !important;
-    text-shadow: none !important;
-    background: none !important;
-    background-clip: unset !important;
-    -webkit-text-fill-color: unset !important;
-  }
-
-  .welcomeNameCard {
-    background: var(--card-background) !important;
-    border: 2px solid var(--border-color) !important;
-    box-shadow: none !important;
-  }
-
-  .welcomeNameCard:hover {
-    border-color: var(--accent-color) !important;
-    box-shadow: 0 0 0 2px var(--accent-color) !important;
-  }
-
-  .footerButton {
-    color: var(--text-primary) !important;
-    background: var(--card-background) !important;
-    border: 3px solid var(--border-color) !important;
-  }
-
-  .footerButton:hover:not(:disabled) {
-    color: var(--background-color) !important;
-    background: var(--accent-color) !important;
-    border-color: var(--accent-color) !important;
-  }
-}
-
-
-/* ==========================================================================
-   WELCOME SCREEN NAMES GRID STYLES
-   ========================================================================== */
-
-.namesGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-  gap: 1.2em;
-  max-width: 700px;
-  padding: 0.5em;
-  margin: 0 auto;
-  animation: gridFadeIn 0.8s ease-out forwards;
-}
-
-@keyframes gridFadeIn {
-  0% {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.nameCardWrapper {
-  opacity: 0;
-  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  animation: cardStagger 0.6s ease-out forwards;
-}
-
-.nameCardWrapper:nth-child(1) { animation-delay: 0.1s; }
-.nameCardWrapper:nth-child(2) { animation-delay: 0.2s; }
-.nameCardWrapper:nth-child(3) { animation-delay: 0.3s; }
-.nameCardWrapper:nth-child(4) { animation-delay: 0.4s; }
-.nameCardWrapper:nth-child(5) { animation-delay: 0.5s; }
-.nameCardWrapper:nth-child(6) { animation-delay: 0.6s; }
-
-@keyframes cardStagger {
-  0% {
-    opacity: 0;
-    transform: translateY(30px) scale(0.9);
-  }
-
-  100% {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-}
-
-.nameCardWrapper:hover {
-  z-index: 10;
-  transform: translateY(-8px) scale(1.05);
-}
-
-.welcomeNameCard {
-  position: relative !important;
-  overflow: hidden !important;
-  background: linear-gradient(135deg, 
-    rgb(255 255 255 / 95%) 0%, 
-    rgb(248 250 252 / 90%) 100%) !important;
-  border: 2px solid var(--ws-primary-gold) !important;
-  border-radius: 16px !important;
-  box-shadow: 
-    0 8px 25px rgb(0 0 0 / 10%),
-    0 4px 10px rgb(0 0 0 / 5%),
-    inset 0 1px 0 rgb(255 255 255 / 80%) !important;
-  backdrop-filter: blur(10px) !important;
-  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
-}
-
-.welcomeNameCard::before {
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  content: "";
-  background: linear-gradient(90deg, 
-    transparent 0%, 
-    rgb(255 255 255 / 30%) 50%, 
-    transparent 100%);
-  transition: left 0.6s ease;
-}
-
-.welcomeNameCard:hover::before {
-  left: 100%;
-}
-
-.welcomeNameCard:hover {
-  border-color: var(--ws-secondary-gold) !important;
-  box-shadow: 
-    0 20px 40px rgb(0 0 0 / 15%),
-    0 8px 16px rgb(0 0 0 / 10%),
-    inset 0 1px 0 rgb(255 255 255 / 90%) !important;
-  transform: translateY(-6px) scale(1.02) !important;
-}
-
-.loadingContainer {
-  display: flex;
-  flex-direction: column;
-  gap: var(--ws-space-md);
-  align-items: center;
-}
-
-.errorContainer,
-.emptyContainer {
-  padding: var(--ws-space-lg);
-  color: var(--ws-white);
-  text-align: center;
-}
-
-.errorContainer h3,
-.emptyContainer h3 {
-  margin-bottom: var(--ws-space-sm);
-  font-size: var(--ws-text-lg);
-  color: var(--ws-primary-gold);
-}
-
-.errorContainer p,
-.emptyContainer p {
-  font-size: var(--ws-text-sm);
-  opacity: 0.8;
-}
-
-@keyframes nameCardFadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
 }

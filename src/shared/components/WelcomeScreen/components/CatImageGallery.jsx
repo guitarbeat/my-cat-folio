@@ -1,28 +1,11 @@
 /**
  * @module CatImageGallery
- * @description Cat image gallery component with navigation controls and transitions.
- * Handles image display, rotation, and user interactions.
+ * @description Simplified cat image gallery component with clean, maintainable code.
  */
 
 import React, { useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import styles from '../WelcomeScreen.module.css';
-
-/**
- * Cat image gallery component
- * @param {Object} props - Component props
- * @param {string} props.currentImage - Current image URL
- * @param {boolean} props.isTransitioning - Whether image is transitioning
- * @param {boolean} props.hasMultipleImages - Whether multiple images are available
- * @param {number} props.currentIndex - Current image index
- * @param {number} props.totalImages - Total number of images
- * @param {Function} props.onPrevious - Previous image callback
- * @param {Function} props.onNext - Next image callback
- * @param {Function} props.onImageSelect - Image selection callback
- * @param {Function} props.onImageLoad - Image load callback
- * @param {Function} props.onImageError - Image error callback
- * @returns {JSX.Element} Cat image gallery
- */
 const CatImageGallery = ({
   currentImage,
   isTransitioning,
@@ -42,9 +25,7 @@ const CatImageGallery = ({
   const handleImageLoad = useCallback(() => {
     setImageLoading(false);
     setImageError(false);
-    if (onImageLoad) {
-      onImageLoad();
-    }
+    onImageLoad?.();
   }, [onImageLoad]);
 
   // * Handle image load error with fallback
@@ -52,10 +33,7 @@ const CatImageGallery = ({
     console.error('Image failed to load:', event.target.src);
     setImageError(true);
     setImageLoading(false);
-
-    if (onImageError) {
-      onImageError(event);
-    }
+    onImageError?.(event);
   }, [onImageError]);
 
   // * Reset loading state when image changes
