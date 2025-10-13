@@ -1,7 +1,6 @@
 /**
  * @module WelcomeCard
- * @description Welcome card component containing the cat name and action button.
- * Provides the main content area with interactive elements.
+ * @description Simplified welcome card component with clean, maintainable code.
  */
 
 import React from 'react';
@@ -9,18 +8,6 @@ import PropTypes from 'prop-types';
 import NameCard from '../../NameCard/NameCard';
 import { SkeletonLoader } from '../../LoadingSpinner';
 import styles from '../WelcomeScreen.module.css';
-
-/**
- * Welcome card component
- * @param {Object} props - Component props
- * @param {Array} props.activeNames - Array of active names from backend
- * @param {boolean} props.namesLoading - Whether names are loading
- * @param {Error} props.namesError - Error if names failed to load
- * @param {Function} props.onContinue - Continue button callback
- * @param {Function} props.onNameHover - Name hover callback
- * @param {Function} props.onNameLeave - Name leave callback
- * @returns {JSX.Element} Welcome card
- */
 const WelcomeCard = ({
   activeNames = [],
   namesLoading = false,
