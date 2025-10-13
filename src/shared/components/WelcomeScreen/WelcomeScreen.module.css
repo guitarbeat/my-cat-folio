@@ -482,6 +482,24 @@
   transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
+.rotatedCard::before {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  height: 3px;
+  content: "";
+  background: linear-gradient(90deg, 
+    var(--ws-primary-gold) 0%, 
+    var(--ws-secondary-gold) 25%, 
+    var(--ws-primary-red) 50%, 
+    var(--ws-primary-blue) 75%, 
+    var(--ws-purple) 100%);
+  background-size: 200% 100%;
+  border-radius: 24px 24px 0 0;
+  animation: gradientShift 3s ease-in-out infinite;
+}
+
 .rotatedCard::after {
   position: absolute;
   inset: 0;
@@ -501,24 +519,6 @@
     0 12px 24px rgb(0 0 0 / 10%),
     inset 0 1px 0 rgb(255 255 255 / 90%);
   transform: translateY(-8px) scale(1.02);
-}
-
-.rotatedCard::before {
-  position: absolute;
-  top: 0;
-  right: 0;
-  left: 0;
-  height: 3px;
-  content: "";
-  background: linear-gradient(90deg, 
-    var(--ws-primary-gold) 0%, 
-    var(--ws-secondary-gold) 25%, 
-    var(--ws-primary-red) 50%, 
-    var(--ws-primary-blue) 75%, 
-    var(--ws-purple) 100%);
-  background-size: 200% 100%;
-  border-radius: 24px 24px 0 0;
-  animation: gradientShift 3s ease-in-out infinite;
 }
 
 @keyframes gradientShift {
@@ -591,30 +591,6 @@
     );
   opacity: 0.25;
   border-radius: inherit;
-}
-
-.badgeNameArea {
-  display: grid;
-  place-items: center;
-  padding: 1em;
-  margin: 0 0 0.75em;
-  background: #fff;
-  border: 2px solid rgb(0 0 0 / 10%);
-  border-radius: 14px;
-  box-shadow: inset 0 1px 0 rgb(0 0 0 / 5%);
-}
-
-.badgeNameText {
-  font-size: clamp(1.6em, 6vw, 2.4em);
-  font-weight: 900;
-  letter-spacing: 0.02em;
-  color: var(--ws-black);
-}
-
-.badgeHint {
-  margin: 0.2em 0 1em;
-  font-size: var(--ws-text-sm);
-  opacity: 0.7;
 }
 
 .cardFooter {
@@ -1079,4 +1055,22 @@
     0 8px 25px rgb(0 0 0 / 40%),
     0 4px 10px rgb(0 0 0 / 20%),
     inset 0 1px 0 rgb(255 255 255 / 20%);
+}
+
+/* Dark theme paper overrides */
+:global(.dark-theme) .rotatedCard {
+  background: linear-gradient(135deg,
+    rgb(20 28 48 / 96%) 0%,
+    rgb(30 41 59 / 92%) 50%,
+    rgb(20 28 48 / 96%) 100%);
+  border: 1px solid rgb(71 85 105 / 40%);
+  box-shadow:
+    0 24px 48px rgb(0 0 0 / 40%),
+    0 10px 20px rgb(0 0 0 / 28%),
+    inset 0 1px 0 rgb(255 255 255 / 8%),
+    inset 0 -1px 0 rgb(0 0 0 / 20%);
+}
+
+:global(.dark-theme) .catNameSection::after {
+  opacity: 0.18;
 }
