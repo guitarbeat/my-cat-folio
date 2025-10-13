@@ -43,8 +43,10 @@ function useTheme() {
 
     // * Batch DOM updates to prevent layout thrashing
     requestAnimationFrame(() => {
+      // Remove all theme classes first
+      body.classList.remove('light-theme', 'dark-theme');
+      // Add the current theme class
       body.classList.add(bodyClass);
-      body.classList.remove(darkBodyClass);
 
       if (themeColorMeta) {
         themeColorMeta.setAttribute('content', metaColor);

@@ -257,14 +257,9 @@ function App() {
   }, [logout, userActions, tournamentActions]);
 
   // * Handle theme change
-  const handleThemeChange = useCallback(
-    (isLight) => {
-      const theme = isLight ? 'light' : 'dark';
-      uiActions.setTheme(theme);
-      toggleTheme();
-    },
-    [uiActions, toggleTheme]
-  );
+  const handleThemeChange = useCallback(() => {
+    toggleTheme();
+  }, [toggleTheme]);
 
   // * Handle welcome screen continue
   const handleWelcomeContinue = useCallback(() => {
@@ -415,6 +410,8 @@ function App() {
     return (
       <WelcomeScreen
         onContinue={handleWelcomeContinue}
+        isLightTheme={isLightTheme}
+        onThemeToggle={handleThemeChange}
       />
     );
   }

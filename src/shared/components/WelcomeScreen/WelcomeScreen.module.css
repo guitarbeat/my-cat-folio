@@ -213,6 +213,16 @@
   );
 }
 
+/* Dark theme overlay */
+:global(.dark-theme) .overlay {
+  background: linear-gradient(
+    135deg,
+    rgb(0 0 0 / 50%) 0%,
+    rgb(0 0 0 / 30%) 50%,
+    rgb(0 0 0 / 60%) 100%
+  );
+}
+
 /* ==========================================================================
    CONTENT CONTAINER
    ========================================================================== */
@@ -1015,6 +1025,19 @@
     inset 0 1px 0 rgb(255 255 255 / 10%);
 }
 
+:global(.dark-theme) .cardHeader {
+  background: linear-gradient(135deg,
+    rgb(30 41 59) 0%,
+    rgb(51 65 85) 50%,
+    rgb(30 41 59) 100%);
+}
+
+:global(.dark-theme) .badgeTitle,
+:global(.dark-theme) .badgeSubtitle {
+  color: #f1f5f9;
+  text-shadow: 0 2px 4px rgb(0 0 0 / 50%);
+}
+
 :global(.dark-theme) .catNameSection {
   background: linear-gradient(180deg, 
     rgb(15 23 42 / 95%) 0%, 
@@ -1057,6 +1080,24 @@
     inset 0 1px 0 rgb(255 255 255 / 20%);
 }
 
+/* Dark theme theme toggle button */
+:global(.dark-theme) .themeToggle {
+  background: rgb(0 0 0 / 80%);
+  border: 2px solid rgb(255 255 255 / 50%);
+  color: #f1f5f9;
+}
+
+:global(.dark-theme) .themeToggle:hover:not(:disabled) {
+  background: rgb(0 0 0 / 90%);
+  border-color: rgb(var(--ws-primary-gold) / 90%);
+  box-shadow: 0 4px 12px rgb(0 0 0 / 60%);
+}
+
+:global(.dark-theme) .themeText {
+  color: #f1f5f9;
+  text-shadow: 0 1px 2px rgb(0 0 0 / 50%);
+}
+
 /* Dark theme paper overrides */
 :global(.dark-theme) .rotatedCard {
   background: linear-gradient(135deg,
@@ -1073,4 +1114,34 @@
 
 :global(.dark-theme) .catNameSection::after {
   opacity: 0.18;
+}
+
+/* Additional dark theme enhancements */
+:global(.dark-theme) .welcomeWrapper {
+  background: linear-gradient(135deg, 
+    rgb(15 23 42 / 95%) 0%, 
+    rgb(30 41 59 / 90%) 100%);
+}
+
+:global(.dark-theme) .backgroundContainer {
+  filter: brightness(0.7) contrast(1.1);
+}
+
+:global(.dark-theme) .catImage {
+  border: 4px solid rgb(71 85 105 / 60%);
+  box-shadow: 
+    0 12px 40px rgb(0 0 0 / 50%),
+    0 4px 16px rgb(0 0 0 / 30%);
+}
+
+:global(.dark-theme) .catImage:hover {
+  box-shadow: 
+    0 16px 50px rgb(0 0 0 / 60%),
+    0 6px 20px rgb(0 0 0 / 40%);
+  transform: scale(1.05) rotate(5deg);
+}
+
+:global(.dark-theme) .catImageGlow {
+  background: radial-gradient(circle, rgb(var(--ws-primary-gold) / 25%), transparent 70%);
+  opacity: 0.7;
 }
