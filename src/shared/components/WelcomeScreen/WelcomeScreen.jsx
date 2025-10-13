@@ -6,14 +6,12 @@ import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { NameStatsTooltip } from '../index';
 import { catNamesAPI } from '../../../../backend/api/supabaseClient';
-import useTheme from '../../../core/hooks/useTheme';
 import useImageGallery from '../../../core/hooks/useImageGallery';
 import ThemeToggle from './components/ThemeToggle';
 import WelcomeCard from './components/WelcomeCard';
 import styles from './WelcomeScreen.module.css';
 
-function WelcomeScreen({ onContinue }) {
-  const { isLightTheme, toggleTheme } = useTheme();
+function WelcomeScreen({ onContinue, isLightTheme, onThemeToggle }) {
   const [isVisible, setIsVisible] = useState(false);
   const [hoveredName, setHoveredName] = useState(null);
   const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 });
@@ -95,7 +93,7 @@ function WelcomeScreen({ onContinue }) {
       aria-label="Welcome screen showing your cat's tournament-generated name"
     >
       {/* Theme Toggle Button */}
-      <ThemeToggle isLightTheme={isLightTheme} onToggle={toggleTheme} />
+      <ThemeToggle isLightTheme={isLightTheme} onToggle={onThemeToggle} />
 
       {/* Background with overlay */}
       <div className={styles.backgroundContainer}>
@@ -134,7 +132,9 @@ function WelcomeScreen({ onContinue }) {
 WelcomeScreen.displayName = 'WelcomeScreen';
 
 WelcomeScreen.propTypes = {
-  onContinue: PropTypes.func
+  onContinue: PropTypes.func,
+  isLightTheme: PropTypes.bool.isRequired,
+  onThemeToggle: PropTypes.func.isRequired
 };
 
 export default WelcomeScreen;
