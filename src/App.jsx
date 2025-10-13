@@ -496,7 +496,7 @@ function App() {
         maxToasts={5}
       />
 
-      {/* * Performance Dashboard - Admin Only */}
+      {/* * Performance Dashboard - Available to all users */}
       <PerformanceDashboard
         userName={userName}
         isVisible={showPerformanceDashboard}

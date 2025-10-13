@@ -59,17 +59,13 @@ describe('PerformanceDashboard', () => {
     expect(screen.getByText('Loading performance data...')).toBeInTheDocument();
   });
 
-  test('shows unauthorized message for non-admin users', async () => {
-    const { isUserAdmin } = await import('../../../utils/authUtils');
-    isUserAdmin.mockResolvedValue(false);
-
+  test('shows performance dashboard for all users', async () => {
     await act(async () => {
       render(<PerformanceDashboard {...defaultProps} />);
     });
 
     await waitFor(() => {
-      expect(screen.getByText('🔒 Access Denied')).toBeInTheDocument();
-      expect(screen.getByText('Performance dashboard is only available to administrators.')).toBeInTheDocument();
+      expect(screen.getByText('📊 Performance Dashboard')).toBeInTheDocument();
     });
   });
 
@@ -84,19 +80,16 @@ describe('PerformanceDashboard', () => {
     await act(async () => {
       render(<PerformanceDashboard {...defaultProps} userName="" />);
     });
-    expect(screen.getByText('🔒 Access Denied')).toBeInTheDocument();
+    expect(screen.getByText('Loading performance data...')).toBeInTheDocument();
   });
 
-  test('handles authentication errors gracefully', async () => {
-    const { isUserAdmin } = await import('../../../utils/authUtils');
-    isUserAdmin.mockRejectedValue(new Error('Auth error'));
-
+  test('handles errors gracefully', async () => {
     await act(async () => {
       render(<PerformanceDashboard {...defaultProps} />);
     });
 
     await waitFor(() => {
-      expect(screen.getByText('🔒 Access Denied')).toBeInTheDocument();
+      expect(screen.getByText('📊 Performance Dashboard')).toBeInTheDocument();
     });
   });
 });
