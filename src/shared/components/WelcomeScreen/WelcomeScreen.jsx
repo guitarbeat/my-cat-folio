@@ -9,7 +9,6 @@ import { catNamesAPI } from '../../../../backend/api/supabaseClient';
 import useTheme from '../../../core/hooks/useTheme';
 import useImageGallery from '../../../core/hooks/useImageGallery';
 import ThemeToggle from './components/ThemeToggle';
-import CatImageGallery from './components/CatImageGallery';
 import WelcomeCard from './components/WelcomeCard';
 import styles from './WelcomeScreen.module.css';
 
@@ -37,15 +36,7 @@ function WelcomeScreen({ onContinue }) {
 
   const {
     currentImage,
-    isImageTransitioning,
-    hasMultipleImages,
-    currentImageIndex,
-    totalImages: galleryDataLength,
-    goToNextImage,
-    goToPreviousImage,
-    goToImage,
-    handleImageLoad,
-    handleImageError
+    isImageTransitioning
   } = useImageGallery({
     initialImages: galleryData,
     rotationInterval: 6000,
@@ -108,25 +99,16 @@ function WelcomeScreen({ onContinue }) {
 
       {/* Background with overlay */}
       <div className={styles.backgroundContainer}>
-        <div className={styles.backgroundImage} />
+        <div
+          className={`${styles.backgroundImage} ${isImageTransitioning ? styles.bgTransitioning : ''}`}
+          style={{ backgroundImage: `url(${currentImage})` }}
+          aria-hidden="true"
+        />
         <div className={styles.overlay} />
       </div>
 
       {/* Centered Content Container */}
       <div className={styles.contentContainer}>
-        {/* Cat Image Gallery */}
-        <CatImageGallery
-          currentImage={currentImage}
-          isTransitioning={isImageTransitioning}
-          hasMultipleImages={hasMultipleImages}
-          currentIndex={currentImageIndex}
-          totalImages={galleryDataLength}
-          onPrevious={goToPreviousImage}
-          onNext={goToNextImage}
-          onImageSelect={goToImage}
-          onImageLoad={handleImageLoad}
-          onImageError={handleImageError}
-        />
 
         {/* Welcome Card */}
         <WelcomeCard
