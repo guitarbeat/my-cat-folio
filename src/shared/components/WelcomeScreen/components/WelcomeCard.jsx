@@ -16,11 +16,14 @@ const WelcomeCard = ({
   onNameHover,
   onNameLeave
 }) => {
+  const primaryName = activeNames && activeNames.length > 0 ? activeNames[0].name : null;
+
   return (
     <div className={styles.rotatedCard}>
       {/* Header */}
       <div className={styles.cardHeader}>
-        <span className={styles.headerText}>Aaron&apos;s Top Cat Names</span>
+        <span className={styles.badgeTitle}>HELLO</span>
+        <span className={styles.badgeSubtitle}>my name is</span>
       </div>
 
       {/* Active Names Display */}
@@ -42,34 +45,39 @@ const WelcomeCard = ({
             <p>Check back later for Aaron&apos;s top rated names!</p>
           </div>
         ) : (
-          <div className={styles.namesGrid}>
-            {activeNames.slice(0, 6).map((name) => (
-              <div
-                key={name.id}
-                className={styles.nameCardWrapper}
-                onMouseEnter={(e) => onNameHover?.(name, e)}
-                onMouseLeave={onNameLeave}
-              >
-                <NameCard
-                  name={name.name}
-                  description={name.description || `Aaron's Rating: ${name.user_rating || 0}`}
-                  size="small"
-                  metadata={{
-                    rating: name.user_rating || 0,
-                    popularity: name.popularity_score,
-                    tournaments: name.total_tournaments,
-                    categories: name.categories,
-                    winRate: name.user_wins && name.user_losses
-                      ? Math.round((name.user_wins / (name.user_wins + name.user_losses)) * 100)
-                      : 0,
-                    totalMatches: (name.user_wins || 0) + (name.user_losses || 0)
-                  }}
-                  className={styles.welcomeNameCard}
-                  disabled={false}
-                />
-              </div>
-            ))}
-          </div>
+          <>
+            <div className={styles.badgeNameArea}>
+              <div className={styles.badgeNameText}>{primaryName}</div>
+            </div>
+            <div className={styles.namesGrid}>
+              {activeNames.slice(0, 6).map((name) => (
+                <div
+                  key={name.id}
+                  className={styles.nameCardWrapper}
+                  onMouseEnter={(e) => onNameHover?.(name, e)}
+                  onMouseLeave={onNameLeave}
+                >
+                  <NameCard
+                    name={name.name}
+                    description={name.description || `Aaron's Rating: ${name.user_rating || 0}`}
+                    size="small"
+                    metadata={{
+                      rating: name.user_rating || 0,
+                      popularity: name.popularity_score,
+                      tournaments: name.total_tournaments,
+                      categories: name.categories,
+                      winRate: name.user_wins && name.user_losses
+                        ? Math.round((name.user_wins / (name.user_wins + name.user_losses)) * 100)
+                        : 0,
+                      totalMatches: (name.user_wins || 0) + (name.user_losses || 0)
+                    }}
+                    className={styles.welcomeNameCard}
+                    disabled={false}
+                  />
+                </div>
+              ))}
+            </div>
+          </>
         )}
       </div>
 
