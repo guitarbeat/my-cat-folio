@@ -487,17 +487,14 @@
   top: 0;
   right: 0;
   left: 0;
-  height: 3px;
+  height: 2px;
   content: "";
-  background: linear-gradient(90deg, 
-    var(--ws-primary-gold) 0%, 
-    var(--ws-secondary-gold) 25%, 
-    var(--ws-primary-red) 50%, 
-    var(--ws-primary-blue) 75%, 
-    var(--ws-purple) 100%);
-  background-size: 200% 100%;
+  background: linear-gradient(90deg,
+    rgb(0 0 0 / 8%),
+    rgb(255 255 255 / 30%),
+    rgb(0 0 0 / 8%));
   border-radius: 24px 24px 0 0;
-  animation: gradientShift 3s ease-in-out infinite;
+  opacity: 0.35;
 }
 
 .rotatedCard::after {
