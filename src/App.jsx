@@ -269,7 +269,13 @@ function App() {
   // * Handle welcome screen continue
   const handleWelcomeContinue = useCallback(() => {
     setShowWelcomeScreen(false);
-  }, []);
+    // Always show Login after Welcome, even if a previous session exists
+    if (isLoggedIn) {
+      logout();
+      userActions.logout();
+      tournamentActions.resetTournament();
+    }
+  }, [isLoggedIn, logout, userActions, tournamentActions]);
 
   // * Memoize main content to prevent unnecessary re-renders
   const mainContent = useMemo(() => {
