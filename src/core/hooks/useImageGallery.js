@@ -1,7 +1,7 @@
 /**
  * @module useImageGallery
- * @description Custom hook for managing image gallery functionality with rotation and navigation.
- * Handles image loading, transitions, and user interactions.
+ * @description Simplified custom hook for managing image gallery functionality.
+ * Handles image loading, transitions, and user interactions with clean, maintainable code.
  */
 
 import { useState, useEffect, useCallback, useRef } from 'react';
@@ -30,45 +30,39 @@ export const useImageGallery = ({
   const imageRotationRef = useRef(null);
   const transitionTimeoutRef = useRef(null);
 
-
-  // Rotate to next image with optimized transitions
+  // * Rotate to next image with optimized transitions
   const rotateImage = useCallback(() => {
     if (galleryData.length <= 1 || isImageTransitioning) return;
 
-    // Use requestAnimationFrame for smoother transitions
     requestAnimationFrame(() => {
       setIsImageTransitioning(true);
 
-      // Clear any existing timeout
       if (transitionTimeoutRef.current) {
         clearTimeout(transitionTimeoutRef.current);
       }
 
       transitionTimeoutRef.current = setTimeout(() => {
         setCurrentImageIndex(prevIndex => (prevIndex + 1) % galleryData.length);
-        // Use requestAnimationFrame to ensure DOM update before setting transition to false
         requestAnimationFrame(() => {
           setIsImageTransitioning(false);
         });
-      }, 200); // Reduced transition time
+      }, 200);
     });
   }, [galleryData.length, isImageTransitioning]);
 
-  // Go to next image
+  // * Go to next image
   const goToNextImage = useCallback(() => {
     if (galleryData.length <= 1 || isImageTransitioning) return;
     rotateImage();
   }, [rotateImage, galleryData.length, isImageTransitioning]);
 
-  // Go to previous image with optimized transitions
+  // * Go to previous image with optimized transitions
   const goToPreviousImage = useCallback(() => {
     if (galleryData.length <= 1 || isImageTransitioning) return;
 
-    // Use requestAnimationFrame for smoother transitions
     requestAnimationFrame(() => {
       setIsImageTransitioning(true);
 
-      // Clear any existing timeout
       if (transitionTimeoutRef.current) {
         clearTimeout(transitionTimeoutRef.current);
       }
@@ -77,40 +71,36 @@ export const useImageGallery = ({
         setCurrentImageIndex(prevIndex =>
           prevIndex === 0 ? galleryData.length - 1 : prevIndex - 1
         );
-        // Use requestAnimationFrame to ensure DOM update before setting transition to false
         requestAnimationFrame(() => {
           setIsImageTransitioning(false);
         });
-      }, 200); // Reduced transition time
+      }, 200);
     });
   }, [galleryData.length, isImageTransitioning]);
 
-  // Go to specific image with optimized transitions
+  // * Go to specific image with optimized transitions
   const goToImage = useCallback((index) => {
     if (galleryData.length <= 1 || isImageTransitioning || index === currentImageIndex) return;
 
     if (index < 0 || index >= galleryData.length) return;
 
-    // Use requestAnimationFrame for smoother transitions
     requestAnimationFrame(() => {
       setIsImageTransitioning(true);
 
-      // Clear any existing timeout
       if (transitionTimeoutRef.current) {
         clearTimeout(transitionTimeoutRef.current);
       }
 
       transitionTimeoutRef.current = setTimeout(() => {
         setCurrentImageIndex(index);
-        // Use requestAnimationFrame to ensure DOM update before setting transition to false
         requestAnimationFrame(() => {
           setIsImageTransitioning(false);
         });
-      }, 200); // Reduced transition time
+      }, 200);
     });
   }, [galleryData.length, isImageTransitioning, currentImageIndex]);
 
-  // Start auto-rotation
+  // * Start auto-rotation
   const startAutoRotation = useCallback(() => {
     if (!autoRotate || galleryData.length <= 1) return;
 
@@ -121,7 +111,7 @@ export const useImageGallery = ({
     imageRotationRef.current = setInterval(rotateImage, rotationInterval);
   }, [autoRotate, galleryData.length, rotateImage, rotationInterval]);
 
-  // Stop auto-rotation
+  // * Stop auto-rotation
   const stopAutoRotation = useCallback(() => {
     if (imageRotationRef.current) {
       clearInterval(imageRotationRef.current);
@@ -159,7 +149,7 @@ export const useImageGallery = ({
     await Promise.allSettled(preloadPromises);
   }, [galleryData, preloadImage]);
 
-  // Handle image load
+  // * Handle image load
   const handleImageLoad = useCallback(() => {
     setIsImageTransitioning(false);
   }, []);
@@ -171,7 +161,7 @@ export const useImageGallery = ({
     setIsImageTransitioning(false);
   }, []);
 
-  // Initialize gallery
+  // * Initialize gallery
   useEffect(() => {
     const initializeGallery = async () => {
       if (initialImages && initialImages.length > 0) {
@@ -203,14 +193,6 @@ export const useImageGallery = ({
     };
 
     initializeGallery();
-  }, [initialImages]); // Add initialImages to dependency array
-
-  // Handle initialImages changes separately
-  useEffect(() => {
-    if (initialImages && initialImages.length > 0) {
-      setGalleryData(initialImages);
-      setIsLoading(false);
-    }
   }, [initialImages]);
 
   // * Preload images when gallery data is ready
@@ -218,9 +200,9 @@ export const useImageGallery = ({
     if (galleryData.length > 0 && !isLoading) {
       preloadAllImages();
     }
-  }, [galleryData, isLoading, preloadAllImages]);
+  }, [galleryData.length, isLoading, preloadAllImages]);
 
-  // Start auto-rotation when gallery is ready
+  // * Start auto-rotation when gallery is ready
   useEffect(() => {
     if (galleryData.length > 1 && !isLoading) {
       startAutoRotation();
@@ -231,7 +213,7 @@ export const useImageGallery = ({
     };
   }, [galleryData.length, isLoading, startAutoRotation, stopAutoRotation]);
 
-  // Cleanup on unmount
+  // * Cleanup on unmount
   useEffect(() => {
     return () => {
       stopAutoRotation();
@@ -251,6 +233,7 @@ export const useImageGallery = ({
     failedImages,
     hasMultipleImages: galleryData.length > 1,
     currentImage: galleryData[currentImageIndex] || '/assets/images/IMG_0778.jpg',
+    totalImages: galleryData.length,
     goToNextImage,
     goToPreviousImage,
     goToImage,
