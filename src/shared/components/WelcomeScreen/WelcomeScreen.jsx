@@ -2,7 +2,7 @@
  * @module WelcomeScreen
  * @description Simplified welcome screen component with clean, maintainable code.
  */
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { NameStatsTooltip } from '../index';
 import { catNamesAPI } from '../../../../backend/api/supabaseClient';
@@ -23,14 +23,17 @@ function WelcomeScreen({ onContinue }) {
   const [namesError, setNamesError] = useState(null);
 
   // * Define gallery data
-  const galleryData = [
-    '/assets/images/IMG_0778.jpg',
-    '/assets/images/IMG_0779.jpg',
-    '/assets/images/IMG_0865.jpg',
-    '/assets/images/IMG_0884.jpg',
-    '/assets/images/IMG_0923.jpg',
-    '/assets/images/IMG_1116.jpg'
-  ];
+  const galleryData = useMemo(
+    () => [
+      '/assets/images/IMG_0778.jpg',
+      '/assets/images/IMG_0779.jpg',
+      '/assets/images/IMG_0865.jpg',
+      '/assets/images/IMG_0884.jpg',
+      '/assets/images/IMG_0923.jpg',
+      '/assets/images/IMG_1116.jpg'
+    ],
+    []
+  );
 
   const {
     currentImage,
