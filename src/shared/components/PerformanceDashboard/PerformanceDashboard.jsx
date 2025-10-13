@@ -1,17 +1,15 @@
 /**
  * @module PerformanceDashboard
- * @description Real-time performance monitoring dashboard for administrators
+ * @description Real-time performance monitoring dashboard for all users
  */
 
 import React, { useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import performanceMonitor from '../../utils/performanceMonitor';
-import { isUserAdmin } from '../../utils/authUtils';
 import styles from './PerformanceDashboard.module.css';
 
 const PerformanceDashboard = ({ userName, isVisible = false, onClose }) => {
   const [metrics, setMetrics] = useState(null);
-  const [isAdmin, setIsAdmin] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [refreshInterval, setRefreshInterval] = useState(null);
 
@@ -21,36 +19,27 @@ const PerformanceDashboard = ({ userName, isVisible = false, onClose }) => {
     setMetrics(currentMetrics);
   }, []);
 
-  // Check admin status
+  // Initialize metrics for all users
   useEffect(() => {
-    const checkAdminStatus = async () => {
+    const initializeMetrics = () => {
       if (!userName) {
-        setIsAdmin(false);
         setIsLoading(false);
         return;
       }
 
-      try {
-        const adminStatus = await isUserAdmin(userName);
-        setIsAdmin(adminStatus);
-        // Load metrics immediately after admin check
-        if (adminStatus && isVisible) {
-          updateMetrics();
-        }
-      } catch (error) {
-        console.error('Error checking admin status:', error);
-        setIsAdmin(false);
-      } finally {
-        setIsLoading(false);
+      // Load metrics immediately for all users
+      if (isVisible) {
+        updateMetrics();
       }
+      setIsLoading(false);
     };
 
-    checkAdminStatus();
+    initializeMetrics();
   }, [userName, isVisible, updateMetrics]);
 
   // Set up refresh interval
   useEffect(() => {
-    if (isVisible && isAdmin) {
+    if (isVisible) {
       // Only set up interval if metrics aren't already loaded
       if (!metrics) {
         updateMetrics();
@@ -67,7 +56,7 @@ const PerformanceDashboard = ({ userName, isVisible = false, onClose }) => {
         clearInterval(refreshInterval);
       }
     };
-  }, [isVisible, isAdmin, updateMetrics, refreshInterval, metrics]);
+  }, [isVisible, updateMetrics, refreshInterval, metrics]);
 
   // Cleanup on unmount
   useEffect(() => {
@@ -82,17 +71,6 @@ const PerformanceDashboard = ({ userName, isVisible = false, onClose }) => {
     return (
       <div className={styles.dashboard}>
         <div className={styles.loading}>Loading performance data...</div>
-      </div>
-    );
-  }
-
-  if (!isAdmin) {
-    return (
-      <div className={styles.dashboard}>
-        <div className={styles.unauthorized}>
-          <h3>🔒 Access Denied</h3>
-          <p>Performance dashboard is only available to administrators.</p>
-        </div>
       </div>
     );
   }

@@ -229,7 +229,7 @@ function NavBar({
               </button>
             </li>
 
-            {/* Performance Dashboard Button - Admin Only */}
+            {/* Performance Dashboard Button - Available to all users */}
             {isLoggedIn && onTogglePerformanceDashboard && (
               <li className="navbar__item navbar__item--performance-dashboard">
                 <button
