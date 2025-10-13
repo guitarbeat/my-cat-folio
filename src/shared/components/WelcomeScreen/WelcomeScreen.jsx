@@ -24,12 +24,12 @@ function WelcomeScreen({ onContinue }) {
   // * Define gallery data
   const galleryData = useMemo(
     () => [
-      '/assets/images/IMG_0778.jpg',
-      '/assets/images/IMG_0779.jpg',
-      '/assets/images/IMG_0865.jpg',
-      '/assets/images/IMG_0884.jpg',
-      '/assets/images/IMG_0923.jpg',
-      '/assets/images/IMG_1116.jpg'
+      '/assets/images/IMG_0778.avif',
+      '/assets/images/IMG_0779.avif',
+      '/assets/images/IMG_0865.avif',
+      '/assets/images/IMG_0884.avif',
+      '/assets/images/IMG_0923.avif',
+      '/assets/images/IMG_1116.avif'
     ],
     []
   );
