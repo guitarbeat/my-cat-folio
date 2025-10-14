@@ -251,7 +251,7 @@ export class ErrorManager {
     const contextMessage = contextMap[context] || 'An error occurred';
     const severity = this.determineSeverity(errorInfo, {});
 
-    return USER_FRIENDLY_MESSAGES[errorInfo.type]?.[severity] || 
+    return USER_FRIENDLY_MESSAGES[errorInfo.type]?.[severity] ||
            `${contextMessage}. Please try again.`;
   }
 
@@ -529,7 +529,8 @@ export class ErrorManager {
   /**
    * * Circuit breaker implementation
    */
-  static CircuitBreaker = class {
+  static get CircuitBreaker() {
+    return class {
     constructor(failureThreshold = 5, resetTimeout = 60000) {
       this.failureThreshold = failureThreshold;
       this.resetTimeout = resetTimeout;
@@ -594,7 +595,8 @@ export class ErrorManager {
       this.failureCount = 0;
       this.lastFailureTime = null;
     }
-  };
+    };
+  }
 
   /**
    * * Create a retry wrapper with circuit breaker
@@ -689,7 +691,7 @@ export const withRetry = (operation, options) => ErrorManager.withRetry(operatio
 export const createResilientFunction = (fn, options) => ErrorManager.createResilientFunction(fn, options);
 export const setupGlobalErrorHandling = () => ErrorManager.setupGlobalErrorHandling();
 export const getSeverityClass = (severity, styles) => ErrorManager.getSeverityClass(severity, styles);
-export const createStandardizedError = (error, context, additionalInfo) => 
+export const createStandardizedError = (error, context, additionalInfo) =>
   ErrorManager.createStandardizedError(error, context, additionalInfo);
 
 export default ErrorManager;
