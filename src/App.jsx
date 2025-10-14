@@ -7,7 +7,7 @@
  * @returns {JSX.Element} The complete application UI
  */
 
-import React, { useCallback, useMemo, lazy, Suspense, useState } from 'react';
+import React, { useCallback, lazy } from 'react';
 import CatBackground from './shared/components/CatBackground/CatBackground';
 import SuspenseView from './shared/components/SuspenseView/SuspenseView';
 import ViewRouter from './shared/components/ViewRouter/ViewRouter';
