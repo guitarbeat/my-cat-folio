@@ -1,14 +1,11 @@
-import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react';
-import viteCompression from 'vite-plugin-compression';
-import { componentTagger } from 'lovable-tagger';
-import { resolve } from 'path';
-import { fileURLToPath } from 'url';
+const { defineConfig } = require('vite');
+const react = require('@vitejs/plugin-react');
+const compressionPkg = require('vite-plugin-compression');
+const viteCompression = compressionPkg.default || compressionPkg;
+const { componentTagger } = require('lovable-tagger');
+const path = require('path');
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = resolve(__filename, '..');
-
-export default defineConfig(({ mode }) => ({
+module.exports = defineConfig(({ mode }) => ({
   plugins: [
     react(),
     mode === 'development' && componentTagger(),
@@ -22,7 +19,7 @@ export default defineConfig(({ mode }) => ({
   assetsInclude: ['**/*.avif', '**/*.webp', '**/*.jpg', '**/*.jpeg', '**/*.png', '**/*.gif', '**/*.webm', '**/*.mp3'],
   resolve: {
     alias: {
-      '@': resolve(__dirname, 'src'),
+      '@': path.resolve(__dirname, 'src'),
     },
   },
   server: {
