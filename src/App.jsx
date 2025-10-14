@@ -86,7 +86,7 @@ function App() {
         tournamentActions.setRatings(updatedRatings);
         tournamentActions.setComplete(true);
       } catch (error) {
-        ErrorService.handleError(error, 'Tournament Completion', {
+        ErrorManager.handleError(error, 'Tournament Completion', {
           isRetryable: true,
           affectsUserData: true,
           isCritical: false
@@ -136,7 +136,7 @@ function App() {
         tournamentActions.setRatings(updatedRatings);
         return true;
       } catch (error) {
-        ErrorService.handleError(error, 'Rating Update', {
+        ErrorManager.handleError(error, 'Rating Update', {
           isRetryable: true,
           affectsUserData: true,
           isCritical: false
