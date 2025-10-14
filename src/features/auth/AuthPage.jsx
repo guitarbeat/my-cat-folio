@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useUserSession } from '@/core/hooks/useUserSession';
+import useUserSession from '@/core/hooks/useUserSession';
 import styles from './AuthPage.module.css';
 
 export function AuthPage() {
