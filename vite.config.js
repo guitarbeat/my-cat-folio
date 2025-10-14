@@ -1,14 +1,10 @@
-import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react';
-import viteCompression from 'vite-plugin-compression';
-import { resolve, dirname } from 'path';
-import { fileURLToPath } from 'url';
+const { defineConfig } = require('vite');
+const react = require('@vitejs/plugin-react');
+const compressionPkg = require('vite-plugin-compression');
+const viteCompression = compressionPkg.default || compressionPkg;
+const { resolve } = require('path');
 
-// Ensure __dirname works in ESM config
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-export default defineConfig({
+module.exports = defineConfig({
   plugins: [
     react(),
     // Gzip compression for broader CDN compatibility
@@ -26,7 +22,7 @@ export default defineConfig({
   },
   server: {
     port: 8080,
-    open: true,
+    open: false,
     hmr: {
       overlay: false,
     },
