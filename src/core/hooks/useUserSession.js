@@ -182,6 +182,11 @@ function useUserSession() {
         throw upsertError;
       }
 
+      // Set user context for RLS policies
+      await supabase.rpc('set_user_context', { user_name_param: trimmedName }).catch(() => {
+        // If function doesn't exist, that's okay - RLS will use JWT claims
+      });
+
       localStorage.setItem('catNamesUser', trimmedName);
       setUserName(trimmedName);
       setIsLoggedIn(true);

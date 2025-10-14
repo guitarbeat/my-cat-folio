@@ -46,17 +46,19 @@ export async function isUserAdmin(userName) {
       return ADMIN_USERS.includes(userName.toLowerCase().trim());
     }
 
+    // Check if user has admin role in user_roles table
     const { data, error } = await supabase
-      .from('cat_app_users')
-      .select('user_role')
+      .from('user_roles')
+      .select('role')
       .eq('user_name', userName.trim())
+      .eq('role', USER_ROLES.ADMIN)
       .single();
 
     if (error || !data) {
       return false;
     }
 
-    return data.user_role === USER_ROLES.ADMIN;
+    return data.role === USER_ROLES.ADMIN;
   } catch (error) {
     console.error('Error checking admin status:', error);
     return false;
@@ -88,18 +90,20 @@ export async function hasRole(userName, requiredRole) {
       return requiredRole === USER_ROLES.USER; // Everyone is at least a user
     }
 
+    // Get all roles for the user from user_roles table
     const { data, error } = await supabase
-      .from('cat_app_users')
-      .select('user_role')
-      .eq('user_name', userName.trim())
-      .single();
+      .from('user_roles')
+      .select('role')
+      .eq('user_name', userName.trim());
 
-    if (error || !data) {
+    if (error || !data || data.length === 0) {
       return false;
     }
 
-    const userRole = data.user_role;
-    const userLevel = ROLE_HIERARCHY[userRole] || 0;
+    // Find the highest role level
+    const userLevel = Math.max(
+      ...data.map(roleRecord => ROLE_HIERARCHY[roleRecord.role] || 0)
+    );
     const requiredLevel = ROLE_HIERARCHY[requiredRole] || 0;
 
     return userLevel >= requiredLevel;
@@ -130,17 +134,21 @@ export async function getUserRole(userName) {
       return ADMIN_USERS.includes(userName.toLowerCase().trim()) ? USER_ROLES.ADMIN : USER_ROLES.USER;
     }
 
+    // Get all roles for the user and return the highest one
     const { data, error } = await supabase
-      .from('cat_app_users')
-      .select('user_role')
-      .eq('user_name', userName.trim())
-      .single();
+      .from('user_roles')
+      .select('role')
+      .eq('user_name', userName.trim());
 
-    if (error || !data) {
+    if (error || !data || data.length === 0) {
       return null;
     }
 
-    return data.user_role;
+    // Return the highest role
+    const roles = data.map(r => r.role);
+    if (roles.includes(USER_ROLES.ADMIN)) return USER_ROLES.ADMIN;
+    if (roles.includes(USER_ROLES.MODERATOR)) return USER_ROLES.MODERATOR;
+    return USER_ROLES.USER;
   } catch (error) {
     console.error('Error getting user role:', error);
     return null;
