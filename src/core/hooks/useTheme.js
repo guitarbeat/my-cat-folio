@@ -22,12 +22,10 @@ function useTheme() {
     () => ({
       light: {
         bodyClass: 'light-theme',
-        darkBodyClass: 'dark-theme',
         metaColor: '#334155'
       },
       dark: {
         bodyClass: 'dark-theme',
-        darkBodyClass: 'light-theme',
         metaColor: '#1a1f2e'
       }
     }),
@@ -39,7 +37,7 @@ function useTheme() {
     const body = document.body;
     const themeColorMeta = document.querySelector('meta[name="theme-color"]');
     const currentTheme = isLightTheme ? 'light' : 'dark';
-    const { bodyClass, darkBodyClass, metaColor } = themeClasses[currentTheme];
+    const { bodyClass, metaColor } = themeClasses[currentTheme];
 
     // * Batch DOM updates to prevent layout thrashing
     requestAnimationFrame(() => {

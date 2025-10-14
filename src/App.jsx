@@ -10,7 +10,7 @@
 import React, { useCallback } from 'react';
 import CatBackground from './shared/components/CatBackground/CatBackground';
 import ViewRouter from './shared/components/ViewRouter/ViewRouter';
-import { ErrorBoundary, ErrorDisplay, ToastContainer } from './shared/components';
+import { ErrorDisplay, ToastContainer } from './shared/components';
 import NavBar from './shared/components/NavBar/NavBar';
 import PerformanceDashboard from './shared/components/PerformanceDashboard';
 

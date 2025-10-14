@@ -12,8 +12,7 @@ import {
   catNamesAPI,
   imagesAPI
 } from '../../../backend/api/supabaseClient';
-import { compressImageFile } from '../../shared/utils/coreUtils';
-import { devLog } from '../../shared/utils/coreUtils';
+import { compressImageFile, devLog } from '../../shared/utils/coreUtils';
 import {
   LoadingSpinner,
   NameCard,
