@@ -1,11 +1,11 @@
 /**
  * @module useUserSession
- * @description A custom React hook that manages user session state and authentication.
- * Handles user login/logout and persists user data in both localStorage and Supabase.
+ * @description A custom React hook that handles user authentication logic.
+ * Manages Supabase authentication and delegates state management to useAppStore.
  *
  * @example
  * // Using the hook in a component
- * const { userName, isLoggedIn, error, login, logout } = useUserSession();
+ * const { login, logout, error } = useUserSession();
  *
  * // Login a user
  * await login('JohnDoe');
@@ -13,12 +13,10 @@
  * // Logout
  * await logout();
  *
- * @returns {Object} Session management object
- * @property {string} userName - Current user's username
- * @property {boolean} isLoggedIn - Whether a user is currently logged in
- * @property {string|null} error - Any error message from login/logout operations
+ * @returns {Object} Authentication management object
  * @property {Function} login - Async function to log in a user
  * @property {Function} logout - Async function to log out the current user
+ * @property {string|null} error - Any error message from login/logout operations
  */
 /**
  * --- AUTO-GENERATED DOCSTRING ---
@@ -54,88 +52,18 @@
  * --- END AUTO-GENERATED DOCSTRING ---
  */
 
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useCallback } from 'react';
 import { supabase } from '../../../backend/api/supabaseClient';
 import { devLog } from '../../shared/utils/coreUtils';
+import useAppStore from '../store/useAppStore';
 
 function useUserSession() {
-  // * Use ref to track if we've already initialized to prevent double initialization
-  const initializedRef = useRef(false);
-
-  // Initialize state with localStorage value immediately
-  const [userName, setUserName] = useState(() => {
-    try {
-      return localStorage.getItem('catNamesUser') || '';
-    } catch (error) {
-      if (process.env.NODE_ENV === 'development') {
-        console.error('Error reading from localStorage:', error);
-      }
-      return '';
-    }
-  });
-  const [isLoggedIn, setIsLoggedIn] = useState(() => Boolean(userName));
   const [error, setError] = useState(null);
-  const [isInitialized, setIsInitialized] = useState(false);
 
-  // Initialize session state - only run once
-  useEffect(() => {
-    // * Prevent double initialization
-    if (initializedRef.current) return;
-    initializedRef.current = true;
+  // * Get user state and actions from store
+  const { user, userActions } = useAppStore();
 
-    const initializeSession = async () => {
-      const storedUser = localStorage.getItem('catNamesUser');
-
-      // If Supabase isn't configured, fall back to localStorage only
-      if (!supabase) {
-        if (process.env.NODE_ENV === 'development') {
-          console.warn(
-            'Supabase not configured; using local storage for session management'
-          );
-        }
-        if (storedUser) {
-          setUserName(storedUser);
-          setIsLoggedIn(true);
-        }
-        setIsInitialized(true);
-        return;
-      }
-
-      try {
-        if (storedUser) {
-          devLog('Found stored user:', storedUser);
-
-          const { data, error: dbError } = await supabase
-            .from('cat_app_users')
-            .select('user_name')
-            .eq('user_name', storedUser)
-            .single();
-
-          if (dbError || !data) {
-            if (process.env.NODE_ENV === 'development') {
-              console.warn(
-                'Stored user not found in database, clearing session'
-              );
-            }
-            localStorage.removeItem('catNamesUser');
-            setUserName('');
-            setIsLoggedIn(false);
-          } else {
-            setUserName(storedUser);
-            setIsLoggedIn(true);
-          }
-        }
-      } catch (error) {
-        if (process.env.NODE_ENV === 'development') {
-          console.error('Session initialization error:', error);
-        }
-      } finally {
-        setIsInitialized(true);
-      }
-    };
-
-    initializeSession();
-  }, []); // * Empty dependency array - only run once
+  // * No initialization needed - store handles this
 
   /**
    * Logs in a user with the given name
@@ -150,19 +78,17 @@ function useUserSession() {
         throw new Error('Please enter a valid name');
       }
 
+      const trimmedName = name.trim();
+
       if (!supabase) {
         if (process.env.NODE_ENV === 'development') {
           console.warn('Supabase not configured; using local login only');
         }
-        const trimmedName = name.trim();
-        localStorage.setItem('catNamesUser', trimmedName);
-        setUserName(trimmedName);
-        setIsLoggedIn(true);
+        // * Use store to update state and localStorage
+        userActions.login(trimmedName);
         setError(null);
         return;
       }
-
-      const trimmedName = name.trim();
 
       // Create/update user in cat_app_users table (basic user authentication)
       const { error: upsertError } = await supabase
@@ -187,9 +113,8 @@ function useUserSession() {
         // If function doesn't exist, that's okay - RLS will use JWT claims
       });
 
-      localStorage.setItem('catNamesUser', trimmedName);
-      setUserName(trimmedName);
-      setIsLoggedIn(true);
+      // * Use store to update state and localStorage
+      userActions.login(trimmedName);
       setError(null);
 
       devLog('Login successful. Current user:', trimmedName);
@@ -200,30 +125,28 @@ function useUserSession() {
       setError(err.message);
       throw err;
     }
-  }, []);
+  }, [userActions]);
 
   /**
    * Logs out the current user
    * Clears local storage and resets session state
    */
   const logout = useCallback(async () => {
-    devLog('Logging out user:', userName);
-    localStorage.removeItem('catNamesUser');
-    setUserName('');
-    setIsLoggedIn(false);
+    devLog('Logging out user:', user.name);
+    // * Use store to update state and localStorage
+    userActions.logout();
     setError(null);
     devLog('Logout complete');
-  }, [userName]);
-
-  // * Removed the debug logging useEffect that was causing unnecessary re-renders
+  }, [user.name, userActions]);
 
   return {
-    userName,
-    isLoggedIn,
+    // * Return store values for backward compatibility
+    userName: user.name,
+    isLoggedIn: user.isLoggedIn,
     error,
     login,
     logout,
-    isInitialized
+    isInitialized: true // * Store is always initialized
   };
 }
 

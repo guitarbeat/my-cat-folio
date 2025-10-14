@@ -20,8 +20,8 @@ import {
   ErrorDisplay,
   InlineError
 } from '../../shared/components';
-import useErrorHandler from '../../core/hooks/useErrorHandler';
 import useToast from '../../core/hooks/useToast';
+import useAppStore from '../../core/store/useAppStore';
 import useMobileGestures from '../../core/hooks/useMobileGestures';
 import {
   validateCatName,
@@ -865,17 +865,10 @@ function useTournamentSetup(userName) {
   const saveTimeoutRef = useRef(null);
   const lastSavedHashRef = useRef('');
 
-  // Enhanced error handling
-  const onErrorCb = useCallback((error) => {
-    console.error('TournamentSetup error:', error);
-  }, []);
+  // * Error handling is now managed by the store
 
-  const { errors, isError, handleError, clearErrors, clearError } =
-    useErrorHandler({
-      showUserFeedback: true,
-      maxRetries: 2,
-      onError: onErrorCb
-    });
+  // * Get error state and actions from store
+  const { errors, errorActions } = useAppStore();
 
   useEffect(() => {
     const fetchNames = async () => {
@@ -932,7 +925,7 @@ function useTournamentSetup(userName) {
       } catch (err) {
         // Provide a clear offline fallback list when backend fails
         setAvailableNames(FALLBACK_NAMES);
-        handleError(err, 'TournamentSetup - Fetch Names', {
+        errorActions.logError(err, 'TournamentSetup - Fetch Names', {
           isRetryable: true,
           affectsUserData: false,
           isCritical: false
@@ -943,7 +936,7 @@ function useTournamentSetup(userName) {
     };
 
     fetchNames();
-  }, [handleError, userName]);
+  }, [errorActions, userName]);
 
   // Save tournament selections to database
   const saveTournamentSelections = useCallback(
@@ -1028,10 +1021,10 @@ function useTournamentSetup(userName) {
     availableNames,
     selectedNames,
     isLoading,
-    errors,
-    isError,
-    clearErrors,
-    clearError,
+    errors: errors.history,
+    isError: !!errors.current,
+    clearErrors: () => errorActions.clearError(),
+    clearError: () => errorActions.clearError(),
     toggleName,
     handleSelectAll
   };
@@ -1279,7 +1272,7 @@ function TournamentSetupContent({ onStart, userName }) {
         <div className={styles.header}>
           <h2>Error Loading Names</h2>
           <ErrorDisplay
-            errors={errors}
+            errors={errors.current ? [errors.current] : []}
             onRetry={() => window.location.reload()}
             onDismiss={clearError}
             onClearAll={clearErrors}
