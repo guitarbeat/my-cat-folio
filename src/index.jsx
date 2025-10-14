@@ -10,7 +10,7 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { setupGlobalErrorHandling } from './shared/utils/errorHandler';
+import { setupGlobalErrorHandling } from './shared/services/errorManager';
 import './shared/styles/theme.css';
 import './shared/styles/global.css';
 import './shared/styles/mobile.css';

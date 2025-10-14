@@ -8,7 +8,7 @@ import {
   buildComparisonsMap,
   initializeSorterPairs,
   getPreferencesMap
-} from '../../shared/utils/tournamentUtils';
+} from '../../shared/utils/coreUtils';
 
 /**
  * Custom hook for managing tournament state and logic

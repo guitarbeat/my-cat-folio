@@ -5,7 +5,7 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
-import performanceMonitor from '../../utils/performanceMonitor';
+import { performanceMonitor } from '../../utils/coreUtils';
 import styles from './PerformanceDashboard.module.css';
 
 const PerformanceDashboard = ({ userName, isVisible = false, onClose }) => {

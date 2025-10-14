@@ -5,8 +5,8 @@
  */
 
 import { createClient } from '@supabase/supabase-js';
-import devLog from '../../src/shared/utils/logger';
-import { databaseRetry } from '../../src/shared/utils/retryUtils';
+import { devLog } from '../../src/shared/utils/coreUtils';
+import { ErrorManager } from '../../src/shared/services/errorManager';
 
 // Environment configuration
 const supabaseUrl =
@@ -72,7 +72,7 @@ export const catNamesAPI = {
 
       // Get ALL hidden name IDs globally (not user-specific)
       let hiddenIds = [];
-      const { data: hiddenData, error: hiddenError } = await databaseRetry.read(
+      const { data: hiddenData, error: hiddenError } = await ErrorManager.withRetry(
         async () => {
           return await supabase
             .from('cat_name_ratings')
@@ -105,7 +105,7 @@ export const catNamesAPI = {
         query = query.not('id', 'in', `(${hiddenIds.join(',')})`);
       }
 
-      const { data, error } = await databaseRetry.read(async () => {
+      const { data, error } = await ErrorManager.withRetry(async () => {
         return await query.order('name');
       });
       if (error) {

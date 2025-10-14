@@ -14,7 +14,7 @@ import {
 } from '../../../backend/api/supabaseClient';
 import useToast from '../../core/hooks/useToast';
 import { FILTER_OPTIONS } from '../../core/constants';
-import { ErrorService } from '../../shared/services/errorService';
+import { ErrorManager } from '../../shared/services/errorManager';
 
 import ProfileStats from './ProfileStats';
 import ProfileFilters from './ProfileFilters';

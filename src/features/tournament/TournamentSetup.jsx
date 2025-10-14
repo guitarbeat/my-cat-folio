@@ -12,8 +12,8 @@ import {
   catNamesAPI,
   imagesAPI
 } from '../../../backend/api/supabaseClient';
-import { compressImageFile } from '../../shared/utils/imageUtils';
-import devLog from '../../shared/utils/logger';
+import { compressImageFile } from '../../shared/utils/coreUtils';
+import { devLog } from '../../shared/utils/coreUtils';
 import {
   LoadingSpinner,
   NameCard,
@@ -27,7 +27,7 @@ import useMobileGestures from '../../core/hooks/useMobileGestures';
 import {
   validateCatName,
   validateDescription
-} from '../../shared/utils/validation';
+} from '../../shared/utils/validationUtils';
 import { isUserAdmin } from '../../shared/utils/authUtils';
 import styles from './TournamentSetup.module.css';
 

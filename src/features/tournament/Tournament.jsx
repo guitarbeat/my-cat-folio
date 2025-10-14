@@ -21,7 +21,7 @@ import InlineError from '../../shared/components/InlineError/InlineError';
 import Bracket from '../../shared/components/Bracket/Bracket';
 import TournamentControls from './TournamentControls';
 import styles from './Tournament.module.css';
-import { shuffleArray } from '../../shared/utils/arrayUtils';
+import { shuffleArray } from '../../shared/utils/coreUtils';
 
 // * Custom hook for audio management
 function useAudioManager() {

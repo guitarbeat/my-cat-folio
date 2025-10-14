@@ -6,7 +6,7 @@
 
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { ERROR_SEVERITY, getSeverityClass } from '../../utils/errorHandler';
+import { ERROR_SEVERITY, getSeverityClass } from '../../services/errorManager';
 import styles from './ErrorDisplay.module.css';
 
 /**
