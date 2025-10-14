@@ -109,16 +109,16 @@ export const validateTournamentSize = (size) => {
   }
 
   if (size < VALIDATION.MIN_TOURNAMENT_SIZE) {
-    return { 
-      success: false, 
-      error: `Tournament size must be at least ${VALIDATION.MIN_TOURNAMENT_SIZE}` 
+    return {
+      success: false,
+      error: `Tournament size must be at least ${VALIDATION.MIN_TOURNAMENT_SIZE}`
     };
   }
 
   if (size > VALIDATION.MAX_TOURNAMENT_SIZE) {
-    return { 
-      success: false, 
-      error: `Tournament size must be ${VALIDATION.MAX_TOURNAMENT_SIZE} or less` 
+    return {
+      success: false,
+      error: `Tournament size must be ${VALIDATION.MAX_TOURNAMENT_SIZE} or less`
     };
   }
 
@@ -148,9 +148,9 @@ export const validateRating = (rating) => {
   }
 
   if (rating > VALIDATION.MAX_RATING) {
-    return { 
-      success: false, 
-      error: `Rating cannot exceed ${VALIDATION.MAX_RATING}` 
+    return {
+      success: false,
+      error: `Rating cannot exceed ${VALIDATION.MAX_RATING}`
     };
   }
 
@@ -214,16 +214,16 @@ export const validateName = (name) => {
   const trimmed = name.trim();
 
   if (trimmed.length < VALIDATION.MIN_NAME_LENGTH) {
-    return { 
-      success: false, 
-      error: `Name must be at least ${VALIDATION.MIN_NAME_LENGTH} character long` 
+    return {
+      success: false,
+      error: `Name must be at least ${VALIDATION.MIN_NAME_LENGTH} character long`
     };
   }
 
   if (trimmed.length > VALIDATION.MAX_NAME_LENGTH) {
-    return { 
-      success: false, 
-      error: `Name must be less than ${VALIDATION.MAX_NAME_LENGTH} characters` 
+    return {
+      success: false,
+      error: `Name must be less than ${VALIDATION.MAX_NAME_LENGTH} characters`
     };
   }
 
@@ -243,16 +243,16 @@ export const validateGeneralDescription = (description) => {
   const trimmed = description.trim();
 
   if (trimmed.length < VALIDATION.MIN_DESCRIPTION_LENGTH) {
-    return { 
-      success: false, 
-      error: `Description must be at least ${VALIDATION.MIN_DESCRIPTION_LENGTH} characters long` 
+    return {
+      success: false,
+      error: `Description must be at least ${VALIDATION.MIN_DESCRIPTION_LENGTH} characters long`
     };
   }
 
   if (trimmed.length > VALIDATION.MAX_DESCRIPTION_LENGTH) {
-    return { 
-      success: false, 
-      error: `Description must be less than ${VALIDATION.MAX_DESCRIPTION_LENGTH} characters` 
+    return {
+      success: false,
+      error: `Description must be less than ${VALIDATION.MAX_DESCRIPTION_LENGTH} characters`
     };
   }
 

@@ -493,18 +493,18 @@ export default {
   shuffleArray,
   generatePairs,
   buildComparisonsMap,
-  
+
   // Image utilities
   validateImageUrl,
   preloadImage,
   getFallbackImageUrl,
   compressImageFile,
-  
+
   // Tournament utilities
   initializeSorterPairs,
   getPreferencesMap,
   computeRating,
-  
+
   // Performance monitoring
   PerformanceMonitor,
   performanceMonitor

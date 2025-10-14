@@ -84,10 +84,10 @@
 
 @media (width <= 480px) {
   .breadcrumb__list {
-    overflow-x: auto;
     flex-wrap: nowrap;
-    scrollbar-width: thin;
+    overflow-x: auto;
     scrollbar-color: rgb(255 255 255 / 20%) transparent;
+    scrollbar-width: thin;
   }
 
   .breadcrumb__list::-webkit-scrollbar {
