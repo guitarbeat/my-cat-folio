@@ -323,41 +323,7 @@
   }
 }
 
-/* Mobile-specific utility classes */
-@media (width <= 768px) {
-  .mobile\:touch-friendly {
-    min-width: 48px; /* Ensure minimum width */
-    min-height: 48px; /* Updated to meet mobile guidelines */
-    padding: var(--space-3) var(--space-4);
-  }
-
-  .mobile\:enhanced-contrast {
-    background: var(--mobile-card-background, var(--card-background));
-    border: 2px solid var(--mobile-card-border, var(--card-border));
-  }
-
-  .mobile\:text-enhanced {
-    font-weight: 600;
-    color: var(--mobile-text-primary, var(--text-primary));
-  }
-
-  /* Ensure proper spacing for floating elements */
-  .mobile\:safe-spacing {
-    padding-bottom: 80px;
-    margin-top: 80px;
-  }
-
-  /* Touch target utilities */
-  .mobile\:touch-target {
-    min-width: 48px;
-    min-height: 48px;
-  }
-
-  .mobile\:touch-target-large {
-    min-width: 56px;
-    min-height: 56px;
-  }
-}
+/* Mobile-specific utility classes removed - not used in codebase */
 
 /* Additional mobile ergonomics improvements */
 @media (width <= 768px) {

@@ -267,29 +267,7 @@
   }
 }
 
-/* Utility classes for mobile ergonomics */
-@media (width <= 768px) {
-  .mobile\:touch-target {
-    min-width: var(--mobile-touch-target-min);
-    min-height: var(--mobile-touch-target-min);
-  }
-
-  .mobile\:touch-target-large {
-    min-width: var(--mobile-touch-target-large);
-    min-height: var(--mobile-touch-target-large);
-  }
-
-  .mobile\:safe-spacing {
-    padding-bottom: var(--mobile-content-padding);
-    margin-top: var(--mobile-content-padding);
-  }
-
-  .mobile\:enhanced-touch {
-    min-width: var(--mobile-touch-target-min);
-    min-height: var(--mobile-touch-target-min);
-    padding: var(--space-3, 0.75rem) var(--space-4, 1rem);
-  }
-}
+/* Mobile ergonomics utility classes removed - not used in codebase */
 
 /* Landscape mobile optimizations */
 @media screen and (width <= 768px) and (orientation: landscape) {
