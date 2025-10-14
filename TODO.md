@@ -3,338 +3,155 @@
 ## Overview
 This document outlines various maintenance tasks for the codebase, including state management consolidation and styling optimization.
 
-## Current Task: CSS Styling Audit and Cleanup
+## ✅ COMPLETED TASKS
 
-### Status: Completed
+### CSS Styling Audit and Cleanup
+**Status**: ✅ Completed  
 **Task**: Audit src styling files for unused classes/selectors and remove confirmed unused styling rules while preserving design.
 
-### Progress:
-- [x] Explore project structure to identify styling files and components
-- [x] Analyze CSS/SCSS/styling files to catalog all classes and selectors
-- [x] Find usage patterns of styling classes/selectors in codebase
-- [x] Identify unused styling rules by comparing definitions vs usage
-- [x] Remove confirmed unused styling rules while preserving design
-- [ ] Verify that design is preserved after removing unused styles
-- [ ] Summarize all changes made and verification results
+**Summary**:
+- **Total Lines Removed**: ~600+ lines of unused CSS
+- **Files Cleaned**: 3 major styling files
+- **Design Preserved**: All essential styling and functionality maintained
+- **Performance Impact**: Reduced CSS bundle size and improved maintainability
 
-### Files Analyzed:
-- `src/shared/styles/global.css` - Main global stylesheet with utilities and components
-- `src/shared/styles/mobile.css` - Mobile-specific optimizations
-- `src/shared/styles/theme.css` - Theme variables and color definitions
-- `src/shared/styles/mobile-ergonomics.css` - Mobile ergonomics improvements
-- `src/features/auth/Login.module.css` - Login component styles
-- `src/features/profile/Profile.module.css` - Profile component styles
-- `src/shared/components/Card/Card.module.css` - Card component styles
-- `src/shared/components/NameCard/NameCard.module.css` - NameCard component styles
-
-### Key Findings:
-- Large global.css file (3500+ lines) with extensive utility classes
-- Many potential duplicate or unused utility classes
-- Complex CSS module structure with component-specific styles
-- Extensive mobile responsiveness and accessibility features
-
-### Changes Made:
-- **Removed Vibrant Color System**: Eliminated 200+ lines of unused vibrant color utility classes (btnVibrant*, cardVibrant*, vibrant-*, glow-*, etc.)
-- **Removed Mobile Utility Classes**: Cleaned up unused mobile-specific utility classes (mobile:touch*, mobile:enhanced*, mobile:safe*)
-- **Removed Responsive Utilities**: Eliminated unused responsive width and grid utilities (sm:w-*, md:w-*, lg:w-*, xl:w-*, lg:grid-cols-*)
-- **Removed Hover/Focus Utilities**: Cleaned up unused hover, focus, and active utility classes (hover:*, focus:*, active:*)
-- **Removed Animation Utilities**: Eliminated unused animation utility classes (animate-fade-in, animate-slide-up, fade-in, slide-up)
-- **Preserved Core Functionality**: Kept all essential styling for components, themes, and responsive design
-
-### Files Modified:
-- `src/shared/styles/global.css` - Removed ~500 lines of unused utility classes
-- `src/shared/styles/mobile.css` - Removed unused mobile utility classes
-- `src/shared/styles/mobile-ergonomics.css` - Removed unused mobile ergonomics utilities
-
-### Summary:
-✅ **Task Completed Successfully**
-
-**Total Lines Removed**: ~600+ lines of unused CSS
-**Files Cleaned**: 3 major styling files
-**Design Preserved**: All essential styling and functionality maintained
-**Performance Impact**: Reduced CSS bundle size and improved maintainability
-
-**Key Benefits**:
-- Cleaner, more maintainable CSS codebase
-- Reduced file size and faster loading
-- Eliminated potential confusion from unused classes
-- Preserved all essential styling and responsive design
-- Maintained accessibility and mobile optimization features
-
-**Verification**: All changes were made conservatively, removing only confirmed unused classes while preserving all essential styling for components, themes, and responsive design.
+**Key Changes**:
+- Removed Vibrant Color System (200+ lines)
+- Removed Mobile Utility Classes
+- Removed Responsive Utilities
+- Removed Hover/Focus Utilities
+- Removed Animation Utilities
+- Preserved Core Functionality
 
 ---
 
-## Completed: State Management Consolidation
+## 🚧 IN PROGRESS TASKS
 
-### Status: Completed
+### State Management Consolidation
+**Status**: 🚧 In Progress  
+**Priority**: High  
 **Task**: Fix duplicate state management issues to improve maintainability and prevent potential bugs.
 
-## Critical Issues
+**Current Status**: Partially implemented - `useAppStore` is the primary store, but hooks still manage their own state
 
-### 1. Duplicate Theme State Management
-**Problem:** Both `useTheme` hook and `useAppStore` manage theme state independently
-- `useTheme` hook manages theme with localStorage
+### Critical Issues Identified
+
+#### 1. Duplicate User State Management ⚠️ HIGH PRIORITY
+**Problem**: Both `useUserSession` hook and `useAppStore` manage user authentication state
+- `useUserSession` manages: userName, isLoggedIn, error, login, logout
+- `useAppStore` manages: user.name, user.isLoggedIn, user.isAdmin
+- Both are used simultaneously in `App.jsx` causing potential conflicts
+
+**Files Affected**:
+- `src/core/hooks/useUserSession.js` (lines 66-76, 145-198)
+- `src/core/store/useAppStore.js` (lines 24-29, 116-157)
+- `src/App.jsx` (lines 35, 42-53)
+
+**Action Required**:
+- [ ] **1.1** Refactor `useUserSession` to only handle authentication logic
+- [ ] **1.2** Move all user state management to `useAppStore`
+- [ ] **1.3** Update `App.jsx` to use only store for user state
+- [ ] **1.4** Ensure localStorage persistence is maintained through store
+
+#### 2. Duplicate Tournament State Management ⚠️ HIGH PRIORITY
+**Problem**: Both `useTournament` hook and `useAppStore` manage tournament state
+- `useTournament` manages: tournamentState with useState (lines 31-41)
+- `useAppStore` manages: tournament section (lines 14-21, 49-113)
+- Both are being used, creating potential synchronization issues
+
+**Files Affected**:
+- `src/core/hooks/useTournament.js` (lines 31-41, 44-59)
+- `src/core/store/useAppStore.js` (lines 14-21, 49-113)
+- `src/App.jsx` (lines 46-53, 69-96, 104-125)
+
+**Action Required**:
+- [ ] **2.1** Remove `tournamentState` useState from `useTournament` hook
+- [ ] **2.2** Update `useTournament` to read from store instead of managing state
+- [ ] **2.3** Update all tournament state updates to use store actions
+- [ ] **2.4** Test tournament functionality thoroughly
+
+#### 3. Theme State Duplication ⚠️ MEDIUM PRIORITY
+**Problem**: Both `useTheme` hook and `useAppStore` manage theme state
+- `useTheme` manages theme with localStorage
 - `useAppStore` manages theme in UI section
 - Both are used simultaneously in `App.jsx`
 
-**Files Affected:**
+**Files Affected**:
 - `src/core/hooks/useTheme.js`
-- `src/core/store/useAppStore.js`
-- `src/App.jsx`
+- `src/core/store/useAppStore.js` (lines 33, 161-175)
+- `src/App.jsx` (lines 36, 158-160)
 
-**Action Required:**
-- [ ] Choose one source of truth (recommend `useAppStore`)
-- [ ] Remove theme state from `useTheme` hook
-- [ ] Update `App.jsx` to use only one theme management system
-- [ ] Ensure localStorage persistence is maintained
+**Action Required**:
+- [ ] **3.1** Choose one source of truth (recommend `useAppStore`)
+- [ ] **3.2** Remove theme state from `useTheme` hook
+- [ ] **3.3** Update `App.jsx` to use only one theme management system
+- [ ] **3.4** Ensure localStorage persistence is maintained
 
-### 2. Duplicate User State Management
-**Problem:** Both `useUserSession` hook and `useAppStore` manage user authentication state
-- `useUserSession` manages userName, isLoggedIn, error, login, logout
-- `useAppStore` manages user state (name, isLoggedIn, isAdmin)
-- Both are used in `App.jsx` causing potential conflicts
-
-**Files Affected:**
-- `src/core/hooks/useUserSession.js`
-- `src/core/store/useAppStore.js`
-- `src/App.jsx`
-
-**Action Required:**
-- [ ] Consolidate user state management into `useAppStore`
-- [ ] Remove user state from `useUserSession` hook
-- [ ] Update `App.jsx` to use only centralized user state
-- [ ] Ensure authentication flow remains intact
-
-### 3. Duplicate Admin State Management
-**Problem:** Multiple components manage `isAdmin` state independently
-- `Profile.jsx` has its own `isAdmin` state
-- `TournamentSetup.jsx` has its own `isAdmin` state
-- `PerformanceDashboard.jsx` has its own `isAdmin` state
-
-**Files Affected:**
-- `src/features/profile/Profile.jsx`
-- `src/features/tournament/TournamentSetup.jsx`
-- `src/shared/components/PerformanceDashboard/PerformanceDashboard.jsx`
-
-**Action Required:**
-- [ ] Move admin state to centralized store
-- [ ] Remove individual `isAdmin` state from components
-- [ ] Update components to use store's admin state
-- [ ] Ensure admin detection logic is centralized
-
-### 4. Duplicate Tournament State Management
-**Problem:** Both `useTournament` hook and `useAppStore` manage tournament state
-- `useTournament` manages tournament state with localStorage
-- `useAppStore` manages tournament state in tournament section
-- Both are being used, creating potential synchronization issues
-
-**Files Affected:**
-- `src/core/hooks/useTournament.js`
-- `src/core/store/useAppStore.js`
-- `src/features/tournament/Tournament.jsx`
-
-**Action Required:**
-- [ ] Consolidate tournament state into `useAppStore`
-- [ ] Remove tournament state from `useTournament` hook
-- [ ] Update tournament components to use only centralized state
-- [ ] Ensure localStorage persistence is maintained
-
-### 5. Duplicate Error State Management
-**Problem:** Both `useErrorHandler` hook and `useAppStore` manage error state
+#### 4. Error State Duplication ⚠️ MEDIUM PRIORITY
+**Problem**: Both `useErrorHandler` hook and `useAppStore` manage error state
 - `useErrorHandler` manages errors array and error handling
 - `useAppStore` manages error state in errors section
 - Both are used in various components
 
-**Files Affected:**
+**Files Affected**:
 - `src/core/hooks/useErrorHandler.js`
-- `src/core/store/useAppStore.js`
+- `src/core/store/useAppStore.js` (lines 43-46, 235-274)
 - Multiple components using error handling
 
-**Action Required:**
-- [ ] Consolidate error state into `useAppStore`
-- [ ] Remove error state from `useErrorHandler` hook
-- [ ] Update components to use centralized error state
-- [ ] Ensure error handling functionality remains intact
+**Action Required**:
+- [ ] **4.1** Consolidate error state into `useAppStore`
+- [ ] **4.2** Remove error state from `useErrorHandler` hook
+- [ ] **4.3** Update components to use centralized error state
+- [ ] **4.4** Ensure error handling functionality remains intact
 
-## Code Quality Issues
+### Code Quality Issues
 
-### 6. Excessive useState in TournamentSetup
-**Problem:** `TournamentSetup` component has 20+ individual `useState` calls
-- Makes component hard to maintain
-- State updates are scattered
-- Potential for state synchronization issues
+#### 5. localStorage Key Inconsistency ⚠️ LOW PRIORITY
+**Problem**: Different components use different localStorage keys
+- `useUserSession` uses 'catNamesUser' key
+- `useTheme` likely uses 'theme' key
+- Inconsistent data persistence patterns
 
-**Files Affected:**
-- `src/features/tournament/TournamentSetup.jsx`
+**Action Required**:
+- [ ] **5.1** Standardize localStorage keys
+- [ ] **5.2** Create constants for all localStorage keys
+- [ ] **5.3** Ensure consistent data persistence through store
 
-**Action Required:**
-- [ ] Consolidate related state into objects
-- [ ] Move shared state to centralized store
-- [ ] Reduce number of individual useState calls
-- [ ] Improve state management organization
+---
 
-### 7. localStorage Key Duplication
-**Problem:** Different components use different localStorage keys for similar data
-- `useTheme` uses 'theme' key
-- `useAppStore` might use different keys
-- Inconsistent data persistence
+## 📋 IMPLEMENTATION PLAN
 
-**Files Affected:**
-- `src/core/hooks/useTheme.js`
-- `src/core/store/useAppStore.js`
-- `src/core/hooks/useLocalStorage.js`
+### Phase 1: User State Consolidation (Priority: HIGH)
+**Estimated Time**: 2-3 hours
+- [ ] **1.1** Refactor `useUserSession` to remove state management
+- [ ] **1.2** Update `useUserSession` to only handle authentication logic
+- [ ] **1.3** Move user state to `useAppStore` with localStorage persistence
+- [ ] **1.4** Update `App.jsx` to use store for user state
+- [ ] **1.5** Test user login/logout flow
 
-**Action Required:**
-- [ ] Standardize localStorage keys
-- [ ] Create constants for all localStorage keys
-- [ ] Ensure consistent data persistence
-- [ ] Document localStorage usage
+### Phase 2: Tournament State Consolidation (Priority: HIGH)
+**Estimated Time**: 3-4 hours
+- [ ] **2.1** Remove `tournamentState` from `useTournament` hook
+- [ ] **2.2** Update `useTournament` to read from store
+- [ ] **2.3** Update tournament state updates to use store actions
+- [ ] **2.4** Test tournament functionality end-to-end
 
-## Implementation Priority
+### Phase 3: Theme & Error State (Priority: MEDIUM)
+**Estimated Time**: 1-2 hours
+- [ ] **3.1** Consolidate theme state management
+- [ ] **3.2** Consolidate error state management
+- [ ] **3.3** Test theme switching and error handling
 
-### Phase 1: Critical State Consolidation
-1. [ ] Fix duplicate theme state management
-2. [ ] Fix duplicate user state management
-3. [ ] Fix duplicate admin state management
+### Phase 4: Testing & Validation (Priority: HIGH)
+**Estimated Time**: 1-2 hours
+- [ ] **4.1** Comprehensive testing of all user flows
+- [ ] **4.2** Test state persistence across browser sessions
+- [ ] **4.3** Performance validation
+- [ ] **4.4** Fix any regressions
 
-### Phase 2: Tournament and Error State
-4. [ ] Fix duplicate tournament state management
-5. [ ] Fix duplicate error state management
+---
 
-### Phase 3: Code Quality Improvements
-6. [ ] Refactor TournamentSetup useState usage
-7. [ ] Standardize localStorage keys
-
-## Testing Requirements
-- [ ] Test theme switching functionality
-- [ ] Test user login/logout flow
-- [ ] Test admin functionality
-- [ ] Test tournament state persistence
-- [ ] Test error handling
-- [ ] Test localStorage data persistence
-
-## Notes
-- The centralized `useAppStore` appears to be the most recent and comprehensive approach
-- Consider using `useAppStore` as the primary state management solution
-- Ensure backward compatibility during refactoring
-- Test thoroughly after each change to prevent regressions
-This document outlines the duplicate state management issues found in the codebase that need to be resolved to improve maintainability and prevent bugs.
-
-## Critical Issues Found
-
-### 1. Duplicate Tournament State Management
-**Problem**: Tournament state is managed in both `useAppStore` (Zustand) and `useTournament` hook
-- **Files**: `src/core/store/useAppStore.js` vs `src/core/hooks/useTournament.js`
-- **Issue**: Same tournament data (names, ratings, completion status) stored in two different places with different update mechanisms
-- **Impact**: High - Can cause state synchronization issues and data inconsistency
-
-### 2. Duplicate User State Management
-**Problem**: User authentication state is managed in both `useUserSession` hook and `useAppStore`
-- **Files**: `src/core/hooks/useUserSession.js` vs `src/core/store/useAppStore.js`
-- **Issue**: User login status, name, and admin status are duplicated across both systems
-- **Impact**: High - Can cause authentication state conflicts
-
-### 3. Redundant localStorage Usage
-**Problem**: `useUserSession` directly manages localStorage while `useAppStore` also handles persistence
-- **Files**: `src/core/hooks/useUserSession.js` lines 66-75
-- **Issue**: User data is stored in localStorage twice with different keys
-- **Impact**: Medium - Wastes storage and can cause data inconsistency
-
-### 4. Duplicate Tournament State in Tournament Component
-**Problem**: `Tournament.jsx` has its own `useTournamentState` hook that duplicates state already managed by `useTournament`
-- **Files**: `src/features/tournament/Tournament.jsx` lines 259-350
-- **Issue**: Tournament state is managed in three different places: store, hook, and component
-- **Impact**: High - Creates unnecessary complexity and potential bugs
-
-### 5. Redundant State Updates in App.jsx
-**Problem**: App component manually updates store state that should be handled by the store itself
-- **Files**: `src/App.jsx` lines 186-198, 201-203, 255-257
-- **Issue**: Manual store updates that duplicate the store's own action methods
-- **Impact**: Medium - Violates single source of truth principle
-
-### 6. Duplicate Error State Management
-**Problem**: Error state is managed in both `useErrorHandler` hook and `useAppStore`
-- **Files**: `src/core/hooks/useErrorHandler.js` vs `src/core/store/useAppStore.js`
-- **Issue**: Error handling logic is duplicated across multiple systems
-- **Impact**: Medium - Can cause error state conflicts
-
-## Action Items
-
-### Phase 1: Consolidate Core State Management
-- [ ] **1.1** Remove tournament state from `useTournament` hook and use only `useAppStore`
-  - [ ] Update `useTournament` to read from store instead of managing its own state
-  - [ ] Remove `tournamentState` useState from `useTournament`
-  - [ ] Update all tournament state updates to use store actions
-  - [ ] Test tournament functionality thoroughly
-
-- [ ] **1.2** Consolidate user state management into `useAppStore`
-  - [ ] Remove user state from `useUserSession` hook
-  - [ ] Update `useUserSession` to only handle authentication logic, not state
-  - [ ] Move all user state to `useAppStore`
-  - [ ] Update all components using `useUserSession` to use store instead
-
-- [ ] **1.3** Fix localStorage duplication
-  - [ ] Remove direct localStorage usage from `useUserSession`
-  - [ ] Ensure only `useAppStore` manages localStorage persistence
-  - [ ] Update localStorage keys to be consistent
-  - [ ] Test persistence across browser sessions
-
-### Phase 2: Clean Up Component State
-- [ ] **2.1** Remove duplicate tournament state from Tournament component
-  - [ ] Remove `useTournamentState` hook from `Tournament.jsx`
-  - [ ] Use only `useTournament` hook (which should read from store)
-  - [ ] Remove redundant state variables
-  - [ ] Test tournament component functionality
-
-- [ ] **2.2** Clean up App.jsx state management
-  - [ ] Remove manual store updates that duplicate store actions
-  - [ ] Use only store actions for state changes
-  - [ ] Remove redundant state synchronization code
-  - [ ] Test app-level functionality
-
-### Phase 3: Consolidate Error Handling
-- [ ] **3.1** Consolidate error state management
-  - [ ] Remove error state from `useErrorHandler` hook
-  - [ ] Use only `useAppStore` for error state management
-  - [ ] Update error handling logic to use store actions
-  - [ ] Test error handling across the application
-
-### Phase 4: Testing and Validation
-- [ ] **4.1** Comprehensive testing
-  - [ ] Test all user flows to ensure no functionality is broken
-  - [ ] Test state persistence across browser sessions
-  - [ ] Test error handling scenarios
-  - [ ] Test tournament functionality end-to-end
-
-- [ ] **4.2** Performance validation
-  - [ ] Ensure no performance regression from state consolidation
-  - [ ] Check for unnecessary re-renders
-  - [ ] Validate memory usage improvements
-
-## Implementation Notes
-
-### Key Principles
-1. **Single Source of Truth**: All state should be managed in `useAppStore`
-2. **Separation of Concerns**: Hooks should handle logic, store should handle state
-3. **Consistency**: Use consistent patterns for state management across the app
-4. **Testing**: Thoroughly test after each change to prevent regressions
-
-### Files to Modify
-- `src/core/store/useAppStore.js` - Central state management
-- `src/core/hooks/useTournament.js` - Remove state, keep logic
-- `src/core/hooks/useUserSession.js` - Remove state, keep auth logic
-- `src/core/hooks/useErrorHandler.js` - Remove state, keep error logic
-- `src/features/tournament/Tournament.jsx` - Remove duplicate state
-- `src/App.jsx` - Remove redundant state updates
-
-### Risk Mitigation
-- Make changes incrementally, one phase at a time
-- Test thoroughly after each change
-- Keep backup of working state before major changes
-- Consider feature flags for gradual rollout if needed
-
-## Success Criteria
+## 🎯 SUCCESS CRITERIA
 - [ ] No duplicate state management patterns remain
 - [ ] All state is managed in `useAppStore`
 - [ ] All functionality works as before
@@ -342,12 +159,38 @@ This document outlines the duplicate state management issues found in the codeba
 - [ ] No performance regressions
 - [ ] All tests pass
 
-## Estimated Effort
-- **Phase 1**: 4-6 hours
-- **Phase 2**: 2-3 hours  
-- **Phase 3**: 1-2 hours
-- **Phase 4**: 2-3 hours
-- **Total**: 9-14 hours
+---
 
 ---
-*This TODO list was generated based on analysis of duplicate state management issues in the codebase.*
+
+## 🔮 FUTURE TASKS
+
+### Performance Optimization
+**Priority**: Medium
+- [ ] **P.1** Implement React.memo for expensive components
+- [ ] **P.2** Add lazy loading for heavy components
+- [ ] **P.3** Optimize re-renders in tournament components
+- [ ] **P.4** Add performance monitoring
+
+### Code Quality Improvements
+**Priority**: Low
+- [ ] **C.1** Add comprehensive unit tests
+- [ ] **C.2** Improve TypeScript coverage
+- [ ] **C.3** Add ESLint rules for state management
+- [ ] **C.4** Refactor large components into smaller ones
+
+### Feature Enhancements
+**Priority**: Low
+- [ ] **F.1** Add tournament history persistence
+- [ ] **F.2** Implement user preferences
+- [ ] **F.3** Add tournament sharing functionality
+- [ ] **F.4** Improve mobile experience
+
+---
+
+## 📝 NOTES
+- The centralized `useAppStore` is the most recent and comprehensive approach
+- All state should be managed in `useAppStore` as the single source of truth
+- Hooks should handle logic, store should handle state
+- Test thoroughly after each change to prevent regressions
+- Focus on Phase 1 and 2 first as they address the most critical issues
