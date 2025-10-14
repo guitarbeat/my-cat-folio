@@ -41,6 +41,17 @@ function App() {
   // * UI flags from store
   const { ui } = useAppStore();
 
+
+  // * Centralized store
+  const {
+    tournament,
+    errors,
+    tournamentActions,
+    userActions,
+    uiActions,
+    errorActions
+  } = useAppStore();
+
   // * Keyboard shortcut for performance dashboard (Ctrl+Shift+P)
   React.useEffect(() => {
     const handleKeyDown = (event) => {
@@ -53,18 +64,6 @@ function App() {
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [uiActions]);
-
-
-
-  // * Centralized store
-  const {
-    tournament,
-    errors,
-    tournamentActions,
-    userActions,
-    uiActions,
-    errorActions
-  } = useAppStore();
 
   // * Handle tournament completion
   const handleTournamentComplete = useCallback(
