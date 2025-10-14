@@ -274,16 +274,6 @@ function App() {
 
   // * Memoize main content to prevent unnecessary re-renders
   const mainContent = useMemo(() => {
-    if (!isLoggedIn) {
-      return (
-        <Suspense
-          fallback={<div className="loading-placeholder">Loading...</div>}
-        >
-          <Login onLogin={login} />
-        </Suspense>
-      );
-    }
-
     // * Handle profile view
     if (tournament.currentView === 'profile') {
       return (
@@ -359,8 +349,6 @@ function App() {
       </ErrorBoundary>
     );
   }, [
-    isLoggedIn,
-    login,
     tournament.currentView,
     tournament.names,
     tournament.isComplete,
