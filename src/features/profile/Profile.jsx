@@ -372,7 +372,7 @@ const Profile = ({ userName, onStartNewTournament }) => {
         // Refresh backing data (ensures filters reflect server state)
         fetchNames();
       } catch (error) {
-        ErrorService.handleError(error, 'Profile - Toggle Visibility', {
+        ErrorManager.handleError(error, 'Profile - Toggle Visibility', {
           isRetryable: true,
           affectsUserData: false,
           isCritical: false
@@ -400,7 +400,7 @@ const Profile = ({ userName, onStartNewTournament }) => {
         fetchNames();
         fetchSelectionStats();
       } catch (error) {
-        ErrorService.handleError(error, 'Profile - Delete Name', {
+        ErrorManager.handleError(error, 'Profile - Delete Name', {
           isRetryable: true,
           affectsUserData: true,
           isCritical: false
@@ -457,7 +457,7 @@ const Profile = ({ userName, onStartNewTournament }) => {
           showError('Failed to hide names');
         }
       } catch (error) {
-        ErrorService.handleError(error, 'Profile - Bulk Hide', {
+        ErrorManager.handleError(error, 'Profile - Bulk Hide', {
           isRetryable: true,
           affectsUserData: false,
           isCritical: false
@@ -501,7 +501,7 @@ const Profile = ({ userName, onStartNewTournament }) => {
           showError('Failed to unhide names');
         }
       } catch (error) {
-        ErrorService.handleError(error, 'Profile - Bulk Unhide', {
+        ErrorManager.handleError(error, 'Profile - Bulk Unhide', {
           isRetryable: true,
           affectsUserData: false,
           isCritical: false

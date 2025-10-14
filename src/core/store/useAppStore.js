@@ -32,6 +32,8 @@ const useAppStore = create(
       ui: {
         theme: 'light',
 
+        showWelcomeScreen: true,
+        showPerformanceDashboard: false,
         showGlobalAnalytics: false,
         showUserComparison: false,
         matrixMode: false
@@ -172,6 +174,38 @@ const useAppStore = create(
             }
           })),
 
+        setWelcomeVisible: (show) =>
+          set((state) => ({
+            ui: {
+              ...state.ui,
+              showWelcomeScreen: !!show
+            }
+          })),
+
+        toggleWelcome: () =>
+          set((state) => ({
+            ui: {
+              ...state.ui,
+              showWelcomeScreen: !state.ui.showWelcomeScreen
+            }
+          })),
+
+        setPerformanceDashboardVisible: (show) =>
+          set((state) => ({
+            ui: {
+              ...state.ui,
+              showPerformanceDashboard: !!show
+            }
+          })),
+
+        togglePerformanceDashboard: () =>
+          set((state) => ({
+            ui: {
+              ...state.ui,
+              showPerformanceDashboard: !state.ui.showPerformanceDashboard
+            }
+          })),
+
         setMatrixMode: (enabled) =>
           set((state) => ({
             ui: {
@@ -251,6 +285,8 @@ const useAppStore = create(
         getIsLoggedIn: () => get().user.isLoggedIn,
         getIsAdmin: () => get().user.isAdmin,
         getTheme: () => get().ui.theme,
+        getShowWelcome: () => get().ui.showWelcomeScreen,
+        getShowPerformanceDashboard: () => get().ui.showPerformanceDashboard,
 
         getCurrentError: () => get().errors.current
       }
