@@ -32,6 +32,8 @@ const useAppStore = create(
       ui: {
         theme: 'light',
 
+        showWelcomeScreen: true,
+        showPerformanceDashboard: false,
         showGlobalAnalytics: false,
         showUserComparison: false,
         matrixMode: false
