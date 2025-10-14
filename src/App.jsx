@@ -7,27 +7,14 @@
  * @returns {JSX.Element} The complete application UI
  */
 
-import React, { useCallback, lazy } from 'react';
+import React, { useCallback } from 'react';
 import CatBackground from './shared/components/CatBackground/CatBackground';
-import SuspenseView from './shared/components/SuspenseView/SuspenseView';
 import ViewRouter from './shared/components/ViewRouter/ViewRouter';
-import {
-  ErrorBoundary,
-  ErrorDisplay,
-  ToastContainer,
-  WelcomeScreen
-} from './shared/components';
+import { ErrorBoundary, ErrorDisplay, ToastContainer } from './shared/components';
 import NavBar from './shared/components/NavBar/NavBar';
 import PerformanceDashboard from './shared/components/PerformanceDashboard';
 
 // * Lazy load heavy components for better code splitting
-const Login = lazy(() => import('./features/auth/Login'));
-const Tournament = lazy(() => import('./features/tournament/Tournament'));
-const TournamentSetup = lazy(
-  () => import('./features/tournament/TournamentSetup')
-);
-const Results = lazy(() => import('./features/tournament/Results'));
-const Profile = lazy(() => import('./features/profile/Profile'));
 import useUserSession from './core/hooks/useUserSession';
 import useTheme from './core/hooks/useTheme';
 import useToast from './core/hooks/useToast';
@@ -164,10 +151,9 @@ function App() {
   const handleLogout = useCallback(async () => {
     logout();
     userActions.logout();
-    // Reset tournament state and go back to welcome screen
     tournamentActions.resetTournament();
-    setShowWelcomeScreen(true);
-  }, [logout, userActions, tournamentActions]);
+    uiActions.setWelcomeVisible(true);
+  }, [logout, userActions, tournamentActions, uiActions]);
 
   // * Handle theme change
   const handleThemeChange = useCallback(() => {
@@ -187,7 +173,7 @@ function App() {
   // * Memoize main content to prevent unnecessary re-renders
 
   // * Memoize NavBar props to prevent unnecessary re-renders
-  const navBarProps = useMemo(
+  const navBarProps = React.useMemo(
     () => ({
       view: tournament.currentView || 'tournament',
       setView: (view) => {
@@ -217,16 +203,6 @@ function App() {
     ]
   );
 
-  // * Show welcome screen first
-  if (ui.showWelcomeScreen) {
-    return (
-      <WelcomeScreen
-        onContinue={handleWelcomeContinue}
-        isLightTheme={isLightTheme}
-        onThemeToggle={handleThemeChange}
-      />
-    );
-  }
 
   return (
     <div className="app">
@@ -241,30 +217,31 @@ function App() {
       {/* * NavBar - always visible for navigation and controls */}
       <NavBar {...navBarProps} />
 
-      {/* * Conditional rendering based on login state */}
-      {isLoggedIn ? (
-        <div id="main-content" className="main-content" tabIndex="-1">
-          {errors.current && (
-            <ErrorDisplay
-              errors={errors.current}
-              onDismiss={() => errorActions.clearError()}
-              onRetry={() => window.location.reload()}
-            />
-          )}
-
-          <ViewRouter
-            tournament={tournament}
-            userName={userName}
-            onStartNewTournament={handleStartNewTournament}
-            onUpdateRatings={handleUpdateRatings}
-            onTournamentSetup={handleTournamentSetup}
-            onTournamentComplete={handleTournamentComplete}
-            onVote={(vote) => tournamentActions.addVote(vote)}
+      <div id="main-content" className="main-content" tabIndex="-1">
+        {errors.current && isLoggedIn && (
+          <ErrorDisplay
+            errors={errors.current}
+            onDismiss={() => errorActions.clearError()}
+            onRetry={() => window.location.reload()}
           />
-        </div>
-      ) : (
-        <Login onLogin={login} />
-      )}
+        )}
+
+        <ViewRouter
+          showWelcomeScreen={ui.showWelcomeScreen}
+          isLoggedIn={isLoggedIn}
+          isLightTheme={isLightTheme}
+          onThemeToggle={handleThemeChange}
+          onWelcomeContinue={handleWelcomeContinue}
+          onLogin={login}
+          tournament={tournament}
+          userName={userName}
+          onStartNewTournament={handleStartNewTournament}
+          onUpdateRatings={handleUpdateRatings}
+          onTournamentSetup={handleTournamentSetup}
+          onTournamentComplete={handleTournamentComplete}
+          onVote={(vote) => tournamentActions.addVote(vote)}
+        />
+      </div>
 
       {/* * Global loading overlay */}
       {tournament.isLoading && (
