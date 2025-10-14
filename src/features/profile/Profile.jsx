@@ -15,6 +15,7 @@ import {
 import useToast from '../../core/hooks/useToast';
 import { FILTER_OPTIONS } from '../../core/constants';
 import { ErrorManager } from '../../shared/services/errorManager';
+import { isUserAdmin } from '../../shared/utils/authUtils';
 
 import ProfileStats from './ProfileStats';
 import ProfileFilters from './ProfileFilters';
@@ -332,10 +333,15 @@ const Profile = ({ userName, onStartNewTournament }) => {
     }
   }, [userName, fetchNames, fetchSelectionStats]);
 
-  // * Check admin status (simple: 'aaron' is admin)
+  // Check if the current user is an admin
   useEffect(() => {
-    const nameIsAdmin = (userName || '').toLowerCase() === 'aaron';
-    setIsAdmin(nameIsAdmin);
+    const checkAdmin = async () => {
+      if (userName) {
+        const adminStatus = await isUserAdmin(userName);
+        setIsAdmin(adminStatus);
+      }
+    };
+    checkAdmin();
   }, [userName]);
 
   // * Calculate statistics based on current filters
