@@ -3,6 +3,7 @@ import { PreferenceSorter } from '../../features/tournament/PreferenceSorter';
 import EloRating from '../../features/tournament/EloRating';
 import useLocalStorage from './useLocalStorage';
 import useUserSession from './useUserSession';
+import useAppStore from '../store/useAppStore';
 import {
   computeRating,
   buildComparisonsMap,
@@ -50,11 +51,23 @@ export function useTournament({
     isTransitioning,
     sorter
   } = tournamentState;
-  
+
   // * Get tournament state from store
+  const tournament = useAppStore((state) => state.tournament);
   const {
     ratings: currentRatings
   } = tournament;
+
+  // * Get tournament actions from store
+  const { tournamentActions } = useAppStore();
+
+  // * Get persistent state values for backward compatibility
+  const currentMatch = persistentState.currentMatch;
+  const roundNumber = persistentState.currentRound;
+  const currentMatchNumber = persistentState.currentMatch;
+  const totalMatches = persistentState.totalMatches;
+  const canUndo = persistentState.matchHistory.length > 1;
+  const isError = false; // * Error state is now managed by store
 
   // * Persistent storage setup
   const tournamentId = useMemo(() => {
@@ -326,25 +339,25 @@ export function useTournament({
           currentMatch: currentMatchNumber + 1
         }));
 
-        // * Update current ratings
-        updateTournamentState({
-          currentRatings: {
-            ...currentRatings,
-            [leftName]: {
-              ...currentRatings[leftName],
-              rating: updatedLeftRating,
-              wins: newLeftWins,
-              losses: newLeftLosses
-            },
-            [rightName]: {
-              ...currentRatings[rightName],
-              rating: updatedRightRating,
-              wins: newRightWins,
-              losses: newRightLosses
-            }
+        // * Update current ratings in store
+        tournamentActions.setRatings({
+          ...currentRatings,
+          [leftName]: {
+            ...currentRatings[leftName],
+            rating: updatedLeftRating,
+            wins: newLeftWins,
+            losses: newLeftLosses
           },
-          canUndo: true
+          [rightName]: {
+            ...currentRatings[rightName],
+            rating: updatedRightRating,
+            wins: newRightWins,
+            losses: newRightLosses
+          }
         });
+
+        // * Add vote to store
+        tournamentActions.addVote(voteData);
 
         // * Check if tournament is complete
         if (currentMatchNumber >= totalMatches) {
@@ -417,7 +430,8 @@ export function useTournament({
       updatePersistentState,
       userName,
       elo,
-      persistentState.matchHistory
+      persistentState.matchHistory,
+      tournamentActions
     ]
   );
 
