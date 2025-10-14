@@ -1,8 +1,8 @@
 .container {
-  min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
+  min-height: 100vh;
   padding: 1rem;
   background: var(--bg-primary);
 }
@@ -10,18 +10,18 @@
 .card {
   width: 100%;
   max-width: 400px;
+  padding: 2rem;
   background: var(--bg-secondary);
   border-radius: 12px;
-  padding: 2rem;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 6px rgb(0 0 0 / 10%);
 }
 
 .title {
+  margin-bottom: 2rem;
   font-size: 1.875rem;
   font-weight: bold;
-  text-align: center;
-  margin-bottom: 2rem;
   color: var(--text-primary);
+  text-align: center;
 }
 
 .form {
@@ -44,11 +44,11 @@
 
 .input {
   padding: 0.75rem;
+  font-size: 1rem;
+  color: var(--text-primary);
+  background: var(--bg-primary);
   border: 1px solid var(--border-primary);
   border-radius: 8px;
-  background: var(--bg-primary);
-  color: var(--text-primary);
-  font-size: 1rem;
   transition: border-color 0.2s;
 }
 
@@ -59,22 +59,22 @@
 
 .error {
   padding: 0.75rem;
-  background: rgba(239, 68, 68, 0.1);
-  border: 1px solid rgb(239, 68, 68);
-  border-radius: 8px;
-  color: rgb(239, 68, 68);
   font-size: 0.875rem;
+  color: rgb(239 68 68);
+  background: rgb(239 68 68 / 10%);
+  border: 1px solid rgb(239 68 68);
+  border-radius: 8px;
 }
 
 .button {
   padding: 0.75rem;
-  background: var(--accent-primary);
+  font-size: 1rem;
+  font-weight: 600;
   color: white;
+  cursor: pointer;
+  background: var(--accent-primary);
   border: none;
   border-radius: 8px;
-  font-weight: 600;
-  font-size: 1rem;
-  cursor: pointer;
   transition: opacity 0.2s;
 }
 
@@ -83,14 +83,14 @@
 }
 
 .toggleButton {
-  margin-top: 1rem;
   padding: 0.5rem;
+  margin-top: 1rem;
+  font-size: 0.875rem;
+  color: var(--accent-primary);
+  text-decoration: underline;
+  cursor: pointer;
   background: transparent;
   border: none;
-  color: var(--accent-primary);
-  font-size: 0.875rem;
-  cursor: pointer;
-  text-decoration: underline;
 }
 
 .toggleButton:hover {

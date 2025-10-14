@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useUserSession from '@/core/hooks/useUserSession';
 import styles from './AuthPage.module.css';
@@ -13,7 +13,7 @@ export function AuthPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (isSignup) {
       await signup(email, password, displayName);
     } else {
@@ -31,7 +31,7 @@ export function AuthPage() {
         <h1 className={styles.title}>
           {isSignup ? 'Create Account' : 'Welcome Back'}
         </h1>
-        
+
         <form onSubmit={handleSubmit} className={styles.form}>
           {isSignup && (
             <div className={styles.field}>

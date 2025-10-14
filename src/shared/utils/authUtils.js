@@ -14,14 +14,6 @@ export const USER_ROLES = {
   ADMIN: 'admin'
 };
 
-/**
- * Role hierarchy for permission checking
- */
-const ROLE_HIERARCHY = {
-  [USER_ROLES.USER]: 1,
-  [USER_ROLES.MODERATOR]: 2,
-  [USER_ROLES.ADMIN]: 3
-};
 
 /**
  * Checks if a user has admin privileges using role-based authentication
@@ -30,13 +22,13 @@ const ROLE_HIERARCHY = {
  */
 export async function isUserAdmin(userId) {
   if (!userId) return false;
-  
+
   try {
     const { data, error } = await supabase.rpc('has_role', {
       _user_id: userId,
       _role: USER_ROLES.ADMIN
     });
-    
+
     if (error) throw error;
     return data === true;
   } catch (error) {
@@ -53,13 +45,13 @@ export async function isUserAdmin(userId) {
  */
 export async function hasRole(userId, requiredRole) {
   if (!userId || !requiredRole) return false;
-  
+
   try {
     const { data, error } = await supabase.rpc('has_role', {
       _user_id: userId,
       _role: requiredRole
     });
-    
+
     if (error) throw error;
     return data === true;
   } catch (error) {
@@ -75,7 +67,7 @@ export async function hasRole(userId, requiredRole) {
  */
 export async function getUserRole(userId) {
   if (!userId) return null;
-  
+
   try {
     const { data, error } = await supabase
       .from('user_roles')
@@ -84,7 +76,7 @@ export async function getUserRole(userId) {
       .order('role', { ascending: false })
       .limit(1)
       .single();
-    
+
     if (error) throw error;
     return data?.role || USER_ROLES.USER;
   } catch (error) {
