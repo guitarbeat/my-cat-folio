@@ -47,16 +47,14 @@ export function useTournament({
 
   // * Destructure state for easier access
   const {
-    currentMatch,
     isTransitioning,
-    roundNumber,
-    currentMatchNumber,
-    totalMatches,
-    canUndo,
-    currentRatings,
-    isError,
     sorter
   } = tournamentState;
+  
+  // * Get tournament state from store
+  const {
+    ratings: currentRatings
+  } = tournament;
 
   // * Persistent storage setup
   const tournamentId = useMemo(() => {

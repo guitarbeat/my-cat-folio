@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
+import { useEffect } from 'react';
 
 /**
  * @module useAppStore
@@ -115,37 +116,73 @@ const useAppStore = create(
       // * User Actions
       userActions: {
         setUser: (userData) =>
-          set((state) => ({
-            user: {
+          set((state) => {
+            const newUser = {
               ...state.user,
               ...userData
+            };
+            // * Persist to localStorage
+            try {
+              if (newUser.name) {
+                localStorage.setItem('catNamesUser', newUser.name);
+              } else {
+                localStorage.removeItem('catNamesUser');
+              }
+            } catch (error) {
+              if (process.env.NODE_ENV === 'development') {
+                console.error('Error updating localStorage:', error);
+              }
             }
-          })),
+            return {
+              user: newUser
+            };
+          }),
 
         login: (userName) =>
-          set((state) => ({
-            user: {
+          set((state) => {
+            const newUser = {
               ...state.user,
               name: userName,
               isLoggedIn: true
+            };
+            // * Persist to localStorage
+            try {
+              localStorage.setItem('catNamesUser', userName);
+            } catch (error) {
+              if (process.env.NODE_ENV === 'development') {
+                console.error('Error updating localStorage:', error);
+              }
             }
-          })),
+            return {
+              user: newUser
+            };
+          }),
 
         logout: () =>
-          set((state) => ({
-            user: {
-              ...state.user,
-              name: '',
-              isLoggedIn: false,
-              isAdmin: false
-            },
-            tournament: {
-              ...state.tournament,
-              names: null,
-              isComplete: false,
-              voteHistory: []
+          set((state) => {
+            // * Clear localStorage
+            try {
+              localStorage.removeItem('catNamesUser');
+            } catch (error) {
+              if (process.env.NODE_ENV === 'development') {
+                console.error('Error clearing localStorage:', error);
+              }
             }
-          })),
+            return {
+              user: {
+                ...state.user,
+                name: '',
+                isLoggedIn: false,
+                isAdmin: false
+              },
+              tournament: {
+                ...state.tournament,
+                names: null,
+                isComplete: false,
+                voteHistory: []
+              }
+            };
+          }),
 
         setAdminStatus: (isAdmin) =>
           set((state) => ({
@@ -153,26 +190,91 @@ const useAppStore = create(
               ...state.user,
               isAdmin
             }
-          }))
+          })),
+
+        // * Initialize user from localStorage
+        initializeFromStorage: () =>
+          set((state) => {
+            try {
+              const storedUser = localStorage.getItem('catNamesUser');
+              if (storedUser) {
+                return {
+                  user: {
+                    ...state.user,
+                    name: storedUser,
+                    isLoggedIn: true
+                  }
+                };
+              }
+            } catch (error) {
+              if (process.env.NODE_ENV === 'development') {
+                console.error('Error reading from localStorage:', error);
+              }
+            }
+            return state;
+          })
       },
 
       // * UI Actions
       uiActions: {
-        setTheme: (theme) =>
-          set((state) => ({
-            ui: {
-              ...state.ui,
-              theme
+        // * Initialize theme from localStorage
+        initializeTheme: () =>
+          set((state) => {
+            try {
+              const storedTheme = localStorage.getItem('theme');
+              if (storedTheme !== null) {
+                const isLightTheme = storedTheme === 'true';
+                return {
+                  ui: {
+                    ...state.ui,
+                    theme: isLightTheme ? 'light' : 'dark'
+                  }
+                };
+              }
+            } catch (error) {
+              if (process.env.NODE_ENV === 'development') {
+                console.error('Error reading theme from localStorage:', error);
+              }
             }
-          })),
+            return state;
+          }),
+
+        setTheme: (theme) =>
+          set((state) => {
+            // * Persist to localStorage
+            try {
+              localStorage.setItem('theme', theme === 'light' ? 'true' : 'false');
+            } catch (error) {
+              if (process.env.NODE_ENV === 'development') {
+                console.error('Error updating theme localStorage:', error);
+              }
+            }
+            return {
+              ui: {
+                ...state.ui,
+                theme
+              }
+            };
+          }),
 
         toggleTheme: () =>
-          set((state) => ({
-            ui: {
-              ...state.ui,
-              theme: state.ui.theme === 'light' ? 'dark' : 'light'
+          set((state) => {
+            const newTheme = state.ui.theme === 'light' ? 'dark' : 'light';
+            // * Persist to localStorage
+            try {
+              localStorage.setItem('theme', newTheme === 'light' ? 'true' : 'false');
+            } catch (error) {
+              if (process.env.NODE_ENV === 'development') {
+                console.error('Error updating theme localStorage:', error);
+              }
             }
-          })),
+            return {
+              ui: {
+                ...state.ui,
+                theme: newTheme
+              }
+            };
+          }),
 
         setWelcomeVisible: (show) =>
           set((state) => ({
@@ -297,5 +399,17 @@ const useAppStore = create(
     }
   )
 );
+
+// * Hook to initialize store from localStorage
+export const useAppStoreInitialization = () => {
+  const { userActions, uiActions } = useAppStore();
+
+  useEffect(() => {
+    // * Initialize user state from localStorage on mount
+    userActions.initializeFromStorage();
+    // * Initialize theme state from localStorage on mount
+    uiActions.initializeTheme();
+  }, [userActions, uiActions]);
+};
 
 export default useAppStore;

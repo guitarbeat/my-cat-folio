@@ -16,9 +16,8 @@ import PerformanceDashboard from './shared/components/PerformanceDashboard';
 
 // * Lazy load heavy components for better code splitting
 import useUserSession from './core/hooks/useUserSession';
-import useTheme from './core/hooks/useTheme';
 import useToast from './core/hooks/useToast';
-import useAppStore from './core/store/useAppStore';
+import useAppStore, { useAppStoreInitialization } from './core/store/useAppStore';
 import { TournamentService } from './shared/services/tournamentService';
 import { ErrorManager } from './shared/services/errorManager';
 import LoadingSpinner from './shared/components/LoadingSpinner/LoadingSpinner';
@@ -32,22 +31,21 @@ import LoadingSpinner from './shared/components/LoadingSpinner/LoadingSpinner';
  */
 
 function App() {
-  const { userName, isLoggedIn, login, logout } = useUserSession();
-  const { isLightTheme, toggleTheme } = useTheme();
+  const { login, logout } = useUserSession();
 
   // * Toast notifications
   const { toasts, removeToast } = useToast();
 
-  // * UI flags from store
-  const { ui } = useAppStore();
-
+  // * Initialize store from localStorage
+  useAppStoreInitialization();
 
   // * Centralized store
   const {
+    user,
     tournament,
+    ui,
     errors,
     tournamentActions,
-    userActions,
     uiActions,
     errorActions
   } = useAppStore();
@@ -69,7 +67,7 @@ function App() {
   const handleTournamentComplete = useCallback(
     async (finalRatings) => {
       try {
-        if (!userName) {
+        if (!user.name) {
           throw new Error('No user name available');
         }
 
@@ -77,7 +75,7 @@ function App() {
           await TournamentService.processTournamentCompletion(
             finalRatings,
             tournament.voteHistory,
-            userName,
+            user.name,
             tournament.ratings
           );
 
@@ -92,7 +90,7 @@ function App() {
         });
       }
     },
-    [userName, tournament.voteHistory, tournament.ratings, tournamentActions]
+    [user.name, tournament.voteHistory, tournament.ratings, tournamentActions]
   );
 
   // * Handle start new tournament
@@ -130,7 +128,7 @@ function App() {
       try {
         const updatedRatings = await TournamentService.updateRatings(
           adjustedRatings,
-          userName
+          user.name
         );
         tournamentActions.setRatings(updatedRatings);
         return true;
@@ -143,31 +141,29 @@ function App() {
         throw error;
       }
     },
-    [userName, tournamentActions]
+    [user.name, tournamentActions]
   );
 
   // * Handle logout
   const handleLogout = useCallback(async () => {
-    logout();
-    userActions.logout();
+    logout(); // * This already calls userActions.logout() internally
     tournamentActions.resetTournament();
     uiActions.setWelcomeVisible(true);
-  }, [logout, userActions, tournamentActions, uiActions]);
+  }, [logout, tournamentActions, uiActions]);
 
   // * Handle theme change
   const handleThemeChange = useCallback(() => {
-    toggleTheme();
-  }, [toggleTheme]);
+    uiActions.toggleTheme();
+  }, [uiActions]);
 
   // * Handle welcome screen continue
   const handleWelcomeContinue = useCallback(() => {
     uiActions.setWelcomeVisible(false);
-    if (isLoggedIn) {
-      logout();
-      userActions.logout();
+    if (user.isLoggedIn) {
+      logout(); // * This already calls userActions.logout() internally
       tournamentActions.resetTournament();
     }
-  }, [isLoggedIn, logout, userActions, tournamentActions, uiActions]);
+  }, [user.isLoggedIn, logout, tournamentActions, uiActions]);
 
   // * Memoize main content to prevent unnecessary re-renders
 
@@ -181,22 +177,22 @@ function App() {
           tournamentActions.resetTournament();
         }
       },
-      isLoggedIn,
-      userName,
+      isLoggedIn: user.isLoggedIn,
+      userName: user.name,
       onLogout: handleLogout,
       onStartNewTournament: handleStartNewTournament,
-      isLightTheme,
+      isLightTheme: ui.theme === 'light',
       onThemeChange: handleThemeChange,
       onTogglePerformanceDashboard: () => uiActions.togglePerformanceDashboard()
     }),
     [
       tournament.currentView,
       tournamentActions,
-      isLoggedIn,
-      userName,
+      user.isLoggedIn,
+      user.name,
       handleLogout,
       handleStartNewTournament,
-      isLightTheme,
+      ui.theme,
       handleThemeChange,
       uiActions
     ]
@@ -217,7 +213,7 @@ function App() {
       <NavBar {...navBarProps} />
 
       <div id="main-content" className="main-content" tabIndex="-1">
-        {errors.current && isLoggedIn && (
+        {errors.current && user.isLoggedIn && (
           <ErrorDisplay
             errors={errors.current}
             onDismiss={() => errorActions.clearError()}
@@ -227,13 +223,13 @@ function App() {
 
         <ViewRouter
           showWelcomeScreen={ui.showWelcomeScreen}
-          isLoggedIn={isLoggedIn}
-          isLightTheme={isLightTheme}
+          isLoggedIn={user.isLoggedIn}
+          isLightTheme={ui.theme === 'light'}
           onThemeToggle={handleThemeChange}
           onWelcomeContinue={handleWelcomeContinue}
           onLogin={login}
           tournament={tournament}
-          userName={userName}
+          userName={user.name}
           onStartNewTournament={handleStartNewTournament}
           onUpdateRatings={handleUpdateRatings}
           onTournamentSetup={handleTournamentSetup}
@@ -264,7 +260,7 @@ function App() {
 
       {/* * Performance Dashboard - Available to all users */}
       <PerformanceDashboard
-        userName={userName}
+        userName={user.name}
         isVisible={ui.showPerformanceDashboard}
         onClose={() => uiActions.setPerformanceDashboardVisible(false)}
       />
