@@ -15,7 +15,7 @@ export default function ViewRouter({
   isLightTheme,
   onThemeToggle,
   onWelcomeContinue,
-  onLogin,
+  onLogin: _onLogin,
   tournament,
   userName,
   onStartNewTournament,
