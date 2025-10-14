@@ -35,6 +35,7 @@
     "@heroicons/react": "^2.2.0",
     "@supabase/supabase-js": "^2.49.3",
     "@testing-library/dom": "^10.4.1",
+    "lovable-tagger": "^1.1.10",
     "prop-types": "^15.8.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
