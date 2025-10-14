@@ -198,6 +198,131 @@ This document outlines the duplicate state management issues found in the codeba
 - [ ] **1.1** Remove tournament state from `useTournament` hook and use only `useAppStore`
   - [ ] Update `useTournament` to read from store instead of managing its own state
   - [ ] Remove `tournamentState` useState from `useTournament`
+
+## Supabase CAT-Prefixed Data Fix
+
+### Root Cause
+- Supabase returned empty result sets for cat name queries because Row Level Security blocked the `anon` and `authenticated` roles from selecting rows in the CAT-prefixed tables.
+- Historical migrations created uppercase table names (for example `"CAT_NAME_OPTIONS"`, `"CAT_NAME_RATINGS"`, `"CAT_APP_USERS"`). PostgreSQL treats quoted uppercase identifiers as case-sensitive, so the lowercase table names used by the application (`cat_name_options`, `cat_name_ratings`, `cat_app_users`) did not match until the objects were renamed.
+- Missing default columns (`avg_rating`, `popularity_score`, `total_tournaments`, `is_active`) prevented downstream calculations, causing null values and additional filtering to hide every record.
+
+### SQL Migration (run in Supabase SQL editor)
+```sql
+-- 1. Normalize table names so they match the lowercase identifiers used by the app
+DO $$
+BEGIN
+  IF EXISTS (
+    SELECT 1 FROM information_schema.tables
+    WHERE table_schema = 'public' AND table_name = 'CAT_NAME_OPTIONS'
+  ) THEN
+    EXECUTE 'ALTER TABLE "CAT_NAME_OPTIONS" RENAME TO cat_name_options';
+  END IF;
+
+  IF EXISTS (
+    SELECT 1 FROM information_schema.tables
+    WHERE table_schema = 'public' AND table_name = 'CAT_NAME_RATINGS'
+  ) THEN
+    EXECUTE 'ALTER TABLE "CAT_NAME_RATINGS" RENAME TO cat_name_ratings';
+  END IF;
+
+  IF EXISTS (
+    SELECT 1 FROM information_schema.tables
+    WHERE table_schema = 'public' AND table_name = 'CAT_APP_USERS'
+  ) THEN
+    EXECUTE 'ALTER TABLE "CAT_APP_USERS" RENAME TO cat_app_users';
+  END IF;
+END;
+$$;
+
+-- 2. Ensure required columns exist with defaults expected by the client
+ALTER TABLE cat_name_options
+  ADD COLUMN IF NOT EXISTS description text DEFAULT ''::text,
+  ADD COLUMN IF NOT EXISTS avg_rating numeric DEFAULT 0,
+  ADD COLUMN IF NOT EXISTS popularity_score numeric DEFAULT 0,
+  ADD COLUMN IF NOT EXISTS total_tournaments integer DEFAULT 0,
+  ADD COLUMN IF NOT EXISTS is_active boolean DEFAULT true,
+  ADD COLUMN IF NOT EXISTS categories jsonb DEFAULT '[]'::jsonb;
+
+ALTER TABLE cat_name_ratings
+  ADD COLUMN IF NOT EXISTS user_name text NOT NULL,
+  ADD COLUMN IF NOT EXISTS name_id uuid NOT NULL,
+  ADD COLUMN IF NOT EXISTS rating numeric DEFAULT 1500,
+  ADD COLUMN IF NOT EXISTS wins integer DEFAULT 0,
+  ADD COLUMN IF NOT EXISTS losses integer DEFAULT 0,
+  ADD COLUMN IF NOT EXISTS is_hidden boolean DEFAULT false,
+  ADD COLUMN IF NOT EXISTS rating_history jsonb;
+
+ALTER TABLE cat_app_users
+  ADD COLUMN IF NOT EXISTS preferences jsonb DEFAULT '{
+    "preferred_categories": [],
+    "tournament_size_preference": 8,
+    "rating_display_preference": "elo",
+    "sound_enabled": true,
+    "theme_preference": "dark"
+  }'::jsonb,
+  ADD COLUMN IF NOT EXISTS tournament_data jsonb DEFAULT '[]'::jsonb,
+  ADD COLUMN IF NOT EXISTS user_role text DEFAULT 'user';
+
+-- 3. Rebuild foreign keys to keep referential integrity intact
+ALTER TABLE cat_name_ratings
+  ADD CONSTRAINT IF NOT EXISTS cat_name_ratings_name_fk
+    FOREIGN KEY (name_id) REFERENCES cat_name_options(id) ON DELETE CASCADE;
+
+ALTER TABLE cat_name_ratings
+  ADD CONSTRAINT IF NOT EXISTS cat_name_ratings_user_fk
+    FOREIGN KEY (user_name) REFERENCES cat_app_users(user_name) ON DELETE CASCADE;
+
+-- 4. Grant privileges so REST API can read the data
+GRANT SELECT ON TABLE cat_name_options TO anon, authenticated;
+GRANT SELECT ON TABLE cat_name_ratings TO anon, authenticated;
+GRANT SELECT ON TABLE cat_app_users TO authenticated;
+
+-- 5. Reconfigure Row Level Security to allow read access to active names
+ALTER TABLE cat_name_options ENABLE ROW LEVEL SECURITY;
+ALTER TABLE cat_name_ratings ENABLE ROW LEVEL SECURITY;
+ALTER TABLE cat_app_users ENABLE ROW LEVEL SECURITY;
+
+DROP POLICY IF EXISTS cat_name_options_public_read ON cat_name_options;
+CREATE POLICY cat_name_options_public_read ON cat_name_options
+  FOR SELECT
+  TO anon, authenticated
+  USING (is_active IS TRUE);
+
+DROP POLICY IF EXISTS cat_name_ratings_public_read ON cat_name_ratings;
+CREATE POLICY cat_name_ratings_public_read ON cat_name_ratings
+  FOR SELECT
+  TO authenticated
+  USING (true);
+
+DROP POLICY IF EXISTS cat_app_users_select_self ON cat_app_users;
+CREATE POLICY cat_app_users_select_self ON cat_app_users
+  FOR SELECT
+  TO authenticated
+  USING (auth.uid()::text = user_name);
+
+-- 6. Optional: expose a view for anonymous read-only access to active names
+CREATE OR REPLACE VIEW cat_names_public AS
+SELECT
+  id,
+  name,
+  description,
+  created_at,
+  avg_rating,
+  popularity_score,
+  total_tournaments,
+  is_active
+FROM cat_name_options
+WHERE is_active IS TRUE;
+
+GRANT SELECT ON cat_names_public TO anon;
+```
+
+### Verification Steps
+1. Run the SQL block above in the Supabase SQL editor.
+2. Refresh the Supabase table previews to confirm `cat_name_options` now contains the expected rows and lowercase table names.
+3. In Supabase Studio, test the policies with the "Run as anon" option to ensure rows are returned.
+4. Reload the application in development; the names list and tournaments should populate with active records.
+5. Execute the existing test suite (`npm run test`); name-related tests should now pass without empty dataset failures.
   - [ ] Update all tournament state updates to use store actions
   - [ ] Test tournament functionality thoroughly
 
