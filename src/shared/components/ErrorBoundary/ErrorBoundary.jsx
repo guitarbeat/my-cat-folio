@@ -7,7 +7,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { createStandardizedError } from '../../utils/errorHandler';
+import { createStandardizedError } from '../../services/errorManager';
 import styles from './ErrorBoundary.module.css';
 
 class ErrorBoundary extends React.Component {

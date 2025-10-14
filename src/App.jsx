@@ -30,7 +30,7 @@ import useTheme from './core/hooks/useTheme';
 import useToast from './core/hooks/useToast';
 import useAppStore from './core/store/useAppStore';
 import { TournamentService } from './shared/services/tournamentService';
-import { ErrorService } from './shared/services/errorService';
+import { ErrorManager } from './shared/services/errorManager';
 import LoadingSpinner from './shared/components/LoadingSpinner/LoadingSpinner';
 
 // * Components imported directly for better code splitting

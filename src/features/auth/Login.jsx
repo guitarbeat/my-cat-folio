@@ -7,7 +7,7 @@ import PropTypes from 'prop-types';
 
 import { InlineError } from '../../shared/components';
 import useToast from '../../core/hooks/useToast';
-import { validateUsername } from '../../shared/utils/validation';
+import { validateUsername } from '../../shared/utils/validationUtils';
 import styles from './Login.module.css';
 
 function Login({ onLogin }) {

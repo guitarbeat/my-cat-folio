@@ -101,7 +101,21 @@ export const VALIDATION = {
   MIN_DESCRIPTION_LENGTH: 0,
   MAX_DESCRIPTION_LENGTH: 500,
   USERNAME_PATTERN: /^[a-zA-Z0-9_-]+$/,
-  EMAIL_PATTERN: /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+  EMAIL_PATTERN: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+  // * Tournament validation
+  MIN_TOURNAMENT_SIZE: 2,
+  MAX_TOURNAMENT_SIZE: 64,
+  MIN_RATING: 0,
+  MAX_RATING: 3000,
+  // * Username validation
+  MIN_USERNAME_LENGTH: 2,
+  MAX_USERNAME_LENGTH: 50,
+  USERNAME_PATTERN_EXTENDED: /^[a-zA-Z0-9\s\-_]+$/,
+  // * Cat name validation
+  MIN_CAT_NAME_LENGTH: 1,
+  MAX_CAT_NAME_LENGTH: 100,
+  // * Description validation
+  MIN_DESCRIPTION_LENGTH_EXTENDED: 10
 };
 
 // * API Constants

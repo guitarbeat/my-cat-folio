@@ -5,7 +5,7 @@
 // Third-party imports
 import React, { useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
-import './navbar.css';
+import './navbar-improved.css';
 
 function NavBar({
   view,

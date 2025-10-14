@@ -1,35 +1,80 @@
 /**
- * @module ErrorService
- * @description Centralized error handling service for the application.
- * Provides consistent error handling, logging, and user feedback.
+ * @module ErrorManager
+ * @description Comprehensive error handling service for the application.
+ * Consolidates error handling, logging, retry logic, and circuit breaker patterns.
  */
 
-export class ErrorService {
-  /**
-   * * Error types for categorization
-   */
-  static get ERROR_TYPES() {
-    return {
-      NETWORK: 'network',
-      VALIDATION: 'validation',
-      AUTH: 'auth',
-      DATABASE: 'database',
-      UNKNOWN: 'unknown'
-    };
-  }
+// * Error types for categorization
+export const ERROR_TYPES = {
+  NETWORK: 'network',
+  VALIDATION: 'validation',
+  AUTH: 'auth',
+  DATABASE: 'database',
+  RUNTIME: 'runtime',
+  UNKNOWN: 'unknown'
+};
 
-  /**
-   * * Error severity levels
-   */
-  static get SEVERITY_LEVELS() {
-    return {
-      LOW: 'low',
-      MEDIUM: 'medium',
-      HIGH: 'high',
-      CRITICAL: 'critical'
-    };
-  }
+// * Error severity levels
+export const ERROR_SEVERITY = {
+  LOW: 'low',
+  MEDIUM: 'medium',
+  HIGH: 'high',
+  CRITICAL: 'critical'
+};
 
+// * User-friendly error messages
+export const USER_FRIENDLY_MESSAGES = {
+  [ERROR_TYPES.NETWORK]: {
+    [ERROR_SEVERITY.LOW]: 'Connection is slow. Please try again.',
+    [ERROR_SEVERITY.MEDIUM]: 'Network connection issue. Please check your internet and try again.',
+    [ERROR_SEVERITY.HIGH]: 'Unable to connect to the server. Please try again later.',
+    [ERROR_SEVERITY.CRITICAL]: 'Service temporarily unavailable. Please try again later.'
+  },
+  [ERROR_TYPES.AUTH]: {
+    [ERROR_SEVERITY.LOW]: 'Please log in again.',
+    [ERROR_SEVERITY.MEDIUM]: 'Your session has expired. Please log in again.',
+    [ERROR_SEVERITY.HIGH]: 'Authentication failed. Please check your credentials.',
+    [ERROR_SEVERITY.CRITICAL]: 'Account access issue. Please contact support.'
+  },
+  [ERROR_TYPES.DATABASE]: {
+    [ERROR_SEVERITY.LOW]: 'Data loading is slow. Please try again.',
+    [ERROR_SEVERITY.MEDIUM]: 'Unable to load data. Please refresh the page.',
+    [ERROR_SEVERITY.HIGH]: 'Data access error. Please try again later.',
+    [ERROR_SEVERITY.CRITICAL]: 'Database connection issue. Please try again later.'
+  },
+  [ERROR_TYPES.VALIDATION]: {
+    [ERROR_SEVERITY.LOW]: 'Please check your input and try again.',
+    [ERROR_SEVERITY.MEDIUM]: 'Invalid input detected. Please review and try again.',
+    [ERROR_SEVERITY.HIGH]: 'Input validation failed. Please check your data.',
+    [ERROR_SEVERITY.CRITICAL]: 'Critical validation error. Please contact support.'
+  },
+  [ERROR_TYPES.RUNTIME]: {
+    [ERROR_SEVERITY.LOW]: 'Something went wrong. Please try again.',
+    [ERROR_SEVERITY.MEDIUM]: 'An error occurred. Please refresh the page.',
+    [ERROR_SEVERITY.HIGH]: 'Application error. Please try again later.',
+    [ERROR_SEVERITY.CRITICAL]: 'Critical application error. Please contact support.'
+  },
+  [ERROR_TYPES.UNKNOWN]: {
+    [ERROR_SEVERITY.LOW]: 'Something unexpected happened. Please try again.',
+    [ERROR_SEVERITY.MEDIUM]: 'An unexpected error occurred. Please try again.',
+    [ERROR_SEVERITY.HIGH]: 'Unexpected error. Please try again later.',
+    [ERROR_SEVERITY.CRITICAL]: 'Critical unexpected error. Please contact support.'
+  }
+};
+
+// * Retry configuration
+export const RETRY_CONFIG = {
+  maxAttempts: 3,
+  baseDelay: 1000,
+  maxDelay: 10000,
+  backoffMultiplier: 2,
+  jitter: 0.1
+};
+
+/**
+ * * Comprehensive error management class
+ */
+export class ErrorManager {
   /**
    * * Handles errors with consistent formatting and logging
    * @param {Error|Object} error - The error object or error-like object
@@ -67,7 +112,7 @@ export class ErrorService {
         message: error,
         name: 'StringError',
         stack: null,
-        type: this.ERROR_TYPES.UNKNOWN
+        type: ERROR_TYPES.UNKNOWN
       };
     }
 
@@ -86,7 +131,7 @@ export class ErrorService {
       message: 'An unexpected error occurred',
       name: 'UnknownError',
       stack: null,
-      type: this.ERROR_TYPES.UNKNOWN
+      type: ERROR_TYPES.UNKNOWN
     };
   }
 
@@ -97,29 +142,34 @@ export class ErrorService {
    */
   static determineErrorType(error) {
     if (error.code === 'PGRST301' || error.code === 'PGRST302') {
-      return this.ERROR_TYPES.AUTH;
+      return ERROR_TYPES.AUTH;
     }
 
     if (error.code === 'PGRST116' || error.code === 'PGRST117') {
-      return this.ERROR_TYPES.VALIDATION;
+      return ERROR_TYPES.VALIDATION;
     }
 
-    if (
-      error.status === 0 ||
-      error.status === 500 ||
-      error.message?.includes('fetch')
-    ) {
-      return this.ERROR_TYPES.NETWORK;
+    if (error.code === 'NETWORK_ERROR' || error.message?.includes('fetch')) {
+      return ERROR_TYPES.NETWORK;
     }
 
-    if (
-      error.message?.includes('database') ||
-      error.message?.includes('supabase')
-    ) {
-      return this.ERROR_TYPES.DATABASE;
+    if (error.status === 0 || error.status === 500) {
+      return ERROR_TYPES.NETWORK;
     }
 
-    return this.ERROR_TYPES.UNKNOWN;
+    if (error.message?.includes('database') || error.message?.includes('supabase')) {
+      return ERROR_TYPES.DATABASE;
+    }
+
+    if (error.name === 'TypeError' || error.name === 'ReferenceError') {
+      return ERROR_TYPES.RUNTIME;
+    }
+
+    if (error.code === 'VALIDATION_ERROR' || error.message?.includes('validation')) {
+      return ERROR_TYPES.VALIDATION;
+    }
+
+    return ERROR_TYPES.UNKNOWN;
   }
 
   /**
@@ -159,24 +209,26 @@ export class ErrorService {
    */
   static determineSeverity(errorInfo, metadata) {
     if (metadata.isCritical) {
-      return this.SEVERITY_LEVELS.CRITICAL;
+      return ERROR_SEVERITY.CRITICAL;
     }
 
     if (metadata.affectsUserData) {
-      return this.SEVERITY_LEVELS.HIGH;
+      return ERROR_SEVERITY.HIGH;
     }
 
     switch (errorInfo.type) {
-      case this.ERROR_TYPES.AUTH:
-        return this.SEVERITY_LEVELS.HIGH;
-      case this.ERROR_TYPES.DATABASE:
-        return this.SEVERITY_LEVELS.MEDIUM;
-      case this.ERROR_TYPES.NETWORK:
-        return this.SEVERITY_LEVELS.MEDIUM;
-      case this.ERROR_TYPES.VALIDATION:
-        return this.SEVERITY_LEVELS.LOW;
+      case ERROR_TYPES.AUTH:
+        return ERROR_SEVERITY.HIGH;
+      case ERROR_TYPES.DATABASE:
+        return ERROR_SEVERITY.MEDIUM;
+      case ERROR_TYPES.NETWORK:
+        return ERROR_SEVERITY.MEDIUM;
+      case ERROR_TYPES.VALIDATION:
+        return ERROR_SEVERITY.LOW;
+      case ERROR_TYPES.RUNTIME:
+        return ERROR_SEVERITY.MEDIUM;
       default:
-        return this.SEVERITY_LEVELS.MEDIUM;
+        return ERROR_SEVERITY.MEDIUM;
     }
   }
 
@@ -197,19 +249,10 @@ export class ErrorService {
     };
 
     const contextMessage = contextMap[context] || 'An error occurred';
+    const severity = this.determineSeverity(errorInfo, {});
 
-    switch (errorInfo.type) {
-      case this.ERROR_TYPES.NETWORK:
-        return `${contextMessage}. Please check your internet connection and try again.`;
-      case this.ERROR_TYPES.AUTH:
-        return `${contextMessage}. Please log in again.`;
-      case this.ERROR_TYPES.VALIDATION:
-        return `${contextMessage}. Please check your input and try again.`;
-      case this.ERROR_TYPES.DATABASE:
-        return `${contextMessage}. Please try again later.`;
-      default:
-        return `${contextMessage}. Please try again.`;
-    }
+    return USER_FRIENDLY_MESSAGES[errorInfo.type]?.[severity] || 
+           `${contextMessage}. Please try again.`;
   }
 
   /**
@@ -228,22 +271,22 @@ export class ErrorService {
     }
 
     // * Network errors are generally retryable
-    if (errorInfo.type === this.ERROR_TYPES.NETWORK) {
+    if (errorInfo.type === ERROR_TYPES.NETWORK) {
       return true;
     }
 
     // * Database errors might be retryable
-    if (errorInfo.type === this.ERROR_TYPES.DATABASE) {
+    if (errorInfo.type === ERROR_TYPES.DATABASE) {
       return true;
     }
 
     // * Auth errors are not retryable
-    if (errorInfo.type === this.ERROR_TYPES.AUTH) {
+    if (errorInfo.type === ERROR_TYPES.AUTH) {
       return false;
     }
 
     // * Validation errors are not retryable
-    if (errorInfo.type === this.ERROR_TYPES.VALIDATION) {
+    if (errorInfo.type === ERROR_TYPES.VALIDATION) {
       return false;
     }
 
@@ -293,8 +336,8 @@ export class ErrorService {
   static sendToErrorService(logData) {
     try {
       const errorData = {
-        message: logData.message,
-        level: logData.severity,
+        message: logData.error.message,
+        level: logData.error.severity,
         timestamp: logData.timestamp,
         context: logData.context,
         metadata: logData.metadata,
@@ -357,7 +400,6 @@ export class ErrorService {
    */
   static sendToCustomEndpoint(errorData) {
     try {
-      // Check if we have a custom error endpoint configured
       const errorEndpoint = process.env.REACT_APP_ERROR_ENDPOINT;
       if (errorEndpoint) {
         fetch(errorEndpoint, {
@@ -418,7 +460,6 @@ export class ErrorService {
    */
   static getUserId() {
     try {
-      // Get user from localStorage (matches the app's auth system)
       return localStorage.getItem('catNamesUser') || null;
     } catch {
       return null;
@@ -433,10 +474,10 @@ export class ErrorService {
    */
   static mapSeverityToSentryLevel(severity) {
     const mapping = {
-      [this.SEVERITY_LEVELS.LOW]: 'info',
-      [this.SEVERITY_LEVELS.MEDIUM]: 'warning',
-      [this.SEVERITY_LEVELS.HIGH]: 'error',
-      [this.SEVERITY_LEVELS.CRITICAL]: 'fatal'
+      [ERROR_SEVERITY.LOW]: 'info',
+      [ERROR_SEVERITY.MEDIUM]: 'warning',
+      [ERROR_SEVERITY.HIGH]: 'error',
+      [ERROR_SEVERITY.CRITICAL]: 'fatal'
     };
     return mapping[severity] || 'error';
   }
@@ -448,29 +489,35 @@ export class ErrorService {
    * @returns {Function} Wrapped function with retry logic
    */
   static withRetry(operation, options = {}) {
+    const config = { ...RETRY_CONFIG, ...options };
     const {
-      maxRetries = 3,
-      delay = 1000,
-      backoff = 2,
-      // Ensure we classify errors before deciding retryability
+      maxAttempts = config.maxAttempts,
+      baseDelay = config.baseDelay,
+      backoffMultiplier = config.backoffMultiplier,
+      jitter = config.jitter,
       shouldRetry = (error) => this.isRetryable(this.parseError(error), {})
-    } = options;
+    } = config;
 
     return async (...args) => {
       let lastError;
 
-      for (let attempt = 1; attempt <= maxRetries; attempt++) {
+      for (let attempt = 1; attempt <= maxAttempts; attempt++) {
         try {
           return await operation(...args);
         } catch (error) {
           lastError = error;
 
-          if (attempt === maxRetries || !shouldRetry(error)) {
+          if (attempt === maxAttempts || !shouldRetry(error)) {
             throw error;
           }
 
-          // * Wait before retrying with exponential backoff
-          const waitTime = delay * Math.pow(backoff, attempt - 1);
+          // * Wait before retrying with exponential backoff and jitter
+          const exponentialDelay = baseDelay * Math.pow(backoffMultiplier, attempt - 1);
+          const cappedDelay = Math.min(exponentialDelay, config.maxDelay);
+          const jitterRange = cappedDelay * jitter;
+          const jitterValue = (Math.random() - 0.5) * jitterRange;
+          const waitTime = Math.max(0, cappedDelay + jitterValue);
+
           await new Promise((resolve) => setTimeout(resolve, waitTime));
         }
       }
@@ -478,6 +525,171 @@ export class ErrorService {
       throw lastError;
     };
   }
+
+  /**
+   * * Circuit breaker implementation
+   */
+  static CircuitBreaker = class {
+    constructor(failureThreshold = 5, resetTimeout = 60000) {
+      this.failureThreshold = failureThreshold;
+      this.resetTimeout = resetTimeout;
+      this.failureCount = 0;
+      this.lastFailureTime = null;
+      this.state = 'CLOSED'; // CLOSED, OPEN, HALF_OPEN
+    }
+
+    async execute(fn) {
+      if (this.state === 'OPEN') {
+        if (this.shouldAttemptReset()) {
+          this.state = 'HALF_OPEN';
+        } else {
+          throw new Error('Circuit breaker is OPEN - service is unavailable');
+        }
+      }
+
+      try {
+        const result = await fn();
+        this.onSuccess();
+        return result;
+      } catch (error) {
+        this.onFailure();
+        throw error;
+      }
+    }
+
+    onSuccess() {
+      this.failureCount = 0;
+      this.state = 'CLOSED';
+      this.lastFailureTime = null;
+    }
+
+    onFailure() {
+      this.failureCount++;
+      this.lastFailureTime = Date.now();
+
+      if (this.failureCount >= this.failureThreshold) {
+        this.state = 'OPEN';
+      }
+    }
+
+    shouldAttemptReset() {
+      if (!this.lastFailureTime) return false;
+      return Date.now() - this.lastFailureTime >= this.resetTimeout;
+    }
+
+    getStatus() {
+      return {
+        state: this.state,
+        failureCount: this.failureCount,
+        failureThreshold: this.failureThreshold,
+        lastFailureTime: this.lastFailureTime,
+        timeUntilReset: this.lastFailureTime
+          ? Math.max(0, this.resetTimeout - (Date.now() - this.lastFailureTime))
+          : 0
+      };
+    }
+
+    reset() {
+      this.state = 'CLOSED';
+      this.failureCount = 0;
+      this.lastFailureTime = null;
+    }
+  };
+
+  /**
+   * * Create a retry wrapper with circuit breaker
+   * @param {Function} fn - Function to wrap
+   * @param {Object} options - Options for retry and circuit breaker
+   * @returns {Function} Wrapped function with retry and circuit breaker
+   */
+  static createResilientFunction(fn, options = {}) {
+    const circuitBreaker = new this.CircuitBreaker(
+      options.failureThreshold || 5,
+      options.resetTimeout || 60000
+    );
+
+    return async (...args) => {
+      return circuitBreaker.execute(() => this.withRetry(() => fn(...args), options));
+    };
+  }
+
+  /**
+   * * Global error handler setup
+   */
+  static setupGlobalErrorHandling() {
+    // Handle unhandled promise rejections
+    window.addEventListener('unhandledrejection', (event) => {
+      event.preventDefault();
+      this.handleError(event.reason, 'Unhandled Promise Rejection', {
+        isRetryable: false,
+        affectsUserData: false,
+        isCritical: true
+      });
+    });
+
+    // Handle unhandled errors
+    window.addEventListener('error', (event) => {
+      event.preventDefault();
+      this.handleError(event.error, 'Unhandled Error', {
+        isRetryable: false,
+        affectsUserData: false,
+        isCritical: true
+      });
+    });
+  }
+
+  /**
+   * * Get CSS class name for error severity
+   * @param {string} severity - The error severity level
+   * @param {Object} styles - The styles object containing severity classes
+   * @returns {string} CSS class name for the severity
+   */
+  static getSeverityClass(severity, styles) {
+    switch (severity) {
+      case ERROR_SEVERITY.CRITICAL:
+        return styles.critical;
+      case ERROR_SEVERITY.HIGH:
+        return styles.high;
+      case ERROR_SEVERITY.MEDIUM:
+        return styles.medium;
+      case ERROR_SEVERITY.LOW:
+        return styles.low;
+      default:
+        return styles.unknown || styles.medium;
+    }
+  }
+
+  /**
+   * * Create a standardized error object
+   * @param {Error|Object} error - The original error
+   * @param {string} context - Where the error occurred
+   * @param {Object} additionalInfo - Additional context
+   * @returns {Object} Standardized error object
+   */
+  static createStandardizedError(error, context = 'Unknown', additionalInfo = {}) {
+    const errorInfo = this.handleError(error, context, additionalInfo);
+
+    return {
+      ...errorInfo,
+      originalError: error,
+      context,
+      timestamp: new Date().toISOString(),
+      retry: () => {
+        if (errorInfo.isRetryable) {
+          window.location.reload();
+        }
+      }
+    };
+  }
 }
 
-export default ErrorService;
+// * Convenience functions for backward compatibility
+export const handleError = (error, context, metadata) => ErrorManager.handleError(error, context, metadata);
+export const withRetry = (operation, options) => ErrorManager.withRetry(operation, options);
+export const createResilientFunction = (fn, options) => ErrorManager.createResilientFunction(fn, options);
+export const setupGlobalErrorHandling = () => ErrorManager.setupGlobalErrorHandling();
+export const getSeverityClass = (severity, styles) => ErrorManager.getSeverityClass(severity, styles);
+export const createStandardizedError = (error, context, additionalInfo) => 
+  ErrorManager.createStandardizedError(error, context, additionalInfo);
+
+export default ErrorManager;
