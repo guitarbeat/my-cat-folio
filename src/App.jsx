@@ -31,7 +31,7 @@ import LoadingSpinner from './shared/components/LoadingSpinner/LoadingSpinner';
  */
 
 function App() {
-  const { login, logout } = useUserSession();
+  const { logout } = useUserSession();
 
   // * Toast notifications
   const { toasts, removeToast } = useToast();
@@ -227,7 +227,6 @@ function App() {
           isLightTheme={ui.theme === 'light'}
           onThemeToggle={handleThemeChange}
           onWelcomeContinue={handleWelcomeContinue}
-          onLogin={login}
           tournament={tournament}
           userName={user.name}
           onStartNewTournament={handleStartNewTournament}

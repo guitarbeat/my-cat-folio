@@ -111,6 +111,12 @@ function Login({ onLogin }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // * Prevent duplicate submissions
+    if (isLoading) {
+      return;
+    }
+
     const finalName = name.trim() || generateFunName();
 
     // Validate the username

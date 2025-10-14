@@ -15,7 +15,6 @@ export default function ViewRouter({
   isLightTheme,
   onThemeToggle,
   onWelcomeContinue,
-  onLogin: _onLogin,
   tournament,
   userName,
   onStartNewTournament,
@@ -103,7 +102,6 @@ ViewRouter.propTypes = {
   isLightTheme: PropTypes.bool.isRequired,
   onThemeToggle: PropTypes.func.isRequired,
   onWelcomeContinue: PropTypes.func.isRequired,
-  onLogin: PropTypes.func.isRequired,
   tournament: PropTypes.shape({
     names: PropTypes.any,
     ratings: PropTypes.object.isRequired,
