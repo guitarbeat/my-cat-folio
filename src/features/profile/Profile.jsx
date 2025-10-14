@@ -372,7 +372,7 @@ const Profile = ({ userName, onStartNewTournament }) => {
         // Refresh backing data (ensures filters reflect server state)
         fetchNames();
       } catch (error) {
-        ErrorService.handleError(error, 'Profile - Toggle Visibility', {
+        ErrorManager.handleError(error, 'Profile - Toggle Visibility', {
           isRetryable: true,
           affectsUserData: false,
           isCritical: false
