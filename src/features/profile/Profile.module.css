@@ -9,7 +9,7 @@
 }
 
 /* Header - Fixed at top */
-.profileHeader {
+.header {
   position: sticky;
   top: 0;
   z-index: 100;
@@ -23,7 +23,7 @@
   backdrop-filter: blur(var(--glass-blur));
 }
 
-.profileTitle {
+.title {
   margin: 0;
   font-size: 2rem;
   font-weight: 700;
@@ -32,10 +32,41 @@
   background-clip: text;
 }
 
-.headerActions {
+.headerButtons {
   display: flex;
   gap: 1rem;
   align-items: center;
+}
+
+.newTournamentButton,
+.migrationButton {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.newTournamentButton {
+  background: var(--accent-primary);
+  color: white;
+}
+
+.newTournamentButton:hover {
+  background: var(--accent-hover);
+  transform: translateY(-1px);
+}
+
+.migrationButton {
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+}
+
+.migrationButton:hover {
+  background: var(--bg-tertiary);
+  transform: translateY(-1px);
 }
 
 .button {

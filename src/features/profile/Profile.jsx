@@ -20,6 +20,7 @@ import { isUserAdmin } from '../../shared/utils/authUtils';
 import ProfileStats from './ProfileStats';
 import ProfileFilters from './ProfileFilters';
 import ProfileNameList from './ProfileNameList';
+import DataMigration from '../admin/DataMigration';
 import styles from './Profile.module.css';
 
 // * Enhanced utility functions for better statistics
@@ -278,6 +279,7 @@ const Profile = ({ userName, onStartNewTournament }) => {
   const [selectionStats, setSelectionStats] = useState(null);
   // * NEW: Selection-based filtering state
   const [selectionFilter, setSelectionFilter] = useState('all');
+  const [showMigration, setShowMigration] = useState(false);
   const { showSuccess, showError } = useToast();
 
   // * Hooks
@@ -562,64 +564,82 @@ const Profile = ({ userName, onStartNewTournament }) => {
 
   return (
     <div className={styles.profileContainer}>
-      {/* * Header */}
-      <div className={styles.header}>
-        <h1 className={styles.title}>Profile: {userName}</h1>
-        <button
-          onClick={onStartNewTournament}
-          className={styles.newTournamentButton}
-        >
-          Start New Tournament
-        </button>
-      </div>
+      {/* * Show migration tool for admins */}
+      {showMigration && isAdmin ? (
+        <DataMigration />
+      ) : (
+        <>
+          {/* * Header */}
+          <div className={styles.header}>
+            <h1 className={styles.title}>Profile: {userName}</h1>
+            <div className={styles.headerButtons}>
+              {isAdmin && (
+                <button
+                  onClick={() => setShowMigration(true)}
+                  className={styles.migrationButton}
+                  title="Migrate data from external Supabase"
+                >
+                  🔄 Migrate Data
+                </button>
+              )}
+              <button
+                onClick={onStartNewTournament}
+                className={styles.newTournamentButton}
+              >
+                Start New Tournament
+              </button>
+            </div>
+          </div>
 
-      {/* * Statistics Section */}
-      <ProfileStats
-        stats={stats}
-        selectionStats={selectionStats}
-        isLoading={ratingsLoading}
-        className={styles.statsSection}
-      />
+          {/* * Statistics Section */}
+          <ProfileStats
+            stats={stats}
+            selectionStats={selectionStats}
+            isLoading={ratingsLoading}
+            className={styles.statsSection}
+          />
 
-      {/* * Filters Section */}
-      <ProfileFilters
-        filterStatus={filterStatus}
-        setFilterStatus={setFilterStatus}
-        userFilter={userFilter}
-        setUserFilter={setUserFilter}
-        sortBy={sortBy}
-        setSortBy={setSortBy}
-        sortOrder={sortOrder}
-        setSortOrder={setSortOrder}
-        isAdmin={isAdmin}
-        className={styles.filtersSection}
-        selectionFilter={selectionFilter}
-        setSelectionFilter={setSelectionFilter}
-        hasSelectionData={!!selectionStats} // * Show selection filters if we have selection data
-      />
+          {/* * Filters Section */}
+          <ProfileFilters
+            filterStatus={filterStatus}
+            setFilterStatus={setFilterStatus}
+            userFilter={userFilter}
+            setUserFilter={setUserFilter}
+            sortBy={sortBy}
+            setSortBy={setSortBy}
+            sortOrder={sortOrder}
+            setSortOrder={setSortOrder}
+            isAdmin={isAdmin}
+            className={styles.filtersSection}
+            selectionFilter={selectionFilter}
+            setSelectionFilter={setSelectionFilter}
+            hasSelectionData={!!selectionStats} // * Show selection filters if we have selection data
+          />
 
-      {/* * Names List Section */}
-      <ProfileNameList
-        names={allNames}
-        ratings={{ userName }}
-        isLoading={ratingsLoading}
-        filterStatus={filterStatus}
-        userFilter={userFilter}
-        sortBy={sortBy}
-        sortOrder={sortOrder}
-        isAdmin={isAdmin}
-        onToggleVisibility={handleToggleVisibility}
-        onDelete={handleDelete}
-        onSelectionChange={handleSelectionChange}
-        selectedNames={selectedNames}
-        hiddenIds={hiddenNames}
-        className={styles.namesSection}
-        showAdminControls={isAdmin} // * Pass admin controls flag
-        selectionFilter={selectionFilter}
-        selectionStats={selectionStats}
-        onBulkHide={handleBulkHide}
-        onBulkUnhide={handleBulkUnhide}
-      />
+          {/* * Names List Section */}
+          <ProfileNameList
+            names={allNames}
+            ratings={{ userName }}
+            isLoading={ratingsLoading}
+            filterStatus={filterStatus}
+            userFilter={userFilter}
+            sortBy={sortBy}
+            sortOrder={sortOrder}
+            isAdmin={isAdmin}
+            onToggleVisibility={handleToggleVisibility}
+            onDelete={handleDelete}
+            onSelectionChange={handleSelectionChange}
+            selectedNames={selectedNames}
+            hiddenIds={hiddenNames}
+            className={styles.namesSection}
+            showAdminControls={isAdmin} // * Pass admin controls flag
+            selectionFilter={selectionFilter}
+            selectionStats={selectionStats}
+            onBulkHide={handleBulkHide}
+            onBulkUnhide={handleBulkUnhide}
+          />
+        </>
+      )}
     </div>
   );
 };
