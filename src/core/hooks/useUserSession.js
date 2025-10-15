@@ -40,6 +40,16 @@ function useUserSession() {
       setError(null);
       const trimmedName = userName.trim();
 
+      if (!supabase) {
+        console.warn(
+          'Supabase client is not configured. Proceeding with local-only login.'
+        );
+
+        localStorage.setItem('catNamesUser', trimmedName);
+        userActions.login(trimmedName);
+        return true;
+      }
+
       // Check if user exists in database
       const { data: existingUser, error: fetchError } = await supabase
         .from('cat_app_users')
@@ -72,7 +82,7 @@ function useUserSession() {
       // Store username and update state
       localStorage.setItem('catNamesUser', trimmedName);
       userActions.login(trimmedName);
-      
+
       return true;
     } catch (err) {
       console.error('Login error:', err);
