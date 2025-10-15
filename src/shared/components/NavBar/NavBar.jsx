@@ -5,13 +5,14 @@
 // Third-party imports
 import React, { useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
-import './navbar-improved.css';
+import './navbar.css';
 
 function NavBar({
   view,
   setView,
   isLoggedIn,
   userName,
+  isAdmin,
   onLogout,
   onStartNewTournament,
   isLightTheme,
@@ -229,8 +230,8 @@ function NavBar({
               </button>
             </li>
 
-            {/* Performance Dashboard Button - Available to all users */}
-            {isLoggedIn && onTogglePerformanceDashboard && (
+            {/* Performance Dashboard Button - Admin only */}
+            {isLoggedIn && isAdmin && onTogglePerformanceDashboard && (
               <li className="navbar__item navbar__item--performance-dashboard">
                 <button
                   type="button"
@@ -385,7 +386,8 @@ NavBar.propTypes = {
   onStartNewTournament: PropTypes.func,
   isLightTheme: PropTypes.bool.isRequired,
   onThemeChange: PropTypes.func.isRequired,
-  onTogglePerformanceDashboard: PropTypes.func
+  onTogglePerformanceDashboard: PropTypes.func,
+  isAdmin: PropTypes.bool
 };
 
 export default NavBar;

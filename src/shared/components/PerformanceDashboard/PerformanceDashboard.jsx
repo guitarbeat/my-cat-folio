@@ -11,7 +11,7 @@ import styles from './PerformanceDashboard.module.css';
 const PerformanceDashboard = ({ userName, isVisible = false, onClose }) => {
   const [metrics, setMetrics] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [refreshInterval, setRefreshInterval] = useState(null);
+  const refreshRef = React.useRef(null);
 
   // Update metrics
   const updateMetrics = useCallback(() => {
@@ -37,35 +37,43 @@ const PerformanceDashboard = ({ userName, isVisible = false, onClose }) => {
     initializeMetrics();
   }, [userName, isVisible, updateMetrics]);
 
-  // Set up refresh interval
+  // Set up refresh interval (use ref to avoid re-triggering effect)
   useEffect(() => {
     if (isVisible) {
-      // Only set up interval if metrics aren't already loaded
       if (!metrics) {
         updateMetrics();
       }
-      const interval = setInterval(updateMetrics, 5000); // Update every 5 seconds
-      setRefreshInterval(interval);
-    } else if (refreshInterval) {
-      clearInterval(refreshInterval);
-      setRefreshInterval(null);
+
+      // clear any existing interval
+      if (refreshRef.current) {
+        clearInterval(refreshRef.current);
+      }
+
+      refreshRef.current = setInterval(updateMetrics, 5000);
+    } else {
+      if (refreshRef.current) {
+        clearInterval(refreshRef.current);
+        refreshRef.current = null;
+      }
     }
 
     return () => {
-      if (refreshInterval) {
-        clearInterval(refreshInterval);
+      if (refreshRef.current) {
+        clearInterval(refreshRef.current);
+        refreshRef.current = null;
       }
     };
-  }, [isVisible, updateMetrics, refreshInterval, metrics]);
+  }, [isVisible, updateMetrics, metrics]);
 
-  // Cleanup on unmount
+  // Cleanup on unmount (redundant but safe)
   useEffect(() => {
     return () => {
-      if (refreshInterval) {
-        clearInterval(refreshInterval);
+      if (refreshRef.current) {
+        clearInterval(refreshRef.current);
+        refreshRef.current = null;
       }
     };
-  }, [refreshInterval]);
+  }, []);
 
   if (isLoading) {
     return (
