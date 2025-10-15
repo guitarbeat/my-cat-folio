@@ -23,7 +23,33 @@ import ProfileNameList from './ProfileNameList';
 import DataMigration from '../admin/DataMigration';
 import styles from './Profile.module.css';
 
-// * Enhanced utility functions for better statistics
+// * Use database-optimized stats calculation
+const fetchUserStatsFromDB = async (userName) => {
+  if (!supabase || !userName) return null;
+
+  try {
+    const dbStats = await catNamesAPI.getUserStats(userName);
+    if (!dbStats) return null;
+
+    // Transform database response to match expected format
+    return {
+      total: dbStats.total_ratings,
+      wins: dbStats.total_wins,
+      losses: dbStats.total_losses,
+      winRate: dbStats.win_rate,
+      avgRating: dbStats.avg_rating,
+      ratingSpread: 0, // Can be calculated client-side if needed
+      totalMatches: dbStats.total_wins + dbStats.total_losses,
+      activeNames: dbStats.total_ratings - dbStats.hidden_count,
+      popularNames: 0 // Can be calculated separately if needed
+    };
+  } catch (error) {
+    console.error('Error fetching user stats from DB:', error);
+    return null;
+  }
+};
+
+// * Enhanced utility functions for better statistics (fallback)
 const calculateEnhancedStats = (
   ratings,
   filterStatus = FILTER_OPTIONS.STATUS.ALL
@@ -346,8 +372,32 @@ const Profile = ({ userName, onStartNewTournament }) => {
     checkAdmin();
   }, [userName]);
 
-  // * Calculate statistics based on current filters
-  const stats = calculateEnhancedStats(allNames, filterStatus);
+  // * State for statistics
+  const [stats, setStats] = useState(null);
+  const [statsLoading, setStatsLoading] = useState(true);
+
+  // * Load statistics using database-optimized function
+  useEffect(() => {
+    const loadStats = async () => {
+      if (!userName) return;
+      
+      setStatsLoading(true);
+      
+      // Try database-optimized stats first
+      const dbStats = await fetchUserStatsFromDB(userName);
+      if (dbStats) {
+        setStats(dbStats);
+      } else {
+        // Fallback to client-side calculation if needed
+        const clientStats = calculateEnhancedStats(allNames, filterStatus);
+        setStats(clientStats);
+      }
+      
+      setStatsLoading(false);
+    };
+    
+    loadStats();
+  }, [userName, allNames, filterStatus]);
 
   // * Handle name visibility toggle
   const handleToggleVisibility = useCallback(
@@ -595,7 +645,7 @@ const Profile = ({ userName, onStartNewTournament }) => {
           <ProfileStats
             stats={stats}
             selectionStats={selectionStats}
-            isLoading={ratingsLoading}
+            isLoading={statsLoading || ratingsLoading}
             className={styles.statsSection}
           />
 
