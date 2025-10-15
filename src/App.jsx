@@ -31,7 +31,7 @@ import LoadingSpinner from './shared/components/LoadingSpinner/LoadingSpinner';
  */
 
 function App() {
-  const { logout } = useUserSession();
+  const { login, logout } = useUserSession();
 
   // * Toast notifications
   const { toasts, removeToast } = useToast();
@@ -165,6 +165,20 @@ function App() {
     }
   }, [user.isLoggedIn, logout, tournamentActions, uiActions]);
 
+  // * Handle user login
+  const handleLogin = useCallback(async (userName) => {
+    try {
+      const success = await login(userName);
+      if (success) {
+        uiActions.setWelcomeVisible(false);
+      }
+      return success;
+    } catch (error) {
+      console.error('Login error:', error);
+      throw error;
+    }
+  }, [login, uiActions]);
+
   // * Memoize main content to prevent unnecessary re-renders
 
   // * Memoize NavBar props to prevent unnecessary re-renders
@@ -227,6 +241,7 @@ function App() {
           isLightTheme={ui.theme === 'light'}
           onThemeToggle={handleThemeChange}
           onWelcomeContinue={handleWelcomeContinue}
+          onLogin={handleLogin}
           tournament={tournament}
           userName={user.name}
           onStartNewTournament={handleStartNewTournament}

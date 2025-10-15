@@ -15,6 +15,7 @@ export default function ViewRouter({
   isLightTheme,
   onThemeToggle,
   onWelcomeContinue,
+  onLogin,
   tournament,
   userName,
   onStartNewTournament,
@@ -35,10 +36,7 @@ export default function ViewRouter({
 
   if (!isLoggedIn) {
     return (
-      <Login onLogin={(userName) => {
-        // This will be handled by useUserSession hook via the parent component
-        window.location.reload();
-      }} />
+      <Login onLogin={onLogin} />
     );
   }
 
@@ -103,6 +101,7 @@ ViewRouter.propTypes = {
   isLightTheme: PropTypes.bool.isRequired,
   onThemeToggle: PropTypes.func.isRequired,
   onWelcomeContinue: PropTypes.func.isRequired,
+  onLogin: PropTypes.func.isRequired,
   tournament: PropTypes.shape({
     names: PropTypes.any,
     ratings: PropTypes.object.isRequired,
