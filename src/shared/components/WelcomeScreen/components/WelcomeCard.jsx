@@ -6,7 +6,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import NameCard from '../../NameCard/NameCard';
-import { SkeletonLoader } from '../../LoadingSpinner';
+import { SkeletonLoader } from '../../Loading';
 import styles from '../WelcomeScreen.module.css';
 const WelcomeCard = ({
   activeNames = [],

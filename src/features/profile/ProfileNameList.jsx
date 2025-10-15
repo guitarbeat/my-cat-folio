@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import NameCard from '../../shared/components/NameCard/NameCard';
-import { SkeletonLoader } from '../../shared/components/LoadingSpinner';
+import { SkeletonLoader } from '../../shared/components';
 import { FILTER_OPTIONS, TOURNAMENT } from '../../core/constants';
 import styles from './ProfileNameList.module.css';
 

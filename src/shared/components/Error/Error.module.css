@@ -1,0 +1,576 @@
+/* Unified Error Component Styles */
+
+/* ===== BOUNDARY ERROR (Full-page error) ===== */
+.boundary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 2rem;
+  font-family: var(
+    --font-sans,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    sans-serif
+  );
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.boundaryContent {
+  width: 100%;
+  max-width: 600px;
+  padding: 3rem;
+  text-align: center;
+  background: rgb(255 255 255 / 95%);
+  border: 1px solid rgb(255 255 255 / 20%);
+  border-radius: 20px;
+  box-shadow: 0 20px 40px rgb(0 0 0 / 10%);
+  backdrop-filter: blur(10px);
+}
+
+.boundaryIcon {
+  margin-bottom: 1.5rem;
+  font-size: 4rem;
+  animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-10px);
+  }
+  60% {
+    transform: translateY(-5px);
+  }
+}
+
+.boundaryTitle {
+  margin-bottom: 1rem;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #1f2937;
+}
+
+.boundaryMessage {
+  margin-bottom: 1.5rem;
+  font-size: 1.125rem;
+  color: #6b7280;
+  line-height: 1.6;
+}
+
+.boundaryRetryInfo {
+  margin-bottom: 2rem;
+  font-size: 0.875rem;
+  color: #9ca3af;
+}
+
+.boundaryActions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.boundaryRetryButton,
+.boundaryRefreshButton,
+.boundaryHomeButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.boundaryRetryButton {
+  background: #3b82f6;
+  color: white;
+}
+
+.boundaryRetryButton:hover {
+  background: #2563eb;
+  transform: translateY(-1px);
+}
+
+.boundaryRefreshButton {
+  background: #6b7280;
+  color: white;
+}
+
+.boundaryRefreshButton:hover {
+  background: #4b5563;
+  transform: translateY(-1px);
+}
+
+.boundaryHomeButton {
+  background: #10b981;
+  color: white;
+}
+
+.boundaryHomeButton:hover {
+  background: #059669;
+  transform: translateY(-1px);
+}
+
+.boundaryRetryIcon,
+.boundaryRefreshIcon,
+.boundaryHomeIcon {
+  font-size: 1rem;
+}
+
+.boundaryDetails {
+  margin-top: 2rem;
+  padding: 1rem;
+  background: #f9fafb;
+  border-radius: 8px;
+  text-align: left;
+}
+
+.boundaryDetails summary {
+  cursor: pointer;
+  font-weight: 600;
+  color: #374151;
+}
+
+.boundaryErrorContent {
+  margin-top: 1rem;
+}
+
+.boundaryErrorContent h4 {
+  margin-bottom: 0.5rem;
+  color: #ef4444;
+}
+
+.boundaryErrorContent pre {
+  background: #f3f4f6;
+  padding: 0.5rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  overflow-x: auto;
+  color: #7f1d1d;
+}
+
+.boundarySupport {
+  margin-top: 2rem;
+  padding: 1rem;
+  background: #fef3c7;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  color: #92400e;
+}
+
+.boundaryErrorId {
+  margin-top: 0.5rem;
+  font-weight: 600;
+  font-family: monospace;
+}
+
+/* ===== ERROR LIST (Multiple errors) ===== */
+.list {
+  width: 100%;
+  max-width: 800px;
+}
+
+.listHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.listCount {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #374151;
+}
+
+.listClearAllButton {
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  background: #dc2626;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.listClearAllButton:hover {
+  background: #b91c1c;
+}
+
+.listItems {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.listItem {
+  padding: 1rem;
+  border-radius: 8px;
+  border-left: 4px solid;
+  transition: all 0.2s ease;
+}
+
+.listItem:hover {
+  box-shadow: 0 2px 8px rgb(0 0 0 / 10%);
+}
+
+/* Severity colors */
+.listItem.critical {
+  border-left-color: #dc2626;
+  background: #fef2f2;
+}
+
+.listItem.high {
+  border-left-color: #ea580c;
+  background: #fff7ed;
+}
+
+.listItem.medium {
+  border-left-color: #d97706;
+  background: #fffbeb;
+}
+
+.listItem.low {
+  border-left-color: #2563eb;
+  background: #eff6ff;
+}
+
+.listItemHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.listItemInfo {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.listSeverityIcon {
+  font-size: 1.25rem;
+  flex-shrink: 0;
+}
+
+.listMessage {
+  flex: 1;
+  font-weight: 500;
+  color: #111827;
+}
+
+.listTime {
+  font-size: 0.75rem;
+  color: #6b7280;
+  flex-shrink: 0;
+}
+
+.listItemActions {
+  display: flex;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+.listRetryButton,
+.listDismissButton,
+.listDetailsButton {
+  padding: 0.375rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.listRetryButton {
+  background: #3b82f6;
+  color: white;
+}
+
+.listRetryButton:hover {
+  background: #2563eb;
+}
+
+.listDismissButton {
+  background: #6b7280;
+  color: white;
+}
+
+.listDismissButton:hover {
+  background: #4b5563;
+}
+
+.listDetailsButton {
+  background: #f3f4f6;
+  color: #374151;
+  border: 1px solid #d1d5db;
+}
+
+.listDetailsButton:hover {
+  background: #e5e7eb;
+}
+
+.listDetails {
+  margin-top: 1rem;
+  padding: 1rem;
+  background: #f9fafb;
+  border-radius: 6px;
+  font-size: 0.875rem;
+}
+
+.listDetailRow {
+  margin-bottom: 0.5rem;
+}
+
+.listDetailRow:last-child {
+  margin-bottom: 0;
+}
+
+.listDetailRow strong {
+  color: #374151;
+}
+
+.listErrorStack {
+  background: #f3f4f6;
+  padding: 0.5rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  overflow-x: auto;
+  color: #7f1d1d;
+  margin-top: 0.25rem;
+}
+
+/* ===== INLINE ERROR (Single error) ===== */
+.inline {
+  margin-top: 0.5rem;
+  transition: all 0.2s ease;
+}
+
+.inlineContent {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  border-radius: 6px;
+  font-size: 0.875rem;
+}
+
+.inlineIcon {
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+
+.inlineMessage {
+  flex: 1;
+  color: #111827;
+}
+
+.inlineActions {
+  display: flex;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+.inlineRetryButton,
+.inlineDismissButton {
+  padding: 0.25rem 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.inlineRetryButton {
+  background: #3b82f6;
+  color: white;
+}
+
+.inlineRetryButton:hover {
+  background: #2563eb;
+}
+
+.inlineDismissButton {
+  background: #6b7280;
+  color: white;
+}
+
+.inlineDismissButton:hover {
+  background: #4b5563;
+}
+
+.inlineRetryIcon {
+  font-size: 0.75rem;
+}
+
+/* Context variants */
+.inlineForm {
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+}
+
+.inlineVote {
+  background: #fef3c7;
+  border: 1px solid #fde68a;
+}
+
+.inlineSubmit {
+  background: #ecfdf5;
+  border: 1px solid #a7f3d0;
+}
+
+.inlineValidation {
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+}
+
+.inlineGeneral {
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+}
+
+/* Severity colors */
+.inline.critical {
+  background: #fef2f2;
+  border-color: #fecaca;
+  color: #7f1d1d;
+}
+
+.inline.critical .inlineMessage {
+  color: #7f1d1d;
+}
+
+.inline.high {
+  background: #fef3c7;
+  border-color: #fde68a;
+  color: #92400e;
+}
+
+.inline.high .inlineMessage {
+  color: #92400e;
+}
+
+.inline.medium {
+  background: #fffbeb;
+  border-color: #fde68a;
+  color: #78350f;
+}
+
+.inline.medium .inlineMessage {
+  color: #78350f;
+}
+
+.inline.low {
+  background: #eff6ff;
+  border-color: #bfdbfe;
+  color: #1e3a8a;
+}
+
+.inline.low .inlineMessage {
+  color: #1e3a8a;
+}
+
+/* Size variants */
+.inlineSmall .inlineContent {
+  padding: 0.5rem 0.75rem;
+  font-size: 0.75rem;
+}
+
+.inlineLarge .inlineContent {
+  padding: 1rem 1.25rem;
+  font-size: 1rem;
+}
+
+/* Position variants */
+.inlineAbove {
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+}
+
+.inlineBelow {
+  margin-top: 0.5rem;
+  margin-bottom: 0;
+}
+
+.inlineInline {
+  margin: 0;
+  display: inline-block;
+}
+
+/* Development details */
+.inlineDevDetails {
+  margin-top: 0.75rem;
+  padding: 0.75rem;
+  background: #f9fafb;
+  border-radius: 4px;
+  font-size: 0.75rem;
+}
+
+.inlineDevDetails summary {
+  cursor: pointer;
+  font-weight: 600;
+  color: #374151;
+}
+
+.inlineDevStack {
+  margin-top: 0.5rem;
+  background: #f3f4f6;
+  padding: 0.5rem;
+  border-radius: 4px;
+  overflow-x: auto;
+  color: #7f1d1d;
+  font-size: 0.7rem;
+}
+
+/* ===== RESPONSIVE DESIGN ===== */
+@media (max-width: 640px) {
+  .boundaryContent {
+    padding: 2rem 1.5rem;
+  }
+
+  .boundaryActions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .boundaryRetryButton,
+  .boundaryRefreshButton,
+  .boundaryHomeButton {
+    justify-content: center;
+  }
+
+  .listItemHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+
+  .listItemActions {
+    align-self: flex-end;
+  }
+
+  .inlineContent {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .inlineActions {
+    align-self: flex-end;
+  }
+}

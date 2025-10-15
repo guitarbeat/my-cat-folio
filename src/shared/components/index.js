@@ -6,17 +6,17 @@
  */
 
 // * Error Handling Components
-export { default as ErrorBoundary } from './ErrorBoundary/ErrorBoundary';
-export { default as ErrorDisplay } from './ErrorDisplay/ErrorDisplay';
-export { default as InlineError } from './InlineError';
+export { default as Error } from './Error/Error';
 
 // * Loading Components
 export {
-  default as LoadingSpinner,
+  default as Loading,
+  LoadingSpinner,
+  SuspenseView,
   SkeletonLoader,
   TournamentSkeleton,
   NameCardSkeleton
-} from './LoadingSpinner';
+} from './Loading';
 
 // * UI Components
 export { default as Card } from './Card/Card';

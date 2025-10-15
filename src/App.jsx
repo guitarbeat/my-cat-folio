@@ -10,7 +10,7 @@
 import React, { useCallback } from 'react';
 import CatBackground from './shared/components/CatBackground/CatBackground';
 import ViewRouter from './shared/components/ViewRouter/ViewRouter';
-import { ErrorDisplay, ToastContainer } from './shared/components';
+import { Error, ToastContainer } from './shared/components';
 import NavBar from './shared/components/NavBar/NavBar';
 import PerformanceDashboard from './shared/components/PerformanceDashboard';
 
@@ -20,7 +20,7 @@ import useToast from './core/hooks/useToast';
 import useAppStore, { useAppStoreInitialization } from './core/store/useAppStore';
 import { TournamentService } from './shared/services/tournamentService';
 import { ErrorManager } from './shared/services/errorManager';
-import LoadingSpinner from './shared/components/LoadingSpinner/LoadingSpinner';
+import { Loading } from './shared/components';
 
 // * Components imported directly for better code splitting
 
@@ -234,8 +234,9 @@ function App() {
 
       <div id="main-content" className="main-content" tabIndex="-1">
         {errors.current && user.isLoggedIn && (
-          <ErrorDisplay
-            errors={errors.current}
+          <Error
+            variant="list"
+            error={errors.current}
             onDismiss={() => errorActions.clearError()}
             onRetry={() => window.location.reload()}
           />
@@ -266,7 +267,7 @@ function App() {
           aria-live="polite"
           aria-busy="true"
         >
-          <LoadingSpinner text="Initializing Tournament..." />
+          <Loading variant="spinner" text="Initializing Tournament..." />
         </div>
       )}
 

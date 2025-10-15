@@ -1,15 +1,15 @@
 /**
  * @module Toast
- * @description A toast notification component for showing temporary messages to users.
- * Provides different types (success, error, info, warning) with auto-dismiss functionality.
+ * @description Unified toast notification system that consolidates individual toasts and container management.
+ * Supports both individual toast rendering and container management with multiple toasts.
  */
 
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import styles from './Toast.module.css';
 
 /**
- * Toast component for displaying temporary notifications
+ * Individual Toast Component
  * @param {Object} props - Component props
  * @param {string} props.message - The message to display
  * @param {string} props.type - Type of toast ('success', 'error', 'info', 'warning')
@@ -17,9 +17,9 @@ import styles from './Toast.module.css';
  * @param {Function} props.onDismiss - Function to call when toast is dismissed
  * @param {boolean} props.autoDismiss - Whether to auto-dismiss the toast
  * @param {string} props.className - Additional CSS classes
- * @returns {JSX.Element} The toast component
+ * @returns {JSX.Element|null} The toast component or null if not visible
  */
-const Toast = ({
+const ToastItem = ({
   message,
   type = 'info',
   duration = 5000,
@@ -52,38 +52,30 @@ const Toast = ({
 
   const getTypeIcon = () => {
     switch (type) {
-      case 'success':
-        return '✅';
-      case 'error':
-        return '❌';
-      case 'warning':
-        return '⚠️';
+      case 'success': return '✅';
+      case 'error': return '❌';
+      case 'warning': return '⚠️';
       case 'info':
-      default:
-        return 'ℹ️';
+      default: return 'ℹ️';
     }
   };
 
   const getTypeClass = () => {
     switch (type) {
-      case 'success':
-        return styles.success;
-      case 'error':
-        return styles.error;
-      case 'warning':
-        return styles.warning;
+      case 'success': return styles.success;
+      case 'error': return styles.error;
+      case 'warning': return styles.warning;
       case 'info':
-      default:
-        return styles.info;
+      default: return styles.info;
     }
   };
 
   return (
     <div
       className={`
-        ${styles.container} 
-        ${getTypeClass()} 
-        ${isExiting ? styles.exiting : ''} 
+        ${styles.item}
+        ${getTypeClass()}
+        ${isExiting ? styles.exiting : ''}
         ${className}
       `}
       role="alert"
@@ -92,9 +84,7 @@ const Toast = ({
     >
       <div className={styles.content}>
         <span className={styles.icon}>{getTypeIcon()}</span>
-
         <span className={styles.message}>{message}</span>
-
         <button
           onClick={handleDismiss}
           className={styles.dismissButton}
@@ -121,7 +111,168 @@ const Toast = ({
   );
 };
 
+/**
+ * Toast Container Component
+ * @param {Object} props - Component props
+ * @param {Array} props.toasts - Array of toast objects
+ * @param {Function} props.removeToast - Function to remove a toast by id
+ * @param {string} props.position - Position of the toast container
+ * @param {number} props.maxToasts - Maximum number of toasts to show
+ * @param {string} props.className - Additional CSS classes
+ * @returns {JSX.Element|null} The toast container component or null if no toasts
+ */
+const ToastContainer = ({
+  toasts = [],
+  removeToast,
+  position = 'top-right',
+  maxToasts = 5,
+  className = ''
+}) => {
+  const containerRef = useRef(null);
+
+  // Limit the number of visible toasts
+  const visibleToasts = toasts.slice(0, maxToasts);
+
+  const getPositionClass = () => {
+    switch (position) {
+      case 'top-left': return styles.topLeft;
+      case 'top-center': return styles.topCenter;
+      case 'top-right': return styles.topRight;
+      case 'bottom-left': return styles.bottomLeft;
+      case 'bottom-center': return styles.bottomCenter;
+      case 'bottom-right': return styles.bottomRight;
+      default: return styles.topRight;
+    }
+  };
+
+  const handleToastDismiss = useCallback(
+    (toastId) => {
+      removeToast?.(toastId);
+    },
+    [removeToast]
+  );
+
+  if (toasts.length === 0) {
+    return null;
+  }
+
+  return (
+    <div
+      ref={containerRef}
+      className={`${styles.container} ${getPositionClass()} ${className}`}
+      role="region"
+      aria-label="Notifications"
+      aria-live="polite"
+      aria-atomic="false"
+    >
+      {visibleToasts.map((toast) => (
+        <ToastItem
+          key={toast.id}
+          message={toast.message}
+          type={toast.type}
+          duration={toast.duration}
+          autoDismiss={toast.autoDismiss}
+          onDismiss={() => handleToastDismiss(toast.id)}
+          className={styles.toastItem}
+        />
+      ))}
+
+      {/* Show count of hidden toasts */}
+      {toasts.length > maxToasts && (
+        <div className={styles.hiddenCount}>
+          +{toasts.length - maxToasts} more
+        </div>
+      )}
+    </div>
+  );
+};
+
+/**
+ * Unified Toast Component
+ * @param {Object} props - Component props
+ * @param {string} props.variant - 'item' for single toast, 'container' for multiple toasts
+ * @param {Array|Object} props.toasts - Toast data (array for container, object for item)
+ * @param {Function} props.onDismiss - Dismiss callback
+ * @param {Function} props.removeToast - Remove toast callback (for container)
+ * @param {string} props.position - Container position
+ * @param {number} props.maxToasts - Max toasts to show
+ * @param {string} props.message - Message (for item variant)
+ * @param {string} props.type - Type (for item variant)
+ * @param {number} props.duration - Duration (for item variant)
+ * @param {boolean} props.autoDismiss - Auto-dismiss (for item variant)
+ * @param {string} props.className - Additional CSS classes
+ * @returns {JSX.Element|null} The appropriate toast component
+ */
+const Toast = ({
+  variant = 'item',
+  toasts,
+  onDismiss,
+  removeToast,
+  position = 'top-right',
+  maxToasts = 5,
+  message,
+  type = 'info',
+  duration = 5000,
+  autoDismiss = true,
+  className = ''
+}) => {
+  if (variant === 'container') {
+    return (
+      <ToastContainer
+        toasts={toasts}
+        removeToast={removeToast}
+        position={position}
+        maxToasts={maxToasts}
+        className={className}
+      />
+    );
+  }
+
+  // Default to item variant
+  return (
+    <ToastItem
+      message={message}
+      type={type}
+      duration={duration}
+      onDismiss={onDismiss}
+      autoDismiss={autoDismiss}
+      className={className}
+    />
+  );
+};
+
+// PropTypes
 Toast.propTypes = {
+  variant: PropTypes.oneOf(['item', 'container']),
+  toasts: PropTypes.oneOfType([
+    PropTypes.array,
+    PropTypes.shape({
+      id: PropTypes.string,
+      message: PropTypes.string,
+      type: PropTypes.oneOf(['success', 'error', 'info', 'warning']),
+      duration: PropTypes.number,
+      autoDismiss: PropTypes.bool
+    })
+  ]),
+  onDismiss: PropTypes.func,
+  removeToast: PropTypes.func,
+  position: PropTypes.oneOf([
+    'top-left',
+    'top-center',
+    'top-right',
+    'bottom-left',
+    'bottom-center',
+    'bottom-right'
+  ]),
+  maxToasts: PropTypes.number,
+  message: PropTypes.string,
+  type: PropTypes.oneOf(['success', 'error', 'info', 'warning']),
+  duration: PropTypes.number,
+  autoDismiss: PropTypes.bool,
+  className: PropTypes.string
+};
+
+ToastItem.propTypes = {
   message: PropTypes.string.isRequired,
   type: PropTypes.oneOf(['success', 'error', 'info', 'warning']),
   duration: PropTypes.number,
@@ -130,4 +281,30 @@ Toast.propTypes = {
   className: PropTypes.string
 };
 
+ToastContainer.propTypes = {
+  toasts: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string.isRequired,
+      message: PropTypes.string.isRequired,
+      type: PropTypes.oneOf(['success', 'error', 'info', 'warning']),
+      duration: PropTypes.number,
+      autoDismiss: PropTypes.bool
+    })
+  ),
+  removeToast: PropTypes.func.isRequired,
+  position: PropTypes.oneOf([
+    'top-left',
+    'top-center',
+    'top-right',
+    'bottom-left',
+    'bottom-center',
+    'bottom-right'
+  ]),
+  maxToasts: PropTypes.number,
+  className: PropTypes.string
+};
+
+Toast.displayName = 'Toast';
+
 export default Toast;
+export { ToastItem, ToastContainer };

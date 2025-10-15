@@ -1,7 +1,7 @@
 import React, { lazy } from 'react';
 import PropTypes from 'prop-types';
-import SuspenseView from '../SuspenseView/SuspenseView';
-import { ErrorBoundary, WelcomeScreen } from '..';
+import { Loading } from '..';
+import { Error, WelcomeScreen } from '..';
 import Login from '../../../features/auth/Login';
 
 const Tournament = lazy(() => import('../../../features/tournament/Tournament'));
@@ -42,32 +42,32 @@ export default function ViewRouter({
 
   if (tournament.currentView === 'profile') {
     return (
-      <SuspenseView text="Loading Profile...">
+      <Loading variant="suspense" text="Loading Profile...">
         <Profile
           userName={userName}
           onStartNewTournament={onStartNewTournament}
           ratings={tournament.ratings}
           onUpdateRatings={onUpdateRatings}
         />
-      </SuspenseView>
+      </Loading>
     );
   }
 
   if (tournament.names === null) {
     return (
-      <SuspenseView text="Loading Tournament Setup...">
+      <Loading variant="suspense" text="Loading Tournament Setup...">
         <TournamentSetup
           onStart={onTournamentSetup}
           userName={userName}
           existingRatings={tournament.ratings}
         />
-      </SuspenseView>
+      </Loading>
     );
   }
 
   if (tournament.isComplete) {
     return (
-      <SuspenseView text="Loading Results...">
+      <Loading variant="suspense" text="Loading Results...">
         <Results
           ratings={tournament.ratings}
           onStartNew={onStartNewTournament}
@@ -76,13 +76,13 @@ export default function ViewRouter({
           currentTournamentNames={tournament.names}
           voteHistory={tournament.voteHistory}
         />
-      </SuspenseView>
+      </Loading>
     );
   }
 
   return (
-    <ErrorBoundary>
-      <SuspenseView text="Loading Tournament...">
+    <Error variant="boundary">
+      <Loading variant="suspense" text="Loading Tournament...">
         <Tournament
           names={tournament.names}
           existingRatings={tournament.ratings}
@@ -90,8 +90,8 @@ export default function ViewRouter({
           userName={userName}
           onVote={onVote}
         />
-      </SuspenseView>
-    </ErrorBoundary>
+      </Loading>
+    </Error>
   );
 }
 

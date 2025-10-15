@@ -14,10 +14,10 @@ import React, {
 import PropTypes from 'prop-types';
 import { useTournament } from '../../core/hooks/useTournament';
 import useToast from '../../core/hooks/useToast';
-import LoadingSpinner from '../../shared/components/LoadingSpinner/LoadingSpinner';
+import { Loading } from '../../shared/components';
 import ErrorBoundary from '../../shared/components/ErrorBoundary/ErrorBoundary';
 import NameCard from '../../shared/components/NameCard/NameCard';
-import InlineError from '../../shared/components/InlineError/InlineError';
+import { Error } from '../../shared/components';
 import Bracket from '../../shared/components/Bracket/Bracket';
 import TournamentControls from './TournamentControls';
 import styles from './Tournament.module.css';
@@ -807,7 +807,7 @@ function TournamentContent({
   if (!randomizedNames.length || !currentMatch) {
     return (
       <div className={styles.tournamentContainer}>
-        <LoadingSpinner />
+        <Loading variant="spinner" />
         <p style={{ textAlign: 'center', marginTop: '1rem' }}>
           {!randomizedNames.length
             ? 'Setting up tournament...'
@@ -967,7 +967,8 @@ function TournamentContent({
 
           {/* Voting Error Display */}
           {votingError && (
-            <InlineError
+            <Error
+              variant="inline"
               error={votingError}
               context="vote"
               position="below"

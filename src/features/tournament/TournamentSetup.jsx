@@ -14,11 +14,9 @@ import {
 } from '../../../backend/api/supabaseClient';
 import { compressImageFile, devLog } from '../../shared/utils/coreUtils';
 import {
-  LoadingSpinner,
+  Loading,
   NameCard,
-  ErrorBoundary,
-  ErrorDisplay,
-  InlineError
+  Error
 } from '../../shared/components';
 import useToast from '../../core/hooks/useToast';
 import useAppStore from '../../core/store/useAppStore';
@@ -827,7 +825,8 @@ const NameSuggestionSection = () => {
           </div>
 
           {error && (
-            <InlineError
+            <Error
+              variant="inline"
               error={error}
               context="form"
               position="below"
@@ -1263,7 +1262,7 @@ function TournamentSetupContent({ onStart, userName }) {
   }, [openImages]);
 
   if (isLoading) {
-    return <LoadingSpinner />;
+    return <Loading variant="spinner" />;
   }
 
   if (isError) {
