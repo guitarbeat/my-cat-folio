@@ -874,19 +874,14 @@ function useTournamentSetup(userName) {
   const { errors, errorActions } = useAppStore();
 
   useEffect(() => {
-    console.log('🔍 useTournamentSetup: useEffect triggered');
     const fetchNames = async () => {
-      console.log('🔍 useTournamentSetup: fetchNames called');
       try {
         setIsLoading(true);
-        console.log('🔍 useTournamentSetup: checking supabase client...');
         if (!supabase) {
-          console.log('❌ useTournamentSetup: supabase client not available, using fallback');
           setAvailableNames(FALLBACK_NAMES);
           setIsLoading(false);
           return;
         }
-        console.log('✅ useTournamentSetup: supabase client available, calling getNamesWithDescriptions');
 
         // Get all names and hidden names in parallel for efficiency
         const [namesData, { data: hiddenData, error: hiddenError }] =
@@ -1039,7 +1034,6 @@ function useTournamentSetup(userName) {
 }
 
 function TournamentSetupContent({ onStart, userName }) {
-  console.log('🔍 TournamentSetupContent rendered with userName:', userName);
   const {
     availableNames,
     selectedNames,
@@ -1602,7 +1596,6 @@ function TournamentSetupContent({ onStart, userName }) {
 }
 
 function TournamentSetup(props) {
-  console.log('🔍 TournamentSetup rendered with props:', props);
   return (
     <ErrorBoundary variant="boundary">
       <TournamentSetupContent {...props} />
