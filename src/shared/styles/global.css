@@ -2127,9 +2127,10 @@ h1 {
   z-index: 1;
   flex: 1;
   width: 100%;
+  max-width: 1400px;
   min-height: 100vh;
   padding: var(--space-6);
-  margin-top: 65px;
+  margin: 65px auto 0;
   background: var(--background-color);
   transition: all 0.3s var(--ease-out);
 }
@@ -2138,14 +2139,14 @@ h1 {
 @media (width <= 768px) {
   .main-content {
     padding: var(--mobile-padding);
-    margin-top: 60px; /* Slightly less margin on mobile */
+    margin: 60px auto 0; /* Slightly less margin on mobile */
   }
 }
 
 @media (width <= 480px) {
   .main-content {
     padding: 0.75rem;
-    margin-top: 55px;
+    margin: 55px auto 0;
   }
 }
 
