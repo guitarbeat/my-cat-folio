@@ -14,10 +14,9 @@ import React, {
 import PropTypes from 'prop-types';
 import { useTournament } from '../../core/hooks/useTournament';
 import useToast from '../../core/hooks/useToast';
-import { Loading } from '../../shared/components';
-import ErrorBoundary from '../../shared/components/ErrorBoundary/ErrorBoundary';
+import { Loading, Error } from '../../shared/components';
+// ErrorBoundary import removed - using unified Error component
 import NameCard from '../../shared/components/NameCard/NameCard';
-import { Error } from '../../shared/components';
 import Bracket from '../../shared/components/Bracket/Bracket';
 import TournamentControls from './TournamentControls';
 import styles from './Tournament.module.css';
@@ -1080,9 +1079,9 @@ function TournamentContent({
 // * Main Tournament component with error boundary
 function Tournament(props) {
   return (
-    <ErrorBoundary>
+    <Error variant="boundary">
       <TournamentContent {...props} />
-    </ErrorBoundary>
+    </Error>
   );
 }
 

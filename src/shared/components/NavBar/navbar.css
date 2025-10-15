@@ -396,6 +396,7 @@
 /* Responsive */
 @media (width >= 768px) {
   .navbar__menu-list--desktop { display: flex; }
+  .navbar__mobile-menu-button { display: none; }
 }
 
 @media (width >= 1024px) {

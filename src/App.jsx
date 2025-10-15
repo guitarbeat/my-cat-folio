@@ -10,7 +10,7 @@
 import React, { useCallback } from 'react';
 import CatBackground from './shared/components/CatBackground/CatBackground';
 import ViewRouter from './shared/components/ViewRouter/ViewRouter';
-import { Error, ToastContainer } from './shared/components';
+import { Error, Toast, Loading } from './shared/components';
 import NavBar from './shared/components/NavBar/NavBar';
 import PerformanceDashboard from './shared/components/PerformanceDashboard';
 
@@ -20,7 +20,6 @@ import useToast from './core/hooks/useToast';
 import useAppStore, { useAppStoreInitialization } from './core/store/useAppStore';
 import { TournamentService } from './shared/services/tournamentService';
 import { ErrorManager } from './shared/services/errorManager';
-import { Loading } from './shared/components';
 
 // * Components imported directly for better code splitting
 
@@ -31,10 +30,10 @@ import { Loading } from './shared/components';
  */
 
 function App() {
-  const { login, logout } = useUserSession();
-
   // * Toast notifications
-  const { toasts, removeToast } = useToast();
+  const { toasts, removeToast, showToast } = useToast();
+
+  const { login, logout } = useUserSession({ showToast });
 
   // * Initialize store from localStorage
   useAppStoreInitialization();
@@ -152,22 +151,14 @@ function App() {
   const handleLogout = useCallback(async () => {
     logout(); // * This already calls userActions.logout() internally
     tournamentActions.resetTournament();
-    uiActions.setWelcomeVisible(true);
-  }, [logout, tournamentActions, uiActions]);
+  }, [logout, tournamentActions]);
 
   // * Handle theme change
   const handleThemeChange = useCallback(() => {
     uiActions.toggleTheme();
   }, [uiActions]);
 
-  // * Handle welcome screen continue
-  const handleWelcomeContinue = useCallback(() => {
-    uiActions.setWelcomeVisible(false);
-    if (user.isLoggedIn) {
-      logout(); // * This already calls userActions.logout() internally
-      tournamentActions.resetTournament();
-    }
-  }, [user.isLoggedIn, logout, tournamentActions, uiActions]);
+  // * Welcome screen removed
 
   // * Handle user login
   const handleLogin = useCallback(async (userName) => {
@@ -229,8 +220,8 @@ function App() {
       {/* * Static cat-themed background */}
       <CatBackground />
 
-      {/* * NavBar - hidden on welcome screen */}
-      {!ui.showWelcomeScreen && <NavBar {...navBarProps} />}
+      {/* * NavBar */}
+      <NavBar {...navBarProps} />
 
       <div id="main-content" className="main-content" tabIndex="-1">
         {errors.current && user.isLoggedIn && (
@@ -243,11 +234,7 @@ function App() {
         )}
 
         <ViewRouter
-          showWelcomeScreen={ui.showWelcomeScreen}
           isLoggedIn={user.isLoggedIn}
-          isLightTheme={ui.theme === 'light'}
-          onThemeToggle={handleThemeChange}
-          onWelcomeContinue={handleWelcomeContinue}
           onLogin={handleLogin}
           tournament={tournament}
           userName={user.name}

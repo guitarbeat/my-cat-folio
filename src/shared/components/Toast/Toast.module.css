@@ -4,14 +4,14 @@
 .item {
   min-width: 300px;
   max-width: 400px;
-  background: var(--card-background, #ffffff);
+  pointer-events: auto;
+  background: var(--card-background, #fff);
   border-left: 4px solid;
   border-radius: 8px;
   box-shadow: 0 4px 12px rgb(0 0 0 / 15%);
   transform: translateX(100%);
   transition: all 0.3s ease-in-out;
   animation: slideIn 0.3s ease-out forwards;
-  pointer-events: auto;
 }
 
 .item.exiting {
@@ -66,19 +66,19 @@
 }
 
 .dismissButton {
-  flex-shrink: 0;
-  width: 24px;
-  height: 24px;
   display: flex;
+  flex-shrink: 0;
   align-items: center;
   justify-content: center;
+  width: 24px;
+  height: 24px;
+  font-size: 1.2em;
+  font-weight: bold;
   color: inherit;
+  cursor: pointer;
   background: rgb(255 255 255 / 80%);
   border: 1px solid currentcolor;
   border-radius: 4px;
-  cursor: pointer;
-  font-size: 1.2em;
-  font-weight: bold;
   transition: all 0.2s ease;
 }
 
@@ -307,11 +307,12 @@
   color: var(--text-primary, #374151);
   text-align: center;
   pointer-events: none;
-  background: var(--overlay-dark, rgba(0, 0, 0, 0.8));
+  background: var(--overlay-dark, rgb(0 0 0 / 80%));
   border-radius: 20px;
 }
 
 /* ===== RESPONSIVE DESIGN ===== */
+
 /* Mobile responsiveness */
 @media (width <= 768px) {
   .container {
@@ -414,6 +415,7 @@
 }
 
 /* ===== ACCESSIBILITY & PREFERENCES ===== */
+
 /* High contrast mode support */
 @media (prefers-contrast: more) {
   .item {

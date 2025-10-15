@@ -21,6 +21,13 @@ function NavBar({
 }) {
   const [showScrollTop, setShowScrollTop] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(() => {
+    try {
+      return typeof window !== 'undefined' ? window.innerWidth < 768 : false;
+    } catch {
+      return false;
+    }
+  });
 
   // Define nav items based on login state
   const navItems = [];
@@ -81,6 +88,15 @@ function NavBar({
 
     const handleResize = () => {
       checkScroll();
+      try {
+        const currentlyMobile = window.innerWidth < 768;
+        setIsMobile(currentlyMobile);
+        if (!currentlyMobile) {
+          setIsMobileMenuOpen(false);
+        }
+      } catch {
+        // noop
+      }
     };
 
     window.addEventListener('resize', handleResize, { passive: true });
@@ -251,23 +267,26 @@ function NavBar({
             {navLinks}
           </ul>
 
-          {/* Mobile Menu Button */}
-          <button
-            className="navbar__mobile-menu-button"
-            onClick={handleMobileMenuClick}
-            aria-label={isMobileMenuOpen ? 'Close menu' : 'Open menu'}
-            aria-expanded={isMobileMenuOpen}
-            aria-controls="mobile-menu"
-            type="button"
-          >
-            <span
-              className="navbar__mobile-menu-icon"
-              aria-hidden="true"
-            ></span>
-          </button>
+          {/* Mobile Menu Button (mobile only) */}
+          {isMobile && (
+            <button
+              className="navbar__mobile-menu-button"
+              onClick={handleMobileMenuClick}
+              aria-label={isMobileMenuOpen ? 'Close menu' : 'Open menu'}
+              aria-expanded={isMobileMenuOpen}
+              aria-controls="mobile-menu"
+              type="button"
+            >
+              <span
+                className="navbar__mobile-menu-icon"
+                aria-hidden="true"
+              ></span>
+            </button>
+          )}
         </div>
 
-        {/* Mobile Menu Overlay */}
+        {/* Mobile Menu Overlay (mobile only) */}
+        {isMobile && (
         <div
           id="mobile-menu"
           className={`navbar__mobile-menu ${isMobileMenuOpen ? 'visible' : ''}`}
@@ -347,10 +366,11 @@ function NavBar({
             </li>
           </ul>
         </div>
+        )}
       </nav>
 
       {/* Mobile Menu Backdrop */}
-      {isMobileMenuOpen && (
+      {isMobile && isMobileMenuOpen && (
         <div
           className="navbar__mobile-backdrop"
           onClick={() => setIsMobileMenuOpen(false)}

@@ -10,38 +10,32 @@ export type Database = {
   // Allows to automatically instantiate createClient with right options
   // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
   __InternalSupabase: {
-    PostgrestVersion: "13.0.5"
+    PostgrestVersion: "12.2.3 (519615d)"
   }
   public: {
     Tables: {
       cat_app_users: {
         Row: {
-          created_at: string | null
-          id: string
-          last_login: string | null
+          created_at: string
           preferences: Json | null
           tournament_data: Json | null
-          updated_at: string | null
+          updated_at: string
           user_name: string
           user_role: string | null
         }
         Insert: {
-          created_at?: string | null
-          id?: string
-          last_login?: string | null
+          created_at?: string
           preferences?: Json | null
           tournament_data?: Json | null
-          updated_at?: string | null
+          updated_at?: string
           user_name: string
           user_role?: string | null
         }
         Update: {
-          created_at?: string | null
-          id?: string
-          last_login?: string | null
+          created_at?: string
           preferences?: Json | null
           tournament_data?: Json | null
-          updated_at?: string | null
+          updated_at?: string
           user_name?: string
           user_role?: string | null
         }
@@ -49,62 +43,65 @@ export type Database = {
       }
       cat_name_options: {
         Row: {
-          created_at: string | null
+          avg_rating: number | null
+          categories: string[] | null
+          created_at: string
           description: string | null
           id: string
-          is_hidden: boolean | null
+          is_active: boolean | null
           name: string
-          updated_at: string | null
-          user_name: string | null
+          popularity_score: number | null
+          total_tournaments: number | null
         }
         Insert: {
-          created_at?: string | null
+          avg_rating?: number | null
+          categories?: string[] | null
+          created_at?: string
           description?: string | null
           id?: string
-          is_hidden?: boolean | null
+          is_active?: boolean | null
           name: string
-          updated_at?: string | null
-          user_name?: string | null
+          popularity_score?: number | null
+          total_tournaments?: number | null
         }
         Update: {
-          created_at?: string | null
+          avg_rating?: number | null
+          categories?: string | null
           description?: string | null
           id?: string
-          is_hidden?: boolean | null
+          is_active?: boolean | null
           name?: string
-          updated_at?: string | null
-          user_name?: string | null
+          popularity_score?: number | null
+          total_tournaments?: number | null
         }
         Relationships: []
       }
       cat_name_ratings: {
         Row: {
-          created_at: string | null
-          id: string
+          is_hidden: boolean | null
           losses: number | null
           name_id: string
           rating: number | null
-          updated_at: string | null
+          rating_history: Json | null
+          updated_at: string
           user_name: string
           wins: number | null
         }
         Insert: {
-          created_at?: string | null
-          id?: string
+          is_hidden?: boolean | null
           losses?: number | null
           name_id: string
           rating?: number | null
-          updated_at?: string | null
-          user_name?: string
+          rating_history?: Json | null
+          updated_at?: string
+          user_name: string
           wins?: number | null
         }
         Update: {
-          created_at?: string | null
-          id?: string
-          losses?: number | null
-          name_id?: string
+          is_hidden?: boolean | null
           rating?: number | null
-          updated_at?: string | null
+          rating_history?: Json | null
+          updated_at?: string
           user_name?: string
           wins?: number | null
         }
@@ -116,54 +113,43 @@ export type Database = {
             referencedRelation: "cat_name_options"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "cat_name_ratings_user_name_fkey"
+            columns: ["user_name"]
+            isOneToOne: false
+            referencedRelation: "cat_app_users"
+            referencedColumns: ["user_name"]
+          },
         ]
-      }
-      profiles: {
-        Row: {
-          created_at: string | null
-          display_name: string | null
-          id: string
-          preferences: Json | null
-          updated_at: string | null
-        }
-        Insert: {
-          created_at?: string | null
-          display_name?: string | null
-          id: string
-          preferences?: Json | null
-          updated_at?: string | null
-        }
-        Update: {
-          created_at?: string | null
-          display_name?: string | null
-          id?: string
-          preferences?: Json | null
-          updated_at?: string | null
-        }
-        Relationships: []
       }
       tournament_selections: {
         Row: {
-          created_at: string | null
-          id: string
+          created_at: string
+          id: number
+          name: string
           name_id: string
-          selected_at: string | null
+          selected_at: string
+          selection_type: string | null
           tournament_id: string
           user_name: string
         }
         Insert: {
-          created_at?: string | null
-          id?: string
+          created_at?: string
+          id?: number
+          name: string
           name_id: string
-          selected_at?: string | null
+          selected_at?: string
+          selection_type?: string | null
           tournament_id: string
-          user_name?: string
+          user_name: string
         }
         Update: {
-          created_at?: string | null
-          id?: string
+          created_at?: string
+          id?: number
+          name?: string
           name_id?: string
-          selected_at?: string | null
+          selected_at?: string
+          selection_type?: string | null
           tournament_id?: string
           user_name?: string
         }
@@ -177,32 +163,112 @@ export type Database = {
           },
         ]
       }
-      user_roles: {
-        Row: {
-          created_at: string | null
-          id: string
-          role: Database["public"]["Enums"]["app_role"]
-          user_id: string
-        }
-        Insert: {
-          created_at?: string | null
-          id?: string
-          role: Database["public"]["Enums"]["app_role"]
-          user_id: string
-        }
-        Update: {
-          created_at?: string | null
-          id?: string
-          role?: Database["public"]["Enums"]["app_role"]
-          user_id?: string
-        }
-        Relationships: []
-      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
+      add_app_access_to_user: {
+        Args: { app_name: string }
+        Returns: undefined
+      }
+      change_user_role: {
+        Args: {
+          new_role: Database["public"]["Enums"]["app_role"]
+          target_user_id: string
+        }
+        Returns: boolean
+      }
+      check_current_user_admin: {
+        Args: Record<PropertyKey, never>
+        Returns: boolean
+      }
+      check_profile_access_rate_limit: {
+        Args: Record<PropertyKey, never>
+        Returns: boolean
+      }
+      check_user_role_by_name: {
+        Args: { required_role: string; user_name_param: string }
+        Returns: boolean
+      }
+      cleanup_orphaned_auth_users: {
+        Args: Record<PropertyKey, never>
+        Returns: undefined
+      }
+      delete_user_complete: {
+        Args: { target_user_id: string }
+        Returns: boolean
+      }
+      get_all_users_with_roles: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          avatar_url: string
+          created_at: string
+          display_name: string
+          email: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+          username: string
+        }[]
+      }
+      get_current_user_role: {
+        Args: Record<PropertyKey, never>
+        Returns: Database["public"]["Enums"]["app_role"]
+      }
+      get_existing_usernames: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          avatar_url: string
+          display_name: string
+          username: string
+        }[]
+      }
+      get_safe_profile_data: {
+        Args: { profile_user_id: string }
+        Returns: {
+          avatar_url: string
+          created_at: string
+          display_name: string
+          id: string
+          username: string
+        }[]
+      }
+      get_secure_profile: {
+        Args: { target_user_id: string }
+        Returns: Json
+      }
+      get_user_flo_data_admin: {
+        Args: { target_user_id: string }
+        Returns: {
+          created_at: string
+          date: string
+          id: string
+          is_period_day: boolean
+          updated_at: string
+        }[]
+      }
+      get_user_profile_by_id: {
+        Args: { user_id: string }
+        Returns: {
+          avatar_url: string
+          created_at: string
+          display_name: string
+          email: string
+          first_name: string
+          id: string
+          username: string
+        }[]
+      }
+      get_users_with_flo_data: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          display_name: string
+          email: string
+          first_name: string
+          flo_entries: Json
+          user_id: string
+        }[]
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
@@ -210,9 +276,43 @@ export type Database = {
         }
         Returns: boolean
       }
+      increment_selection: {
+        Args: { p_name_id: string; p_user_name: string }
+        Returns: undefined
+      }
+      is_user_admin: {
+        Args: { user_id_to_check: string }
+        Returns: boolean
+      }
+      merge_user_accounts: {
+        Args: { p_new_user_id: string; p_username: string }
+        Returns: undefined
+      }
+      user_exists_by_username: {
+        Args: { p_username: string }
+        Returns: {
+          avatar_url: string
+          display_name: string
+          first_name: string
+          id: string
+          username: string
+        }[]
+      }
+      user_has_app_access: {
+        Args: { app_name: string; user_id_param: string }
+        Returns: boolean
+      }
+      validate_environment_setup: {
+        Args: Record<PropertyKey, never>
+        Returns: boolean
+      }
+      validate_username: {
+        Args: { p_username: string }
+        Returns: Json
+      }
     }
     Enums: {
-      app_role: "user" | "moderator" | "admin"
+      app_role: "admin" | "user"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -340,7 +440,21 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
-      app_role: ["user", "moderator", "admin"],
+      app_role: ["admin", "user"],
     },
   },
 } as const
+
+// * Type aliases for better developer experience
+export type UserRole = Database["public"]["Enums"]["app_role"]
+export type CatAppUser = Database["public"]["Tables"]["cat_app_users"]["Row"]
+export type CatAppUserInsert = Database["public"]["Tables"]["cat_app_users"]["Insert"]
+export type CatAppUserUpdate = Database["public"]["Tables"]["cat_app_users"]["Update"]
+export type CatNameOption = Database["public"]["Tables"]["cat_name_options"]["Row"]
+export type CatNameRating = Database["public"]["Tables"]["cat_name_ratings"]["Row"]
+export type TournamentSelection = Database["public"]["Tables"]["tournament_selections"]["Row"]
+
+// * Utility types for common patterns
+export type UserPreferences = NonNullable<CatAppUser["preferences"]>
+export type TournamentData = NonNullable<CatAppUser["tournament_data"]>
+export type RatingHistory = NonNullable<CatNameRating["rating_history"]>

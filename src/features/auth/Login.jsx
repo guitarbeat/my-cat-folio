@@ -163,7 +163,7 @@ function Login({ onLogin }) {
         {/* Hero Content Section */}
         <div className={styles.heroContent}>
           <div className={styles.stepIndicator}>
-            <span className={styles.stepNumber}>2</span>
+            <span className={styles.stepNumber}>1</span>
             <span className={styles.stepText}>Create Your Judge Profile</span>
           </div>
           <h1 className={styles.welcomeTitle}>Ready to Judge the Names?</h1>

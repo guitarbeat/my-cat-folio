@@ -1,7 +1,7 @@
 import React, { lazy } from 'react';
 import PropTypes from 'prop-types';
 import { Loading } from '..';
-import { Error, WelcomeScreen } from '..';
+import { Error } from '..';
 import Login from '../../../features/auth/Login';
 
 const Tournament = lazy(() => import('../../../features/tournament/Tournament'));
@@ -10,11 +10,7 @@ const Results = lazy(() => import('../../../features/tournament/Results'));
 const Profile = lazy(() => import('../../../features/profile/Profile'));
 
 export default function ViewRouter({
-  showWelcomeScreen,
   isLoggedIn,
-  isLightTheme,
-  onThemeToggle,
-  onWelcomeContinue,
   onLogin,
   tournament,
   userName,
@@ -24,15 +20,6 @@ export default function ViewRouter({
   onTournamentComplete,
   onVote
 }) {
-  if (showWelcomeScreen) {
-    return (
-      <WelcomeScreen
-        onContinue={onWelcomeContinue}
-        isLightTheme={isLightTheme}
-        onThemeToggle={onThemeToggle}
-      />
-    );
-  }
 
   if (!isLoggedIn) {
     return (
@@ -96,11 +83,7 @@ export default function ViewRouter({
 }
 
 ViewRouter.propTypes = {
-  showWelcomeScreen: PropTypes.bool.isRequired,
   isLoggedIn: PropTypes.bool.isRequired,
-  isLightTheme: PropTypes.bool.isRequired,
-  onThemeToggle: PropTypes.func.isRequired,
-  onWelcomeContinue: PropTypes.func.isRequired,
   onLogin: PropTypes.func.isRequired,
   tournament: PropTypes.shape({
     names: PropTypes.any,

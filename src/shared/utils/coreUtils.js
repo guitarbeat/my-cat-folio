@@ -302,16 +302,25 @@ export class PerformanceMonitor {
 
     // Track long tasks
     if ('PerformanceObserver' in window) {
+      // Throttle long task logs to avoid console spam during HMR/initial load
+      let lastLogTs = 0;
+      const minIntervalMs = 1000; // log at most once per second
       const observer = new PerformanceObserver((list) => {
-        list.getEntries().forEach((entry) => {
-          if (entry.duration > 50) { // Tasks longer than 50ms
-            console.warn('🐌 Long Task Detected:', {
-              duration: entry.duration,
-              startTime: entry.startTime,
-              name: entry.name
-            });
+        const now = performance.now();
+        let worst = null;
+        for (const entry of list.getEntries()) {
+          if (entry.duration > 50) {
+            if (!worst || entry.duration > worst.duration) worst = entry;
           }
-        });
+        }
+        if (worst && (now - lastLogTs) >= minIntervalMs) {
+          lastLogTs = now;
+          console.warn('🐌 Long Task Detected:', {
+            duration: Math.round(worst.duration),
+            startTime: Math.round(worst.startTime),
+            name: worst.name
+          });
+        }
       });
 
       observer.observe({ entryTypes: ['longtask'] });
@@ -319,40 +328,7 @@ export class PerformanceMonitor {
     }
   }
 
-  /**
-   * * Track Welcome Screen specific metrics
-   */
-  trackWelcomeScreenMetrics() {
-    if (typeof window === 'undefined') return;
-
-    const startTime = performance.now();
-
-    // Track particle system performance
-    const particleObserver = new PerformanceObserver((list) => {
-      list.getEntries().forEach((entry) => {
-        if (entry.name.includes('particle')) {
-          console.log('✨ Particle Animation:', {
-            duration: entry.duration,
-            startTime: entry.startTime
-          });
-        }
-      });
-    });
-
-    if ('PerformanceObserver' in window) {
-      particleObserver.observe({ entryTypes: ['measure'] });
-      this.observers.push(particleObserver);
-    }
-
-    // Track image loading
-    const images = document.querySelectorAll('img');
-    images.forEach((img, index) => {
-      img.addEventListener('load', () => {
-        const loadTime = performance.now() - startTime;
-        console.log(`🖼️ Image ${index + 1} loaded in ${loadTime.toFixed(2)}ms`);
-      });
-    });
-  }
+  // * Welcome screen removed – function deleted
 
   /**
    * * Track image loading metrics
@@ -452,7 +428,6 @@ export class PerformanceMonitor {
     this.trackBundleSize();
     this.trackLoadTimes();
     this.trackRuntimePerformance();
-    this.trackWelcomeScreenMetrics();
   }
 }
 

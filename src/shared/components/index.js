@@ -12,11 +12,15 @@ export { default as Error } from './Error/Error';
 export {
   default as Loading,
   LoadingSpinner,
-  SuspenseView,
+  SuspenseView
+} from './Loading';
+
+// * Skeleton Components
+export {
   SkeletonLoader,
   TournamentSkeleton,
   NameCardSkeleton
-} from './Loading';
+} from './SkeletonLoader';
 
 // * UI Components
 export { default as Card } from './Card/Card';
@@ -33,7 +37,6 @@ export { default as Toast, ToastItem, ToastContainer } from './Toast';
 
 // * Interactive Components
 export { default as BongoCat } from './BongoCat/BongoCat';
-export { default as WelcomeScreen } from './WelcomeScreen/WelcomeScreen';
 
 // * Feature Components
 export { default as Login } from '../../features/auth/Login';

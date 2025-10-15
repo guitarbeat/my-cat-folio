@@ -2,7 +2,7 @@
  * @module useUserSession
  * @description Hook for managing user sessions with username-based authentication (no email/password)
  * @example
- * const { login, logout, error, userName, isLoggedIn } = useUserSession();
+ * const { login, logout, error, userName, isLoggedIn } = useUserSession({ showToast });
  * await login('MyUsername');
  * await logout();
  */
@@ -11,7 +11,7 @@ import { useState, useCallback, useEffect } from 'react';
 import { supabase } from '../../../backend/api/supabaseClient';
 import useAppStore from '../store/useAppStore';
 
-function useUserSession() {
+function useUserSession({ showToast } = {}) {
   const [error, setError] = useState(null);
   const [isInitialized, setIsInitialized] = useState(false);
   const { user, userActions } = useAppStore();
@@ -58,6 +58,9 @@ function useUserSession() {
         .maybeSingle();
 
       if (fetchError) {
+        console.error('Error fetching user:', fetchError);
+        const errorMessage = fetchError.message || 'Cannot verify existing user';
+        showToast?.({ message: errorMessage, type: 'error' });
         throw fetchError;
       }
 
@@ -75,8 +78,21 @@ function useUserSession() {
           });
 
         if (insertError) {
-          throw insertError;
+          // Handle 409 conflict (user already exists) as success
+          if (insertError.code === '23505') {
+            showToast?.({ message: 'Logging in...', type: 'info' });
+            // User exists, continue with login
+          } else {
+            console.error('Error creating user:', insertError);
+            const errorMessage = insertError.message || 'Failed to create user account';
+            showToast?.({ message: errorMessage, type: 'error' });
+            throw insertError;
+          }
+        } else {
+          showToast?.({ message: 'Account created successfully!', type: 'success' });
         }
+      } else {
+        showToast?.({ message: 'Logging in...', type: 'info' });
       }
 
       // Store username and update state
@@ -86,7 +102,19 @@ function useUserSession() {
       return true;
     } catch (err) {
       console.error('Login error:', err);
-      setError(err.message || 'Failed to login');
+      let errorMessage = 'Failed to login';
+      
+      // Handle specific error types
+      if (err.message?.includes('fetch')) {
+        errorMessage = 'Cannot connect to database. Please check your connection.';
+      } else if (err.message?.includes('JWT')) {
+        errorMessage = 'Authentication error. Please try again.';
+      } else if (err.message) {
+        errorMessage = err.message;
+      }
+      
+      setError(errorMessage);
+      showToast?.({ message: errorMessage, type: 'error' });
       return false;
     }
   }, [userActions]);

@@ -61,7 +61,7 @@ export default function DataMigration() {
           <div className={`${styles.results} ${results.success ? styles.success : styles.error}`}>
             <h3>Migration Results</h3>
             <p><strong>Message:</strong> {results.message || results.error}</p>
-            
+
             {results.details && (
               <div className={styles.details}>
                 <div className={styles.stat}>

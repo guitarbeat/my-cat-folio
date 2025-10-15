@@ -41,16 +41,16 @@
 .newTournamentButton,
 .migrationButton {
   padding: 0.75rem 1.5rem;
-  border: none;
-  border-radius: 8px;
   font-weight: 600;
   cursor: pointer;
+  border: none;
+  border-radius: 8px;
   transition: all 0.2s;
 }
 
 .newTournamentButton {
-  background: var(--accent-primary);
   color: white;
+  background: var(--accent-primary);
 }
 
 .newTournamentButton:hover {
@@ -59,8 +59,8 @@
 }
 
 .migrationButton {
-  background: var(--bg-secondary);
   color: var(--text-primary);
+  background: var(--bg-secondary);
   border: 1px solid var(--border-color);
 }
 

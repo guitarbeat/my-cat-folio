@@ -339,7 +339,7 @@
   padding: clamp(0.75rem, 2vw, 1rem) clamp(2.5rem, 6vw, 3rem)
     clamp(0.75rem, 2vw, 1rem) clamp(1rem, 2.5vw, 1.25rem);
   font-size: clamp(0.875rem, 3vw, 1rem);
-  color: #ffffff;
+  color: #fff;
   background: rgb(255 255 255 / 15%);
   border: 2px solid rgb(255 255 255 / 30%);
   border-radius: 8px;
@@ -360,10 +360,10 @@
 }
 
 .loginInput.error {
-  border-color: #ef4444;
-  box-shadow: 0 0 0 3px rgb(239 68 68 / 30%);
   outline: 2px solid #ef4444;
   outline-offset: 2px;
+  border-color: #ef4444;
+  box-shadow: 0 0 0 3px rgb(239 68 68 / 30%);
 }
 
 .randomNameIndicator {
