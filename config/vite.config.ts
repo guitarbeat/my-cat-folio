@@ -47,7 +47,6 @@ export default defineConfig(({ mode }) => ({
           vendor: ['react', 'react-dom'],
           zustand: ['zustand'],
           supabase: ['@supabase/supabase-js'],
-          utils: ['lodash', 'date-fns'],
         },
         chunkFileNames: 'assets/js/[name]-[hash].js',
         entryFileNames: 'assets/js/[name]-[hash].js',

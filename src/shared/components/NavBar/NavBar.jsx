@@ -72,7 +72,7 @@ function NavBar({
   // * Generate breadcrumb items based on current view
   const breadcrumbItems = useCallback(() => {
     if (!isLoggedIn) return [];
-    
+
     const items = [
       { id: 'home', label: 'Home', onClick: () => setView('tournament') }
     ];
@@ -192,7 +192,7 @@ function NavBar({
 
     const handleFocusTrap = (event) => {
       if (!isMobile) return;
-      
+
       const mobileMenu = document.getElementById('mobile-menu');
       if (!mobileMenu) return;
 
@@ -352,7 +352,7 @@ function NavBar({
           <Breadcrumb items={breadcrumbItems()} />
         </div>
       )}
-      
+
       <nav className={navbarClass}>
         <div className="navbar__menu-container">
           {/* Desktop Navigation */}

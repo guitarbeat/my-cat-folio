@@ -103,7 +103,7 @@ function useUserSession({ showToast } = {}) {
     } catch (err) {
       console.error('Login error:', err);
       let errorMessage = 'Failed to login';
-      
+
       // Handle specific error types
       if (err.message?.includes('fetch')) {
         errorMessage = 'Cannot connect to database. Please check your connection.';
@@ -112,7 +112,7 @@ function useUserSession({ showToast } = {}) {
       } else if (err.message) {
         errorMessage = err.message;
       }
-      
+
       setError(errorMessage);
       showToast?.({ message: errorMessage, type: 'error' });
       return false;

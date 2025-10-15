@@ -119,7 +119,7 @@ class StatisticsService {
     matches.forEach(match => {
       if (match.winner) {
         totalVotes++;
-        
+
         if (participantStats[match.name1]) {
           participantStats[match.name1].totalMatches++;
           if (match.winner === match.name1) {
@@ -204,7 +204,7 @@ class StatisticsService {
    */
   calculateVotingFrequency(matches) {
     const completedMatches = matches.filter(match => match.winner && match.timestamp);
-    
+
     if (completedMatches.length < 2) {
       return {
         averageTimeBetweenVotes: 0,

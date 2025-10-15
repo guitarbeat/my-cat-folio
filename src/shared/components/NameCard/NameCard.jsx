@@ -179,8 +179,8 @@ function NameCard({
 
       // Show tooltip if metadata is available and has relevant data
       if (metadata && (
-        metadata.rating || 
-        metadata.wins !== undefined || 
+        metadata.rating ||
+        metadata.wins !== undefined ||
         metadata.losses !== undefined ||
         metadata.popularity ||
         metadata.tournaments ||

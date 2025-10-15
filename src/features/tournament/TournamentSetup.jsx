@@ -18,6 +18,10 @@ import {
   NameCard,
   Error
 } from '../../shared/components';
+
+// * Import Error components for specific use cases
+const ErrorDisplay = Error;
+const ErrorBoundary = Error;
 import useToast from '../../core/hooks/useToast';
 import useAppStore from '../../core/store/useAppStore';
 import useMobileGestures from '../../core/hooks/useMobileGestures';

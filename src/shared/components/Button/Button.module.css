@@ -45,8 +45,8 @@
 .btn--primary:hover:not(:disabled) {
   background: var(--primary-700);
   border-color: var(--primary-700);
-  transform: translateY(-1px);
   box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
 }
 
 .btn--secondary {
@@ -59,8 +59,8 @@
   color: var(--text-primary);
   background: var(--accent-color);
   border-color: var(--accent-color);
-  transform: translateY(-1px);
   box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
 }
 
 .btn--danger {
@@ -72,8 +72,8 @@
 .btn--danger:hover:not(:disabled) {
   background: color-mix(in srgb, rgb(var(--error-rgb)) 90%, black 10%);
   border-color: color-mix(in srgb, rgb(var(--error-rgb)) 85%, black 15%);
-  transform: translateY(-1px);
   box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
 }
 
 .btn--ghost {
@@ -113,14 +113,14 @@
 /* Button states */
 .btn--disabled {
   cursor: not-allowed;
+  box-shadow: none !important;
   opacity: 0.7;
   transform: none !important;
-  box-shadow: none !important;
 }
 
 .btn--loading {
-  cursor: not-allowed;
   pointer-events: none;
+  cursor: not-allowed;
 }
 
 /* Loading spinner */
@@ -135,7 +135,7 @@
   width: 16px;
   height: 16px;
   border: 2px solid transparent;
-  border-top: 2px solid currentColor;
+  border-top: 2px solid currentcolor;
   border-radius: 50%;
   animation: spin 1s linear infinite;
 }
@@ -149,8 +149,8 @@
 /* Button content */
 .btn__content {
   display: flex;
-  align-items: center;
   gap: var(--space-2);
+  align-items: center;
   transition: opacity var(--transition-smooth);
 }
 

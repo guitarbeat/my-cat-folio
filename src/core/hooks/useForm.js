@@ -119,7 +119,7 @@ export const useForm = (initialValues = {}, validationRules = {}, onSubmit) => {
    */
   const handleSubmit = useCallback(async (event) => {
     event.preventDefault();
-    
+
     if (!onSubmit) return;
 
     // * Mark all fields as touched
@@ -135,7 +135,7 @@ export const useForm = (initialValues = {}, validationRules = {}, onSubmit) => {
     }
 
     setIsSubmitting(true);
-    
+
     try {
       await onSubmit(values, { setErrors, setValues });
     } catch (error) {

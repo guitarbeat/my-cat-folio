@@ -116,7 +116,7 @@ class ErrorBoundary extends React.Component {
     console.error('ErrorBoundary caught an error:', error, errorInfo);
   }
 
-  handleRetry = () => {
+  handleRetry() {
     const { retryCount, maxRetries } = this.state;
 
     if (retryCount < maxRetries) {

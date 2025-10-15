@@ -15,7 +15,7 @@ import { useLocalStorage } from './useLocalStorage';
 export const useTournamentMatches = () => {
   const tournament = useTournamentData();
   const { setVoteHistory, setRatings, setIsComplete } = useTournamentActions();
-  const { getItem, setItem } = useLocalStorage();
+  const { setItem } = useLocalStorage();
 
   /**
    * Calculate Elo rating change

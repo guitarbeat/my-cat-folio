@@ -380,9 +380,9 @@ const Profile = ({ userName, onStartNewTournament }) => {
   useEffect(() => {
     const loadStats = async () => {
       if (!userName) return;
-      
+
       setStatsLoading(true);
-      
+
       // Try database-optimized stats first
       const dbStats = await fetchUserStatsFromDB(userName);
       if (dbStats) {
@@ -392,10 +392,10 @@ const Profile = ({ userName, onStartNewTournament }) => {
         const clientStats = calculateEnhancedStats(allNames, filterStatus);
         setStats(clientStats);
       }
-      
+
       setStatsLoading(false);
     };
-    
+
     loadStats();
   }, [userName, allNames, filterStatus]);
 

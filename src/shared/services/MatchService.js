@@ -117,12 +117,12 @@ class MatchService {
       };
     }
 
-    const nameMatches = matches.filter(match => 
+    const nameMatches = matches.filter(match =>
       match.name1 === name || match.name2 === name
     );
 
     const wins = nameMatches.filter(match => match.winner === name).length;
-    const losses = nameMatches.filter(match => 
+    const losses = nameMatches.filter(match =>
       match.winner && match.winner !== name
     ).length;
     const totalMatches = wins + losses;
@@ -152,7 +152,7 @@ class MatchService {
       };
     }
 
-    const headToHeadMatches = matches.filter(match => 
+    const headToHeadMatches = matches.filter(match =>
       (match.name1 === name1 && match.name2 === name2) ||
       (match.name1 === name2 && match.name2 === name1)
     );
@@ -179,7 +179,7 @@ class MatchService {
     if (!matches || matches.length === 0) return [];
 
     const nameMatches = matches
-      .filter(match => 
+      .filter(match =>
         (match.name1 === name || match.name2 === name) && match.winner
       )
       .sort((a, b) => b.timestamp - a.timestamp)

@@ -405,7 +405,7 @@ export const useTournamentStats = () => useAppStore((state) => ({
   totalVotes: state.tournament.voteHistory.length,
   isComplete: state.tournament.isComplete,
   isLoading: state.tournament.isLoading,
-  progress: state.tournament.names ? 
+  progress: state.tournament.names ?
     (state.tournament.voteHistory.length / (state.tournament.names.length * (state.tournament.names.length - 1) / 2)) * 100 : 0
 }));
 
@@ -415,7 +415,7 @@ export const useTournamentProgress = () => useAppStore((state) => {
   const totalNames = state.tournament.names?.length || 0;
   const totalVotes = state.tournament.voteHistory.length;
   const totalPossibleVotes = totalNames > 0 ? (totalNames * (totalNames - 1)) / 2 : 0;
-  
+
   return {
     current: totalVotes,
     total: totalPossibleVotes,

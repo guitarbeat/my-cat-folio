@@ -19,10 +19,10 @@ export const useTournamentProgress = () => {
    */
   const progress = useMemo(() => {
     if (!tournament.names || tournament.names.length < 2) return 0;
-    
+
     const totalPossibleVotes = (tournament.names.length * (tournament.names.length - 1)) / 2;
     const completedVotes = tournament.voteHistory.length;
-    
+
     return totalPossibleVotes > 0 ? (completedVotes / totalPossibleVotes) * 100 : 0;
   }, [tournament.names, tournament.voteHistory.length]);
 
@@ -31,7 +31,7 @@ export const useTournamentProgress = () => {
    */
   const remainingMatches = useMemo(() => {
     if (!tournament.names || tournament.names.length < 2) return 0;
-    
+
     const totalPossibleVotes = (tournament.names.length * (tournament.names.length - 1)) / 2;
     return Math.max(0, totalPossibleVotes - tournament.voteHistory.length);
   }, [tournament.names, tournament.voteHistory.length]);
@@ -107,7 +107,7 @@ export const useTournamentProgress = () => {
     if (!tournament.names || !tournament.ratings) return {};
 
     const popularity = {};
-    
+
     // * Initialize all names
     tournament.names.forEach(name => {
       popularity[name] = {
@@ -157,14 +157,14 @@ export const useTournamentProgress = () => {
 
     const estimatedTimeRemaining = stats.remainingVotes * averageTimePerVote;
     const estimatedCompletionTime = Date.now() + estimatedTimeRemaining;
-    
+
     // * Confidence based on voting history consistency
     const timeSpans = frequency.timeSpans;
     const variance = timeSpans.reduce((sum, time) => {
       const diff = time - frequency.averageTimeSpan;
       return sum + (diff * diff);
     }, 0) / timeSpans.length;
-    
+
     const confidence = Math.max(0.1, Math.min(1, 1 - (variance / (frequency.averageTimeSpan * frequency.averageTimeSpan))));
 
     return {

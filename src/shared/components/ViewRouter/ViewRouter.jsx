@@ -1,7 +1,6 @@
 import React, { lazy } from 'react';
 import PropTypes from 'prop-types';
-import { Loading } from '..';
-import { Error } from '..';
+import { Loading, Error } from '..';
 import Login from '../../../features/auth/Login';
 
 const Tournament = lazy(() => import('../../../features/tournament/Tournament'));

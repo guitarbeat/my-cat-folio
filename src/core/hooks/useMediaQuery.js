@@ -19,13 +19,13 @@ export const useMediaQuery = (query) => {
     if (typeof window === 'undefined') return;
 
     const mediaQuery = window.matchMedia(query);
-    
+
     // * Set initial value
     setMatches(mediaQuery.matches);
 
     // * Create event listener
     const handler = (event) => setMatches(event.matches);
-    
+
     // * Add listener
     mediaQuery.addEventListener('change', handler);
 

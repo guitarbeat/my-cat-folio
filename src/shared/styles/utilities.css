@@ -288,6 +288,7 @@
 .transition-all { transition: var(--transition-all); }
 .transition-transform { transition: var(--transition-transform); }
 .transition-opacity { transition: var(--transition-opacity); }
+
 .transition-colors {
   transition:
     color var(--transition-smooth),

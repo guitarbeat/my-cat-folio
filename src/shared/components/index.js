@@ -19,17 +19,22 @@ export { default as NavBar } from './NavBar/NavBar';
 // export { default as Layout } from './Layout/Layout';
 // export { default as Container } from './Container/Container';
 
-// * UI Components (placeholder - create when needed)
+// * UI Components
+export { default as Toast } from './Toast/Toast';
+export { default as Loading } from './Loading/Loading';
+export { default as Error } from './Error/Error';
+export { default as SkeletonLoader } from './SkeletonLoader/SkeletonLoader';
+// * Placeholder for future components - uncomment when created
 // export { default as Modal } from './Modal/Modal';
-// export { default as Toast } from './Toast/Toast';
 // export { default as LoadingSpinner } from './LoadingSpinner/LoadingSpinner';
 
-// * Feature Components
+// * Feature Components (only export existing ones)
 export { default as NameCard } from './NameCard/NameCard';
 export { default as StatsCard } from './StatsCard/StatsCard';
 export { default as BongoCat } from './BongoCat/BongoCat';
-export { default as CatBackground } from './CatBackground/CatBackground';
-export { default as PerformanceDashboard } from './PerformanceDashboard/PerformanceDashboard';
-export { default as TournamentBracket } from './TournamentBracket/TournamentBracket';
-export { default as UserComparison } from './UserComparison/UserComparison';
-export { default as GlobalAnalytics } from './GlobalAnalytics/GlobalAnalytics';
+// * Placeholder for future components - uncomment when created
+// export { default as CatBackground } from './CatBackground/CatBackground';
+// export { default as PerformanceDashboard } from './PerformanceDashboard/PerformanceDashboard';
+// export { default as TournamentBracket } from './TournamentBracket/TournamentBracket';
+// export { default as UserComparison } from './UserComparison/UserComparison';
+// export { default as GlobalAnalytics } from './GlobalAnalytics/GlobalAnalytics';

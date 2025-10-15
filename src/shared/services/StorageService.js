@@ -23,7 +23,7 @@ class StorageService {
       this.storage.setItem(test, test);
       this.storage.removeItem(test);
       return true;
-    } catch (e) {
+    } catch {
       return false;
     }
   }
@@ -255,7 +255,7 @@ class StorageService {
       'tournamentVoteHistory',
       'tournamentMatches'
     ];
-    
+
     keysToRemove.forEach(key => this.removeItem(key));
   }
 
@@ -266,11 +266,11 @@ class StorageService {
   exportData() {
     const allKeys = this.getAllKeys();
     const data = {};
-    
+
     allKeys.forEach(key => {
       data[key] = this.getItem(key);
     });
-    
+
     return {
       timestamp: Date.now(),
       data

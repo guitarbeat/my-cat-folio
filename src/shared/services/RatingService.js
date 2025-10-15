@@ -97,7 +97,7 @@ class RatingService {
     const min = sortedRatings[0];
     const max = sortedRatings[sortedRatings.length - 1];
     const average = this.calculateAverageRating(ratingValues);
-    
+
     // Calculate median
     const middle = Math.floor(sortedRatings.length / 2);
     const median = sortedRatings.length % 2 === 0
