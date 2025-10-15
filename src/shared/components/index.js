@@ -29,8 +29,7 @@ export { default as NameStatsTooltip } from './NameStatsTooltip/NameStatsTooltip
 export { default as Breadcrumb } from './Breadcrumb';
 
 // * Notification Components
-export { default as Toast } from './Toast';
-export { default as ToastContainer } from './ToastContainer';
+export { default as Toast, ToastItem, ToastContainer } from './Toast';
 
 // * Interactive Components
 export { default as BongoCat } from './BongoCat/BongoCat';

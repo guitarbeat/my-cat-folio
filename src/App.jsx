@@ -272,7 +272,8 @@ function App() {
       )}
 
       {/* * Toast notifications */}
-      <ToastContainer
+      <Toast
+        variant="container"
         toasts={toasts}
         removeToast={removeToast}
         position="top-right"
