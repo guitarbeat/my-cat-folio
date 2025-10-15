@@ -61,10 +61,14 @@ export const catNamesAPI = {
    * Get all names with descriptions and ratings (hidden names are filtered out globally)
    */
   async getNamesWithDescriptions() {
+    console.log('🔍 getNamesWithDescriptions called');
     try {
+      console.log('🔍 Checking if Supabase is available...');
       if (!isSupabaseAvailable()) {
+        console.log('❌ Supabase not available, returning empty array');
         return [];
       }
+      console.log('✅ Supabase is available, proceeding with data fetch');
 
       // Get ALL hidden name IDs globally (not user-specific)
       let hiddenIds = [];
@@ -83,8 +87,10 @@ export const catNamesAPI = {
       } else {
         hiddenIds = hiddenData?.map((item) => item.name_id) || [];
       }
+      console.log('🔍 Hidden IDs:', hiddenIds.length);
 
       // Build query - leverages idx_cat_name_options_active partial index
+      console.log('🔍 Building query for cat_name_options...');
       let query = supabase.from('cat_name_options').select(`
         id,
         name,
@@ -100,17 +106,19 @@ export const catNamesAPI = {
 
       // Filter out ALL hidden names globally
       if (hiddenIds.length > 0) {
+        console.log('🔍 Filtering out hidden names:', hiddenIds.length);
         query = query.not('id', 'in', `(${hiddenIds.join(',')})`);
       }
 
-      const { data, error } = await ErrorManager.withRetry(async () => {
-        return await query;
-      });
+      console.log('🔍 Executing query...');
+      const { data, error } = await query;
+      console.log('🔍 Query result:', { dataCount: data?.length || 0, hasError: !!error });
       if (error) {
-        console.error('Error fetching names with descriptions:', error);
+        console.error('❌ Error fetching names with descriptions:', error);
         return [];
       }
 
+      console.log('✅ Fetched', data?.length || 0, 'names from database');
       // Process data to include default values (no user-specific data in this view)
       return (
         (data || []).map((item) => ({

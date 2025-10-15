@@ -75,6 +75,7 @@ export default function ViewRouter({
   }
 
   if (tournament.names === null) {
+    console.log('🔍 ViewRouter: tournament.names is null, rendering TournamentSetup');
     return (
       <Suspense fallback={<Loading variant="spinner" text="Loading Tournament Setup..." />}>
         <TournamentSetup
