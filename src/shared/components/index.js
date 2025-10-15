@@ -27,7 +27,6 @@ export { default as Card } from './Card/Card';
 export { default as NameCard } from './NameCard/NameCard';
 export { default as StatsCard } from './StatsCard/StatsCard';
 export { default as CalendarButton } from './CalendarButton/CalendarButton';
-export { default as NameStatsTooltip } from './NameStatsTooltip/NameStatsTooltip';
 
 // * Navigation Components
 export { default as Breadcrumb } from './Breadcrumb';

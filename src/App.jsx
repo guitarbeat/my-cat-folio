@@ -164,15 +164,12 @@ function App() {
   const handleLogin = useCallback(async (userName) => {
     try {
       const success = await login(userName);
-      if (success) {
-        uiActions.setWelcomeVisible(false);
-      }
       return success;
     } catch (error) {
       console.error('Login error:', error);
       throw error;
     }
-  }, [login, uiActions]);
+  }, [login]);
 
   // * Memoize main content to prevent unnecessary re-renders
 

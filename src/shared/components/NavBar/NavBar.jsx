@@ -5,6 +5,7 @@
 // Third-party imports
 import React, { useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
+import Breadcrumb from '../Breadcrumb/Breadcrumb';
 import './navbar.css';
 
 function NavBar({
@@ -28,6 +29,30 @@ function NavBar({
       return false;
     }
   });
+
+  // * Generate breadcrumb items based on current view
+  const breadcrumbItems = useCallback(() => {
+    if (!isLoggedIn) return [];
+    
+    const items = [
+      { id: 'home', label: 'Home', onClick: () => setView('tournament') }
+    ];
+
+    switch (view) {
+      case 'profile':
+        items.push({ id: 'profile', label: 'Profile' });
+        break;
+      case 'tournament':
+        if (view === 'tournament') {
+          items.push({ id: 'tournament', label: 'Tournament' });
+        }
+        break;
+      default:
+        break;
+    }
+
+    return items;
+  }, [isLoggedIn, view, setView]);
 
   // Define nav items based on login state
   const navItems = [];
@@ -221,6 +246,13 @@ function NavBar({
 
   return (
     <>
+      {/* Breadcrumb Navigation */}
+      {isLoggedIn && breadcrumbItems().length > 0 && (
+        <div className="breadcrumb-container">
+          <Breadcrumb items={breadcrumbItems()} />
+        </div>
+      )}
+      
       <nav className={navbarClass}>
         <div className="navbar__menu-container">
           {/* Desktop Navigation */}

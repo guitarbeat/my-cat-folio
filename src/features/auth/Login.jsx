@@ -6,6 +6,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 
 import { Error } from '../../shared/components';
+import BongoCat from '../../shared/components/BongoCat/BongoCat';
 import useToast from '../../core/hooks/useToast';
 import { validateUsername } from '../../shared/utils/validationUtils';
 import styles from './Login.module.css';
@@ -325,6 +326,17 @@ function Login({ onLogin }) {
           </div>
         </div>
       </div>
+
+      {/* Interactive BongoCat */}
+      <BongoCat
+        size={0.4}
+        color="#ff6b9d"
+        onBongo={() => {
+          // Fun interaction when the cat is bongoed on login
+          console.log('🐱 Bongo cat says hello!');
+        }}
+        containerRef={containerRef}
+      />
     </div>
   );
 }

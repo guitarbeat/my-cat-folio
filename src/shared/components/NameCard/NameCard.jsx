@@ -73,6 +73,8 @@ function NameCard({
   const [rippleStyle, setRippleStyle] = useState({});
   const [isRippling, setIsRippling] = useState(false);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [showTooltip, setShowTooltip] = useState(false);
+  const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 });
   const cardRef = useRef(null);
   const imgRef = useRef(null);
   const imgContainerRef = useRef(null);
@@ -174,10 +176,27 @@ function NameCard({
         card.style.setProperty('--mouse-x', `${mouseX}%`);
         card.style.setProperty('--mouse-y', `${mouseY}%`);
       }
+
+      // Show tooltip if metadata is available and has relevant data
+      if (metadata && (
+        metadata.rating || 
+        metadata.wins !== undefined || 
+        metadata.losses !== undefined ||
+        metadata.popularity ||
+        metadata.tournaments ||
+        (metadata.categories && metadata.categories.length > 0)
+      )) {
+        // * Safety check for clientX/clientY
+        if (typeof e.clientX === 'number' && typeof e.clientY === 'number') {
+          setTooltipPosition({ x: e.clientX, y: e.clientY });
+          setShowTooltip(true);
+        }
+      }
     };
 
     const handleMouseLeave = () => {
       setMousePosition({ x: 50, y: 50 });
+      setShowTooltip(false);
 
       // Reset CSS custom properties
       if (card) {
@@ -193,7 +212,7 @@ function NameCard({
       card.removeEventListener('mousemove', handleMouseMove);
       card.removeEventListener('mouseleave', handleMouseLeave);
     };
-  }, [disabled]);
+  }, [disabled, metadata]);
 
   const handleInteraction = (event) => {
     if (disabled) {
@@ -438,6 +457,81 @@ function NameCard({
           )}
         </div>
       )}
+
+      {/* Enhanced tooltip with detailed stats */}
+      {showTooltip && metadata && tooltipPosition.x > 0 && tooltipPosition.y > 0 && (
+        <div
+          className={styles.tooltip}
+          style={{
+            left: Math.min(tooltipPosition.x + 10, typeof window !== 'undefined' ? window.innerWidth - 320 : tooltipPosition.x + 10),
+            top: Math.max(tooltipPosition.y - 10, 10),
+            zIndex: 1000
+          }}
+        >
+          <div className={styles.tooltipContent}>
+            <div className={styles.tooltipHeader}>
+              <h3 className={styles.tooltipName}>{name}</h3>
+              {metadata.rank && (
+                <span className={styles.tooltipRank}>#{metadata.rank}</span>
+              )}
+            </div>
+
+            {metadata.description && (
+              <p className={styles.tooltipDescription}>{metadata.description}</p>
+            )}
+
+            <div className={styles.tooltipStats}>
+              {metadata.rating && (
+                <div className={styles.tooltipStat}>
+                  <span className={styles.tooltipLabel}>Rating</span>
+                  <span className={styles.tooltipValue}>{metadata.rating}</span>
+                </div>
+              )}
+
+              {metadata.wins !== undefined && (
+                <div className={styles.tooltipStat}>
+                  <span className={styles.tooltipLabel}>Wins</span>
+                  <span className={styles.tooltipValue}>{metadata.wins}</span>
+                </div>
+              )}
+
+              {metadata.losses !== undefined && (
+                <div className={styles.tooltipStat}>
+                  <span className={styles.tooltipLabel}>Losses</span>
+                  <span className={styles.tooltipValue}>{metadata.losses}</span>
+                </div>
+              )}
+
+              {metadata.totalMatches && (
+                <div className={styles.tooltipStat}>
+                  <span className={styles.tooltipLabel}>Total Matches</span>
+                  <span className={styles.tooltipValue}>{metadata.totalMatches}</span>
+                </div>
+              )}
+
+              {metadata.winRate && (
+                <div className={styles.tooltipStat}>
+                  <span className={styles.tooltipLabel}>Win Rate</span>
+                  <span className={styles.tooltipValue}>{metadata.winRate}%</span>
+                </div>
+              )}
+            </div>
+
+            {metadata.categories && metadata.categories.length > 0 && (
+              <div className={styles.tooltipCategories}>
+                <span className={styles.tooltipCategoriesLabel}>Categories:</span>
+                <div className={styles.tooltipCategoryTags}>
+                  {metadata.categories.map((category, index) => (
+                    <span key={index} className={styles.tooltipCategoryTag}>
+                      {category}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
@@ -455,7 +549,13 @@ NameCard.propTypes = {
     rating: PropTypes.number,
     popularity: PropTypes.number,
     tournaments: PropTypes.number,
-    categories: PropTypes.arrayOf(PropTypes.string)
+    categories: PropTypes.arrayOf(PropTypes.string),
+    wins: PropTypes.number,
+    losses: PropTypes.number,
+    totalMatches: PropTypes.number,
+    winRate: PropTypes.number,
+    rank: PropTypes.number,
+    description: PropTypes.string
   }),
   isAdmin: PropTypes.bool,
   isHidden: PropTypes.bool,
