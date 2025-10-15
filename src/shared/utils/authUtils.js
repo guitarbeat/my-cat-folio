@@ -23,6 +23,11 @@ export const USER_ROLES = {
 export async function isUserAdmin(userId) {
   if (!userId) return false;
 
+  if (!supabase) {
+    console.warn('Supabase client is not configured. Admin check will default to false.');
+    return false;
+  }
+
   try {
     const { data, error } = await supabase.rpc('has_role', {
       _user_id: userId,
@@ -46,6 +51,11 @@ export async function isUserAdmin(userId) {
 export async function hasRole(userId, requiredRole) {
   if (!userId || !requiredRole) return false;
 
+  if (!supabase) {
+    console.warn('Supabase client is not configured. Role check will default to false.');
+    return false;
+  }
+
   try {
     const { data, error } = await supabase.rpc('has_role', {
       _user_id: userId,
@@ -67,6 +77,11 @@ export async function hasRole(userId, requiredRole) {
  */
 export async function getUserRole(userId) {
   if (!userId) return null;
+
+  if (!supabase) {
+    console.warn('Supabase client is not configured. Using default user role.');
+    return USER_ROLES.USER;
+  }
 
   try {
     const { data, error } = await supabase
