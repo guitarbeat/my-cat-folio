@@ -393,4 +393,40 @@ export const useAppStoreInitialization = () => {
   }, [userActions, uiActions]);
 };
 
+// * Store selectors for granular subscriptions
+export const useTournamentData = () => useAppStore((state) => state.tournament);
+export const useUserData = () => useAppStore((state) => state.user);
+export const useUIState = () => useAppStore((state) => state.ui);
+export const useErrorState = () => useAppStore((state) => state.errors);
+
+// * Computed selectors for derived state
+export const useTournamentStats = () => useAppStore((state) => ({
+  totalNames: state.tournament.names?.length || 0,
+  totalVotes: state.tournament.voteHistory.length,
+  isComplete: state.tournament.isComplete,
+  isLoading: state.tournament.isLoading,
+  progress: state.tournament.names ? 
+    (state.tournament.voteHistory.length / (state.tournament.names.length * (state.tournament.names.length - 1) / 2)) * 100 : 0
+}));
+
+export const useCurrentView = () => useAppStore((state) => state.tournament.currentView);
+
+export const useTournamentProgress = () => useAppStore((state) => {
+  const totalNames = state.tournament.names?.length || 0;
+  const totalVotes = state.tournament.voteHistory.length;
+  const totalPossibleVotes = totalNames > 0 ? (totalNames * (totalNames - 1)) / 2 : 0;
+  
+  return {
+    current: totalVotes,
+    total: totalPossibleVotes,
+    percentage: totalPossibleVotes > 0 ? (totalVotes / totalPossibleVotes) * 100 : 0
+  };
+});
+
+// * Action selectors for better performance
+export const useTournamentActions = () => useAppStore((state) => state.tournamentActions);
+export const useUserActions = () => useAppStore((state) => state.userActions);
+export const useUIActions = () => useAppStore((state) => state.uiActions);
+export const useErrorActions = () => useAppStore((state) => state.errorActions);
+
 export default useAppStore;

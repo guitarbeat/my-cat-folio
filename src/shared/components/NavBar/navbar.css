@@ -192,6 +192,7 @@
   display: inline-block;
   width: 24px;
   height: 18px;
+  transition: transform 0.3s ease;
 }
 
 .navbar__mobile-menu-icon::before,
@@ -203,10 +204,34 @@
   content: "";
   background: rgb(255 255 255 / 95%);
   border-radius: 2px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-origin: center;
 }
 
-.navbar__mobile-menu-icon::before { top: 0; box-shadow: 0 8px 0 rgb(255 255 255 / 95%); }
-.navbar__mobile-menu-icon::after { bottom: 0; }
+.navbar__mobile-menu-icon::before { 
+  top: 0; 
+  box-shadow: 0 8px 0 rgb(255 255 255 / 95%); 
+}
+
+.navbar__mobile-menu-icon::after { 
+  bottom: 0; 
+}
+
+/* * Animated hamburger to X transformation */
+.navbar__mobile-menu-button[aria-expanded="true"] .navbar__mobile-menu-icon {
+  transform: rotate(45deg);
+}
+
+.navbar__mobile-menu-button[aria-expanded="true"] .navbar__mobile-menu-icon::before {
+  top: 8px;
+  box-shadow: none;
+  transform: rotate(90deg);
+}
+
+.navbar__mobile-menu-button[aria-expanded="true"] .navbar__mobile-menu-icon::after {
+  bottom: 8px;
+  transform: rotate(90deg);
+}
 
 /* Mobile drawer */
 .navbar__mobile-menu {
@@ -226,6 +251,7 @@
   backdrop-filter: blur(20px);
   transform: translateX(100%);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform, opacity;
 }
 
 .navbar__mobile-menu.visible {
@@ -304,7 +330,47 @@
   inset: 0;
   z-index: calc(var(--z-sticky, 100) + 0.5);
   background: rgb(0 0 0 / 60%);
-  animation: fadeIn 0.2s ease forwards;
+  backdrop-filter: blur(4px);
+  animation: fadeIn 0.3s ease forwards;
+  will-change: opacity;
+  /* * Default hidden state */
+  display: none;
+  visibility: hidden;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* * Ensure backdrop is hidden when not in mobile menu open state */
+.navbar:not(.mobile-menu-open) .navbar__mobile-backdrop {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+/* * Force hide backdrop when mobile menu is closed */
+.navbar__mobile-backdrop:not(.visible) {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+/* * Only show backdrop when mobile menu is open and element is visible */
+.navbar.mobile-menu-open .navbar__mobile-backdrop {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 /* Scroll to top */
@@ -418,9 +484,27 @@
 }
 
 @media (hover: none) and (pointer: coarse) {
-  .navbar__mobile-menu-button:active { background: rgb(255 255 255 / 30%); transform: scale(0.95); }
-  .navbar__mobile-link:active { background: rgb(255 255 255 / 20%); transform: scale(0.98); }
-  .navbar__mobile-theme-toggle:active { background: rgb(255 255 255 / 30%); transform: scale(0.98); }
+  .navbar__mobile-menu-button:active { 
+    background: rgb(255 255 255 / 30%); 
+    transform: scale(0.95); 
+    transition: all 0.1s ease;
+  }
+  
+  .navbar__mobile-link:active { 
+    background: rgb(255 255 255 / 20%); 
+    transform: scale(0.98); 
+    transition: all 0.1s ease;
+  }
+  
+  .navbar__mobile-theme-toggle:active { 
+    background: rgb(255 255 255 / 30%); 
+    transform: scale(0.98); 
+    transition: all 0.1s ease;
+  }
+  
+  .navbar__mobile-backdrop:active {
+    background: rgb(0 0 0 / 70%);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

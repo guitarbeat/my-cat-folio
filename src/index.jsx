@@ -11,10 +11,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { setupGlobalErrorHandling } from './shared/services/errorManager';
+import './shared/styles/reset.css';
 import './shared/styles/theme.css';
-import './shared/styles/global.css';
-import './shared/styles/mobile.css';
-import './shared/styles/mobile-ergonomics.css';
+import './shared/styles/utilities.css';
+import './shared/styles/animations.css';
+import './shared/styles/components-global.css';
+import './shared/styles/responsive.css';
 import App from './App.jsx';
 // import { Analytics } from "@vercel/analytics/react"
 

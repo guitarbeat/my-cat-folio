@@ -30,6 +30,45 @@ function NavBar({
     }
   });
 
+  // * Ensure mobile menu is closed on component mount
+  useEffect(() => {
+    setIsMobileMenuOpen(false);
+  }, []);
+
+  // * Force hide backdrop when mobile menu is closed
+  useEffect(() => {
+    const backdrops = document.querySelectorAll('.navbar__mobile-backdrop');
+    backdrops.forEach(backdrop => {
+      if (!isMobileMenuOpen) {
+        backdrop.style.display = 'none';
+        backdrop.style.visibility = 'hidden';
+        backdrop.style.opacity = '0';
+        backdrop.style.pointerEvents = 'none';
+        backdrop.style.zIndex = '-1';
+      } else {
+        backdrop.style.display = 'block';
+        backdrop.style.visibility = 'visible';
+        backdrop.style.opacity = '1';
+        backdrop.style.pointerEvents = 'auto';
+        backdrop.style.zIndex = 'calc(var(--z-sticky, 100) + 0.5)';
+      }
+    });
+  }, [isMobileMenuOpen]);
+
+  // * Cleanup effect to ensure backdrop is hidden on unmount
+  useEffect(() => {
+    return () => {
+      const backdrops = document.querySelectorAll('.navbar__mobile-backdrop');
+      backdrops.forEach(backdrop => {
+        backdrop.style.display = 'none';
+        backdrop.style.visibility = 'hidden';
+        backdrop.style.opacity = '0';
+        backdrop.style.pointerEvents = 'none';
+        backdrop.style.zIndex = '-1';
+      });
+    };
+  }, []);
+
   // * Generate breadcrumb items based on current view
   const breadcrumbItems = useCallback(() => {
     if (!isLoggedIn) return [];
@@ -74,8 +113,8 @@ function NavBar({
       ];
 
   const handleMobileMenuClick = useCallback(() => {
-    setIsMobileMenuOpen(!isMobileMenuOpen);
-  }, [isMobileMenuOpen]);
+    setIsMobileMenuOpen(prev => !prev);
+  }, []);
 
   const handleNavItemClick = useCallback(
     (key) => {
@@ -116,11 +155,13 @@ function NavBar({
       try {
         const currentlyMobile = window.innerWidth < 768;
         setIsMobile(currentlyMobile);
+        // * Always close mobile menu when switching to desktop
         if (!currentlyMobile) {
           setIsMobileMenuOpen(false);
         }
       } catch {
-        // noop
+        // * Fallback: close mobile menu on error
+        setIsMobileMenuOpen(false);
       }
     };
 
@@ -134,6 +175,65 @@ function NavBar({
       }
     };
   }, []);
+
+  // * Handle escape key, focus management, and body scroll lock for mobile menu
+  useEffect(() => {
+    if (!isMobileMenuOpen) return;
+
+    // * Lock body scroll when mobile menu is open
+    const originalStyle = window.getComputedStyle(document.body).overflow;
+    document.body.style.overflow = 'hidden';
+
+    const handleEscapeKey = (event) => {
+      if (event.key === 'Escape') {
+        setIsMobileMenuOpen(false);
+      }
+    };
+
+    const handleFocusTrap = (event) => {
+      if (!isMobile) return;
+      
+      const mobileMenu = document.getElementById('mobile-menu');
+      if (!mobileMenu) return;
+
+      const focusableElements = mobileMenu.querySelectorAll(
+        'a[href], button, [tabindex]:not([tabindex="-1"])'
+      );
+      const firstElement = focusableElements[0];
+      const lastElement = focusableElements[focusableElements.length - 1];
+
+      if (event.key === 'Tab') {
+        if (event.shiftKey) {
+          if (document.activeElement === firstElement) {
+            event.preventDefault();
+            lastElement?.focus();
+          }
+        } else {
+          if (document.activeElement === lastElement) {
+            event.preventDefault();
+            firstElement?.focus();
+          }
+        }
+      }
+    };
+
+    // * Focus the first focusable element when menu opens
+    const mobileMenu = document.getElementById('mobile-menu');
+    if (mobileMenu) {
+      const firstFocusable = mobileMenu.querySelector('a[href], button, [tabindex]:not([tabindex="-1"])');
+      firstFocusable?.focus();
+    }
+
+    document.addEventListener('keydown', handleEscapeKey);
+    document.addEventListener('keydown', handleFocusTrap);
+
+    return () => {
+      // * Restore body scroll when menu closes
+      document.body.style.overflow = originalStyle;
+      document.removeEventListener('keydown', handleEscapeKey);
+      document.removeEventListener('keydown', handleFocusTrap);
+    };
+  }, [isMobileMenuOpen, isMobile]);
 
   // Create nav links
   const navLinks = navItems.map((item) => (
@@ -401,7 +501,7 @@ function NavBar({
         )}
       </nav>
 
-      {/* Mobile Menu Backdrop */}
+      {/* Mobile Menu Backdrop (mobile only) */}
       {isMobile && isMobileMenuOpen && (
         <div
           className="navbar__mobile-backdrop"
