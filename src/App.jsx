@@ -50,8 +50,12 @@ function App() {
     errorActions
   } = useAppStore();
 
+  // Determine admin (Aaron only, case-insensitive)
+  const isAdmin = typeof user.name === 'string' && user.name.trim().toLowerCase() === 'aaron';
+
   // * Keyboard shortcut for performance dashboard (Ctrl+Shift+P)
   React.useEffect(() => {
+    if (!isAdmin) return;
     const handleKeyDown = (event) => {
       if (event.ctrlKey && event.shiftKey && event.key === 'P') {
         event.preventDefault();
@@ -61,7 +65,7 @@ function App() {
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [uiActions]);
+  }, [uiActions, isAdmin]);
 
   // * Handle tournament completion
   const handleTournamentComplete = useCallback(
@@ -193,6 +197,7 @@ function App() {
       },
       isLoggedIn: user.isLoggedIn,
       userName: user.name,
+      isAdmin,
       onLogout: handleLogout,
       onStartNewTournament: handleStartNewTournament,
       isLightTheme: ui.theme === 'light',
@@ -204,6 +209,7 @@ function App() {
       tournamentActions,
       user.isLoggedIn,
       user.name,
+      isAdmin,
       handleLogout,
       handleStartNewTournament,
       ui.theme,
@@ -223,8 +229,8 @@ function App() {
       {/* * Static cat-themed background */}
       <CatBackground />
 
-      {/* * NavBar - always visible for navigation and controls */}
-      <NavBar {...navBarProps} />
+      {/* * NavBar - hidden on welcome screen */}
+      {!ui.showWelcomeScreen && <NavBar {...navBarProps} />}
 
       <div id="main-content" className="main-content" tabIndex="-1">
         {errors.current && user.isLoggedIn && (
@@ -272,10 +278,10 @@ function App() {
         maxToasts={5}
       />
 
-      {/* * Performance Dashboard - Available to all users */}
+      {/* * Performance Dashboard - Admin (Aaron) only */}
       <PerformanceDashboard
         userName={user.name}
-        isVisible={ui.showPerformanceDashboard}
+        isVisible={isAdmin && ui.showPerformanceDashboard}
         onClose={() => uiActions.setPerformanceDashboardVisible(false)}
       />
     </div>
