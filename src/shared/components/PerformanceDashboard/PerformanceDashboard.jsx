@@ -5,7 +5,7 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
-import { performanceMonitor } from '../../utils/coreUtils';
+import { performanceMonitor, throttle } from '../../utils/coreUtils';
 import styles from './PerformanceDashboard.module.css';
 
 const PerformanceDashboard = ({ userName, isVisible = false, onClose }) => {
@@ -13,11 +13,14 @@ const PerformanceDashboard = ({ userName, isVisible = false, onClose }) => {
   const [isLoading, setIsLoading] = useState(true);
   const refreshRef = React.useRef(null);
 
-  // Update metrics
-  const updateMetrics = useCallback(() => {
-    const currentMetrics = performanceMonitor.getAllMetrics();
-    setMetrics(currentMetrics);
-  }, []);
+  // Update metrics with throttling to prevent excessive updates
+  const updateMetrics = useCallback(
+    throttle(() => {
+      const currentMetrics = performanceMonitor.getAllMetrics();
+      setMetrics(currentMetrics);
+    }, 1000), // Throttle to max once per second
+    []
+  );
 
   // Initialize metrics for all users
   useEffect(() => {
@@ -49,7 +52,7 @@ const PerformanceDashboard = ({ userName, isVisible = false, onClose }) => {
         clearInterval(refreshRef.current);
       }
 
-      refreshRef.current = setInterval(updateMetrics, 5000);
+      refreshRef.current = setInterval(updateMetrics, 5000); // Update every 5 seconds
     } else {
       if (refreshRef.current) {
         clearInterval(refreshRef.current);

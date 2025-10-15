@@ -178,7 +178,17 @@ function NavBar({
 
   // * Handle escape key, focus management, and body scroll lock for mobile menu
   useEffect(() => {
-    if (!isMobileMenuOpen) return;
+    if (!isMobileMenuOpen) {
+      // * Ensure focus is removed from mobile menu elements when closed
+      const mobileMenu = document.getElementById('mobile-menu');
+      if (mobileMenu) {
+        const focusedElement = mobileMenu.querySelector(':focus');
+        if (focusedElement) {
+          focusedElement.blur();
+        }
+      }
+      return;
+    }
 
     // * Lock body scroll when mobile menu is open
     const originalStyle = window.getComputedStyle(document.body).overflow;
@@ -448,6 +458,7 @@ function NavBar({
                     className={`navbar__mobile-link ${isActive ? 'active' : ''}`}
                     aria-current={isActive ? 'page' : undefined}
                     aria-label={`${item.label}${isActive ? ' (current page)' : ''}`}
+                    tabIndex={isMobileMenuOpen ? 0 : -1}
                   >
                     {item.label}
                   </a>
@@ -466,6 +477,7 @@ function NavBar({
                     onLogout();
                   }}
                   className="navbar__mobile-link"
+                  tabIndex={isMobileMenuOpen ? 0 : -1}
                 >
                   Logout
                 </a>
@@ -491,6 +503,7 @@ function NavBar({
                     ? 'Switch to dark theme'
                     : 'Switch to light theme'
                 }
+                tabIndex={isMobileMenuOpen ? 0 : -1}
               >
                 {isLightTheme
                   ? '🌙 Switch to Dark Theme'

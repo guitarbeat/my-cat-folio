@@ -128,7 +128,7 @@ export function useBongoCat({ containerRef, size, onBongo }) {
     }
   }, []);
 
-  // Set up event listeners and observers
+  // Set up event listeners and observers with performance optimizations
   useEffect(() => {
     document.addEventListener('keydown', handleKeyDown);
     document.addEventListener('keyup', handleKeyUp);
@@ -138,28 +138,60 @@ export function useBongoCat({ containerRef, size, onBongo }) {
       resizeObserverRef.current = new ResizeObserver(updatePosition);
       resizeObserverRef.current.observe(containerRef.current);
 
-      // Initial position calculation
-      updatePosition();
+      // Initial position calculation with RAF to avoid forced reflow
+      requestAnimationFrame(updatePosition);
 
-      // Improved scroll and position tracking
+      // Throttled scroll handler to prevent excessive reflows
+      let scrollTimeout;
       const handleScroll = () => {
-        requestAnimationFrame(updatePosition);
+        if (scrollTimeout) return;
+        scrollTimeout = requestAnimationFrame(() => {
+          updatePosition();
+          scrollTimeout = null;
+        });
       };
 
-      // Track container position with multiple events to ensure it stays attached
+      // Throttled resize handler
+      let resizeTimeout;
+      const handleResize = () => {
+        if (resizeTimeout) return;
+        resizeTimeout = requestAnimationFrame(() => {
+          updatePosition();
+          resizeTimeout = null;
+        });
+      };
+
+      // Track container position with throttled events
       window.addEventListener('scroll', handleScroll, { passive: true });
-      window.addEventListener('resize', handleScroll, { passive: true });
+      window.addEventListener('resize', handleResize, { passive: true });
 
-      // Additional events that might affect positioning
-      window.addEventListener('orientationchange', updatePosition);
-      window.addEventListener('load', updatePosition);
+      // Debounced orientation change handler
+      let orientationTimeout;
+      const handleOrientationChange = () => {
+        if (orientationTimeout) return;
+        orientationTimeout = setTimeout(() => {
+          requestAnimationFrame(updatePosition);
+          orientationTimeout = null;
+        }, 100);
+      };
 
-      // Use MutationObserver to detect DOM changes that might affect container position
-      const mutationObserver = new MutationObserver(updatePosition);
+      window.addEventListener('orientationchange', handleOrientationChange);
+
+      // Throttled MutationObserver to reduce DOM observation overhead
+      let mutationTimeout;
+      const handleMutation = () => {
+        if (mutationTimeout) return;
+        mutationTimeout = requestAnimationFrame(() => {
+          updatePosition();
+          mutationTimeout = null;
+        });
+      };
+
+      const mutationObserver = new MutationObserver(handleMutation);
       mutationObserver.observe(document.body, {
         childList: true,
-        subtree: true,
-        attributes: true
+        subtree: false, // Only observe direct children to reduce overhead
+        attributes: false // Disable attribute observation to reduce reflows
       });
 
       return () => {
@@ -168,10 +200,15 @@ export function useBongoCat({ containerRef, size, onBongo }) {
         }
 
         window.removeEventListener('scroll', handleScroll);
-        window.removeEventListener('resize', handleScroll);
-        window.removeEventListener('orientationchange', updatePosition);
-        window.removeEventListener('load', updatePosition);
+        window.removeEventListener('resize', handleResize);
+        window.removeEventListener('orientationchange', handleOrientationChange);
         mutationObserver.disconnect();
+        
+        // Clean up timeouts
+        if (scrollTimeout) cancelAnimationFrame(scrollTimeout);
+        if (resizeTimeout) cancelAnimationFrame(resizeTimeout);
+        if (orientationTimeout) clearTimeout(orientationTimeout);
+        if (mutationTimeout) cancelAnimationFrame(mutationTimeout);
       };
     }
 
