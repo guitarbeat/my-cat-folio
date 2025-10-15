@@ -231,9 +231,9 @@ export class PerformanceMonitor {
   }
 
   /**
-   * * Track bundle size metrics
+   * * Track bundle size metrics (async)
    */
-  trackBundleSize() {
+  async trackBundleSize() {
     if (typeof window === 'undefined') return;
 
     const scripts = Array.from(document.querySelectorAll('script[src]'));
@@ -242,15 +242,24 @@ export class PerformanceMonitor {
     let totalJS = 0;
     let totalCSS = 0;
 
-    scripts.forEach(script => {
-      const size = this.getResourceSize(script.src);
-      if (size) totalJS += size;
-    });
+    try {
+      // * Process scripts asynchronously
+      const scriptSizes = await Promise.all(
+        scripts.map(script => this.getResourceSize(script.src))
+      );
+      totalJS = scriptSizes.reduce((sum, size) => sum + (size || 0), 0);
 
-    stylesheets.forEach(link => {
-      const size = this.getResourceSize(link.href);
-      if (size) totalCSS += size;
-    });
+      // * Process stylesheets asynchronously
+      const stylesheetSizes = await Promise.all(
+        stylesheets.map(link => this.getResourceSize(link.href))
+      );
+      totalCSS = stylesheetSizes.reduce((sum, size) => sum + (size || 0), 0);
+    } catch (error) {
+      console.warn('⚠️ Error calculating bundle size:', error);
+      // * Fallback to 0 if calculation fails
+      totalJS = 0;
+      totalCSS = 0;
+    }
 
     this.metrics.bundleSize = {
       javascript: totalJS,
@@ -362,16 +371,15 @@ export class PerformanceMonitor {
   }
 
   /**
-   * * Get resource size from URL
+   * * Get resource size from URL (async)
    * @param {string} url - Resource URL
-   * @returns {number} Resource size in bytes
+   * @returns {Promise<number>} Resource size in bytes
    */
-  getResourceSize(url) {
+  async getResourceSize(url) {
     try {
-      const xhr = new XMLHttpRequest();
-      xhr.open('HEAD', url, false);
-      xhr.send();
-      return parseInt(xhr.getResponseHeader('Content-Length') || '0');
+      const response = await fetch(url, { method: 'HEAD' });
+      const contentLength = response.headers.get('Content-Length');
+      return parseInt(contentLength || '0');
     } catch {
       return 0;
     }
@@ -425,7 +433,10 @@ export class PerformanceMonitor {
    * * Initialize all monitoring
    */
   init() {
-    this.trackBundleSize();
+    // * Run bundle size calculation in background to avoid blocking
+    this.trackBundleSize().catch(error => {
+      console.warn('Bundle size calculation failed:', error);
+    });
     this.trackLoadTimes();
     this.trackRuntimePerformance();
   }

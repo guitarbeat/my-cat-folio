@@ -113,7 +113,7 @@ export const catNamesAPI = {
 
       // Process data to include default values (no user-specific data in this view)
       return (
-        data.map((item) => ({
+        (data || []).map((item) => ({
           ...item,
           updated_at: null,
           user_rating: null,
@@ -121,7 +121,7 @@ export const catNamesAPI = {
           user_losses: 0,
           isHidden: false,
           has_user_rating: false
-        })) || []
+        }))
       );
     } catch (error) {
       if (process.env.NODE_ENV === 'development') {

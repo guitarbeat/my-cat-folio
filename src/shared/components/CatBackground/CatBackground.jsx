@@ -1,4 +1,5 @@
 import React from 'react';
+import './CatBackground.css';
 
 function createCatVideo(index) {
   return (

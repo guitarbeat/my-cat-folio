@@ -117,7 +117,7 @@ function useUserSession({ showToast } = {}) {
       showToast?.({ message: errorMessage, type: 'error' });
       return false;
     }
-  }, [userActions]);
+  }, [userActions, showToast]);
 
   /**
    * Logout current user

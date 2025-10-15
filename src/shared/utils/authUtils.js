@@ -17,11 +17,11 @@ export const USER_ROLES = {
 
 /**
  * Checks if a user has admin privileges using role-based authentication
- * @param {string} userId - The user ID to check
+ * @param {string} userIdOrName - The user ID or username to check
  * @returns {Promise<boolean>} True if user is an admin
  */
-export async function isUserAdmin(userId) {
-  if (!userId) return false;
+export async function isUserAdmin(userIdOrName) {
+  if (!userIdOrName) return false;
 
   if (!supabase) {
     console.warn('Supabase client is not configured. Admin check will default to false.');
@@ -29,6 +29,25 @@ export async function isUserAdmin(userId) {
   }
 
   try {
+    let userId = userIdOrName;
+    
+    // * If it's not a UUID, treat it as a username and get the user ID
+    const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+    if (!uuidRegex.test(userIdOrName)) {
+      const { data: userData, error: userError } = await supabase
+        .from('profiles')
+        .select('id')
+        .eq('username', userIdOrName)
+        .single();
+      
+      if (userError || !userData) {
+        console.warn('User not found:', userIdOrName);
+        return false;
+      }
+      
+      userId = userData.id;
+    }
+
     const { data, error } = await supabase.rpc('has_role', {
       _user_id: userId,
       _role: USER_ROLES.ADMIN

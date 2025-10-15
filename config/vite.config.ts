@@ -39,14 +39,23 @@ export default defineConfig(({ mode }) => ({
       compress: {
         drop_console: true,
         drop_debugger: true,
+        pure_funcs: ['console.log', 'console.info'],
+        passes: 1,
+      },
+      mangle: {
+        safari10: true,
       },
     },
     rollupOptions: {
       output: {
-        manualChunks: {
-          vendor: ['react', 'react-dom'],
-          zustand: ['zustand'],
-          supabase: ['@supabase/supabase-js'],
+        manualChunks: (id) => {
+          // * Only chunk large vendor libraries to avoid build slowdown
+          if (id.includes('node_modules')) {
+            if (id.includes('@supabase/supabase-js')) return 'vendor-supabase';
+            if (id.includes('@hello-pangea/dnd')) return 'vendor-dnd';
+            if (id.includes('react') || id.includes('react-dom')) return 'vendor-react';
+            if (id.includes('zustand')) return 'vendor-zustand';
+          }
         },
         chunkFileNames: 'assets/js/[name]-[hash].js',
         entryFileNames: 'assets/js/[name]-[hash].js',
@@ -54,6 +63,8 @@ export default defineConfig(({ mode }) => ({
       },
     },
     chunkSizeWarningLimit: 1000,
+    target: 'esnext',
+    cssCodeSplit: false,
   },
   define: {
     'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development'),

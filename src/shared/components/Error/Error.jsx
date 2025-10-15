@@ -130,15 +130,15 @@ class ErrorBoundary extends React.Component {
     } else {
       window.location.reload();
     }
-  };
+  }
 
-  handleRefresh = () => {
+  handleRefresh() {
     window.location.reload();
-  };
+  }
 
-  handleGoHome = () => {
+  handleGoHome() {
     window.location.href = '/';
-  };
+  }
 
   render() {
     const {

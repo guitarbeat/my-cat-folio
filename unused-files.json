@@ -1,0 +1,1349 @@
+{
+  "entries": [
+    "src/index.jsx"
+  ],
+  "tree": {
+    "src/index.jsx": [
+      {
+        "issuer": "src/index.jsx",
+        "request": "react",
+        "kind": "StaticImport",
+        "id": "node_modules/react/index.js"
+      },
+      {
+        "issuer": "src/index.jsx",
+        "request": "react-dom/client",
+        "kind": "StaticImport",
+        "id": "node_modules/react-dom/client.js"
+      },
+      {
+        "issuer": "src/index.jsx",
+        "request": "./shared/services/errorManager",
+        "kind": "StaticImport",
+        "id": "src/shared/services/errorManager.js"
+      },
+      {
+        "issuer": "src/index.jsx",
+        "request": "./shared/styles/reset.css",
+        "kind": "StaticImport",
+        "id": "src/shared/styles/reset.css"
+      },
+      {
+        "issuer": "src/index.jsx",
+        "request": "./shared/styles/theme.css",
+        "kind": "StaticImport",
+        "id": "src/shared/styles/theme.css"
+      },
+      {
+        "issuer": "src/index.jsx",
+        "request": "./shared/styles/utilities.css",
+        "kind": "StaticImport",
+        "id": "src/shared/styles/utilities.css"
+      },
+      {
+        "issuer": "src/index.jsx",
+        "request": "./shared/styles/animations.css",
+        "kind": "StaticImport",
+        "id": "src/shared/styles/animations.css"
+      },
+      {
+        "issuer": "src/index.jsx",
+        "request": "./shared/styles/components-global.css",
+        "kind": "StaticImport",
+        "id": "src/shared/styles/components-global.css"
+      },
+      {
+        "issuer": "src/index.jsx",
+        "request": "./shared/styles/responsive.css",
+        "kind": "StaticImport",
+        "id": "src/shared/styles/responsive.css"
+      },
+      {
+        "issuer": "src/index.jsx",
+        "request": "./App.jsx",
+        "kind": "StaticImport",
+        "id": "src/App.jsx"
+      }
+    ],
+    "node_modules/react-dom/client.js": null,
+    "src/shared/styles/reset.css": [],
+    "src/shared/styles/theme.css": [],
+    "src/shared/styles/utilities.css": [],
+    "src/shared/styles/animations.css": [],
+    "src/shared/styles/components-global.css": [],
+    "src/shared/styles/responsive.css": [],
+    "src/App.jsx": [
+      {
+        "issuer": "src/App.jsx",
+        "request": "react",
+        "kind": "StaticImport",
+        "id": "node_modules/react/index.js"
+      },
+      {
+        "issuer": "src/App.jsx",
+        "request": "./shared/components/CatBackground/CatBackground",
+        "kind": "StaticImport",
+        "id": "src/shared/components/CatBackground/CatBackground.jsx"
+      },
+      {
+        "issuer": "src/App.jsx",
+        "request": "./shared/components/ViewRouter/ViewRouter",
+        "kind": "StaticImport",
+        "id": "src/shared/components/ViewRouter/ViewRouter.jsx"
+      },
+      {
+        "issuer": "src/App.jsx",
+        "request": "./shared/components",
+        "kind": "StaticImport",
+        "id": "src/shared/components/index.js"
+      },
+      {
+        "issuer": "src/App.jsx",
+        "request": "./shared/components/NavBar/NavBar",
+        "kind": "StaticImport",
+        "id": "src/shared/components/NavBar/NavBar.jsx"
+      },
+      {
+        "issuer": "src/App.jsx",
+        "request": "./shared/components/PerformanceDashboard",
+        "kind": "StaticImport",
+        "id": "src/shared/components/PerformanceDashboard/index.js"
+      },
+      {
+        "issuer": "src/App.jsx",
+        "request": "./core/hooks/useUserSession",
+        "kind": "StaticImport",
+        "id": "src/core/hooks/useUserSession.js"
+      },
+      {
+        "issuer": "src/App.jsx",
+        "request": "./core/hooks/useToast",
+        "kind": "StaticImport",
+        "id": "src/core/hooks/useToast.js"
+      },
+      {
+        "issuer": "src/App.jsx",
+        "request": "./core/store/useAppStore",
+        "kind": "StaticImport",
+        "id": "src/core/store/useAppStore.js"
+      },
+      {
+        "issuer": "src/App.jsx",
+        "request": "./shared/services/tournamentService",
+        "kind": "StaticImport",
+        "id": "src/shared/services/tournamentService.js"
+      },
+      {
+        "issuer": "src/App.jsx",
+        "request": "./shared/services/errorManager",
+        "kind": "StaticImport",
+        "id": "src/shared/services/errorManager.js"
+      }
+    ],
+    "node_modules/react/index.js": null,
+    "src/shared/services/errorManager.js": [],
+    "src/core/hooks/useUserSession.js": [
+      {
+        "issuer": "src/core/hooks/useUserSession.js",
+        "request": "react",
+        "kind": "StaticImport",
+        "id": "node_modules/react/index.js"
+      },
+      {
+        "issuer": "src/core/hooks/useUserSession.js",
+        "request": "../../../backend/api/supabaseClient",
+        "kind": "StaticImport",
+        "id": "backend/api/supabaseClient.js"
+      },
+      {
+        "issuer": "src/core/hooks/useUserSession.js",
+        "request": "../store/useAppStore",
+        "kind": "StaticImport",
+        "id": "src/core/store/useAppStore.js"
+      }
+    ],
+    "src/core/hooks/useToast.js": [
+      {
+        "issuer": "src/core/hooks/useToast.js",
+        "request": "react",
+        "kind": "StaticImport",
+        "id": "node_modules/react/index.js"
+      }
+    ],
+    "src/core/store/useAppStore.js": [
+      {
+        "issuer": "src/core/store/useAppStore.js",
+        "request": "zustand",
+        "kind": "StaticImport",
+        "id": "node_modules/zustand/index.js"
+      },
+      {
+        "issuer": "src/core/store/useAppStore.js",
+        "request": "zustand/middleware",
+        "kind": "StaticImport",
+        "id": "node_modules/zustand/middleware.js"
+      },
+      {
+        "issuer": "src/core/store/useAppStore.js",
+        "request": "react",
+        "kind": "StaticImport",
+        "id": "node_modules/react/index.js"
+      }
+    ],
+    "src/shared/services/tournamentService.js": [
+      {
+        "issuer": "src/shared/services/tournamentService.js",
+        "request": "../../../backend/api/supabaseClient",
+        "kind": "StaticImport",
+        "id": "backend/api/supabaseClient.js"
+      }
+    ],
+    "src/shared/components/CatBackground/CatBackground.jsx": [
+      {
+        "issuer": "src/shared/components/CatBackground/CatBackground.jsx",
+        "request": "react",
+        "kind": "StaticImport",
+        "id": "node_modules/react/index.js"
+      }
+    ],
+    "src/shared/components/ViewRouter/ViewRouter.jsx": [
+      {
+        "issuer": "src/shared/components/ViewRouter/ViewRouter.jsx",
+        "request": "react",
+        "kind": "StaticImport",
+        "id": "node_modules/react/index.js"
+      },
+      {
+        "issuer": "src/shared/components/ViewRouter/ViewRouter.jsx",
+        "request": "prop-types",
+        "kind": "StaticImport",
+        "id": "node_modules/prop-types/index.js"
+      },
+      {
+        "issuer": "src/shared/components/ViewRouter/ViewRouter.jsx",
+        "request": "..",
+        "kind": "StaticImport",
+        "id": "src/shared/components/index.js"
+      },
+      {
+        "issuer": "src/shared/components/ViewRouter/ViewRouter.jsx",
+        "request": "../../../features/auth/Login",
+        "kind": "StaticImport",
+        "id": "src/features/auth/Login.jsx"
+      },
+      {
+        "issuer": "src/shared/components/ViewRouter/ViewRouter.jsx",
+        "request": "../../../features/tournament/Tournament",
+        "kind": "DynamicImport",
+        "id": "src/features/tournament/Tournament.jsx"
+      },
+      {
+        "issuer": "src/shared/components/ViewRouter/ViewRouter.jsx",
+        "request": "../../../features/tournament/TournamentSetup",
+        "kind": "DynamicImport",
+        "id": "src/features/tournament/TournamentSetup.jsx"
+      },
+      {
+        "issuer": "src/shared/components/ViewRouter/ViewRouter.jsx",
+        "request": "../../../features/tournament/Results",
+        "kind": "DynamicImport",
+        "id": "src/features/tournament/Results.jsx"
+      },
+      {
+        "issuer": "src/shared/components/ViewRouter/ViewRouter.jsx",
+        "request": "../../../features/profile/Profile",
+        "kind": "DynamicImport",
+        "id": "src/features/profile/Profile.jsx"
+      }
+    ],
+    "src/shared/components/NavBar/NavBar.jsx": [
+      {
+        "issuer": "src/shared/components/NavBar/NavBar.jsx",
+        "request": "react",
+        "kind": "StaticImport",
+        "id": "node_modules/react/index.js"
+      },
+      {
+        "issuer": "src/shared/components/NavBar/NavBar.jsx",
+        "request": "prop-types",
+        "kind": "StaticImport",
+        "id": "node_modules/prop-types/index.js"
+      },
+      {
+        "issuer": "src/shared/components/NavBar/NavBar.jsx",
+        "request": "../Breadcrumb/Breadcrumb",
+        "kind": "StaticImport",
+        "id": "src/shared/components/Breadcrumb/Breadcrumb.jsx"
+      },
+      {
+        "issuer": "src/shared/components/NavBar/NavBar.jsx",
+        "request": "./navbar.css",
+        "kind": "StaticImport",
+        "id": "src/shared/components/NavBar/navbar.css"
+      }
+    ],
+    "node_modules/zustand/middleware.js": null,
+    "src/shared/components/NavBar/navbar.css": [],
+    "src/shared/components/index.js": [
+      {
+        "issuer": "src/shared/components/index.js",
+        "request": "./Button",
+        "kind": "StaticExport",
+        "id": "src/shared/components/Button/index.js"
+      },
+      {
+        "issuer": "src/shared/components/index.js",
+        "request": "./Card",
+        "kind": "StaticExport",
+        "id": "src/shared/components/Card/index.js"
+      },
+      {
+        "issuer": "src/shared/components/index.js",
+        "request": "./Form",
+        "kind": "StaticExport",
+        "id": "src/shared/components/Form/index.js"
+      },
+      {
+        "issuer": "src/shared/components/index.js",
+        "request": "./NavBar/NavBar",
+        "kind": "StaticExport",
+        "id": "src/shared/components/NavBar/NavBar.jsx"
+      },
+      {
+        "issuer": "src/shared/components/index.js",
+        "request": "./Toast/Toast",
+        "kind": "StaticExport",
+        "id": "src/shared/components/Toast/Toast.jsx"
+      },
+      {
+        "issuer": "src/shared/components/index.js",
+        "request": "./Loading/Loading",
+        "kind": "StaticExport",
+        "id": "src/shared/components/Loading/Loading.jsx"
+      },
+      {
+        "issuer": "src/shared/components/index.js",
+        "request": "./Error/Error",
+        "kind": "StaticExport",
+        "id": "src/shared/components/Error/Error.jsx"
+      },
+      {
+        "issuer": "src/shared/components/index.js",
+        "request": "./SkeletonLoader/SkeletonLoader",
+        "kind": "StaticExport",
+        "id": "src/shared/components/SkeletonLoader/SkeletonLoader.jsx"
+      },
+      {
+        "issuer": "src/shared/components/index.js",
+        "request": "./NameCard/NameCard",
+        "kind": "StaticExport",
+        "id": "src/shared/components/NameCard/NameCard.jsx"
+      },
+      {
+        "issuer": "src/shared/components/index.js",
+        "request": "./StatsCard/StatsCard",
+        "kind": "StaticExport",
+        "id": "src/shared/components/StatsCard/StatsCard.jsx"
+      },
+      {
+        "issuer": "src/shared/components/index.js",
+        "request": "./BongoCat/BongoCat",
+        "kind": "StaticExport",
+        "id": "src/shared/components/BongoCat/BongoCat.jsx"
+      }
+    ],
+    "src/shared/components/PerformanceDashboard/index.js": [
+      {
+        "issuer": "src/shared/components/PerformanceDashboard/index.js",
+        "request": "./PerformanceDashboard",
+        "kind": "StaticExport",
+        "id": "src/shared/components/PerformanceDashboard/PerformanceDashboard.jsx"
+      }
+    ],
+    "backend/api/supabaseClient.js": [
+      {
+        "issuer": "backend/api/supabaseClient.js",
+        "request": "@supabase/supabase-js",
+        "kind": "StaticImport",
+        "id": "node_modules/@supabase/supabase-js/dist/module/index.js"
+      },
+      {
+        "issuer": "backend/api/supabaseClient.js",
+        "request": "../../src/shared/utils/coreUtils",
+        "kind": "StaticImport",
+        "id": "src/shared/utils/coreUtils.js"
+      },
+      {
+        "issuer": "backend/api/supabaseClient.js",
+        "request": "../../src/shared/services/errorManager",
+        "kind": "StaticImport",
+        "id": "src/shared/services/errorManager.js"
+      }
+    ],
+    "node_modules/zustand/index.js": null,
+    "node_modules/prop-types/index.js": null,
+    "src/shared/components/Breadcrumb/Breadcrumb.jsx": [
+      {
+        "issuer": "src/shared/components/Breadcrumb/Breadcrumb.jsx",
+        "request": "react",
+        "kind": "StaticImport",
+        "id": "node_modules/react/index.js"
+      },
+      {
+        "issuer": "src/shared/components/Breadcrumb/Breadcrumb.jsx",
+        "request": "prop-types",
+        "kind": "StaticImport",
+        "id": "node_modules/prop-types/index.js"
+      },
+      {
+        "issuer": "src/shared/components/Breadcrumb/Breadcrumb.jsx",
+        "request": "./Breadcrumb.css",
+        "kind": "StaticImport",
+        "id": "src/shared/components/Breadcrumb/Breadcrumb.css"
+      }
+    ],
+    "src/features/auth/Login.jsx": [
+      {
+        "issuer": "src/features/auth/Login.jsx",
+        "request": "react",
+        "kind": "StaticImport",
+        "id": "node_modules/react/index.js"
+      },
+      {
+        "issuer": "src/features/auth/Login.jsx",
+        "request": "prop-types",
+        "kind": "StaticImport",
+        "id": "node_modules/prop-types/index.js"
+      },
+      {
+        "issuer": "src/features/auth/Login.jsx",
+        "request": "../../shared/components",
+        "kind": "StaticImport",
+        "id": "src/shared/components/index.js"
+      },
+      {
+        "issuer": "src/features/auth/Login.jsx",
+        "request": "../../shared/components/BongoCat/BongoCat",
+        "kind": "StaticImport",
+        "id": "src/shared/components/BongoCat/BongoCat.jsx"
+      },
+      {
+        "issuer": "src/features/auth/Login.jsx",
+        "request": "../../core/hooks/useToast",
+        "kind": "StaticImport",
+        "id": "src/core/hooks/useToast.js"
+      },
+      {
+        "issuer": "src/features/auth/Login.jsx",
+        "request": "../../shared/utils/validationUtils",
+        "kind": "StaticImport",
+        "id": "src/shared/utils/validationUtils.js"
+      },
+      {
+        "issuer": "src/features/auth/Login.jsx",
+        "request": "./Login.module.css",
+        "kind": "StaticImport",
+        "id": "src/features/auth/Login.module.css"
+      }
+    ],
+    "src/features/tournament/Tournament.jsx": [
+      {
+        "issuer": "src/features/tournament/Tournament.jsx",
+        "request": "react",
+        "kind": "StaticImport",
+        "id": "node_modules/react/index.js"
+      },
+      {
+        "issuer": "src/features/tournament/Tournament.jsx",
+        "request": "prop-types",
+        "kind": "StaticImport",
+        "id": "node_modules/prop-types/index.js"
+      },
+      {
+        "issuer": "src/features/tournament/Tournament.jsx",
+        "request": "../../core/hooks/useTournament",
+        "kind": "StaticImport",
+        "id": "src/core/hooks/useTournament.js"
+      },
+      {
+        "issuer": "src/features/tournament/Tournament.jsx",
+        "request": "../../core/hooks/useToast",
+        "kind": "StaticImport",
+        "id": "src/core/hooks/useToast.js"
+      },
+      {
+        "issuer": "src/features/tournament/Tournament.jsx",
+        "request": "../../shared/components",
+        "kind": "StaticImport",
+        "id": "src/shared/components/index.js"
+      },
+      {
+        "issuer": "src/features/tournament/Tournament.jsx",
+        "request": "../../shared/components/NameCard/NameCard",
+        "kind": "StaticImport",
+        "id": "src/shared/components/NameCard/NameCard.jsx"
+      },
+      {
+        "issuer": "src/features/tournament/Tournament.jsx",
+        "request": "../../shared/components/Bracket/Bracket",
+        "kind": "StaticImport",
+        "id": "src/shared/components/Bracket/Bracket.jsx"
+      },
+      {
+        "issuer": "src/features/tournament/Tournament.jsx",
+        "request": "./TournamentControls",
+        "kind": "StaticImport",
+        "id": "src/features/tournament/TournamentControls.jsx"
+      },
+      {
+        "issuer": "src/features/tournament/Tournament.jsx",
+        "request": "./Tournament.module.css",
+        "kind": "StaticImport",
+        "id": "src/features/tournament/Tournament.module.css"
+      },
+      {
+        "issuer": "src/features/tournament/Tournament.jsx",
+        "request": "../../shared/utils/coreUtils",
+        "kind": "StaticImport",
+        "id": "src/shared/utils/coreUtils.js"
+      }
+    ],
+    "src/features/tournament/TournamentSetup.jsx": [
+      {
+        "issuer": "src/features/tournament/TournamentSetup.jsx",
+        "request": "react",
+        "kind": "StaticImport",
+        "id": "node_modules/react/index.js"
+      },
+      {
+        "issuer": "src/features/tournament/TournamentSetup.jsx",
+        "request": "prop-types",
+        "kind": "StaticImport",
+        "id": "node_modules/prop-types/index.js"
+      },
+      {
+        "issuer": "src/features/tournament/TournamentSetup.jsx",
+        "request": "../../../backend/api/supabaseClient",
+        "kind": "StaticImport",
+        "id": "backend/api/supabaseClient.js"
+      },
+      {
+        "issuer": "src/features/tournament/TournamentSetup.jsx",
+        "request": "../../shared/utils/coreUtils",
+        "kind": "StaticImport",
+        "id": "src/shared/utils/coreUtils.js"
+      },
+      {
+        "issuer": "src/features/tournament/TournamentSetup.jsx",
+        "request": "../../shared/components",
+        "kind": "StaticImport",
+        "id": "src/shared/components/index.js"
+      },
+      {
+        "issuer": "src/features/tournament/TournamentSetup.jsx",
+        "request": "../../core/hooks/useToast",
+        "kind": "StaticImport",
+        "id": "src/core/hooks/useToast.js"
+      },
+      {
+        "issuer": "src/features/tournament/TournamentSetup.jsx",
+        "request": "../../core/store/useAppStore",
+        "kind": "StaticImport",
+        "id": "src/core/store/useAppStore.js"
+      },
+      {
+        "issuer": "src/features/tournament/TournamentSetup.jsx",
+        "request": "../../core/hooks/useMobileGestures",
+        "kind": "StaticImport",
+        "id": "src/core/hooks/useMobileGestures.js"
+      },
+      {
+        "issuer": "src/features/tournament/TournamentSetup.jsx",
+        "request": "../../shared/utils/validationUtils",
+        "kind": "StaticImport",
+        "id": "src/shared/utils/validationUtils.js"
+      },
+      {
+        "issuer": "src/features/tournament/TournamentSetup.jsx",
+        "request": "../../shared/utils/authUtils",
+        "kind": "StaticImport",
+        "id": "src/shared/utils/authUtils.js"
+      },
+      {
+        "issuer": "src/features/tournament/TournamentSetup.jsx",
+        "request": "./TournamentSetup.module.css",
+        "kind": "StaticImport",
+        "id": "src/features/tournament/TournamentSetup.module.css"
+      }
+    ],
+    "src/features/tournament/Results.jsx": [
+      {
+        "issuer": "src/features/tournament/Results.jsx",
+        "request": "react",
+        "kind": "StaticImport",
+        "id": "node_modules/react/index.js"
+      },
+      {
+        "issuer": "src/features/tournament/Results.jsx",
+        "request": "prop-types",
+        "kind": "StaticImport",
+        "id": "node_modules/prop-types/index.js"
+      },
+      {
+        "issuer": "src/features/tournament/Results.jsx",
+        "request": "./RankingAdjustment",
+        "kind": "StaticImport",
+        "id": "src/features/tournament/RankingAdjustment.jsx"
+      },
+      {
+        "issuer": "src/features/tournament/Results.jsx",
+        "request": "../../shared/components/Bracket/Bracket",
+        "kind": "StaticImport",
+        "id": "src/shared/components/Bracket/Bracket.jsx"
+      },
+      {
+        "issuer": "src/features/tournament/Results.jsx",
+        "request": "../../shared/components/CalendarButton/CalendarButton",
+        "kind": "StaticImport",
+        "id": "src/shared/components/CalendarButton/CalendarButton.jsx"
+      },
+      {
+        "issuer": "src/features/tournament/Results.jsx",
+        "request": "./Results.module.css",
+        "kind": "StaticImport",
+        "id": "src/features/tournament/Results.module.css"
+      },
+      {
+        "issuer": "src/features/tournament/Results.jsx",
+        "request": "../../shared/components/StatsCard/StatsCard",
+        "kind": "StaticImport",
+        "id": "src/shared/components/StatsCard/StatsCard.jsx"
+      }
+    ],
+    "src/features/profile/Profile.jsx": [
+      {
+        "issuer": "src/features/profile/Profile.jsx",
+        "request": "react",
+        "kind": "StaticImport",
+        "id": "node_modules/react/index.js"
+      },
+      {
+        "issuer": "src/features/profile/Profile.jsx",
+        "request": "prop-types",
+        "kind": "StaticImport",
+        "id": "node_modules/prop-types/index.js"
+      },
+      {
+        "issuer": "src/features/profile/Profile.jsx",
+        "request": "../../../backend/api/supabaseClient",
+        "kind": "StaticImport",
+        "id": "backend/api/supabaseClient.js"
+      },
+      {
+        "issuer": "src/features/profile/Profile.jsx",
+        "request": "../../core/hooks/useToast",
+        "kind": "StaticImport",
+        "id": "src/core/hooks/useToast.js"
+      },
+      {
+        "issuer": "src/features/profile/Profile.jsx",
+        "request": "../../core/constants",
+        "kind": "StaticImport",
+        "id": "src/core/constants/index.js"
+      },
+      {
+        "issuer": "src/features/profile/Profile.jsx",
+        "request": "../../shared/services/errorManager",
+        "kind": "StaticImport",
+        "id": "src/shared/services/errorManager.js"
+      },
+      {
+        "issuer": "src/features/profile/Profile.jsx",
+        "request": "../../shared/utils/authUtils",
+        "kind": "StaticImport",
+        "id": "src/shared/utils/authUtils.js"
+      },
+      {
+        "issuer": "src/features/profile/Profile.jsx",
+        "request": "./ProfileStats",
+        "kind": "StaticImport",
+        "id": "src/features/profile/ProfileStats.jsx"
+      },
+      {
+        "issuer": "src/features/profile/Profile.jsx",
+        "request": "./ProfileFilters",
+        "kind": "StaticImport",
+        "id": "src/features/profile/ProfileFilters.jsx"
+      },
+      {
+        "issuer": "src/features/profile/Profile.jsx",
+        "request": "./ProfileNameList",
+        "kind": "StaticImport",
+        "id": "src/features/profile/ProfileNameList.jsx"
+      },
+      {
+        "issuer": "src/features/profile/Profile.jsx",
+        "request": "../admin/DataMigration",
+        "kind": "StaticImport",
+        "id": "src/features/admin/DataMigration.jsx"
+      },
+      {
+        "issuer": "src/features/profile/Profile.jsx",
+        "request": "./Profile.module.css",
+        "kind": "StaticImport",
+        "id": "src/features/profile/Profile.module.css"
+      }
+    ],
+    "src/shared/components/Breadcrumb/Breadcrumb.css": [],
+    "src/features/tournament/TournamentSetup.module.css": [],
+    "src/features/auth/Login.module.css": [],
+    "src/features/tournament/Tournament.module.css": [],
+    "src/features/tournament/Results.module.css": [],
+    "src/features/profile/Profile.module.css": [],
+    "src/shared/components/Toast/Toast.jsx": [
+      {
+        "issuer": "src/shared/components/Toast/Toast.jsx",
+        "request": "react",
+        "kind": "StaticImport",
+        "id": "node_modules/react/index.js"
+      },
+      {
+        "issuer": "src/shared/components/Toast/Toast.jsx",
+        "request": "prop-types",
+        "kind": "StaticImport",
+        "id": "node_modules/prop-types/index.js"
+      },
+      {
+        "issuer": "src/shared/components/Toast/Toast.jsx",
+        "request": "./Toast.module.css",
+        "kind": "StaticImport",
+        "id": "src/shared/components/Toast/Toast.module.css"
+      }
+    ],
+    "src/shared/components/Error/Error.jsx": [
+      {
+        "issuer": "src/shared/components/Error/Error.jsx",
+        "request": "react",
+        "kind": "StaticImport",
+        "id": "node_modules/react/index.js"
+      },
+      {
+        "issuer": "src/shared/components/Error/Error.jsx",
+        "request": "prop-types",
+        "kind": "StaticImport",
+        "id": "node_modules/prop-types/index.js"
+      },
+      {
+        "issuer": "src/shared/components/Error/Error.jsx",
+        "request": "../../services/errorManager",
+        "kind": "StaticImport",
+        "id": "src/shared/services/errorManager.js"
+      },
+      {
+        "issuer": "src/shared/components/Error/Error.jsx",
+        "request": "./Error.module.css",
+        "kind": "StaticImport",
+        "id": "src/shared/components/Error/Error.module.css"
+      }
+    ],
+    "src/shared/components/Loading/Loading.jsx": [
+      {
+        "issuer": "src/shared/components/Loading/Loading.jsx",
+        "request": "react",
+        "kind": "StaticImport",
+        "id": "node_modules/react/index.js"
+      },
+      {
+        "issuer": "src/shared/components/Loading/Loading.jsx",
+        "request": "prop-types",
+        "kind": "StaticImport",
+        "id": "node_modules/prop-types/index.js"
+      },
+      {
+        "issuer": "src/shared/components/Loading/Loading.jsx",
+        "request": "./Loading.module.css",
+        "kind": "StaticImport",
+        "id": "src/shared/components/Loading/Loading.module.css"
+      }
+    ],
+    "src/shared/components/SkeletonLoader/SkeletonLoader.jsx": [
+      {
+        "issuer": "src/shared/components/SkeletonLoader/SkeletonLoader.jsx",
+        "request": "react",
+        "kind": "StaticImport",
+        "id": "node_modules/react/index.js"
+      },
+      {
+        "issuer": "src/shared/components/SkeletonLoader/SkeletonLoader.jsx",
+        "request": "prop-types",
+        "kind": "StaticImport",
+        "id": "node_modules/prop-types/index.js"
+      },
+      {
+        "issuer": "src/shared/components/SkeletonLoader/SkeletonLoader.jsx",
+        "request": "./SkeletonLoader.module.css",
+        "kind": "StaticImport",
+        "id": "src/shared/components/SkeletonLoader/SkeletonLoader.module.css"
+      }
+    ],
+    "src/shared/components/NameCard/NameCard.jsx": [
+      {
+        "issuer": "src/shared/components/NameCard/NameCard.jsx",
+        "request": "react",
+        "kind": "StaticImport",
+        "id": "node_modules/react/index.js"
+      },
+      {
+        "issuer": "src/shared/components/NameCard/NameCard.jsx",
+        "request": "prop-types",
+        "kind": "StaticImport",
+        "id": "node_modules/prop-types/index.js"
+      },
+      {
+        "issuer": "src/shared/components/NameCard/NameCard.jsx",
+        "request": "./NameCard.module.css",
+        "kind": "StaticImport",
+        "id": "src/shared/components/NameCard/NameCard.module.css"
+      }
+    ],
+    "src/shared/components/StatsCard/StatsCard.jsx": [
+      {
+        "issuer": "src/shared/components/StatsCard/StatsCard.jsx",
+        "request": "react",
+        "kind": "StaticImport",
+        "id": "node_modules/react/index.js"
+      },
+      {
+        "issuer": "src/shared/components/StatsCard/StatsCard.jsx",
+        "request": "./StatsCard.module.css",
+        "kind": "StaticImport",
+        "id": "src/shared/components/StatsCard/StatsCard.module.css"
+      }
+    ],
+    "src/shared/components/BongoCat/BongoCat.jsx": [
+      {
+        "issuer": "src/shared/components/BongoCat/BongoCat.jsx",
+        "request": "react",
+        "kind": "StaticImport",
+        "id": "node_modules/react/index.js"
+      },
+      {
+        "issuer": "src/shared/components/BongoCat/BongoCat.jsx",
+        "request": "prop-types",
+        "kind": "StaticImport",
+        "id": "node_modules/prop-types/index.js"
+      },
+      {
+        "issuer": "src/shared/components/BongoCat/BongoCat.jsx",
+        "request": "../../../core/hooks/useBongoCat",
+        "kind": "StaticImport",
+        "id": "src/core/hooks/useBongoCat.js"
+      },
+      {
+        "issuer": "src/shared/components/BongoCat/BongoCat.jsx",
+        "request": "./BongoCat.module.css",
+        "kind": "StaticImport",
+        "id": "src/shared/components/BongoCat/BongoCat.module.css"
+      }
+    ],
+    "src/shared/components/PerformanceDashboard/PerformanceDashboard.jsx": [
+      {
+        "issuer": "src/shared/components/PerformanceDashboard/PerformanceDashboard.jsx",
+        "request": "react",
+        "kind": "StaticImport",
+        "id": "node_modules/react/index.js"
+      },
+      {
+        "issuer": "src/shared/components/PerformanceDashboard/PerformanceDashboard.jsx",
+        "request": "prop-types",
+        "kind": "StaticImport",
+        "id": "node_modules/prop-types/index.js"
+      },
+      {
+        "issuer": "src/shared/components/PerformanceDashboard/PerformanceDashboard.jsx",
+        "request": "../../utils/coreUtils",
+        "kind": "StaticImport",
+        "id": "src/shared/utils/coreUtils.js"
+      },
+      {
+        "issuer": "src/shared/components/PerformanceDashboard/PerformanceDashboard.jsx",
+        "request": "./PerformanceDashboard.module.css",
+        "kind": "StaticImport",
+        "id": "src/shared/components/PerformanceDashboard/PerformanceDashboard.module.css"
+      }
+    ],
+    "node_modules/@supabase/supabase-js/dist/module/index.js": null,
+    "src/shared/utils/coreUtils.js": [],
+    "src/core/hooks/useMobileGestures.js": [
+      {
+        "issuer": "src/core/hooks/useMobileGestures.js",
+        "request": "react",
+        "kind": "StaticImport",
+        "id": "node_modules/react/index.js"
+      },
+      {
+        "issuer": "src/core/hooks/useMobileGestures.js",
+        "request": "../../shared/utils/mobileGestures",
+        "kind": "StaticImport",
+        "id": "src/shared/utils/mobileGestures.js"
+      }
+    ],
+    "src/shared/utils/validationUtils.js": [
+      {
+        "issuer": "src/shared/utils/validationUtils.js",
+        "request": "../../core/constants",
+        "kind": "StaticImport",
+        "id": "src/core/constants/index.js"
+      }
+    ],
+    "src/shared/utils/authUtils.js": [
+      {
+        "issuer": "src/shared/utils/authUtils.js",
+        "request": "../../../backend/api/supabaseClient",
+        "kind": "StaticImport",
+        "id": "backend/api/supabaseClient.js"
+      }
+    ],
+    "src/core/hooks/useTournament.js": [
+      {
+        "issuer": "src/core/hooks/useTournament.js",
+        "request": "react",
+        "kind": "StaticImport",
+        "id": "node_modules/react/index.js"
+      },
+      {
+        "issuer": "src/core/hooks/useTournament.js",
+        "request": "../../features/tournament/PreferenceSorter",
+        "kind": "StaticImport",
+        "id": "src/features/tournament/PreferenceSorter.jsx"
+      },
+      {
+        "issuer": "src/core/hooks/useTournament.js",
+        "request": "../../features/tournament/EloRating",
+        "kind": "StaticImport",
+        "id": "src/features/tournament/EloRating.jsx"
+      },
+      {
+        "issuer": "src/core/hooks/useTournament.js",
+        "request": "./useLocalStorage",
+        "kind": "StaticImport",
+        "id": "src/core/hooks/useLocalStorage.js"
+      },
+      {
+        "issuer": "src/core/hooks/useTournament.js",
+        "request": "./useUserSession",
+        "kind": "StaticImport",
+        "id": "src/core/hooks/useUserSession.js"
+      },
+      {
+        "issuer": "src/core/hooks/useTournament.js",
+        "request": "../store/useAppStore",
+        "kind": "StaticImport",
+        "id": "src/core/store/useAppStore.js"
+      },
+      {
+        "issuer": "src/core/hooks/useTournament.js",
+        "request": "../../shared/utils/coreUtils",
+        "kind": "StaticImport",
+        "id": "src/shared/utils/coreUtils.js"
+      }
+    ],
+    "src/shared/components/Bracket/Bracket.jsx": [
+      {
+        "issuer": "src/shared/components/Bracket/Bracket.jsx",
+        "request": "react",
+        "kind": "StaticImport",
+        "id": "node_modules/react/index.js"
+      },
+      {
+        "issuer": "src/shared/components/Bracket/Bracket.jsx",
+        "request": "prop-types",
+        "kind": "StaticImport",
+        "id": "node_modules/prop-types/index.js"
+      },
+      {
+        "issuer": "src/shared/components/Bracket/Bracket.jsx",
+        "request": "./Bracket.module.css",
+        "kind": "StaticImport",
+        "id": "src/shared/components/Bracket/Bracket.module.css"
+      }
+    ],
+    "src/features/tournament/RankingAdjustment.jsx": [
+      {
+        "issuer": "src/features/tournament/RankingAdjustment.jsx",
+        "request": "react",
+        "kind": "StaticImport",
+        "id": "node_modules/react/index.js"
+      },
+      {
+        "issuer": "src/features/tournament/RankingAdjustment.jsx",
+        "request": "prop-types",
+        "kind": "StaticImport",
+        "id": "node_modules/prop-types/index.js"
+      },
+      {
+        "issuer": "src/features/tournament/RankingAdjustment.jsx",
+        "request": "@hello-pangea/dnd",
+        "kind": "StaticImport",
+        "id": "node_modules/@hello-pangea/dnd/dist/dnd.esm.js"
+      },
+      {
+        "issuer": "src/features/tournament/RankingAdjustment.jsx",
+        "request": "./RankingAdjustment.css",
+        "kind": "StaticImport",
+        "id": "src/features/tournament/RankingAdjustment.css"
+      }
+    ],
+    "src/features/tournament/TournamentControls.jsx": [
+      {
+        "issuer": "src/features/tournament/TournamentControls.jsx",
+        "request": "react",
+        "kind": "StaticImport",
+        "id": "node_modules/react/index.js"
+      },
+      {
+        "issuer": "src/features/tournament/TournamentControls.jsx",
+        "request": "prop-types",
+        "kind": "StaticImport",
+        "id": "node_modules/prop-types/index.js"
+      },
+      {
+        "issuer": "src/features/tournament/TournamentControls.jsx",
+        "request": "@heroicons/react/24/outline",
+        "kind": "StaticImport",
+        "id": "node_modules/@heroicons/react/24/outline/index.js"
+      },
+      {
+        "issuer": "src/features/tournament/TournamentControls.jsx",
+        "request": "./Tournament.module.css",
+        "kind": "StaticImport",
+        "id": "src/features/tournament/Tournament.module.css"
+      }
+    ],
+    "src/features/profile/ProfileFilters.jsx": [
+      {
+        "issuer": "src/features/profile/ProfileFilters.jsx",
+        "request": "react",
+        "kind": "StaticImport",
+        "id": "node_modules/react/index.js"
+      },
+      {
+        "issuer": "src/features/profile/ProfileFilters.jsx",
+        "request": "prop-types",
+        "kind": "StaticImport",
+        "id": "node_modules/prop-types/index.js"
+      },
+      {
+        "issuer": "src/features/profile/ProfileFilters.jsx",
+        "request": "../../core/constants",
+        "kind": "StaticImport",
+        "id": "src/core/constants/index.js"
+      },
+      {
+        "issuer": "src/features/profile/ProfileFilters.jsx",
+        "request": "./ProfileFilters.module.css",
+        "kind": "StaticImport",
+        "id": "src/features/profile/ProfileFilters.module.css"
+      }
+    ],
+    "src/features/admin/DataMigration.jsx": [
+      {
+        "issuer": "src/features/admin/DataMigration.jsx",
+        "request": "react",
+        "kind": "StaticImport",
+        "id": "node_modules/react/index.js"
+      },
+      {
+        "issuer": "src/features/admin/DataMigration.jsx",
+        "request": "../../../backend/api/supabaseClient",
+        "kind": "StaticImport",
+        "id": "backend/api/supabaseClient.js"
+      },
+      {
+        "issuer": "src/features/admin/DataMigration.jsx",
+        "request": "../../core/hooks/useToast",
+        "kind": "StaticImport",
+        "id": "src/core/hooks/useToast.js"
+      },
+      {
+        "issuer": "src/features/admin/DataMigration.jsx",
+        "request": "./DataMigration.module.css",
+        "kind": "StaticImport",
+        "id": "src/features/admin/DataMigration.module.css"
+      }
+    ],
+    "src/features/profile/ProfileNameList.jsx": [
+      {
+        "issuer": "src/features/profile/ProfileNameList.jsx",
+        "request": "react",
+        "kind": "StaticImport",
+        "id": "node_modules/react/index.js"
+      },
+      {
+        "issuer": "src/features/profile/ProfileNameList.jsx",
+        "request": "prop-types",
+        "kind": "StaticImport",
+        "id": "node_modules/prop-types/index.js"
+      },
+      {
+        "issuer": "src/features/profile/ProfileNameList.jsx",
+        "request": "../../shared/components/NameCard/NameCard",
+        "kind": "StaticImport",
+        "id": "src/shared/components/NameCard/NameCard.jsx"
+      },
+      {
+        "issuer": "src/features/profile/ProfileNameList.jsx",
+        "request": "../../shared/components",
+        "kind": "StaticImport",
+        "id": "src/shared/components/index.js"
+      },
+      {
+        "issuer": "src/features/profile/ProfileNameList.jsx",
+        "request": "../../core/constants",
+        "kind": "StaticImport",
+        "id": "src/core/constants/index.js"
+      },
+      {
+        "issuer": "src/features/profile/ProfileNameList.jsx",
+        "request": "./ProfileNameList.module.css",
+        "kind": "StaticImport",
+        "id": "src/features/profile/ProfileNameList.module.css"
+      }
+    ],
+    "src/features/profile/ProfileStats.jsx": [
+      {
+        "issuer": "src/features/profile/ProfileStats.jsx",
+        "request": "react",
+        "kind": "StaticImport",
+        "id": "node_modules/react/index.js"
+      },
+      {
+        "issuer": "src/features/profile/ProfileStats.jsx",
+        "request": "prop-types",
+        "kind": "StaticImport",
+        "id": "node_modules/prop-types/index.js"
+      },
+      {
+        "issuer": "src/features/profile/ProfileStats.jsx",
+        "request": "../../shared/components/StatsCard/StatsCard",
+        "kind": "StaticImport",
+        "id": "src/shared/components/StatsCard/StatsCard.jsx"
+      },
+      {
+        "issuer": "src/features/profile/ProfileStats.jsx",
+        "request": "./ProfileStats.module.css",
+        "kind": "StaticImport",
+        "id": "src/features/profile/ProfileStats.module.css"
+      }
+    ],
+    "src/shared/components/CalendarButton/CalendarButton.jsx": [
+      {
+        "issuer": "src/shared/components/CalendarButton/CalendarButton.jsx",
+        "request": "react",
+        "kind": "StaticImport",
+        "id": "node_modules/react/index.js"
+      },
+      {
+        "issuer": "src/shared/components/CalendarButton/CalendarButton.jsx",
+        "request": "prop-types",
+        "kind": "StaticImport",
+        "id": "node_modules/prop-types/index.js"
+      },
+      {
+        "issuer": "src/shared/components/CalendarButton/CalendarButton.jsx",
+        "request": "./CalendarButton.module.css",
+        "kind": "StaticImport",
+        "id": "src/shared/components/CalendarButton/CalendarButton.module.css"
+      }
+    ],
+    "src/shared/components/Toast/Toast.module.css": [],
+    "src/shared/components/Error/Error.module.css": [],
+    "src/shared/components/SkeletonLoader/SkeletonLoader.module.css": [],
+    "src/shared/components/Loading/Loading.module.css": [],
+    "src/shared/components/BongoCat/BongoCat.module.css": [],
+    "src/shared/components/StatsCard/StatsCard.module.css": [],
+    "src/shared/components/NameCard/NameCard.module.css": [],
+    "src/shared/components/PerformanceDashboard/PerformanceDashboard.module.css": [],
+    "src/shared/components/Button/index.js": [
+      {
+        "issuer": "src/shared/components/Button/index.js",
+        "request": "./Button",
+        "kind": "StaticExport",
+        "id": "src/shared/components/Button/Button.jsx"
+      },
+      {
+        "issuer": "src/shared/components/Button/index.js",
+        "request": "./Button",
+        "kind": "StaticExport",
+        "id": "src/shared/components/Button/Button.jsx"
+      }
+    ],
+    "src/shared/components/Form/index.js": [
+      {
+        "issuer": "src/shared/components/Form/index.js",
+        "request": "./Form",
+        "kind": "StaticExport",
+        "id": "src/shared/components/Form/Form.jsx"
+      },
+      {
+        "issuer": "src/shared/components/Form/index.js",
+        "request": "./Input",
+        "kind": "StaticExport",
+        "id": "src/shared/components/Form/Input.jsx"
+      },
+      {
+        "issuer": "src/shared/components/Form/index.js",
+        "request": "./Select",
+        "kind": "StaticExport",
+        "id": "src/shared/components/Form/Select.jsx"
+      },
+      {
+        "issuer": "src/shared/components/Form/index.js",
+        "request": "./Form",
+        "kind": "StaticExport",
+        "id": "src/shared/components/Form/Form.jsx"
+      }
+    ],
+    "src/shared/components/Card/index.js": [
+      {
+        "issuer": "src/shared/components/Card/index.js",
+        "request": "./Card",
+        "kind": "StaticExport",
+        "id": "src/shared/components/Card/Card.jsx"
+      }
+    ],
+    "node_modules/@heroicons/react/24/outline/index.js": null,
+    "src/features/profile/ProfileFilters.module.css": [],
+    "src/shared/components/Bracket/Bracket.module.css": [],
+    "src/features/tournament/RankingAdjustment.css": [],
+    "src/features/admin/DataMigration.module.css": [],
+    "src/features/profile/ProfileNameList.module.css": [],
+    "src/features/profile/ProfileStats.module.css": [],
+    "src/core/hooks/useBongoCat.js": [
+      {
+        "issuer": "src/core/hooks/useBongoCat.js",
+        "request": "react",
+        "kind": "StaticImport",
+        "id": "node_modules/react/index.js"
+      }
+    ],
+    "src/shared/components/CalendarButton/CalendarButton.module.css": [],
+    "src/core/constants/index.js": [],
+    "src/shared/utils/mobileGestures.js": [],
+    "src/core/hooks/useLocalStorage.js": [
+      {
+        "issuer": "src/core/hooks/useLocalStorage.js",
+        "request": "react",
+        "kind": "StaticImport",
+        "id": "node_modules/react/index.js"
+      }
+    ],
+    "src/features/tournament/PreferenceSorter.jsx": [],
+    "src/features/tournament/EloRating.jsx": [],
+    "node_modules/@hello-pangea/dnd/dist/dnd.esm.js": null,
+    "src/shared/components/Button/Button.jsx": [
+      {
+        "issuer": "src/shared/components/Button/Button.jsx",
+        "request": "react",
+        "kind": "StaticImport",
+        "id": "node_modules/react/index.js"
+      },
+      {
+        "issuer": "src/shared/components/Button/Button.jsx",
+        "request": "prop-types",
+        "kind": "StaticImport",
+        "id": "node_modules/prop-types/index.js"
+      },
+      {
+        "issuer": "src/shared/components/Button/Button.jsx",
+        "request": "./Button.module.css",
+        "kind": "StaticImport",
+        "id": "src/shared/components/Button/Button.module.css"
+      }
+    ],
+    "src/shared/components/Card/Card.jsx": [
+      {
+        "issuer": "src/shared/components/Card/Card.jsx",
+        "request": "react",
+        "kind": "StaticImport",
+        "id": "node_modules/react/index.js"
+      },
+      {
+        "issuer": "src/shared/components/Card/Card.jsx",
+        "request": "prop-types",
+        "kind": "StaticImport",
+        "id": "node_modules/prop-types/index.js"
+      },
+      {
+        "issuer": "src/shared/components/Card/Card.jsx",
+        "request": "./Card.module.css",
+        "kind": "StaticImport",
+        "id": "src/shared/components/Card/Card.module.css"
+      }
+    ],
+    "src/shared/components/Form/Form.jsx": [
+      {
+        "issuer": "src/shared/components/Form/Form.jsx",
+        "request": "react",
+        "kind": "StaticImport",
+        "id": "node_modules/react/index.js"
+      },
+      {
+        "issuer": "src/shared/components/Form/Form.jsx",
+        "request": "prop-types",
+        "kind": "StaticImport",
+        "id": "node_modules/prop-types/index.js"
+      },
+      {
+        "issuer": "src/shared/components/Form/Form.jsx",
+        "request": "./Form.module.css",
+        "kind": "StaticImport",
+        "id": "src/shared/components/Form/Form.module.css"
+      }
+    ],
+    "src/shared/components/Form/Select.jsx": [
+      {
+        "issuer": "src/shared/components/Form/Select.jsx",
+        "request": "react",
+        "kind": "StaticImport",
+        "id": "node_modules/react/index.js"
+      },
+      {
+        "issuer": "src/shared/components/Form/Select.jsx",
+        "request": "prop-types",
+        "kind": "StaticImport",
+        "id": "node_modules/prop-types/index.js"
+      },
+      {
+        "issuer": "src/shared/components/Form/Select.jsx",
+        "request": "./Form.module.css",
+        "kind": "StaticImport",
+        "id": "src/shared/components/Form/Form.module.css"
+      }
+    ],
+    "src/shared/components/Form/Input.jsx": [
+      {
+        "issuer": "src/shared/components/Form/Input.jsx",
+        "request": "react",
+        "kind": "StaticImport",
+        "id": "node_modules/react/index.js"
+      },
+      {
+        "issuer": "src/shared/components/Form/Input.jsx",
+        "request": "prop-types",
+        "kind": "StaticImport",
+        "id": "node_modules/prop-types/index.js"
+      },
+      {
+        "issuer": "src/shared/components/Form/Input.jsx",
+        "request": "./Form.module.css",
+        "kind": "StaticImport",
+        "id": "src/shared/components/Form/Form.module.css"
+      }
+    ],
+    "src/shared/components/Card/Card.module.css": [],
+    "src/shared/components/Button/Button.module.css": [],
+    "src/shared/components/Form/Form.module.css": []
+  },
+  "circulars": []
+}

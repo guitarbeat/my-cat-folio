@@ -423,6 +423,7 @@ function NavBar({
           id="mobile-menu"
           className={`navbar__mobile-menu ${isMobileMenuOpen ? 'visible' : ''}`}
           aria-hidden={!isMobileMenuOpen}
+          inert={!isMobileMenuOpen}
         >
           <div className="navbar__mobile-menu-header">
             {logoItem}
