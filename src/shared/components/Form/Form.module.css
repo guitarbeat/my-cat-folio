@@ -1,0 +1,283 @@
+/* Form Component Styles - Unified form system */
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+/* Input Group */
+.inputGroup {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+/* Labels */
+.label {
+  display: block;
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.required {
+  margin-left: var(--space-1);
+  color: var(--error-500);
+}
+
+/* Input Styles */
+.input {
+  width: 100%;
+  min-height: 40px;
+  padding: var(--space-3);
+  font-size: var(--text-base);
+  color: var(--text-primary);
+  background: var(--surface-color);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  transition: all var(--transition-smooth);
+}
+
+.input:focus {
+  outline: none;
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 3px rgb(232 191 118 / 20%);
+}
+
+.input:disabled {
+  cursor: not-allowed;
+  background: var(--card-background);
+  opacity: 0.7;
+}
+
+.input--error {
+  border-color: var(--error-500);
+}
+
+.input--error:focus {
+  box-shadow: 0 0 0 3px rgb(var(--error-rgb) / 20%);
+}
+
+/* Select Styles */
+.select {
+  width: 100%;
+  min-height: 40px;
+  padding: var(--space-3);
+  font-size: var(--text-base);
+  color: var(--text-primary);
+  background: var(--surface-color);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all var(--transition-smooth);
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+  background-position: right var(--space-3) center;
+  background-repeat: no-repeat;
+  background-size: 16px;
+  padding-right: calc(var(--space-3) + 20px);
+}
+
+.select:focus {
+  outline: none;
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 3px rgb(232 191 118 / 20%);
+}
+
+.select:disabled {
+  cursor: not-allowed;
+  background: var(--card-background);
+  opacity: 0.7;
+}
+
+.select--error {
+  border-color: var(--error-500);
+}
+
+.select--error:focus {
+  box-shadow: 0 0 0 3px rgb(var(--error-rgb) / 20%);
+}
+
+/* Error Text */
+.errorText {
+  font-size: var(--text-sm);
+  color: var(--error-500);
+  line-height: 1.5;
+}
+
+/* Form Actions */
+.formActions {
+  display: flex;
+  gap: var(--space-3);
+  align-items: center;
+  justify-content: flex-end;
+  margin-top: var(--space-4);
+}
+
+.formActions--center {
+  justify-content: center;
+}
+
+.formActions--start {
+  justify-content: flex-start;
+}
+
+/* Form Groups */
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.formGroup--row {
+  flex-direction: row;
+  align-items: flex-end;
+}
+
+.formGroup--inline {
+  flex-direction: row;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+/* Fieldset */
+.fieldset {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+}
+
+.legend {
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--text-secondary);
+  padding: 0 var(--space-2);
+}
+
+/* Checkbox and Radio */
+.checkboxGroup,
+.radioGroup {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.checkboxItem,
+.radioItem {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  cursor: pointer;
+}
+
+.checkboxInput,
+.radioInput {
+  width: 16px;
+  height: 16px;
+  margin: 0;
+  cursor: pointer;
+}
+
+.checkboxLabel,
+.radioLabel {
+  font-size: var(--text-sm);
+  color: var(--text-primary);
+  cursor: pointer;
+  user-select: none;
+}
+
+/* Mobile optimizations */
+@media (width <= 768px) {
+  .input,
+  .select {
+    min-height: 48px;
+    padding: var(--space-3) var(--space-4);
+    font-size: var(--text-base);
+  }
+
+  .formActions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .formGroup--row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .formGroup--inline {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--space-2);
+  }
+}
+
+@media (width <= 480px) {
+  .input,
+  .select {
+    min-height: 44px;
+    padding: var(--space-2) var(--space-3);
+    font-size: var(--text-sm);
+  }
+
+  .form {
+    gap: var(--space-3);
+  }
+
+  .formActions {
+    gap: var(--space-2);
+  }
+}
+
+/* Touch device optimizations */
+@media (hover: none) and (pointer: coarse) {
+  .input:active,
+  .select:active {
+    transform: scale(0.98);
+    transition: transform 0.1s ease;
+  }
+
+  .checkboxItem:active,
+  .radioItem:active {
+    transform: scale(0.98);
+    transition: transform 0.1s ease;
+  }
+}
+
+/* High contrast mode */
+@media (prefers-contrast: more) {
+  .input,
+  .select {
+    border-width: 2px;
+  }
+
+  .input:focus,
+  .select:focus {
+    box-shadow:
+      0 0 0 2px var(--background-color),
+      0 0 0 4px var(--accent-color);
+  }
+
+  .input--error,
+  .select--error {
+    border-width: 3px;
+  }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .input,
+  .select {
+    transition: none;
+  }
+
+  .input:active,
+  .select:active {
+    transform: none;
+  }
+}

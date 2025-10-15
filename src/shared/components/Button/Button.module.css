@@ -1,0 +1,232 @@
+/* Button Component Styles - Unified button system */
+
+.btn {
+  /* Base button styles */
+  position: relative;
+  display: inline-flex;
+  gap: var(--space-2);
+  align-items: center;
+  justify-content: center;
+  min-height: 36px;
+  padding: var(--space-2) var(--space-4);
+  font-family: inherit;
+  font-size: var(--text-base);
+  font-weight: 500;
+  line-height: 1.5;
+  color: white;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  user-select: none;
+  background: var(--charcoal);
+  border: 1px solid var(--charcoal);
+  border-radius: var(--radius-md);
+  transition: all var(--transition-smooth);
+  will-change: transform;
+}
+
+.btn:focus {
+  outline: none;
+}
+
+.btn:focus-visible {
+  box-shadow:
+    0 0 0 2px var(--background-color),
+    0 0 0 4px var(--accent-color);
+}
+
+/* Button variants */
+.btn--primary {
+  color: white;
+  background: var(--charcoal);
+  border-color: var(--charcoal);
+}
+
+.btn--primary:hover:not(:disabled) {
+  background: var(--primary-700);
+  border-color: var(--primary-700);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+.btn--secondary {
+  color: var(--text-primary);
+  background: var(--blue-gray);
+  border-color: var(--border-color);
+}
+
+.btn--secondary:hover:not(:disabled) {
+  color: var(--text-primary);
+  background: var(--accent-color);
+  border-color: var(--accent-color);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+.btn--danger {
+  color: white;
+  background: rgb(var(--error-rgb));
+  border-color: rgba(var(--error-rgb), 0.9);
+}
+
+.btn--danger:hover:not(:disabled) {
+  background: color-mix(in srgb, rgb(var(--error-rgb)) 90%, black 10%);
+  border-color: color-mix(in srgb, rgb(var(--error-rgb)) 85%, black 15%);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+.btn--ghost {
+  color: var(--text-primary);
+  background: transparent;
+  border-color: transparent;
+}
+
+.btn--ghost:hover:not(:disabled) {
+  color: var(--text-primary);
+  background: var(--card-hover);
+  border-color: var(--border-color);
+}
+
+/* Button sizes */
+.btn--small {
+  min-height: 32px;
+  padding: var(--space-1) var(--space-3);
+  font-size: var(--text-sm);
+  border-radius: var(--radius-sm);
+}
+
+.btn--medium {
+  min-height: 36px;
+  padding: var(--space-2) var(--space-4);
+  font-size: var(--text-base);
+  border-radius: var(--radius-md);
+}
+
+.btn--large {
+  min-height: 44px;
+  padding: var(--space-3) var(--space-6);
+  font-size: var(--text-lg);
+  border-radius: var(--radius-lg);
+}
+
+/* Button states */
+.btn--disabled {
+  cursor: not-allowed;
+  opacity: 0.7;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+.btn--loading {
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* Loading spinner */
+.loader {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.loader__spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid transparent;
+  border-top: 2px solid currentColor;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Button content */
+.btn__content {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  transition: opacity var(--transition-smooth);
+}
+
+.btn__content--loading {
+  opacity: 0.7;
+}
+
+/* Icon buttons */
+.btn--icon {
+  width: 40px;
+  height: 40px;
+  padding: 0;
+}
+
+.btn--icon.btn--small {
+  width: 32px;
+  height: 32px;
+}
+
+.btn--icon.btn--large {
+  width: 48px;
+  height: 48px;
+}
+
+/* Touch device optimizations */
+@media (hover: none) and (pointer: coarse) {
+  .btn:active:not(:disabled) {
+    transform: scale(0.95);
+    transition: transform 0.1s ease;
+  }
+
+  .btn--primary:active:not(:disabled) {
+    background: var(--primary-800);
+  }
+
+  .btn--secondary:active:not(:disabled) {
+    background: var(--primary-100);
+  }
+
+  .btn--danger:active:not(:disabled) {
+    background: color-mix(in srgb, rgb(var(--error-rgb)) 80%, black 20%);
+  }
+
+  .btn--ghost:active:not(:disabled) {
+    background: var(--surface-color);
+  }
+}
+
+/* High contrast mode */
+@media (prefers-contrast: more) {
+  .btn {
+    border-width: 2px;
+  }
+
+  .btn:focus-visible {
+    box-shadow:
+      0 0 0 2px var(--background-color),
+      0 0 0 4px var(--accent-color);
+  }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .btn {
+    transition: none;
+  }
+
+  .btn:hover:not(:disabled) {
+    transform: none;
+  }
+
+  .btn:active:not(:disabled) {
+    transform: none;
+  }
+
+  .loader__spinner {
+    animation: none;
+  }
+}
