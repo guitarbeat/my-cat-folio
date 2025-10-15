@@ -14,6 +14,39 @@ export type Database = {
   }
   public: {
     Tables: {
+      cat_app_users: {
+        Row: {
+          created_at: string | null
+          id: string
+          last_login: string | null
+          preferences: Json | null
+          tournament_data: Json | null
+          updated_at: string | null
+          user_name: string
+          user_role: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          last_login?: string | null
+          preferences?: Json | null
+          tournament_data?: Json | null
+          updated_at?: string | null
+          user_name: string
+          user_role?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          last_login?: string | null
+          preferences?: Json | null
+          tournament_data?: Json | null
+          updated_at?: string | null
+          user_name?: string
+          user_role?: string | null
+        }
+        Relationships: []
+      }
       cat_name_options: {
         Row: {
           created_at: string | null
@@ -22,7 +55,7 @@ export type Database = {
           is_hidden: boolean | null
           name: string
           updated_at: string | null
-          user_id: string | null
+          user_name: string | null
         }
         Insert: {
           created_at?: string | null
@@ -31,7 +64,7 @@ export type Database = {
           is_hidden?: boolean | null
           name: string
           updated_at?: string | null
-          user_id?: string | null
+          user_name?: string | null
         }
         Update: {
           created_at?: string | null
@@ -40,7 +73,7 @@ export type Database = {
           is_hidden?: boolean | null
           name?: string
           updated_at?: string | null
-          user_id?: string | null
+          user_name?: string | null
         }
         Relationships: []
       }
@@ -52,7 +85,7 @@ export type Database = {
           name_id: string
           rating: number | null
           updated_at: string | null
-          user_id: string
+          user_name: string
           wins: number | null
         }
         Insert: {
@@ -62,7 +95,7 @@ export type Database = {
           name_id: string
           rating?: number | null
           updated_at?: string | null
-          user_id: string
+          user_name?: string
           wins?: number | null
         }
         Update: {
@@ -72,7 +105,7 @@ export type Database = {
           name_id?: string
           rating?: number | null
           updated_at?: string | null
-          user_id?: string
+          user_name?: string
           wins?: number | null
         }
         Relationships: [
@@ -116,7 +149,7 @@ export type Database = {
           name_id: string
           selected_at: string | null
           tournament_id: string
-          user_id: string
+          user_name: string
         }
         Insert: {
           created_at?: string | null
@@ -124,7 +157,7 @@ export type Database = {
           name_id: string
           selected_at?: string | null
           tournament_id: string
-          user_id: string
+          user_name?: string
         }
         Update: {
           created_at?: string | null
@@ -132,7 +165,7 @@ export type Database = {
           name_id?: string
           selected_at?: string | null
           tournament_id?: string
-          user_id?: string
+          user_name?: string
         }
         Relationships: [
           {

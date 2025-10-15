@@ -2,7 +2,7 @@ import React, { lazy } from 'react';
 import PropTypes from 'prop-types';
 import SuspenseView from '../SuspenseView/SuspenseView';
 import { ErrorBoundary, WelcomeScreen } from '..';
-import { AuthPage } from '../../../features/auth/AuthPage';
+import Login from '../../../features/auth/Login';
 
 const Tournament = lazy(() => import('../../../features/tournament/Tournament'));
 const TournamentSetup = lazy(() => import('../../../features/tournament/TournamentSetup'));
@@ -35,9 +35,10 @@ export default function ViewRouter({
 
   if (!isLoggedIn) {
     return (
-      <SuspenseView text="Loading...">
-        <AuthPage />
-      </SuspenseView>
+      <Login onLogin={(userName) => {
+        // This will be handled by useUserSession hook via the parent component
+        window.location.reload();
+      }} />
     );
   }
 

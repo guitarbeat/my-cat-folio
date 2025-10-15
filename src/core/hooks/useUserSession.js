@@ -1,136 +1,99 @@
 /**
  * @module useUserSession
- * @description A custom React hook that handles user authentication using Supabase Auth.
- * Manages authentication state and integrates with useAppStore.
- *
+ * @description Hook for managing user sessions with username-based authentication (no email/password)
  * @example
- * const { login, signup, logout, error } = useUserSession();
- * await login('user@example.com', 'password');
- * await signup('user@example.com', 'password', 'Display Name');
+ * const { login, logout, error, userName, isLoggedIn } = useUserSession();
+ * await login('MyUsername');
  * await logout();
  */
 
 import { useState, useCallback, useEffect } from 'react';
 import { supabase } from '../../../backend/api/supabaseClient';
-import { devLog } from '../../shared/utils/coreUtils';
 import useAppStore from '../store/useAppStore';
 
 function useUserSession() {
   const [error, setError] = useState(null);
+  const [isInitialized, setIsInitialized] = useState(false);
   const { user, userActions } = useAppStore();
 
-  // Initialize auth state from Supabase
+  // Initialize user from localStorage on mount
   useEffect(() => {
-    const initAuth = async () => {
-      try {
-        const { data: { session } } = await supabase.auth.getSession();
-        if (session?.user) {
-          userActions.login(session.user.id);
-        }
-      } catch (err) {
-        console.error('Error initializing auth:', err);
-      }
-    };
-
-    initAuth();
-
-    // Listen for auth changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (event, session) => {
-        if (event === 'SIGNED_IN' && session?.user) {
-          userActions.login(session.user.id);
-        } else if (event === 'SIGNED_OUT') {
-          userActions.logout();
-        }
-      }
-    );
-
-    return () => subscription.unsubscribe();
+    const storedUserName = localStorage.getItem('catNamesUser');
+    if (storedUserName && storedUserName.trim()) {
+      userActions.login(storedUserName);
+    }
+    setIsInitialized(true);
   }, [userActions]);
 
   /**
-   * Logs in a user with email and password
-   * @param {string} email - The user's email
-   * @param {string} password - The user's password
+   * Login with username only (no password required)
+   * Creates user in database if doesn't exist
+   * @param {string} userName - The user's chosen username
    */
-  const login = useCallback(async (email, password) => {
-    if (!email || !password) {
-      setError('Please provide email and password');
-      return;
+  const login = useCallback(async (userName) => {
+    if (!userName || !userName.trim()) {
+      setError('Username is required');
+      return false;
     }
 
-    setError(null);
-
     try {
-      const { data, error: signInError } = await supabase.auth.signInWithPassword({
-        email,
-        password
-      });
+      setError(null);
+      const trimmedName = userName.trim();
 
-      if (signInError) throw signInError;
+      // Check if user exists in database
+      const { data: existingUser, error: fetchError } = await supabase
+        .from('cat_app_users')
+        .select('user_name, preferences, user_role')
+        .eq('user_name', trimmedName)
+        .maybeSingle();
 
-      if (data.user) {
-        userActions.login(data.user.id);
+      if (fetchError) {
+        throw fetchError;
       }
 
-      devLog('Login successful');
+      // Create user if doesn't exist
+      if (!existingUser) {
+        const { error: insertError } = await supabase
+          .from('cat_app_users')
+          .insert({
+            user_name: trimmedName,
+            preferences: {
+              sound_enabled: true,
+              theme_preference: 'dark'
+            },
+            user_role: 'user'
+          });
+
+        if (insertError) {
+          throw insertError;
+        }
+      }
+
+      // Store username and update state
+      localStorage.setItem('catNamesUser', trimmedName);
+      userActions.login(trimmedName);
+      
+      return true;
     } catch (err) {
       console.error('Login error:', err);
-      setError(err.message || 'Failed to login. Please try again.');
+      setError(err.message || 'Failed to login');
+      return false;
     }
   }, [userActions]);
 
   /**
-   * Signs up a new user
-   * @param {string} email - The user's email
-   * @param {string} password - The user's password
-   * @param {string} displayName - Optional display name
-   */
-  const signup = useCallback(async (email, password, displayName) => {
-    if (!email || !password) {
-      setError('Please provide email and password');
-      return;
-    }
-
-    setError(null);
-
-    try {
-      const { data, error: signUpError } = await supabase.auth.signUp({
-        email,
-        password,
-        options: {
-          data: {
-            display_name: displayName || email.split('@')[0]
-          },
-          emailRedirectTo: `${window.location.origin}/`
-        }
-      });
-
-      if (signUpError) throw signUpError;
-
-      if (data.user) {
-        userActions.login(data.user.id);
-      }
-
-      devLog('Signup successful');
-    } catch (err) {
-      console.error('Signup error:', err);
-      setError(err.message || 'Failed to sign up. Please try again.');
-    }
-  }, [userActions]);
-
-  /**
-   * Logs out the current user
+   * Logout current user
    */
   const logout = useCallback(async () => {
     try {
-      await supabase.auth.signOut();
-      userActions.logout();
       setError(null);
-      devLog('Logout complete');
+      localStorage.removeItem('catNamesUser');
+      userActions.logout();
+      return true;
     } catch (err) {
       console.error('Logout error:', err);
-      setError('Failed to logout');
+      setError(err.message || 'Failed to logout');
+      return false;
     }
   }, [userActions]);
 
@@ -139,9 +102,8 @@ function useUserSession() {
     isLoggedIn: user.isLoggedIn,
     error,
     login,
-    signup,
     logout,
-    isInitialized: true
+    isInitialized
   };
 }
 
