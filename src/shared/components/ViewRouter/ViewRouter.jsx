@@ -2,6 +2,7 @@ import React, { lazy, Suspense } from 'react';
 import PropTypes from 'prop-types';
 import { Loading, Error } from '@components';
 import Login from '@features/auth/Login';
+import { useRouting } from '../../../core/hooks/useRouting';
 
 // * Dynamic imports with better error handling and loading states
 const Tournament = lazy(() => 
@@ -24,6 +25,11 @@ const Profile = lazy(() =>
     default: () => <Error variant="list" error={{ message: 'Failed to load Profile' }} />
   }))
 );
+const BongoPage = lazy(() => 
+  import('@features/bongo/BongoPage').catch(() => ({
+    default: () => <Error variant="list" error={{ message: 'Failed to load Bongo Page' }} />
+  }))
+);
 
 export default function ViewRouter({
   isLoggedIn,
@@ -36,6 +42,18 @@ export default function ViewRouter({
   onTournamentComplete,
   onVote
 }) {
+  const { isRoute } = useRouting();
+
+  // Handle special routes first
+  // NOTE: The /bongo route is intentionally hidden and only accessible via direct URL
+  // There is no navigation link to this page - users must manually type /bongo in the URL
+  if (isRoute('/bongo')) {
+    return (
+      <Suspense fallback={<Loading variant="spinner" text="Loading Bongo Cat..." />}>
+        <BongoPage isLoggedIn={isLoggedIn} userName={userName} />
+      </Suspense>
+    );
+  }
 
   if (!isLoggedIn) {
     return (

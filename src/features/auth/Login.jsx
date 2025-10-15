@@ -6,7 +6,6 @@ import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 
 import { Error } from '../../shared/components';
-import BongoCat from '../../shared/components/BongoCat/BongoCat';
 import useToast from '../../core/hooks/useToast';
 import { validateUsername } from '../../shared/utils/validationUtils';
 import styles from './Login.module.css';
@@ -131,7 +130,7 @@ function Login({ onLogin }) {
     try {
       setIsLoading(true);
       await onLogin(validation.value);
-      showSuccess(`Welcome, ${validation.value}! 🎉`);
+      showSuccess(`Welcome back, ${validation.value}! 🎉`);
     } catch (err) {
       setError(err.message || 'Something went wrong. Please try again.');
       showError('Login failed. Please try again.');
@@ -189,6 +188,9 @@ function Login({ onLogin }) {
         {/* Form Section */}
         <div className={styles.formSection}>
           <h2 className={styles.loginTitle}>Cat Name Olympics</h2>
+          <p className={styles.loginSubtitle}>
+            Enter your name to login or create a new account
+          </p>
           <p className={styles.catFact}>
             {catFact ? (
               <>{catFact}</>
@@ -218,11 +220,11 @@ function Login({ onLogin }) {
             onSubmit={handleSubmit}
             className={styles.loginForm}
             role="form"
-            aria-label="Login form"
+            aria-label="Login or create account form"
           >
             <div className={styles.inputWrapper}>
               <label htmlFor="loginName" className={styles.inputLabel}>
-                Your Judge Name:
+                Your Judge Name (Login or Create Account):
               </label>
               <div className={styles.inputContainer}>
                 <input
@@ -230,7 +232,7 @@ function Login({ onLogin }) {
                   type="text"
                   value={name}
                   onChange={handleNameChange}
-                  placeholder="Enter your name (or leave empty for random)"
+                  placeholder="Enter your name to login or create account"
                   className={`${styles.loginInput} ${error ? styles.error : ''}`}
                   autoFocus
                   disabled={isLoading}
@@ -263,8 +265,8 @@ function Login({ onLogin }) {
                 />
               )}
               <p id="loginHelp" className={styles.explainerText}>
-                Type your name to save your ratings, or leave it blank for a
-                surprise name!
+                If you're a returning user, enter your name to login. If you're new, 
+                enter your name to create an account and start judging!
               </p>
               {name.trim() && (
                 <div className={styles.characterCounter}>
@@ -294,7 +296,7 @@ function Login({ onLogin }) {
                   </>
                 ) : (
                   <>
-                    {name.trim() ? 'Start Judging!' : 'Get Random Name & Start'}
+                    {name.trim() ? 'Login or Create Account' : 'Get Random Name & Start'}
                     <span className={styles.buttonEmoji} aria-hidden="true">
                       🏆
                     </span>
@@ -307,7 +309,7 @@ function Login({ onLogin }) {
           <div className={styles.namePreview}>
             {name ? (
               <p className={styles.helperText}>
-                You&apos;ll be known as{' '}
+                You&apos;ll login or create an account as{' '}
                 <span className={styles.nameHighlight}>&quot;{name}&quot;</span>
               </p>
             ) : (
@@ -327,16 +329,6 @@ function Login({ onLogin }) {
         </div>
       </div>
 
-      {/* Interactive BongoCat */}
-      <BongoCat
-        size={0.4}
-        color="#ff6b9d"
-        onBongo={() => {
-          // Fun interaction when the cat is bongoed on login
-          console.log('🐱 Bongo cat says hello!');
-        }}
-        containerRef={containerRef}
-      />
     </div>
   );
 }

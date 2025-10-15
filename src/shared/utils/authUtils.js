@@ -41,7 +41,10 @@ export async function isUserAdmin(userIdOrName) {
         .single();
       
       if (userError || !userData) {
-        console.warn('User not found:', userIdOrName);
+        // Only log in development mode to reduce console noise
+        if (process.env.NODE_ENV === 'development') {
+          console.warn('User not found:', userIdOrName);
+        }
         return false;
       }
       

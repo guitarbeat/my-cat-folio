@@ -38,7 +38,10 @@
   list-style: none;
 }
 
-.navbar__menu-list--desktop { display: none; }
+.navbar__menu-list--desktop { 
+  display: none; 
+  margin-left: auto; /* Right-align the desktop menu items */
+}
 
 /* Logo/brand */
 .navbar__logo-link {
@@ -433,22 +436,22 @@
 }
 
 .navbar.light-theme .navbar__title {
-  color: #1f2937;
+  color: #1e293b;
   text-shadow: none;
 }
 
 .navbar.light-theme .navbar__item a {
-  color: #374151;
+  color: #475569;
 }
 
 .navbar.light-theme .navbar__item a:hover,
 .navbar.light-theme .navbar__item a.active {
-  color: #111827;
+  color: #1e293b;
   background: rgb(0 0 0 / 5%);
 }
 
 .navbar.light-theme .navbar__action-button {
-  color: #374151;
+  color: #475569;
   background: rgb(0 0 0 / 5%);
   border-color: rgb(0 0 0 / 10%);
 }
@@ -470,12 +473,12 @@
 
 .navbar.light-theme .navbar__mobile-menu { background: rgb(255 255 255 / 98%); }
 
-.navbar.light-theme .navbar__mobile-link { color: #374151; }
+.navbar.light-theme .navbar__mobile-link { color: #475569; }
 
 .navbar.light-theme .navbar__mobile-link:hover { background: rgb(0 0 0 / 5%); }
 
 .navbar.light-theme .navbar__mobile-link.active {
-  color: #111827;
+  color: #1e293b;
   background: rgb(0 0 0 / 8%);
 }
 

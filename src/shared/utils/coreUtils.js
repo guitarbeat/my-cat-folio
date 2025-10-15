@@ -309,8 +309,8 @@ export class PerformanceMonitor {
       };
     }
 
-    // Track long tasks
-    if ('PerformanceObserver' in window) {
+    // Track long tasks (disabled to reduce console noise)
+    if ('PerformanceObserver' in window && false) { // Disabled for now
       // Throttle long task logs to avoid console spam during HMR/initial load
       let lastLogTs = 0;
       const minIntervalMs = 1000; // log at most once per second
