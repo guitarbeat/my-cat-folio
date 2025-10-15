@@ -9,6 +9,8 @@
     "build": "vite build --config config/vite.config.ts",
     "build:dev": "vite build --mode development --config config/vite.config.ts",
     "build:analyze": "vite build --mode analyze --config config/vite.config.ts",
+    "analyze": "npm run build && npx vite-bundle-analyzer build/assets/js/*.js",
+    "analyze:dead-code": "node scripts/analyze-dead-code.mjs",
     "preview": "vite preview --config config/vite.config.ts",
     "compress:images": "node scripts/build/compress-images.mjs",
     "convert:gif:webm": "ffmpeg -y -i public/images/cat.gif -vf \"fps=24,scale=320:-1:flags=lanczos\" -c:v libvpx-vp9 -crf 36 -b:v 0 -row-mt 1 public/images/cat.webm || echo 'Install ffmpeg to run this conversion'",
@@ -53,6 +55,7 @@
   },
   "devDependencies": {
     "@babel/plugin-transform-private-property-in-object": "^7.21.11",
+    "babel-plugin-transform-react-remove-prop-types": "^0.4.24",
     "@eslint/js": "^9.34.0",
     "@fullhuman/postcss-purgecss": "^7.0.2",
     "@testing-library/jest-dom": "^6.9.1",
@@ -78,6 +81,7 @@
     "terser": "^5.44.0",
     "vite": "^7.1.7",
     "vite-plugin-compression": "^0.5.1",
+    "vite-bundle-analyzer": "^0.7.0",
     "vitest": "^3.2.4"
   },
   "lint-staged": {

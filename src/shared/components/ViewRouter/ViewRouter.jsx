@@ -1,12 +1,29 @@
-import React, { lazy } from 'react';
+import React, { lazy, Suspense } from 'react';
 import PropTypes from 'prop-types';
-import { Loading, Error } from '..';
-import Login from '../../../features/auth/Login';
+import { Loading, Error } from '@components';
+import Login from '@features/auth/Login';
 
-const Tournament = lazy(() => import('../../../features/tournament/Tournament'));
-const TournamentSetup = lazy(() => import('../../../features/tournament/TournamentSetup'));
-const Results = lazy(() => import('../../../features/tournament/Results'));
-const Profile = lazy(() => import('../../../features/profile/Profile'));
+// * Dynamic imports with better error handling and loading states
+const Tournament = lazy(() => 
+  import('@features/tournament/Tournament').catch(() => ({
+    default: () => <Error variant="list" error={{ message: 'Failed to load Tournament' }} />
+  }))
+);
+const TournamentSetup = lazy(() => 
+  import('@features/tournament/TournamentSetup').catch(() => ({
+    default: () => <Error variant="list" error={{ message: 'Failed to load Tournament Setup' }} />
+  }))
+);
+const Results = lazy(() => 
+  import('@features/tournament/Results').catch(() => ({
+    default: () => <Error variant="list" error={{ message: 'Failed to load Results' }} />
+  }))
+);
+const Profile = lazy(() => 
+  import('@features/profile/Profile').catch(() => ({
+    default: () => <Error variant="list" error={{ message: 'Failed to load Profile' }} />
+  }))
+);
 
 export default function ViewRouter({
   isLoggedIn,
@@ -28,32 +45,32 @@ export default function ViewRouter({
 
   if (tournament.currentView === 'profile') {
     return (
-      <Loading variant="suspense" text="Loading Profile...">
+      <Suspense fallback={<Loading variant="spinner" text="Loading Profile..." />}>
         <Profile
           userName={userName}
           onStartNewTournament={onStartNewTournament}
           ratings={tournament.ratings}
           onUpdateRatings={onUpdateRatings}
         />
-      </Loading>
+      </Suspense>
     );
   }
 
   if (tournament.names === null) {
     return (
-      <Loading variant="suspense" text="Loading Tournament Setup...">
+      <Suspense fallback={<Loading variant="spinner" text="Loading Tournament Setup..." />}>
         <TournamentSetup
           onStart={onTournamentSetup}
           userName={userName}
           existingRatings={tournament.ratings}
         />
-      </Loading>
+      </Suspense>
     );
   }
 
   if (tournament.isComplete) {
     return (
-      <Loading variant="suspense" text="Loading Results...">
+      <Suspense fallback={<Loading variant="spinner" text="Loading Results..." />}>
         <Results
           ratings={tournament.ratings}
           onStartNew={onStartNewTournament}
@@ -62,13 +79,13 @@ export default function ViewRouter({
           currentTournamentNames={tournament.names}
           voteHistory={tournament.voteHistory}
         />
-      </Loading>
+      </Suspense>
     );
   }
 
   return (
     <Error variant="boundary">
-      <Loading variant="suspense" text="Loading Tournament...">
+      <Suspense fallback={<Loading variant="spinner" text="Loading Tournament..." />}>
         <Tournament
           names={tournament.names}
           existingRatings={tournament.ratings}
@@ -76,7 +93,7 @@ export default function ViewRouter({
           userName={userName}
           onVote={onVote}
         />
-      </Loading>
+      </Suspense>
     </Error>
   );
 }

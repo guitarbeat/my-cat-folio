@@ -10,13 +10,13 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { setupGlobalErrorHandling } from './shared/services/errorManager';
-import './shared/styles/reset.css';
-import './shared/styles/theme.css';
-import './shared/styles/utilities.css';
-import './shared/styles/animations.css';
-import './shared/styles/components-global.css';
-import './shared/styles/responsive.css';
+import { setupGlobalErrorHandling } from '@services/errorManager';
+import '@styles/reset.css';
+import '@styles/theme.css';
+import '@styles/utilities.css';
+import '@styles/animations.css';
+import '@styles/components-global.css';
+import '@styles/responsive.css';
 import App from './App.jsx';
 // import { Analytics } from "@vercel/analytics/react"
 

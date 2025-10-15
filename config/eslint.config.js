@@ -35,13 +35,17 @@ module.exports = [
       ...reactHooks.configs.recommended.rules,
 
       // General JavaScript rules
-      'no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
+      'no-unused-vars': ['error', { 
+        argsIgnorePattern: '^_',
+        varsIgnorePattern: '^_',
+        caughtErrorsIgnorePattern: '^_'
+      }],
       'no-console': 'off', // Allow console statements
       'prefer-const': 'error',
       'no-var': 'error',
 
-      // Additional useful rules
-      'no-duplicate-imports': 'error',
+      // * Tree shaking and dead code elimination rules
+      'no-unused-expressions': 'error',
       'no-unreachable': 'error',
       'no-constant-condition': 'error',
       'no-empty': 'error',
@@ -53,6 +57,19 @@ module.exports = [
       'comma-dangle': ['error', 'never'],
       'quotes': ['error', 'single', { avoidEscape: true }],
       'semi': ['error', 'always'],
+
+      // * Import/export optimization rules
+      'no-duplicate-imports': 'error',
+      'no-useless-rename': 'error',
+      'object-shorthand': 'error',
+      'prefer-template': 'error',
+      'prefer-arrow-callback': 'error',
+      'prefer-destructuring': ['error', {
+        array: true,
+        object: true
+      }, {
+        enforceForRenamedProperties: false
+      }],
 
       // Disable problematic rules temporarily
       'react/prop-types': 'off', // Disable prop-types validation

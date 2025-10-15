@@ -8,18 +8,19 @@
  */
 
 import React, { useCallback } from 'react';
-import CatBackground from './shared/components/CatBackground/CatBackground';
-import ViewRouter from './shared/components/ViewRouter/ViewRouter';
-import { Error, Toast, Loading } from './shared/components';
-import NavBar from './shared/components/NavBar/NavBar';
-import PerformanceDashboard from './shared/components/PerformanceDashboard';
+// * Use path aliases for better tree shaking
+import CatBackground from '@components/CatBackground/CatBackground';
+import ViewRouter from '@components/ViewRouter/ViewRouter';
+import { Error, Toast, Loading } from '@components';
+import NavBar from '@components/NavBar/NavBar';
+import PerformanceDashboard from '@components/PerformanceDashboard';
 
 // * Lazy load heavy components for better code splitting
-import useUserSession from './core/hooks/useUserSession';
-import useToast from './core/hooks/useToast';
-import useAppStore, { useAppStoreInitialization } from './core/store/useAppStore';
-import { TournamentService } from './shared/services/tournamentService';
-import { ErrorManager } from './shared/services/errorManager';
+import useUserSession from '@hooks/useUserSession';
+import useToast from '@hooks/useToast';
+import useAppStore, { useAppStoreInitialization } from '@core/store/useAppStore';
+import { TournamentService } from '@services/tournamentService';
+import { ErrorManager } from '@services/errorManager';
 
 // * Components imported directly for better code splitting
 
