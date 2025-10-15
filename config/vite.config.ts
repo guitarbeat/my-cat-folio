@@ -1,7 +1,7 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import viteCompression from 'vite-plugin-compression';
-import { componentTagger } from 'lovable-tagger';
+// import { componentTagger } from 'lovable-tagger'; // Removed unused dependency
 import { fileURLToPath } from 'url';
 import { dirname, resolve as pathResolve } from 'path';
 
@@ -11,7 +11,7 @@ const __dirname = dirname(__filename);
 export default defineConfig(({ mode }) => ({
   plugins: [
     react(),
-    mode === 'development' && componentTagger(),
+    // mode === 'development' && componentTagger(), // Removed unused dependency
     // Gzip compression for broader CDN compatibility
     viteCompression({ algorithm: 'gzip' }),
     // Brotli compression for modern clients
