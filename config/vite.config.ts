@@ -30,15 +30,15 @@ export default defineConfig(({ mode }) => ({
   assetsInclude: ['**/*.avif', '**/*.webp', '**/*.jpg', '**/*.jpeg', '**/*.png', '**/*.gif', '**/*.webm', '**/*.mp3'],
   resolve: {
     alias: {
-      '@': pathResolve(__dirname, 'src'),
+      '@': pathResolve(__dirname, '../src'),
       // * Add more specific aliases for better tree shaking
-      '@components': pathResolve(__dirname, 'src/shared/components'),
-      '@hooks': pathResolve(__dirname, 'src/core/hooks'),
-      '@utils': pathResolve(__dirname, 'src/shared/utils'),
-      '@services': pathResolve(__dirname, 'src/shared/services'),
-      '@styles': pathResolve(__dirname, 'src/shared/styles'),
-      '@features': pathResolve(__dirname, 'src/features'),
-      '@core': pathResolve(__dirname, 'src/core'),
+      '@components': pathResolve(__dirname, '../src/shared/components'),
+      '@hooks': pathResolve(__dirname, '../src/core/hooks'),
+      '@utils': pathResolve(__dirname, '../src/shared/utils'),
+      '@services': pathResolve(__dirname, '../src/shared/services'),
+      '@styles': pathResolve(__dirname, '../src/shared/styles'),
+      '@features': pathResolve(__dirname, '../src/features'),
+      '@core': pathResolve(__dirname, '../src/core'),
     },
   },
   server: {
