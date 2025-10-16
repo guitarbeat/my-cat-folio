@@ -3,7 +3,7 @@
  * @description Utilities for authentication and authorization checks with role-based access control
  */
 
-import { supabase } from '../../../backend/api/supabaseClient';
+import { supabase } from '@/integrations/supabase/client';
 
 /**
  * User roles hierarchy (higher number = more permissions)
