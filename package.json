@@ -28,7 +28,7 @@
   },
   "license": "MIT",
   "engines": {
-    "node": ">=20.0.0 <21.0.0",
+    "node": ">=20.0.0",
     "npm": ">=10.0.0"
   },
   "scripts": {
@@ -65,9 +65,8 @@
     "outdated": "npm outdated",
     "update:check": "npm outdated",
     "update:interactive": "npx npm-check-updates -i",
-    "prepare": "husky install",
-    "pre-commit": "lint-staged",
-    "postinstall": "husky install"
+    "prepare": "husky",
+    "pre-commit": "lint-staged"
   },
   "dependencies": {
     "@hello-pangea/dnd": "^18.0.1",
