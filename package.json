@@ -113,7 +113,7 @@
     "vite": "^6.0.5",
     "vite-bundle-analyzer": "^0.18.1",
     "vite-plugin-compression": "^0.5.1",
-    "vitest": "^2.1.8"
+    "vitest": "^3.2.4"
   },
   "browserslist": {
     "production": [
