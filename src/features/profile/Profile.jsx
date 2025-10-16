@@ -14,7 +14,7 @@ import {
 } from '../../../backend/api/supabaseClient';
 import useToast from '../../core/hooks/useToast';
 import { FILTER_OPTIONS } from '../../core/constants';
-import { ErrorManager } from '../../shared/services/errorManager';
+// ErrorManager removed to prevent circular dependency
 import { isUserAdmin } from '../../shared/utils/authUtils';
 
 import ProfileStats from './ProfileStats';
@@ -445,11 +445,8 @@ const Profile = ({ userName, onStartNewTournament }) => {
         // Refresh backing data (ensures filters reflect server state)
         fetchNames();
       } catch (error) {
-        ErrorManager.handleError(error, 'Profile - Toggle Visibility', {
-          isRetryable: true,
-          affectsUserData: false,
-          isCritical: false
-        });
+        console.error('Profile - Toggle Visibility error:', error);
+        showToast('Failed to toggle name visibility', 'error');
         showError('Failed to update visibility');
       }
     },
@@ -475,11 +472,8 @@ const Profile = ({ userName, onStartNewTournament }) => {
         fetchNames();
         fetchSelectionStats();
       } catch (error) {
-        ErrorManager.handleError(error, 'Profile - Delete Name', {
-          isRetryable: true,
-          affectsUserData: true,
-          isCritical: false
-        });
+        console.error('Profile - Delete Name error:', error);
+        showToast('Failed to delete name', 'error');
         showError('Failed to delete name');
       }
     },
@@ -534,11 +528,8 @@ const Profile = ({ userName, onStartNewTournament }) => {
           showError('Failed to hide names');
         }
       } catch (error) {
-        ErrorManager.handleError(error, 'Profile - Bulk Hide', {
-          isRetryable: true,
-          affectsUserData: false,
-          isCritical: false
-        });
+        console.error('Profile - Bulk Hide error:', error);
+        showToast('Failed to hide names', 'error');
         showError('Failed to hide names');
       }
     },
@@ -580,11 +571,8 @@ const Profile = ({ userName, onStartNewTournament }) => {
           showError('Failed to unhide names');
         }
       } catch (error) {
-        ErrorManager.handleError(error, 'Profile - Bulk Unhide', {
-          isRetryable: true,
-          affectsUserData: false,
-          isCritical: false
-        });
+        console.error('Profile - Bulk Unhide error:', error);
+        showToast('Failed to unhide names', 'error');
         showError('Failed to unhide names');
       }
     },
