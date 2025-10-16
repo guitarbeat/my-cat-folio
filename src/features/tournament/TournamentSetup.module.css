@@ -1244,9 +1244,11 @@
 
   .catPicturesToggleButton {
     width: 100%;
-    min-height: 44px; /* * Ensure minimum touch target size */
-    padding: var(--space-1) var(--space-3); /* * Reduce vertical padding on mobile */
+    min-height: 48px; /* * Ensure minimum touch target size */
+    padding: var(--space-2) var(--space-3); /* * Optimized padding for mobile */
     margin-top: var(--space-2);
+    font-size: var(--text-xs); /* * Slightly smaller text on mobile */
+    border-radius: var(--radius-lg); /* * Slightly smaller radius on mobile */
   }
 }
 
@@ -1381,20 +1383,128 @@
   transform: translateY(0);
 }
 
-/* Cat Pictures Toggle Button */
+/* Cat Pictures Toggle Button - Enhanced Modern Styling */
 .catPicturesToggleButton {
-  min-height: 44px;
+  /* * Base button styling */
+  min-height: 48px;
+  padding: var(--space-3) var(--space-4);
+  border: 2px solid transparent;
+  border-radius: var(--radius-xl);
+  font-weight: 600;
+  font-size: var(--text-sm);
+  letter-spacing: 0.025em;
+  transition: all var(--duration-normal) var(--ease-out);
+  position: relative;
+  overflow: hidden;
+  
+  /* * Glassmorphism background */
+  background: var(--glass-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  
+  /* * Gradient border effect */
+  background-clip: padding-box;
+  border: 2px solid transparent;
+  background-image: linear-gradient(var(--card-background), var(--card-background)), 
+                    var(--gradient-primary);
+  background-origin: border-box;
+  
+  /* * Subtle glow effect */
+  box-shadow: 
+    0 4px 12px rgba(0, 0, 0, 0.15),
+    0 2px 4px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  
+  /* * Text styling */
+  color: var(--text-primary);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  
+  /* * Interactive states */
+  cursor: pointer;
+  user-select: none;
+}
+
+.catPicturesToggleButton::before {
+  /* * Animated background overlay */
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.1),
+    transparent
+  );
+  transition: left var(--duration-slow) var(--ease-out);
 }
 
 .catPicturesToggleButton:hover:not(:disabled) {
-  background: var(--button-secondary-hover, var(--secondary-dark, #475569));
-  box-shadow: var(--shadow-md);
-  transform: translateY(-1px);
+  /* * Enhanced hover state */
+  background-image: linear-gradient(var(--card-hover), var(--card-hover)), 
+                    var(--gradient-vibrant);
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 
+    0 8px 25px rgba(0, 0, 0, 0.2),
+    0 4px 12px rgba(0, 0, 0, 0.15),
+    var(--glow-cyan);
+  border-color: var(--neon-cyan-100);
+}
+
+.catPicturesToggleButton:hover:not(:disabled)::before {
+  left: 100%;
+}
+
+.catPicturesToggleButton:active:not(:disabled) {
+  transform: translateY(-1px) scale(1.01);
+  transition: transform var(--duration-fast) var(--ease-out);
 }
 
 .catPicturesToggleButton.active {
-  background: var(--primary-color, #5a5cff);
-  box-shadow: var(--shadow-lg);
+  /* * Active state with vibrant styling */
+  background-image: linear-gradient(var(--accent-color), var(--highlight-color)), 
+                    var(--gradient-vibrant);
+  color: var(--charcoal);
+  font-weight: 700;
+  text-shadow: none;
+  box-shadow: 
+    0 6px 20px rgba(232, 191, 118, 0.4),
+    0 3px 8px rgba(241, 164, 56, 0.3),
+    var(--glow-pink);
+  border-color: var(--mimosa);
+  transform: translateY(-1px);
+}
+
+.catPicturesToggleButton.active:hover:not(:disabled) {
+  /* * Enhanced active hover state */
+  background-image: linear-gradient(var(--highlight-color), var(--accent-color)), 
+                    var(--gradient-vibrant);
+  transform: translateY(-3px) scale(1.03);
+  box-shadow: 
+    0 10px 30px rgba(232, 191, 118, 0.5),
+    0 5px 15px rgba(241, 164, 56, 0.4),
+    var(--glow-vibrant);
+}
+
+.catPicturesToggleButton:disabled {
+  /* * Disabled state */
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+  background: var(--glass-bg-light);
+  color: var(--text-tertiary);
+}
+
+.catPicturesToggleButton:focus-visible {
+  /* * Focus state for accessibility */
+  outline: 3px solid var(--accent-color);
+  outline-offset: 3px;
+  box-shadow: 
+    0 0 0 3px rgba(232, 191, 118, 0.3),
+    0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 /* Swipe Mode Container */
@@ -1873,12 +1983,17 @@
 
   .catPicturesToggleButton {
     max-width: 100%; /* * Ensure button doesn't overflow container */
-    min-height: 40px; /* * Ensure minimum height on very small screens */
-    padding: var(--space-1) var(--space-2); /* * Further reduce padding on very small screens */
+    min-height: 44px; /* * Ensure minimum height on very small screens */
+    padding: var(--space-2) var(--space-2); /* * Optimized padding for very small screens */
     overflow: hidden; /* * Hide any overflow */
     text-overflow: ellipsis; /* * Show ellipsis for very long text */
     font-size: var(--text-xs); /* * Reduce font size for better fit */
     white-space: nowrap; /* * Prevent text wrapping */
+    border-radius: var(--radius-md); /* * Smaller radius on very small screens */
+    
+    /* * Reduce effects on very small screens for performance */
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
   }
 }
 
@@ -1901,8 +2016,20 @@
   }
 
   .catPicturesToggleButton {
-    min-height: 44px; /* * Ensure minimum touch target size on touch devices */
+    min-height: 48px; /* * Ensure minimum touch target size on touch devices */
     touch-action: manipulation; /* * Optimize touch behavior */
+    
+    /* * Enhanced touch feedback */
+    -webkit-tap-highlight-color: rgba(232, 191, 118, 0.3);
+    tap-highlight-color: rgba(232, 191, 118, 0.3);
+    
+    /* * Optimize for touch interactions */
+    transition: transform var(--duration-fast) var(--ease-out),
+                box-shadow var(--duration-fast) var(--ease-out);
+  }
+  
+  .catPicturesToggleButton:active {
+    transform: scale(0.98); /* * Subtle press feedback */
   }
 
   /* Ensure swipe overlays are touch-friendly */
