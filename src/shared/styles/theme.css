@@ -25,6 +25,23 @@
   --fire-red-600: #dc141c;
   --fire-red-700: #c31218;
 
+  /* * Gradient Definitions */
+  --gradient-primary: linear-gradient(135deg, var(--neon-cyan), var(--hot-pink));
+  --gradient-vibrant: linear-gradient(135deg, var(--fire-red), var(--hot-pink), var(--neon-cyan));
+  --gradient-mesh: radial-gradient(at 40% 20%, rgba(47, 243, 224, 0.3) 0px, transparent 50%),
+                   radial-gradient(at 80% 0%, rgba(250, 38, 160, 0.3) 0px, transparent 50%),
+                   radial-gradient(at 0% 50%, rgba(245, 23, 32, 0.3) 0px, transparent 50%),
+                   radial-gradient(at 80% 50%, rgba(47, 243, 224, 0.3) 0px, transparent 50%),
+                   radial-gradient(at 0% 100%, rgba(250, 38, 160, 0.3) 0px, transparent 50%),
+                   radial-gradient(at 80% 100%, rgba(245, 23, 32, 0.3) 0px, transparent 50%),
+                   radial-gradient(at 0% 0%, rgba(47, 243, 224, 0.3) 0px, transparent 50%);
+  
+  /* * Glow Effects */
+  --glow-cyan: 0 0 20px rgba(47, 243, 224, 0.5), 0 0 40px rgba(47, 243, 224, 0.3);
+  --glow-pink: 0 0 20px rgba(250, 38, 160, 0.5), 0 0 40px rgba(250, 38, 160, 0.3);
+  --glow-red: 0 0 20px rgba(245, 23, 32, 0.5), 0 0 40px rgba(245, 23, 32, 0.3);
+  --glow-vibrant: 0 0 30px rgba(47, 243, 224, 0.4), 0 0 60px rgba(250, 38, 160, 0.3), 0 0 90px rgba(245, 23, 32, 0.2);
+
   /* Primary Color Scale - Based on Charcoal */
   --primary-50: #f8f9fa;
   --primary-100: #e9ecef;
@@ -275,11 +292,16 @@
   --header-background: #1e293b; /* Darker header for better contrast */
   --header-border: #334155; /* Darker header border */
 
-  /* Glass surface tokens */
-  --glass-bg: rgb(15 23 42 / 28%);
-  --glass-border: rgb(255 255 255 / 18%);
-  --glass-shadow: 0 10px 30px rgb(0 0 0 / 35%);
-  --glass-blur: 18px;
+  /* Glass surface tokens - Enhanced glassmorphism */
+  --glass-bg: rgba(15, 23, 42, 0.4);
+  --glass-bg-light: rgba(15, 23, 42, 0.2);
+  --glass-bg-strong: rgba(15, 23, 42, 0.6);
+  --glass-border: rgba(255, 255, 255, 0.15);
+  --glass-border-hover: rgba(255, 255, 255, 0.25);
+  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  --glass-shadow-colored: 0 8px 32px rgba(47, 243, 224, 0.15), 0 8px 16px rgba(250, 38, 160, 0.1);
+  --glass-blur: 20px;
+  --glass-blur-strong: 30px;
 
   /* Legacy dark-mode variables for backward compatibility */
   --surface-dark: #1e293b; /* Darker charcoal for better contrast */
@@ -321,10 +343,15 @@ body.light-theme {
   --header-border: #e2e8f0; /* * Light header border */
 
   /* Glass surface tokens (light) */
-  --glass-bg: rgb(255 255 255 / 80%); /* * Light glass background */
-  --glass-border: rgb(0 0 0 / 10%); /* * Dark border for contrast */
-  --glass-shadow: 0 10px 30px rgb(0 0 0 / 10%); /* * Lighter shadow */
+  --glass-bg: rgba(255, 255, 255, 0.7);
+  --glass-bg-light: rgba(255, 255, 255, 0.5);
+  --glass-bg-strong: rgba(255, 255, 255, 0.85);
+  --glass-border: rgba(0, 0, 0, 0.1);
+  --glass-border-hover: rgba(0, 0, 0, 0.15);
+  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  --glass-shadow-colored: 0 8px 32px rgba(47, 243, 224, 0.1), 0 8px 16px rgba(250, 38, 160, 0.05);
   --glass-blur: 16px;
+  --glass-blur-strong: 24px;
   --shadow-subtle: 0 1px 3px rgb(0 0 0 / 10%); /* * Subtle shadow for light theme */
   --shadow-medium: 0 4px 12px rgb(0 0 0 / 15%); /* * Medium shadow for light theme */
 
@@ -381,6 +408,17 @@ body.dark-theme {
   --card-hover: #1e293b; /* * Darker hover state */
   --header-background: #0f172a; /* * Darker header background */
   --header-border: #1e293b; /* * Darker header border */
+
+  /* Glass surface tokens (dark) - Enhanced glassmorphism */
+  --glass-bg: rgba(15, 23, 42, 0.4);
+  --glass-bg-light: rgba(15, 23, 42, 0.2);
+  --glass-bg-strong: rgba(15, 23, 42, 0.6);
+  --glass-border: rgba(255, 255, 255, 0.15);
+  --glass-border-hover: rgba(255, 255, 255, 0.25);
+  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  --glass-shadow-colored: 0 8px 32px rgba(47, 243, 224, 0.15), 0 8px 16px rgba(250, 38, 160, 0.1);
+  --glass-blur: 20px;
+  --glass-blur-strong: 30px;
 
   /* Synced light-mode variables for components using legacy names */
   --surface-dark: #0f172a; /* * Updated to match new surface color */

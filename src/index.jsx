@@ -15,6 +15,7 @@ import '@styles/reset.css';
 import '@styles/theme.css';
 import '@styles/utilities.css';
 import '@styles/animations.css';
+import '@styles/background-effects.css';
 import '@styles/components-global.css';
 import '@styles/responsive.css';
 import App from './App.jsx';
@@ -23,9 +24,13 @@ import App from './App.jsx';
 // Set up global error handling
 setupGlobalErrorHandling();
 
+// Boot log to verify app mounting during preview
+console.info('[Boot] index.jsx loaded');
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <App />
   </React.StrictMode>
 );
+

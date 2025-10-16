@@ -50,6 +50,16 @@
 
 /* Scale animations - Removed unused keyframes */
 
+/* Gradient animations */
+@keyframes gradient-shift {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
 /* Bounce animations - Removed unused keyframes */
 
 /* Cat-themed animations */
