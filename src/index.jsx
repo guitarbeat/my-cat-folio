@@ -15,6 +15,7 @@ import '@styles/reset.css';
 import '@styles/theme.css';
 import '@styles/utilities.css';
 import '@styles/animations.css';
+import '@styles/background-effects.css';
 import '@styles/components-global.css';
 import '@styles/responsive.css';
 import App from './App.jsx';

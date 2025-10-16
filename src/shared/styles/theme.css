@@ -343,10 +343,15 @@ body.light-theme {
   --header-border: #e2e8f0; /* * Light header border */
 
   /* Glass surface tokens (light) */
-  --glass-bg: rgb(255 255 255 / 80%); /* * Light glass background */
-  --glass-border: rgb(0 0 0 / 10%); /* * Dark border for contrast */
-  --glass-shadow: 0 10px 30px rgb(0 0 0 / 10%); /* * Lighter shadow */
+  --glass-bg: rgba(255, 255, 255, 0.7);
+  --glass-bg-light: rgba(255, 255, 255, 0.5);
+  --glass-bg-strong: rgba(255, 255, 255, 0.85);
+  --glass-border: rgba(0, 0, 0, 0.1);
+  --glass-border-hover: rgba(0, 0, 0, 0.15);
+  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  --glass-shadow-colored: 0 8px 32px rgba(47, 243, 224, 0.1), 0 8px 16px rgba(250, 38, 160, 0.05);
   --glass-blur: 16px;
+  --glass-blur-strong: 24px;
   --shadow-subtle: 0 1px 3px rgb(0 0 0 / 10%); /* * Subtle shadow for light theme */
   --shadow-medium: 0 4px 12px rgb(0 0 0 / 15%); /* * Medium shadow for light theme */
 
@@ -403,6 +408,17 @@ body.dark-theme {
   --card-hover: #1e293b; /* * Darker hover state */
   --header-background: #0f172a; /* * Darker header background */
   --header-border: #1e293b; /* * Darker header border */
+
+  /* Glass surface tokens (dark) - Enhanced glassmorphism */
+  --glass-bg: rgba(15, 23, 42, 0.4);
+  --glass-bg-light: rgba(15, 23, 42, 0.2);
+  --glass-bg-strong: rgba(15, 23, 42, 0.6);
+  --glass-border: rgba(255, 255, 255, 0.15);
+  --glass-border-hover: rgba(255, 255, 255, 0.25);
+  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  --glass-shadow-colored: 0 8px 32px rgba(47, 243, 224, 0.15), 0 8px 16px rgba(250, 38, 160, 0.1);
+  --glass-blur: 20px;
+  --glass-blur-strong: 30px;
 
   /* Synced light-mode variables for components using legacy names */
   --surface-dark: #0f172a; /* * Updated to match new surface color */
