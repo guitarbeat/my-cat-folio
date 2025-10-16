@@ -5,8 +5,6 @@
  */
 
 import { createClient } from '@supabase/supabase-js';
-import { devLog } from '../../src/shared/utils/coreUtils';
-import { ErrorManager } from '../../src/shared/services/errorManager';
 
 // Environment configuration
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
@@ -68,14 +66,10 @@ export const catNamesAPI = {
 
       // Get ALL hidden name IDs globally (not user-specific)
       let hiddenIds = [];
-      const { data: hiddenData, error: hiddenError } = await ErrorManager.withRetry(
-        async () => {
-          return await supabase
-            .from('cat_name_ratings')
-            .select('name_id')
-            .eq('is_hidden', true);
-        }
-      );
+      const { data: hiddenData, error: hiddenError } = await supabase
+        .from('cat_name_ratings')
+        .select('name_id')
+        .eq('is_hidden', true);
 
       if (hiddenError) {
         console.error('Error fetching hidden names:', hiddenError);
@@ -1468,7 +1462,7 @@ export const categoriesAPI = {
  * This function is kept for backward compatibility but no longer creates tables
  */
 export const ensureRatingHistoryTable = async () => {
-  devLog(
+  console.log(
     'Rating history is now stored in cat_name_ratings.rating_history as JSONB'
   );
   return { success: true };
