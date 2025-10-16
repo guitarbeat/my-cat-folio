@@ -375,7 +375,7 @@ const useAppStore = create(
       }
     }),
     {
-      name: 'meow-namester-store',
+      name: 'name-nosferatu-store',
       enabled: process.env.NODE_ENV === 'development'
     }
   )

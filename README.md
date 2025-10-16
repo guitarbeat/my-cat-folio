@@ -27,7 +27,7 @@ A scientifically-driven tournament platform that helps you discover the perfect 
 
 ### **For Users**
 
-1. Visit the [live demo](https://meow-namester-adl2xiz1n-guitarbeats-projects.vercel.app)
+1. Visit the [live demo](https://name-nosferatu.vercel.app)
 2. Choose a cat name from the welcome screen
 3. Create a tournament with your favorite names
 4. Vote head-to-head until you find the winner
@@ -37,7 +37,7 @@ A scientifically-driven tournament platform that helps you discover the perfect 
 
 ```bash
 git clone <repository-url>
-cd meow-namester
+cd name-nosferatu
 npm install
 npm run dev
 ```
@@ -388,8 +388,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 🙋‍♂️ **Support**
 
-- **Issues**: [GitHub Issues](https://github.com/username/meow-namester/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/username/meow-namester/discussions)
+- **Issues**: [GitHub Issues](https://github.com/guitarbeat/name-nosferatu/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/guitarbeat/name-nosferatu/discussions)
 - **Email**: [support@example.com](mailto:support@example.com)
 
 ---

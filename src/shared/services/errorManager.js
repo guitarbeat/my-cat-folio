@@ -406,7 +406,7 @@ export class ErrorManager {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'X-Error-Source': 'meow-namester'
+            'X-Error-Source': 'name-nosferatu'
           },
           body: JSON.stringify(errorData)
         }).catch(err => {

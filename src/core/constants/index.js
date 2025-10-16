@@ -133,10 +133,10 @@ export const API = {
 
 // * Local Storage Keys
 export const STORAGE_KEYS = {
-  THEME: 'meow-namester-theme',
+  THEME: 'name-nosferatu-theme',
 
-  USER_PREFERENCES: 'meow-namester-preferences',
-  TOURNAMENT_STATE: 'meow-namester-tournament-state'
+  USER_PREFERENCES: 'name-nosferatu-preferences',
+  TOURNAMENT_STATE: 'name-nosferatu-tournament-state'
 };
 
 // * Animation Constants
