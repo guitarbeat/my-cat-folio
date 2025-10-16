@@ -1,5 +1,5 @@
 {
-  "name": "meow-namester",
+  "name": "name-nosferatu",
   "version": "1.0.1",
   "description": "A React application for managing cat names and related data",
   "type": "module",
@@ -7,10 +7,10 @@
   "homepage": ".",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/aaron/meow-namester.git"
+    "url": "git+https://github.com/guitarbeat/name-nosferatu.git"
   },
   "bugs": {
-    "url": "https://github.com/aaron/meow-namester/issues"
+    "url": "https://github.com/guitarbeat/name-nosferatu/issues"
   },
   "keywords": [
     "react",
@@ -149,7 +149,7 @@
   },
   "funding": {
     "type": "individual",
-    "url": "https://github.com/sponsors/aaron"
+    "url": "https://github.com/sponsors/guitarbeat"
   },
   "files": [
     "build",

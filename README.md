@@ -1,14 +1,14 @@
-# 🐱 Meow Namester
+# 🐱 Name Nosferatu
 
 **Elite tournament platform for discovering exceptional cat names through scientific ranking**
 
-[![Live Demo](https://img.shields.io/badge/Live-MEOW_NAMESter-28a745.svg)](https://meow-namester-adl2xiz1n-guitarbeats-projects.vercel.app)
-[![Bundle Size](https://img.shields.io/badge/Bundle-391KB_48%25_Optimized-28a745.svg)](https://meow-namester-adl2xiz1n-guitarbeats-projects.vercel.app)
-[![Performance](https://img.shields.io/badge/Performance-A%2B_Grade-28a745.svg)](https://meow-namester-adl2xiz1n-guitarbeats-projects.vercel.app)
+[![Live Demo](https://img.shields.io/badge/Live-Name_Nosferatu-28a745.svg)](https://name-nosferatu.vercel.app)
+[![Bundle Size](https://img.shields.io/badge/Bundle-391KB_48%25_Optimized-28a745.svg)](https://name-nosferatu.vercel.app)
+[![Performance](https://img.shields.io/badge/Performance-A%2B_Grade-28a745.svg)](https://name-nosferatu.vercel.app)
 
 ---
 
-## 🎯 **What is Meow Namester?**
+## 🎯 **What is Name Nosferatu?**
 
 A scientifically-driven tournament platform that helps you discover the perfect cat name using the same Elo rating algorithm that ranks chess grandmasters. Make data-driven decisions about your feline companion's nomenclature!
 
