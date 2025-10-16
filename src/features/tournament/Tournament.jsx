@@ -34,7 +34,6 @@ function useAudioManager() {
   const musicRef = useRef(null);
   const audioEventListeners = useRef(new Set());
   const musicEventListeners = useRef(new Set());
-  const globalEventListeners = useRef(new Set());
 
   const musicTracks = useMemo(
     () => [
@@ -92,11 +91,7 @@ function useAudioManager() {
         audioRef.current = null;
       }
       
-      // * Clean up global event listeners
-      globalEventListeners.current.forEach(({ event, handler }) => {
-        window.removeEventListener(event, handler);
-      });
-      globalEventListeners.current.clear();
+      // * Note: Global event listeners are cleaned up in the main component
     };
   }, [soundEffects, volume.effects, musicTracks, volume.music]);
 
@@ -518,6 +513,9 @@ function TournamentContent({
 }) {
   const { showSuccess, showError } = useToast();
 
+  // * Global event listeners ref for proper cleanup
+  const globalEventListeners = useRef(new Set());
+
   // * Custom hooks
   const audioManager = useAudioManager();
   const tournamentState = useTournamentState(
@@ -549,6 +547,16 @@ function TournamentContent({
     setVotingError,
     tournament
   } = tournamentState;
+
+  // * Cleanup global event listeners on unmount
+  useEffect(() => {
+    return () => {
+      globalEventListeners.current.forEach(({ event, handler }) => {
+        window.removeEventListener(event, handler);
+      });
+      globalEventListeners.current.clear();
+    };
+  }, []);
 
   const {
     currentMatch,
