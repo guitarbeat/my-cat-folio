@@ -166,7 +166,7 @@ class ErrorBoundary extends React.Component {
 
             {/* Helpful suggestions based on error type */}
             <div className={styles.boundarySuggestions}>
-              <h3 className={styles.boundarySuggestionsTitle}>Here's what you can try:</h3>
+              <h3 className={styles.boundarySuggestionsTitle}>Here&apos;s what you can try:</h3>
               <ul className={styles.boundarySuggestionsList}>
                 <li>🔄 Refresh the page to start fresh</li>
                 <li>🏠 Go back to the main page and try again</li>
@@ -209,8 +209,8 @@ class ErrorBoundary extends React.Component {
             {/* Support information */}
             <div className={styles.boundarySupport}>
               <p className={styles.boundarySupportText}>
-                <strong>Still having trouble?</strong> Our cat naming experts are here to help! 
-                If this keeps happening, please let us know and we'll get our best cats on the case! 🐱
+                <strong>Still having trouble?</strong> Our cat naming experts are here to help!
+                If this keeps happening, please let us know and we&apos;ll get our best cats on the case! 🐱
               </p>
             </div>
 

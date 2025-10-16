@@ -1367,57 +1367,57 @@
 
 /* Swipe Mode Toggle Button - Enhanced Modern Styling */
 .swipeModeToggleButton {
+  position: relative;
+
   /* * Base button styling */
   min-height: 48px;
   padding: var(--space-3) var(--space-4);
-  border: 2px solid transparent;
-  border-radius: var(--radius-xl);
-  font-weight: 600;
-  font-size: var(--text-sm);
-  letter-spacing: 0.025em;
-  transition: all var(--duration-normal) var(--ease-out);
-  position: relative;
   overflow: hidden;
-  
-  /* * Glassmorphism background */
-  background: var(--glass-bg);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  
-  /* * Gradient border effect */
-  background-clip: padding-box;
-  border: 2px solid transparent;
-  background-image: linear-gradient(var(--card-background), var(--card-background)), 
-                    var(--gradient-primary);
-  background-origin: border-box;
-  
-  /* * Subtle glow effect */
-  box-shadow: 
-    0 4px 12px rgba(0, 0, 0, 0.15),
-    0 2px 4px rgba(0, 0, 0, 0.1),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  font-size: var(--text-sm);
+  font-weight: 600;
   
   /* * Text styling */
   color: var(--text-primary);
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  letter-spacing: 0.025em;
+  text-shadow: 0 1px 2px rgb(0 0 0 / 10%);
   
   /* * Interactive states */
   cursor: pointer;
   user-select: none;
+  
+  /* * Glassmorphism background */
+  background: var(--glass-bg);
+  background-image: linear-gradient(var(--card-background), var(--card-background)), 
+                    var(--gradient-primary);
+  
+  /* * Gradient border effect */
+  background-clip: padding-box;
+  background-origin: border-box;
+  border: 2px solid transparent;
+  border-radius: var(--radius-xl);
+  
+  /* * Subtle glow effect */
+  box-shadow: 
+    0 4px 12px rgb(0 0 0 / 15%),
+    0 2px 4px rgb(0 0 0 / 10%),
+    inset 0 1px 0 rgb(255 255 255 / 10%);
+  backdrop-filter: blur(12px);
+  transition: all var(--duration-normal) var(--ease-out);
 }
 
 .swipeModeToggleButton::before {
-  /* * Animated background overlay */
-  content: '';
   position: absolute;
   top: 0;
   left: -100%;
   width: 100%;
   height: 100%;
+
+  /* * Animated background overlay */
+  content: '';
   background: linear-gradient(
     90deg,
     transparent,
-    rgba(255, 255, 255, 0.1),
+    rgb(255 255 255 / 10%),
     transparent
   );
   transition: left var(--duration-slow) var(--ease-out);
@@ -1427,12 +1427,12 @@
   /* * Enhanced hover state */
   background-image: linear-gradient(var(--card-hover), var(--card-hover)), 
                     var(--gradient-vibrant);
-  transform: translateY(-2px) scale(1.02);
-  box-shadow: 
-    0 8px 25px rgba(0, 0, 0, 0.2),
-    0 4px 12px rgba(0, 0, 0, 0.15),
-    var(--glow-cyan);
   border-color: var(--neon-cyan-100);
+  box-shadow: 
+    0 8px 25px rgb(0 0 0 / 20%),
+    0 4px 12px rgb(0 0 0 / 15%),
+    var(--glow-cyan);
+  transform: translateY(-2px) scale(1.02);
 }
 
 .swipeModeToggleButton:hover:not(:disabled)::before {
@@ -1445,17 +1445,18 @@
 }
 
 .swipeModeToggleButton.active {
+  font-weight: 700;
+  color: var(--charcoal);
+  text-shadow: none;
+
   /* * Active state with vibrant styling */
   background-image: linear-gradient(var(--accent-color), var(--highlight-color)), 
                     var(--gradient-vibrant);
-  color: var(--charcoal);
-  font-weight: 700;
-  text-shadow: none;
-  box-shadow: 
-    0 6px 20px rgba(232, 191, 118, 0.4),
-    0 3px 8px rgba(241, 164, 56, 0.3),
-    var(--glow-pink);
   border-color: var(--mimosa);
+  box-shadow: 
+    0 6px 20px rgb(232 191 118 / 40%),
+    0 3px 8px rgb(241 164 56 / 30%),
+    var(--glow-pink);
   transform: translateY(-1px);
 }
 
@@ -1463,21 +1464,22 @@
   /* * Enhanced active hover state */
   background-image: linear-gradient(var(--highlight-color), var(--accent-color)), 
                     var(--gradient-vibrant);
-  transform: translateY(-3px) scale(1.03);
   box-shadow: 
-    0 10px 30px rgba(232, 191, 118, 0.5),
-    0 5px 15px rgba(241, 164, 56, 0.4),
+    0 10px 30px rgb(232 191 118 / 50%),
+    0 5px 15px rgb(241 164 56 / 40%),
     var(--glow-vibrant);
+  transform: translateY(-3px) scale(1.03);
 }
 
 .swipeModeToggleButton:disabled {
+  color: var(--text-tertiary);
+  cursor: not-allowed;
+  background: var(--glass-bg-light);
+  box-shadow: none;
+
   /* * Disabled state */
   opacity: 0.5;
-  cursor: not-allowed;
   transform: none;
-  box-shadow: none;
-  background: var(--glass-bg-light);
-  color: var(--text-tertiary);
 }
 
 .swipeModeToggleButton:focus-visible {
@@ -1485,63 +1487,63 @@
   outline: 3px solid var(--accent-color);
   outline-offset: 3px;
   box-shadow: 
-    0 0 0 3px rgba(232, 191, 118, 0.3),
-    0 4px 12px rgba(0, 0, 0, 0.15);
+    0 0 0 3px rgb(232 191 118 / 30%),
+    0 4px 12px rgb(0 0 0 / 15%);
 }
 
 /* Cat Pictures Toggle Button - Enhanced Modern Styling */
 .catPicturesToggleButton {
+  position: relative;
+
   /* * Base button styling */
   min-height: 48px;
   padding: var(--space-3) var(--space-4);
-  border: 2px solid transparent;
-  border-radius: var(--radius-xl);
-  font-weight: 600;
-  font-size: var(--text-sm);
-  letter-spacing: 0.025em;
-  transition: all var(--duration-normal) var(--ease-out);
-  position: relative;
   overflow: hidden;
-  
-  /* * Glassmorphism background */
-  background: var(--glass-bg);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  
-  /* * Gradient border effect */
-  background-clip: padding-box;
-  border: 2px solid transparent;
-  background-image: linear-gradient(var(--card-background), var(--card-background)), 
-                    var(--gradient-primary);
-  background-origin: border-box;
-  
-  /* * Subtle glow effect */
-  box-shadow: 
-    0 4px 12px rgba(0, 0, 0, 0.15),
-    0 2px 4px rgba(0, 0, 0, 0.1),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  font-size: var(--text-sm);
+  font-weight: 600;
   
   /* * Text styling */
   color: var(--text-primary);
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  letter-spacing: 0.025em;
+  text-shadow: 0 1px 2px rgb(0 0 0 / 10%);
   
   /* * Interactive states */
   cursor: pointer;
   user-select: none;
+  
+  /* * Glassmorphism background */
+  background: var(--glass-bg);
+  background-image: linear-gradient(var(--card-background), var(--card-background)), 
+                    var(--gradient-primary);
+  
+  /* * Gradient border effect */
+  background-clip: padding-box;
+  background-origin: border-box;
+  border: 2px solid transparent;
+  border-radius: var(--radius-xl);
+  
+  /* * Subtle glow effect */
+  box-shadow: 
+    0 4px 12px rgb(0 0 0 / 15%),
+    0 2px 4px rgb(0 0 0 / 10%),
+    inset 0 1px 0 rgb(255 255 255 / 10%);
+  backdrop-filter: blur(12px);
+  transition: all var(--duration-normal) var(--ease-out);
 }
 
 .catPicturesToggleButton::before {
-  /* * Animated background overlay */
-  content: '';
   position: absolute;
   top: 0;
   left: -100%;
   width: 100%;
   height: 100%;
+
+  /* * Animated background overlay */
+  content: '';
   background: linear-gradient(
     90deg,
     transparent,
-    rgba(255, 255, 255, 0.1),
+    rgb(255 255 255 / 10%),
     transparent
   );
   transition: left var(--duration-slow) var(--ease-out);
@@ -1551,12 +1553,12 @@
   /* * Enhanced hover state */
   background-image: linear-gradient(var(--card-hover), var(--card-hover)), 
                     var(--gradient-vibrant);
-  transform: translateY(-2px) scale(1.02);
-  box-shadow: 
-    0 8px 25px rgba(0, 0, 0, 0.2),
-    0 4px 12px rgba(0, 0, 0, 0.15),
-    var(--glow-cyan);
   border-color: var(--neon-cyan-100);
+  box-shadow: 
+    0 8px 25px rgb(0 0 0 / 20%),
+    0 4px 12px rgb(0 0 0 / 15%),
+    var(--glow-cyan);
+  transform: translateY(-2px) scale(1.02);
 }
 
 .catPicturesToggleButton:hover:not(:disabled)::before {
@@ -1569,17 +1571,18 @@
 }
 
 .catPicturesToggleButton.active {
+  font-weight: 700;
+  color: var(--charcoal);
+  text-shadow: none;
+
   /* * Active state with vibrant styling */
   background-image: linear-gradient(var(--accent-color), var(--highlight-color)), 
                     var(--gradient-vibrant);
-  color: var(--charcoal);
-  font-weight: 700;
-  text-shadow: none;
-  box-shadow: 
-    0 6px 20px rgba(232, 191, 118, 0.4),
-    0 3px 8px rgba(241, 164, 56, 0.3),
-    var(--glow-pink);
   border-color: var(--mimosa);
+  box-shadow: 
+    0 6px 20px rgb(232 191 118 / 40%),
+    0 3px 8px rgb(241 164 56 / 30%),
+    var(--glow-pink);
   transform: translateY(-1px);
 }
 
@@ -1587,21 +1590,22 @@
   /* * Enhanced active hover state */
   background-image: linear-gradient(var(--highlight-color), var(--accent-color)), 
                     var(--gradient-vibrant);
-  transform: translateY(-3px) scale(1.03);
   box-shadow: 
-    0 10px 30px rgba(232, 191, 118, 0.5),
-    0 5px 15px rgba(241, 164, 56, 0.4),
+    0 10px 30px rgb(232 191 118 / 50%),
+    0 5px 15px rgb(241 164 56 / 40%),
     var(--glow-vibrant);
+  transform: translateY(-3px) scale(1.03);
 }
 
 .catPicturesToggleButton:disabled {
+  color: var(--text-tertiary);
+  cursor: not-allowed;
+  background: var(--glass-bg-light);
+  box-shadow: none;
+
   /* * Disabled state */
   opacity: 0.5;
-  cursor: not-allowed;
   transform: none;
-  box-shadow: none;
-  background: var(--glass-bg-light);
-  color: var(--text-tertiary);
 }
 
 .catPicturesToggleButton:focus-visible {
@@ -1609,8 +1613,8 @@
   outline: 3px solid var(--accent-color);
   outline-offset: 3px;
   box-shadow: 
-    0 0 0 3px rgba(232, 191, 118, 0.3),
-    0 4px 12px rgba(0, 0, 0, 0.15);
+    0 0 0 3px rgb(232 191 118 / 30%),
+    0 4px 12px rgb(0 0 0 / 15%);
 }
 
 /* Swipe Mode Container */
@@ -1859,69 +1863,71 @@
 }
 
 .swipeButton {
+  position: relative;
+
   /* * Base button styling */
   min-width: 120px;
   min-height: 48px;
   padding: var(--space-3) var(--space-4);
-  border: 2px solid transparent;
-  border-radius: var(--radius-xl);
-  font-weight: 600;
-  font-size: var(--text-sm);
-  letter-spacing: 0.025em;
-  text-transform: uppercase;
-  transition: all var(--duration-normal) var(--ease-out);
-  position: relative;
   overflow: hidden;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  
+  /* * Text styling */
+  color: var(--text-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+  text-shadow: 0 1px 2px rgb(0 0 0 / 10%);
   cursor: pointer;
   user-select: none;
   
   /* * Glassmorphism background */
   background: var(--glass-bg);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  background-image: linear-gradient(var(--card-background), var(--card-background)), 
+                    var(--gradient-primary);
   
   /* * Gradient border effect */
   background-clip: padding-box;
-  background-image: linear-gradient(var(--card-background), var(--card-background)), 
-                    var(--gradient-primary);
   background-origin: border-box;
+  border: 2px solid transparent;
+  border-radius: var(--radius-xl);
   
   /* * Subtle glow effect */
   box-shadow: 
-    0 4px 12px rgba(0, 0, 0, 0.15),
-    0 2px 4px rgba(0, 0, 0, 0.1),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1);
-  
-  /* * Text styling */
-  color: var(--text-primary);
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    0 4px 12px rgb(0 0 0 / 15%),
+    0 2px 4px rgb(0 0 0 / 10%),
+    inset 0 1px 0 rgb(255 255 255 / 10%);
+  backdrop-filter: blur(12px);
+  transition: all var(--duration-normal) var(--ease-out);
 }
 
 .swipeButton::before {
-  /* * Animated background overlay */
-  content: '';
   position: absolute;
   top: 0;
   left: -100%;
   width: 100%;
   height: 100%;
+
+  /* * Animated background overlay */
+  content: '';
   background: linear-gradient(
     90deg,
     transparent,
-    rgba(255, 255, 255, 0.1),
+    rgb(255 255 255 / 10%),
     transparent
   );
   transition: left var(--duration-slow) var(--ease-out);
 }
 
 .swipeButton:hover:not(:disabled) {
+  border-color: var(--neon-cyan-100);
+  box-shadow: 
+    0 8px 25px rgb(0 0 0 / 20%),
+    0 4px 12px rgb(0 0 0 / 15%),
+    var(--glow-cyan);
+
   /* * Enhanced hover state */
   transform: translateY(-2px) scale(1.02);
-  box-shadow: 
-    0 8px 25px rgba(0, 0, 0, 0.2),
-    0 4px 12px rgba(0, 0, 0, 0.15),
-    var(--glow-cyan);
-  border-color: var(--neon-cyan-100);
 }
 
 .swipeButton:hover:not(:disabled)::before {
@@ -1934,13 +1940,14 @@
 }
 
 .swipeButton:disabled {
+  color: var(--text-tertiary);
+  cursor: not-allowed;
+  background: var(--glass-bg-light);
+  box-shadow: none;
+
   /* * Disabled state */
   opacity: 0.5;
-  cursor: not-allowed;
   transform: none;
-  box-shadow: none;
-  background: var(--glass-bg-light);
-  color: var(--text-tertiary);
 }
 
 .swipeButton:focus-visible {
@@ -1948,8 +1955,8 @@
   outline: 3px solid var(--accent-color);
   outline-offset: 3px;
   box-shadow: 
-    0 0 0 3px rgba(232, 191, 118, 0.3),
-    0 4px 12px rgba(0, 0, 0, 0.15);
+    0 0 0 3px rgb(232 191 118 / 30%),
+    0 4px 12px rgb(0 0 0 / 15%);
 }
 
 /* * Skip button (left) styling */
@@ -1960,14 +1967,14 @@
 }
 
 .swipeLeftButton:hover:not(:disabled) {
+  color: white;
   background-image: linear-gradient(var(--error-600), var(--error-500)), 
                     var(--gradient-danger);
-  color: white;
-  box-shadow: 
-    0 8px 25px rgba(239, 68, 68, 0.3),
-    0 4px 12px rgba(220, 38, 38, 0.2),
-    var(--glow-red);
   border-color: var(--error-300);
+  box-shadow: 
+    0 8px 25px rgb(239 68 68 / 30%),
+    0 4px 12px rgb(220 38 38 / 20%),
+    var(--glow-red);
 }
 
 /* * Select button (right) styling */
@@ -1978,14 +1985,14 @@
 }
 
 .swipeRightButton:hover:not(:disabled) {
+  color: white;
   background-image: linear-gradient(var(--success-600), var(--success-500)), 
                     var(--gradient-success);
-  color: white;
-  box-shadow: 
-    0 8px 25px rgba(16, 185, 129, 0.3),
-    0 4px 12px rgba(5, 150, 105, 0.2),
-    var(--glow-green);
   border-color: var(--success-300);
+  box-shadow: 
+    0 8px 25px rgb(16 185 129 / 30%),
+    0 4px 12px rgb(5 150 105 / 20%),
+    var(--glow-green);
 }
 
 /* Card Progress */
@@ -2179,7 +2186,6 @@
     
     /* * Reduce effects on very small screens for performance */
     backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
   }
 }
 
@@ -2206,7 +2212,7 @@
     touch-action: manipulation; /* * Optimize touch behavior */
     
     /* * Enhanced touch feedback */
-    -webkit-tap-highlight-color: rgba(232, 191, 118, 0.3);
+    -webkit-tap-highlight-color: rgb(232 191 118 / 30%);
     
     /* * Optimize for touch interactions */
     transition: transform var(--duration-fast) var(--ease-out),

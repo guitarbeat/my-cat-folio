@@ -267,7 +267,7 @@ function Login({ onLogin }) {
                 />
               )}
               <p id="loginHelp" className={styles.explainerText}>
-                If you're a returning user, enter your name to login. If you're new, 
+                If you&apos;re a returning user, enter your name to login. If you&apos;re new,
                 enter your name to create an account and start judging!
               </p>
               {name.trim() && (

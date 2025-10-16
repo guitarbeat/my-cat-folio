@@ -229,8 +229,7 @@ class MobileGestures {
    */
   handleMultiTouchStart(touches, _event) {
     if (touches.length === 2) {
-      const touch1 = touches[0];
-      const touch2 = touches[1];
+      const [touch1, touch2] = touches;
 
       const initialDistance = Math.sqrt(
         Math.pow(touch2.clientX - touch1.clientX, 2) +
@@ -250,8 +249,7 @@ class MobileGestures {
    */
   handleMultiTouchMove(touches, event) {
     if (touches.length === 2) {
-      const touch1 = touches[0];
-      const touch2 = touches[1];
+      const [touch1, touch2] = touches;
 
       const currentDistance = Math.sqrt(
         Math.pow(touch2.clientX - touch1.clientX, 2) +

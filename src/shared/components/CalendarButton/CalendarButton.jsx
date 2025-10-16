@@ -45,8 +45,8 @@ function CalendarButton({ rankings, userName, hiddenNames }) {
     const baseUrl = 'https://calendar.google.com/calendar/render';
     const params = new URLSearchParams({
       action: 'TEMPLATE',
-      text: text,
-      details: details,
+      text,
+      details,
       dates: `${startDate}/${endDateStr}`,
       ctz: Intl.DateTimeFormat().resolvedOptions().timeZone // Add user's timezone
     });

@@ -1098,7 +1098,7 @@ function TournamentSetupContent({ onStart, userName }) {
       for (const url of merged) {
         if (!url) continue;
         // strip query/hash and extension
-        const clean = String(url).split(/[?#]/)[0];
+        const [clean] = String(url).split(/[?#]/);
         const name = clean.substring(clean.lastIndexOf('/') + 1);
         const base = name.replace(/\.[^.]+$/, '').toLowerCase();
         if (seen.has(base)) continue;

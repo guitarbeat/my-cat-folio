@@ -28,19 +28,19 @@
   /* * Gradient Definitions */
   --gradient-primary: linear-gradient(135deg, var(--neon-cyan), var(--hot-pink));
   --gradient-vibrant: linear-gradient(135deg, var(--fire-red), var(--hot-pink), var(--neon-cyan));
-  --gradient-mesh: radial-gradient(at 40% 20%, rgba(47, 243, 224, 0.3) 0px, transparent 50%),
-                   radial-gradient(at 80% 0%, rgba(250, 38, 160, 0.3) 0px, transparent 50%),
-                   radial-gradient(at 0% 50%, rgba(245, 23, 32, 0.3) 0px, transparent 50%),
-                   radial-gradient(at 80% 50%, rgba(47, 243, 224, 0.3) 0px, transparent 50%),
-                   radial-gradient(at 0% 100%, rgba(250, 38, 160, 0.3) 0px, transparent 50%),
-                   radial-gradient(at 80% 100%, rgba(245, 23, 32, 0.3) 0px, transparent 50%),
-                   radial-gradient(at 0% 0%, rgba(47, 243, 224, 0.3) 0px, transparent 50%);
+  --gradient-mesh: radial-gradient(at 40% 20%, rgb(47 243 224 / 30%) 0px, transparent 50%),
+                   radial-gradient(at 80% 0%, rgb(250 38 160 / 30%) 0px, transparent 50%),
+                   radial-gradient(at 0% 50%, rgb(245 23 32 / 30%) 0px, transparent 50%),
+                   radial-gradient(at 80% 50%, rgb(47 243 224 / 30%) 0px, transparent 50%),
+                   radial-gradient(at 0% 100%, rgb(250 38 160 / 30%) 0px, transparent 50%),
+                   radial-gradient(at 80% 100%, rgb(245 23 32 / 30%) 0px, transparent 50%),
+                   radial-gradient(at 0% 0%, rgb(47 243 224 / 30%) 0px, transparent 50%);
   
   /* * Glow Effects */
-  --glow-cyan: 0 0 20px rgba(47, 243, 224, 0.5), 0 0 40px rgba(47, 243, 224, 0.3);
-  --glow-pink: 0 0 20px rgba(250, 38, 160, 0.5), 0 0 40px rgba(250, 38, 160, 0.3);
-  --glow-red: 0 0 20px rgba(245, 23, 32, 0.5), 0 0 40px rgba(245, 23, 32, 0.3);
-  --glow-vibrant: 0 0 30px rgba(47, 243, 224, 0.4), 0 0 60px rgba(250, 38, 160, 0.3), 0 0 90px rgba(245, 23, 32, 0.2);
+  --glow-cyan: 0 0 20px rgb(47 243 224 / 50%), 0 0 40px rgb(47 243 224 / 30%);
+  --glow-pink: 0 0 20px rgb(250 38 160 / 50%), 0 0 40px rgb(250 38 160 / 30%);
+  --glow-red: 0 0 20px rgb(245 23 32 / 50%), 0 0 40px rgb(245 23 32 / 30%);
+  --glow-vibrant: 0 0 30px rgb(47 243 224 / 40%), 0 0 60px rgb(250 38 160 / 30%), 0 0 90px rgb(245 23 32 / 20%);
 
   /* Primary Color Scale - Based on Charcoal */
   --primary-50: #f8f9fa;
@@ -293,13 +293,13 @@
   --header-border: #334155; /* Darker header border */
 
   /* Glass surface tokens - Enhanced glassmorphism */
-  --glass-bg: rgba(15, 23, 42, 0.4);
-  --glass-bg-light: rgba(15, 23, 42, 0.2);
-  --glass-bg-strong: rgba(15, 23, 42, 0.6);
-  --glass-border: rgba(255, 255, 255, 0.15);
-  --glass-border-hover: rgba(255, 255, 255, 0.25);
-  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
-  --glass-shadow-colored: 0 8px 32px rgba(47, 243, 224, 0.15), 0 8px 16px rgba(250, 38, 160, 0.1);
+  --glass-bg: rgb(15 23 42 / 40%);
+  --glass-bg-light: rgb(15 23 42 / 20%);
+  --glass-bg-strong: rgb(15 23 42 / 60%);
+  --glass-border: rgb(255 255 255 / 15%);
+  --glass-border-hover: rgb(255 255 255 / 25%);
+  --glass-shadow: 0 8px 32px rgb(0 0 0 / 40%);
+  --glass-shadow-colored: 0 8px 32px rgb(47 243 224 / 15%), 0 8px 16px rgb(250 38 160 / 10%);
   --glass-blur: 20px;
   --glass-blur-strong: 30px;
 
@@ -330,34 +330,34 @@ body.light-theme {
   --primary-color: var(--primary-600);
   --primary-light: var(--primary-100);
   --primary-dark: var(--primary-800);
-  --surface-color: #ffffff; /* * Light surface color */
+  --surface-color: #fff; /* * Light surface color */
   --background-color: #f8fafc; /* * Light background color */
   --text-primary: #1e293b; /* Dark text for light backgrounds */
   --text-secondary: #475569; /* Dark secondary text */
   --text-tertiary: #64748b; /* Dark tertiary text */
   --border-color: #e2e8f0; /* Light border for better contrast */
-  --card-background: #ffffff; /* * Light card background */
+  --card-background: #fff; /* * Light card background */
   --card-border: #e2e8f0; /* * Light card border */
   --card-hover: #f1f5f9; /* * Light hover state */
-  --header-background: #ffffff; /* * Light header background */
+  --header-background: #fff; /* * Light header background */
   --header-border: #e2e8f0; /* * Light header border */
 
   /* Glass surface tokens (light) */
-  --glass-bg: rgba(255, 255, 255, 0.7);
-  --glass-bg-light: rgba(255, 255, 255, 0.5);
-  --glass-bg-strong: rgba(255, 255, 255, 0.85);
-  --glass-border: rgba(0, 0, 0, 0.1);
-  --glass-border-hover: rgba(0, 0, 0, 0.15);
-  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-  --glass-shadow-colored: 0 8px 32px rgba(47, 243, 224, 0.1), 0 8px 16px rgba(250, 38, 160, 0.05);
+  --glass-bg: rgb(255 255 255 / 70%);
+  --glass-bg-light: rgb(255 255 255 / 50%);
+  --glass-bg-strong: rgb(255 255 255 / 85%);
+  --glass-border: rgb(0 0 0 / 10%);
+  --glass-border-hover: rgb(0 0 0 / 15%);
+  --glass-shadow: 0 8px 32px rgb(0 0 0 / 10%);
+  --glass-shadow-colored: 0 8px 32px rgb(47 243 224 / 10%), 0 8px 16px rgb(250 38 160 / 5%);
   --glass-blur: 16px;
   --glass-blur-strong: 24px;
   --shadow-subtle: 0 1px 3px rgb(0 0 0 / 10%); /* * Subtle shadow for light theme */
   --shadow-medium: 0 4px 12px rgb(0 0 0 / 15%); /* * Medium shadow for light theme */
 
   /* Synced light-mode variables for components using legacy names */
-  --surface-light: #ffffff; /* * Updated to match new surface color */
-  --card-background-light: #ffffff; /* * Updated to match new card background */
+  --surface-light: #fff; /* * Updated to match new surface color */
+  --card-background-light: #fff; /* * Updated to match new card background */
   --card-hover-light: #f1f5f9; /* * Updated to match new hover color */
   --border-color-light: #e2e8f0; /* * Updated to match new border color */
   --text-primary-light: #1e293b; /* * Dark text for light backgrounds */
@@ -410,13 +410,13 @@ body.dark-theme {
   --header-border: #1e293b; /* * Darker header border */
 
   /* Glass surface tokens (dark) - Enhanced glassmorphism */
-  --glass-bg: rgba(15, 23, 42, 0.4);
-  --glass-bg-light: rgba(15, 23, 42, 0.2);
-  --glass-bg-strong: rgba(15, 23, 42, 0.6);
-  --glass-border: rgba(255, 255, 255, 0.15);
-  --glass-border-hover: rgba(255, 255, 255, 0.25);
-  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
-  --glass-shadow-colored: 0 8px 32px rgba(47, 243, 224, 0.15), 0 8px 16px rgba(250, 38, 160, 0.1);
+  --glass-bg: rgb(15 23 42 / 40%);
+  --glass-bg-light: rgb(15 23 42 / 20%);
+  --glass-bg-strong: rgb(15 23 42 / 60%);
+  --glass-border: rgb(255 255 255 / 15%);
+  --glass-border-hover: rgb(255 255 255 / 25%);
+  --glass-shadow: 0 8px 32px rgb(0 0 0 / 40%);
+  --glass-shadow-colored: 0 8px 32px rgb(47 243 224 / 15%), 0 8px 16px rgb(250 38 160 / 10%);
   --glass-blur: 20px;
   --glass-blur-strong: 30px;
 
