@@ -32,6 +32,9 @@ function useAudioManager() {
 
   const audioRef = useRef(null);
   const musicRef = useRef(null);
+  const audioEventListeners = useRef(new Set());
+  const musicEventListeners = useRef(new Set());
+  const globalEventListeners = useRef(new Set());
 
   const musicTracks = useMemo(
     () => [
@@ -72,12 +75,28 @@ function useAudioManager() {
     return () => {
       if (musicRef.current) {
         musicRef.current.pause();
+        // * Remove all event listeners to prevent memory leaks
+        musicEventListeners.current.forEach(({ event, handler }) => {
+          musicRef.current?.removeEventListener(event, handler);
+        });
+        musicEventListeners.current.clear();
         musicRef.current = null;
       }
       if (audioRef.current) {
         audioRef.current.pause();
+        // * Remove all event listeners to prevent memory leaks
+        audioEventListeners.current.forEach(({ event, handler }) => {
+          audioRef.current?.removeEventListener(event, handler);
+        });
+        audioEventListeners.current.clear();
         audioRef.current = null;
       }
+      
+      // * Clean up global event listeners
+      globalEventListeners.current.forEach(({ event, handler }) => {
+        window.removeEventListener(event, handler);
+      });
+      globalEventListeners.current.clear();
     };
   }, [soundEffects, volume.effects, musicTracks, volume.music]);
 
@@ -113,12 +132,16 @@ function useAudioManager() {
         audioRef.current.volume = volume.effects;
         audioRef.current.play().catch((error) => {
           if (error.name !== 'AbortError') {
-            console.error('Error playing sound effect:', error);
+            if (process.env.NODE_ENV === 'development') {
+              console.error('Error playing sound effect:', error);
+            }
           }
         });
       }
     } catch (error) {
-      console.error('Error playing sound effect:', error);
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Error playing sound effect:', error);
+      }
     }
   }, [isMuted, volume.effects, getRandomSoundEffect]);
 
@@ -141,7 +164,9 @@ function useAudioManager() {
         setAudioError(null);
       } catch (error) {
         if (error.name !== 'AbortError') {
-          console.error('Error playing audio:', error);
+          if (process.env.NODE_ENV === 'development') {
+            console.error('Error playing audio:', error);
+          }
           setAudioError('Unable to play background music. Click to try again.');
         }
       }
@@ -165,8 +190,15 @@ function useAudioManager() {
         return (prev + 1) % musicTracks.length;
       });
     };
+    
+    // * Track event listener for proper cleanup
+    musicEventListeners.current.add({ event: 'ended', handler: onEnded });
     node.addEventListener('ended', onEnded);
-    return () => node.removeEventListener('ended', onEnded);
+    
+    return () => {
+      node.removeEventListener('ended', onEnded);
+      musicEventListeners.current.delete({ event: 'ended', handler: onEnded });
+    };
   }, [isShuffle, musicTracks.length]);
 
   // * Toggle mute
@@ -189,7 +221,9 @@ function useAudioManager() {
           }, 50);
         }
       } catch (error) {
-        console.error('Error toggling mute:', error);
+        if (process.env.NODE_ENV === 'development') {
+          console.error('Error toggling mute:', error);
+        }
       }
       return newMuted;
     });
@@ -215,7 +249,9 @@ function useAudioManager() {
             .then(() => setAudioError(null))
             .catch((error) => {
               if (error.name !== 'AbortError') {
-                console.error('Error retrying audio:', error);
+                if (process.env.NODE_ENV === 'development') {
+                  console.error('Error retrying audio:', error);
+                }
                 setAudioError('Unable to play audio. Click to try again.');
               }
             });
@@ -415,8 +451,14 @@ function useKeyboardControls(
       }
     };
 
+    // * Track global event listener for proper cleanup
+    globalEventListeners.current.add({ event: 'keydown', handler: handleKeyPress });
     window.addEventListener('keydown', handleKeyPress);
-    return () => window.removeEventListener('keydown', handleKeyPress);
+    
+    return () => {
+      window.removeEventListener('keydown', handleKeyPress);
+      globalEventListeners.current.delete({ event: 'keydown', handler: handleKeyPress });
+    };
   }, [
     selectedOption,
     isProcessing,
@@ -563,11 +605,11 @@ function TournamentContent({
     (option) => {
       let resultMessage = '';
       if (option === 'both') {
-        resultMessage = `Both "${currentMatch.left.name}" and "${currentMatch.right.name}" advance!`;
+        resultMessage = `Both "${currentMatch.left?.name || 'Unknown'}" and "${currentMatch.right?.name || 'Unknown'}" advance!`;
       } else if (option === 'left') {
-        resultMessage = `"${currentMatch.left.name}" wins this round!`;
+        resultMessage = `"${currentMatch.left?.name || 'Unknown'}" wins this round!`;
       } else if (option === 'right') {
-        resultMessage = `"${currentMatch.right.name}" wins this round!`;
+        resultMessage = `"${currentMatch.right?.name || 'Unknown'}" wins this round!`;
       } else if (option === 'neither') {
         resultMessage = 'Match skipped';
       }
@@ -602,8 +644,8 @@ function TournamentContent({
         const updatedRatings = await handleVote(option);
 
         if (onVote && currentMatch) {
-          const leftName = currentMatch.left.name;
-          const rightName = currentMatch.right.name;
+          const leftName = currentMatch.left?.name || 'Unknown';
+          const rightName = currentMatch.right?.name || 'Unknown';
 
           let leftOutcome = 'skip';
           let rightOutcome = 'skip';
@@ -661,7 +703,9 @@ function TournamentContent({
         await new Promise((resolve) => setTimeout(resolve, 100));
         setIsTransitioning(false);
       } catch (error) {
-        console.error('Error handling vote:', error);
+        if (process.env.NODE_ENV === 'development') {
+          console.error('Error handling vote:', error);
+        }
         setVotingError({
           message: 'Failed to submit vote. Please try again.',
           severity: 'MEDIUM',
@@ -712,7 +756,9 @@ function TournamentContent({
         await onComplete(currentRatings);
       }
     } catch (error) {
-      console.error('Error ending tournament:', error);
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Error ending tournament:', error);
+      }
     } finally {
       setIsProcessing(false);
     }
@@ -779,8 +825,8 @@ function TournamentContent({
       return {
         id: matchNumber,
         round,
-        name1: vote.match.left.name,
-        name2: vote.match.right.name,
+        name1: vote.match.left?.name || 'Unknown',
+        name2: vote.match.right?.name || 'Unknown',
         winner
       };
     });
@@ -898,8 +944,8 @@ function TournamentContent({
               aria-label="Left name option"
             >
               <NameCard
-                name={currentMatch.left.name}
-                description={currentMatch.left.description}
+                name={currentMatch.left?.name || 'Unknown'}
+                description={currentMatch.left?.description || ''}
                 onClick={() => handleNameCardClick('left')}
                 selected={selectedOption === 'left'}
                 disabled={isProcessing || isTransitioning}
@@ -918,8 +964,8 @@ function TournamentContent({
               aria-label="Right name option"
             >
               <NameCard
-                name={currentMatch.right.name}
-                description={currentMatch.right.description}
+                name={currentMatch.right?.name || 'Unknown'}
+                description={currentMatch.right?.description || ''}
                 onClick={() => handleNameCardClick('right')}
                 selected={selectedOption === 'right'}
                 disabled={isProcessing || isTransitioning}

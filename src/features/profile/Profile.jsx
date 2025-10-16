@@ -21,6 +21,7 @@ import ProfileStats from './ProfileStats';
 import ProfileFilters from './ProfileFilters';
 import ProfileNameList from './ProfileNameList';
 import DataMigration from '../admin/DataMigration';
+import { Error } from '../../shared/components';
 import styles from './Profile.module.css';
 
 // * Use database-optimized stats calculation
@@ -44,7 +45,9 @@ const fetchUserStatsFromDB = async (userName) => {
       popularNames: 0 // Can be calculated separately if needed
     };
   } catch (error) {
-    console.error('Error fetching user stats from DB:', error);
+    if (process.env.NODE_ENV === 'development') {
+      console.error('Error fetching user stats from DB:', error);
+    }
     return null;
   }
 };
@@ -208,7 +211,9 @@ const calculateSelectionStats = async (userName) => {
       insights
     };
   } catch (error) {
-    console.error('Error calculating selection stats:', error);
+    if (process.env.NODE_ENV === 'development') {
+      console.error('Error calculating selection stats:', error);
+    }
     return null;
   }
 };
@@ -318,14 +323,18 @@ const Profile = ({ userName, onStartNewTournament }) => {
       setRatingsLoading(true);
       setRatingsError(null);
       if (!supabase) {
-        console.warn('Supabase not configured, using empty data for Profile');
+        if (process.env.NODE_ENV === 'development') {
+          console.warn('Supabase not configured, using empty data for Profile');
+        }
         setAllNames([]);
         return;
       }
       const names = await catNamesAPI.getNamesWithDescriptions();
       setAllNames(names);
     } catch (err) {
-      console.error('Error fetching names:', err);
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Error fetching names:', err);
+      }
       setRatingsError(err);
     } finally {
       setRatingsLoading(false);
@@ -338,14 +347,18 @@ const Profile = ({ userName, onStartNewTournament }) => {
 
     try {
       if (!supabase) {
-        console.warn('Supabase not configured, skipping selection stats');
+        if (process.env.NODE_ENV === 'development') {
+          console.warn('Supabase not configured, skipping selection stats');
+        }
         setSelectionStats(null);
         return;
       }
       const stats = await calculateSelectionStats(userName);
       setSelectionStats(stats);
     } catch (error) {
-      console.error('Error fetching selection stats:', error);
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Error fetching selection stats:', error);
+      }
       setSelectionStats(null);
     }
   }, [userName]);
@@ -406,7 +419,9 @@ const Profile = ({ userName, onStartNewTournament }) => {
         const currentlyHidden = hiddenNames.has(nameId);
 
         if (!supabase) {
-          console.warn('Supabase not configured, cannot toggle visibility');
+          if (process.env.NODE_ENV === 'development') {
+            console.warn('Supabase not configured, cannot toggle visibility');
+          }
           showError('Database not available');
           return;
         }
@@ -446,7 +461,9 @@ const Profile = ({ userName, onStartNewTournament }) => {
     async (name) => {
       try {
         if (!supabase) {
-          console.warn('Supabase not configured, cannot delete name');
+          if (process.env.NODE_ENV === 'development') {
+            console.warn('Supabase not configured, cannot delete name');
+          }
           showError('Database not available');
           return;
         }
@@ -487,7 +504,9 @@ const Profile = ({ userName, onStartNewTournament }) => {
     async (nameIds) => {
       try {
         if (!supabase) {
-          console.warn('Supabase not configured, cannot hide names');
+          if (process.env.NODE_ENV === 'development') {
+            console.warn('Supabase not configured, cannot hide names');
+          }
           showError('Database not available');
           return;
         }
@@ -531,7 +550,9 @@ const Profile = ({ userName, onStartNewTournament }) => {
     async (nameIds) => {
       try {
         if (!supabase) {
-          console.warn('Supabase not configured, cannot unhide names');
+          if (process.env.NODE_ENV === 'development') {
+            console.warn('Supabase not configured, cannot unhide names');
+          }
           showError('Database not available');
           return;
         }
@@ -699,4 +720,13 @@ Profile.propTypes = {
   onStartNewTournament: PropTypes.func.isRequired
 };
 
-export default Profile;
+// * Wrap Profile with error boundary
+function ProfileWithErrorBoundary(props) {
+  return (
+    <Error variant="boundary">
+      <Profile {...props} />
+    </Error>
+  );
+}
+
+export default ProfileWithErrorBoundary;

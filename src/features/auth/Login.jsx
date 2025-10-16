@@ -88,7 +88,9 @@ function Login({ onLogin }) {
       .then((response) => response.json())
       .then((data) => setCatFact(data.fact))
       .catch((error) => {
-        console.error('Error fetching cat fact:', error);
+        if (process.env.NODE_ENV === 'development') {
+          console.error('Error fetching cat fact:', error);
+        }
         setCatFact('Cats are amazing creatures with unique personalities!');
       });
 
@@ -339,4 +341,13 @@ Login.propTypes = {
   onLogin: PropTypes.func.isRequired
 };
 
-export default Login;
+// * Wrap Login with error boundary
+function LoginWithErrorBoundary(props) {
+  return (
+    <Error variant="boundary">
+      <Login {...props} />
+    </Error>
+  );
+}
+
+export default LoginWithErrorBoundary;

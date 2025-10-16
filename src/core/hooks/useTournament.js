@@ -61,14 +61,6 @@ export function useTournament({
   // * Get tournament actions from store
   const { tournamentActions } = useAppStore();
 
-  // * Get persistent state values for backward compatibility
-  const currentMatch = persistentState.currentMatch;
-  const roundNumber = persistentState.currentRound;
-  const currentMatchNumber = persistentState.currentMatch;
-  const totalMatches = persistentState.totalMatches;
-  const canUndo = persistentState.matchHistory.length > 1;
-  const isError = false; // * Error state is now managed by store
-
   // * Persistent storage setup
   const tournamentId = useMemo(() => {
     const sortedNames = [...names]
@@ -88,6 +80,14 @@ export function useTournament({
     lastUpdated: Date.now(),
     namesKey: ''
   });
+
+  // * Get persistent state values for backward compatibility
+  const currentMatch = persistentState.currentMatch;
+  const roundNumber = persistentState.currentRound;
+  const currentMatchNumber = persistentState.currentMatch;
+  const totalMatches = persistentState.totalMatches;
+  const canUndo = persistentState.matchHistory.length > 1;
+  const isError = false; // * Error state is now managed by store
 
   // * Update persistent state helper
   const updatePersistentState = useCallback(
@@ -407,7 +407,9 @@ export function useTournament({
 
         return () => clearTimeout(timeoutId);
       } catch (error) {
-        console.error('Vote handling error:', error);
+        if (process.env.NODE_ENV === 'development') {
+          console.error('Vote handling error:', error);
+        }
         updateTournamentState({
           isError: true,
           isTransitioning: false
@@ -666,7 +668,9 @@ function getNextMatch(names, sorter, _matchNumber, options = {}) {
         };
       }
     } catch (e) {
-      console.warn('Adaptive next-match selection failed:', e);
+      if (process.env.NODE_ENV === 'development') {
+        console.warn('Adaptive next-match selection failed:', e);
+      }
     }
   }
 
@@ -675,14 +679,18 @@ function getNextMatch(names, sorter, _matchNumber, options = {}) {
     try {
       const nextMatch = sorter.getNextMatch();
       if (nextMatch) {
+        const leftName = names.find((n) => n.name === nextMatch.left);
+        const rightName = names.find((n) => n.name === nextMatch.right);
+        
         return {
-          left: names.find((n) => n.name === nextMatch.left) || nextMatch.left,
-          right:
-            names.find((n) => n.name === nextMatch.right) || nextMatch.right
+          left: leftName || { name: nextMatch.left, id: nextMatch.left },
+          right: rightName || { name: nextMatch.right, id: nextMatch.right }
         };
       }
     } catch (error) {
-      console.warn('Could not get next match from sorter:', error);
+      if (process.env.NODE_ENV === 'development') {
+        console.warn('Could not get next match from sorter:', error);
+      }
     }
   }
 
