@@ -1,5 +1,5 @@
 import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react';
+import react from '@vitejs/plugin-react-swc';
 import viteCompression from 'vite-plugin-compression';
 // import { componentTagger } from 'lovable-tagger'; // Removed unused dependency
 import { fileURLToPath } from 'url';
@@ -10,15 +10,7 @@ const __dirname = dirname(__filename);
 
 export default defineConfig(({ mode }) => ({
   plugins: [
-    react({
-      // * Enable tree shaking for React components
-      babel: {
-        plugins: [
-          // * Remove unused React imports
-          ['babel-plugin-transform-react-remove-prop-types', { removeImport: true }],
-        ],
-      },
-    }),
+    react(),
     // mode === 'development' && componentTagger(), // Removed unused dependency
     // Gzip compression for broader CDN compatibility
     viteCompression({ algorithm: 'gzip' }),
@@ -27,6 +19,7 @@ export default defineConfig(({ mode }) => ({
   ].filter(Boolean),
   root: '.',
   publicDir: 'public',
+  cacheDir: 'node_modules/.vite_lovable',
   assetsInclude: ['**/*.avif', '**/*.webp', '**/*.jpg', '**/*.jpeg', '**/*.png', '**/*.gif', '**/*.webm', '**/*.mp3'],
   resolve: {
     alias: {
@@ -40,6 +33,10 @@ export default defineConfig(({ mode }) => ({
       '@features': pathResolve(__dirname, './src/features'),
       '@core': pathResolve(__dirname, './src/core'),
     },
+  },
+  optimizeDeps: {
+    force: true,
+    include: ['react', 'react-dom']
   },
   server: {
     host: '::',
