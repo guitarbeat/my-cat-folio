@@ -64,6 +64,9 @@ function useAudioManager() {
 
   // * Initialize audio
   useEffect(() => {
+    const currentMusicEventListeners = musicEventListeners.current;
+    const currentAudioEventListeners = audioEventListeners.current;
+
     audioRef.current = new Audio(soundEffects[0].path);
     audioRef.current.volume = volume.effects;
 
@@ -72,25 +75,28 @@ function useAudioManager() {
     musicRef.current.loop = false; // allow auto-advance on 'ended'
 
     return () => {
-      if (musicRef.current) {
-        musicRef.current.pause();
+      const currentMusicRef = musicRef.current;
+      const currentAudioRef = audioRef.current;
+
+      if (currentMusicRef) {
+        currentMusicRef.pause();
         // * Remove all event listeners to prevent memory leaks
-        musicEventListeners.current.forEach(({ event, handler }) => {
-          musicRef.current?.removeEventListener(event, handler);
+        currentMusicEventListeners.forEach(({ event, handler }) => {
+          currentMusicRef.removeEventListener(event, handler);
         });
-        musicEventListeners.current.clear();
+        currentMusicEventListeners.clear();
         musicRef.current = null;
       }
-      if (audioRef.current) {
-        audioRef.current.pause();
+      if (currentAudioRef) {
+        currentAudioRef.pause();
         // * Remove all event listeners to prevent memory leaks
-        audioEventListeners.current.forEach(({ event, handler }) => {
-          audioRef.current?.removeEventListener(event, handler);
+        currentAudioEventListeners.forEach(({ event, handler }) => {
+          currentAudioRef.removeEventListener(event, handler);
         });
-        audioEventListeners.current.clear();
+        currentAudioEventListeners.clear();
         audioRef.current = null;
       }
-      
+
       // * Note: Global event listeners are cleaned up in the main component
     };
   }, [soundEffects, volume.effects, musicTracks, volume.music]);
@@ -185,14 +191,15 @@ function useAudioManager() {
         return (prev + 1) % musicTracks.length;
       });
     };
-    
+
     // * Track event listener for proper cleanup
-    musicEventListeners.current.add({ event: 'ended', handler: onEnded });
+    const currentMusicEventListeners = musicEventListeners.current;
+    currentMusicEventListeners.add({ event: 'ended', handler: onEnded });
     node.addEventListener('ended', onEnded);
-    
+
     return () => {
       node.removeEventListener('ended', onEnded);
-      musicEventListeners.current.delete({ event: 'ended', handler: onEnded });
+      currentMusicEventListeners.delete({ event: 'ended', handler: onEnded });
     };
   }, [isShuffle, musicTracks.length]);
 
@@ -391,6 +398,7 @@ function useKeyboardControls(
   isTransitioning,
   isMuted,
   handleVoteWithAnimation,
+  globalEventListeners,
   { onToggleHelp, onUndo, canUndoNow, onClearSelection } = {}
 ) {
   useEffect(() => {
@@ -447,12 +455,13 @@ function useKeyboardControls(
     };
 
     // * Track global event listener for proper cleanup
-    globalEventListeners.current.add({ event: 'keydown', handler: handleKeyPress });
+    const currentGlobalEventListeners = globalEventListeners.current;
+    currentGlobalEventListeners.add({ event: 'keydown', handler: handleKeyPress });
     window.addEventListener('keydown', handleKeyPress);
-    
+
     return () => {
       window.removeEventListener('keydown', handleKeyPress);
-      globalEventListeners.current.delete({ event: 'keydown', handler: handleKeyPress });
+      currentGlobalEventListeners.delete({ event: 'keydown', handler: handleKeyPress });
     };
   }, [
     selectedOption,
@@ -460,6 +469,7 @@ function useKeyboardControls(
     isTransitioning,
     isMuted,
     handleVoteWithAnimation,
+    globalEventListeners,
     onToggleHelp,
     onUndo,
     canUndoNow,
@@ -550,13 +560,14 @@ function TournamentContent({
 
   // * Cleanup global event listeners on unmount
   useEffect(() => {
+    const currentGlobalEventListeners = globalEventListeners.current;
     return () => {
-      globalEventListeners.current.forEach(({ event, handler }) => {
+      currentGlobalEventListeners.forEach(({ event, handler }) => {
         window.removeEventListener(event, handler);
       });
-      globalEventListeners.current.clear();
+      currentGlobalEventListeners.clear();
     };
-  }, []);
+  }, [globalEventListeners]);
 
   const {
     currentMatch,
@@ -784,6 +795,7 @@ function TournamentContent({
     isTransitioning,
     audioManager.isMuted,
     handleVoteWithAnimation,
+    globalEventListeners,
     {
       onToggleHelp: () => setShowKeyboardHelp((v) => !v),
       onUndo: () => {

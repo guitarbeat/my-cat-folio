@@ -128,7 +128,7 @@ function NavBar({
     let scrollTimeout = null;
 
     const checkScroll = () => {
-      const scrollY = window.scrollY;
+      const {scrollY} = window;
       const threshold =
         window.innerHeight <= 768
           ? window.innerHeight * 1.5
@@ -209,7 +209,7 @@ function NavBar({
       const focusableElements = mobileMenu.querySelectorAll(
         'a[href], button, [tabindex]:not([tabindex="-1"])'
       );
-      const firstElement = focusableElements[0];
+      const [firstElement] = focusableElements;
       const lastElement = focusableElements[focusableElements.length - 1];
 
       if (event.key === 'Tab') {
@@ -374,7 +374,7 @@ function NavBar({
           {/* Right Side - User Info and Actions */}
           <ul className="navbar__menu-list navbar__menu-list--right">
             {userInfo}
-            
+
             {/* Performance Dashboard Button - Admin only */}
             {isLoggedIn && isAdmin && onTogglePerformanceDashboard && (
               <li className="navbar__item navbar__item--performance-dashboard">

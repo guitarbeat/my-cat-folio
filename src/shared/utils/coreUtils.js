@@ -312,21 +312,21 @@ export class PerformanceMonitor {
     const trackLoadMetrics = () => {
       // * Use requestAnimationFrame to avoid forced reflows
       requestAnimationFrame(() => {
-        const navigation = performance.getEntriesByType('navigation')[0];
-        
+        const [navigation] = performance.getEntriesByType('navigation');
+
         if (!navigation) {
           console.warn('⚠️ Navigation timing not available');
           return;
         }
 
         // * Calculate safe timing values with proper fallbacks
-        const domContentLoaded = Math.max(0, 
+        const domContentLoaded = Math.max(0,
           navigation.domContentLoadedEventEnd - navigation.domContentLoadedEventStart
         );
-        const loadComplete = Math.max(0, 
+        const loadComplete = Math.max(0,
           navigation.loadEventEnd - navigation.loadEventStart
         );
-        const totalLoadTime = Math.max(0, 
+        const totalLoadTime = Math.max(0,
           navigation.loadEventEnd - navigation.fetchStart
         );
 
@@ -367,8 +367,10 @@ export class PerformanceMonitor {
       };
     }
 
-    // Track long tasks (disabled to reduce console noise)
-    if ('PerformanceObserver' in window && false) { // Disabled for now
+    // * Long task tracking disabled to reduce console noise
+    // * Uncomment the block below to enable long task monitoring
+    /*
+    if ('PerformanceObserver' in window) {
       // Throttle long task logs to avoid console spam during HMR/initial load
       let lastLogTs = 0;
       const minIntervalMs = 1000; // log at most once per second
@@ -393,6 +395,7 @@ export class PerformanceMonitor {
       observer.observe({ entryTypes: ['longtask'] });
       this.observers.push(observer);
     }
+    */
   }
 
   // * Welcome screen removed – function deleted
@@ -473,7 +476,7 @@ export class PerformanceMonitor {
     const baseSize = 500000; // 500KB base
     const componentOverhead = 200000; // 200KB for components
     const devOverhead = 300000; // 300KB for dev tools and HMR
-    
+
     return baseSize + componentOverhead + devOverhead;
   }
 
@@ -486,7 +489,7 @@ export class PerformanceMonitor {
     const baseCSS = 50000; // 50KB base CSS
     const moduleCSS = 30000; // 30KB for CSS modules
     const devCSS = 20000; // 20KB for dev styles
-    
+
     return baseCSS + moduleCSS + devCSS;
   }
 
@@ -541,7 +544,7 @@ export class PerformanceMonitor {
     });
     this.trackLoadTimes();
     this.trackRuntimePerformance();
-    
+
     // * In development, reduce monitoring frequency to improve performance
     if (process.env.NODE_ENV === 'development') {
       console.log('🚀 Performance monitoring initialized (development mode)');
@@ -584,10 +587,10 @@ export function devLog(...args) {
 export function throttle(func, delay) {
   let timeoutId;
   let lastExecTime = 0;
-  
+
   return function (...args) {
     const currentTime = Date.now();
-    
+
     if (currentTime - lastExecTime > delay) {
       func.apply(this, args);
       lastExecTime = currentTime;
@@ -609,7 +612,7 @@ export function throttle(func, delay) {
  */
 export function debounce(func, delay) {
   let timeoutId;
-  
+
   return function (...args) {
     clearTimeout(timeoutId);
     timeoutId = setTimeout(() => func.apply(this, args), delay);
@@ -638,10 +641,10 @@ export function batchDOMUpdates(updateFunction) {
     // * Temporarily disable layout calculations
     const originalStyle = document.body.style.display;
     document.body.style.display = 'none';
-    
+
     // * Perform updates
     updateFunction();
-    
+
     // * Re-enable layout calculations
     document.body.style.display = originalStyle;
   });

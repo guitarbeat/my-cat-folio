@@ -119,9 +119,9 @@
 
 .navbar__item a:hover {
   color: #fff;
-  background: rgba(255, 255, 255, 0.1);
+  background: rgb(255 255 255 / 10%);
+  box-shadow: 0 4px 12px rgb(47 243 224 / 20%);
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(47, 243, 224, 0.2);
 }
 
 .navbar__item a:hover::before { 
@@ -150,11 +150,13 @@
 
 /* Action buttons (theme, dashboard, etc.) */
 .navbar__action-button {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
   width: 44px;
   height: 44px;
+  overflow: hidden;
   font-size: 1.2rem;
   color: rgb(255 255 255 / 90%);
   cursor: pointer;
@@ -164,25 +166,23 @@
   box-shadow: var(--glass-shadow);
   backdrop-filter: blur(var(--glass-blur));
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  position: relative;
-  overflow: hidden;
 }
 
 .navbar__action-button::before {
-  content: "";
   position: absolute;
   inset: 0;
+  content: "";
   background: linear-gradient(135deg, var(--neon-cyan), var(--hot-pink));
-  opacity: 0;
   border-radius: 50%;
+  opacity: 0;
   transition: opacity 0.3s ease;
 }
 
 .navbar__action-button:hover {
   background: var(--glass-bg);
   border-color: var(--glass-border-hover);
-  transform: translateY(-3px) scale(1.08) rotate(5deg);
   box-shadow: var(--glow-vibrant);
+  transform: translateY(-3px) scale(1.08) rotate(5deg);
 }
 
 .navbar__action-button:hover::before {

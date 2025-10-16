@@ -192,8 +192,8 @@ export class TournamentService {
         (acc, { name, rating, wins = 0, losses = 0 }) => {
           acc[name] = {
             rating: Math.round(rating),
-            wins: wins,
-            losses: losses
+            wins,
+            losses
           };
           return acc;
         },

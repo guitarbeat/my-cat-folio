@@ -14,13 +14,13 @@ const PerformanceDashboard = ({ userName, isVisible = false, onClose }) => {
   const refreshRef = React.useRef(null);
 
   // Update metrics with throttling to prevent excessive updates
-  const updateMetrics = useCallback(
-    throttle(() => {
+  const updateMetrics = useCallback(() => {
+    const throttledUpdate = throttle(() => {
       const currentMetrics = performanceMonitor.getAllMetrics();
       setMetrics(currentMetrics);
-    }, 1000), // Throttle to max once per second
-    []
-  );
+    }, 1000); // Throttle to max once per second
+    throttledUpdate();
+  }, []);
 
   // Initialize metrics for all users
   useEffect(() => {
@@ -95,7 +95,7 @@ const PerformanceDashboard = ({ userName, isVisible = false, onClose }) => {
     const k = 1024;
     const sizes = ['Bytes', 'KB', 'MB', 'GB'];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    return `${parseFloat((bytes / Math.pow(k, i)).toFixed(2))  } ${  sizes[i]}`;
   };
 
   const formatTime = (ms) => {

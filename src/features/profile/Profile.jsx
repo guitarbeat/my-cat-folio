@@ -311,7 +311,7 @@ const Profile = ({ userName, onStartNewTournament }) => {
   // * NEW: Selection-based filtering state
   const [selectionFilter, setSelectionFilter] = useState('all');
   const [showMigration, setShowMigration] = useState(false);
-  const { showSuccess, showError } = useToast();
+  const { showSuccess, showError, showToast } = useToast();
 
   // * Hooks
   const [allNames, setAllNames] = useState([]);
@@ -450,7 +450,7 @@ const Profile = ({ userName, onStartNewTournament }) => {
         showError('Failed to update visibility');
       }
     },
-    [hiddenNames, fetchNames, userName, showSuccess, showError]
+    [hiddenNames, fetchNames, userName, showSuccess, showError, showToast]
   );
 
   // * Handle name deletion
@@ -477,7 +477,7 @@ const Profile = ({ userName, onStartNewTournament }) => {
         showError('Failed to delete name');
       }
     },
-    [fetchNames, fetchSelectionStats, showError]
+    [fetchNames, fetchSelectionStats, showError, showToast]
   );
 
   // * Handle name selection
@@ -533,7 +533,7 @@ const Profile = ({ userName, onStartNewTournament }) => {
         showError('Failed to hide names');
       }
     },
-    [userName, fetchNames, showSuccess, showError]
+    [userName, fetchNames, showSuccess, showError, showToast]
   );
 
   // * Handle bulk unhide operation
@@ -576,7 +576,7 @@ const Profile = ({ userName, onStartNewTournament }) => {
         showError('Failed to unhide names');
       }
     },
-    [userName, fetchNames, showSuccess, showError]
+    [userName, fetchNames, showSuccess, showError, showToast]
   );
 
   // * Handle error display

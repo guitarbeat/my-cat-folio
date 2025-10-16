@@ -203,7 +203,7 @@ export function useBongoCat({ containerRef, size, onBongo }) {
         window.removeEventListener('resize', handleResize);
         window.removeEventListener('orientationchange', handleOrientationChange);
         mutationObserver.disconnect();
-        
+
         // Clean up timeouts
         if (scrollTimeout) cancelAnimationFrame(scrollTimeout);
         if (resizeTimeout) cancelAnimationFrame(resizeTimeout);

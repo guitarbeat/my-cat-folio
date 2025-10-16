@@ -5,27 +5,27 @@ import Login from '@features/auth/Login';
 import { useRouting } from '../../../core/hooks/useRouting';
 
 // * Dynamic imports with better error handling and loading states
-const Tournament = lazy(() => 
+const Tournament = lazy(() =>
   import('@features/tournament/Tournament').catch(() => ({
     default: () => <Error variant="list" error={{ message: 'Failed to load Tournament' }} />
   }))
 );
-const TournamentSetup = lazy(() => 
+const TournamentSetup = lazy(() =>
   import('@features/tournament/TournamentSetup').catch(() => ({
     default: () => <Error variant="list" error={{ message: 'Failed to load Tournament Setup' }} />
   }))
 );
-const Results = lazy(() => 
+const Results = lazy(() =>
   import('@features/tournament/Results').catch(() => ({
     default: () => <Error variant="list" error={{ message: 'Failed to load Results' }} />
   }))
 );
-const Profile = lazy(() => 
+const Profile = lazy(() =>
   import('@features/profile/Profile').catch(() => ({
     default: () => <Error variant="list" error={{ message: 'Failed to load Profile' }} />
   }))
 );
-const BongoPage = lazy(() => 
+const BongoPage = lazy(() =>
   import('@features/bongo/BongoPage').catch(() => ({
     default: () => <Error variant="list" error={{ message: 'Failed to load Bongo Page' }} />
   }))
