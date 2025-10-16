@@ -10,7 +10,7 @@ import { ErrorManager } from '../../src/shared/services/errorManager';
 
 // Environment configuration
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
 // Only create the Supabase client if the required environment variables are present
 // Otherwise export `null` so the application can still render without Supabase
