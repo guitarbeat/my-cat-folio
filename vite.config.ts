@@ -1,7 +1,6 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react-swc';
 import viteCompression from 'vite-plugin-compression';
-import { componentTagger } from 'lovable-tagger';
 import { fileURLToPath } from 'url';
 import { dirname, resolve as pathResolve } from 'path';
 
@@ -11,7 +10,6 @@ const __dirname = dirname(__filename);
 export default defineConfig(({ mode }) => ({
   plugins: [
     react(),
-    mode === 'development' && componentTagger(),
     // Gzip compression for broader CDN compatibility
     viteCompression({ algorithm: 'gzip' }),
     // Brotli compression for modern clients
@@ -19,7 +17,7 @@ export default defineConfig(({ mode }) => ({
   ].filter(Boolean),
   root: '.',
   publicDir: 'public',
-  cacheDir: 'node_modules/.vite_lovable',
+  cacheDir: 'node_modules/.vite',
   assetsInclude: ['**/*.avif', '**/*.webp', '**/*.jpg', '**/*.jpeg', '**/*.png', '**/*.gif', '**/*.webm', '**/*.mp3'],
   resolve: {
     alias: {
