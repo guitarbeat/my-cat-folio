@@ -365,9 +365,32 @@ function NavBar({
 
       <nav className={navbarClass}>
         <div className="navbar__menu-container">
-          {/* Desktop Navigation */}
-          <ul className="navbar__menu-list navbar__menu-list--desktop">
-            {/* Theme Toggle Button - Left Side */}
+          {/* Left Side - Logo and Main Navigation */}
+          <ul className="navbar__menu-list navbar__menu-list--left">
+            {logoItem}
+            {navLinks}
+          </ul>
+
+          {/* Right Side - User Info and Actions */}
+          <ul className="navbar__menu-list navbar__menu-list--right">
+            {userInfo}
+            
+            {/* Performance Dashboard Button - Admin only */}
+            {isLoggedIn && isAdmin && onTogglePerformanceDashboard && (
+              <li className="navbar__item navbar__item--performance-dashboard">
+                <button
+                  type="button"
+                  className="navbar__action-button navbar__performance-dashboard"
+                  onClick={onTogglePerformanceDashboard}
+                  aria-label="Open performance dashboard"
+                  title="Performance Dashboard (Ctrl+Shift+P)"
+                >
+                  📊
+                </button>
+              </li>
+            )}
+
+            {/* Theme Toggle Button - Right Side */}
             <li className="navbar__item navbar__item--theme-toggle">
               <button
                 type="button"
@@ -387,26 +410,6 @@ function NavBar({
                 {isLightTheme ? '🌙' : '☀️'}
               </button>
             </li>
-
-            {/* Performance Dashboard Button - Admin only */}
-            {isLoggedIn && isAdmin && onTogglePerformanceDashboard && (
-              <li className="navbar__item navbar__item--performance-dashboard">
-                <button
-                  type="button"
-                  className="navbar__action-button navbar__performance-dashboard"
-                  onClick={onTogglePerformanceDashboard}
-                  aria-label="Open performance dashboard"
-                  title="Performance Dashboard (Ctrl+Shift+P)"
-                >
-                  📊
-                </button>
-              </li>
-            )}
-
-            {/* Right Side Elements */}
-            {logoItem}
-            {userInfo}
-            {navLinks}
           </ul>
 
           {/* Mobile Menu Button (mobile only) */}

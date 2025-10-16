@@ -15,25 +15,50 @@
     Roboto,
     sans-serif
   );
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: var(--gradient-mesh);
+  position: relative;
+  overflow: hidden;
+}
+
+.boundary::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--gradient-vibrant);
+  opacity: 0.1;
+  animation: gradientShift 8s ease-in-out infinite;
+}
+
+@keyframes gradientShift {
+  0%, 100% { opacity: 0.1; }
+  50% { opacity: 0.2; }
 }
 
 .boundaryContent {
+  position: relative;
+  z-index: 1;
   width: 100%;
   max-width: 600px;
   padding: 3rem;
   text-align: center;
-  background: rgb(255 255 255 / 95%);
-  border: 1px solid rgb(255 255 255 / 20%);
+  background: var(--glass-bg-strong);
+  border: 1px solid var(--glass-border);
   border-radius: 20px;
-  box-shadow: 0 20px 40px rgb(0 0 0 / 10%);
-  backdrop-filter: blur(10px);
+  box-shadow: var(--glass-shadow), var(--glow-vibrant);
+  backdrop-filter: blur(var(--glass-blur-strong)) saturate(180%);
+  transition: all 0.3s ease;
+}
+
+.boundaryContent:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--glass-shadow), var(--glow-vibrant), 0 25px 50px rgba(0, 0, 0, 0.2);
 }
 
 .boundaryIcon {
   margin-bottom: 1.5rem;
   font-size: 4rem;
   animation: bounce 2s infinite;
+  filter: drop-shadow(0 0 10px rgba(47, 243, 224, 0.5));
 }
 
 @keyframes bounce {
@@ -54,20 +79,66 @@
   margin-bottom: 1rem;
   font-size: 2rem;
   font-weight: 700;
-  color: #1f2937;
+  color: var(--text-primary);
+  text-shadow: var(--text-shadow-sm);
+  background: var(--gradient-primary);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .boundaryMessage {
   margin-bottom: 1.5rem;
   font-size: 1.125rem;
   line-height: 1.6;
-  color: #6b7280;
+  color: var(--text-secondary);
 }
 
 .boundaryRetryInfo {
   margin-bottom: 2rem;
   font-size: 0.875rem;
-  color: #9ca3af;
+  color: var(--text-tertiary);
+}
+
+.boundarySuggestions {
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--glass-border);
+  border-radius: 12px;
+  backdrop-filter: blur(5px);
+}
+
+.boundarySuggestionsTitle {
+  margin: 0 0 1rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.boundarySuggestionsList {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.boundarySuggestionsList li {
+  margin-bottom: 0.5rem;
+  padding: 0.5rem 0;
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.2s ease;
+}
+
+.boundarySuggestionsList li:last-child {
+  margin-bottom: 0;
+  border-bottom: none;
+}
+
+.boundarySuggestionsList li:hover {
+  color: var(--text-primary);
+  transform: translateX(5px);
 }
 
 .boundaryActions {
@@ -89,37 +160,45 @@
   cursor: pointer;
   border: none;
   border-radius: 8px;
-  transition: all 0.2s ease;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
 }
 
 .boundaryRetryButton {
   color: white;
-  background: #3b82f6;
+  background: var(--neon-cyan);
+  box-shadow: var(--glow-cyan);
 }
 
 .boundaryRetryButton:hover {
-  background: #2563eb;
-  transform: translateY(-1px);
+  background: var(--neon-cyan-600);
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: var(--glow-cyan), 0 10px 25px rgba(47, 243, 224, 0.3);
 }
 
 .boundaryRefreshButton {
   color: white;
-  background: #6b7280;
+  background: var(--hot-pink);
+  box-shadow: var(--glow-pink);
 }
 
 .boundaryRefreshButton:hover {
-  background: #4b5563;
-  transform: translateY(-1px);
+  background: var(--hot-pink-600);
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: var(--glow-pink), 0 10px 25px rgba(250, 38, 160, 0.3);
 }
 
 .boundaryHomeButton {
   color: white;
-  background: #10b981;
+  background: var(--fire-red);
+  box-shadow: var(--glow-red);
 }
 
 .boundaryHomeButton:hover {
-  background: #059669;
-  transform: translateY(-1px);
+  background: var(--fire-red-600);
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: var(--glow-red), 0 10px 25px rgba(245, 23, 32, 0.3);
 }
 
 .boundaryRetryIcon,
@@ -129,16 +208,18 @@
 }
 
 .boundaryDetails {
-  padding: 1rem;
+  padding: 1.5rem;
   margin-top: 2rem;
   text-align: left;
-  background: #f9fafb;
-  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid var(--glass-border);
+  border-radius: 12px;
+  backdrop-filter: blur(5px);
 }
 
 .boundaryDetails summary {
   font-weight: 600;
-  color: #374151;
+  color: var(--text-primary);
   cursor: pointer;
 }
 
@@ -148,25 +229,36 @@
 
 .boundaryErrorContent h4 {
   margin-bottom: 0.5rem;
-  color: #ef4444;
+  color: var(--fire-red);
 }
 
 .boundaryErrorContent pre {
   padding: 0.5rem;
   overflow-x: auto;
   font-size: 0.75rem;
-  color: #7f1d1d;
-  background: #f3f4f6;
+  color: var(--text-secondary);
+  background: rgba(0, 0, 0, 0.3);
   border-radius: 4px;
 }
 
 .boundarySupport {
-  padding: 1rem;
+  padding: 1.5rem;
   margin-top: 2rem;
   font-size: 0.875rem;
-  color: #92400e;
-  background: #fef3c7;
-  border-radius: 8px;
+  color: var(--text-secondary);
+  background: rgba(47, 243, 224, 0.1);
+  border: 1px solid rgba(47, 243, 224, 0.2);
+  border-radius: 12px;
+  backdrop-filter: blur(5px);
+}
+
+.boundarySupportText {
+  margin: 0;
+  line-height: 1.6;
+}
+
+.boundarySupportText strong {
+  color: var(--text-primary);
 }
 
 .boundaryErrorId {

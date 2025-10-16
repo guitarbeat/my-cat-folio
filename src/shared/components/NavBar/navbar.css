@@ -40,9 +40,14 @@
   list-style: none;
 }
 
-.navbar__menu-list--desktop { 
+.navbar__menu-list--left { 
   display: none; 
-  margin-left: auto; /* Right-align the desktop menu items */
+  margin-right: auto; /* Left-align the main navigation items */
+}
+
+.navbar__menu-list--right { 
+  display: none; 
+  margin-left: auto; /* Right-align the user actions and theme toggle */
 }
 
 /* Logo/brand */
@@ -510,7 +515,11 @@
 
 /* Responsive */
 @media (width >= 768px) {
-  .navbar__menu-list--desktop {
+  .navbar__menu-list--left {
+    display: flex;
+  }
+
+  .navbar__menu-list--right {
     display: flex;
   }
 

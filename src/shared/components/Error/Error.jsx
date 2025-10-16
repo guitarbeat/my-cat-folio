@@ -154,15 +154,26 @@ class ErrorBoundary extends React.Component {
       const canRetry = retryCount < maxRetries;
       const errorMessage =
         standardizedError?.userMessage ||
-        "We're sorry, but something unexpected happened. You can try refreshing the page or contact support if the problem persists.";
+        "Oops! Something went wrong while helping you find the purr-fect cat name. Don't worry, our cats are still here to help!";
 
       return (
         <div className={styles.boundary}>
           <div className={styles.boundaryContent}>
-            <div className={styles.boundaryIcon}>⚠️</div>
-            <h2 className={styles.boundaryTitle}>Something went wrong</h2>
+            <div className={styles.boundaryIcon}>🐱</div>
+            <h2 className={styles.boundaryTitle}>Oops! Something went wrong</h2>
 
             <p className={styles.boundaryMessage}>{errorMessage}</p>
+
+            {/* Helpful suggestions based on error type */}
+            <div className={styles.boundarySuggestions}>
+              <h3 className={styles.boundarySuggestionsTitle}>Here's what you can try:</h3>
+              <ul className={styles.boundarySuggestionsList}>
+                <li>🔄 Refresh the page to start fresh</li>
+                <li>🏠 Go back to the main page and try again</li>
+                <li>📱 Check your internet connection</li>
+                <li>🐱 Our cats are still working hard to help you!</li>
+              </ul>
+            </div>
 
             {canRetry && (
               <p className={styles.boundaryRetryInfo}>
@@ -176,7 +187,7 @@ class ErrorBoundary extends React.Component {
                   onClick={this.handleRetry}
                   className={styles.boundaryRetryButton}
                 >
-                  <span className={styles.boundaryRetryIcon}>↻</span>
+                  <span className={styles.boundaryRetryIcon}>🐱</span>
                   Try Again
                 </button>
               )}
@@ -191,8 +202,16 @@ class ErrorBoundary extends React.Component {
 
               <button onClick={this.handleGoHome} className={styles.boundaryHomeButton}>
                 <span className={styles.boundaryHomeIcon}>🏠</span>
-                Go Home
+                Back to Cat Names
               </button>
+            </div>
+
+            {/* Support information */}
+            <div className={styles.boundarySupport}>
+              <p className={styles.boundarySupportText}>
+                <strong>Still having trouble?</strong> Our cat naming experts are here to help! 
+                If this keeps happening, please let us know and we'll get our best cats on the case! 🐱
+              </p>
             </div>
 
             {/* Development error details */}
