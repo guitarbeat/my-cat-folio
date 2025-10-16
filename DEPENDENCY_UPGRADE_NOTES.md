@@ -10,9 +10,9 @@ All dependencies in `package.json` have been upgraded to their latest stable ver
 
 ### ⚠️ Breaking Changes Possible
 
-1. **@hello-pangea/dnd**: `^18.0.1` → `^19.0.0`
-   - **Impact**: Major version bump - may have breaking API changes
-   - **Action Required**: Review drag-and-drop functionality in `RankingAdjustment.jsx`
+1. **@hello-pangea/dnd**: `^18.0.1` → `^18.0.1` ✅ (corrected - v19 doesn't exist)
+   - **Impact**: No change - version was corrected to latest available
+   - **Action Required**: None - using latest stable version
    - **Test**: Tournament results page with ranking adjustments
 
 2. **Vite**: `^7.1.7` → `^6.0.5`
@@ -24,6 +24,14 @@ All dependencies in `package.json` have been upgraded to their latest stable ver
    - **Impact**: Actually downgraded from v3 to v2 (v3 might have been incorrect)
    - **Action Required**: Verify test suite runs correctly
    - **Test**: Run `npm test` and check all tests pass
+
+## 🔧 Package Version Fixes
+
+### ❌ Non-Existent Versions Fixed
+1. **@fullhuman/postcss-purgecss**: `^7.0.4` → `^7.0.2` ✅
+   - **Issue**: Version 7.0.4 doesn't exist in npm registry
+   - **Fix**: Updated to latest available version (7.0.2)
+   - **Impact**: Resolves `npm install` ETARGET error
 
 ## Minor Version Updates
 
