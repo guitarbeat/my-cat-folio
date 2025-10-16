@@ -2,16 +2,50 @@
 import { createClient } from '@supabase/supabase-js';
 import type { Database } from './types';
 
+// Extend the Window interface to include the Supabase client
+declare global {
+  interface Window {
+    __supabaseClient?: ReturnType<typeof createClient<Database>>;
+  }
+}
+
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
 const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY;
+
+// Only create the Supabase client if the required environment variables are present
+// Otherwise export `null` so the application can still render without Supabase
+let supabase = null;
+if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
+  if (process.env.NODE_ENV === 'development') {
+    console.warn(
+      'Missing Supabase environment variables. Supabase features are disabled.'
+    );
+  }
+} else {
+  // Ensure a single Supabase client instance in browser (avoids multiple GoTrueClient warnings)
+  if (typeof window !== 'undefined') {
+    if (!window.__supabaseClient) {
+      window.__supabaseClient = createClient<Database>(SUPABASE_URL, SUPABASE_ANON_KEY, {
+        auth: {
+          storage: localStorage,
+          persistSession: true,
+          autoRefreshToken: true,
+        }
+      });
+    }
+    supabase = window.__supabaseClient;
+  } else {
+    supabase = createClient<Database>(SUPABASE_URL, SUPABASE_ANON_KEY, {
+      auth: {
+        storage: localStorage,
+        persistSession: true,
+        autoRefreshToken: true,
+      }
+    });
+  }
+}
 
 // Import the supabase client like this:
 // import { supabase } from "@/integrations/supabase/client";
 
-export const supabase = createClient<Database>(SUPABASE_URL, SUPABASE_ANON_KEY, {
-  auth: {
-    storage: localStorage,
-    persistSession: true,
-    autoRefreshToken: true,
-  }
-});
+export { supabase };

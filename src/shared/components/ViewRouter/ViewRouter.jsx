@@ -2,7 +2,7 @@ import React, { lazy, Suspense } from 'react';
 import PropTypes from 'prop-types';
 import { Loading, Error } from '@components';
 import Login from '@features/auth/Login';
-import { useRouting } from '../../../core/hooks/useRouting';
+import { useRouting } from '@hooks/useRouting';
 
 // * Dynamic imports with better error handling and loading states
 const Tournament = lazy(() =>
