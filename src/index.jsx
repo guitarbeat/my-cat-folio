@@ -24,9 +24,13 @@ import App from './App.jsx';
 // Set up global error handling
 setupGlobalErrorHandling();
 
+// Boot log to verify app mounting during preview
+console.info('[Boot] index.jsx loaded');
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <App />
   </React.StrictMode>
 );
+
