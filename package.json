@@ -70,7 +70,7 @@
     "postinstall": "husky install"
   },
   "dependencies": {
-    "@hello-pangea/dnd": "^19.0.0",
+    "@hello-pangea/dnd": "^18.0.1",
     "@heroicons/react": "^2.2.0",
     "@supabase/supabase-js": "^2.46.1",
     "prop-types": "^15.8.1",
@@ -81,7 +81,7 @@
   "devDependencies": {
     "@babel/plugin-transform-private-property-in-object": "^7.25.9",
     "@eslint/js": "^9.17.0",
-    "@fullhuman/postcss-purgecss": "^7.0.4",
+    "@fullhuman/postcss-purgecss": "^7.0.2",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.1.0",
     "@testing-library/user-event": "^14.5.2",
