@@ -21,7 +21,8 @@ import {
   NameCard,
   Error,
   Input,
-  Select
+  Select,
+  CatImage
 } from '../../shared/components';
 
 // * Import Error components for specific use cases
@@ -317,8 +318,6 @@ const SwipeableNameCards = ({
   showCatPictures = false,
   imageList = CAT_IMAGES
 }) => {
-  const imgRef = React.useRef(null);
-  const imgContainerRef = React.useRef(null);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
@@ -461,66 +460,6 @@ const SwipeableNameCards = ({
     }, 300);
   };
 
-  // Lightweight vertical edge-density focal detector (same approach as NameCard)
-  const computeFocalY = React.useCallback((imgEl) => {
-    try {
-      const naturalW = imgEl.naturalWidth || imgEl.width;
-      const naturalH = imgEl.naturalHeight || imgEl.height;
-      if (!naturalW || !naturalH) return null;
-      const targetW = 128;
-      const scale = targetW / naturalW;
-      const w = Math.max(16, Math.min(targetW, naturalW));
-      const h = Math.max(16, Math.floor(naturalH * scale));
-      const canvas = document.createElement('canvas');
-      canvas.width = w;
-      canvas.height = h;
-      const ctx = canvas.getContext('2d', { willReadFrequently: true });
-      ctx.drawImage(imgEl, 0, 0, w, h);
-      const { data } = ctx.getImageData(0, 0, w, h);
-      const rowEnergy = new Array(h).fill(0);
-      const toGray = (r, g, b) => r * 0.299 + g * 0.587 + b * 0.114;
-      const idx = (x, y) => (y * w + x) * 4;
-      for (let y = 1; y < h - 1; y++) {
-        let sum = 0;
-        for (let x = 0; x < w; x++) {
-          const i1 = idx(x, y - 1);
-          const i2 = idx(x, y + 1);
-          sum += Math.abs(
-            toGray(data[i2], data[i2 + 1], data[i2 + 2]) -
-              toGray(data[i1], data[i1 + 1], data[i1 + 2])
-          );
-        }
-        rowEnergy[y] = sum / w;
-      }
-      const start = Math.floor(h * 0.08);
-      const end = Math.floor(h * 0.7);
-      let bestY = start;
-      let bestVal = -Infinity;
-      for (let y = start; y < end; y++) {
-        const e =
-          (rowEnergy[y - 1] || 0) + rowEnergy[y] + (rowEnergy[y + 1] || 0);
-        if (e > bestVal) {
-          bestVal = e;
-          bestY = y;
-        }
-      }
-      const pct = Math.min(60, Math.max(10, Math.round((bestY / h) * 100)));
-      return pct;
-    } catch {
-      return null;
-    }
-  }, []);
-
-  const handleImageLoad = React.useCallback(() => {
-    const imgEl = imgRef.current;
-    const container = imgContainerRef.current;
-    if (!imgEl || !container) return;
-    const focal = computeFocalY(imgEl);
-    if (focal != null) {
-      container.style.setProperty('--image-pos-y', `${focal}%`);
-    }
-  }, [computeFocalY]);
-
   if (!currentName) return null;
 
   const cardStyle = {
@@ -572,55 +511,13 @@ const SwipeableNameCards = ({
           <div className={styles.swipeCardContent}>
             {/* Cat picture when enabled */}
             {showCatPictures && imageSrc && (
-              <div
-                className={styles.swipeCardImageContainer}
-                ref={imgContainerRef}
-                style={{ ['--bg-image']: `url(${imageSrc})` }}
-              >
-                {(() => {
-                  const src = imageSrc;
-                  if (String(src).startsWith('/assets/images/')) {
-                    const base = src.includes('.')
-                      ? src.replace(/\.[^.]+$/, '')
-                      : src;
-                    return (
-                      <picture>
-                        <source type="image/avif" srcSet={`${base}.avif`} />
-                        <source type="image/webp" srcSet={`${base}.webp`} />
-                        <img
-                          ref={imgRef}
-                          src={src}
-                          alt="Random cat picture"
-                          className={styles.swipeCardImage}
-                          loading="eager"
-                          decoding="async"
-                          onLoad={handleImageLoad}
-                          onError={(e) => {
-                            console.error(
-                              'Image failed to load:',
-                              e.target.src
-                            );
-                          }}
-                        />
-                      </picture>
-                    );
-                  }
-                  return (
-                    <img
-                      ref={imgRef}
-                      src={src}
-                      alt="Random cat picture"
-                      className={styles.swipeCardImage}
-                      loading="eager"
-                      decoding="async"
-                      onLoad={handleImageLoad}
-                      onError={(e) => {
-                        console.error('Image failed to load:', e.target.src);
-                      }}
-                    />
-                  );
-                })()}
-              </div>
+              <CatImage
+                src={imageSrc}
+                containerClassName={styles.swipeCardImageContainer}
+                imageClassName={styles.swipeCardImage}
+                loading="eager"
+                decoding="async"
+              />
             )}
 
             <h3 className={styles.swipeCardName}>{currentName.name}</h3>
