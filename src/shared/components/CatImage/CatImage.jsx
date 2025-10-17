@@ -174,13 +174,6 @@ function CatImage({
   );
 
   useEffect(() => {
-    const imgEl = imageRef.current;
-    if (imgEl && imgEl.complete) {
-      applyImageEnhancements(imgEl);
-    }
-  }, [applyImageEnhancements, src]);
-
-  useEffect(() => {
     const container = containerRef.current;
     if (!container) return;
 
@@ -190,7 +183,12 @@ function CatImage({
     container.style.removeProperty('--cat-image-fit');
     container.style.removeProperty('--cat-image-ratio');
     container.style.removeProperty('--cat-image-accent-rgb');
-  }, [src]);
+
+    const imgEl = imageRef.current;
+    if (imgEl && imgEl.complete) {
+      applyImageEnhancements(imgEl);
+    }
+  }, [applyImageEnhancements, src]);
 
   if (!src) {
     return null;
