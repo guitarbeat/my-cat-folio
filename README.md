@@ -42,6 +42,21 @@ npm install
 npm run dev
 ```
 
+### **Troubleshooting**
+
+#### **Site Not Rendering**
+If the site doesn't load properly:
+
+1. **Check the correct port**: The dev server may use ports 5173, 5174, or 5175
+2. **Clear browser cache**: Hard refresh with `Ctrl+Shift+R` (or `Cmd+Shift+R` on Mac)
+3. **Check console errors**: Open browser dev tools for any JavaScript errors
+4. **Verify dependencies**: Run `npm install` to ensure all packages are installed
+
+#### **Development Server Issues**
+- If port conflicts occur, the server will automatically try the next available port
+- Check the terminal output for the correct local URL
+- Ensure no other processes are using the same ports
+
 ---
 
 ## 🎮 **How to Use**

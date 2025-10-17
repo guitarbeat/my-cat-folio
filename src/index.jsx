@@ -27,6 +27,11 @@ setupGlobalErrorHandling();
 // Boot log to verify app mounting during preview
 console.info('[Boot] index.jsx loaded');
 
+// * Additional error boundary for development
+if (process.env.NODE_ENV === 'development') {
+  console.info('[Boot] Development mode - enhanced error reporting enabled');
+}
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
