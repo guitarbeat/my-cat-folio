@@ -37,6 +37,7 @@ const Input = ({
   error = '',
   label,
   className = '',
+  groupClassName = '',
   ...rest
 }) => {
   const inputClasses = [
@@ -49,7 +50,7 @@ const Input = ({
   const inputId = `input-${name}`;
 
   return (
-    <div className={styles.inputGroup}>
+    <div className={`${styles.inputGroup} ${groupClassName}`.trim()}>
       {label && (
         <label htmlFor={inputId} className={styles.label}>
           {label}
@@ -91,7 +92,8 @@ Input.propTypes = {
   required: PropTypes.bool,
   error: PropTypes.string,
   label: PropTypes.string,
-  className: PropTypes.string
+  className: PropTypes.string,
+  groupClassName: PropTypes.string
 };
 
 Input.displayName = 'Input';

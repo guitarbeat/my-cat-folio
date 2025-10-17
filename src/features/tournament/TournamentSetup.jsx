@@ -3,7 +3,7 @@
  * @description Simple wizard for selecting cat names and starting a tournament.
  * Shows names and descriptions by default. Admin users get advanced filtering options.
  */
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import PropTypes from 'prop-types';
 import {
   getSupabaseClient,
@@ -19,7 +19,9 @@ import { compressImageFile, devLog } from '../../shared/utils/coreUtils';
 import {
   Loading,
   NameCard,
-  Error
+  Error,
+  Input,
+  Select
 } from '../../shared/components';
 
 // * Import Error components for specific use cases
@@ -158,6 +160,32 @@ const NameSelection = ({
       })()
     : availableNames; // Non-admin users see all names
 
+  const categoryOptions = useMemo(() => {
+    if (!categories || !categories.length) {
+      return [];
+    }
+
+    return [
+      { value: '', label: 'All Categories' },
+      ...categories.map((category) => ({
+        value: category.name,
+        label: `${category.name} (${availableNames.filter(
+          (name) =>
+            name.categories && name.categories.includes(category.name)
+        ).length})`
+      }))
+    ];
+  }, [availableNames, categories]);
+
+  const adminSortOptions = useMemo(
+    () => [
+      { value: 'alphabetical', label: 'Alphabetical' },
+      { value: 'rating', label: 'Rating (High to Low)' },
+      { value: 'popularity', label: 'Popularity' }
+    ],
+    []
+  );
+
   return (
     <div className={styles.nameSelection}>
       {/* Swipe Mode Instructions */}
@@ -174,59 +202,42 @@ const NameSelection = ({
         <div className={styles.controlsSection}>
           {/* Category filter */}
           {categories && categories.length > 0 && (
-            <div className={styles.filterGroup}>
-              <label htmlFor="category-filter">Category:</label>
-              <select
-                id="category-filter"
-                value={selectedCategory || ''}
-                onChange={(e) => onCategoryChange(e.target.value || null)}
-                className={styles.filterSelect}
-              >
-                <option value="">All Categories</option>
-                {categories.map((category) => (
-                  <option key={category.id} value={category.name}>
-                    {category.name} (
-                    {
-                      availableNames.filter(
-                        (name) =>
-                          name.categories &&
-                          name.categories.includes(category.name)
-                      ).length
-                    }
-                    )
-                  </option>
-                ))}
-              </select>
-            </div>
+            <Select
+              name="category-filter"
+              value={selectedCategory || ''}
+              onChange={(event) =>
+                onCategoryChange(event.target.value || null)
+              }
+              options={categoryOptions}
+              label="Category"
+              placeholder=""
+              className={styles.filterSelect}
+              groupClassName={styles.filterGroup}
+            />
           )}
 
           {/* Search filter */}
-          <div className={styles.filterGroup}>
-            <label htmlFor="search-filter">Search:</label>
-            <input
-              type="text"
-              id="search-filter"
-              value={searchTerm}
-              onChange={(e) => onSearchChange(e.target.value)}
-              placeholder="Search names or descriptions..."
-              className={styles.searchInput}
-            />
-          </div>
+          <Input
+            name="search-filter"
+            value={searchTerm}
+            onChange={(event) => onSearchChange(event.target.value)}
+            placeholder="Search names or descriptions..."
+            label="Search"
+            className={styles.searchInput}
+            groupClassName={styles.filterGroup}
+          />
 
           {/* Sort options */}
-          <div className={styles.filterGroup}>
-            <label htmlFor="sort-filter">Sort by:</label>
-            <select
-              id="sort-filter"
-              value={sortBy}
-              onChange={(e) => onSortChange(e.target.value)}
-              className={styles.filterSelect}
-            >
-              <option value="alphabetical">Alphabetical</option>
-              <option value="rating">Rating (High to Low)</option>
-              <option value="popularity">Popularity</option>
-            </select>
-          </div>
+          <Select
+            name="sort-filter"
+            value={sortBy}
+            onChange={(event) => onSortChange(event.target.value)}
+            options={adminSortOptions}
+            label="Sort By"
+            placeholder=""
+            className={styles.filterSelect}
+            groupClassName={styles.filterGroup}
+          />
         </div>
       )}
 

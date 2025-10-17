@@ -37,6 +37,7 @@ const Select = ({
   label,
   placeholder = 'Select an option',
   className = '',
+  groupClassName = '',
   ...rest
 }) => {
   const selectClasses = [
@@ -49,7 +50,7 @@ const Select = ({
   const selectId = `select-${name}`;
 
   return (
-    <div className={styles.inputGroup}>
+    <div className={`${styles.inputGroup} ${groupClassName}`.trim()}>
       {label && (
         <label htmlFor={selectId} className={styles.label}>
           {label}
@@ -108,7 +109,8 @@ Select.propTypes = {
   error: PropTypes.string,
   label: PropTypes.string,
   placeholder: PropTypes.string,
-  className: PropTypes.string
+  className: PropTypes.string,
+  groupClassName: PropTypes.string
 };
 
 Select.displayName = 'Select';
