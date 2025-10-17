@@ -8,7 +8,7 @@
  */
 
 import { useState, useCallback, useEffect } from 'react';
-import { supabase } from '../../../backend/api/supabaseClient';
+import { supabase } from '../../integrations/supabase/client';
 import useAppStore from '../store/useAppStore';
 
 function useUserSession({ showToast } = {}) {

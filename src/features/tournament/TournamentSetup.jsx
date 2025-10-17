@@ -5,13 +5,13 @@
  */
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import PropTypes from 'prop-types';
+import { supabase } from '../../integrations/supabase/client';
 import {
-  supabase,
   getNamesWithDescriptions,
   tournamentsAPI,
   catNamesAPI,
   imagesAPI
-} from '../../../backend/api/supabaseClient';
+} from '../../integrations/supabase/api';
 import { compressImageFile, devLog } from '../../shared/utils/coreUtils';
 import {
   Loading,
