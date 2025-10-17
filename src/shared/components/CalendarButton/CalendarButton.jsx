@@ -96,7 +96,15 @@ function CalendarButton({
 CalendarButton.displayName = 'CalendarButton';
 
 CalendarButton.propTypes = {
-  rankings: PropTypes.arrayOf(PropTypes.object).isRequired,
+  rankings: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+      name: PropTypes.string.isRequired,
+      rating: PropTypes.number,
+      wins: PropTypes.number,
+      losses: PropTypes.number
+    })
+  ).isRequired,
   userName: PropTypes.string.isRequired,
   hiddenNames: PropTypes.instanceOf(Set).isRequired,
   className: PropTypes.string,

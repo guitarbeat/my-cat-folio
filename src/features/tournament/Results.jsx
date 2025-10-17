@@ -145,10 +145,16 @@ function Results({
       const tournamentNameSet = new Set(
         currentTournamentNames?.map((n) => n.name) || []
       );
+      const nameToIdMap = new Map(
+        (currentTournamentNames || [])
+          .filter((name) => name?.name)
+          .map(({ id, name }) => [name, id])
+      );
 
       return Object.entries(ratingsData || {})
         .filter(([name]) => tournamentNameSet.has(name))
         .map(([name, rating]) => ({
+          id: nameToIdMap.get(name),
           name,
           rating: Math.round(
             typeof rating === 'number' ? rating : rating?.rating || 1500
