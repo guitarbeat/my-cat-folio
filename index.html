@@ -16,7 +16,7 @@
     <!-- SEO -->
     <meta name="description"
         content="Pick the perfect cat name via a fun tournament. Save, compare, and share results.">
-    <meta name="theme-color" content="#eef1f6">
+    <meta name="theme-color" content="#f4f7fb">
 
     <!-- Open Graph -->
     <meta property="og:title" content="Name Nosferatu">
@@ -48,48 +48,88 @@
 
 <body>
     <script>
-      // Initialize theme before React renders to prevent flash
-      // Logic: Respect saved preference; otherwise default to dark after local "sunset" hours.
-      try {
-        const THEME_KEY = 'theme'; // stores boolean: true = light, false = dark
-        const metaTheme = document.querySelector('meta[name="theme-color"]');
+      (function initializeTheme() {
+        try {
+          const THEME_KEY = 'theme';
+          const metaTheme = document.querySelector('meta[name="theme-color"]');
+          const { body, documentElement } = document;
 
-        const applyTheme = (isLight) => {
-          const body = document.body;
-          if (isLight) {
-            body.classList.add('light-theme');
-            body.classList.remove('dark-theme');
-            if (metaTheme) metaTheme.setAttribute('content', '#eef1f6');
-          } else {
-            body.classList.add('dark-theme');
-            body.classList.remove('light-theme');
-            if (metaTheme) metaTheme.setAttribute('content', '#1a1f2e');
+          const applyTheme = (theme) => {
+            const isLight = theme === 'light';
+
+            body.classList.toggle('light-theme', isLight);
+            body.classList.toggle('dark-theme', !isLight);
+
+            documentElement.dataset.theme = theme;
+            documentElement.style.colorScheme = theme;
+            body.style.colorScheme = theme;
+
+            if (metaTheme) {
+              metaTheme.setAttribute('content', isLight ? '#f4f7fb' : '#020617');
+            }
+          };
+
+          const parseStoredTheme = (value) => {
+            if (value === null) return null;
+            if (value === 'light' || value === 'dark') {
+              return value;
+            }
+            if (value === 'true' || value === 'false') {
+              return value === 'true' ? 'light' : 'dark';
+            }
+
+            try {
+              const parsed = JSON.parse(value);
+              if (typeof parsed === 'boolean') {
+                return parsed ? 'light' : 'dark';
+              }
+            } catch (error) {
+              if (
+                typeof process !== 'undefined' &&
+                process.env &&
+                process.env.NODE_ENV === 'development'
+              ) {
+                console.error('Error parsing stored theme value during boot:', error);
+              }
+            }
+
+            return null;
+          };
+
+          const saved =
+            typeof window !== 'undefined' && window.localStorage
+              ? window.localStorage.getItem(THEME_KEY)
+              : null;
+
+          const resolvePreferredTheme = () => {
+            const prefersDark =
+              typeof window !== 'undefined' &&
+              window.matchMedia &&
+              window.matchMedia('(prefers-color-scheme: dark)').matches;
+            if (prefersDark) {
+              return 'dark';
+            }
+
+            const now = new Date();
+            const hour = now.getHours();
+            const minute = now.getMinutes();
+            const afterSunset = hour > 18 || (hour === 18 && minute >= 30) || hour < 6;
+
+            return afterSunset ? 'dark' : 'light';
+          };
+
+          const storedTheme = parseStoredTheme(saved);
+          const themeToApply = storedTheme ?? resolvePreferredTheme();
+
+          applyTheme(themeToApply);
+
+          if (!storedTheme && typeof window !== 'undefined' && window.localStorage) {
+            window.localStorage.setItem('theme', themeToApply);
           }
-        };
-
-        const saved = localStorage.getItem(THEME_KEY);
-        if (saved !== null) {
-          // Stored as JSON boolean by useLocalStorage hook
-          const isLight = JSON.parse(saved);
-          applyTheme(Boolean(isLight));
-        } else {
-          // No saved preference: infer by time and system preference
-          const now = new Date();
-          const hour = now.getHours();
-          const minute = now.getMinutes();
-          // Consider "after sunset" roughly as after 6:30pm until 6:00am
-          const afterSunset = (hour > 18) || (hour === 18 && minute >= 30) || (hour < 6);
-          const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-          const isDark = afterSunset || prefersDark;
-
-          // Persist the inferred choice so React hook picks it up consistently
-          localStorage.setItem(THEME_KEY, JSON.stringify(!isDark ? true : false));
-          applyTheme(!isDark ? true : false);
+        } catch (error) {
+          document.body.classList.add('light-theme');
         }
-      } catch (e) {
-        // Safe fallback
-        document.body.classList.add('light-theme');
-      }
+      })();
     </script>
     <div id="root"></div>
     <script type="module" src="/src/index.jsx"></script>
