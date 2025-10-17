@@ -8,17 +8,14 @@ describe('App', () => {
     render(<App />);
 
     // * Skip link provides direct access to main content for keyboard users
-    expect(
-      screen.getByRole('link', { name: /skip to main content/i })
-    ).toBeInTheDocument();
+    const skipLink = screen.getByRole('link', {
+      name: /skip to main content/i
+    });
+    expect(skipLink).toBeVisible();
+    expect(skipLink).toHaveAttribute('href', '#main-content');
 
-    // * Main navigation should be present as the key entry point into the app
-    expect(screen.getByRole('navigation')).toBeInTheDocument();
-
-    // * Verify a couple of user-facing navigation items to ensure core UI loads
-    expect(screen.getByText(/aaron's folly/i)).toBeInTheDocument();
-    expect(
-      screen.getByRole('link', { name: /k-pop site/i })
-    ).toBeInTheDocument();
+    // * The navbar brand link offers a stable way to navigate home
+    const homeLink = screen.getByRole('link', { name: /go to home page/i });
+    expect(homeLink).toBeInTheDocument();
   });
 });
