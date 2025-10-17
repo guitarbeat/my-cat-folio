@@ -446,17 +446,9 @@
 }
 
 .sidebarCard {
-  padding: var(--space-5);
-  background: var(--card-background);
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-md);
-  transition: all var(--duration-normal) var(--ease-out);
-}
-
-.sidebarCard:hover {
-  box-shadow: var(--shadow-lg);
-  transform: translateY(-2px);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
 }
 
 .sidebarTitle {
@@ -489,19 +481,12 @@
 
 /* Name Counter */
 .nameCount {
-  padding: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
   margin: var(--space-6) 0;
-  cursor: pointer;
-  background: var(--card-background);
-  border: 1px solid var(--card-border);
-  border-radius: var(--radius-lg);
-  transition: var(--transition-all);
-}
-
-.nameCount:hover {
-  background: var(--card-hover);
-  border-color: var(--border-color);
-  box-shadow: var(--shadow-md);
+  text-align: center;
 }
 
 .countAndSelect {

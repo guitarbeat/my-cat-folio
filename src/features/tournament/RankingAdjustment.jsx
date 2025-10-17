@@ -5,6 +5,7 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
+import { Card } from '../../shared/components';
 import './RankingAdjustment.css';
 /**
  * --- AUTO-GENERATED DOCSTRING ---
@@ -155,14 +156,30 @@ function RankingAdjustment({ rankings, onSave, onCancel }) {
     }
   };
 
+  const containerClasses = ['ranking-adjustment', isDragging ? 'is-dragging' : '']
+    .filter(Boolean)
+    .join(' ');
+
   return (
-    <div className={`ranking-adjustment ${isDragging ? 'is-dragging' : ''}`}>
+    <Card
+      className={containerClasses}
+      padding="xl"
+      shadow="xl"
+      as="section"
+    >
       <header className="ranking-header">
         <h2>Your Cat Name Rankings</h2>
         {getSaveStatusDisplay()}
       </header>
 
-      <div className="instructions-card">
+      <Card
+        className="instructions-card"
+        padding="large"
+        shadow="medium"
+        background="glass"
+        as="section"
+        aria-label="Instructions for adjusting rankings"
+      >
         <div className="instruction-icon">↕️</div>
         <div className="instruction-text">
           <h3>How to Adjust Rankings</h3>
@@ -171,7 +188,7 @@ function RankingAdjustment({ rankings, onSave, onCancel }) {
             higher ratings. Your changes are saved automatically.
           </p>
         </div>
-      </div>
+      </Card>
 
       <div className="rankings-grid">
         <div className="rankings-header">
@@ -254,7 +271,7 @@ function RankingAdjustment({ rankings, onSave, onCancel }) {
           Back to Tournament
         </button>
       </div>
-    </div>
+    </Card>
   );
 }
 

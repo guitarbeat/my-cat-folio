@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FILTER_OPTIONS } from '../../core/constants';
-import { Select } from '../../shared/components';
+import { Card, Select } from '../../shared/components';
 import styles from './ProfileFilters.module.css';
 
 /**
@@ -75,8 +75,10 @@ const ProfileFilters = ({
     );
   }
 
+  const containerClasses = [styles.container, className].filter(Boolean).join(' ');
+
   return (
-    <div className={`${styles.container} ${className}`}>
+    <Card className={containerClasses} shadow="medium">
       <h3 className={styles.sectionTitle}>Filters & Sorting</h3>
 
       <div className={styles.filtersGrid}>
@@ -156,7 +158,14 @@ const ProfileFilters = ({
       </div>
 
       {/* * Active Filters Display - Enhanced */}
-      <div className={styles.activeFilters}>
+      <Card
+        className={styles.activeFilters}
+        padding="small"
+        shadow="small"
+        background="glass"
+        as="section"
+        aria-label="Active filters summary"
+      >
         <span className={styles.activeFilterLabel}>Active Filters:</span>
         <span className={styles.activeFilter}>
           Status:{' '}
@@ -178,8 +187,8 @@ const ProfileFilters = ({
           {sortBy.replace('_', ' ').replace(/\b\w/g, (l) => l.toUpperCase())} (
           {sortOrder})
         </span>
-      </div>
-    </div>
+      </Card>
+    </Card>
   );
 };
 
