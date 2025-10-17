@@ -334,7 +334,7 @@ function NavBar({
             fetchPriority="low"
           />
         </video>
-        <span className="navbar__title">Aaron&apos;s Folly</span>
+        <span className="navbar__title">Name Nosferatu</span>
       </a>
     </li>
   );
