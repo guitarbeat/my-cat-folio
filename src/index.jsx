@@ -19,7 +19,7 @@ import '@styles/background-effects.css';
 import '@styles/components-global.css';
 import '@styles/responsive.css';
 import App from './App.jsx';
-// import { Analytics } from "@vercel/analytics/react"
+import { Analytics } from '@vercel/analytics/next';
 
 // Set up global error handling
 setupGlobalErrorHandling();
@@ -31,6 +31,7 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <App />
+    <Analytics />
   </React.StrictMode>
 );
 
