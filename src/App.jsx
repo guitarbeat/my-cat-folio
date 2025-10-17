@@ -162,16 +162,32 @@ function App() {
   // * Synchronize global body class with current theme
   React.useEffect(() => {
     const bodyElement = document.body;
+    const rootElement = document.documentElement;
 
-    if (!bodyElement) {
-      return;
+    if (!bodyElement || !rootElement) {
+      return undefined;
     }
 
+    const themeClass = ui.theme === 'light' ? 'light-theme' : 'dark-theme';
+    const themeColor = ui.theme === 'light' ? '#f4f7fb' : '#020617';
+
     bodyElement.classList.remove('light-theme', 'dark-theme');
-    bodyElement.classList.add(ui.theme === 'light' ? 'light-theme' : 'dark-theme');
+    bodyElement.classList.add(themeClass);
+
+    rootElement.dataset.theme = ui.theme;
+    rootElement.style.colorScheme = ui.theme;
+    bodyElement.style.colorScheme = ui.theme;
+
+    const metaTheme = document.querySelector('meta[name="theme-color"]');
+    if (metaTheme) {
+      metaTheme.setAttribute('content', themeColor);
+    }
 
     return () => {
       bodyElement.classList.remove('light-theme', 'dark-theme');
+      rootElement.removeAttribute('data-theme');
+      rootElement.style.removeProperty('color-scheme');
+      bodyElement.style.removeProperty('color-scheme');
     };
   }, [ui.theme]);
 

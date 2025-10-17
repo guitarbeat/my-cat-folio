@@ -219,15 +219,56 @@ const useAppStore = create(
         initializeTheme: () =>
           set((state) => {
             try {
-              const storedTheme = localStorage.getItem('theme');
-              if (storedTheme !== null) {
-                const isLightTheme = storedTheme === 'true';
+              const storedTheme =
+                typeof window !== 'undefined' && window.localStorage
+                  ? window.localStorage.getItem('theme')
+                  : null;
+
+              const parseStoredTheme = (value) => {
+                if (value === null) return null;
+                if (value === 'light' || value === 'dark') {
+                  return value;
+                }
+                if (value === 'true' || value === 'false') {
+                  return value === 'true' ? 'light' : 'dark';
+                }
+
+                try {
+                  const parsed = JSON.parse(value);
+                  if (typeof parsed === 'boolean') {
+                    return parsed ? 'light' : 'dark';
+                  }
+                } catch (error) {
+                  if (process.env.NODE_ENV === 'development') {
+                    console.error('Error parsing stored theme value:', error);
+                  }
+                }
+                return null;
+              };
+
+              const resolvedStoredTheme = parseStoredTheme(storedTheme);
+
+              if (resolvedStoredTheme) {
                 return {
                   ui: {
                     ...state.ui,
-                    theme: isLightTheme ? 'light' : 'dark'
+                    theme: resolvedStoredTheme
                   }
                 };
+              }
+
+              if (typeof window !== 'undefined' && window.matchMedia) {
+                const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                const preferredTheme = prefersDark ? 'dark' : 'light';
+
+                if (preferredTheme !== state.ui.theme) {
+                  return {
+                    ui: {
+                      ...state.ui,
+                      theme: preferredTheme
+                    }
+                  };
+                }
               }
             } catch (error) {
               if (process.env.NODE_ENV === 'development') {
@@ -241,7 +282,9 @@ const useAppStore = create(
           set((state) => {
             // * Persist to localStorage
             try {
-              localStorage.setItem('theme', theme === 'light' ? 'true' : 'false');
+              if (typeof window !== 'undefined' && window.localStorage) {
+                window.localStorage.setItem('theme', theme);
+              }
             } catch (error) {
               if (process.env.NODE_ENV === 'development') {
                 console.error('Error updating theme localStorage:', error);
@@ -260,7 +303,9 @@ const useAppStore = create(
             const newTheme = state.ui.theme === 'light' ? 'dark' : 'light';
             // * Persist to localStorage
             try {
-              localStorage.setItem('theme', newTheme === 'light' ? 'true' : 'false');
+              if (typeof window !== 'undefined' && window.localStorage) {
+                window.localStorage.setItem('theme', newTheme);
+              }
             } catch (error) {
               if (process.env.NODE_ENV === 'development') {
                 console.error('Error updating theme localStorage:', error);

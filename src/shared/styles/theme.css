@@ -284,6 +284,8 @@
 
   /* Background colors - Improved contrast for WCAG compliance */
   --background-color: #0f1419; /* Darker background for better contrast */
+  --surface-muted: #182130;
+  --surface-elevated: #1e293b;
   --card-background: #1e293b; /* Darker card background for better contrast */
   --card-border: #334155; /* Darker border for better contrast */
   --card-hover: #475569; /* Enhanced hover state for better contrast */
@@ -291,6 +293,8 @@
   --surface-color: #1e293b; /* Darker surface */
   --header-background: #1e293b; /* Darker header for better contrast */
   --header-border: #334155; /* Darker header border */
+  --muted: #111827;
+  --muted-foreground: #94a3b8;
 
   /* Glass surface tokens - Enhanced glassmorphism */
   --glass-bg: rgb(15 23 42 / 40%);
@@ -330,66 +334,77 @@ body.light-theme {
   --primary-color: var(--primary-600);
   --primary-light: var(--primary-100);
   --primary-dark: var(--primary-800);
-  --surface-color: #fff; /* * Light surface color */
-  --background-color: #f8fafc; /* * Light background color */
-  --text-primary: #1e293b; /* Dark text for light backgrounds */
-  --text-secondary: #475569; /* Dark secondary text */
-  --text-tertiary: #64748b; /* Dark tertiary text */
-  --border-color: #e2e8f0; /* Light border for better contrast */
-  --card-background: #fff; /* * Light card background */
-  --card-border: #e2e8f0; /* * Light card border */
-  --card-hover: #f1f5f9; /* * Light hover state */
-  --header-background: #fff; /* * Light header background */
-  --header-border: #e2e8f0; /* * Light header border */
+  --surface-color: #ffffff;
+  --background-color: #f4f7fb;
+  --surface-muted: #f1f5fb;
+  --surface-elevated: #ffffff;
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --text-tertiary: #64748b;
+  --border-color: #dbe3f0;
+  --card-background: #ffffff;
+  --card-border: #dbe3f0;
+  --card-hover: #eef2f9;
+  --header-background: rgb(255 255 255 / 90%);
+  --header-border: rgb(148 163 184 / 40%);
+  --shadow-color: rgb(15 23 42 / 14%);
+  --shadow-color-light: rgb(15 23 42 / 9%);
+  --shadow-color-medium: rgb(15 23 42 / 18%);
+  --shadow-color-strong: rgb(15 23 42 / 26%);
+  --overlay-light: rgb(15 23 42 / 6%);
+  --overlay-medium: rgb(15 23 42 / 12%);
+  --overlay-dark: rgb(15 23 42 / 18%);
+  --overlay-darker: rgb(15 23 42 / 26%);
 
   /* Glass surface tokens (light) */
-  --glass-bg: rgb(255 255 255 / 70%);
-  --glass-bg-light: rgb(255 255 255 / 50%);
+  --glass-bg: rgb(255 255 255 / 78%);
+  --glass-bg-light: rgb(255 255 255 / 55%);
   --glass-bg-strong: rgb(255 255 255 / 85%);
-  --glass-border: rgb(0 0 0 / 10%);
-  --glass-border-hover: rgb(0 0 0 / 15%);
-  --glass-shadow: 0 8px 32px rgb(0 0 0 / 10%);
-  --glass-shadow-colored: 0 8px 32px rgb(47 243 224 / 10%), 0 8px 16px rgb(250 38 160 / 5%);
-  --glass-blur: 16px;
-  --glass-blur-strong: 24px;
-  --shadow-subtle: 0 1px 3px rgb(0 0 0 / 10%); /* * Subtle shadow for light theme */
-  --shadow-medium: 0 4px 12px rgb(0 0 0 / 15%); /* * Medium shadow for light theme */
+  --glass-border: rgb(15 23 42 / 12%);
+  --glass-border-hover: rgb(15 23 42 / 18%);
+  --glass-shadow: 0 24px 45px rgb(15 23 42 / 12%);
+  --glass-shadow-colored: 0 12px 40px rgb(47 243 224 / 12%), 0 8px 24px rgb(250 38 160 / 10%);
+  --glass-blur: 18px;
+  --glass-blur-strong: 26px;
+  --shadow-subtle: 0 8px 20px rgb(15 23 42 / 6%);
+  --shadow-medium: 0 18px 40px rgb(15 23 42 / 14%);
 
   /* Synced light-mode variables for components using legacy names */
-  --surface-light: #fff; /* * Updated to match new surface color */
-  --card-background-light: #fff; /* * Updated to match new card background */
-  --card-hover-light: #f1f5f9; /* * Updated to match new hover color */
-  --border-color-light: #e2e8f0; /* * Updated to match new border color */
-  --text-primary-light: #1e293b; /* * Dark text for light backgrounds */
-  --text-secondary-light: #475569; /* * Dark secondary text */
+  --surface-light: #ffffff;
+  --card-background-light: #ffffff;
+  --card-hover-light: #eef2f9;
+  --border-color-light: #dbe3f0;
+  --text-primary-light: #1e293b;
+  --text-secondary-light: #475569;
   --button-primary-bg: var(--primary-600);
   --button-primary-hover: var(--primary-700);
-  --button-secondary-bg: rgb(
-    0 0 0 / 5%
-  ); /* * Light secondary button */
-
-  --button-secondary-hover: rgb(
-    0 0 0 / 10%
-  ); /* * Light hover state */
-
+  --button-secondary-bg: rgb(15 23 42 / 6%);
+  --button-secondary-hover: rgb(15 23 42 / 12%);
   --button-text-light: white;
 
   /* * Start section colors for light theme */
-  --start-section-bg-start: #f8fafc; /* * Light start color */
-  --start-section-bg-end: #e2e8f0; /* * Light end color */
-  --start-section-border: #cbd5e1; /* * Light border */
-  --start-section-pattern: #94a3b8; /* * Darker pattern color for contrast */
-  --accent-subtle: rgb(0 0 0 / 5%); /* * Subtle accent for light theme */
-  --accent-medium: rgb(0 0 0 / 10%); /* * Medium accent for light theme */
+  --start-section-bg-start: #f7f9fc;
+  --start-section-bg-end: #e2e8f0;
+  --start-section-border: #cbd5e1;
+  --start-section-pattern: #94a3b8;
+  --accent-subtle: rgb(15 23 42 / 6%);
+  --accent-medium: rgb(15 23 42 / 12%);
 
   /* NameCard selected state variables */
-  --namecard-selected-bg: linear-gradient(
-    135deg,
-    var(--primary-600),
-    var(--primary-700)
-  );
+  --namecard-selected-bg: linear-gradient(135deg, var(--primary-600), var(--primary-700));
   --namecard-selected-border: var(--primary-400);
   --namecard-selected-description: var(--primary-300);
+
+  --muted: #eef2f9;
+  --muted-foreground: #475569;
+
+  color-scheme: light;
+  background-image:
+    radial-gradient(circle at -10% -10%, rgba(var(--accent-rgb), 0.16), transparent 60%),
+    radial-gradient(circle at 120% -20%, rgba(var(--neon-cyan-rgb), 0.12), transparent 55%),
+    radial-gradient(circle at 10% 120%, rgba(var(--hot-pink-rgb), 0.1), transparent 60%);
+  background-attachment: fixed;
+  background-repeat: no-repeat;
 }
 
 /* Dark Theme Overrides */
@@ -397,60 +412,77 @@ body.dark-theme {
   --primary-color: var(--primary-400);
   --primary-light: var(--primary-700);
   --primary-dark: var(--primary-200);
-  --surface-color: #0f172a; /* * Darker surface for better contrast */
-  --background-color: #020617; /* * Darker background for better contrast */
+  --surface-color: #0b1120;
+  --background-color: #020617;
+  --surface-muted: #0f172a;
+  --surface-elevated: #111c2e;
   --text-primary: #f8fafc;
   --text-secondary: #e2e8f0;
   --text-tertiary: #cbd5e1;
-  --border-color: #1e293b; /* * Darker border for better contrast */
-  --card-background: #0f172a; /* * Darker card background */
-  --card-border: #1e293b; /* * Darker card border */
-  --card-hover: #1e293b; /* * Darker hover state */
-  --header-background: #0f172a; /* * Darker header background */
-  --header-border: #1e293b; /* * Darker header border */
+  --border-color: #1e293b;
+  --card-background: #0b1220;
+  --card-border: #1f2a3d;
+  --card-hover: #1b2536;
+  --header-background: rgb(15 23 42 / 75%);
+  --header-border: rgb(59 72 99 / 55%);
+  --shadow-color: rgb(2 6 23 / 60%);
+  --shadow-color-light: rgb(2 6 23 / 35%);
+  --shadow-color-medium: rgb(2 6 23 / 50%);
+  --shadow-color-strong: rgb(2 6 23 / 65%);
+  --overlay-light: rgb(15 23 42 / 35%);
+  --overlay-medium: rgb(15 23 42 / 45%);
+  --overlay-dark: rgb(15 23 42 / 60%);
+  --overlay-darker: rgb(15 23 42 / 70%);
 
   /* Glass surface tokens (dark) - Enhanced glassmorphism */
-  --glass-bg: rgb(15 23 42 / 40%);
-  --glass-bg-light: rgb(15 23 42 / 20%);
-  --glass-bg-strong: rgb(15 23 42 / 60%);
-  --glass-border: rgb(255 255 255 / 15%);
-  --glass-border-hover: rgb(255 255 255 / 25%);
-  --glass-shadow: 0 8px 32px rgb(0 0 0 / 40%);
-  --glass-shadow-colored: 0 8px 32px rgb(47 243 224 / 15%), 0 8px 16px rgb(250 38 160 / 10%);
-  --glass-blur: 20px;
-  --glass-blur-strong: 30px;
+  --glass-bg: rgb(15 23 42 / 55%);
+  --glass-bg-light: rgb(15 23 42 / 30%);
+  --glass-bg-strong: rgb(15 23 42 / 70%);
+  --glass-border: rgb(255 255 255 / 12%);
+  --glass-border-hover: rgb(255 255 255 / 22%);
+  --glass-shadow: 0 30px 60px rgb(2 6 23 / 65%);
+  --glass-shadow-colored: 0 18px 40px rgb(47 243 224 / 18%), 0 14px 32px rgb(250 38 160 / 14%);
+  --glass-blur: 22px;
+  --glass-blur-strong: 32px;
+  --shadow-subtle: 0 8px 24px rgb(2 6 23 / 45%);
+  --shadow-medium: 0 24px 60px rgb(2 6 23 / 65%);
 
   /* Synced light-mode variables for components using legacy names */
-  --surface-dark: #0f172a; /* * Updated to match new surface color */
-  --card-background-dark: #0f172a; /* * Updated to match new card background */
-  --card-hover-dark: #1e293b; /* * Updated to match new hover color */
-  --border-color-dark: #1e293b; /* * Updated to match new border color */
+  --surface-dark: #0b1220;
+  --card-background-dark: #0b1220;
+  --card-hover-dark: #152135;
+  --border-color-dark: #1f2a3d;
   --text-primary-dark: #f8fafc;
   --text-secondary-dark: #e2e8f0;
   --button-primary-bg: var(--primary-500);
   --button-primary-hover: var(--primary-400);
-  --button-secondary-bg: rgb(255 255 255 / 12%); /* * Slightly more visible */
-  --button-secondary-hover: rgb(255 255 255 / 25%); /* * More visible hover */
+  --button-secondary-bg: rgb(255 255 255 / 16%);
+  --button-secondary-hover: rgb(255 255 255 / 28%);
   --button-text-light: #0f1419;
-  --shadow-subtle: 0 1px 3px rgb(0 0 0 / 25%); /* * Subtle shadow for dark theme */
-  --shadow-medium: 0 4px 12px rgb(0 0 0 / 35%); /* * Medium shadow for dark theme */
 
   /* * Start section colors for dark theme */
-  --start-section-bg-start: #1e293b; /* * Darker start color for better contrast */
-  --start-section-bg-end: #334155; /* * Darker end color for better contrast */
-  --start-section-border: #475569; /* * Darker border for better contrast */
-  --start-section-pattern: #64748b; /* * Subtle pattern color */
-  --accent-subtle: rgb(255 255 255 / 8%); /* * Subtle accent for dark theme */
-  --accent-medium: rgb(255 255 255 / 15%); /* * Medium accent for dark theme */
+  --start-section-bg-start: #141c2f;
+  --start-section-bg-end: #1f2a3d;
+  --start-section-border: #23324a;
+  --start-section-pattern: #3b4a63;
+  --accent-subtle: rgb(255 255 255 / 10%);
+  --accent-medium: rgb(255 255 255 / 18%);
 
   /* NameCard selected state variables */
-  --namecard-selected-bg: linear-gradient(
-    135deg,
-    var(--primary-700),
-    var(--primary-800)
-  );
-  --namecard-selected-border: var(--primary-400);
+  --namecard-selected-bg: linear-gradient(135deg, var(--primary-700), var(--primary-800));
+  --namecard-selected-border: var(--primary-300);
   --namecard-selected-description: var(--primary-300);
+
+  --muted: #111827;
+  --muted-foreground: #94a3b8;
+
+  color-scheme: dark;
+  background-image:
+    radial-gradient(circle at 15% -20%, rgba(var(--hot-pink-rgb), 0.24), transparent 55%),
+    radial-gradient(circle at 120% 10%, rgba(var(--neon-cyan-rgb), 0.18), transparent 55%),
+    radial-gradient(circle at -10% 70%, rgba(var(--fire-red-rgb), 0.12), transparent 60%);
+  background-attachment: fixed;
+  background-repeat: no-repeat;
 }
 
 /* High Contrast Mode */
