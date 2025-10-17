@@ -50,8 +50,8 @@ function App() {
     errorActions
   } = useAppStore();
 
-  // Determine admin (Aaron only, case-insensitive)
-  const isAdmin = typeof user.name === 'string' && user.name.trim().toLowerCase() === 'aaron';
+  // Get admin status from server-side validation
+  const isAdmin = user.isAdmin;
 
   // * Keyboard shortcut for performance dashboard (Ctrl+Shift+P)
   React.useEffect(() => {

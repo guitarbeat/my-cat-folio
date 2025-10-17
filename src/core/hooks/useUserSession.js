@@ -13,6 +13,7 @@ import {
   getSupabaseClientSync
 } from '../../integrations/supabase/client';
 import useAppStore from '../store/useAppStore';
+import { isUserAdmin } from '@/shared/utils/authUtils';
 
 const resolveSupabaseClient = async () =>
   getSupabaseClientSync() ?? (await getSupabaseClient());
@@ -27,6 +28,13 @@ function useUserSession({ showToast } = {}) {
     const storedUserName = localStorage.getItem('catNamesUser');
     if (storedUserName && storedUserName.trim()) {
       userActions.login(storedUserName);
+      
+      // Check admin status server-side
+      isUserAdmin(storedUserName).then(adminStatus => {
+        userActions.setAdminStatus(adminStatus);
+      }).catch(() => {
+        userActions.setAdminStatus(false);
+      });
     }
     setIsInitialized(true);
   }, [userActions]);
@@ -106,6 +114,10 @@ function useUserSession({ showToast } = {}) {
       // Store username and update state
       localStorage.setItem('catNamesUser', trimmedName);
       userActions.login(trimmedName);
+      
+      // Check admin status server-side
+      const adminStatus = await isUserAdmin(trimmedName);
+      userActions.setAdminStatus(adminStatus);
 
       return true;
     } catch (err) {
