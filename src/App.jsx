@@ -159,6 +159,22 @@ function App() {
     uiActions.toggleTheme();
   }, [uiActions]);
 
+  // * Synchronize global body class with current theme
+  React.useEffect(() => {
+    const bodyElement = document.body;
+
+    if (!bodyElement) {
+      return;
+    }
+
+    bodyElement.classList.remove('light-theme', 'dark-theme');
+    bodyElement.classList.add(ui.theme === 'light' ? 'light-theme' : 'dark-theme');
+
+    return () => {
+      bodyElement.classList.remove('light-theme', 'dark-theme');
+    };
+  }, [ui.theme]);
+
   // * Welcome screen removed
 
   // * Handle user login
