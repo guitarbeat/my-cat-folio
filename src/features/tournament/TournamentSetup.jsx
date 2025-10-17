@@ -58,6 +58,10 @@ const CAT_IMAGES = [
   '/assets/images/75209580524__60DCC26F-55A1-4EF8-A0B2-14E80A026A8D.jpg'
 ];
 
+const GALLERY_IMAGE_SIZES =
+  '(max-width: 480px) 88vw, (max-width: 768px) 44vw, (max-width: 1280px) 28vw, 200px';
+const LIGHTBOX_IMAGE_SIZES = '(max-width: 768px) 94vw, 80vw';
+
 const DEFAULT_DESCRIPTION = 'A name as unique as your future companion';
 
 const resolveSupabaseClient = async () =>
@@ -1429,8 +1433,16 @@ function TournamentSetupContent({ onStart, userName }) {
                         const base = image.replace(/\.[^.]+$/, '');
                         return (
                           <picture>
-                            <source type="image/avif" srcSet={`${base}.avif`} />
-                            <source type="image/webp" srcSet={`${base}.webp`} />
+                            <source
+                              type="image/avif"
+                              srcSet={`${base}.avif`}
+                              sizes={GALLERY_IMAGE_SIZES}
+                            />
+                            <source
+                              type="image/webp"
+                              srcSet={`${base}.webp`}
+                              sizes={GALLERY_IMAGE_SIZES}
+                            />
                             <img
                               src={image}
                               alt=""
@@ -1438,6 +1450,7 @@ function TournamentSetupContent({ onStart, userName }) {
                               decoding="async"
                               width="200"
                               height="200"
+                              sizes={GALLERY_IMAGE_SIZES}
                             />
                           </picture>
                         );
@@ -1450,6 +1463,7 @@ function TournamentSetupContent({ onStart, userName }) {
                         decoding="async"
                         width="200"
                         height="200"
+                        sizes={GALLERY_IMAGE_SIZES}
                       />
                     )}
                     <div className={styles.photoOverlay}>
@@ -1620,14 +1634,23 @@ function Lightbox({ images, index, onClose, onPrev, onNext }) {
         </button>
         <div className={styles.lightboxImageWrap}>
           <picture>
-            <source type="image/avif" srcSet={`${base}.avif`} />
-            <source type="image/webp" srcSet={`${base}.webp`} />
+            <source
+              type="image/avif"
+              srcSet={`${base}.avif`}
+              sizes={LIGHTBOX_IMAGE_SIZES}
+            />
+            <source
+              type="image/webp"
+              srcSet={`${base}.webp`}
+              sizes={LIGHTBOX_IMAGE_SIZES}
+            />
             <img
               src={current}
               alt={`Cat photo ${index + 1} of ${images.length}`}
               className={styles.lightboxImage}
               loading="eager"
               decoding="async"
+              sizes={LIGHTBOX_IMAGE_SIZES}
             />
           </picture>
         </div>
