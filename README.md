@@ -77,7 +77,7 @@ npm run dev
 
 - **Frontend**: React 19 + Vite + CSS Modules
 - **Backend**: Supabase (PostgreSQL + Auth)
-- **State**: Zustand + Immer
+- **State**: Zustand
 - **Testing**: Vitest + React Testing Library
 - **Deployment**: Vercel with edge computing
 - **Performance**: Code splitting, lazy loading, compression
