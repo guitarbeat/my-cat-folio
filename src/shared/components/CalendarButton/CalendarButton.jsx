@@ -1,9 +1,12 @@
 /**
  * @module CalendarButton
  * @description Button that exports tournament results to Google Calendar.
+ * Reuses the shared Button component to stay visually consistent with other
+ * actions in the app.
  */
 import React from 'react';
 import PropTypes from 'prop-types';
+import Button from '../Button';
 import styles from './CalendarButton.module.css';
 /**
  * --- AUTO-GENERATED DOCSTRING ---
@@ -15,7 +18,16 @@ import styles from './CalendarButton.module.css';
  * --- END AUTO-GENERATED DOCSTRING ---
  */
 
-function CalendarButton({ rankings, userName, hiddenNames }) {
+function CalendarButton({
+  rankings,
+  userName,
+  hiddenNames,
+  className = '',
+  variant = 'secondary',
+  size = 'medium',
+  disabled = false,
+  ...rest
+}) {
   const handleClick = () => {
     // Filter out hidden names and sort by rating
     const activeNames = rankings
@@ -55,15 +67,19 @@ function CalendarButton({ rankings, userName, hiddenNames }) {
   };
 
   return (
-    <button
-      className={styles.button}
+    <Button
+      variant={variant}
+      size={size}
       onClick={handleClick}
-      title="Add to Google Calendar"
+      className={className}
+      disabled={disabled}
+      startIcon={<span className={styles.icon}>📅</span>}
       aria-label="Add to Google Calendar"
+      title="Add to Google Calendar"
+      {...rest}
     >
-      <span className={styles.icon}>📅</span>
       Add to Calendar
-    </button>
+    </Button>
   );
 }
 
@@ -72,7 +88,11 @@ CalendarButton.displayName = 'CalendarButton';
 CalendarButton.propTypes = {
   rankings: PropTypes.arrayOf(PropTypes.object).isRequired,
   userName: PropTypes.string.isRequired,
-  hiddenNames: PropTypes.instanceOf(Set).isRequired
+  hiddenNames: PropTypes.instanceOf(Set).isRequired,
+  className: PropTypes.string,
+  variant: PropTypes.oneOf(['primary', 'secondary', 'danger', 'ghost']),
+  size: PropTypes.oneOf(['small', 'medium', 'large']),
+  disabled: PropTypes.bool
 };
 
 export default CalendarButton;
