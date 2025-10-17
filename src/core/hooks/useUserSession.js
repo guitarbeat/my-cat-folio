@@ -18,6 +18,49 @@ import { isUserAdmin } from '@/shared/utils/authUtils';
 const resolveSupabaseClient = async () =>
   getSupabaseClientSync() ?? (await getSupabaseClient());
 
+let canUseSetUserContext = true;
+
+const isRpcUnavailableError = (error) => {
+  if (!error) return false;
+
+  const statusCode = typeof error.status === 'number' ? error.status : null;
+  const errorCode = typeof error.code === 'string' ? error.code.toUpperCase() : '';
+  const message = error.message?.toLowerCase?.() ?? '';
+
+  return (
+    statusCode === 404 ||
+    errorCode === '404' ||
+    errorCode === 'PGRST301' ||
+    errorCode === 'PGRST303' ||
+    message.includes('not found') ||
+    message.includes('does not exist')
+  );
+};
+
+const setSupabaseUserContext = async (activeSupabase, userName) => {
+  if (!canUseSetUserContext || !activeSupabase || !userName) {
+    return;
+  }
+
+  try {
+    const trimmedName = userName.trim?.() ?? userName;
+    if (!trimmedName) return;
+
+    await activeSupabase.rpc('set_user_context', { user_name_param: trimmedName });
+  } catch (error) {
+    if (isRpcUnavailableError(error)) {
+      canUseSetUserContext = false;
+      if (process.env.NODE_ENV === 'development') {
+        console.info(
+          'Supabase set_user_context RPC is unavailable. Skipping future context calls.'
+        );
+      }
+    } else if (process.env.NODE_ENV === 'development') {
+      console.warn('Failed to set Supabase user context:', error);
+    }
+  }
+};
+
 function useUserSession({ showToast } = {}) {
   const [error, setError] = useState(null);
   const [isInitialized, setIsInitialized] = useState(false);
@@ -33,7 +76,7 @@ function useUserSession({ showToast } = {}) {
       (async () => {
         try {
           const activeSupabase = await resolveSupabaseClient();
-          await activeSupabase?.rpc('set_user_context', { user_name_param: storedUserName.trim() });
+          await setSupabaseUserContext(activeSupabase, storedUserName);
         } catch {}
       })();
       
@@ -75,9 +118,7 @@ function useUserSession({ showToast } = {}) {
       }
 
       // Ensure the RLS session uses the current username
-      try {
-        await activeSupabase.rpc('set_user_context', { user_name_param: trimmedName });
-      } catch {}
+      await setSupabaseUserContext(activeSupabase, trimmedName);
 
       // Check if user exists in database
       const { data: existingUser, error: fetchError } = await activeSupabase
