@@ -3,7 +3,7 @@
  * @description Simple wizard for selecting cat names and starting a tournament.
  * Shows names and descriptions by default. Admin users get advanced filtering options.
  */
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import React, { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import {
   getSupabaseClient,
@@ -19,7 +19,9 @@ import { compressImageFile, devLog } from '../../shared/utils/coreUtils';
 import {
   Loading,
   NameCard,
-  Error
+  Error,
+  Input,
+  Select
 } from '../../shared/components';
 
 // * Import Error components for specific use cases
@@ -158,6 +160,35 @@ const NameSelection = ({
       })()
     : availableNames; // Non-admin users see all names
 
+  const categoryOptions = useMemo(() => {
+    if (!categories?.length) {
+      return [];
+    }
+
+    const categoryCounts = categories.map((category) => {
+      const count = availableNames.filter(
+        (name) =>
+          name.categories && name.categories.includes(category.name)
+      ).length;
+
+      return {
+        value: category.name,
+        label: `${category.name} (${count})`
+      };
+    });
+
+    return [{ value: '', label: 'All Categories' }, ...categoryCounts];
+  }, [categories, availableNames]);
+
+  const sortOptions = useMemo(
+    () => [
+      { value: 'alphabetical', label: 'Alphabetical' },
+      { value: 'rating', label: 'Rating (High to Low)' },
+      { value: 'popularity', label: 'Popularity' }
+    ],
+    []
+  );
+
   return (
     <div className={styles.nameSelection}>
       {/* Swipe Mode Instructions */}
@@ -173,59 +204,44 @@ const NameSelection = ({
       {isAdmin && (
         <div className={styles.controlsSection}>
           {/* Category filter */}
-          {categories && categories.length > 0 && (
+          {categoryOptions.length > 0 && (
             <div className={styles.filterGroup}>
-              <label htmlFor="category-filter">Category:</label>
-              <select
-                id="category-filter"
-                value={selectedCategory || ''}
+              <Select
+                name="category"
+                label="Category"
+                value={selectedCategory ?? ''}
                 onChange={(e) => onCategoryChange(e.target.value || null)}
+                options={categoryOptions}
                 className={styles.filterSelect}
-              >
-                <option value="">All Categories</option>
-                {categories.map((category) => (
-                  <option key={category.id} value={category.name}>
-                    {category.name} (
-                    {
-                      availableNames.filter(
-                        (name) =>
-                          name.categories &&
-                          name.categories.includes(category.name)
-                      ).length
-                    }
-                    )
-                  </option>
-                ))}
-              </select>
+                placeholder=""
+              />
             </div>
           )}
 
           {/* Search filter */}
           <div className={styles.filterGroup}>
-            <label htmlFor="search-filter">Search:</label>
-            <input
-              type="text"
-              id="search-filter"
+            <Input
+              name="search-filter"
+              label="Search"
               value={searchTerm}
               onChange={(e) => onSearchChange(e.target.value)}
               placeholder="Search names or descriptions..."
               className={styles.searchInput}
+              type="text"
             />
           </div>
 
           {/* Sort options */}
           <div className={styles.filterGroup}>
-            <label htmlFor="sort-filter">Sort by:</label>
-            <select
-              id="sort-filter"
+            <Select
+              name="sort-filter"
+              label="Sort by"
               value={sortBy}
               onChange={(e) => onSortChange(e.target.value)}
+              options={sortOptions}
               className={styles.filterSelect}
-            >
-              <option value="alphabetical">Alphabetical</option>
-              <option value="rating">Rating (High to Low)</option>
-              <option value="popularity">Popularity</option>
-            </select>
+              placeholder=""
+            />
           </div>
         </div>
       )}
@@ -799,17 +815,18 @@ const NameSuggestionSection = () => {
           aria-label="Name suggestion form"
         >
           <div className={styles.formGroup}>
-            <label htmlFor="suggestion-name">Name</label>
-            <input
-              type="text"
-              id="suggestion-name"
+            <Input
+              name="suggestion-name"
+              label="Name"
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="Enter a cat name"
               maxLength={50}
               disabled={isSubmitting}
               aria-required="true"
-              aria-describedby="name-help"
+              ariaDescribedBy="name-help"
+              required
+              type="text"
             />
             <div id="name-help" className={styles.helpText}>
               Enter a unique cat name (maximum 50 characters)
