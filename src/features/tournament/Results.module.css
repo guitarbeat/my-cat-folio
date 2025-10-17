@@ -371,6 +371,7 @@
 .actionButton {
   min-width: 200px;
 }
+
 @media (width <= 640px) {
   .header {
     flex-direction: column;
