@@ -26,7 +26,7 @@ import styles from './Error.module.css';
  * @param {string} props.className - Additional CSS classes
  * @param {React.ReactNode} props.children - Children for boundary variant
  */
-const Error = ({
+const ErrorComponent = ({
   variant = 'inline',
   error,
   onRetry,
@@ -518,11 +518,11 @@ const ErrorInline = ({
 };
 
 // PropTypes
-Error.propTypes = {
+ErrorComponent.propTypes = {
   variant: PropTypes.oneOf(['boundary', 'list', 'inline']),
   error: PropTypes.oneOfType([
     PropTypes.string,
-    PropTypes.instanceOf(Error),
+    PropTypes.instanceOf(globalThis.Error),
     PropTypes.object,
     PropTypes.array
   ]),
@@ -539,6 +539,6 @@ Error.propTypes = {
   children: PropTypes.node
 };
 
-Error.displayName = 'Error';
+ErrorComponent.displayName = 'Error';
 
-export default Error;
+export default ErrorComponent;
