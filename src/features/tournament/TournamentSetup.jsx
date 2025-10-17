@@ -1358,7 +1358,9 @@ function TournamentSetupContent({ onStart, userName }) {
 
                 <button
                   onClick={() => setIsSwipeMode(!isSwipeMode)}
-                  className={`${styles.swipeModeToggleButton} ${isSwipeMode ? styles.active : ''}`}
+                  className={`${styles.headerActionButton} ${styles.swipeModeToggleButton} ${
+                    isSwipeMode ? styles.headerActionButtonActive : ''
+                  }`}
                   aria-label={
                     isSwipeMode ? 'Switch to card mode' : 'Switch to swipe mode'
                   }
@@ -1368,7 +1370,9 @@ function TournamentSetupContent({ onStart, userName }) {
 
                 <button
                   onClick={() => setShowCatPictures(!showCatPictures)}
-                  className={`${styles.catPicturesToggleButton} ${showCatPictures ? styles.active : ''}`}
+                  className={`${styles.headerActionButton} ${styles.catPicturesToggleButton} ${
+                    showCatPictures ? styles.headerActionButtonActive : ''
+                  }`}
                   aria-label={
                     showCatPictures
                       ? 'Hide cat pictures'

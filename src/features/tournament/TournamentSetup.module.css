@@ -1365,39 +1365,40 @@
   gap: var(--space-6);
 }
 
-/* Swipe Mode Toggle Button - Enhanced Modern Styling */
-.swipeModeToggleButton {
+/* Header Action Buttons - Shared Styling */
+.headerActionButton {
   position: relative;
-
-  /* * Base button styling */
+  display: inline-flex;
+  gap: var(--space-2);
+  align-items: center;
+  justify-content: center;
   min-height: 48px;
   padding: var(--space-3) var(--space-4);
   overflow: hidden;
   font-size: var(--text-sm);
   font-weight: 600;
-  
+
   /* * Text styling */
   color: var(--text-primary);
   letter-spacing: 0.025em;
+  white-space: nowrap;
   text-shadow: 0 1px 2px rgb(0 0 0 / 10%);
-  
-  /* * Interactive states */
   cursor: pointer;
   user-select: none;
-  
+
   /* * Glassmorphism background */
   background: var(--glass-bg);
-  background-image: linear-gradient(var(--card-background), var(--card-background)), 
+  background-image: linear-gradient(var(--card-background), var(--card-background)),
                     var(--gradient-primary);
-  
+
   /* * Gradient border effect */
   background-clip: padding-box;
   background-origin: border-box;
   border: 2px solid transparent;
   border-radius: var(--radius-xl);
-  
+
   /* * Subtle glow effect */
-  box-shadow: 
+  box-shadow:
     0 4px 12px rgb(0 0 0 / 15%),
     0 2px 4px rgb(0 0 0 / 10%),
     inset 0 1px 0 rgb(255 255 255 / 10%);
@@ -1405,7 +1406,7 @@
   transition: all var(--duration-normal) var(--ease-out);
 }
 
-.swipeModeToggleButton::before {
+.headerActionButton::before {
   position: absolute;
   top: 0;
   left: -100%;
@@ -1423,55 +1424,55 @@
   transition: left var(--duration-slow) var(--ease-out);
 }
 
-.swipeModeToggleButton:hover:not(:disabled) {
+.headerActionButton:hover:not(:disabled) {
   /* * Enhanced hover state */
-  background-image: linear-gradient(var(--card-hover), var(--card-hover)), 
+  background-image: linear-gradient(var(--card-hover), var(--card-hover)),
                     var(--gradient-vibrant);
   border-color: var(--neon-cyan-100);
-  box-shadow: 
+  box-shadow:
     0 8px 25px rgb(0 0 0 / 20%),
     0 4px 12px rgb(0 0 0 / 15%),
     var(--glow-cyan);
   transform: translateY(-2px) scale(1.02);
 }
 
-.swipeModeToggleButton:hover:not(:disabled)::before {
+.headerActionButton:hover:not(:disabled)::before {
   left: 100%;
 }
 
-.swipeModeToggleButton:active:not(:disabled) {
+.headerActionButton:active:not(:disabled) {
   transform: translateY(-1px) scale(1.01);
   transition: transform var(--duration-fast) var(--ease-out);
 }
 
-.swipeModeToggleButton.active {
+.headerActionButtonActive {
   font-weight: 700;
   color: var(--charcoal);
   text-shadow: none;
 
   /* * Active state with vibrant styling */
-  background-image: linear-gradient(var(--accent-color), var(--highlight-color)), 
+  background-image: linear-gradient(var(--accent-color), var(--highlight-color)),
                     var(--gradient-vibrant);
   border-color: var(--mimosa);
-  box-shadow: 
+  box-shadow:
     0 6px 20px rgb(232 191 118 / 40%),
     0 3px 8px rgb(241 164 56 / 30%),
     var(--glow-pink);
   transform: translateY(-1px);
 }
 
-.swipeModeToggleButton.active:hover:not(:disabled) {
+.headerActionButtonActive:hover:not(:disabled) {
   /* * Enhanced active hover state */
-  background-image: linear-gradient(var(--highlight-color), var(--accent-color)), 
+  background-image: linear-gradient(var(--highlight-color), var(--accent-color)),
                     var(--gradient-vibrant);
-  box-shadow: 
+  box-shadow:
     0 10px 30px rgb(232 191 118 / 50%),
     0 5px 15px rgb(241 164 56 / 40%),
     var(--glow-vibrant);
   transform: translateY(-3px) scale(1.03);
 }
 
-.swipeModeToggleButton:disabled {
+.headerActionButton:disabled {
   color: var(--text-tertiary);
   cursor: not-allowed;
   background: var(--glass-bg-light);
@@ -1482,139 +1483,18 @@
   transform: none;
 }
 
-.swipeModeToggleButton:focus-visible {
+.headerActionButton:focus-visible {
   /* * Focus state for accessibility */
   outline: 3px solid var(--accent-color);
   outline-offset: 3px;
-  box-shadow: 
+  box-shadow:
     0 0 0 3px rgb(232 191 118 / 30%),
     0 4px 12px rgb(0 0 0 / 15%);
 }
 
-/* Cat Pictures Toggle Button - Enhanced Modern Styling */
+.swipeModeToggleButton,
 .catPicturesToggleButton {
   position: relative;
-
-  /* * Base button styling */
-  min-height: 48px;
-  padding: var(--space-3) var(--space-4);
-  overflow: hidden;
-  font-size: var(--text-sm);
-  font-weight: 600;
-  
-  /* * Text styling */
-  color: var(--text-primary);
-  letter-spacing: 0.025em;
-  text-shadow: 0 1px 2px rgb(0 0 0 / 10%);
-  
-  /* * Interactive states */
-  cursor: pointer;
-  user-select: none;
-  
-  /* * Glassmorphism background */
-  background: var(--glass-bg);
-  background-image: linear-gradient(var(--card-background), var(--card-background)), 
-                    var(--gradient-primary);
-  
-  /* * Gradient border effect */
-  background-clip: padding-box;
-  background-origin: border-box;
-  border: 2px solid transparent;
-  border-radius: var(--radius-xl);
-  
-  /* * Subtle glow effect */
-  box-shadow: 
-    0 4px 12px rgb(0 0 0 / 15%),
-    0 2px 4px rgb(0 0 0 / 10%),
-    inset 0 1px 0 rgb(255 255 255 / 10%);
-  backdrop-filter: blur(12px);
-  transition: all var(--duration-normal) var(--ease-out);
-}
-
-.catPicturesToggleButton::before {
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-
-  /* * Animated background overlay */
-  content: '';
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgb(255 255 255 / 10%),
-    transparent
-  );
-  transition: left var(--duration-slow) var(--ease-out);
-}
-
-.catPicturesToggleButton:hover:not(:disabled) {
-  /* * Enhanced hover state */
-  background-image: linear-gradient(var(--card-hover), var(--card-hover)), 
-                    var(--gradient-vibrant);
-  border-color: var(--neon-cyan-100);
-  box-shadow: 
-    0 8px 25px rgb(0 0 0 / 20%),
-    0 4px 12px rgb(0 0 0 / 15%),
-    var(--glow-cyan);
-  transform: translateY(-2px) scale(1.02);
-}
-
-.catPicturesToggleButton:hover:not(:disabled)::before {
-  left: 100%;
-}
-
-.catPicturesToggleButton:active:not(:disabled) {
-  transform: translateY(-1px) scale(1.01);
-  transition: transform var(--duration-fast) var(--ease-out);
-}
-
-.catPicturesToggleButton.active {
-  font-weight: 700;
-  color: var(--charcoal);
-  text-shadow: none;
-
-  /* * Active state with vibrant styling */
-  background-image: linear-gradient(var(--accent-color), var(--highlight-color)), 
-                    var(--gradient-vibrant);
-  border-color: var(--mimosa);
-  box-shadow: 
-    0 6px 20px rgb(232 191 118 / 40%),
-    0 3px 8px rgb(241 164 56 / 30%),
-    var(--glow-pink);
-  transform: translateY(-1px);
-}
-
-.catPicturesToggleButton.active:hover:not(:disabled) {
-  /* * Enhanced active hover state */
-  background-image: linear-gradient(var(--highlight-color), var(--accent-color)), 
-                    var(--gradient-vibrant);
-  box-shadow: 
-    0 10px 30px rgb(232 191 118 / 50%),
-    0 5px 15px rgb(241 164 56 / 40%),
-    var(--glow-vibrant);
-  transform: translateY(-3px) scale(1.03);
-}
-
-.catPicturesToggleButton:disabled {
-  color: var(--text-tertiary);
-  cursor: not-allowed;
-  background: var(--glass-bg-light);
-  box-shadow: none;
-
-  /* * Disabled state */
-  opacity: 0.5;
-  transform: none;
-}
-
-.catPicturesToggleButton:focus-visible {
-  /* * Focus state for accessibility */
-  outline: 3px solid var(--accent-color);
-  outline-offset: 3px;
-  box-shadow: 
-    0 0 0 3px rgb(232 191 118 / 30%),
-    0 4px 12px rgb(0 0 0 / 15%);
 }
 
 /* Swipe Mode Container */
