@@ -3,7 +3,13 @@
  * @description Utilities for authentication and authorization checks with role-based access control
  */
 
-import { supabase } from '@/integrations/supabase/client';
+import {
+  getSupabaseClient,
+  getSupabaseClientSync
+} from '@/integrations/supabase/client';
+
+const resolveSupabaseClient = async () =>
+  getSupabaseClientSync() ?? (await getSupabaseClient());
 
 /**
  * User roles hierarchy (higher number = more permissions)
@@ -23,7 +29,9 @@ export const USER_ROLES = {
 export async function isUserAdmin(userIdOrName) {
   if (!userIdOrName) return false;
 
-  if (!supabase) {
+  const activeSupabase = await resolveSupabaseClient();
+
+  if (!activeSupabase) {
     console.warn('Supabase client is not configured. Admin check will default to false.');
     return false;
   }
@@ -34,7 +42,7 @@ export async function isUserAdmin(userIdOrName) {
     // * If it's not a UUID, treat it as a username and get the user ID
     const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
     if (!uuidRegex.test(userIdOrName)) {
-      const { data: userData, error: userError } = await supabase
+      const { data: userData, error: userError } = await activeSupabase
         .from('profiles')
         .select('id')
         .eq('username', userIdOrName)
@@ -51,7 +59,7 @@ export async function isUserAdmin(userIdOrName) {
       userId = userData.id;
     }
 
-    const { data, error } = await supabase.rpc('has_role', {
+    const { data, error } = await activeSupabase.rpc('has_role', {
       _user_id: userId,
       _role: USER_ROLES.ADMIN
     });
@@ -73,13 +81,15 @@ export async function isUserAdmin(userIdOrName) {
 export async function hasRole(userId, requiredRole) {
   if (!userId || !requiredRole) return false;
 
-  if (!supabase) {
+  const activeSupabase = await resolveSupabaseClient();
+
+  if (!activeSupabase) {
     console.warn('Supabase client is not configured. Role check will default to false.');
     return false;
   }
 
   try {
-    const { data, error } = await supabase.rpc('has_role', {
+    const { data, error } = await activeSupabase.rpc('has_role', {
       _user_id: userId,
       _role: requiredRole
     });
@@ -100,13 +110,15 @@ export async function hasRole(userId, requiredRole) {
 export async function getUserRole(userId) {
   if (!userId) return null;
 
-  if (!supabase) {
+  const activeSupabase = await resolveSupabaseClient();
+
+  if (!activeSupabase) {
     console.warn('Supabase client is not configured. Using default user role.');
     return USER_ROLES.USER;
   }
 
   try {
-    const { data, error } = await supabase
+    const { data, error } = await activeSupabase
       .from('user_roles')
       .select('role')
       .eq('user_id', userId)

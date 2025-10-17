@@ -1,7 +1,13 @@
 import React, { useState } from 'react';
-import { supabase } from '../../integrations/supabase/client';
+import {
+  getSupabaseClient,
+  getSupabaseClientSync
+} from '../../integrations/supabase/client';
 import useToast from '../../core/hooks/useToast';
 import styles from './DataMigration.module.css';
+
+const resolveSupabaseClient = async () =>
+  getSupabaseClientSync() ?? (await getSupabaseClient());
 
 export default function DataMigration() {
   const [isLoading, setIsLoading] = useState(false);
@@ -13,7 +19,20 @@ export default function DataMigration() {
       setIsLoading(true);
       setResults(null);
 
-      const { data, error } = await supabase.functions.invoke('migrate-data');
+      const supabaseClient = await resolveSupabaseClient();
+
+      if (!supabaseClient) {
+        showError('Supabase client is not configured.');
+        setResults({
+          success: false,
+          error: 'Supabase client is not configured.'
+        });
+        return;
+      }
+
+      const { data, error } = await supabaseClient.functions.invoke(
+        'migrate-data'
+      );
 
       if (error) throw error;
 

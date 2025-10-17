@@ -5,7 +5,10 @@
  */
 import React, { useState, useCallback, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { supabase } from '../../integrations/supabase/client';
+import {
+  getSupabaseClient,
+  getSupabaseClientSync
+} from '../../integrations/supabase/client';
 import {
   deleteName,
   catNamesAPI,
@@ -25,8 +28,15 @@ import { Error } from '../../shared/components';
 import styles from './Profile.module.css';
 
 // * Use database-optimized stats calculation
+const resolveSupabaseClient = async () =>
+  getSupabaseClientSync() ?? (await getSupabaseClient());
+
 const fetchUserStatsFromDB = async (userName) => {
-  if (!supabase || !userName) return null;
+  if (!userName) return null;
+
+  if (!(await resolveSupabaseClient())) {
+    return null;
+  }
 
   try {
     const dbStats = await catNamesAPI.getUserStats(userName);
@@ -120,7 +130,7 @@ const calculateEnhancedStats = (
 // * Calculate selection analytics using consolidated tournament_data in cat_app_users
 const calculateSelectionStats = async (userName) => {
   try {
-    if (!supabase) return null;
+    if (!(await resolveSupabaseClient())) return null;
 
     // Pull tournaments from cat_app_users.tournament_data via API
     const tournaments = await tournamentsAPI.getUserTournaments(userName);
@@ -242,7 +252,13 @@ const generateSelectionPattern = (selections) => {
 const generatePreferredCategories = async (selections) => {
   try {
     const nameIds = selections.map((s) => s.name_id);
-    const { data: names, error } = await supabase
+    const supabaseClient = await resolveSupabaseClient();
+
+    if (!supabaseClient) {
+      return 'Analyzing your preferences...';
+    }
+
+    const { data: names, error } = await supabaseClient
       .from('cat_name_options')
       .select('categories')
       .in('id', nameIds);
@@ -312,6 +328,26 @@ const Profile = ({ userName, onStartNewTournament }) => {
   const [selectionFilter, setSelectionFilter] = useState('all');
   const [showMigration, setShowMigration] = useState(false);
   const { showSuccess, showError, showToast } = useToast();
+  const [hasSupabaseClient, setHasSupabaseClient] = useState(
+    () => !!getSupabaseClientSync()
+  );
+
+  useEffect(() => {
+    let isMounted = true;
+
+    const ensureClient = async () => {
+      const client = await resolveSupabaseClient();
+      if (isMounted) {
+        setHasSupabaseClient(!!client);
+      }
+    };
+
+    void ensureClient();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   // * Hooks
   const [allNames, setAllNames] = useState([]);
@@ -322,7 +358,10 @@ const Profile = ({ userName, onStartNewTournament }) => {
     try {
       setRatingsLoading(true);
       setRatingsError(null);
-      if (!supabase) {
+      const supabaseClient = await resolveSupabaseClient();
+      setHasSupabaseClient(!!supabaseClient);
+
+      if (!supabaseClient) {
         if (process.env.NODE_ENV === 'development') {
           console.warn('Supabase not configured, using empty data for Profile');
         }
@@ -346,7 +385,10 @@ const Profile = ({ userName, onStartNewTournament }) => {
     if (!userName) return;
 
     try {
-      if (!supabase) {
+      const supabaseClient = await resolveSupabaseClient();
+      setHasSupabaseClient(!!supabaseClient);
+
+      if (!supabaseClient) {
         if (process.env.NODE_ENV === 'development') {
           console.warn('Supabase not configured, skipping selection stats');
         }
@@ -418,7 +460,10 @@ const Profile = ({ userName, onStartNewTournament }) => {
       try {
         const currentlyHidden = hiddenNames.has(nameId);
 
-        if (!supabase) {
+        const supabaseClient = await resolveSupabaseClient();
+        setHasSupabaseClient(!!supabaseClient);
+
+        if (!supabaseClient) {
           if (process.env.NODE_ENV === 'development') {
             console.warn('Supabase not configured, cannot toggle visibility');
           }
@@ -457,7 +502,10 @@ const Profile = ({ userName, onStartNewTournament }) => {
   const handleDelete = useCallback(
     async (name) => {
       try {
-        if (!supabase) {
+        const supabaseClient = await resolveSupabaseClient();
+        setHasSupabaseClient(!!supabaseClient);
+
+        if (!supabaseClient) {
           if (process.env.NODE_ENV === 'development') {
             console.warn('Supabase not configured, cannot delete name');
           }
@@ -497,7 +545,10 @@ const Profile = ({ userName, onStartNewTournament }) => {
   const handleBulkHide = useCallback(
     async (nameIds) => {
       try {
-        if (!supabase) {
+        const supabaseClient = await resolveSupabaseClient();
+        setHasSupabaseClient(!!supabaseClient);
+
+        if (!supabaseClient) {
           if (process.env.NODE_ENV === 'development') {
             console.warn('Supabase not configured, cannot hide names');
           }
@@ -540,7 +591,10 @@ const Profile = ({ userName, onStartNewTournament }) => {
   const handleBulkUnhide = useCallback(
     async (nameIds) => {
       try {
-        if (!supabase) {
+        const supabaseClient = await resolveSupabaseClient();
+        setHasSupabaseClient(!!supabaseClient);
+
+        if (!supabaseClient) {
           if (process.env.NODE_ENV === 'development') {
             console.warn('Supabase not configured, cannot unhide names');
           }
@@ -606,7 +660,7 @@ const Profile = ({ userName, onStartNewTournament }) => {
         <div className={styles.noDataContainer}>
           <h2>No Data Available</h2>
           <p>
-            {!supabase
+            {!hasSupabaseClient
               ? 'Database not configured. Please set up Supabase environment variables to view your profile data.'
               : 'No names found in your profile. Start a tournament to begin collecting data!'}
           </p>
