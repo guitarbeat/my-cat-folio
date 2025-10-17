@@ -77,7 +77,11 @@ function useUserSession({ showToast } = {}) {
         try {
           const activeSupabase = await resolveSupabaseClient();
           await setSupabaseUserContext(activeSupabase, storedUserName);
-        } catch {}
+        } catch (error) {
+          if (process.env.NODE_ENV === 'development') {
+            console.warn('Failed to initialize Supabase user context:', error);
+          }
+        }
       })();
       
       // Check admin status server-side
