@@ -5,7 +5,10 @@
  */
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import PropTypes from 'prop-types';
-import { supabase } from '../../integrations/supabase/client';
+import {
+  getSupabaseClient,
+  getSupabaseClientSync
+} from '../../integrations/supabase/client';
 import {
   getNamesWithDescriptions,
   tournamentsAPI,
@@ -51,6 +54,9 @@ const CAT_IMAGES = [
 ];
 
 const DEFAULT_DESCRIPTION = 'A name as unique as your future companion';
+
+const resolveSupabaseClient = async () =>
+  getSupabaseClientSync() ?? (await getSupabaseClient());
 
 const FALLBACK_NAMES = [
   {
@@ -877,7 +883,9 @@ function useTournamentSetup(userName) {
     const fetchNames = async () => {
       try {
         setIsLoading(true);
-        if (!supabase) {
+        const supabaseClient = await resolveSupabaseClient();
+
+        if (!supabaseClient) {
           setAvailableNames(FALLBACK_NAMES);
           setIsLoading(false);
           return;
@@ -887,7 +895,7 @@ function useTournamentSetup(userName) {
         const [namesData, { data: hiddenData, error: hiddenError }] =
           await Promise.all([
             getNamesWithDescriptions(),
-            supabase
+            supabaseClient
               .from('cat_name_ratings')
               .select('name_id')
               .eq('is_hidden', true)
@@ -949,7 +957,9 @@ function useTournamentSetup(userName) {
         const tournamentId = `selection_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
 
         // Save selections to database
-        if (!supabase) return;
+        const supabaseClient = await resolveSupabaseClient();
+
+        if (!supabaseClient) return;
 
         const result = await tournamentsAPI.saveTournamentSelections(
           userName,
@@ -1064,7 +1074,9 @@ function TournamentSetupContent({ onStart, userName }) {
     let cancelled = false;
     const trySupabase = async () => {
       try {
-        if (!supabase) return false;
+        const supabaseClient = await resolveSupabaseClient();
+
+        if (!supabaseClient) return false;
         const list = await imagesAPI.list('');
         if (Array.isArray(list) && list.length) return list;
       } catch {

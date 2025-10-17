@@ -4,34 +4,25 @@
  * Combines all database operations, real-time subscriptions, and utility functions.
  */
 
-import { createClient } from '@supabase/supabase-js';
+import {
+  getSupabaseClient,
+  getSupabaseClientSync
+} from '../../src/integrations/supabase/client';
 
-// Environment configuration
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+let supabase = getSupabaseClientSync() ?? null;
 
-// Only create the Supabase client if the required environment variables are present
-// Otherwise export `null` so the application can still render without Supabase
-let supabase = null;
-if (!supabaseUrl || !supabaseAnonKey) {
-  if (process.env.NODE_ENV === 'development') {
-    console.warn(
-      'Missing Supabase environment variables. Supabase features are disabled.'
-    );
+const resolveSupabaseClient = async () => {
+  if (supabase) {
+    return supabase;
   }
-} else {
-  // Ensure a single Supabase client instance in browser (avoids multiple GoTrueClient warnings)
-  if (typeof window !== 'undefined') {
-    if (!window.__supabaseClient) {
-      window.__supabaseClient = createClient(supabaseUrl, supabaseAnonKey);
-    }
-    supabase = window.__supabaseClient;
-  } else {
-    supabase = createClient(supabaseUrl, supabaseAnonKey);
-  }
-}
+
+  supabase = (await getSupabaseClient()) ?? null;
+
+  return supabase;
+};
 
 export { supabase };
+export const getSupabaseServiceClient = resolveSupabaseClient;
 
 // ===== HELPER FUNCTIONS =====
 
@@ -39,8 +30,9 @@ export { supabase };
  * Check if Supabase is configured and available
  * @returns {boolean} True if Supabase is available
  */
-const isSupabaseAvailable = () => {
-  if (!supabase) {
+const isSupabaseAvailable = async () => {
+  const client = await resolveSupabaseClient();
+  if (!client) {
     if (process.env.NODE_ENV === 'development') {
       console.warn('Supabase not configured. Some features may not work.');
     }
@@ -60,7 +52,7 @@ export const catNamesAPI = {
    */
   async getNamesWithDescriptions() {
     try {
-      if (!isSupabaseAvailable()) {
+      if (!(await isSupabaseAvailable())) {
         return [];
       }
 
@@ -127,7 +119,7 @@ export const catNamesAPI = {
    */
   async addName(name, description = '') {
     try {
-      if (!isSupabaseAvailable()) {
+      if (!(await isSupabaseAvailable())) {
         return { success: false, error: 'Supabase not configured' };
       }
 
@@ -158,7 +150,7 @@ export const catNamesAPI = {
    */
   async removeName(name) {
     try {
-      if (!isSupabaseAvailable()) {
+      if (!(await isSupabaseAvailable())) {
         return { success: false, error: 'Supabase not configured' };
       }
 
@@ -191,7 +183,7 @@ export const catNamesAPI = {
    */
   async getLeaderboard(limit = 50, categoryId = null, minTournaments = 3) {
     try {
-      if (!isSupabaseAvailable()) {
+      if (!(await isSupabaseAvailable())) {
         return [];
       }
 
@@ -237,7 +229,7 @@ export const catNamesAPI = {
    */
   async getUserStats(userName) {
     try {
-      if (!isSupabaseAvailable()) {
+      if (!(await isSupabaseAvailable())) {
         return null;
       }
 
@@ -263,7 +255,7 @@ export const catNamesAPI = {
    */
   async getAaronsTopNames(limit = 10) {
     try {
-      if (!isSupabaseAvailable()) {
+      if (!(await isSupabaseAvailable())) {
         return [];
       }
 
@@ -333,7 +325,7 @@ export const ratingsAPI = {
     const now = new Date().toISOString();
 
     try {
-      if (!isSupabaseAvailable()) {
+      if (!(await isSupabaseAvailable())) {
         return { success: false, error: 'Supabase not configured' };
       }
 
@@ -412,7 +404,7 @@ export const ratingsAPI = {
    */
   async getRatingHistory(userName, nameId = null, limit = 20) {
     try {
-      if (!isSupabaseAvailable()) {
+      if (!(await isSupabaseAvailable())) {
         return [];
       }
 
@@ -460,7 +452,7 @@ export const ratingsAPI = {
     context = 'manual'
   ) {
     try {
-      if (!isSupabaseAvailable()) {
+      if (!(await isSupabaseAvailable())) {
         return { success: false, error: 'Supabase not configured' };
       }
 
@@ -529,7 +521,7 @@ export const hiddenNamesAPI = {
    */
   async hideName(userName, nameId) {
     try {
-      if (!isSupabaseAvailable()) {
+      if (!(await isSupabaseAvailable())) {
         return { success: false, error: 'Supabase not configured' };
       }
 
@@ -577,7 +569,7 @@ export const hiddenNamesAPI = {
    */
   async unhideName(userName, nameId) {
     try {
-      if (!isSupabaseAvailable()) {
+      if (!(await isSupabaseAvailable())) {
         return { success: false, error: 'Supabase not configured' };
       }
 
@@ -603,7 +595,7 @@ export const hiddenNamesAPI = {
    */
   async hideNames(userName, nameIds) {
     try {
-      if (!isSupabaseAvailable()) {
+      if (!(await isSupabaseAvailable())) {
         return { success: false, error: 'Supabase not configured' };
       }
 
@@ -638,7 +630,7 @@ export const hiddenNamesAPI = {
    */
   async unhideNames(userName, nameIds) {
     try {
-      if (!isSupabaseAvailable()) {
+      if (!(await isSupabaseAvailable())) {
         return { success: false, error: 'Supabase not configured' };
       }
 
@@ -673,7 +665,7 @@ export const hiddenNamesAPI = {
    */
   async getHiddenNames(userName) {
     try {
-      if (!isSupabaseAvailable()) {
+      if (!(await isSupabaseAvailable())) {
         return [];
       }
 
@@ -718,7 +710,7 @@ export const tournamentsAPI = {
     tournamentData = {}
   ) {
     try {
-      if (!isSupabaseAvailable()) {
+      if (!(await isSupabaseAvailable())) {
         return { success: false, error: 'Supabase not configured' };
       }
 
@@ -821,7 +813,7 @@ export const tournamentsAPI = {
    */
   async updateTournamentStatus(tournamentId, status) {
     try {
-      if (!isSupabaseAvailable()) {
+      if (!(await isSupabaseAvailable())) {
         return { success: false, error: 'Supabase not configured' };
       }
 
@@ -907,7 +899,7 @@ export const tournamentsAPI = {
    */
   async getUserTournaments(userName, status = null) {
     try {
-      if (!isSupabaseAvailable()) {
+      if (!(await isSupabaseAvailable())) {
         return [];
       }
 
@@ -959,7 +951,7 @@ export const tournamentsAPI = {
    */
   async saveTournamentSelections(userName, selectedNames, tournamentId = null) {
     try {
-      if (!isSupabaseAvailable()) {
+      if (!(await isSupabaseAvailable())) {
         return { success: false, error: 'Supabase not configured' };
       }
 
@@ -1075,7 +1067,7 @@ export const tournamentsAPI = {
    */
   async createTournamentSelectionsTable() {
     try {
-      if (!isSupabaseAvailable()) {
+      if (!(await isSupabaseAvailable())) {
         return { success: false, error: 'Supabase not configured' };
       }
 
@@ -1108,7 +1100,7 @@ export const tournamentsAPI = {
    */
   async getTournamentSelectionHistory(userName, limit = 50) {
     try {
-      if (!isSupabaseAvailable()) {
+      if (!(await isSupabaseAvailable())) {
         return [];
       }
 
@@ -1151,7 +1143,7 @@ export const tournamentsAPI = {
    */
   async getPopularTournamentNames(limit = 20) {
     try {
-      if (!isSupabaseAvailable()) {
+      if (!(await isSupabaseAvailable())) {
         return [];
       }
 
@@ -1196,7 +1188,7 @@ export const tournamentsAPI = {
    */
   async getPersonalizedRecommendations(userName, limit = 10) {
     try {
-      if (!isSupabaseAvailable()) {
+      if (!(await isSupabaseAvailable())) {
         return [];
       }
 
@@ -1228,7 +1220,7 @@ export const tournamentsAPI = {
    */
   async getSelectionDashboard() {
     try {
-      if (!isSupabaseAvailable()) {
+      if (!(await isSupabaseAvailable())) {
         return null;
       }
 
@@ -1258,7 +1250,7 @@ export const tournamentsAPI = {
    */
   async getPopularNamesBySelections(limit = 20) {
     try {
-      if (!isSupabaseAvailable()) {
+      if (!(await isSupabaseAvailable())) {
         return [];
       }
 
@@ -1291,7 +1283,7 @@ export const userPreferencesAPI = {
    */
   async getPreferences(userName) {
     try {
-      if (!isSupabaseAvailable()) {
+      if (!(await isSupabaseAvailable())) {
         return {
           user_name: userName,
           preferred_categories: [],
@@ -1359,7 +1351,7 @@ export const userPreferencesAPI = {
    */
   async updatePreferences(userName, preferences) {
     try {
-      if (!isSupabaseAvailable()) {
+      if (!(await isSupabaseAvailable())) {
         return preferences;
       }
 
@@ -1409,7 +1401,7 @@ export const categoriesAPI = {
    */
   async getCategories() {
     try {
-      if (!isSupabaseAvailable()) {
+      if (!(await isSupabaseAvailable())) {
         return [];
       }
 
@@ -1434,7 +1426,7 @@ export const categoriesAPI = {
    */
   async getNamesByCategory(categoryId, limit = 100) {
     try {
-      if (!isSupabaseAvailable()) {
+      if (!(await isSupabaseAvailable())) {
         return [];
       }
 
@@ -1473,7 +1465,7 @@ export const ensureRatingHistoryTable = async () => {
  */
 export const deleteName = async (nameId) => {
   try {
-    if (!isSupabaseAvailable()) {
+    if (!(await isSupabaseAvailable())) {
       return { success: false, error: 'Supabase not configured' };
     }
 
@@ -1532,7 +1524,7 @@ export const imagesAPI = {
    */
   async list(prefix = '', limit = 1000) {
     try {
-      if (!isSupabaseAvailable()) {
+      if (!(await isSupabaseAvailable())) {
         return [];
       }
 
@@ -1592,7 +1584,7 @@ export const imagesAPI = {
    * Upload an image file to the `cat-images` bucket. Returns public URL.
    */
   async upload(file, _userName = 'anon', prefix = '') {
-    if (!isSupabaseAvailable()) {
+    if (!(await isSupabaseAvailable())) {
       throw new Error('Supabase not configured');
     }
 
@@ -1618,7 +1610,7 @@ export const adminAPI = {
    */
   async refreshMaterializedViews() {
     try {
-      if (!isSupabaseAvailable()) {
+      if (!(await isSupabaseAvailable())) {
         return { success: false, error: 'Supabase not available' };
       }
 

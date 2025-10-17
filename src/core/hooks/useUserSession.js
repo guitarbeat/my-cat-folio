@@ -8,8 +8,14 @@
  */
 
 import { useState, useCallback, useEffect } from 'react';
-import { supabase } from '../../integrations/supabase/client';
+import {
+  getSupabaseClient,
+  getSupabaseClientSync
+} from '../../integrations/supabase/client';
 import useAppStore from '../store/useAppStore';
+
+const resolveSupabaseClient = async () =>
+  getSupabaseClientSync() ?? (await getSupabaseClient());
 
 function useUserSession({ showToast } = {}) {
   const [error, setError] = useState(null);
@@ -40,7 +46,9 @@ function useUserSession({ showToast } = {}) {
       setError(null);
       const trimmedName = userName.trim();
 
-      if (!supabase) {
+      const activeSupabase = await resolveSupabaseClient();
+
+      if (!activeSupabase) {
         console.warn(
           'Supabase client is not configured. Proceeding with local-only login.'
         );
@@ -51,7 +59,7 @@ function useUserSession({ showToast } = {}) {
       }
 
       // Check if user exists in database
-      const { data: existingUser, error: fetchError } = await supabase
+      const { data: existingUser, error: fetchError } = await activeSupabase
         .from('cat_app_users')
         .select('user_name, preferences, user_role')
         .eq('user_name', trimmedName)
@@ -66,7 +74,7 @@ function useUserSession({ showToast } = {}) {
 
       // Create user if doesn't exist
       if (!existingUser) {
-        const { error: insertError } = await supabase
+        const { error: insertError } = await activeSupabase
           .from('cat_app_users')
           .insert({
             user_name: trimmedName,

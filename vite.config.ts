@@ -92,6 +92,9 @@ export default defineConfig(({ mode }) => ({
             const feature = id.split('/features/')[1]?.split('/')[0];
             if (feature) return `feature-${feature}`;
           }
+          if (id.includes('/shared/utils/coreUtils')) {
+            return 'shared-utils';
+          }
           // * Chunk shared components
           if (id.includes('/shared/components/')) {
             return 'shared-components';
