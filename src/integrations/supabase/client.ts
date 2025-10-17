@@ -8,8 +8,10 @@ declare global {
   }
 }
 
-const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
-const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY;
+const SUPABASE_URL =
+  import.meta.env.SUPABASE_URL ?? import.meta.env.VITE_SUPABASE_URL;
+const SUPABASE_ANON_KEY =
+  import.meta.env.SUPABASE_ANON_KEY ?? import.meta.env.VITE_SUPABASE_ANON_KEY;
 
 let supabase: SupabaseClient<Database> | null =
   typeof window !== 'undefined' ? window.__supabaseClient ?? null : null;
@@ -20,7 +22,7 @@ const createSupabaseClient = async (): Promise<SupabaseClient<Database> | null> 
   if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
     if (process.env.NODE_ENV === 'development') {
       console.warn(
-        'Missing Supabase environment variables. Supabase features are disabled.'
+        'Missing Supabase environment variables (SUPABASE_URL / SUPABASE_ANON_KEY). Supabase features are disabled.'
       );
     }
     return null;
