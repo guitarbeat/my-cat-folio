@@ -48,6 +48,7 @@ export function useTournament({
 
   // * Destructure state for easier access
   const {
+    currentMatch,
     isTransitioning,
     sorter
   } = tournamentState;
@@ -82,10 +83,9 @@ export function useTournament({
   });
 
   // * Get persistent state values for backward compatibility
-  const {currentMatch} = persistentState;
   const roundNumber = persistentState.currentRound;
   const currentMatchNumber = persistentState.currentMatch;
-  const {totalMatches} = persistentState;
+  const totalMatches = persistentState.totalMatches;
   const canUndo = persistentState.matchHistory.length > 1;
   const isError = false; // * Error state is now managed by store
 
