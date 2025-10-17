@@ -1,6 +1,7 @@
 import React, { lazy, Suspense } from 'react';
 import PropTypes from 'prop-types';
-import { Loading, Error } from '@components';
+import Loading from '../Loading/Loading';
+import Error from '../Error/Error';
 import Login from '@features/auth/Login';
 import { useRouting } from '@hooks/useRouting';
 
