@@ -2,6 +2,55 @@ import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
 import { useEffect } from 'react';
 
+const getInitialUserState = () => {
+  const defaultState = {
+    name: '',
+    isLoggedIn: false,
+    isAdmin: false,
+    preferences: {}
+  };
+
+  if (typeof window === 'undefined') {
+    return defaultState;
+  }
+
+  try {
+    const storedUser = window.localStorage.getItem('catNamesUser');
+    if (storedUser && storedUser.trim()) {
+      return {
+        ...defaultState,
+        name: storedUser.trim(),
+        isLoggedIn: true
+      };
+    }
+  } catch (error) {
+    if (process.env.NODE_ENV === 'development') {
+      console.warn('Unable to read stored user from localStorage:', error);
+    }
+  }
+
+  return defaultState;
+};
+
+const getInitialTheme = () => {
+  if (typeof window === 'undefined') {
+    return 'light';
+  }
+
+  try {
+    const storedTheme = window.localStorage.getItem('theme');
+    if (storedTheme !== null) {
+      return storedTheme === 'true' ? 'light' : 'dark';
+    }
+  } catch (error) {
+    if (process.env.NODE_ENV === 'development') {
+      console.warn('Unable to read stored theme from localStorage:', error);
+    }
+  }
+
+  return 'light';
+};
+
 /**
  * @module useAppStore
  * @description Centralized state management for the entire application using Zustand.
@@ -22,16 +71,11 @@ const useAppStore = create(
       },
 
       // * User State
-      user: {
-        name: '',
-        isLoggedIn: false,
-        isAdmin: false,
-        preferences: {}
-      },
+      user: getInitialUserState(),
 
       // * UI State
       ui: {
-        theme: 'light',
+        theme: getInitialTheme(),
         showPerformanceDashboard: false,
         showGlobalAnalytics: false,
         showUserComparison: false,
@@ -195,7 +239,7 @@ const useAppStore = create(
           set((state) => {
             try {
               const storedUser = localStorage.getItem('catNamesUser');
-              if (storedUser) {
+              if (storedUser && state.user.name !== storedUser) {
                 return {
                   user: {
                     ...state.user,
@@ -249,6 +293,12 @@ const useAppStore = create(
               const resolvedStoredTheme = parseStoredTheme(storedTheme);
 
               if (resolvedStoredTheme) {
+              const storedTheme = localStorage.getItem('theme');
+              if (
+                storedTheme !== null &&
+                (storedTheme === 'true' ? 'light' : 'dark') !== state.ui.theme
+              ) {
+                const isLightTheme = storedTheme === 'true';
                 return {
                   ui: {
                     ...state.ui,
