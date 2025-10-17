@@ -216,7 +216,7 @@ SUPABASE_ANON_KEY=your-anon-key
 ```bash
 npm run build    # Production build
 npm run preview  # Preview production build
-npm run deploy   # Deploy to Vercel
+npx vercel --prod  # Deploy to Vercel (requires Vercel CLI login)
 ```
 
 ---
