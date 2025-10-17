@@ -3,6 +3,153 @@ import PropTypes from 'prop-types';
 import StatsCard from '../../shared/components/StatsCard/StatsCard';
 import styles from './ProfileStats.module.css';
 
+const STAT_CARD_SECTIONS = {
+  base: [
+    {
+      key: 'total',
+      title: 'Total Names',
+      emoji: '📊',
+      variant: 'primary',
+      getValue: ({ total = 0 }) => total
+    },
+    {
+      key: 'winRate',
+      title: 'Win Rate',
+      emoji: '🏆',
+      variant: 'success',
+      getValue: ({ winRate = 0 }) => `${winRate}%`
+    },
+    {
+      key: 'avgRating',
+      title: 'Average Rating',
+      emoji: '⭐',
+      variant: 'warning',
+      getValue: ({ avgRating = 0 }) => avgRating
+    },
+    {
+      key: 'ratingSpread',
+      title: 'Rating Spread',
+      emoji: '📈',
+      variant: 'info',
+      getValue: ({ ratingSpread = 0 }) => ratingSpread
+    },
+    {
+      key: 'totalMatches',
+      title: 'Total Matches',
+      emoji: '🎯',
+      variant: 'secondary',
+      getValue: ({ totalMatches = 0 }) => totalMatches
+    },
+    {
+      key: 'activeNames',
+      title: 'Active Names',
+      emoji: '👁️',
+      variant: 'default',
+      getValue: ({ activeNames = 0 }) => activeNames
+    },
+    {
+      key: 'popularNames',
+      title: 'Popular Names',
+      emoji: '🔥',
+      variant: 'danger',
+      getValue: ({ popularNames = 0 }) => popularNames,
+      isVisible: ({ popularNames = 0 }) => popularNames > 0
+    }
+  ],
+  selection: [
+    {
+      key: 'totalSelections',
+      title: 'Tournament Selections',
+      emoji: '🎲',
+      variant: 'primary',
+      getValue: ({ totalSelections = 0 }) => totalSelections
+    },
+    {
+      key: 'totalTournaments',
+      title: 'Tournaments Created',
+      emoji: '🏁',
+      variant: 'success',
+      getValue: ({ totalTournaments = 0 }) => totalTournaments
+    },
+    {
+      key: 'avgSelectionsPerName',
+      title: 'Selection Frequency',
+      emoji: '📊',
+      variant: 'warning',
+      getValue: ({ avgSelectionsPerName = 0 }) => avgSelectionsPerName
+    },
+    {
+      key: 'mostSelectedName',
+      title: 'Most Selected',
+      emoji: '❤️',
+      variant: 'danger',
+      getValue: ({ mostSelectedName = 'N/A' }) => mostSelectedName
+    },
+    {
+      key: 'currentStreak',
+      title: 'Selection Streak',
+      emoji: '🔥',
+      variant: 'info',
+      getValue: ({ currentStreak = 0 }) => currentStreak
+    },
+    {
+      key: 'userRank',
+      title: 'Selection Rank',
+      emoji: '🏅',
+      variant: 'secondary',
+      getValue: ({ userRank }) => (userRank ? `#${userRank}` : '#N/A')
+    }
+  ]
+};
+
+const SELECTION_INSIGHT_DEFINITIONS = [
+  {
+    key: 'selectionPattern',
+    icon: '📅',
+    title: 'Selection Pattern',
+    fallback: 'Analyzing your patterns...'
+  },
+  {
+    key: 'preferredCategories',
+    icon: '🎯',
+    title: 'Preferred Categories',
+    fallback: 'Discovering your preferences...'
+  },
+  {
+    key: 'improvementTip',
+    icon: '🚀',
+    title: 'Improvement Tip',
+    fallback: 'Optimizing your selections...'
+  }
+];
+
+const buildStatCards = (data, definitions = []) => {
+  if (!data) return [];
+
+  return definitions
+    .filter(({ isVisible }) => (isVisible ? isVisible(data) : true))
+    .map(({ key, title, emoji, variant, getValue }) => ({
+      key,
+      title,
+      emoji,
+      variant,
+      value: typeof getValue === 'function' ? getValue(data) : data[key]
+    }));
+};
+
+const buildSelectionInsights = (insights) => {
+  if (!insights) return [];
+
+  return SELECTION_INSIGHT_DEFINITIONS.map(
+    ({ key, icon, title, fallback }) => ({
+      key,
+      icon,
+      title,
+      content: insights[key] || fallback
+    })
+  );
+};
+
 /**
  * @module ProfileStats
  * @description Displays user statistics and analytics in a card-based layout.
@@ -38,157 +185,42 @@ const ProfileStats = ({
     );
   }
 
-  const {
-    total,
-    winRate,
-    avgRating,
-    ratingSpread,
-    totalMatches,
-    activeNames,
-    popularNames
-  } = stats;
+  const baseStatCards = buildStatCards(stats, STAT_CARD_SECTIONS.base);
+  const selectionStatCards = buildStatCards(
+    selectionStats,
+    STAT_CARD_SECTIONS.selection
+  );
+  const selectionInsights = buildSelectionInsights(selectionStats?.insights);
 
   return (
     <div className={`${styles.container} ${className}`}>
       <h2 className={styles.sectionTitle}>Your Statistics</h2>
 
       <div className={styles.statsGrid}>
-        <StatsCard
-          title="Total Names"
-          value={total}
-          emoji="📊"
-          variant="primary"
-        />
-
-        <StatsCard
-          title="Win Rate"
-          value={`${winRate}%`}
-          emoji="🏆"
-          variant="success"
-        />
-
-        <StatsCard
-          title="Average Rating"
-          value={avgRating}
-          emoji="⭐"
-          variant="warning"
-        />
-
-        <StatsCard
-          title="Rating Spread"
-          value={ratingSpread}
-          emoji="📈"
-          variant="info"
-        />
-
-        <StatsCard
-          title="Total Matches"
-          value={totalMatches}
-          emoji="🎯"
-          variant="secondary"
-        />
-
-        <StatsCard
-          title="Active Names"
-          value={activeNames}
-          emoji="👁️"
-          variant="default"
-        />
-
-        {popularNames > 0 && (
-          <StatsCard
-            title="Popular Names"
-            value={popularNames}
-            emoji="🔥"
-            variant="danger"
-          />
-        )}
+        {baseStatCards.map(({ key, ...cardProps }) => (
+          <StatsCard key={key} {...cardProps} />
+        ))}
 
         {/* Selection Analytics Section */}
-        {selectionStats && (
-          <>
-            <StatsCard
-              title="Tournament Selections"
-              value={selectionStats.totalSelections || 0}
-              emoji="🎲"
-              variant="primary"
-            />
-
-            <StatsCard
-              title="Tournaments Created"
-              value={selectionStats.totalTournaments || 0}
-              emoji="🏁"
-              variant="success"
-            />
-
-            <StatsCard
-              title="Selection Frequency"
-              value={selectionStats.avgSelectionsPerName || 0}
-              emoji="📊"
-              variant="warning"
-            />
-
-            <StatsCard
-              title="Most Selected"
-              value={selectionStats.mostSelectedName || 'N/A'}
-              emoji="❤️"
-              variant="danger"
-            />
-
-            <StatsCard
-              title="Selection Streak"
-              value={selectionStats.currentStreak || 0}
-              emoji="🔥"
-              variant="info"
-            />
-
-            <StatsCard
-              title="Selection Rank"
-              value={`#${selectionStats.userRank || 'N/A'}`}
-              emoji="🏅"
-              variant="secondary"
-            />
-          </>
-        )}
+        {selectionStatCards.map(({ key, ...cardProps }) => (
+          <StatsCard key={key} {...cardProps} />
+        ))}
       </div>
 
       {/* Selection Insights Section */}
-      {selectionStats && selectionStats.insights && (
+      {selectionInsights.length > 0 && (
         <div className={styles.insightsSection}>
           <h3 className={styles.insightsTitle}>Selection Insights</h3>
           <div className={styles.insightsGrid}>
-            <div className={styles.insightCard}>
-              <span className={styles.insightIcon}>📅</span>
-              <div className={styles.insightContent}>
-                <h4>Selection Pattern</h4>
-                <p>
-                  {selectionStats.insights.selectionPattern ||
-                    'Analyzing your patterns...'}
-                </p>
+            {selectionInsights.map(({ key, icon, title, content }) => (
+              <div key={key} className={styles.insightCard}>
+                <span className={styles.insightIcon}>{icon}</span>
+                <div className={styles.insightContent}>
+                  <h4>{title}</h4>
+                  <p>{content}</p>
+                </div>
               </div>
-            </div>
-
-            <div className={styles.insightCard}>
-              <span className={styles.insightIcon}>🎯</span>
-              <div className={styles.insightContent}>
-                <h4>Preferred Categories</h4>
-                <p>
-                  {selectionStats.insights.preferredCategories ||
-                    'Discovering your preferences...'}
-                </p>
-              </div>
-            </div>
-
-            <div className={styles.insightCard}>
-              <span className={styles.insightIcon}>🚀</span>
-              <div className={styles.insightContent}>
-                <h4>Improvement Tip</h4>
-                <p>
-                  {selectionStats.insights.improvementTip ||
-                    'Optimizing your selections...'}
-                </p>
-              </div>
-            </div>
+            ))}
           </div>
         </div>
       )}
