@@ -10,11 +10,7 @@
 .card {
   width: 100%;
   max-width: 600px;
-  padding: 2rem;
-  background: var(--bg-secondary);
-  border: 1px solid var(--border-color);
-  border-radius: 12px;
-  box-shadow: 0 4px 6px rgb(0 0 0 / 10%);
+  margin: 0 auto;
 }
 
 .title {

@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import Card from '../../shared/components/Card';
 import StatsCard from '../../shared/components/StatsCard/StatsCard';
 import styles from './ProfileStats.module.css';
 
@@ -213,13 +214,20 @@ const ProfileStats = ({
           <h3 className={styles.insightsTitle}>Selection Insights</h3>
           <div className={styles.insightsGrid}>
             {selectionInsights.map(({ key, icon, title, content }) => (
-              <div key={key} className={styles.insightCard}>
+              <Card
+                key={key}
+                className={styles.insightCard}
+                variant="outlined"
+                padding="medium"
+                shadow="medium"
+                background="transparent"
+              >
                 <span className={styles.insightIcon}>{icon}</span>
                 <div className={styles.insightContent}>
                   <h4>{title}</h4>
                   <p>{content}</p>
                 </div>
-              </div>
+              </Card>
             ))}
           </div>
         </div>

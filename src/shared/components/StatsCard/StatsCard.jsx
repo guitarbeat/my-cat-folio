@@ -1,4 +1,6 @@
 import React, { memo } from 'react';
+import PropTypes from 'prop-types';
+import Card from '../Card';
 import styles from './StatsCard.module.css';
 
 /**
@@ -11,28 +13,39 @@ function StatsCard({
   label,
   value,
   emoji,
-  variant = 'default',
+  variant: tone = 'default',
   className = '',
   labelClassName = '',
   valueClassName = '',
   emojiClassName = '',
-  ...props
+  cardVariant = 'elevated',
+  cardPadding = 'medium',
+  cardShadow = 'medium',
+  cardBackground = 'glass',
+  ...rest
 }) {
-  const labelText = title || label;
+  const labelText = title || label || 'Statistic';
+  const valueText =
+    typeof value === 'string' || typeof value === 'number' ? value : '';
+  const ariaLabel = valueText ? `${labelText}: ${valueText}` : labelText;
   const cardClasses = [
     styles.card,
-    variant !== 'default' && styles[variant],
+    tone !== 'default' && styles[tone],
     className
   ]
     .filter(Boolean)
     .join(' ');
 
   return (
-    <div
+    <Card
+      variant={cardVariant}
+      padding={cardPadding}
+      shadow={cardShadow}
+      background={cardBackground}
       className={cardClasses}
       role="status"
-      aria-label={`${labelText}: ${value}`}
-      {...props}
+      aria-label={ariaLabel}
+      {...rest}
     >
       {title ? (
         <h3 className={`${styles.label} ${labelClassName}`.trim()}>{title}</h3>
@@ -49,8 +62,32 @@ function StatsCard({
           {emoji}
         </span>
       )}
-    </div>
+    </Card>
   );
 }
+
+StatsCard.propTypes = {
+  title: PropTypes.string,
+  label: PropTypes.string,
+  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number, PropTypes.node])
+    .isRequired,
+  emoji: PropTypes.node,
+  variant: PropTypes.oneOf([
+    'default',
+    'primary',
+    'success',
+    'warning',
+    'info',
+    'danger'
+  ]),
+  className: PropTypes.string,
+  labelClassName: PropTypes.string,
+  valueClassName: PropTypes.string,
+  emojiClassName: PropTypes.string,
+  cardVariant: PropTypes.oneOf(['default', 'elevated', 'outlined', 'filled']),
+  cardPadding: PropTypes.oneOf(['none', 'small', 'medium', 'large', 'xl']),
+  cardShadow: PropTypes.oneOf(['none', 'small', 'medium', 'large', 'xl']),
+  cardBackground: PropTypes.oneOf(['solid', 'glass', 'gradient', 'transparent'])
+};
 
 export default memo(StatsCard);
