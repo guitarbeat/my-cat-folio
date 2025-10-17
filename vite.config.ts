@@ -43,7 +43,7 @@ export default defineConfig(({ mode }) => ({
   },
   build: {
     outDir: 'build',
-    sourcemap: false,
+    sourcemap: true, // * Enable source maps for debugging production issues
     minify: 'terser',
     terserOptions: {
       compress: {
