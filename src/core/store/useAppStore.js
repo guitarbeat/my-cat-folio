@@ -489,14 +489,25 @@ export const useUIState = () => useAppStore((state) => state.ui);
 export const useErrorState = () => useAppStore((state) => state.errors);
 
 // * Computed selectors for derived state
-export const useTournamentStats = () => useAppStore((state) => ({
-  totalNames: state.tournament.names?.length || 0,
-  totalVotes: state.tournament.voteHistory.length,
-  isComplete: state.tournament.isComplete,
-  isLoading: state.tournament.isLoading,
-  progress: state.tournament.names ?
-    (state.tournament.voteHistory.length / (state.tournament.names.length * (state.tournament.names.length - 1) / 2)) * 100 : 0
-}));
+export const selectTournamentStats = (state) => {
+  const totalNames = state.tournament.names?.length || 0;
+  const totalVotes = state.tournament.voteHistory.length;
+  const totalPossibleMatches =
+    totalNames > 1 ? (totalNames * (totalNames - 1)) / 2 : 0;
+
+  return {
+    totalNames,
+    totalVotes,
+    isComplete: state.tournament.isComplete,
+    isLoading: state.tournament.isLoading,
+    progress:
+      totalPossibleMatches > 0
+        ? (totalVotes / totalPossibleMatches) * 100
+        : 0
+  };
+};
+
+export const useTournamentStats = () => useAppStore(selectTournamentStats);
 
 export const useCurrentView = () => useAppStore((state) => state.tournament.currentView);
 
