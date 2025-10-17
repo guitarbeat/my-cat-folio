@@ -37,6 +37,7 @@ const Select = ({
   label,
   placeholder = 'Select an option',
   className = '',
+  containerClassName = '',
   ...rest
 }) => {
   const selectClasses = [
@@ -47,9 +48,12 @@ const Select = ({
   ].filter(Boolean).join(' ');
 
   const selectId = `select-${name}`;
+  const containerClasses = [styles.inputGroup, containerClassName]
+    .filter(Boolean)
+    .join(' ');
 
   return (
-    <div className={styles.inputGroup}>
+    <div className={containerClasses}>
       {label && (
         <label htmlFor={selectId} className={styles.label}>
           {label}
@@ -108,7 +112,8 @@ Select.propTypes = {
   error: PropTypes.string,
   label: PropTypes.string,
   placeholder: PropTypes.string,
-  className: PropTypes.string
+  className: PropTypes.string,
+  containerClassName: PropTypes.string
 };
 
 Select.displayName = 'Select';

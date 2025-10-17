@@ -37,6 +37,7 @@ const Input = ({
   error = '',
   label,
   className = '',
+  containerClassName = '',
   ...rest
 }) => {
   const inputClasses = [
@@ -47,9 +48,12 @@ const Input = ({
   ].filter(Boolean).join(' ');
 
   const inputId = `input-${name}`;
+  const containerClasses = [styles.inputGroup, containerClassName]
+    .filter(Boolean)
+    .join(' ');
 
   return (
-    <div className={styles.inputGroup}>
+    <div className={containerClasses}>
       {label && (
         <label htmlFor={inputId} className={styles.label}>
           {label}
@@ -91,7 +95,8 @@ Input.propTypes = {
   required: PropTypes.bool,
   error: PropTypes.string,
   label: PropTypes.string,
-  className: PropTypes.string
+  className: PropTypes.string,
+  containerClassName: PropTypes.string
 };
 
 Input.displayName = 'Input';
