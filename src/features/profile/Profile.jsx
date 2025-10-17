@@ -24,7 +24,7 @@ import ProfileStats from './ProfileStats';
 import ProfileFilters from './ProfileFilters';
 import ProfileNameList from './ProfileNameList';
 import DataMigration from '../admin/DataMigration';
-import { Error } from '../../shared/components';
+import { Error, StartTournamentButton } from '../../shared/components';
 import styles from './Profile.module.css';
 
 // * Use database-optimized stats calculation
@@ -641,12 +641,12 @@ const Profile = ({ userName, onStartNewTournament }) => {
       <div className={styles.profileContainer}>
         <div className={styles.header}>
           <h1 className={styles.title}>Profile: {userName}</h1>
-          <button
+          <StartTournamentButton
             onClick={onStartNewTournament}
             className={styles.newTournamentButton}
           >
             Start New Tournament
-          </button>
+          </StartTournamentButton>
         </div>
         <div className={styles.noDataContainer}>
           <h2>No Data Available</h2>
@@ -655,12 +655,13 @@ const Profile = ({ userName, onStartNewTournament }) => {
               ? 'Database not configured. Please set up Supabase environment variables to view your profile data.'
               : 'No names found in your profile. Start a tournament to begin collecting data!'}
           </p>
-          <button
+          <StartTournamentButton
             onClick={onStartNewTournament}
-            className={styles.primaryButton}
+            className={styles.noDataButton}
+            size="large"
           >
             Start New Tournament
-          </button>
+          </StartTournamentButton>
         </div>
       </div>
     );
@@ -686,12 +687,13 @@ const Profile = ({ userName, onStartNewTournament }) => {
                   🔄 Migrate Data
                 </button>
               )}
-              <button
+              <StartTournamentButton
                 onClick={onStartNewTournament}
                 className={styles.newTournamentButton}
+                size="medium"
               >
                 Start New Tournament
-              </button>
+              </StartTournamentButton>
             </div>
           </div>
 

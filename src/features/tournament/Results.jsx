@@ -45,6 +45,7 @@ import PropTypes from 'prop-types';
 import RankingAdjustment from './RankingAdjustment';
 import Bracket from '../../shared/components/Bracket/Bracket';
 import CalendarButton from '../../shared/components/CalendarButton/CalendarButton';
+import StartTournamentButton from '../../shared/components/StartTournamentButton/StartTournamentButton';
 import StatsCard from '../../shared/components/StatsCard/StatsCard';
 import { Toast } from '@components';
 import useToast from '@hooks/useToast';
@@ -315,25 +316,13 @@ function Results({
         />
 
         <div className={styles.actions}>
-          <button
+          <StartTournamentButton
             onClick={onStartNew}
             className={styles.startNewButton}
-            aria-label="Start new tournament"
+            ariaLabel="Start new tournament"
           >
-            <svg
-              viewBox="0 0 24 24"
-              width="20"
-              height="20"
-              stroke="currentColor"
-              strokeWidth="2"
-              fill="none"
-              className={styles.buttonIcon}
-              aria-hidden="true"
-            >
-              <path d="M12 4v16m8-8H4" />
-            </svg>
             Start New Tournament
-          </button>
+          </StartTournamentButton>
           <CalendarButton
             rankings={currentRankings}
             userName={userName}

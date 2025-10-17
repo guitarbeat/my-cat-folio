@@ -22,7 +22,8 @@ import {
   Error,
   Input,
   Select,
-  CatImage
+  CatImage,
+  StartTournamentButton
 } from '../../shared/components';
 
 // * Import Error components for specific use cases
@@ -630,20 +631,21 @@ const StartButton = ({ selectedNames, onStart, variant = 'default' }) => {
 
   const buttonClass =
     variant === 'header' ? styles.startButtonHeader : styles.startButton;
+  const isReady = selectedNames.length >= 2;
 
   return (
-    <button
+    <StartTournamentButton
       onClick={handleStart}
       className={buttonClass}
-      disabled={selectedNames.length < 2}
-      aria-label={
-        selectedNames.length < 2
-          ? 'Select at least 2 names to start'
-          : 'Start Tournament'
+      disabled={!isReady}
+      ariaLabel={
+        isReady ? 'Start Tournament' : 'Select at least 2 names to start'
       }
+      size={variant === 'header' ? 'medium' : 'large'}
+      startIcon={isReady ? undefined : null}
     >
       {buttonText}
-    </button>
+    </StartTournamentButton>
   );
 };
 

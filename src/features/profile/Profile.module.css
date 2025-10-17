@@ -38,38 +38,29 @@
   align-items: center;
 }
 
-.newTournamentButton,
+.newTournamentButton {
+  min-width: 200px;
+  white-space: nowrap;
+}
+
+.noDataButton {
+  margin-top: 1.5rem;
+}
+
 .migrationButton {
   padding: 0.75rem 1.5rem;
   font-weight: 600;
   cursor: pointer;
-  border: none;
-  border-radius: 8px;
-  transition: all 0.2s;
-}
-
-.newTournamentButton {
-  color: white;
-  background: var(--accent-primary);
-}
-
-.newTournamentButton:hover {
-  background: var(--accent-hover);
-  transform: translateY(-1px);
-}
-
-.migrationButton {
   color: var(--text-primary);
   background: var(--bg-secondary);
   border: 1px solid var(--border-color);
+  border-radius: 8px;
+  transition: all 0.2s;
 }
 
 .migrationButton:hover {
   background: var(--bg-tertiary);
   transform: translateY(-1px);
-}
-
-.button {
 }
 
 /* Main Content - Sidebar Layout */
@@ -907,25 +898,6 @@
   font-size: 1.1rem;
   line-height: 1.6;
   color: var(--text-secondary);
-}
-
-.primaryButton {
-  padding: 1rem 2rem;
-  font-size: 1.1rem;
-  font-weight: 600;
-  color: white;
-  text-decoration: none;
-  cursor: pointer;
-  background: linear-gradient(135deg, var(--primary-500), var(--primary-600));
-  border: 1px solid var(--primary-500);
-  border-radius: 12px;
-  box-shadow: var(--shadow-md);
-  transition: all 0.3s ease;
-}
-
-.primaryButton:hover {
-  box-shadow: var(--shadow-lg);
-  transform: translateY(-2px);
 }
 
 /* Error Container */
