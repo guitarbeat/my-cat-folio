@@ -45,7 +45,7 @@
     "analyze:deps": "npx depcheck --ignores='@types/*,eslint*,prettier*,stylelint*,vitest*,@testing-library/*,jsdom,husky,lint-staged'",
     "analyze:exports": "node scripts/check-unused-exports.mjs",
     "analyze:all": "npm run analyze:size && npm run analyze:tree-shaking && npm run analyze:exports && npm run analyze:deps",
-    "test": "vitest run --config config/vitest.config.mjs",
+    "test": "node scripts/test-runner.mjs",
     "test:watch": "vitest --config config/vitest.config.mjs",
     "test:coverage": "vitest run --coverage --config config/vitest.config.mjs",
     "test:ui": "vitest --ui --config config/vitest.config.mjs",

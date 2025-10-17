@@ -170,6 +170,9 @@ const {
 # Run all tests
 npm run test
 
+# Run a specific test file (Jest-compatible flag supported)
+npm run test -- --runTestsByPath src/App.test.jsx
+
 # Run tests with coverage
 npm run test:coverage
 

@@ -18,11 +18,30 @@ import PerformanceDashboard from '@components/PerformanceDashboard';
 // * Lazy load heavy components for better code splitting
 import useUserSession from '@hooks/useUserSession';
 import useToast from '@hooks/useToast';
+import { useRouting } from '@hooks/useRouting';
 import useAppStore, { useAppStoreInitialization } from '@core/store/useAppStore';
 import { TournamentService } from '@services/tournamentService';
 import { ErrorManager } from '@services/errorManager';
 
 // * Components imported directly for better code splitting
+
+const normalizeRoutePath = (routeValue) => {
+  if (typeof routeValue !== 'string') {
+    return '/';
+  }
+
+  const [path] = routeValue.split(/[?#]/);
+
+  if (!path) {
+    return '/';
+  }
+
+  if (path.length > 1 && path.endsWith('/')) {
+    return path.replace(/\/+$/, '') || '/';
+  }
+
+  return path;
+};
 
 /**
  * Generate a cat background video element
@@ -49,6 +68,14 @@ function App() {
     uiActions,
     errorActions
   } = useAppStore();
+
+  // * Simple URL routing helpers
+  const { currentRoute, navigateTo } = useRouting();
+
+  const normalizedPath = React.useMemo(() => normalizeRoutePath(currentRoute), [currentRoute]);
+  const previousRouteRef = React.useRef(null);
+  const lastViewRef = React.useRef(tournament.currentView);
+  const lastCompletionRef = React.useRef(tournament.isComplete);
 
   // Get admin status from server-side validation
   const isAdmin = user.isAdmin;
@@ -158,6 +185,89 @@ function App() {
   const handleThemeChange = useCallback(() => {
     uiActions.toggleTheme();
   }, [uiActions]);
+
+  // * Update the URL when the active view changes
+  React.useEffect(() => {
+    if (!user.isLoggedIn || normalizedPath === '/bongo') {
+      lastViewRef.current = tournament.currentView;
+      lastCompletionRef.current = tournament.isComplete;
+      return;
+    }
+
+    const completionChanged = tournament.isComplete !== lastCompletionRef.current;
+    lastCompletionRef.current = tournament.isComplete;
+
+    if (!completionChanged && tournament.currentView === lastViewRef.current) {
+      return;
+    }
+
+    lastViewRef.current = tournament.currentView;
+
+    if (tournament.currentView === 'profile') {
+      if (normalizedPath !== '/profile') {
+        navigateTo('/profile');
+      }
+      return;
+    }
+
+    if (tournament.isComplete && tournament.currentView === 'tournament') {
+      if (normalizedPath !== '/results') {
+        navigateTo('/results');
+      }
+      return;
+    }
+
+    if (!['/', '/tournament'].includes(normalizedPath)) {
+      navigateTo('/tournament');
+    }
+  }, [
+    navigateTo,
+    normalizedPath,
+    tournament.currentView,
+    tournament.isComplete,
+    user.isLoggedIn
+  ]);
+
+  // * Keep application state in sync with URL changes
+  React.useEffect(() => {
+    if (normalizedPath === '/bongo') {
+      previousRouteRef.current = currentRoute;
+      return;
+    }
+
+    if (!user.isLoggedIn) {
+      if (normalizedPath !== '/login') {
+        navigateTo('/login', { replace: true });
+      }
+      previousRouteRef.current = currentRoute;
+      return;
+    }
+
+    if (normalizedPath === '/profile' && tournament.currentView !== 'profile') {
+      lastViewRef.current = 'profile';
+      tournamentActions.setView('profile');
+      previousRouteRef.current = currentRoute;
+      return;
+    }
+
+    const previousPath = normalizeRoutePath(previousRouteRef.current);
+    const pathChanged = previousRouteRef.current === null || previousPath !== normalizedPath;
+    const tournamentPaths = new Set(['/', '/tournament', '/results']);
+
+    if (pathChanged && tournamentPaths.has(normalizedPath) && tournament.currentView !== 'tournament') {
+      lastViewRef.current = 'tournament';
+      tournamentActions.setView('tournament');
+    }
+
+    previousRouteRef.current = currentRoute;
+  }, [
+    currentRoute,
+    navigateTo,
+    normalizedPath,
+    tournament.currentView,
+    tournamentActions,
+    user.isLoggedIn
+  ]);
 
   // * Synchronize global body class with current theme
   React.useEffect(() => {

@@ -62,7 +62,9 @@ export default function ViewRouter({
     );
   }
 
-  if (tournament.currentView === 'profile') {
+  const shouldShowProfile = isRoute('/profile') || tournament.currentView === 'profile';
+
+  if (shouldShowProfile) {
     return (
       <Suspense fallback={<Loading variant="spinner" text="Loading Profile..." />}>
         <Profile
@@ -87,7 +89,18 @@ export default function ViewRouter({
     );
   }
 
-  if (tournament.isComplete) {
+  const shouldShowResults = tournament.isComplete || isRoute('/results');
+
+  if (shouldShowResults) {
+    if (!tournament.isComplete) {
+      return (
+        <Error
+          variant="list"
+          error={{ message: 'Results are only available after completing a tournament.' }}
+        />
+      );
+    }
+
     return (
       <Suspense fallback={<Loading variant="spinner" text="Loading Results..." />}>
         <Results
