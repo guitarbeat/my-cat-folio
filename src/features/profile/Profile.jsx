@@ -67,18 +67,9 @@ const calculateEnhancedStats = (
   ratings,
   filterStatus = FILTER_OPTIONS.STATUS.ALL
 ) => {
-  if (!ratings?.length)
-    return {
-      total: 0,
-      wins: 0,
-      losses: 0,
-      winRate: 0,
-      avgRating: 0,
-      ratingSpread: 0,
-      totalMatches: 0,
-      activeNames: 0,
-      popularNames: 0
-    };
+  if (!ratings?.length) {
+    return null;
+  }
 
   const filtered =
     filterStatus === FILTER_OPTIONS.STATUS.ACTIVE
