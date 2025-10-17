@@ -28,7 +28,17 @@ function CalendarButton({
   disabled = false,
   ...rest
 }) {
-  const handleClick = () => {
+  const { onClick: externalOnClick, ...buttonProps } = rest;
+
+  const handleClick = (event) => {
+    if (typeof externalOnClick === 'function') {
+      externalOnClick(event);
+    }
+
+    if (event?.defaultPrevented) {
+      return;
+    }
+
     // Filter out hidden names and sort by rating
     const activeNames = rankings
       .filter((name) => !hiddenNames.has(name.id))
@@ -76,7 +86,7 @@ function CalendarButton({
       startIcon={<span className={styles.icon}>📅</span>}
       aria-label="Add to Google Calendar"
       title="Add to Google Calendar"
-      {...rest}
+      {...buttonProps}
     >
       Add to Calendar
     </Button>
