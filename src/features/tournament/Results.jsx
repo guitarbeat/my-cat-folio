@@ -47,7 +47,7 @@ import Bracket from '../../shared/components/Bracket/Bracket';
 import CalendarButton from '../../shared/components/CalendarButton/CalendarButton';
 import StartTournamentButton from '../../shared/components/StartTournamentButton/StartTournamentButton';
 import StatsCard from '../../shared/components/StatsCard/StatsCard';
-import { Toast } from '@components';
+import { Card, Toast } from '@components';
 import useToast from '@hooks/useToast';
 import styles from './Results.module.css';
 
@@ -289,13 +289,19 @@ function Results({
 
   return (
     <div className={styles.container}>
-      <header className={styles.header}>
+      <Card
+        as="header"
+        className={styles.header}
+        background="glass"
+        padding="none"
+        shadow="medium"
+      >
         <h2>Name Rankings</h2>
         <p className={styles.welcome}>
           Welcome back, <span className={styles.userName}>{userName}</span>!
           Here are your latest name rankings.
         </p>
-      </header>
+      </Card>
 
       <div className={styles.content}>
         <div className={styles.statsGrid}>
