@@ -22,6 +22,7 @@ import styles from './Form.module.css';
  * @param {string} props.label - Select label
  * @param {string} props.placeholder - Placeholder text
  * @param {string} props.className - Additional CSS classes
+ * @param {string} props.ariaDescribedBy - Space separated IDs for aria-describedby
  * @param {Object} props.rest - Additional props
  * @returns {JSX.Element} Select component
  */
@@ -37,6 +38,7 @@ const Select = ({
   label,
   placeholder = 'Select an option',
   className = '',
+  ariaDescribedBy = '',
   ...rest
 }) => {
   const selectClasses = [
@@ -47,6 +49,12 @@ const Select = ({
   ].filter(Boolean).join(' ');
 
   const selectId = `select-${name}`;
+  const describedBy = [
+    ariaDescribedBy,
+    error ? `${selectId}-error` : null
+  ]
+    .filter(Boolean)
+    .join(' ') || undefined;
 
   return (
     <div className={styles.inputGroup}>
@@ -66,7 +74,7 @@ const Select = ({
         required={required}
         className={selectClasses}
         aria-invalid={!!error}
-        aria-describedby={error ? `${selectId}-error` : undefined}
+        aria-describedby={describedBy}
         {...rest}
       >
         {placeholder && (
@@ -108,7 +116,8 @@ Select.propTypes = {
   error: PropTypes.string,
   label: PropTypes.string,
   placeholder: PropTypes.string,
-  className: PropTypes.string
+  className: PropTypes.string,
+  ariaDescribedBy: PropTypes.string
 };
 
 Select.displayName = 'Select';

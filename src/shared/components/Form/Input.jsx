@@ -22,6 +22,7 @@ import styles from './Form.module.css';
  * @param {string} props.error - Error message
  * @param {string} props.label - Input label
  * @param {string} props.className - Additional CSS classes
+ * @param {string} props.ariaDescribedBy - Space separated IDs for aria-describedby
  * @param {Object} props.rest - Additional props
  * @returns {JSX.Element} Input component
  */
@@ -37,6 +38,7 @@ const Input = ({
   error = '',
   label,
   className = '',
+  ariaDescribedBy = '',
   ...rest
 }) => {
   const inputClasses = [
@@ -47,6 +49,12 @@ const Input = ({
   ].filter(Boolean).join(' ');
 
   const inputId = `input-${name}`;
+  const describedBy = [
+    ariaDescribedBy,
+    error ? `${inputId}-error` : null
+  ]
+    .filter(Boolean)
+    .join(' ') || undefined;
 
   return (
     <div className={styles.inputGroup}>
@@ -68,7 +76,7 @@ const Input = ({
         required={required}
         className={inputClasses}
         aria-invalid={!!error}
-        aria-describedby={error ? `${inputId}-error` : undefined}
+        aria-describedby={describedBy}
         {...rest}
       />
       {error && (
@@ -91,7 +99,8 @@ Input.propTypes = {
   required: PropTypes.bool,
   error: PropTypes.string,
   label: PropTypes.string,
-  className: PropTypes.string
+  className: PropTypes.string,
+  ariaDescribedBy: PropTypes.string
 };
 
 Input.displayName = 'Input';
