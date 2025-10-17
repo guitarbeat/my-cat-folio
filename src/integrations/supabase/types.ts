@@ -14,6 +14,36 @@ export type Database = {
   }
   public: {
     Tables: {
+      audit_log: {
+        Row: {
+          created_at: string | null
+          id: string
+          new_values: Json | null
+          old_values: Json | null
+          operation: string
+          table_name: string
+          user_name: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          new_values?: Json | null
+          old_values?: Json | null
+          operation: string
+          table_name: string
+          user_name?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          new_values?: Json | null
+          old_values?: Json | null
+          operation?: string
+          table_name?: string
+          user_name?: string | null
+        }
+        Relationships: []
+      }
       cat_app_users: {
         Row: {
           created_at: string
@@ -66,7 +96,8 @@ export type Database = {
         }
         Update: {
           avg_rating?: number | null
-          categories?: string | null
+          categories?: string[] | null
+          created_at?: string
           description?: string | null
           id?: string
           is_active?: boolean | null
@@ -99,6 +130,8 @@ export type Database = {
         }
         Update: {
           is_hidden?: boolean | null
+          losses?: number | null
+          name_id?: string
           rating?: number | null
           rating_history?: Json | null
           updated_at?: string
@@ -165,12 +198,41 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      leaderboard_stats: {
+        Row: {
+          avg_rating: number | null
+          description: string | null
+          last_updated: string | null
+          name: string | null
+          name_id: string | null
+          total_losses: number | null
+          total_ratings: number | null
+          total_wins: number | null
+          win_rate: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "cat_name_ratings_name_id_fkey"
+            columns: ["name_id"]
+            isOneToOne: false
+            referencedRelation: "cat_name_options"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Functions: {
       add_app_access_to_user: {
         Args: { app_name: string }
         Returns: undefined
+      }
+      calculate_elo_change: {
+        Args: {
+          current_rating: number
+          opponent_rating: number
+          result: number
+        }
+        Returns: number
       }
       change_user_role: {
         Args: {
@@ -237,6 +299,17 @@ export type Database = {
         Args: { target_user_id: string }
         Returns: Json
       }
+      get_top_names_by_category: {
+        Args: { p_category: string; p_limit?: number }
+        Returns: {
+          avg_rating: number
+          category: string
+          description: string
+          id: string
+          name: string
+          total_ratings: number
+        }[]
+      }
       get_user_flo_data_admin: {
         Args: { target_user_id: string }
         Returns: {
@@ -257,6 +330,17 @@ export type Database = {
           first_name: string
           id: string
           username: string
+        }[]
+      }
+      get_user_stats: {
+        Args: { p_user_name: string }
+        Returns: {
+          avg_rating: number
+          hidden_count: number
+          total_losses: number
+          total_ratings: number
+          total_wins: number
+          win_rate: number
         }[]
       }
       get_users_with_flo_data: {
@@ -286,6 +370,10 @@ export type Database = {
       }
       merge_user_accounts: {
         Args: { p_new_user_id: string; p_username: string }
+        Returns: undefined
+      }
+      refresh_materialized_views: {
+        Args: Record<PropertyKey, never>
         Returns: undefined
       }
       user_exists_by_username: {
@@ -444,17 +532,3 @@ export const Constants = {
     },
   },
 } as const
-
-// * Type aliases for better developer experience
-export type UserRole = Database["public"]["Enums"]["app_role"]
-export type CatAppUser = Database["public"]["Tables"]["cat_app_users"]["Row"]
-export type CatAppUserInsert = Database["public"]["Tables"]["cat_app_users"]["Insert"]
-export type CatAppUserUpdate = Database["public"]["Tables"]["cat_app_users"]["Update"]
-export type CatNameOption = Database["public"]["Tables"]["cat_name_options"]["Row"]
-export type CatNameRating = Database["public"]["Tables"]["cat_name_ratings"]["Row"]
-export type TournamentSelection = Database["public"]["Tables"]["tournament_selections"]["Row"]
-
-// * Utility types for common patterns
-export type UserPreferences = NonNullable<CatAppUser["preferences"]>
-export type TournamentData = NonNullable<CatAppUser["tournament_data"]>
-export type RatingHistory = NonNullable<CatNameRating["rating_history"]>

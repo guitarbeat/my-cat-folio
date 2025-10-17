@@ -28,6 +28,14 @@ function useUserSession({ showToast } = {}) {
     const storedUserName = localStorage.getItem('catNamesUser');
     if (storedUserName && storedUserName.trim()) {
       userActions.login(storedUserName);
+
+      // Set username context for RLS policies (username-based auth)
+      (async () => {
+        try {
+          const activeSupabase = await resolveSupabaseClient();
+          await activeSupabase?.rpc('set_user_context', { user_name_param: storedUserName.trim() });
+        } catch {}
+      })();
       
       // Check admin status server-side
       isUserAdmin(storedUserName).then(adminStatus => {
@@ -65,6 +73,11 @@ function useUserSession({ showToast } = {}) {
         userActions.login(trimmedName);
         return true;
       }
+
+      // Ensure the RLS session uses the current username
+      try {
+        await activeSupabase.rpc('set_user_context', { user_name_param: trimmedName });
+      } catch {}
 
       // Check if user exists in database
       const { data: existingUser, error: fetchError } = await activeSupabase
