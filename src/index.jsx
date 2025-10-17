@@ -19,7 +19,7 @@ import '@styles/background-effects.css';
 import '@styles/components-global.css';
 import '@styles/responsive.css';
 import App from './App.jsx';
-import { Analytics } from '@vercel/analytics/next';
+import { Analytics } from '@vercel/analytics/react';
 
 // Set up global error handling
 setupGlobalErrorHandling();
