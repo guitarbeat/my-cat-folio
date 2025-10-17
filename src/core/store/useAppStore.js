@@ -292,13 +292,7 @@ const useAppStore = create(
 
               const resolvedStoredTheme = parseStoredTheme(storedTheme);
 
-              if (resolvedStoredTheme) {
-              const storedTheme = localStorage.getItem('theme');
-              if (
-                storedTheme !== null &&
-                (storedTheme === 'true' ? 'light' : 'dark') !== state.ui.theme
-              ) {
-                const isLightTheme = storedTheme === 'true';
+              if (resolvedStoredTheme && resolvedStoredTheme !== state.ui.theme) {
                 return {
                   ui: {
                     ...state.ui,
