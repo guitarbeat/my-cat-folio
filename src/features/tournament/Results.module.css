@@ -60,10 +60,6 @@
   transform: translateY(0);
 }
 
-.buttonIcon {
-  font-size: 1.2em;
-}
-
 .welcome {
   font-size: var(--text-lg);
   line-height: 1.6;
@@ -130,13 +126,7 @@
 }
 
 .startNewButton {
-  display: inline-flex;
-  gap: var(--space-2);
-  align-items: center;
-}
-
-.startNewButton:hover {
-  transform: translateY(-1px);
+  white-space: nowrap;
 }
 
 .tip {
