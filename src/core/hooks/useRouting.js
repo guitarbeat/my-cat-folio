@@ -4,14 +4,31 @@
  */
 import { useState, useEffect, useCallback } from 'react';
 
+const ROUTE_CHANGE_EVENT = 'app-routing-change';
+
+const getBrowserRoute = () =>
+  window.location.pathname + window.location.search + window.location.hash;
+
+const broadcastRouteChange = () => {
+  if (typeof window === 'undefined') {
+    return;
+  }
+
+  try {
+    window.dispatchEvent(new Event(ROUTE_CHANGE_EVENT));
+  } catch (error) {
+    if (typeof document !== 'undefined' && typeof document.createEvent === 'function') {
+      const fallbackEvent = document.createEvent('Event');
+      fallbackEvent.initEvent(ROUTE_CHANGE_EVENT, false, false);
+      window.dispatchEvent(fallbackEvent);
+    }
+  }
+};
+
 export function useRouting() {
   const [currentRoute, setCurrentRoute] = useState(() => {
     if (typeof window !== 'undefined') {
-      return (
-        window.location.pathname +
-        window.location.search +
-        window.location.hash
-      );
+      return getBrowserRoute();
     }
     return '/';
   });
@@ -22,16 +39,18 @@ export function useRouting() {
     }
 
     const handleRouteChange = () => {
-      setCurrentRoute(window.location.pathname + window.location.search + window.location.hash);
+      setCurrentRoute(getBrowserRoute());
     };
 
     // Listen for browser navigation (back/forward buttons)
     window.addEventListener('popstate', handleRouteChange);
     window.addEventListener('hashchange', handleRouteChange);
+    window.addEventListener(ROUTE_CHANGE_EVENT, handleRouteChange);
 
     return () => {
       window.removeEventListener('popstate', handleRouteChange);
       window.removeEventListener('hashchange', handleRouteChange);
+      window.removeEventListener(ROUTE_CHANGE_EVENT, handleRouteChange);
     };
   }, []);
 
@@ -70,8 +89,9 @@ export function useRouting() {
 
       const fullPath = sanitizedRoute;
 
-      if (window.location.pathname + window.location.search + window.location.hash === fullPath) {
+      if (getBrowserRoute() === fullPath) {
         setCurrentRoute(fullPath);
+        broadcastRouteChange();
         return;
       }
 
@@ -79,6 +99,7 @@ export function useRouting() {
 
       window.history[historyMethod]({}, '', fullPath);
       setCurrentRoute(fullPath);
+      broadcastRouteChange();
     },
     [sanitizeRoute]
   );
