@@ -5,13 +5,13 @@
  */
 import React, { useState, useCallback, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import { supabase } from '../../integrations/supabase/client';
 import {
-  supabase,
   deleteName,
   catNamesAPI,
   tournamentsAPI,
   hiddenNamesAPI
-} from '../../../backend/api/supabaseClient';
+} from '../../integrations/supabase/api';
 import useToast from '../../core/hooks/useToast';
 import { FILTER_OPTIONS } from '../../core/constants';
 // ErrorManager removed to prevent circular dependency
