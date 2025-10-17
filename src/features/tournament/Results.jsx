@@ -45,19 +45,10 @@ import PropTypes from 'prop-types';
 import RankingAdjustment from './RankingAdjustment';
 import Bracket from '../../shared/components/Bracket/Bracket';
 import CalendarButton from '../../shared/components/CalendarButton/CalendarButton';
-import styles from './Results.module.css';
 import StatsCard from '../../shared/components/StatsCard/StatsCard';
-
-// Toast component extracted for reusability
-const Toast = memo(({ message, type, onClose }) => (
-  <div
-    role="alert"
-    className={type === 'success' ? styles.toastSuccess : styles.toastError}
-    onClick={onClose}
-  >
-    {message}
-  </div>
-));
+import { Toast } from '@components';
+import useToast from '@hooks/useToast';
+import styles from './Results.module.css';
 
 function Results({
   ratings,
@@ -69,12 +60,19 @@ function Results({
 }) {
   const [currentRankings, setCurrentRankings] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [toast, setToast] = useState({
-    show: false,
-    message: '',
-    type: 'success'
-  });
   const [hiddenNames] = useState(new Set());
+
+  const { toasts, showToast, removeToast } = useToast({
+    maxToasts: 1,
+    defaultDuration: 3000
+  });
+
+  const showToastMessage = useCallback((message, type = 'info') => {
+    showToast({
+      message,
+      type
+    });
+  }, [showToast]);
 
   // Convert vote history to bracket matches
   const getBracketMatches = useCallback(() => {
@@ -169,15 +167,11 @@ function Results({
       setCurrentRankings(processedRankings);
     } catch (error) {
       console.error('Error processing rankings:', error);
-      setToast({
-        show: true,
-        message: 'Error processing rankings data',
-        type: 'error'
-      });
+      showToastMessage('Error processing rankings data', 'error');
     } finally {
       setIsLoading(false);
     }
-  }, [ratings, processRankings]);
+  }, [ratings, processRankings, showToastMessage]);
 
   const handleSaveAdjustments = useCallback(
     async (adjustedRankings) => {
@@ -207,35 +201,16 @@ function Results({
         await onUpdateRatings(newRatings);
         setCurrentRankings(updatedRankings);
 
-        setToast({
-          show: true,
-          message: 'Rankings updated successfully!',
-          type: 'success'
-        });
+        showToastMessage('Rankings updated successfully!', 'success');
       } catch (error) {
         console.error('Failed to update rankings:', error);
-        setToast({
-          show: true,
-          message: 'Failed to update rankings. Please try again.',
-          type: 'error'
-        });
+        showToastMessage('Failed to update rankings. Please try again.', 'error');
       } finally {
         setIsLoading(false);
       }
     },
-    [currentRankings, ratings, onUpdateRatings]
+    [currentRankings, ratings, onUpdateRatings, showToastMessage]
   );
-
-  const closeToast = useCallback(() => {
-    setToast((prev) => ({ ...prev, show: false }));
-  }, []);
-
-  useEffect(() => {
-    if (toast.show) {
-      const timer = setTimeout(closeToast, 3000);
-      return () => clearTimeout(timer);
-    }
-  }, [toast.show, closeToast]);
 
   useEffect(() => {
     // Add cool effects to the results header
@@ -378,9 +353,13 @@ function Results({
         )}
       </div>
 
-      {toast.show && (
-        <Toast message={toast.message} type={toast.type} onClose={closeToast} />
-      )}
+      <Toast
+        variant="container"
+        toasts={toasts}
+        removeToast={removeToast}
+        position="bottom-right"
+        maxToasts={1}
+      />
     </div>
   );
 }
