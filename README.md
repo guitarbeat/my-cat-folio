@@ -200,9 +200,12 @@ npm run test:watch
 ### **Environment Variables**
 
 ```bash
-# Required for Supabase integration
-VITE_SUPABASE_URL=https://your-project.supabase.co
-VITE_SUPABASE_ANON_KEY=your-anon-key
+# Required for Supabase integration (supports both prefixes)
+SUPABASE_URL=https://your-project.supabase.co
+SUPABASE_ANON_KEY=your-anon-key
+# Legacy Vite-prefixed variables are still supported for local development:
+# VITE_SUPABASE_URL=...
+# VITE_SUPABASE_ANON_KEY=...
 ```
 
 ### **Build Commands**

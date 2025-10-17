@@ -41,6 +41,7 @@ export default defineConfig(({ mode }) => ({
     hmr: { overlay: false },
     open: false,
   },
+  envPrefix: ['VITE_', 'SUPABASE_'],
   build: {
     outDir: 'build',
     sourcemap: true, // * Enable source maps for debugging production issues
