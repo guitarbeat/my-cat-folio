@@ -1525,8 +1525,17 @@
   height: 220px; /* show more of the cat */
   margin-bottom: 1rem;
   overflow: hidden;
+  background: linear-gradient(135deg, rgb(15 23 42 / 85%), rgb(15 23 42 / 95%));
+  background: radial-gradient(
+      circle at 30% 25%,
+      rgb(var(--cat-image-accent-rgb, 100 116 139) / 60%) 0%,
+      rgb(15 23 42 / 92%) 65%
+    ),
+    linear-gradient(135deg, rgb(15 23 42 / 85%), rgb(15 23 42 / 95%));
   border-radius: 15px;
-  box-shadow: 0 4px 20px rgb(0 0 0 / 20%);
+  box-shadow: 0 8px 28px rgb(15 23 42 / 45%);
+  transition: box-shadow var(--duration-normal) var(--ease-out),
+    transform var(--duration-normal) var(--ease-out);
 }
 
 /* Blurred background fill for swipe card images */
@@ -1538,8 +1547,10 @@
   background-image: var(--bg-image);
   background-position: 50% var(--image-pos-y, 20%);
   background-size: cover;
-  filter: blur(16px) brightness(0.9) saturate(110%);
+  opacity: 0;
+  filter: blur(18px) brightness(0.92) saturate(112%);
   transform: scale(1.1);
+  transition: opacity var(--duration-normal) var(--ease-out);
 }
 
 .swipeCardImageContainer::after {
@@ -1547,7 +1558,13 @@
   inset: 0;
   z-index: 0;
   content: "";
-  background: linear-gradient(180deg, rgb(0 0 0 / 0%) 0%, rgb(0 0 0 / 6%) 100%);
+  background: linear-gradient(
+    180deg,
+    rgb(15 23 42 / 5%) 0%,
+    rgb(2 6 23 / 55%) 100%
+  );
+  opacity: 0;
+  transition: opacity var(--duration-normal) var(--ease-out);
 }
 
 .swipeCardImage {
@@ -1555,13 +1572,46 @@
   z-index: 1;
   width: 100%;
   height: 100%;
-  object-fit: contain; /* show full cat; blurred bg fills behind */
+  object-fit: var(--cat-image-fit, contain); /* show full cat; blurred bg fills behind */
   object-position: 50% var(--image-pos-y, 20%);
-  transition: transform 0.3s ease;
+  opacity: 0;
+  filter: drop-shadow(0 18px 28px rgb(15 23 42 / 45%));
+  transform: scale(1.04);
+  transition: transform 0.35s ease, opacity 0.25s ease;
 }
 
 .swipeCardImage:hover {
   transform: scale(1.02);
+}
+
+.swipeCardImageContainer[data-loaded='true']::before,
+.swipeCardImageContainer[data-loaded='true']::after {
+  opacity: 1;
+}
+
+.swipeCardImageContainer[data-loaded='true'] .swipeCardImage {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.swipeCardImageContainer[data-orientation='portrait'] {
+  height: 260px;
+}
+
+.swipeCardImageContainer[data-orientation='landscape'] {
+  height: 210px;
+}
+
+.swipeCardImageContainer[data-orientation='square'] {
+  height: 235px;
+}
+
+.swipeCardImageContainer[data-orientation='portrait'] .swipeCardImage {
+  transform-origin: center 20%;
+}
+
+.swipeCardImageContainer[data-orientation='landscape'] .swipeCardImage {
+  object-position: 50% var(--image-pos-y, 40%);
 }
 
 .swipeCardName {

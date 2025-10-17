@@ -20,15 +20,17 @@ function CatImage({
   const containerRef = useRef(null);
   const imageRef = useRef(null);
 
-  const computeFocalY = useMemo(
+  const analyseImage = useMemo(
     () =>
       (imgEl) => {
         try {
           const naturalW = imgEl.naturalWidth || imgEl.width;
           const naturalH = imgEl.naturalHeight || imgEl.height;
-          if (!naturalW || !naturalH) return null;
+          if (!naturalW || !naturalH) {
+            return {};
+          }
 
-          const targetW = 128;
+          const targetW = 144;
           const scale = targetW / naturalW;
           const w = Math.max(16, Math.min(targetW, naturalW));
           const h = Math.max(16, Math.floor(naturalH * scale));
@@ -44,16 +46,34 @@ function CatImage({
           const toGray = (r, g, b) => r * 0.299 + g * 0.587 + b * 0.114;
           const idx = (x, y) => (y * w + x) * 4;
 
-          for (let y = 1; y < h - 1; y += 1) {
+          let totalR = 0;
+          let totalG = 0;
+          let totalB = 0;
+
+          for (let y = 0; y < h; y += 1) {
             let sum = 0;
             for (let x = 0; x < w; x += 1) {
-              const i1 = idx(x, y - 1);
-              const i2 = idx(x, y + 1);
-              const g1 = toGray(data[i1], data[i1 + 1], data[i1 + 2]);
-              const g2 = toGray(data[i2], data[i2 + 1], data[i2 + 2]);
-              sum += Math.abs(g2 - g1);
+              const base = idx(x, y);
+              const r = data[base];
+              const g = data[base + 1];
+              const b = data[base + 2];
+
+              totalR += r;
+              totalG += g;
+              totalB += b;
+
+              if (y > 0 && y < h - 1) {
+                const i1 = idx(x, y - 1);
+                const i2 = idx(x, y + 1);
+                const g1 = toGray(data[i1], data[i1 + 1], data[i1 + 2]);
+                const g2 = toGray(data[i2], data[i2 + 1], data[i2 + 2]);
+                sum += Math.abs(g2 - g1);
+              }
             }
-            rowEnergy[y] = sum / w;
+
+            if (y > 0 && y < h - 1) {
+              rowEnergy[y] = sum / w;
+            }
           }
 
           const start = Math.floor(h * 0.08);
@@ -71,36 +91,76 @@ function CatImage({
           }
 
           const pct = Math.min(60, Math.max(10, Math.round((bestY / h) * 100)));
-          return pct;
+
+          const pixelCount = w * h;
+          const accent = pixelCount
+            ? `${Math.round(totalR / pixelCount)} ${Math.round(
+                totalG / pixelCount
+              )} ${Math.round(totalB / pixelCount)}`
+            : undefined;
+
+          const orientation = (() => {
+            const ratio = naturalW / naturalH;
+            if (ratio >= 1.45) return 'landscape';
+            if (ratio <= 0.75) return 'portrait';
+            return 'square';
+          })();
+
+          return {
+            focal: pct,
+            accent,
+            orientation
+          };
         } catch (error) {
-          console.error('Failed to compute focal point for cat image', error);
-          return null;
+          console.error('Failed to analyse cat image metadata', error);
+          return {};
         }
       },
     []
   );
 
-  const applyFocalPoint = useCallback(
+  const applyImageEnhancements = useCallback(
     (imgEl) => {
       if (!imgEl) return;
       const container = containerRef.current;
       if (!container) return;
 
-      const focal = computeFocalY(imgEl);
+      const { focal, accent, orientation } = analyseImage(imgEl);
+
       if (focal != null) {
         container.style.setProperty('--image-pos-y', `${focal}%`);
       }
+
+      if (accent) {
+        container.style.setProperty('--cat-image-accent-rgb', accent);
+      }
+
+      if (orientation) {
+        container.dataset.orientation = orientation;
+      }
+
+      if (imgEl.naturalWidth && imgEl.naturalHeight) {
+        const ratio = imgEl.naturalWidth / imgEl.naturalHeight;
+        const isPortrait = ratio <= 0.85;
+        const isUltraWide = ratio >= 1.9;
+        const fit = isPortrait || isUltraWide ? 'contain' : 'cover';
+
+        container.style.setProperty('--cat-image-fit', fit);
+        container.style.setProperty('--cat-image-ratio', ratio.toFixed(3));
+      }
+
+      container.dataset.loaded = 'true';
     },
-    [computeFocalY]
+    [analyseImage]
   );
 
   const handleLoad = useCallback(
     (event) => {
       const target = event?.target || imageRef.current;
-      applyFocalPoint(target);
+      applyImageEnhancements(target);
       onLoad?.(event);
     },
-    [applyFocalPoint, onLoad]
+    [applyImageEnhancements, onLoad]
   );
 
   const handleError = useCallback(
@@ -114,11 +174,21 @@ function CatImage({
   );
 
   useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    container.dataset.loaded = 'false';
+    delete container.dataset.orientation;
+    container.style.removeProperty('--image-pos-y');
+    container.style.removeProperty('--cat-image-fit');
+    container.style.removeProperty('--cat-image-ratio');
+    container.style.removeProperty('--cat-image-accent-rgb');
+
     const imgEl = imageRef.current;
     if (imgEl && imgEl.complete) {
-      applyFocalPoint(imgEl);
+      applyImageEnhancements(imgEl);
     }
-  }, [applyFocalPoint, src]);
+  }, [applyImageEnhancements, src]);
 
   if (!src) {
     return null;
