@@ -1,11 +1,9 @@
 /* * Profile Filters Container */
 .container {
-  padding: var(--space-4, 1.5rem);
   margin-bottom: var(--space-6, 2rem);
-  background: var(--surface-color, #f9fafb);
-  border: 1px solid var(--border-color, #e5e7eb);
-  border-radius: var(--radius-lg, 8px);
-  transition: var(--transition-all, all 0.2s ease);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4, 1.5rem);
 }
 
 .sectionTitle {
@@ -110,14 +108,10 @@
 /* * Active Filters Display */
 .activeFilters {
   display: flex;
+  flex-direction: row;
   flex-wrap: wrap;
   gap: var(--space-3, 0.75rem);
   align-items: center;
-  padding: var(--space-4, 1rem);
-  background: var(--card-background);
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-md, 6px);
-  transition: var(--transition-all, all 0.2s ease);
 }
 
 .activeFilterLabel {
@@ -149,10 +143,6 @@
 
 /* * Responsive Design */
 @media (width <= 768px) {
-  .container {
-    padding: var(--space-3, 1rem);
-  }
-
   .filtersGrid {
     grid-template-columns: 1fr;
     gap: var(--space-3, 1rem);
@@ -171,11 +161,6 @@
 }
 
 @media (width <= 480px) {
-  .container {
-    padding: var(--space-2, 0.75rem);
-    margin-bottom: var(--space-4, 1.5rem);
-  }
-
   .filtersGrid {
     gap: var(--space-2, 0.75rem);
   }

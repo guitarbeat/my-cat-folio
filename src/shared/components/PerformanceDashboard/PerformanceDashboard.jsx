@@ -5,6 +5,7 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
+import Card from '../Card';
 import { performanceMonitor, throttle } from '../../utils/coreUtils';
 import styles from './PerformanceDashboard.module.css';
 
@@ -144,7 +145,13 @@ const PerformanceDashboard = ({ userName, isVisible = false, onClose }) => {
       {metrics && (
         <div className={styles.content}>
           {/* Bundle Size Metrics */}
-          <div className={styles.section}>
+          <Card
+            className={styles.section}
+            variant="outlined"
+            padding="medium"
+            shadow="medium"
+            background="transparent"
+          >
             <h3>📦 Bundle Size</h3>
             <div className={styles.metricsGrid}>
               <div className={styles.metric}>
@@ -174,10 +181,16 @@ const PerformanceDashboard = ({ userName, isVisible = false, onClose }) => {
                 </span>
               </div>
             </div>
-          </div>
+          </Card>
 
           {/* Load Time Metrics */}
-          <div className={styles.section}>
+          <Card
+            className={styles.section}
+            variant="outlined"
+            padding="medium"
+            shadow="medium"
+            background="transparent"
+          >
             <h3>⏱️ Load Performance</h3>
             <div className={styles.metricsGrid}>
               <div className={styles.metric}>
@@ -207,11 +220,17 @@ const PerformanceDashboard = ({ userName, isVisible = false, onClose }) => {
                 </span>
               </div>
             </div>
-          </div>
+          </Card>
 
           {/* Memory Usage */}
           {metrics.memoryUsage && (
-            <div className={styles.section}>
+            <Card
+              className={styles.section}
+              variant="outlined"
+              padding="medium"
+              shadow="medium"
+              background="transparent"
+            >
               <h3>🧠 Memory Usage</h3>
               <div className={styles.metricsGrid}>
                 <div className={styles.metric}>
@@ -233,12 +252,18 @@ const PerformanceDashboard = ({ userName, isVisible = false, onClose }) => {
                   </span>
                 </div>
               </div>
-            </div>
+            </Card>
           )}
 
           {/* Connection Info */}
           {metrics.connection && (
-            <div className={styles.section}>
+            <Card
+              className={styles.section}
+              variant="outlined"
+              padding="medium"
+              shadow="medium"
+              background="transparent"
+            >
               <h3>🌐 Connection</h3>
               <div className={styles.metricsGrid}>
                 <div className={styles.metric}>
@@ -260,11 +285,17 @@ const PerformanceDashboard = ({ userName, isVisible = false, onClose }) => {
                   </span>
                 </div>
               </div>
-            </div>
+            </Card>
           )}
 
           {/* System Info */}
-          <div className={styles.section}>
+          <Card
+            className={styles.section}
+            variant="outlined"
+            padding="medium"
+            shadow="medium"
+            background="transparent"
+          >
             <h3>💻 System Info</h3>
             <div className={styles.systemInfo}>
               <div className={styles.infoItem}>
@@ -278,7 +309,7 @@ const PerformanceDashboard = ({ userName, isVisible = false, onClose }) => {
                 </span>
               </div>
             </div>
-          </div>
+          </Card>
         </div>
       )}
     </div>

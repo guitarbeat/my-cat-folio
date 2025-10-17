@@ -2,11 +2,7 @@
   position: relative;
   z-index: var(--z-modal);
   max-width: 800px;
-  padding: var(--space-6);
   margin: 0 auto;
-  background: var(--surface-color);
-  border-radius: var(--radius-xl);
-  box-shadow: var(--shadow-lg);
   animation: fadeScale var(--duration-normal) var(--ease-out-expo);
 }
 
@@ -36,14 +32,11 @@
 .instructions-card {
   position: relative;
   display: flex;
+  flex-direction: row;
   gap: var(--space-6);
   align-items: center;
-  padding: var(--space-6);
   margin-bottom: var(--space-6);
-  background: var(--card-background);
   border: 2px solid var(--primary-200);
-  border-radius: var(--radius-xl);
-  box-shadow: var(--shadow-lg);
   transition: all var(--duration-normal) var(--ease-out-expo);
 }
 
@@ -91,9 +84,7 @@
 
 @media (width <= 768px) {
   .ranking-adjustment {
-    padding: var(--space-3);
     margin: 0;
-    border-radius: var(--radius-lg);
   }
 
   .ranking-header {
@@ -108,7 +99,6 @@
   .instructions-card {
     flex-direction: column;
     gap: var(--space-3);
-    padding: var(--space-3);
     margin-bottom: var(--space-4);
     text-align: center;
   }

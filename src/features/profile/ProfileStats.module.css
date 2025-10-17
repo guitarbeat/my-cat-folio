@@ -140,7 +140,7 @@
   }
 }
 
-@media (width <= 768px) {
+  @media (width <= 768px) {
   .container {
     padding: 1.25rem;
     margin-bottom: 1.5rem;
@@ -323,7 +323,6 @@
   display: flex;
   gap: 1rem;
   align-items: flex-start;
-  padding: 1.5rem;
   overflow: hidden;
   background: linear-gradient(
     135deg,
@@ -331,7 +330,6 @@
     rgb(255 255 255 / 5%) 100%
   );
   border: 1px solid rgb(255 255 255 / 10%);
-  border-radius: 16px;
   backdrop-filter: blur(10px);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -406,7 +404,6 @@
 
   .insightCard {
     flex-direction: column;
-    padding: 1.25rem;
     text-align: center;
   }
 
@@ -425,10 +422,6 @@
   .insightsSection {
     padding: 1rem;
     margin-top: 1rem;
-  }
-
-  .insightCard {
-    padding: 1rem;
   }
 
   .insightIcon {

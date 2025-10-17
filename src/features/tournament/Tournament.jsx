@@ -14,7 +14,7 @@ import React, {
 import PropTypes from 'prop-types';
 import { useTournament } from '../../core/hooks/useTournament';
 import useToast from '../../core/hooks/useToast';
-import { Loading, Error } from '../../shared/components';
+import { Card, Loading, Error } from '../../shared/components';
 // ErrorBoundary import removed - using unified Error component
 import NameCard from '../../shared/components/NameCard/NameCard';
 import Bracket from '../../shared/components/Bracket/Bracket';
@@ -885,8 +885,11 @@ function TournamentContent({
   return (
     <div className={styles.tournament} role="main" aria-live="polite">
       {/* Progress Information */}
-      <div
+      <Card
         className={styles.progressInfo}
+        background="glass"
+        padding="none"
+        shadow="medium"
         role="status"
         aria-live="polite"
         aria-atomic="true"
@@ -903,7 +906,7 @@ function TournamentContent({
         >
           {progress}% Complete
         </div>
-      </div>
+      </Card>
 
       {/* Tournament Controls */}
       <TournamentControls
@@ -951,8 +954,11 @@ function TournamentContent({
         aria-label="Tournament voting interface"
       >
         {/* Matchup Section */}
-        <div
+        <Card
           className={styles.matchup}
+          background="glass"
+          padding="none"
+          shadow="medium"
           role="region"
           aria-label="Current matchup"
           aria-busy={isTransitioning || isProcessing}
@@ -1045,7 +1051,7 @@ function TournamentContent({
               className={styles.votingError}
             />
           )}
-        </div>
+        </Card>
 
         {/* Tournament Controls */}
         <div className={styles.tournamentControls}>

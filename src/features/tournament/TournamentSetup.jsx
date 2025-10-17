@@ -17,6 +17,7 @@ import {
 } from '../../integrations/supabase/api';
 import { compressImageFile, devLog } from '../../shared/utils/coreUtils';
 import {
+  Card,
   Loading,
   NameCard,
   Error,
@@ -1293,7 +1294,14 @@ function TournamentSetupContent({ onStart, userName }) {
             </div>
 
             {/* Name count for all users */}
-            <div className={styles.nameCount}>
+            <Card
+              className={styles.nameCount}
+              padding="small"
+              shadow="medium"
+              background="glass"
+              as="section"
+              aria-live="polite"
+            >
               <span className={styles.countText}>
                 {selectedNames.length === 0
                   ? 'Pick some pawsome names! 🐾'
@@ -1305,7 +1313,7 @@ function TournamentSetupContent({ onStart, userName }) {
                   Just one more to start! 🎯
                 </span>
               )}
-            </div>
+            </Card>
 
             {/* Admin-only enhanced statistics */}
             {isAdmin && (
@@ -1365,9 +1373,20 @@ function TournamentSetupContent({ onStart, userName }) {
 
         {/* Sidebar */}
         <aside className={styles.sidebar}>
-          <div className={styles.sidebarCard}>
+          <Card
+            className={styles.sidebarCard}
+            padding="large"
+            shadow="large"
+            as="section"
+            aria-labelledby="tournament-setup-overview"
+          >
             <div className={styles.tournamentHeader}>
-              <h1 className={styles.tournamentTitle}>🏆 Cat Name Tournament</h1>
+              <h1
+                id="tournament-setup-overview"
+                className={styles.tournamentTitle}
+              >
+                🏆 Cat Name Tournament
+              </h1>
               <p className={styles.tournamentSubtitle}>
                 Pick the perfect name for your cat through fun head-to-head
                 battles!
@@ -1502,11 +1521,17 @@ function TournamentSetupContent({ onStart, userName }) {
                 )}
               </div>
             </div>
-          </div>
+          </Card>
 
-          <div className={styles.sidebarCard}>
+          <Card
+            className={styles.sidebarCard}
+            padding="large"
+            shadow="large"
+            as="section"
+            aria-label="Name suggestions"
+          >
             <NameSuggestionSection />
-          </div>
+          </Card>
         </aside>
       </div>
 

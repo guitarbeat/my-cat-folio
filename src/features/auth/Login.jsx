@@ -5,7 +5,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 
-import { Error } from '../../shared/components';
+import { Card, Error } from '../../shared/components';
 import useToast from '../../core/hooks/useToast';
 import { validateUsername } from '../../shared/utils/validationUtils';
 import styles from './Login.module.css';
@@ -188,7 +188,13 @@ function Login({ onLogin }) {
         </div>
 
         {/* Form Section */}
-        <div className={styles.formSection}>
+        <Card
+          className={styles.formCard}
+          variant="outlined"
+          background="transparent"
+          shadow="xl"
+          padding="xl"
+        >
           <h2 className={styles.loginTitle}>Cat Name Olympics</h2>
           <p className={styles.loginSubtitle}>
             Enter your name to login or create a new account
@@ -328,7 +334,7 @@ function Login({ onLogin }) {
               </div>
             )}
           </div>
-        </div>
+        </Card>
       </div>
 
     </div>

@@ -88,17 +88,13 @@
 }
 
 /* Form Section */
-.formSection {
+.formCard {
   width: 100%;
   max-width: 500px;
-  padding: 2.5rem;
+  color: rgb(248 250 252);
   background: linear-gradient(135deg, rgb(30 41 59 / 95%), rgb(51 65 85 / 95%));
   border: 1px solid rgb(255 255 255 / 15%);
   border-radius: 28px;
-  box-shadow:
-    0 25px 50px rgb(0 0 0 / 25%),
-    0 0 0 1px rgb(255 255 255 / 10%),
-    inset 0 1px 0 rgb(255 255 255 / 10%);
   backdrop-filter: blur(25px);
   animation: slideUp 0.6s 0.4s ease-out both;
 }
@@ -544,9 +540,8 @@
     gap: 1.5rem;
   }
 
-  .formSection {
+  .formCard {
     max-width: 100%;
-    padding: 1.5rem;
   }
 
   .welcomeTitle {
@@ -584,8 +579,7 @@
     padding: 0.5rem;
   }
 
-  .formSection {
-    padding: 1rem;
+  .formCard {
     border-radius: 20px;
   }
 

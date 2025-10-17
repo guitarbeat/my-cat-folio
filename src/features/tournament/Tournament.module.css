@@ -37,17 +37,13 @@
    ========================================================================== */
 .progressInfo {
   display: flex;
+  flex-direction: row;
   align-items: center;
   justify-content: space-between;
   width: 100%;
   max-width: 1200px;
   padding: var(--space-4);
   margin-bottom: var(--space-6);
-  background: var(--glass-bg);
-  border: 1px solid var(--glass-border);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--glass-shadow);
-  backdrop-filter: blur(var(--glass-blur));
   transition:
     transform var(--duration-normal) var(--ease-out),
     box-shadow var(--duration-normal) var(--ease-out);
@@ -104,11 +100,6 @@
   /* Improve touch target size on mobile */
   min-height: 200px;
   padding: var(--space-6);
-  background: var(--glass-bg);
-  border: 1px solid var(--glass-border);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--glass-shadow);
-  backdrop-filter: blur(var(--glass-blur));
   transition: all var(--duration-normal) var(--ease-out);
   will-change: transform, box-shadow;
 }
@@ -167,20 +158,58 @@
 }
 
 .extraOptionsButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  min-height: 48px;
   min-width: 120px;
+  padding: var(--space-2) var(--space-5);
+  font-size: var(--text-base);
+  font-weight: 600;
+  color: var(--text-primary);
+  background: linear-gradient(
+    135deg,
+    var(--glass-bg-light, rgba(255, 255, 255, 0.5)),
+    var(--glass-bg, rgba(255, 255, 255, 0.7))
+  );
+  border: 1px solid var(--glass-border, rgba(0, 0, 0, 0.1));
+  border-radius: var(--radius-full);
+  box-shadow: var(--shadow-subtle, 0 1px 3px rgb(0 0 0 / 10%));
+  backdrop-filter: blur(var(--glass-blur, 16px));
   transition: all var(--duration-normal) var(--ease-out);
 }
 
 .extraOptionsButton:hover:not(:disabled) {
   transform: translateY(-1px);
+  border-color: var(--glass-border-hover, rgba(0, 0, 0, 0.15));
+  box-shadow: var(--shadow-medium, 0 4px 12px rgb(0 0 0 / 15%));
 }
 
 .extraOptionsButton:active:not(:disabled) {
   transform: translateY(0);
 }
 
-.selected {
-  background: var(--primary-color);
+.extraOptionsButton:focus-visible {
+  outline: 2px solid var(--primary-400);
+  outline-offset: 2px;
+}
+
+.extraOptionsButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.extraOptionsButton.selected {
+  color: var(--button-text-light, #fff);
+  background: linear-gradient(
+    135deg,
+    var(--primary-600),
+    var(--primary-700)
+  );
+  border-color: transparent;
+  box-shadow: var(--glass-shadow-colored, 0 8px 32px rgb(47 243 224 / 10%), 0 8px 16px rgb(250 38 160 / 5%));
 }
 
 /* Controls & Buttons

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Card from '../../shared/components/Card';
 import {
   getSupabaseClient,
   getSupabaseClientSync
@@ -56,7 +57,13 @@ export default function DataMigration() {
 
   return (
     <div className={styles.container}>
-      <div className={styles.card}>
+      <Card
+        className={styles.card}
+        variant="elevated"
+        padding="large"
+        shadow="large"
+        background="glass"
+      >
         <h2 className={styles.title}>Data Migration Tool</h2>
         <p className={styles.description}>
           This will copy all data from your external Supabase project to Lovable Cloud:
@@ -129,7 +136,7 @@ export default function DataMigration() {
             )}
           </div>
         )}
-      </div>
+      </Card>
     </div>
   );
 }
