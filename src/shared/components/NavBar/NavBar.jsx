@@ -18,7 +18,8 @@ function NavBar({
   onStartNewTournament,
   isLightTheme,
   onThemeChange,
-  onTogglePerformanceDashboard
+  onTogglePerformanceDashboard,
+  sidebarTrigger
 }) {
   const [showScrollTop, setShowScrollTop] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -367,6 +368,11 @@ function NavBar({
         <div className="navbar__menu-container">
           {/* Left Side - Logo and Main Navigation */}
           <ul className="navbar__menu-list navbar__menu-list--left">
+            {sidebarTrigger && !isMobile && (
+              <li className="navbar__item navbar__item--sidebar-trigger">
+                {sidebarTrigger}
+              </li>
+            )}
             {logoItem}
             {navLinks}
           </ul>
@@ -556,7 +562,8 @@ NavBar.propTypes = {
   isLightTheme: PropTypes.bool.isRequired,
   onThemeChange: PropTypes.func.isRequired,
   onTogglePerformanceDashboard: PropTypes.func,
-  isAdmin: PropTypes.bool
+  isAdmin: PropTypes.bool,
+  sidebarTrigger: PropTypes.node
 };
 
 export default NavBar;

@@ -11,7 +11,7 @@ import React, { useCallback } from 'react';
 // * Use path aliases for better tree shaking
 import CatBackground from '@components/CatBackground/CatBackground';
 import ViewRouter from '@components/ViewRouter/ViewRouter';
-import { Error, Toast, Loading } from '@components';
+import { Error, Toast, Loading, NavBar } from '@components';
 import PerformanceDashboard from '@components/PerformanceDashboard';
 import { SidebarProvider, SidebarTrigger } from './shared/components/ui/sidebar';
 import { AppSidebar } from './shared/components/AppSidebar/AppSidebar';
@@ -334,7 +334,10 @@ function App() {
       onStartNewTournament: handleStartNewTournament,
       isLightTheme: ui.theme === 'light',
       onThemeChange: handleThemeChange,
-      onTogglePerformanceDashboard: () => uiActions.togglePerformanceDashboard()
+      onTogglePerformanceDashboard: () => uiActions.togglePerformanceDashboard(),
+      sidebarTrigger: user.isLoggedIn ? (
+        <SidebarTrigger className="navbar__sidebar-trigger" />
+      ) : null
     }),
     [
       tournament.currentView,
@@ -362,12 +365,8 @@ function App() {
         {/* * Static cat-themed background */}
         <CatBackground />
 
-        {/* * Header with Sidebar Trigger - Only show when logged in */}
-        {user.isLoggedIn && (
-          <header className="app-header">
-            <SidebarTrigger className="app-sidebar-trigger" />
-          </header>
-        )}
+        {/* * Top navigation bar */}
+        <NavBar {...navBarProps} />
 
         {/* * App Sidebar - Only show when logged in */}
         {user.isLoggedIn && <AppSidebar {...navBarProps} />}

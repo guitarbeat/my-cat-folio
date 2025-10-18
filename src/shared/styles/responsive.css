@@ -13,8 +13,17 @@
 
 /* Global mobile spacing to prevent navbar cutoff */
 @media (width <= 768px) {
+  :root {
+    --app-navbar-height: var(--mobile-navbar-height);
+  }
+
   /* Ensure main content doesn't get cut off by fixed navbar */
   body {
+    padding-top: 0;
+  }
+
+  .app-main-wrapper,
+  .app-main-wrapper--full {
     padding-top: var(--mobile-navbar-height);
   }
 
@@ -170,6 +179,12 @@
 
   li {
     margin-bottom: var(--space-2);
+  }
+}
+
+@media (width <= 480px) {
+  :root {
+    --app-navbar-height: var(--mobile-navbar-height-small);
   }
 }
 
