@@ -274,11 +274,11 @@ function Login({ onLogin }) {
                 onSubmit={handleSubmit}
                 className={styles.loginForm}
                 role="form"
-                aria-label="Login or create account form"
+                aria-label="Judge name login form"
               >
                 <div className={styles.inputWrapper}>
                   <label htmlFor="loginName" className={styles.inputLabel}>
-                    Your Judge Name (Login or Create Account):
+                    Your Judge Name
                   </label>
                   <div className={styles.inputContainer}>
                     <input
@@ -287,7 +287,7 @@ function Login({ onLogin }) {
                       value={name}
                       onChange={handleNameChange}
                       onFocus={handleInputFocus}
-                      placeholder="Enter your name to login or create account"
+                      placeholder="Enter your judge name"
                       className={`${styles.loginInput} ${error ? styles.error : ''}`}
                       autoFocus
                       disabled={isLoading}
@@ -320,9 +320,8 @@ function Login({ onLogin }) {
                     />
                   )}
                   <p id="loginHelp" className={styles.explainerText}>
-                    If you&apos;re a returning user, enter your name to login. If
-                    you&apos;re new, enter your name to create an account and start
-                    judging!
+                    Type your judge name to sign in. We&apos;ll create an account
+                    automatically if it&apos;s your first time.
                   </p>
                   {name.trim() && (
                     <div className={styles.characterCounter}>
@@ -353,7 +352,7 @@ function Login({ onLogin }) {
                     ) : (
                       <>
                         {name.trim()
-                          ? 'Login or Create Account'
+                          ? 'Continue'
                           : 'Get Random Name & Start'}
                         <span className={styles.buttonEmoji} aria-hidden="true">
                           🏆
