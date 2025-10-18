@@ -9,8 +9,16 @@ const __dirname = dirname(__filename);
 
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '');
-  const supabaseUrl = env.SUPABASE_URL ?? env.VITE_SUPABASE_URL;
-  const supabaseAnonKey = env.SUPABASE_ANON_KEY ?? env.VITE_SUPABASE_ANON_KEY;
+  const supabaseUrl =
+    env.SUPABASE_URL ??
+    process.env.SUPABASE_URL ??
+    env.VITE_SUPABASE_URL ??
+    process.env.VITE_SUPABASE_URL;
+  const supabaseAnonKey =
+    env.SUPABASE_ANON_KEY ??
+    process.env.SUPABASE_ANON_KEY ??
+    env.VITE_SUPABASE_ANON_KEY ??
+    process.env.VITE_SUPABASE_ANON_KEY;
 
   const defineEnv: Record<string, string> = {
     'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development'),
