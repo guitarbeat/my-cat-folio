@@ -3,10 +3,10 @@
 .sidebar {
   position: fixed;
   left: 0;
-  top: var(--app-navbar-height, 70px);
+  top: 0;
   bottom: 0;
   z-index: var(--z-sticky, 100);
-  width: 260px;
+  width: var(--sidebar-expanded-width, 260px);
   background: var(--glass-bg);
   border-right: 1px solid var(--glass-border);
   box-shadow: var(--glass-shadow-colored);
@@ -17,7 +17,7 @@
 }
 
 .sidebar--collapsed {
-  width: 56px;
+  width: var(--sidebar-collapsed-width, 56px);
 }
 
 .sidebar-trigger {
@@ -193,10 +193,11 @@
 /* Responsive */
 @media (max-width: 768px) {
   .sidebar {
-    transform: translateX(-100%);
+    width: min(80vw, 320px);
+    transform: translateX(0);
   }
 
-  .sidebar--mobile-open {
-    transform: translateX(0);
+  .app--sidebar-collapsed .sidebar {
+    width: var(--sidebar-collapsed-width, 56px);
   }
 }

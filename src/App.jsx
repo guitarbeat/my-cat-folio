@@ -8,12 +8,14 @@
  */
 
 import React, { useCallback } from 'react';
+import PropTypes from 'prop-types';
 // * Use path aliases for better tree shaking
 import CatBackground from '@components/CatBackground/CatBackground';
 import ViewRouter from '@components/ViewRouter/ViewRouter';
-import { Error, Toast, Loading, NavBar } from '@components';
+import { Error, Toast, Loading } from '@components';
 import PerformanceDashboard from '@components/PerformanceDashboard';
-import { SidebarProvider, SidebarTrigger } from './shared/components/ui/sidebar';
+import Breadcrumb from './shared/components/Breadcrumb/Breadcrumb';
+import { SidebarProvider, useSidebar } from './shared/components/ui/sidebar';
 import { AppSidebar } from './shared/components/AppSidebar/AppSidebar';
 
 // * Lazy load heavy components for better code splitting
@@ -317,8 +319,8 @@ function App() {
 
   // * Memoize main content to prevent unnecessary re-renders
 
-  // * Memoize NavBar props to prevent unnecessary re-renders
-  const navBarProps = React.useMemo(
+  // * Memoize sidebar props to prevent unnecessary re-renders
+  const sidebarProps = React.useMemo(
     () => ({
       view: tournament.currentView || 'tournament',
       setView: (view) => {
@@ -334,10 +336,7 @@ function App() {
       onStartNewTournament: handleStartNewTournament,
       isLightTheme: ui.theme === 'light',
       onThemeChange: handleThemeChange,
-      onTogglePerformanceDashboard: () => uiActions.togglePerformanceDashboard(),
-      sidebarTrigger: user.isLoggedIn ? (
-        <SidebarTrigger className="navbar__sidebar-trigger" />
-      ) : null
+      onTogglePerformanceDashboard: () => uiActions.togglePerformanceDashboard()
     }),
     [
       tournament.currentView,
@@ -356,65 +355,156 @@ function App() {
 
   return (
     <SidebarProvider collapsedWidth={56}>
-      <div className="app">
-        {/* * Skip link for keyboard navigation */}
-        <a href="#main-content" className="skip-link">
-          Skip to main content
-        </a>
-
-        {/* * Static cat-themed background */}
-        <CatBackground />
-
-        {/* * Top navigation bar */}
-        <NavBar {...navBarProps} />
-
-        {/* * App Sidebar - Only show when logged in */}
-        {user.isLoggedIn && <AppSidebar {...navBarProps} />}
-
-        <main className={`app-main-wrapper ${!user.isLoggedIn ? 'app-main-wrapper--full' : ''}`}>
-          <div id="main-content" className="main-content" tabIndex="-1">
-            {errors.current && user.isLoggedIn && (
-              <Error
-                variant="list"
-                error={errors.current}
-                onDismiss={() => errorActions.clearError()}
-                onRetry={() => window.location.reload()}
-              />
-            )}
-
-            <ViewRouter
-              isLoggedIn={user.isLoggedIn}
-              onLogin={handleLogin}
-              tournament={tournament}
-              userName={user.name}
-              onStartNewTournament={handleStartNewTournament}
-              onUpdateRatings={handleUpdateRatings}
-              onTournamentSetup={handleTournamentSetup}
-              onTournamentComplete={handleTournamentComplete}
-              onVote={(vote) => tournamentActions.addVote(vote)}
-            />
-          </div>
-
-          {/* * Global loading overlay */}
-          {tournament.isLoading && (
-        <div
-          className="global-loading-overlay"
-          role="status"
-          aria-live="polite"
-          aria-busy="true"
-        >
-          <Loading variant="spinner" text="Initializing Tournament..." />
-        </div>
-      )}
-
-      {/* * Toast notifications */}
-      <Toast
-        variant="container"
+      <AppLayout
+        sidebarProps={sidebarProps}
+        user={user}
+        errors={errors}
+        errorActions={errorActions}
+        tournament={tournament}
+        tournamentActions={tournamentActions}
+        handleLogin={handleLogin}
+        handleStartNewTournament={handleStartNewTournament}
+        handleUpdateRatings={handleUpdateRatings}
+        handleTournamentSetup={handleTournamentSetup}
+        handleTournamentComplete={handleTournamentComplete}
         toasts={toasts}
         removeToast={removeToast}
-        position="top-right"
-        maxToasts={5}
+        ui={ui}
+        uiActions={uiActions}
+        isAdmin={isAdmin}
       />
+    </SidebarProvider>
+  );
+}
+
+export default App;
+
+function AppLayout({
+  sidebarProps,
+  user,
+  errors,
+  errorActions,
+  tournament,
+  tournamentActions,
+  handleLogin,
+  handleStartNewTournament,
+  handleUpdateRatings,
+  handleTournamentSetup,
+  handleTournamentComplete,
+  toasts,
+  removeToast,
+  ui,
+  uiActions,
+  isAdmin
+}) {
+  const { collapsed, collapsedWidth } = useSidebar();
+  const isLoggedIn = user.isLoggedIn;
+  const { view: currentView, setView, onStartNewTournament } = sidebarProps;
+
+  const appClassName = [
+    'app',
+    collapsed ? 'app--sidebar-collapsed' : ''
+  ]
+    .filter(Boolean)
+    .join(' ');
+
+  const layoutStyle = React.useMemo(
+    () => ({
+      '--sidebar-expanded-width': 'min(80vw, 260px)',
+      '--sidebar-collapsed-width': `${collapsedWidth}px`
+    }),
+    [collapsedWidth]
+  );
+
+  const handleBreadcrumbHome = React.useCallback(() => {
+    setView('tournament');
+    if (typeof onStartNewTournament === 'function') {
+      onStartNewTournament();
+    }
+  }, [onStartNewTournament, setView]);
+
+  const breadcrumbItems = React.useMemo(() => {
+    if (!isLoggedIn) {
+      return [];
+    }
+
+    const items = [
+      { id: 'home', label: 'Home', onClick: handleBreadcrumbHome }
+    ];
+
+    if (currentView === 'profile') {
+      items.push({ id: 'profile', label: 'Profile' });
+    }
+
+    if (currentView === 'tournament') {
+      items.push({ id: 'tournament', label: 'Tournament' });
+    }
+
+    return items;
+  }, [currentView, handleBreadcrumbHome, isLoggedIn]);
+
+  return (
+    <div className={appClassName} style={layoutStyle}>
+      {/* * Skip link for keyboard navigation */}
+      <a href="#main-content" className="skip-link">
+        Skip to main content
+      </a>
+
+      {/* * Static cat-themed background */}
+      <CatBackground />
+
+      {/* * Primary navigation lives in the sidebar */}
+      <AppSidebar {...sidebarProps} />
+
+      <main className="app-main-wrapper">
+        {breadcrumbItems.length > 0 && (
+          <div className="app-breadcrumb-container">
+            <Breadcrumb items={breadcrumbItems} />
+          </div>
+        )}
+        <div id="main-content" className="main-content" tabIndex="-1">
+          {errors.current && isLoggedIn && (
+            <Error
+              variant="list"
+              error={errors.current}
+              onDismiss={() => errorActions.clearError()}
+              onRetry={() => window.location.reload()}
+            />
+          )}
+
+          <ViewRouter
+            isLoggedIn={isLoggedIn}
+            onLogin={handleLogin}
+            tournament={tournament}
+            userName={user.name}
+            onStartNewTournament={handleStartNewTournament}
+            onUpdateRatings={handleUpdateRatings}
+            onTournamentSetup={handleTournamentSetup}
+            onTournamentComplete={handleTournamentComplete}
+            onVote={(vote) => tournamentActions.addVote(vote)}
+          />
+        </div>
+
+        {/* * Global loading overlay */}
+        {tournament.isLoading && (
+          <div
+            className="global-loading-overlay"
+            role="status"
+            aria-live="polite"
+            aria-busy="true"
+          >
+            <Loading variant="spinner" text="Initializing Tournament..." />
+          </div>
+        )}
+
+        {/* * Toast notifications */}
+        <Toast
+          variant="container"
+          toasts={toasts}
+          removeToast={removeToast}
+          position="top-right"
+          maxToasts={5}
+        />
 
         {/* * Performance Dashboard - Admin (Aaron) only */}
         <PerformanceDashboard
@@ -422,10 +512,104 @@ function App() {
           isVisible={isAdmin && ui.showPerformanceDashboard}
           onClose={() => uiActions.setPerformanceDashboardVisible(false)}
         />
-        </main>
-      </div>
-    </SidebarProvider>
+
+        <ScrollToTopButton isLoggedIn={isLoggedIn} />
+      </main>
+    </div>
   );
 }
 
-export default App;
+AppLayout.propTypes = {
+  sidebarProps: PropTypes.shape({}).isRequired,
+  user: PropTypes.shape({
+    isLoggedIn: PropTypes.bool.isRequired,
+    name: PropTypes.string
+  }).isRequired,
+  errors: PropTypes.shape({
+    current: PropTypes.any
+  }).isRequired,
+  errorActions: PropTypes.shape({
+    clearError: PropTypes.func.isRequired
+  }).isRequired,
+  tournament: PropTypes.shape({
+    isLoading: PropTypes.bool.isRequired
+  }).isRequired,
+  tournamentActions: PropTypes.shape({
+    addVote: PropTypes.func.isRequired
+  }).isRequired,
+  handleLogin: PropTypes.func.isRequired,
+  handleStartNewTournament: PropTypes.func.isRequired,
+  handleUpdateRatings: PropTypes.func.isRequired,
+  handleTournamentSetup: PropTypes.func.isRequired,
+  handleTournamentComplete: PropTypes.func.isRequired,
+  toasts: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+  removeToast: PropTypes.func.isRequired,
+  ui: PropTypes.shape({
+    showPerformanceDashboard: PropTypes.bool.isRequired
+  }).isRequired,
+  uiActions: PropTypes.shape({
+    setPerformanceDashboardVisible: PropTypes.func.isRequired
+  }).isRequired,
+  isAdmin: PropTypes.bool.isRequired
+};
+
+function ScrollToTopButton({ isLoggedIn }) {
+  const [showScrollTop, setShowScrollTop] = React.useState(false);
+
+  React.useEffect(() => {
+    if (!isLoggedIn) {
+      setShowScrollTop(false);
+      return undefined;
+    }
+
+    let scrollTimeout = null;
+
+    const checkScroll = () => {
+      const threshold = window.innerHeight <= 768
+        ? window.innerHeight * 1.5
+        : window.innerHeight;
+      setShowScrollTop(window.scrollY > threshold);
+    };
+
+    const throttledCheckScroll = () => {
+      if (scrollTimeout) return;
+
+      scrollTimeout = requestAnimationFrame(() => {
+        checkScroll();
+        scrollTimeout = null;
+      });
+    };
+
+    checkScroll();
+
+    window.addEventListener('scroll', throttledCheckScroll, { passive: true });
+
+    return () => {
+      window.removeEventListener('scroll', throttledCheckScroll);
+      if (scrollTimeout) {
+        cancelAnimationFrame(scrollTimeout);
+      }
+    };
+  }, [isLoggedIn]);
+
+  if (!isLoggedIn) {
+    return null;
+  }
+
+  return (
+    <button
+      type="button"
+      className={`scroll-to-top ${showScrollTop ? 'visible' : ''}`}
+      onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+      aria-label="Scroll to top"
+      aria-hidden={!showScrollTop}
+      tabIndex={showScrollTop ? 0 : -1}
+    >
+      ↑
+    </button>
+  );
+}
+
+ScrollToTopButton.propTypes = {
+  isLoggedIn: PropTypes.bool.isRequired
+};

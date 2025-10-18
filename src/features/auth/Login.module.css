@@ -574,12 +574,12 @@
 /* Responsive Design */
 @media (width <= 768px) {
   .loginWrapper {
-    padding-top: 60px; /* Slightly less navbar height on mobile */
+    padding-top: var(--space-6);
   }
 
   .heroContainer {
     gap: 2rem;
-    min-height: calc(100vh - 60px); /* Account for mobile navbar height */
+    min-height: 100vh;
     padding: 1rem;
   }
 
@@ -630,12 +630,12 @@
 
 @media (width <= 480px) {
   .loginWrapper {
-    padding-top: 55px; /* Even less navbar height on small mobile */
+    padding-top: var(--space-5);
   }
 
   .heroContainer {
     gap: 1.5rem;
-    min-height: calc(100vh - 55px); /* Account for small mobile navbar height */
+    min-height: 100vh;
     padding: 0.5rem;
   }
 

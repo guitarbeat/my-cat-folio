@@ -14,8 +14,8 @@ describe('App', () => {
     expect(skipLink).toBeVisible();
     expect(skipLink).toHaveAttribute('href', '#main-content');
 
-    // * The navbar brand link offers a stable way to navigate home
-    const homeLink = screen.getByRole('link', { name: /go to home page/i });
-    expect(homeLink).toBeInTheDocument();
+    // * The sidebar logo button offers a stable way to navigate home
+    const homeButton = screen.getByRole('button', { name: /go to home page/i });
+    expect(homeButton).toBeInTheDocument();
   });
 });

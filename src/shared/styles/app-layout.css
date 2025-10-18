@@ -1,36 +1,47 @@
 /* App Layout Styles for Sidebar */
 
-:root {
-  --app-navbar-height: 70px;
-}
-
-@media (max-width: 480px) {
-  :root {
-    --app-navbar-height: 60px;
-  }
-}
-
 .app {
   display: flex;
   min-height: 100vh;
   width: 100%;
+  --sidebar-expanded-width: 260px;
+  --sidebar-collapsed-width: 56px;
+  --sidebar-current-width: var(--sidebar-expanded-width);
+}
+
+.app--sidebar-collapsed {
+  --sidebar-current-width: var(--sidebar-collapsed-width);
 }
 
 .app-main-wrapper {
   flex: 1;
   display: flex;
   flex-direction: column;
-  padding-left: 260px; /* Match sidebar width */
-  padding-top: var(--app-navbar-height);
+  padding-left: var(--sidebar-current-width);
+  padding-top: 2rem;
   min-width: 0; /* Prevent flex overflow */
   transition: padding-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   width: 100%;
 }
 
-/* Full width when not logged in (no sidebar) */
-.app-main-wrapper--full {
-  padding-left: 0;
-  padding-top: var(--app-navbar-height);
+.app-breadcrumb-container {
+  padding: 0.75rem 2rem;
+  margin-bottom: 1rem;
+  position: sticky;
+  top: 1.5rem;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: 16px;
+  box-shadow: var(--glass-shadow);
+  backdrop-filter: blur(var(--glass-blur)) saturate(180%);
+}
+
+.app-breadcrumb-container .breadcrumb {
+  margin-bottom: 0;
 }
 
 .main-content {
@@ -63,24 +74,15 @@
 }
 
 /* Responsive adjustments */
-@media (max-width: 768px) {
-  .app-main-wrapper {
-    padding-left: 0;
-    padding-top: var(--app-navbar-height);
-  }
+  @media (max-width: 768px) {
+    .app-main-wrapper {
+      padding-top: 1.5rem;
+    }
 
-  .main-content {
-    padding: 1rem;
+    .main-content {
+      padding: 1rem;
+    }
   }
-
-  .sidebar {
-    transform: translateX(-100%);
-  }
-
-  .sidebar.sidebar--mobile-open {
-    transform: translateX(0);
-  }
-}
 
 /* Global loading overlay positioning */
 .global-loading-overlay {
