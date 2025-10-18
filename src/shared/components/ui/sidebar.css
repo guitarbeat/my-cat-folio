@@ -3,7 +3,7 @@
 .sidebar {
   position: fixed;
   left: 0;
-  top: 0;
+  top: var(--app-navbar-height, 70px);
   bottom: 0;
   z-index: var(--z-sticky, 100);
   width: 260px;
