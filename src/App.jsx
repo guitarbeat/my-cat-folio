@@ -79,7 +79,7 @@ function App() {
   const lastCompletionRef = React.useRef(tournament.isComplete);
 
   // Get admin status from server-side validation
-  const isAdmin = user.isAdmin;
+  const {isAdmin} = user;
 
   // * Keyboard shortcut for performance dashboard (Ctrl+Shift+P)
   React.useEffect(() => {

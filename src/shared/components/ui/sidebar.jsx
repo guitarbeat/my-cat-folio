@@ -109,17 +109,17 @@ SidebarContent.propTypes = {
 };
 
 // SidebarGroup
-export function SidebarGroup({ children, className = '', open = true, onOpenChange }) {
-  const [isOpen, setIsOpen] = useState(open);
-
-  const handleToggle = () => {
-    const newState = !isOpen;
-    setIsOpen(newState);
-    if (onOpenChange) onOpenChange(newState);
-  };
+export function SidebarGroup({ children, className = '', open = true, ...rest }) {
+  const classNames = [
+    'sidebar-group',
+    open ? 'sidebar-group--open' : '',
+    className
+  ]
+    .filter(Boolean)
+    .join(' ');
 
   return (
-    <div className={`sidebar-group ${isOpen ? 'sidebar-group--open' : ''} ${className}`}>
+    <div className={classNames} data-state={open ? 'open' : 'closed'} {...rest}>
       {children}
     </div>
   );
@@ -128,8 +128,7 @@ export function SidebarGroup({ children, className = '', open = true, onOpenChan
 SidebarGroup.propTypes = {
   children: PropTypes.node.isRequired,
   className: PropTypes.string,
-  open: PropTypes.bool,
-  onOpenChange: PropTypes.func
+  open: PropTypes.bool
 };
 
 // SidebarGroupLabel
@@ -192,7 +191,7 @@ SidebarMenuItem.propTypes = {
 export const SidebarMenuButton = React.forwardRef(
   ({ children, className = '', asChild = false, ...props }, ref) => {
     const { collapsed } = useSidebar();
-    
+
     if (asChild && React.isValidElement(children)) {
       return React.cloneElement(children, {
         ref,
