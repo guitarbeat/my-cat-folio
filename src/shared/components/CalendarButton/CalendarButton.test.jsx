@@ -33,8 +33,9 @@ describe('CalendarButton', () => {
     fireEvent.click(getByRole('button', { name: /add to google calendar/i }));
 
     expect(window.open).toHaveBeenCalledTimes(1);
-    const [url] = window.open.mock.calls[0];
-    const params = new URLSearchParams(url.split('?')[1]);
+    const [[url]] = window.open.mock.calls;
+    const [, queryString] = url.split('?');
+    const params = new URLSearchParams(queryString);
     const details = params.get('details');
 
     expect(details).toContain('Whiskers');
