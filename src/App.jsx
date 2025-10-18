@@ -362,15 +362,17 @@ function App() {
         {/* * Static cat-themed background */}
         <CatBackground />
 
-        {/* * Header with Sidebar Trigger */}
-        <header className="app-header">
-          <SidebarTrigger className="app-sidebar-trigger" />
-        </header>
+        {/* * Header with Sidebar Trigger - Only show when logged in */}
+        {user.isLoggedIn && (
+          <header className="app-header">
+            <SidebarTrigger className="app-sidebar-trigger" />
+          </header>
+        )}
 
-        {/* * App Sidebar */}
-        <AppSidebar {...navBarProps} />
+        {/* * App Sidebar - Only show when logged in */}
+        {user.isLoggedIn && <AppSidebar {...navBarProps} />}
 
-        <main className="app-main-wrapper">
+        <main className={`app-main-wrapper ${!user.isLoggedIn ? 'app-main-wrapper--full' : ''}`}>
           <div id="main-content" className="main-content" tabIndex="-1">
             {errors.current && user.isLoggedIn && (
               <Error

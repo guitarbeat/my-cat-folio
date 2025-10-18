@@ -37,10 +37,21 @@
   width: 100%;
 }
 
+/* Full width when not logged in (no sidebar) */
+.app-main-wrapper--full {
+  padding-left: 0;
+  padding-top: 0;
+}
+
 .main-content {
   flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   padding: 2rem;
   overflow-y: auto;
+  max-width: 100%;
 }
 
 /* Adjust for CatBackground */
