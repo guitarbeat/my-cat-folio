@@ -2,11 +2,11 @@
  * @module Card
  * @description Reusable card component with flexible styling options
  */
-import React from 'react';
+import React, { forwardRef } from 'react';
 import PropTypes from 'prop-types';
 import styles from './Card.module.css';
 
-function Card({
+const Card = forwardRef(({
   children,
   className = '',
   variant = 'default',
@@ -16,7 +16,7 @@ function Card({
   background = 'solid',
   as: Component = 'div',
   ...props
-}) {
+}, ref) => {
   const cardClasses = [
     styles.card,
     styles[variant],
@@ -28,11 +28,11 @@ function Card({
   ].filter(Boolean).join(' ');
 
   return (
-    <Component className={cardClasses} {...props}>
+    <Component ref={ref} className={cardClasses} {...props}>
       {children}
     </Component>
   );
-}
+});
 
 Card.displayName = 'Card';
 
