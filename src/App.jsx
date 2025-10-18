@@ -7,7 +7,7 @@
  * @returns {JSX.Element} The complete application UI
  */
 
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 // * Use path aliases for better tree shaking
 import CatBackground from '@components/CatBackground/CatBackground';
@@ -22,29 +22,11 @@ import { AppSidebar } from './shared/components/AppSidebar/AppSidebar';
 import useUserSession from '@hooks/useUserSession';
 import useToast from '@hooks/useToast';
 import { useRouting } from '@hooks/useRouting';
+import { useTournamentRoutingSync } from '@hooks/useTournamentRoutingSync';
+import { useThemeSync } from '@hooks/useThemeSync';
 import useAppStore, { useAppStoreInitialization } from '@core/store/useAppStore';
 import { TournamentService } from '@services/tournamentService';
 import { ErrorManager } from '@services/errorManager';
-
-// * Components imported directly for better code splitting
-
-const normalizeRoutePath = (routeValue) => {
-  if (typeof routeValue !== 'string') {
-    return '/';
-  }
-
-  const [path] = routeValue.split(/[?#]/);
-
-  if (!path) {
-    return '/';
-  }
-
-  if (path.length > 1 && path.endsWith('/')) {
-    return path.replace(/\/+$/, '') || '/';
-  }
-
-  return path;
-};
 
 /**
  * Generate a cat background video element
@@ -75,10 +57,14 @@ function App() {
   // * Simple URL routing helpers
   const { currentRoute, navigateTo } = useRouting();
 
-  const normalizedPath = useMemo(() => normalizeRoutePath(currentRoute), [currentRoute]);
-  const previousRouteRef = useRef(null);
-  const lastViewRef = useRef(tournament.currentView);
-  const lastCompletionRef = useRef(tournament.isComplete);
+  useTournamentRoutingSync({
+    currentRoute,
+    navigateTo,
+    isLoggedIn: user.isLoggedIn,
+    currentView: tournament.currentView,
+    onViewChange: tournamentActions.setView,
+    isTournamentComplete: tournament.isComplete
+  });
 
   // Get admin status from server-side validation
   const {isAdmin} = user;
@@ -189,120 +175,7 @@ function App() {
     uiActions.toggleTheme();
   }, [uiActions]);
 
-  // * Update the URL when the active view changes
-  useEffect(() => {
-    if (!user.isLoggedIn || normalizedPath === '/bongo') {
-      lastViewRef.current = tournament.currentView;
-      lastCompletionRef.current = tournament.isComplete;
-      return;
-    }
-
-    const completionChanged = tournament.isComplete !== lastCompletionRef.current;
-    lastCompletionRef.current = tournament.isComplete;
-
-    if (!completionChanged && tournament.currentView === lastViewRef.current) {
-      return;
-    }
-
-    lastViewRef.current = tournament.currentView;
-
-    if (tournament.currentView === 'profile') {
-      if (normalizedPath !== '/profile') {
-        navigateTo('/profile');
-      }
-      return;
-    }
-
-    if (tournament.isComplete && tournament.currentView === 'tournament') {
-      if (normalizedPath !== '/results') {
-        navigateTo('/results');
-      }
-      return;
-    }
-
-    if (!['/', '/tournament'].includes(normalizedPath)) {
-      navigateTo('/tournament');
-    }
-  }, [
-    navigateTo,
-    normalizedPath,
-    tournament.currentView,
-    tournament.isComplete,
-    user.isLoggedIn
-  ]);
-
-  // * Keep application state in sync with URL changes
-  useEffect(() => {
-    if (normalizedPath === '/bongo') {
-      previousRouteRef.current = currentRoute;
-      return;
-    }
-
-    if (!user.isLoggedIn) {
-      if (normalizedPath !== '/login') {
-        navigateTo('/login', { replace: true });
-      }
-      previousRouteRef.current = currentRoute;
-      return;
-    }
-
-    if (normalizedPath === '/profile' && tournament.currentView !== 'profile') {
-      lastViewRef.current = 'profile';
-      tournamentActions.setView('profile');
-      previousRouteRef.current = currentRoute;
-      return;
-    }
-
-    const previousPath = normalizeRoutePath(previousRouteRef.current);
-    const pathChanged = previousRouteRef.current === null || previousPath !== normalizedPath;
-    const tournamentPaths = new Set(['/', '/tournament', '/results']);
-
-    if (pathChanged && tournamentPaths.has(normalizedPath) && tournament.currentView !== 'tournament') {
-      lastViewRef.current = 'tournament';
-      tournamentActions.setView('tournament');
-    }
-
-    previousRouteRef.current = currentRoute;
-  }, [
-    currentRoute,
-    navigateTo,
-    normalizedPath,
-    tournament.currentView,
-    tournamentActions,
-    user.isLoggedIn
-  ]);
-
-  // * Synchronize global body class with current theme
-  useEffect(() => {
-    const bodyElement = document.body;
-    const rootElement = document.documentElement;
-
-    if (!bodyElement || !rootElement) {
-      return undefined;
-    }
-
-    const themeClass = ui.theme === 'light' ? 'light-theme' : 'dark-theme';
-    const themeColor = ui.theme === 'light' ? '#f4f7fb' : '#020617';
-
-    bodyElement.classList.remove('light-theme', 'dark-theme');
-    bodyElement.classList.add(themeClass);
-
-    rootElement.dataset.theme = ui.theme;
-    rootElement.style.colorScheme = ui.theme;
-    bodyElement.style.colorScheme = ui.theme;
-
-    const metaTheme = document.querySelector('meta[name="theme-color"]');
-    if (metaTheme) {
-      metaTheme.setAttribute('content', themeColor);
-    }
-
-    return () => {
-      bodyElement.classList.remove('light-theme', 'dark-theme');
-      rootElement.removeAttribute('data-theme');
-      rootElement.style.removeProperty('color-scheme');
-      bodyElement.style.removeProperty('color-scheme');
-    };
-  }, [ui.theme]);
+  useThemeSync(ui.theme);
 
   // * Welcome screen removed
 
