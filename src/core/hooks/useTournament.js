@@ -85,7 +85,7 @@ export function useTournament({
   // * Get persistent state values for backward compatibility
   const roundNumber = persistentState.currentRound;
   const currentMatchNumber = persistentState.currentMatch;
-  const totalMatches = persistentState.totalMatches;
+  const {totalMatches} = persistentState;
   const canUndo = persistentState.matchHistory.length > 1;
   const isError = false; // * Error state is now managed by store
 

@@ -83,7 +83,7 @@ function useUserSession({ showToast } = {}) {
           }
         }
       })();
-      
+
       // Check admin status server-side
       isUserAdmin(storedUserName).then(adminStatus => {
         userActions.setAdminStatus(adminStatus);
@@ -172,7 +172,7 @@ function useUserSession({ showToast } = {}) {
       // Store username and update state
       localStorage.setItem('catNamesUser', trimmedName);
       userActions.login(trimmedName);
-      
+
       // Check admin status server-side
       const adminStatus = await isUserAdmin(trimmedName);
       userActions.setAdminStatus(adminStatus);
