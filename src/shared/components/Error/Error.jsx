@@ -6,10 +6,10 @@
 
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { ErrorBoundary as ReactErrorBoundary } from 'react-error-boundary';
 import { ERROR_SEVERITY, getSeverityClass } from '../../services/errorManager';
 import styles from './Error.module.css';
 import ErrorBoundaryFallback from './ErrorBoundaryFallback.jsx';
+import ErrorBoundary from './ErrorBoundary.jsx';
 
 /**
  * Unified Error Component
@@ -46,14 +46,14 @@ const ErrorComponent = ({
   // Boundary variant (React error boundary)
   if (variant === 'boundary') {
     return (
-      <ReactErrorBoundary
+      <ErrorBoundary
         FallbackComponent={(props) => (
           <ErrorBoundaryFallback {...props} onRetry={onRetry} />
         )}
         onReset={onRetry}
       >
         {children}
-      </ReactErrorBoundary>
+      </ErrorBoundary>
     );
   }
 
