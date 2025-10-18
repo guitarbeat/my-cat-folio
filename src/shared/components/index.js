@@ -16,7 +16,6 @@ export { Form, Input, Select } from './Form';
 export { default as Button } from './Button';
 export { default as StartTournamentButton } from './StartTournamentButton';
 export { default as Card } from './Card';
-export { default as NavBar } from './NavBar/NavBar';
 export { default as CatImage } from './CatImage';
 
 // * Feature-specific Components (lazy loaded when needed)

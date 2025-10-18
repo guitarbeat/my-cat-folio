@@ -2,9 +2,7 @@
 .container {
   width: 100%;
   min-height: 100vh;
-  padding-top: calc(
-    var(--space-6) + 70px
-  ); /* Add navbar height to prevent content cutoff */
+  padding-top: var(--space-6);
 
   background: transparent; /* Let galaxy background show through */
 }
@@ -2017,7 +2015,7 @@
 /* Mobile Responsiveness */
 @media (width <= 768px) {
   .container {
-    padding-top: calc(var(--space-4) + 70px); /* Adjust for mobile */
+    padding-top: var(--space-4);
   }
 
   .mainContent {
@@ -2033,7 +2031,7 @@
   .swipeContainer {
     gap: 1.5rem;
     padding: 1rem 0;
-    margin-top: 1rem; /* Add margin to prevent navbar overlap */
+    margin-top: 1rem;
   }
 
   .swipeCardWrapper {
@@ -2102,7 +2100,7 @@
 /* Extra small mobile devices */
 @media (width <= 480px) {
   .container {
-    padding-top: calc(var(--space-3) + 60px); /* Adjust for smaller navbar */
+    padding-top: var(--space-3);
   }
 
   .headerActions {

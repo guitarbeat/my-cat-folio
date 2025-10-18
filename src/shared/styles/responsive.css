@@ -4,34 +4,13 @@
 :root {
   --mobile-touch-target-min: 48px;
   --mobile-touch-target-large: 56px;
-  --mobile-navbar-height: 70px;
-  --mobile-navbar-height-small: 65px;
   --mobile-content-padding: 80px;
   --mobile-safe-spacing: 20px;
   --mobile-safe-spacing-small: 15px;
 }
 
-/* Global mobile spacing to prevent navbar cutoff */
+/* Global mobile spacing adjustments */
 @media (width <= 768px) {
-  :root {
-    --app-navbar-height: var(--mobile-navbar-height);
-  }
-
-  /* Ensure main content doesn't get cut off by fixed navbar */
-  body {
-    padding-top: 0;
-  }
-
-  .app-main-wrapper,
-  .app-main-wrapper--full {
-    padding-top: var(--mobile-navbar-height);
-  }
-
-  /* Adjust main containers to account for navbar */
-  .container {
-    padding-top: calc(var(--space-4) + var(--mobile-navbar-height));
-  }
-
   /* Mobile navigation improvements - Updated to 48x48px minimum */
   .nav-menu button {
     min-width: var(--mobile-touch-target-min);
@@ -98,12 +77,6 @@
   /* Ensure floating elements don't overlap content */
   .main-content {
     padding-bottom: var(--mobile-content-padding);
-    margin-top: var(--mobile-content-padding);
-  }
-
-  /* Improve floating navigation spacing */
-  .navbar {
-    height: var(--mobile-navbar-height);
   }
 
   /* Ensure scroll-to-top button doesn't overlap content */
@@ -124,9 +97,7 @@
   .button-primary,
   .button-secondary,
   a[role="button"],
-  .nav-menu button,
-  .navbar__mobile-link,
-  .navbar__mobile-menu-button {
+  .nav-menu button {
     min-width: var(--mobile-touch-target-min);
     min-height: var(--mobile-touch-target-min);
   }
@@ -182,12 +153,6 @@
   }
 }
 
-@media (width <= 480px) {
-  :root {
-    --app-navbar-height: var(--mobile-navbar-height-small);
-  }
-}
-
 /* Small mobile devices (iPhone SE, etc.) */
 @media (width <= 430px) {
   /* Enhanced small mobile colors */
@@ -218,12 +183,6 @@
 
   .main-content {
     padding: var(--space-3);
-    margin-top: 75px; /* Adjusted for smaller navbar */
-  }
-
-  /* Ensure proper spacing for floating elements on small screens */
-  .navbar {
-    height: var(--mobile-navbar-height-small);
   }
 
   .scroll-to-top {
@@ -243,9 +202,7 @@
   .button:active,
   .button-primary:active,
   .button-secondary:active,
-  .nav-menu button:active,
-  .navbar__mobile-link:active,
-  .navbar__mobile-menu-button:active {
+  .nav-menu button:active {
     transform: scale(0.95);
   }
 
@@ -270,12 +227,6 @@
     color: var(--primary-700);
     background: var(--primary-100);
     transform: scale(0.95);
-  }
-
-  /* Touch-friendly navigation */
-  .navbar__item a:active {
-    background: var(--card-hover);
-    transform: scale(0.98);
   }
 
   /* Touch-friendly theme switch */
@@ -358,12 +309,6 @@
       padding-left: max(var(--space-4), env(safe-area-inset-left));
     }
 
-    /* Ensure floating elements respect safe areas */
-    .navbar {
-      padding-right: max(1rem, env(safe-area-inset-right));
-      padding-left: max(1rem, env(safe-area-inset-left));
-    }
-
     .scroll-to-top {
       right: max(
         var(--mobile-safe-spacing),
@@ -412,11 +357,6 @@
   .main-content {
     margin-top: 70px; /* Reduced margin for landscape */
   }
-
-  .navbar {
-    height: var(--mobile-navbar-height-small);
-  }
-
   .scroll-to-top {
     right: var(--mobile-safe-spacing-small);
     bottom: var(--mobile-safe-spacing-small);

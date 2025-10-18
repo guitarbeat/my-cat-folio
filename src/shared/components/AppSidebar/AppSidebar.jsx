@@ -30,7 +30,7 @@ export function AppSidebar({
   onThemeChange,
   onTogglePerformanceDashboard
 }) {
-  const { collapsed } = useSidebar();
+  const { collapsed, toggleCollapsed } = useSidebar();
 
   // Define navigation items
   const navItems = [
@@ -64,9 +64,47 @@ export function AppSidebar({
     });
   }
 
+  const externalLinks = React.useMemo(
+    () => (
+      isLoggedIn
+        ? []
+        : [
+            { key: 'kpop', label: 'K-Pop Site', url: 'https://kpop.alw.lol' },
+            { key: 'personal', label: 'Personal Site', url: 'https://aaronwoods.info' }
+          ]
+    ),
+    [isLoggedIn]
+  );
+
   return (
     <Sidebar className="app-sidebar" collapsible>
       <SidebarContent>
+        <div className="sidebar-top-controls">
+          <SidebarMenuButton
+            type="button"
+            className="sidebar-collapse-toggle"
+            onClick={toggleCollapsed}
+            aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="M21 3H3" />
+              <path d="M21 21H3" />
+              <path d="M15 7l-4 5 4 5" />
+            </svg>
+            <span>{collapsed ? 'Expand Sidebar' : 'Collapse Sidebar'}</span>
+          </SidebarMenuButton>
+        </div>
+
         {/* Logo Section */}
         <div className="sidebar-logo">
           <button
@@ -135,6 +173,45 @@ export function AppSidebar({
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
+
+        {/* External Links for guests */}
+        {externalLinks.length > 0 && (
+          <SidebarGroup open={true}>
+            <SidebarGroupLabel>Explore</SidebarGroupLabel>
+            <SidebarGroupContent>
+              <SidebarMenu>
+                {externalLinks.map((link) => (
+                  <SidebarMenuItem key={link.key}>
+                    <SidebarMenuButton asChild>
+                      <a
+                        href={link.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="20"
+                          height="20"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        >
+                          <path d="M14 3h7v7" />
+                          <path d="M10 14 21 3" />
+                          <path d="M21 14v7H3V3h7" />
+                        </svg>
+                        <span>{link.label}</span>
+                      </a>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                ))}
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
+        )}
 
         {/* User Info Section */}
         {isLoggedIn && userName && !collapsed && (
