@@ -3,7 +3,7 @@
  * @description Simple wizard for selecting cat names and starting a tournament.
  * Shows names and descriptions by default. Admin users get advanced filtering options.
  */
-import React, { useState, useEffect, useCallback, useRef, useMemo } from 'react';
+import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import {
   getSupabaseClient,
@@ -1584,9 +1584,9 @@ export default TournamentSetup;
 
 // Lightweight lightbox component with keyboard navigation
 function Lightbox({ images, index, onClose, onPrev, onNext }) {
-  const closeBtnRef = React.useRef(null);
+  const closeBtnRef = useRef(null);
 
-  React.useEffect(() => {
+  useEffect(() => {
     const onKey = (e) => {
       if (e.key === 'Escape') onClose();
       else if (e.key === 'ArrowLeft') onPrev();
@@ -1596,7 +1596,7 @@ function Lightbox({ images, index, onClose, onPrev, onNext }) {
     return () => window.removeEventListener('keydown', onKey);
   }, [onClose, onPrev, onNext]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     closeBtnRef.current?.focus();
   }, []);
 

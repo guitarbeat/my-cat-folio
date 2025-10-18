@@ -93,12 +93,7 @@ export default defineConfig(({ mode }) => {
         module: true,
       },
       rollupOptions: {
-        // * Enhanced tree shaking configuration
-        treeshake: {
-          moduleSideEffects: false,
-          propertyReadSideEffects: false,
-          tryCatchDeoptimization: false,
-        },
+        // * Use default Rollup tree-shaking to preserve React module initialization
         output: {
           manualChunks: (id) => {
             // * More granular chunking for better tree shaking
@@ -120,10 +115,7 @@ export default defineConfig(({ mode }) => {
             if (id.includes('/shared/utils/coreUtils')) {
               return 'shared-utils';
             }
-            // * Chunk shared components
-            if (id.includes('/shared/components/')) {
-              return 'shared-components';
-            }
+            // * Allow shared components to remain with their importers to avoid early execution ordering issues
           },
           chunkFileNames: 'assets/js/[name]-[hash].js',
           entryFileNames: 'assets/js/[name]-[hash].js',

@@ -3,7 +3,7 @@
  * @description Shadcn-style sidebar component for collapsible navigation
  */
 
-import React, { createContext, useContext, useState } from 'react';
+import { cloneElement, createContext, forwardRef, isValidElement, useContext, useState } from 'react';
 import PropTypes from 'prop-types';
 import './sidebar.css';
 
@@ -188,12 +188,12 @@ SidebarMenuItem.propTypes = {
 };
 
 // SidebarMenuButton
-export const SidebarMenuButton = React.forwardRef(
+export const SidebarMenuButton = forwardRef(
   ({ children, className = '', asChild = false, ...props }, ref) => {
     const { collapsed } = useSidebar();
 
-    if (asChild && React.isValidElement(children)) {
-      return React.cloneElement(children, {
+    if (asChild && isValidElement(children)) {
+      return cloneElement(children, {
         ref,
         className: `sidebar-menu-button ${collapsed ? 'sidebar-menu-button--collapsed' : ''} ${children.props.className || ''} ${className}`,
         ...props
