@@ -20,6 +20,7 @@ function Login({ onLogin }) {
   const { showSuccess, showError } = useToast();
 
   const containerRef = useRef(null);
+  const formCardRef = useRef(null);
   const typingTimeoutRef = useRef(null);
 
   // Add login-page class to body and html when component mounts
@@ -124,14 +125,25 @@ function Login({ onLogin }) {
     }
   };
 
-  const handleExpand = () => {
-    setIsExpanded(true);
-  };
-
   const handleInputFocus = () => {
     if (!isExpanded) {
       setIsExpanded(true);
     }
+  };
+
+  const handleCardMouseLeave = () => {
+    if (name.trim()) {
+      return;
+    }
+
+    const activeElement = typeof document !== 'undefined' ? document.activeElement : null;
+    if (formCardRef.current && activeElement) {
+      if (formCardRef.current.contains(activeElement)) {
+        return;
+      }
+    }
+
+    setIsExpanded(false);
   };
 
   const handleSubmit = async (e) => {
@@ -217,6 +229,12 @@ function Login({ onLogin }) {
           background="transparent"
           shadow="xl"
           padding="xl"
+          onMouseEnter={() => setIsExpanded(true)}
+          onMouseLeave={handleCardMouseLeave}
+          onFocusCapture={() => setIsExpanded(true)}
+          aria-expanded={isExpanded}
+          tabIndex={isExpanded ? -1 : 0}
+          ref={formCardRef}
         >
           <h2 className={styles.loginTitle}>Cat Name Olympics</h2>
           <p className={styles.loginSubtitle}>
@@ -226,18 +244,9 @@ function Login({ onLogin }) {
           {!isExpanded ? (
             <div className={styles.collapsedContent}>
               <p className={styles.collapsedDescription}>
-                Get ready to compete in the Cat Name Olympics. Expand the form
-                whenever you&apos;re ready to enter or generate your judge name.
+                Hover or focus here to open the judge login form—no clicks
+                needed. We&apos;ll help you enter or generate a name in seconds.
               </p>
-              <button
-                type="button"
-                className={styles.expandButton}
-                onClick={handleExpand}
-                aria-expanded={isExpanded}
-                aria-controls={isExpanded ? 'loginInteraction' : undefined}
-              >
-                Start judging names
-              </button>
             </div>
           ) : (
             <div
@@ -274,11 +283,11 @@ function Login({ onLogin }) {
                 onSubmit={handleSubmit}
                 className={styles.loginForm}
                 role="form"
-                aria-label="Login or create account form"
+                aria-label="Judge name login form"
               >
                 <div className={styles.inputWrapper}>
                   <label htmlFor="loginName" className={styles.inputLabel}>
-                    Your Judge Name (Login or Create Account):
+                    Your Judge Name
                   </label>
                   <div className={styles.inputContainer}>
                     <input
@@ -287,7 +296,7 @@ function Login({ onLogin }) {
                       value={name}
                       onChange={handleNameChange}
                       onFocus={handleInputFocus}
-                      placeholder="Enter your name to login or create account"
+                      placeholder="Enter your judge name"
                       className={`${styles.loginInput} ${error ? styles.error : ''}`}
                       autoFocus
                       disabled={isLoading}
@@ -320,9 +329,8 @@ function Login({ onLogin }) {
                     />
                   )}
                   <p id="loginHelp" className={styles.explainerText}>
-                    If you&apos;re a returning user, enter your name to login. If
-                    you&apos;re new, enter your name to create an account and start
-                    judging!
+                    Type your judge name to sign in. We&apos;ll create an account
+                    automatically if it&apos;s your first time.
                   </p>
                   {name.trim() && (
                     <div className={styles.characterCounter}>
@@ -353,7 +361,7 @@ function Login({ onLogin }) {
                     ) : (
                       <>
                         {name.trim()
-                          ? 'Login or Create Account'
+                          ? 'Continue'
                           : 'Get Random Name & Start'}
                         <span className={styles.buttonEmoji} aria-hidden="true">
                           🏆
