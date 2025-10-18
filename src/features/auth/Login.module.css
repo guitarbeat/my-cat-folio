@@ -97,6 +97,70 @@
   border-radius: 28px;
   backdrop-filter: blur(25px);
   animation: slideUp 0.6s 0.4s ease-out both;
+  transition: max-width 0.4s ease, transform 0.4s ease, padding 0.3s ease;
+}
+
+.formCollapsed {
+  max-width: 420px;
+  padding: clamp(1.75rem, 5vw, 2.5rem);
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+}
+
+.formExpanded {
+  max-width: 520px;
+}
+
+.collapsedContent {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  align-items: center;
+}
+
+.collapsedDescription {
+  margin: 0;
+  font-size: clamp(1rem, 2.6vw, 1.15rem);
+  line-height: 1.6;
+  color: rgb(226 232 240);
+  max-width: 28ch;
+}
+
+.expandButton {
+  display: inline-flex;
+  gap: 0.5rem;
+  align-items: center;
+  justify-content: center;
+  padding: 0.85rem 1.75rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #0f172a;
+  background: linear-gradient(135deg, #fde68a, #f97316);
+  border: none;
+  border-radius: 999px;
+  box-shadow: 0 15px 35px rgb(249 115 22 / 35%);
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.expandButton:hover {
+  transform: translateY(-1px) scale(1.01);
+  box-shadow: 0 18px 40px rgb(249 115 22 / 45%);
+}
+
+.expandButton:focus-visible {
+  outline: 3px solid rgb(59 130 246 / 80%);
+  outline-offset: 4px;
+}
+
+.expandedContent {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
 }
 
 /* Centered animations */
@@ -544,6 +608,19 @@
     max-width: 100%;
   }
 
+  .formCollapsed {
+    max-width: 100%;
+    padding: 1.75rem;
+  }
+
+  .collapsedDescription {
+    max-width: none;
+  }
+
+  .expandButton {
+    width: 100%;
+  }
+
   .welcomeTitle {
     font-size: 1.75rem;
   }
@@ -581,6 +658,14 @@
 
   .formCard {
     border-radius: 20px;
+  }
+
+  .formCollapsed {
+    padding: 1.5rem;
+  }
+
+  .expandButton {
+    padding: 0.75rem 1.25rem;
   }
 
   .heroContent {

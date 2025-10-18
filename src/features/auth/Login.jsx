@@ -16,6 +16,7 @@ function Login({ onLogin }) {
   const [error, setError] = useState('');
   const [catFact, setCatFact] = useState('');
   const [isTyping, setIsTyping] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(false);
   const { showSuccess, showError } = useToast();
 
   const containerRef = useRef(null);
@@ -102,12 +103,34 @@ function Login({ onLogin }) {
     };
   }, []);
 
+  useEffect(() => {
+    if (isExpanded && containerRef.current) {
+      containerRef.current.scrollIntoView({
+        behavior: 'smooth',
+        block: 'center'
+      });
+    }
+  }, [isExpanded]);
+
   const handleNameChange = (e) => {
     setName(e.target.value);
     setIsTyping(true);
     resetTypingTimer();
     if (error) {
       setError('');
+    }
+    if (!isExpanded) {
+      setIsExpanded(true);
+    }
+  };
+
+  const handleExpand = () => {
+    setIsExpanded(true);
+  };
+
+  const handleInputFocus = () => {
+    if (!isExpanded) {
+      setIsExpanded(true);
     }
   };
 
@@ -189,7 +212,7 @@ function Login({ onLogin }) {
 
         {/* Form Section */}
         <Card
-          className={styles.formCard}
+          className={`${styles.formCard} ${isExpanded ? styles.formExpanded : styles.formCollapsed}`}
           variant="outlined"
           background="transparent"
           shadow="xl"
@@ -199,141 +222,170 @@ function Login({ onLogin }) {
           <p className={styles.loginSubtitle}>
             Enter your name to login or create a new account
           </p>
-          <p className={styles.catFact}>
-            {catFact ? (
-              <>{catFact}</>
-            ) : (
-              <span className={styles.loadingFact}>
-                <span className={styles.loadingDots}>
-                  Loading a fun cat fact
-                </span>
-                <span className={styles.loadingDots}>...</span>
-              </span>
-            )}
-          </p>
-          {isTyping ? (
-            <div className={styles.typingIndicator}>
-              <span className={styles.typingText}>
-                The cat is watching you type!
-              </span>
-              <span className={styles.typingDots}>
-                <span className={styles.dot}>.</span>
-                <span className={styles.dot}>.</span>
-                <span className={styles.dot}>.</span>
-              </span>
-            </div>
-          ) : null}
 
-          <form
-            onSubmit={handleSubmit}
-            className={styles.loginForm}
-            role="form"
-            aria-label="Login or create account form"
-          >
-            <div className={styles.inputWrapper}>
-              <label htmlFor="loginName" className={styles.inputLabel}>
-                Your Judge Name (Login or Create Account):
-              </label>
-              <div className={styles.inputContainer}>
-                <input
-                  id="loginName"
-                  type="text"
-                  value={name}
-                  onChange={handleNameChange}
-                  placeholder="Enter your name to login or create account"
-                  className={`${styles.loginInput} ${error ? styles.error : ''}`}
-                  autoFocus
-                  disabled={isLoading}
-                  aria-label="Your name"
-                  aria-describedby={error ? 'loginError' : 'loginHelp'}
-                  aria-required="false"
-                  maxLength={30}
-                />
-                {!name.trim() && (
-                  <div
-                    className={styles.randomNameIndicator}
-                    title="A random name will be generated"
-                    aria-hidden="true"
-                  >
-                    <span className={styles.diceIcon}>🎲</span>
-                  </div>
-                )}
-              </div>
-              {error && (
-                <Error
-                  variant="inline"
-                  error={error}
-                  context="form"
-                  position="below"
-                  onDismiss={() => setError('')}
-                  showRetry={false}
-                  showDismiss={true}
-                  size="medium"
-                  className={styles.loginError}
-                />
-              )}
-              <p id="loginHelp" className={styles.explainerText}>
-                If you&apos;re a returning user, enter your name to login. If you&apos;re new,
-                enter your name to create an account and start judging!
+          {!isExpanded ? (
+            <div className={styles.collapsedContent}>
+              <p className={styles.collapsedDescription}>
+                Get ready to compete in the Cat Name Olympics. Expand the form
+                whenever you&apos;re ready to enter or generate your judge name.
               </p>
-              {name.trim() && (
-                <div className={styles.characterCounter}>
-                  <span className={styles.counterText}>
-                    {name.length}/30 characters
-                  </span>
-                  <div className={styles.counterBar}>
-                    <div
-                      className={styles.counterProgress}
-                      style={{ width: `${(name.length / 30) * 100}%` }}
-                    />
-                  </div>
-                </div>
-              )}
+              <button
+                type="button"
+                className={styles.expandButton}
+                onClick={handleExpand}
+                aria-expanded={isExpanded}
+                aria-controls={isExpanded ? 'loginInteraction' : undefined}
+              >
+                Start judging names
+              </button>
             </div>
-
-            <button
-              type="submit"
-              className={`${styles.singleButton} ${isLoading ? styles.loading : ''} ${name.trim() ? styles.hasName : ''}`}
-              disabled={isLoading}
+          ) : (
+            <div
+              id="loginInteraction"
+              className={styles.expandedContent}
+              aria-live="polite"
             >
-              <span className={styles.buttonContent}>
-                {isLoading ? (
-                  <>
-                    <span className={styles.spinner} />
-                    Loading...
-                  </>
+              <p className={styles.catFact}>
+                {catFact ? (
+                  <>{catFact}</>
                 ) : (
-                  <>
-                    {name.trim() ? 'Login or Create Account' : 'Get Random Name & Start'}
-                    <span className={styles.buttonEmoji} aria-hidden="true">
-                      🏆
+                  <span className={styles.loadingFact}>
+                    <span className={styles.loadingDots}>
+                      Loading a fun cat fact
                     </span>
-                  </>
-                )}
-              </span>
-            </button>
-          </form>
-
-          <div className={styles.namePreview}>
-            {name ? (
-              <p className={styles.helperText}>
-                You&apos;ll login or create an account as{' '}
-                <span className={styles.nameHighlight}>&quot;{name}&quot;</span>
-              </p>
-            ) : (
-              <div className={styles.randomPreview}>
-                <p className={`${styles.helperText} ${styles.randomNameText}`}>
-                  We&apos;ll generate a fun name automatically!
-                </p>
-                <p className={styles.randomNameExample}>
-                  <span className={styles.exampleLabel}>Example: </span>
-                  <span className={styles.exampleValue}>
-                    {exampleRandomName}
+                    <span className={styles.loadingDots}>...</span>
                   </span>
-                </p>
+                )}
+              </p>
+              {isTyping ? (
+                <div className={styles.typingIndicator}>
+                  <span className={styles.typingText}>
+                    The cat is watching you type!
+                  </span>
+                  <span className={styles.typingDots}>
+                    <span className={styles.dot}>.</span>
+                    <span className={styles.dot}>.</span>
+                    <span className={styles.dot}>.</span>
+                  </span>
+                </div>
+              ) : null}
+
+              <form
+                onSubmit={handleSubmit}
+                className={styles.loginForm}
+                role="form"
+                aria-label="Login or create account form"
+              >
+                <div className={styles.inputWrapper}>
+                  <label htmlFor="loginName" className={styles.inputLabel}>
+                    Your Judge Name (Login or Create Account):
+                  </label>
+                  <div className={styles.inputContainer}>
+                    <input
+                      id="loginName"
+                      type="text"
+                      value={name}
+                      onChange={handleNameChange}
+                      onFocus={handleInputFocus}
+                      placeholder="Enter your name to login or create account"
+                      className={`${styles.loginInput} ${error ? styles.error : ''}`}
+                      autoFocus
+                      disabled={isLoading}
+                      aria-label="Your name"
+                      aria-describedby={error ? 'loginError' : 'loginHelp'}
+                      aria-required="false"
+                      maxLength={30}
+                    />
+                    {!name.trim() && (
+                      <div
+                        className={styles.randomNameIndicator}
+                        title="A random name will be generated"
+                        aria-hidden="true"
+                      >
+                        <span className={styles.diceIcon}>🎲</span>
+                      </div>
+                    )}
+                  </div>
+                  {error && (
+                    <Error
+                      variant="inline"
+                      error={error}
+                      context="form"
+                      position="below"
+                      onDismiss={() => setError('')}
+                      showRetry={false}
+                      showDismiss={true}
+                      size="medium"
+                      className={styles.loginError}
+                    />
+                  )}
+                  <p id="loginHelp" className={styles.explainerText}>
+                    If you&apos;re a returning user, enter your name to login. If
+                    you&apos;re new, enter your name to create an account and start
+                    judging!
+                  </p>
+                  {name.trim() && (
+                    <div className={styles.characterCounter}>
+                      <span className={styles.counterText}>
+                        {name.length}/30 characters
+                      </span>
+                      <div className={styles.counterBar}>
+                        <div
+                          className={styles.counterProgress}
+                          style={{ width: `${(name.length / 30) * 100}%` }}
+                        />
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                <button
+                  type="submit"
+                  className={`${styles.singleButton} ${isLoading ? styles.loading : ''} ${name.trim() ? styles.hasName : ''}`}
+                  disabled={isLoading}
+                >
+                  <span className={styles.buttonContent}>
+                    {isLoading ? (
+                      <>
+                        <span className={styles.spinner} />
+                        Loading...
+                      </>
+                    ) : (
+                      <>
+                        {name.trim()
+                          ? 'Login or Create Account'
+                          : 'Get Random Name & Start'}
+                        <span className={styles.buttonEmoji} aria-hidden="true">
+                          🏆
+                        </span>
+                      </>
+                    )}
+                  </span>
+                </button>
+              </form>
+
+              <div className={styles.namePreview}>
+                {name ? (
+                  <p className={styles.helperText}>
+                    You&apos;ll login or create an account as{' '}
+                    <span className={styles.nameHighlight}>&quot;{name}&quot;</span>
+                  </p>
+                ) : (
+                  <div className={styles.randomPreview}>
+                    <p className={`${styles.helperText} ${styles.randomNameText}`}>
+                      We&apos;ll generate a fun name automatically!
+                    </p>
+                    <p className={styles.randomNameExample}>
+                      <span className={styles.exampleLabel}>Example: </span>
+                      <span className={styles.exampleValue}>
+                        {exampleRandomName}
+                      </span>
+                    </p>
+                  </div>
+                )}
               </div>
-            )}
-          </div>
+            </div>
+          )}
         </Card>
       </div>
 
