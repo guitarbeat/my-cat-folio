@@ -1,0 +1,116 @@
+/* AppSidebar Specific Styles */
+
+.app-sidebar {
+  /* Inherits from sidebar.css */
+}
+
+.sidebar-logo {
+  padding: 1rem;
+  border-bottom: 1px solid rgb(255 255 255 / 10%);
+  margin-bottom: 1rem;
+}
+
+.sidebar-logo-button {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 0.5rem;
+  background: transparent;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.sidebar-logo-button:hover {
+  background: rgb(255 255 255 / 10%);
+}
+
+.sidebar-logo-button:focus-visible {
+  outline: 2px solid var(--accent-color, #e8bf76);
+  outline-offset: 2px;
+}
+
+.sidebar-logo-video {
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+}
+
+.sidebar-logo-text {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: rgb(255 255 255 / 95%);
+  text-shadow: 0 2px 4px rgb(0 0 0 / 40%);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sidebar--collapsed .sidebar-logo-button {
+  justify-content: center;
+}
+
+.sidebar-user-info {
+  padding: 1rem;
+  margin: 1rem 0;
+  border-top: 1px solid rgb(255 255 255 / 10%);
+  border-bottom: 1px solid rgb(255 255 255 / 10%);
+}
+
+.sidebar-user-greeting {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem;
+  font-size: 0.875rem;
+  color: rgb(255 255 255 / 90%);
+  background: rgb(255 255 255 / 5%);
+  border-radius: 8px;
+}
+
+.sidebar-user-greeting svg {
+  flex-shrink: 0;
+}
+
+.sidebar-logout-button {
+  color: #ff6b6b !important;
+}
+
+.sidebar-logout-button:hover {
+  background: rgb(255 107 107 / 15%) !important;
+}
+
+/* Light theme */
+.light-theme .sidebar-logo {
+  border-bottom-color: rgb(0 0 0 / 10%);
+}
+
+.light-theme .sidebar-logo-button:hover {
+  background: rgb(0 0 0 / 5%);
+}
+
+.light-theme .sidebar-logo-text {
+  color: #1e293b;
+  text-shadow: none;
+}
+
+.light-theme .sidebar-user-info {
+  border-top-color: rgb(0 0 0 / 10%);
+  border-bottom-color: rgb(0 0 0 / 10%);
+}
+
+.light-theme .sidebar-user-greeting {
+  color: #475569;
+  background: rgb(0 0 0 / 3%);
+}
+
+.light-theme .sidebar-logout-button {
+  color: #dc2626 !important;
+}
+
+.light-theme .sidebar-logout-button:hover {
+  background: rgb(220 38 38 / 10%) !important;
+}

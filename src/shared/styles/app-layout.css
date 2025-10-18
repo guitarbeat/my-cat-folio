@@ -1,0 +1,100 @@
+/* App Layout Styles for Sidebar */
+
+.app {
+  display: flex;
+  min-height: 100vh;
+  width: 100%;
+}
+
+.app-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: calc(var(--z-sticky, 100) + 10);
+  display: flex;
+  align-items: center;
+  height: 60px;
+  padding: 0 1rem;
+  background: var(--glass-bg);
+  border-bottom: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+  backdrop-filter: blur(var(--glass-blur)) saturate(180%);
+}
+
+.app-sidebar-trigger {
+  margin: 0;
+}
+
+.app-main-wrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding-left: 260px; /* Match sidebar width */
+  padding-top: 60px; /* Match header height */
+  min-width: 0; /* Prevent flex overflow */
+  transition: padding-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  width: 100%;
+}
+
+.main-content {
+  flex: 1;
+  padding: 2rem;
+  overflow-y: auto;
+}
+
+/* Adjust for CatBackground */
+.app .cat-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 0;
+}
+
+/* Ensure content is above background */
+.app-header,
+.sidebar,
+.app-main-wrapper {
+  position: relative;
+  z-index: 1;
+}
+
+/* Light theme */
+.light-theme .app-header {
+  background: rgb(255 255 255 / 90%);
+  border-bottom-color: rgb(0 0 0 / 10%);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .app-main-wrapper {
+    padding-left: 0;
+    padding-top: 60px; /* Keep header space */
+  }
+
+  .main-content {
+    padding: 1rem;
+  }
+
+  .sidebar {
+    transform: translateX(-100%);
+  }
+
+  .sidebar.sidebar--mobile-open {
+    transform: translateX(0);
+  }
+}
+
+/* Global loading overlay positioning */
+.global-loading-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgb(0 0 0 / 60%);
+  backdrop-filter: blur(8px);
+}

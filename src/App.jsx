@@ -12,8 +12,9 @@ import React, { useCallback } from 'react';
 import CatBackground from '@components/CatBackground/CatBackground';
 import ViewRouter from '@components/ViewRouter/ViewRouter';
 import { Error, Toast, Loading } from '@components';
-import NavBar from '@components/NavBar/NavBar';
 import PerformanceDashboard from '@components/PerformanceDashboard';
+import { SidebarProvider, SidebarTrigger } from './shared/components/ui/sidebar';
+import { AppSidebar } from './shared/components/AppSidebar/AppSidebar';
 
 // * Lazy load heavy components for better code splitting
 import useUserSession from '@hooks/useUserSession';
@@ -351,43 +352,50 @@ function App() {
 
 
   return (
-    <div className="app">
-      {/* * Skip link for keyboard navigation */}
-      <a href="#main-content" className="skip-link">
-        Skip to main content
-      </a>
+    <SidebarProvider collapsedWidth={56}>
+      <div className="app">
+        {/* * Skip link for keyboard navigation */}
+        <a href="#main-content" className="skip-link">
+          Skip to main content
+        </a>
 
-      {/* * Static cat-themed background */}
-      <CatBackground />
+        {/* * Static cat-themed background */}
+        <CatBackground />
 
-      {/* * NavBar */}
-      <NavBar {...navBarProps} />
+        {/* * Header with Sidebar Trigger */}
+        <header className="app-header">
+          <SidebarTrigger className="app-sidebar-trigger" />
+        </header>
 
-      <div id="main-content" className="main-content" tabIndex="-1">
-        {errors.current && user.isLoggedIn && (
-          <Error
-            variant="list"
-            error={errors.current}
-            onDismiss={() => errorActions.clearError()}
-            onRetry={() => window.location.reload()}
-          />
-        )}
+        {/* * App Sidebar */}
+        <AppSidebar {...navBarProps} />
 
-        <ViewRouter
-          isLoggedIn={user.isLoggedIn}
-          onLogin={handleLogin}
-          tournament={tournament}
-          userName={user.name}
-          onStartNewTournament={handleStartNewTournament}
-          onUpdateRatings={handleUpdateRatings}
-          onTournamentSetup={handleTournamentSetup}
-          onTournamentComplete={handleTournamentComplete}
-          onVote={(vote) => tournamentActions.addVote(vote)}
-        />
-      </div>
+        <main className="app-main-wrapper">
+          <div id="main-content" className="main-content" tabIndex="-1">
+            {errors.current && user.isLoggedIn && (
+              <Error
+                variant="list"
+                error={errors.current}
+                onDismiss={() => errorActions.clearError()}
+                onRetry={() => window.location.reload()}
+              />
+            )}
 
-      {/* * Global loading overlay */}
-      {tournament.isLoading && (
+            <ViewRouter
+              isLoggedIn={user.isLoggedIn}
+              onLogin={handleLogin}
+              tournament={tournament}
+              userName={user.name}
+              onStartNewTournament={handleStartNewTournament}
+              onUpdateRatings={handleUpdateRatings}
+              onTournamentSetup={handleTournamentSetup}
+              onTournamentComplete={handleTournamentComplete}
+              onVote={(vote) => tournamentActions.addVote(vote)}
+            />
+          </div>
+
+          {/* * Global loading overlay */}
+          {tournament.isLoading && (
         <div
           className="global-loading-overlay"
           role="status"
@@ -407,13 +415,15 @@ function App() {
         maxToasts={5}
       />
 
-      {/* * Performance Dashboard - Admin (Aaron) only */}
-      <PerformanceDashboard
-        userName={user.name}
-        isVisible={isAdmin && ui.showPerformanceDashboard}
-        onClose={() => uiActions.setPerformanceDashboardVisible(false)}
-      />
-    </div>
+        {/* * Performance Dashboard - Admin (Aaron) only */}
+        <PerformanceDashboard
+          userName={user.name}
+          isVisible={isAdmin && ui.showPerformanceDashboard}
+          onClose={() => uiActions.setPerformanceDashboardVisible(false)}
+        />
+        </main>
+      </div>
+    </SidebarProvider>
   );
 }
 

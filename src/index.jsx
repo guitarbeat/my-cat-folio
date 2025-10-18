@@ -17,6 +17,7 @@ import '@styles/utilities.css';
 import '@styles/animations.css';
 import '@styles/background-effects.css';
 import '@styles/components-global.css';
+import '@styles/app-layout.css';
 import '@styles/responsive.css';
 import App from './App.jsx';
 import { Analytics } from '@vercel/analytics/react';
