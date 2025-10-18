@@ -1,4 +1,5 @@
-import { defineConfig } from "vitest/config";
+import { defineConfig } from 'vitest/config';
+import react from '@vitejs/plugin-react-swc';
 import { fileURLToPath } from 'url';
 import { dirname, resolve as pathResolve } from 'path';
 
@@ -6,9 +7,10 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 export default defineConfig({
+  plugins: [react()],
   test: {
-    environment: "jsdom",
-    setupFiles: ["./src/setupTests.js"],
+    environment: 'jsdom',
+    setupFiles: ['./src/setupTests.js'],
     globals: true,
   },
   resolve: {
