@@ -3,7 +3,7 @@
  * @description Application sidebar navigation component
  */
 
-import React from 'react';
+import { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import {
   Sidebar,
@@ -64,7 +64,7 @@ export function AppSidebar({
     });
   }
 
-  const externalLinks = React.useMemo(
+  const externalLinks = useMemo(
     () => (
       isLoggedIn
         ? []

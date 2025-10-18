@@ -7,7 +7,7 @@
  * @returns {JSX.Element} The complete application UI
  */
 
-import React, { useCallback } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 // * Use path aliases for better tree shaking
 import CatBackground from '@components/CatBackground/CatBackground';
@@ -75,16 +75,16 @@ function App() {
   // * Simple URL routing helpers
   const { currentRoute, navigateTo } = useRouting();
 
-  const normalizedPath = React.useMemo(() => normalizeRoutePath(currentRoute), [currentRoute]);
-  const previousRouteRef = React.useRef(null);
-  const lastViewRef = React.useRef(tournament.currentView);
-  const lastCompletionRef = React.useRef(tournament.isComplete);
+  const normalizedPath = useMemo(() => normalizeRoutePath(currentRoute), [currentRoute]);
+  const previousRouteRef = useRef(null);
+  const lastViewRef = useRef(tournament.currentView);
+  const lastCompletionRef = useRef(tournament.isComplete);
 
   // Get admin status from server-side validation
   const {isAdmin} = user;
 
   // * Keyboard shortcut for performance dashboard (Ctrl+Shift+P)
-  React.useEffect(() => {
+  useEffect(() => {
     if (!isAdmin) return;
     const handleKeyDown = (event) => {
       if (event.ctrlKey && event.shiftKey && event.key === 'P') {
@@ -190,7 +190,7 @@ function App() {
   }, [uiActions]);
 
   // * Update the URL when the active view changes
-  React.useEffect(() => {
+  useEffect(() => {
     if (!user.isLoggedIn || normalizedPath === '/bongo') {
       lastViewRef.current = tournament.currentView;
       lastCompletionRef.current = tournament.isComplete;
@@ -232,7 +232,7 @@ function App() {
   ]);
 
   // * Keep application state in sync with URL changes
-  React.useEffect(() => {
+  useEffect(() => {
     if (normalizedPath === '/bongo') {
       previousRouteRef.current = currentRoute;
       return;
@@ -273,7 +273,7 @@ function App() {
   ]);
 
   // * Synchronize global body class with current theme
-  React.useEffect(() => {
+  useEffect(() => {
     const bodyElement = document.body;
     const rootElement = document.documentElement;
 
@@ -320,7 +320,7 @@ function App() {
   // * Memoize main content to prevent unnecessary re-renders
 
   // * Memoize sidebar props to prevent unnecessary re-renders
-  const sidebarProps = React.useMemo(
+  const sidebarProps = useMemo(
     () => ({
       view: tournament.currentView || 'tournament',
       setView: (view) => {
@@ -408,7 +408,7 @@ function AppLayout({
     .filter(Boolean)
     .join(' ');
 
-  const layoutStyle = React.useMemo(
+  const layoutStyle = useMemo(
     () => ({
       '--sidebar-expanded-width': 'min(80vw, 260px)',
       '--sidebar-collapsed-width': `${collapsedWidth}px`
@@ -416,14 +416,14 @@ function AppLayout({
     [collapsedWidth]
   );
 
-  const handleBreadcrumbHome = React.useCallback(() => {
+  const handleBreadcrumbHome = useCallback(() => {
     setView('tournament');
     if (typeof onStartNewTournament === 'function') {
       onStartNewTournament();
     }
   }, [onStartNewTournament, setView]);
 
-  const breadcrumbItems = React.useMemo(() => {
+  const breadcrumbItems = useMemo(() => {
     if (!isLoggedIn) {
       return [];
     }
@@ -554,9 +554,9 @@ AppLayout.propTypes = {
 };
 
 function ScrollToTopButton({ isLoggedIn }) {
-  const [showScrollTop, setShowScrollTop] = React.useState(false);
+  const [showScrollTop, setShowScrollTop] = useState(false);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (!isLoggedIn) {
       setShowScrollTop(false);
       return undefined;

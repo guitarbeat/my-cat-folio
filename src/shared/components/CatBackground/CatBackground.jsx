@@ -1,4 +1,4 @@
-import React from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 import './CatBackground.css';
 
 function createCatVideo(index) {
@@ -18,9 +18,9 @@ function createCatVideo(index) {
 }
 
 export default function CatBackground() {
-  const containerRef = React.useRef(null);
+  const containerRef = useRef(null);
 
-  React.useEffect(() => {
+  useEffect(() => {
     const prefersReduced =
       typeof window !== 'undefined' &&
       window.matchMedia &&
@@ -121,7 +121,7 @@ export default function CatBackground() {
     };
   }, []);
 
-  const showCats = React.useMemo(() => {
+  const showCats = useMemo(() => {
     const prefersReducedMotion =
       typeof window !== 'undefined' &&
       window.matchMedia &&

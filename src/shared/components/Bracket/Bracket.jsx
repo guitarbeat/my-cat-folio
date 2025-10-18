@@ -43,7 +43,7 @@
  * --- END AUTO-GENERATED DOCSTRING ---
  */
 
-import React, { useMemo } from 'react';
+import { memo, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import styles from './Bracket.module.css';
 
@@ -248,4 +248,4 @@ Bracket.propTypes = {
   ).isRequired
 };
 
-export default React.memo(Bracket);
+export default memo(Bracket);

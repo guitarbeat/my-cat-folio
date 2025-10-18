@@ -3,7 +3,7 @@
  * @description Real-time performance monitoring dashboard for all users
  */
 
-import React, { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import PropTypes from 'prop-types';
 import Card from '../Card';
 import { performanceMonitor, throttle } from '../../utils/coreUtils';
@@ -12,7 +12,7 @@ import styles from './PerformanceDashboard.module.css';
 const PerformanceDashboard = ({ userName, isVisible = false, onClose }) => {
   const [metrics, setMetrics] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
-  const refreshRef = React.useRef(null);
+  const refreshRef = useRef(null);
 
   // Update metrics with throttling to prevent excessive updates
   const updateMetrics = useCallback(() => {
