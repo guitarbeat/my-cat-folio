@@ -113,7 +113,15 @@ class ErrorBoundary extends React.Component {
       standardizedError
     });
 
-    console.error('ErrorBoundary caught an error:', error, errorInfo);
+    console.error('ErrorBoundary caught an error', {
+      error: {
+        name: error?.name,
+        message: error?.message,
+        stack: error?.stack
+      },
+      componentStack: errorInfo?.componentStack,
+      standardizedError
+    });
   }
 
   handleRetry() {
