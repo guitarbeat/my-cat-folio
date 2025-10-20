@@ -4,12 +4,12 @@
  * Supports multiple error display variants: boundary (full-page), list (multiple errors), and inline (single error)
  */
 
-import React, { useState } from 'react';
-import PropTypes from 'prop-types';
-import { ERROR_SEVERITY, getSeverityClass } from '../../services/errorManager';
-import styles from './Error.module.css';
-import ErrorBoundaryFallback from './ErrorBoundaryFallback.jsx';
-import ErrorBoundary from './ErrorBoundary.jsx';
+import React, { useState } from "react";
+import PropTypes from "prop-types";
+import { ERROR_SEVERITY, getSeverityClass } from "../../services/errorManager";
+import styles from "./Error.module.css";
+import ErrorBoundaryFallback from "./ErrorBoundaryFallback.jsx";
+import ErrorBoundary from "./ErrorBoundary.jsx";
 
 /**
  * Unified Error Component
@@ -29,22 +29,22 @@ import ErrorBoundary from './ErrorBoundary.jsx';
  * @param {React.ReactNode} props.children - Children for boundary variant
  */
 const ErrorComponent = ({
-  variant = 'inline',
+  variant = "inline",
   error,
   onRetry,
   onDismiss,
   onClearAll,
-  context = 'general',
-  position = 'below',
+  context = "general",
+  position = "below",
   showDetails = false,
   showRetry = true,
   showDismiss = true,
-  size = 'medium',
-  className = '',
-  children
+  size = "medium",
+  className = "",
+  children,
 }) => {
   // Boundary variant (React error boundary)
-  if (variant === 'boundary') {
+  if (variant === "boundary") {
     return (
       <ErrorBoundary
         FallbackComponent={(props) => (
@@ -58,10 +58,12 @@ const ErrorComponent = ({
   }
 
   // List variant (multiple errors from store)
-  if (variant === 'list') {
+  if (variant === "list") {
+    // * Ensure errors is always an array for list variant
+    const errorsArray = Array.isArray(error) ? error : [error];
     return (
       <ErrorList
-        errors={error}
+        errors={errorsArray}
         onRetry={onRetry}
         onDismiss={onDismiss}
         onClearAll={onClearAll}
@@ -87,11 +89,17 @@ const ErrorComponent = ({
   );
 };
 
-
 /**
  * Error List Component (multiple errors)
  */
-const ErrorList = ({ errors = [], onRetry, onDismiss, onClearAll, showDetails, className }) => {
+const ErrorList = ({
+  errors = [],
+  onRetry,
+  onDismiss,
+  onClearAll,
+  showDetails,
+  className,
+}) => {
   const [expandedErrors, setExpandedErrors] = useState(new Set());
 
   if (!errors || errors.length === 0) {
@@ -112,11 +120,16 @@ const ErrorList = ({ errors = [], onRetry, onDismiss, onClearAll, showDetails, c
 
   const getSeverityIcon = (severity) => {
     switch (severity) {
-      case ERROR_SEVERITY.CRITICAL: return '🚨';
-      case ERROR_SEVERITY.HIGH: return '⚠️';
-      case ERROR_SEVERITY.MEDIUM: return '⚠️';
-      case ERROR_SEVERITY.LOW: return 'ℹ️';
-      default: return '❓';
+      case ERROR_SEVERITY.CRITICAL:
+        return "🚨";
+      case ERROR_SEVERITY.HIGH:
+        return "⚠️";
+      case ERROR_SEVERITY.MEDIUM:
+        return "⚠️";
+      case ERROR_SEVERITY.LOW:
+        return "ℹ️";
+      default:
+        return "❓";
     }
   };
 
@@ -124,7 +137,7 @@ const ErrorList = ({ errors = [], onRetry, onDismiss, onClearAll, showDetails, c
     try {
       return new Date(timestamp).toLocaleTimeString();
     } catch {
-      return 'Unknown time';
+      return "Unknown time";
     }
   };
 
@@ -134,7 +147,7 @@ const ErrorList = ({ errors = [], onRetry, onDismiss, onClearAll, showDetails, c
       {errors.length > 1 && onClearAll && (
         <div className={styles.listHeader}>
           <span className={styles.listCount}>
-            {errors.length} error{errors.length !== 1 ? 's' : ''}
+            {errors.length} error{errors.length !== 1 ? "s" : ""}
           </span>
           <button
             onClick={onClearAll}
@@ -194,34 +207,37 @@ const ErrorList = ({ errors = [], onRetry, onDismiss, onClearAll, showDetails, c
                     className={styles.listDetailsButton}
                     aria-label="Toggle error details"
                   >
-                    {expandedErrors.has(`${error.timestamp}-${index}`) ? '−' : '+'}
+                    {expandedErrors.has(`${error.timestamp}-${index}`)
+                      ? "−"
+                      : "+"}
                   </button>
                 )}
               </div>
             </div>
 
             {/* Error details */}
-            {showDetails && expandedErrors.has(`${error.timestamp}-${index}`) && (
-              <div className={styles.listDetails}>
-                <div className={styles.listDetailRow}>
-                  <strong>Type:</strong> {error.errorType}
-                </div>
-                <div className={styles.listDetailRow}>
-                  <strong>Severity:</strong> {error.severity}
-                </div>
-                <div className={styles.listDetailRow}>
-                  <strong>Context:</strong> {error.context}
-                </div>
-                {error.originalError && (
+            {showDetails &&
+              expandedErrors.has(`${error.timestamp}-${index}`) && (
+                <div className={styles.listDetails}>
                   <div className={styles.listDetailRow}>
-                    <strong>Original Error:</strong>
-                    <pre className={styles.listErrorStack}>
-                      {error.originalError.toString()}
-                    </pre>
+                    <strong>Type:</strong> {error.errorType}
                   </div>
-                )}
-              </div>
-            )}
+                  <div className={styles.listDetailRow}>
+                    <strong>Severity:</strong> {error.severity}
+                  </div>
+                  <div className={styles.listDetailRow}>
+                    <strong>Context:</strong> {error.context}
+                  </div>
+                  {error.originalError && (
+                    <div className={styles.listDetailRow}>
+                      <strong>Original Error:</strong>
+                      <pre className={styles.listErrorStack}>
+                        {error.originalError.toString()}
+                      </pre>
+                    </div>
+                  )}
+                </div>
+              )}
           </div>
         ))}
       </div>
@@ -234,56 +250,73 @@ const ErrorList = ({ errors = [], onRetry, onDismiss, onClearAll, showDetails, c
  */
 const ErrorInline = ({
   error,
-  context = 'general',
-  position = 'below',
+  context = "general",
+  position = "below",
   onRetry,
   onDismiss,
   showRetry = true,
   showDismiss = true,
-  size = 'medium',
-  className = ''
+  size = "medium",
+  className = "",
 }) => {
   if (!error) {
     return null;
   }
 
-  const errorMessage = typeof error === 'string' ? error : error.message || 'An error occurred';
+  const errorMessage =
+    typeof error === "string" ? error : error.message || "An error occurred";
   const isRetryable = error?.isRetryable !== false && onRetry;
   const severity = error?.severity || ERROR_SEVERITY.MEDIUM;
 
   const getContextClass = () => {
     switch (context) {
-      case 'vote': return styles.inlineVote;
-      case 'form': return styles.inlineForm;
-      case 'submit': return styles.inlineSubmit;
-      case 'validation': return styles.inlineValidation;
-      default: return styles.inlineGeneral;
+      case "vote":
+        return styles.inlineVote;
+      case "form":
+        return styles.inlineForm;
+      case "submit":
+        return styles.inlineSubmit;
+      case "validation":
+        return styles.inlineValidation;
+      default:
+        return styles.inlineGeneral;
     }
   };
 
   const getSizeClass = () => {
     switch (size) {
-      case 'small': return styles.inlineSmall;
-      case 'large': return styles.inlineLarge;
-      default: return styles.inlineMedium;
+      case "small":
+        return styles.inlineSmall;
+      case "large":
+        return styles.inlineLarge;
+      default:
+        return styles.inlineMedium;
     }
   };
 
   const getPositionClass = () => {
     switch (position) {
-      case 'above': return styles.inlineAbove;
-      case 'inline': return styles.inlineInline;
-      default: return styles.inlineBelow;
+      case "above":
+        return styles.inlineAbove;
+      case "inline":
+        return styles.inlineInline;
+      default:
+        return styles.inlineBelow;
     }
   };
 
   const getSeverityIcon = () => {
     switch (severity) {
-      case ERROR_SEVERITY.CRITICAL: return '🚨';
-      case ERROR_SEVERITY.HIGH: return '⚠️';
-      case ERROR_SEVERITY.MEDIUM: return '⚠️';
-      case ERROR_SEVERITY.LOW: return 'ℹ️';
-      default: return '❓';
+      case ERROR_SEVERITY.CRITICAL:
+        return "🚨";
+      case ERROR_SEVERITY.HIGH:
+        return "⚠️";
+      case ERROR_SEVERITY.MEDIUM:
+        return "⚠️";
+      case ERROR_SEVERITY.LOW:
+        return "ℹ️";
+      default:
+        return "❓";
     }
   };
 
@@ -301,9 +334,7 @@ const ErrorInline = ({
       aria-live="polite"
     >
       <div className={styles.inlineContent}>
-        <span className={styles.inlineIcon}>
-          {getSeverityIcon()}
-        </span>
+        <span className={styles.inlineIcon}>{getSeverityIcon()}</span>
 
         <span className={styles.inlineMessage}>{errorMessage}</span>
 
@@ -334,7 +365,7 @@ const ErrorInline = ({
       </div>
 
       {/* Development error details */}
-      {process.env.NODE_ENV === 'development' && error?.stack && (
+      {process.env.NODE_ENV === "development" && error?.stack && (
         <details className={styles.inlineDevDetails}>
           <summary>Error Details (Development)</summary>
           <pre className={styles.inlineDevStack}>{error.stack}</pre>
@@ -346,26 +377,26 @@ const ErrorInline = ({
 
 // PropTypes
 ErrorComponent.propTypes = {
-  variant: PropTypes.oneOf(['boundary', 'list', 'inline']),
+  variant: PropTypes.oneOf(["boundary", "list", "inline"]),
   error: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.instanceOf(globalThis.Error),
     PropTypes.object,
-    PropTypes.array
+    PropTypes.array,
   ]),
   onRetry: PropTypes.func,
   onDismiss: PropTypes.func,
   onClearAll: PropTypes.func,
-  context: PropTypes.oneOf(['form', 'vote', 'submit', 'validation', 'general']),
-  position: PropTypes.oneOf(['above', 'below', 'inline']),
+  context: PropTypes.oneOf(["form", "vote", "submit", "validation", "general"]),
+  position: PropTypes.oneOf(["above", "below", "inline"]),
   showDetails: PropTypes.bool,
   showRetry: PropTypes.bool,
   showDismiss: PropTypes.bool,
-  size: PropTypes.oneOf(['small', 'medium', 'large']),
+  size: PropTypes.oneOf(["small", "medium", "large"]),
   className: PropTypes.string,
-  children: PropTypes.node
+  children: PropTypes.node,
 };
 
-ErrorComponent.displayName = 'Error';
+ErrorComponent.displayName = "Error";
 
 export default ErrorComponent;

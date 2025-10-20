@@ -1,0 +1,368 @@
+/* Cat Name Olympics - Playful Minimized Sidebar Container */
+
+.cat-name-olympics {
+  position: fixed;
+  top: 50%;
+  left: 28px; /* * Positioned where collapsed sidebar would be */
+  transform: translateY(-50%);
+  z-index: 1000;
+  pointer-events: none;
+  opacity: 0;
+  animation: fadeInOlympics 0.6s ease-out forwards;
+}
+
+.olympics-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 200px;
+  background: linear-gradient(
+    135deg,
+    rgba(var(--neon-cyan-rgb), 0.15),
+    rgba(var(--hot-pink-rgb), 0.15),
+    rgba(var(--neon-cyan-rgb), 0.15)
+  );
+  border: 2px solid rgba(var(--neon-cyan-rgb), 0.3);
+  border-radius: 24px;
+  backdrop-filter: blur(10px);
+  box-shadow: 
+    0 8px 32px rgba(var(--neon-cyan-rgb), 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  overflow: hidden;
+}
+
+/* * Olympic rings animation */
+.olympic-rings {
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 32px;
+  height: 16px;
+}
+
+.ring {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border: 2px solid;
+  border-radius: 50%;
+  animation: ringPulse 2s ease-in-out infinite;
+}
+
+.ring-1 {
+  top: 0;
+  left: 0;
+  border-color: #ff6b6b;
+  animation-delay: 0s;
+}
+
+.ring-2 {
+  top: 0;
+  left: 12px;
+  border-color: #4ecdc4;
+  animation-delay: 0.2s;
+}
+
+.ring-3 {
+  top: 0;
+  left: 24px;
+  border-color: #45b7d1;
+  animation-delay: 0.4s;
+}
+
+.ring-4 {
+  top: 8px;
+  left: 6px;
+  border-color: #96ceb4;
+  animation-delay: 0.6s;
+}
+
+.ring-5 {
+  top: 8px;
+  left: 18px;
+  border-color: #feca57;
+  animation-delay: 0.8s;
+}
+
+/* * Main title styling */
+.olympics-title {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  margin-top: 20px;
+  text-align: center;
+}
+
+.cat-emoji {
+  font-size: 16px;
+  animation: catBounce 1.5s ease-in-out infinite;
+}
+
+.title-text {
+  font-size: 8px;
+  font-weight: 700;
+  color: rgb(255 255 255 / 90%);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  letter-spacing: 0.5px;
+  line-height: 1;
+}
+
+.olympics-text {
+  font-size: 7px;
+  font-weight: 600;
+  color: rgba(var(--neon-cyan-rgb), 0.9);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  letter-spacing: 0.3px;
+  line-height: 1;
+  animation: textGlow 2s ease-in-out infinite alternate;
+}
+
+/* * Paw prints animation */
+.paw-prints {
+  position: absolute;
+  bottom: 15px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 2px;
+}
+
+.paw-print {
+  font-size: 8px;
+  opacity: 0;
+  animation: pawWalk 3s ease-in-out infinite;
+}
+
+.paw-1 {
+  animation-delay: 0s;
+}
+
+.paw-2 {
+  animation-delay: 0.5s;
+}
+
+.paw-3 {
+  animation-delay: 1s;
+}
+
+/* * Floating cat icons */
+.floating-cats {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+}
+
+.floating-cat {
+  position: absolute;
+  font-size: 10px;
+  opacity: 0;
+  animation: floatAround 4s ease-in-out infinite;
+}
+
+.cat-1 {
+  top: 20%;
+  left: 10%;
+  animation-delay: 0s;
+}
+
+.cat-2 {
+  top: 60%;
+  right: 15%;
+  animation-delay: 1.3s;
+}
+
+.cat-3 {
+  bottom: 30%;
+  left: 20%;
+  animation-delay: 2.6s;
+}
+
+/* * Sparkle effects */
+.sparkles {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+}
+
+.sparkle {
+  position: absolute;
+  font-size: 6px;
+  opacity: 0;
+  animation: sparkleTwinkle 2s ease-in-out infinite;
+}
+
+.sparkle-1 {
+  top: 15%;
+  left: 20%;
+  animation-delay: 0s;
+}
+
+.sparkle-2 {
+  top: 25%;
+  right: 25%;
+  animation-delay: 0.5s;
+}
+
+.sparkle-3 {
+  bottom: 25%;
+  left: 15%;
+  animation-delay: 1s;
+}
+
+.sparkle-4 {
+  bottom: 15%;
+  right: 20%;
+  animation-delay: 1.5s;
+}
+
+/* * Animations */
+@keyframes fadeInOlympics {
+  from {
+    opacity: 0;
+    transform: translateY(-50%) scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(-50%) scale(1);
+  }
+}
+
+@keyframes ringPulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.7;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 1;
+  }
+}
+
+@keyframes catBounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-3px);
+  }
+}
+
+@keyframes textGlow {
+  from {
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  }
+  to {
+    text-shadow: 
+      0 1px 2px rgba(0, 0, 0, 0.3),
+      0 0 8px rgba(var(--neon-cyan-rgb), 0.6);
+  }
+}
+
+@keyframes pawWalk {
+  0%, 20%, 100% {
+    opacity: 0;
+    transform: translateY(0);
+  }
+  10% {
+    opacity: 1;
+    transform: translateY(-2px);
+  }
+}
+
+@keyframes floatAround {
+  0%, 100% {
+    opacity: 0;
+    transform: translateY(0) rotate(0deg);
+  }
+  25% {
+    opacity: 0.8;
+    transform: translateY(-10px) rotate(5deg);
+  }
+  50% {
+    opacity: 1;
+    transform: translateY(-15px) rotate(0deg);
+  }
+  75% {
+    opacity: 0.8;
+    transform: translateY(-10px) rotate(-5deg);
+  }
+}
+
+@keyframes sparkleTwinkle {
+  0%, 100% {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* * Phase-based animations for variety */
+.cat-name-olympics[data-phase="1"] .olympic-rings {
+  animation-direction: reverse;
+}
+
+.cat-name-olympics[data-phase="2"] .floating-cat {
+  animation-duration: 3s;
+}
+
+.cat-name-olympics[data-phase="3"] .sparkle {
+  animation-duration: 1.5s;
+}
+
+/* * Light theme adjustments */
+:root[data-theme="light"] .olympics-container {
+  background: linear-gradient(
+    135deg,
+    rgba(var(--neon-cyan-rgb), 0.08),
+    rgba(var(--hot-pink-rgb), 0.08),
+    rgba(var(--neon-cyan-rgb), 0.08)
+  );
+  border-color: rgba(var(--neon-cyan-rgb), 0.2);
+  box-shadow: 
+    0 8px 32px rgba(var(--neon-cyan-rgb), 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+:root[data-theme="light"] .title-text {
+  color: #1e293b;
+  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.5);
+}
+
+:root[data-theme="light"] .olympics-text {
+  color: rgba(var(--neon-cyan-rgb), 0.8);
+  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.5);
+}
+
+/* * Responsive adjustments */
+@media (max-width: 768px) {
+  .cat-name-olympics {
+    left: 20px;
+  }
+  
+  .olympics-container {
+    width: 40px;
+    height: 160px;
+  }
+  
+  .title-text {
+    font-size: 7px;
+  }
+  
+  .olympics-text {
+    font-size: 6px;
+  }
+}

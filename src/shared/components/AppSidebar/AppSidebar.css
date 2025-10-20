@@ -81,6 +81,12 @@
   transition: all 0.3s ease;
 }
 
+/* * Ensure text is not truncated when visible */
+.sidebar-collapse-toggle span {
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
 .sidebar-logo {
   padding: 1.5rem 1.25rem;
   margin-bottom: 1.5rem;

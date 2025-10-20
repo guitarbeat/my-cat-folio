@@ -6,6 +6,10 @@
 
 // * Import Supabase client directly to avoid TypeScript/JavaScript compatibility issues
 import { createClient } from '@supabase/supabase-js';
+import { config } from 'dotenv';
+
+// * Load environment variables from .env.local
+config({ path: '.env.local' });
 
 // * Supabase configuration
 const SUPABASE_URL = process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL;
@@ -18,6 +22,10 @@ const resolveSupabaseClient = async () => {
     return supabase;
   }
 
+  console.log('🔧 Backend: Resolving Supabase client...');
+  console.log('   SUPABASE_URL:', SUPABASE_URL ? 'SET' : 'NOT SET');
+  console.log('   SUPABASE_ANON_KEY:', SUPABASE_ANON_KEY ? 'SET' : 'NOT SET');
+
   if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
     if (process.env.NODE_ENV === 'development') {
       console.warn('Missing Supabase environment variables (SUPABASE_URL / SUPABASE_ANON_KEY). Supabase features are disabled.');
@@ -26,7 +34,9 @@ const resolveSupabaseClient = async () => {
   }
 
   try {
+    console.log('   Creating Supabase client...');
     supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    console.log('   ✅ Supabase client created successfully');
     return supabase;
   } catch (error) {
     console.error('Failed to initialize Supabase client:', error);
@@ -66,7 +76,137 @@ export const catNamesAPI = {
   async getNamesWithDescriptions() {
     try {
       if (!(await isSupabaseAvailable())) {
-        return [];
+        console.warn('Supabase not available, using fallback names');
+        return [
+          {
+            id: 'aaron',
+            name: 'aaron',
+            description: 'temporary fallback — Supabase not configured',
+            avg_rating: 1500,
+            popularity_score: 0,
+            total_tournaments: 0,
+            is_active: true,
+            created_at: new Date().toISOString(),
+            updated_at: null,
+            user_rating: null,
+            user_wins: 0,
+            user_losses: 0,
+            isHidden: false,
+            has_user_rating: false
+          },
+          {
+            id: 'fix',
+            name: 'fix',
+            description: 'temporary fallback — Supabase not configured',
+            avg_rating: 1500,
+            popularity_score: 0,
+            total_tournaments: 0,
+            is_active: true,
+            created_at: new Date().toISOString(),
+            updated_at: null,
+            user_rating: null,
+            user_wins: 0,
+            user_losses: 0,
+            isHidden: false,
+            has_user_rating: false
+          },
+          {
+            id: 'the',
+            name: 'the',
+            description: 'temporary fallback — Supabase not configured',
+            avg_rating: 1500,
+            popularity_score: 0,
+            total_tournaments: 0,
+            is_active: true,
+            created_at: new Date().toISOString(),
+            updated_at: null,
+            user_rating: null,
+            user_wins: 0,
+            user_losses: 0,
+            isHidden: false,
+            has_user_rating: false
+          },
+          {
+            id: 'whiskers',
+            name: 'whiskers',
+            description: 'temporary fallback — Supabase not configured',
+            avg_rating: 1500,
+            popularity_score: 0,
+            total_tournaments: 0,
+            is_active: true,
+            created_at: new Date().toISOString(),
+            updated_at: null,
+            user_rating: null,
+            user_wins: 0,
+            user_losses: 0,
+            isHidden: false,
+            has_user_rating: false
+          },
+          {
+            id: 'shadow',
+            name: 'shadow',
+            description: 'temporary fallback — Supabase not configured',
+            avg_rating: 1500,
+            popularity_score: 0,
+            total_tournaments: 0,
+            is_active: true,
+            created_at: new Date().toISOString(),
+            updated_at: null,
+            user_rating: null,
+            user_wins: 0,
+            user_losses: 0,
+            isHidden: false,
+            has_user_rating: false
+          },
+          {
+            id: 'luna',
+            name: 'luna',
+            description: 'temporary fallback — Supabase not configured',
+            avg_rating: 1500,
+            popularity_score: 0,
+            total_tournaments: 0,
+            is_active: true,
+            created_at: new Date().toISOString(),
+            updated_at: null,
+            user_rating: null,
+            user_wins: 0,
+            user_losses: 0,
+            isHidden: false,
+            has_user_rating: false
+          },
+          {
+            id: 'felix',
+            name: 'felix',
+            description: 'temporary fallback — Supabase not configured',
+            avg_rating: 1500,
+            popularity_score: 0,
+            total_tournaments: 0,
+            is_active: true,
+            created_at: new Date().toISOString(),
+            updated_at: null,
+            user_rating: null,
+            user_wins: 0,
+            user_losses: 0,
+            isHidden: false,
+            has_user_rating: false
+          },
+          {
+            id: 'milo',
+            name: 'milo',
+            description: 'temporary fallback — Supabase not configured',
+            avg_rating: 1500,
+            popularity_score: 0,
+            total_tournaments: 0,
+            is_active: true,
+            created_at: new Date().toISOString(),
+            updated_at: null,
+            user_rating: null,
+            user_wins: 0,
+            user_losses: 0,
+            isHidden: false,
+            has_user_rating: false
+          }
+        ];
       }
 
       // Get ALL hidden name IDs globally (not user-specific)
@@ -94,8 +234,8 @@ export const catNamesAPI = {
         total_tournaments,
         is_active
       `)
-      .eq('is_active', true)  // Add this to use partial index
-      .order('avg_rating', { ascending: false }); // Order uses index
+        .eq('is_active', true)  // Add this to use partial index
+        .order('avg_rating', { ascending: false }); // Order uses index
 
       // Filter out ALL hidden names globally
       if (hiddenIds.length > 0) {
@@ -105,8 +245,157 @@ export const catNamesAPI = {
       const { data, error } = await query;
       if (error) {
         console.error('Error fetching names with descriptions:', error);
+        console.error('Query details:', {
+          table: 'cat_name_options',
+          filter: 'is_active = true',
+          hiddenIds: hiddenIds.length,
+          errorCode: error.code,
+          errorMessage: error.message
+        });
         return [];
       }
+
+      console.log('Names query result:', {
+        totalNames: data?.length || 0,
+        hiddenNames: hiddenIds.length,
+        hasActiveNames: data?.some(name => name.is_active) || false
+      });
+
+      // * If no active names found, return fallback names
+      if (!data || data.length === 0) {
+        console.warn('No active names found in database, using fallback names');
+        return [
+          {
+            id: 'aaron',
+            name: 'aaron',
+            description: 'temporary fallback — no active names in database',
+            avg_rating: 1500,
+            popularity_score: 0,
+            total_tournaments: 0,
+            is_active: true,
+            created_at: new Date().toISOString(),
+            updated_at: null,
+            user_rating: null,
+            user_wins: 0,
+            user_losses: 0,
+            isHidden: false,
+            has_user_rating: false
+          },
+          {
+            id: 'fix',
+            name: 'fix',
+            description: 'temporary fallback — no active names in database',
+            avg_rating: 1500,
+            popularity_score: 0,
+            total_tournaments: 0,
+            is_active: true,
+            created_at: new Date().toISOString(),
+            updated_at: null,
+            user_rating: null,
+            user_wins: 0,
+            user_losses: 0,
+            isHidden: false,
+            has_user_rating: false
+          },
+          {
+            id: 'the',
+            name: 'the',
+            description: 'temporary fallback — no active names in database',
+            avg_rating: 1500,
+            popularity_score: 0,
+            total_tournaments: 0,
+            is_active: true,
+            created_at: new Date().toISOString(),
+            updated_at: null,
+            user_rating: null,
+            user_wins: 0,
+            user_losses: 0,
+            isHidden: false,
+            has_user_rating: false
+          },
+          {
+            id: 'whiskers',
+            name: 'whiskers',
+            description: 'temporary fallback — no active names in database',
+            avg_rating: 1500,
+            popularity_score: 0,
+            total_tournaments: 0,
+            is_active: true,
+            created_at: new Date().toISOString(),
+            updated_at: null,
+            user_rating: null,
+            user_wins: 0,
+            user_losses: 0,
+            isHidden: false,
+            has_user_rating: false
+          },
+          {
+            id: 'shadow',
+            name: 'shadow',
+            description: 'temporary fallback — no active names in database',
+            avg_rating: 1500,
+            popularity_score: 0,
+            total_tournaments: 0,
+            is_active: true,
+            created_at: new Date().toISOString(),
+            updated_at: null,
+            user_rating: null,
+            user_wins: 0,
+            user_losses: 0,
+            isHidden: false,
+            has_user_rating: false
+          },
+          {
+            id: 'luna',
+            name: 'luna',
+            description: 'temporary fallback — no active names in database',
+            avg_rating: 1500,
+            popularity_score: 0,
+            total_tournaments: 0,
+            is_active: true,
+            created_at: new Date().toISOString(),
+            updated_at: null,
+            user_rating: null,
+            user_wins: 0,
+            user_losses: 0,
+            isHidden: false,
+            has_user_rating: false
+          },
+          {
+            id: 'felix',
+            name: 'felix',
+            description: 'temporary fallback — no active names in database',
+            avg_rating: 1500,
+            popularity_score: 0,
+            total_tournaments: 0,
+            is_active: true,
+            created_at: new Date().toISOString(),
+            updated_at: null,
+            user_rating: null,
+            user_wins: 0,
+            user_losses: 0,
+            isHidden: false,
+            has_user_rating: false
+          },
+          {
+            id: 'milo',
+            name: 'milo',
+            description: 'temporary fallback — no active names in database',
+            avg_rating: 1500,
+            popularity_score: 0,
+            total_tournaments: 0,
+            is_active: true,
+            created_at: new Date().toISOString(),
+            updated_at: null,
+            user_rating: null,
+            user_wins: 0,
+            user_losses: 0,
+            isHidden: false,
+            has_user_rating: false
+          }
+        ];
+      }
+
       // Process data to include default values (no user-specific data in this view)
       return (
         (data || []).map((item) => ({
@@ -212,7 +501,7 @@ export const catNamesAPI = {
           p_category: categoryId,
           p_limit: limit
         });
-        
+
         if (categoryError) {
           console.error('Error fetching category leaderboard:', categoryError);
           return [];
