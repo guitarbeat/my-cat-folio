@@ -305,6 +305,15 @@
   transition: all 0.3s ease;
 }
 
+/* Ensure items are visually centered in collapsed mode */
+.sidebar--collapsed .sidebar-group-content {
+  align-items: center;
+}
+
+.sidebar--collapsed .sidebar-group-label {
+  display: none;
+}
+
 /* * Enhanced collapsed state with tooltip-like glow */
 .sidebar--collapsed .sidebar-menu-button:hover {
   transform: scale(1.05);

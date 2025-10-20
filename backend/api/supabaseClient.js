@@ -6,14 +6,30 @@
 
 // * Import Supabase client directly to avoid TypeScript/JavaScript compatibility issues
 import { createClient } from '@supabase/supabase-js';
-import { config } from 'dotenv';
 
-// * Load environment variables from .env.local
-config({ path: '.env.local' });
+// * Supabase configuration (isomorphic: works in browser and Node)
+const readFromViteEnv = (key) => {
+  try {
+    // Vite replaces import.meta.env at build time in the browser
+    // Guard access so Node does not error
+    // eslint-disable-next-line no-undef
+    return typeof import.meta !== 'undefined' && import.meta.env ? import.meta.env[key] : undefined;
+  } catch {
+    return undefined;
+  }
+};
 
-// * Supabase configuration
-const SUPABASE_URL = process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL;
-const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY || process.env.VITE_SUPABASE_ANON_KEY;
+const SUPABASE_URL =
+  readFromViteEnv('SUPABASE_URL') ||
+  readFromViteEnv('VITE_SUPABASE_URL') ||
+  process.env.SUPABASE_URL ||
+  process.env.VITE_SUPABASE_URL;
+
+const SUPABASE_ANON_KEY =
+  readFromViteEnv('SUPABASE_ANON_KEY') ||
+  readFromViteEnv('VITE_SUPABASE_ANON_KEY') ||
+  process.env.SUPABASE_ANON_KEY ||
+  process.env.VITE_SUPABASE_ANON_KEY;
 
 let supabase = null;
 
