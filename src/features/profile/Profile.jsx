@@ -6,8 +6,8 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import {
-  getSupabaseClient,
-  getSupabaseClientSync
+  getSupabaseClientSync,
+  resolveSupabaseClient
 } from '../../integrations/supabase/client';
 import {
   deleteName,
@@ -28,9 +28,6 @@ import { Error, StartTournamentButton } from '../../shared/components';
 import styles from './Profile.module.css';
 
 // * Use database-optimized stats calculation
-const resolveSupabaseClient = async () =>
-  getSupabaseClientSync() ?? (await getSupabaseClient());
-
 const fetchUserStatsFromDB = async (userName) => {
   if (!userName) return null;
 

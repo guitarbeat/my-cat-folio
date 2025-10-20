@@ -1,14 +1,8 @@
 import React, { useState } from 'react';
 import Card from '../../shared/components/Card';
-import {
-  getSupabaseClient,
-  getSupabaseClientSync
-} from '../../integrations/supabase/client';
+import { resolveSupabaseClient } from '../../integrations/supabase/client';
 import useToast from '../../core/hooks/useToast';
 import styles from './DataMigration.module.css';
-
-const resolveSupabaseClient = async () =>
-  getSupabaseClientSync() ?? (await getSupabaseClient());
 
 export default function DataMigration() {
   const [isLoading, setIsLoading] = useState(false);
