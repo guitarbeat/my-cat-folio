@@ -469,7 +469,7 @@
   background: linear-gradient(
     135deg,
     var(--inline-accent-surface),
-    var(--glass-bg, rgba(255, 255, 255, 0.7))
+    var(--glass-bg, rgb(255 255 255 / 70%))
   );
   border: 1px solid var(--inline-accent-border);
   border-radius: var(--radius-xl, 1rem);
@@ -506,14 +506,14 @@
 .inlineRetryButton,
 .inlineDismissButton {
   display: inline-flex;
-  align-items: center;
   gap: var(--space-2, 0.5rem);
+  align-items: center;
   padding: 0.375rem 0.75rem;
   font-size: var(--text-sm, 0.875rem);
   font-weight: 600;
   cursor: pointer;
-  border-radius: var(--radius-md, 0.5rem);
   border: 1px solid transparent;
+  border-radius: var(--radius-md, 0.5rem);
   transition: var(--transition-all, all 0.2s ease);
 }
 
@@ -554,8 +554,8 @@
 
 .inlineRetryButton:disabled,
 .inlineDismissButton:disabled {
-  opacity: 0.6;
   cursor: not-allowed;
+  opacity: 0.6;
 }
 
 .inlineRetryIcon {
@@ -565,43 +565,43 @@
 /* Context variants */
 .inlineForm {
   --inline-accent: var(--error-600);
-  --inline-accent-border: rgba(220, 38, 38, 0.35);
-  --inline-accent-surface: rgba(254, 226, 226, 0.7);
+  --inline-accent-border: rgb(220 38 38 / 35%);
+  --inline-accent-surface: rgb(254 226 226 / 70%);
 }
 
 .inlineVote {
   --inline-accent: var(--highlight-600);
-  --inline-accent-border: rgba(217, 119, 6, 0.35);
-  --inline-accent-surface: rgba(254, 243, 199, 0.7);
+  --inline-accent-border: rgb(217 119 6 / 35%);
+  --inline-accent-surface: rgb(254 243 199 / 70%);
 }
 
 .inlineSubmit {
   --inline-accent: var(--success-600);
-  --inline-accent-border: rgba(5, 150, 105, 0.35);
-  --inline-accent-surface: rgba(209, 250, 229, 0.7);
+  --inline-accent-border: rgb(5 150 105 / 35%);
+  --inline-accent-surface: rgb(209 250 229 / 70%);
 }
 
 .inlineValidation {
   --inline-accent: var(--warning-600);
-  --inline-accent-border: rgba(217, 119, 6, 0.35);
-  --inline-accent-surface: rgba(254, 240, 138, 0.7);
+  --inline-accent-border: rgb(217 119 6 / 35%);
+  --inline-accent-surface: rgb(254 240 138 / 70%);
 }
 
 .inlineGeneral {
   --inline-accent: var(--secondary-600);
-  --inline-accent-border: rgba(71, 85, 105, 0.3);
-  --inline-accent-surface: rgba(241, 245, 249, 0.7);
+  --inline-accent-border: rgb(71 85 105 / 30%);
+  --inline-accent-surface: rgb(241 245 249 / 70%);
 }
 
-:global(.dark-theme) .inline {
-  --inline-accent-border: rgba(255, 255, 255, 0.18);
-  --inline-accent-surface: rgba(15, 23, 42, 0.6);
+:global(:root[data-theme='dark']) .inline {
+  --inline-accent-border: rgb(255 255 255 / 18%);
+  --inline-accent-surface: rgb(15 23 42 / 60%);
   --inline-text: var(--text-primary, #f8fafc);
 }
 
-:global(.dark-theme) .inlineGeneral {
-  --inline-accent-border: rgba(148, 163, 184, 0.35);
-  --inline-accent-surface: rgba(30, 41, 59, 0.7);
+:global(:root[data-theme='dark']) .inlineGeneral {
+  --inline-accent-border: rgb(148 163 184 / 35%);
+  --inline-accent-surface: rgb(30 41 59 / 70%);
 }
 
 /* Severity colors */

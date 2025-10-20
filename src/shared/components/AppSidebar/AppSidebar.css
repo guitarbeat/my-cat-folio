@@ -11,11 +11,11 @@
 }
 
 .sidebar-collapse-toggle {
-  background: transparent;
+  padding: 0.5rem 0.75rem;
   color: rgb(255 255 255 / 85%);
+  background: transparent;
   border: none;
   box-shadow: none;
-  padding: 0.5rem 0.75rem;
 }
 
 .sidebar-collapse-toggle svg {
@@ -24,20 +24,20 @@
 
 .sidebar-logo {
   padding: 1rem;
-  border-bottom: 1px solid rgb(255 255 255 / 10%);
   margin-bottom: 1rem;
+  border-bottom: 1px solid rgb(255 255 255 / 10%);
 }
 
 .sidebar-logo-button {
   display: flex;
-  align-items: center;
   gap: 0.75rem;
+  align-items: center;
   width: 100%;
   padding: 0.5rem;
+  cursor: pointer;
   background: transparent;
   border: none;
   border-radius: 8px;
-  cursor: pointer;
   transition: all 0.2s ease;
 }
 
@@ -58,13 +58,13 @@
 }
 
 .sidebar-logo-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
   font-size: 1.125rem;
   font-weight: 700;
   color: rgb(255 255 255 / 95%);
-  text-shadow: 0 2px 4px rgb(0 0 0 / 40%);
   white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  text-shadow: 0 2px 4px rgb(0 0 0 / 40%);
 }
 
 .sidebar--collapsed .sidebar-logo-button {
@@ -80,8 +80,8 @@
 
 .sidebar-user-greeting {
   display: flex;
-  align-items: center;
   gap: 0.5rem;
+  align-items: center;
   padding: 0.75rem;
   font-size: 0.875rem;
   color: rgb(255 255 255 / 90%);
@@ -102,37 +102,37 @@
 }
 
 /* Light theme */
-.light-theme .sidebar-logo {
+:root[data-theme='light'] .sidebar-logo {
   border-bottom-color: rgb(0 0 0 / 10%);
 }
 
-.light-theme .sidebar-logo-button:hover {
+:root[data-theme='light'] .sidebar-logo-button:hover {
   background: rgb(0 0 0 / 5%);
 }
 
-.light-theme .sidebar-collapse-toggle {
+:root[data-theme='light'] .sidebar-collapse-toggle {
   color: #475569;
 }
 
-.light-theme .sidebar-logo-text {
+:root[data-theme='light'] .sidebar-logo-text {
   color: #1e293b;
   text-shadow: none;
 }
 
-.light-theme .sidebar-user-info {
+:root[data-theme='light'] .sidebar-user-info {
   border-top-color: rgb(0 0 0 / 10%);
   border-bottom-color: rgb(0 0 0 / 10%);
 }
 
-.light-theme .sidebar-user-greeting {
+:root[data-theme='light'] .sidebar-user-greeting {
   color: #475569;
   background: rgb(0 0 0 / 3%);
 }
 
-.light-theme .sidebar-logout-button {
+:root[data-theme='light'] .sidebar-logout-button {
   color: #dc2626 !important;
 }
 
-.light-theme .sidebar-logout-button:hover {
+:root[data-theme='light'] .sidebar-logout-button:hover {
   background: rgb(220 38 38 / 10%) !important;
 }
