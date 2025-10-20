@@ -3,8 +3,8 @@
  * @description Application sidebar navigation component
  */
 
-import { useMemo } from 'react';
-import PropTypes from 'prop-types';
+import { useMemo } from "react";
+import PropTypes from "prop-types";
 import {
   Sidebar,
   SidebarContent,
@@ -14,9 +14,9 @@ import {
   SidebarMenu,
   SidebarMenuItem,
   SidebarMenuButton,
-  useSidebar
-} from '../ui/sidebar';
-import './AppSidebar.css';
+  useSidebar,
+} from "../ui/sidebar";
+import "./AppSidebar.css";
 
 export function AppSidebar({
   view,
@@ -28,17 +28,27 @@ export function AppSidebar({
   onStartNewTournament,
   isLightTheme,
   onThemeChange,
-  onTogglePerformanceDashboard
+  onTogglePerformanceDashboard,
 }) {
   const { collapsed, toggleCollapsed } = useSidebar();
 
   // Define navigation items
   const navItems = [
     {
-      key: 'tournament',
-      label: 'Tournament',
+      key: "tournament",
+      label: "Tournament",
       icon: (
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
           <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6" />
           <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18" />
           <path d="M4 22h16" />
@@ -46,33 +56,46 @@ export function AppSidebar({
           <path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22" />
           <path d="M18 2H6v7a6 6 0 0 0 12 0V2Z" />
         </svg>
-      )
-    }
+      ),
+    },
   ];
 
   // Add Profile if logged in
   if (isLoggedIn) {
     navItems.push({
-      key: 'profile',
-      label: 'Profile',
+      key: "profile",
+      label: "Profile",
       icon: (
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
           <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
           <circle cx="12" cy="7" r="4" />
         </svg>
-      )
+      ),
     });
   }
 
   const externalLinks = useMemo(
-    () => (
+    () =>
       isLoggedIn
         ? []
         : [
-            { key: 'kpop', label: 'K-Pop Site', url: 'https://kpop.alw.lol' },
-            { key: 'personal', label: 'Personal Site', url: 'https://aaronwoods.info' }
-          ]
-    ),
+            { key: "kpop", label: "K-Pop Site", url: "https://kpop.alw.lol" },
+            {
+              key: "personal",
+              label: "Personal Site",
+              url: "https://aaronwoods.info",
+            },
+          ],
     [isLoggedIn]
   );
 
@@ -84,12 +107,12 @@ export function AppSidebar({
             type="button"
             className="sidebar-collapse-toggle"
             onClick={toggleCollapsed}
-            aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+            aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              width="20"
-              height="20"
+              width="16"
+              height="16"
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
@@ -97,11 +120,11 @@ export function AppSidebar({
               strokeLinecap="round"
               strokeLinejoin="round"
             >
-              <path d="M21 3H3" />
-              <path d="M21 21H3" />
-              <path d="M15 7l-4 5 4 5" />
+              <path d="M3 6h18" />
+              <path d="M3 12h18" />
+              <path d="M3 18h18" />
             </svg>
-            <span>{collapsed ? 'Expand Sidebar' : 'Collapse Sidebar'}</span>
+            <span>{collapsed ? "Expand Sidebar" : "Collapse Sidebar"}</span>
           </SidebarMenuButton>
         </div>
 
@@ -110,8 +133,8 @@ export function AppSidebar({
           <button
             type="button"
             onClick={() => {
-              setView('tournament');
-              if (typeof onStartNewTournament === 'function') {
+              setView("tournament");
+              if (typeof onStartNewTournament === "function") {
                 onStartNewTournament();
               }
             }}
@@ -140,7 +163,9 @@ export function AppSidebar({
                 fetchPriority="low"
               />
             </video>
-            {!collapsed && <span className="sidebar-logo-text">Name Nosferatu</span>}
+            {!collapsed && (
+              <span className="sidebar-logo-text">Name Nosferatu</span>
+            )}
           </button>
         </div>
 
@@ -160,8 +185,8 @@ export function AppSidebar({
                           e.preventDefault();
                           setView(item.key.toLowerCase());
                         }}
-                        className={isActive ? 'active' : ''}
-                        aria-current={isActive ? 'page' : undefined}
+                        className={isActive ? "active" : ""}
+                        aria-current={isActive ? "page" : undefined}
                       >
                         {item.icon}
                         <span>{item.label}</span>
@@ -217,7 +242,17 @@ export function AppSidebar({
         {isLoggedIn && userName && !collapsed && (
           <div className="sidebar-user-info">
             <div className="sidebar-user-greeting">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
                 <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
                 <circle cx="12" cy="7" r="4" />
               </svg>
@@ -237,14 +272,38 @@ export function AppSidebar({
                   <button
                     type="button"
                     onClick={onThemeChange}
-                    aria-label={isLightTheme ? 'Switch to dark theme' : 'Switch to light theme'}
+                    aria-label={
+                      isLightTheme
+                        ? "Switch to dark theme"
+                        : "Switch to light theme"
+                    }
                   >
                     {isLightTheme ? (
-                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="20"
+                        height="20"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      >
                         <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />
                       </svg>
                     ) : (
-                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="20"
+                        height="20"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      >
                         <circle cx="12" cy="12" r="4" />
                         <path d="M12 2v2" />
                         <path d="M12 20v2" />
@@ -256,7 +315,7 @@ export function AppSidebar({
                         <path d="m19.07 4.93-1.41 1.41" />
                       </svg>
                     )}
-                    <span>{isLightTheme ? 'Dark Mode' : 'Light Mode'}</span>
+                    <span>{isLightTheme ? "Dark Mode" : "Light Mode"}</span>
                   </button>
                 </SidebarMenuButton>
               </SidebarMenuItem>
@@ -270,7 +329,17 @@ export function AppSidebar({
                       onClick={onTogglePerformanceDashboard}
                       aria-label="Open performance dashboard"
                     >
-                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="20"
+                        height="20"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      >
                         <line x1="12" x2="12" y1="20" y2="10" />
                         <line x1="18" x2="18" y1="20" y2="4" />
                         <line x1="6" x2="6" y1="20" y2="16" />
@@ -290,7 +359,17 @@ export function AppSidebar({
                       onClick={onLogout}
                       className="sidebar-logout-button"
                     >
-                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="20"
+                        height="20"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      >
                         <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
                         <polyline points="16 17 21 12 16 7" />
                         <line x1="21" x2="9" y1="12" y2="12" />
@@ -318,5 +397,5 @@ AppSidebar.propTypes = {
   onStartNewTournament: PropTypes.func,
   isLightTheme: PropTypes.bool.isRequired,
   onThemeChange: PropTypes.func.isRequired,
-  onTogglePerformanceDashboard: PropTypes.func
+  onTogglePerformanceDashboard: PropTypes.func,
 };
