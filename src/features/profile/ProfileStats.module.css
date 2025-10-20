@@ -264,19 +264,19 @@
 
 /* Insights Section */
 .insightsSection {
-  padding: 0.875rem;
-  margin-top: 1rem;
+  padding: 0.75rem;
+  margin-top: 0.75rem;
   background: linear-gradient(
     135deg,
     rgb(255 255 255 / 8%) 0%,
     rgb(255 255 255 / 4%) 100%
   );
   border: 1px solid rgb(255 255 255 / 12%);
-  border-radius: 14px;
+  border-radius: 12px;
   box-shadow:
-    0 6px 20px rgb(0 0 0 / 12%),
-    inset 0 1px 0 rgb(255 255 255 / 15%);
-  backdrop-filter: blur(18px);
+    0 4px 16px rgb(0 0 0 / 10%),
+    inset 0 1px 0 rgb(255 255 255 / 12%);
+  backdrop-filter: blur(16px);
 }
 
 .insightsTitle {
@@ -313,8 +313,8 @@
 
 .insightsGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 0.875rem;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 0.75rem;
 }
 
 .insightCard {

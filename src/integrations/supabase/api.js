@@ -17,6 +17,7 @@ export {
   deleteName,
   getNamesWithDescriptions,
   getNamesWithUserRatings,
+  getUserStats,
   addRatingHistory,
   updateRating,
   getRatingHistory,

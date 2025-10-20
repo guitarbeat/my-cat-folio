@@ -40,7 +40,7 @@ describe("Login Component - Focused Tests", () => {
     Element.prototype.scrollIntoView = vi.fn();
   });
 
-  it("renders login form in collapsed state initially", async () => {
+  it("renders login form in expanded state initially", async () => {
     await act(async () => {
       render(<Login onLogin={mockOnLogin} />);
     });
@@ -49,9 +49,7 @@ describe("Login Component - Focused Tests", () => {
     expect(
       screen.getByText("Enter your name to login or create a new account")
     ).toBeInTheDocument();
-    expect(
-      screen.getByText(/Hover or focus here to open the judge/)
-    ).toBeInTheDocument();
+    expect(screen.getByRole("textbox")).toBeInTheDocument();
   });
 
   it("expands form on click", async () => {

@@ -8,25 +8,12 @@
   background: transparent; /* let galaxy show */
 }
 
-/* Header - Fixed at top */
-.header {
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 1rem 2rem;
-  background: var(--glass-bg);
-  border-bottom: 1px solid var(--glass-border);
-  box-shadow: var(--glass-shadow);
-  backdrop-filter: blur(var(--glass-blur));
-}
-
+/* Title - Integrated into container */
 .title {
-  margin: 0;
+  margin: 0 0 1.5rem;
   font-size: 2rem;
   font-weight: 700;
+  text-align: center;
   background: linear-gradient(135deg, var(--primary-400), var(--primary-600));
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -956,9 +943,9 @@
 }
 
 @media (width <= 1024px) {
-  .mainContent {
-    padding: 1.5rem;
-    gap: 1.5rem;
+  .profileContainer {
+    padding: 1.25rem;
+    gap: 1.25rem;
   }
 
   .statsOverview {
@@ -987,7 +974,7 @@
     justify-content: center;
   }
 
-  .mainContent {
+  .profileContainer {
     padding: 1rem;
     gap: 1rem;
   }

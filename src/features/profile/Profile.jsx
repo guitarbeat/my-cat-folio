@@ -15,14 +15,13 @@ import {
   tournamentsAPI,
   hiddenNamesAPI,
   getNamesWithUserRatings,
+  getUserStats,
 } from "../../integrations/supabase/api";
 import useToast from "../../core/hooks/useToast";
 import { FILTER_OPTIONS } from "../../core/constants";
 // ErrorManager removed to prevent circular dependency
 import { isUserAdmin } from "../../shared/utils/authUtils";
 
-import ProfileStats from "./ProfileStats";
-import ProfileFilters from "./ProfileFilters";
 import ProfileNameList from "./ProfileNameList";
 import { Error } from "../../shared/components";
 import styles from "./Profile.module.css";
@@ -36,7 +35,7 @@ const fetchUserStatsFromDB = async (userName) => {
   }
 
   try {
-    const dbStats = await catNamesAPI.getUserStats(userName);
+    const dbStats = await getUserStats(userName);
     if (!dbStats) return null;
 
     // Return database stats directly (no transformation needed)
@@ -319,6 +318,23 @@ const Profile = ({ userName }) => {
         names.filter((name) => name.isHidden).map((name) => name.id)
       );
       setHiddenNames(hiddenIds);
+
+      // * Debug logging for hidden names
+      if (process.env.NODE_ENV === "development") {
+        const hiddenNames = names.filter((name) => name.isHidden);
+        console.log(
+          `🔍 Profile loaded ${names.length} names for user: ${userName}`
+        );
+        console.log(
+          `🔍 Found ${hiddenNames.length} hidden names:`,
+          hiddenNames.map((n) => ({
+            id: n.id,
+            name: n.name,
+            isHidden: n.isHidden,
+          }))
+        );
+        console.log(`🔍 Hidden IDs set:`, Array.from(hiddenIds));
+      }
     } catch (err) {
       if (process.env.NODE_ENV === "development") {
         console.error("Error fetching names:", err);
@@ -462,6 +478,13 @@ const Profile = ({ userName }) => {
         } else {
           await hiddenNamesAPI.hideName(userName, nameId);
           showSuccess("Hidden");
+        }
+
+        // * Debug logging for visibility toggle
+        if (process.env.NODE_ENV === "development") {
+          console.log(
+            `🔍 Toggled visibility for name ${nameId}: ${currentlyHidden ? "unhidden" : "hidden"} for user: ${userName}`
+          );
         }
 
         // Optimistic local update for instant UI feedback
@@ -656,18 +679,12 @@ const Profile = ({ userName }) => {
 
   return (
     <div className={styles.profileContainer}>
-      <div className={styles.header}>
-        <h1 className={styles.title}>{userName}</h1>
-      </div>
+      <h1 className={styles.title}>{userName}</h1>
 
-      <ProfileStats
-        stats={stats}
-        selectionStats={selectionStats}
-        highlights={highlights}
-        isLoading={statsLoading || ratingsLoading}
-      />
-
-      <ProfileFilters
+      <ProfileNameList
+        names={allNames}
+        ratings={{ userName }}
+        isLoading={ratingsLoading || statsLoading}
         filterStatus={filterStatus}
         setFilterStatus={setFilterStatus}
         userFilter={userFilter}
@@ -677,23 +694,6 @@ const Profile = ({ userName }) => {
         sortOrder={sortOrder}
         setSortOrder={setSortOrder}
         isAdmin={isAdmin}
-        selectionFilter={selectionFilter}
-        setSelectionFilter={setSelectionFilter}
-        hasSelectionData={!!selectionStats}
-        filteredCount={filteredCount}
-        totalCount={allNames.length}
-        onApplyFilters={handleApplyFilters}
-      />
-
-      <ProfileNameList
-        names={allNames}
-        ratings={{ userName }}
-        isLoading={ratingsLoading}
-        filterStatus={filterStatus}
-        userFilter={userFilter}
-        sortBy={sortBy}
-        sortOrder={sortOrder}
-        isAdmin={isAdmin}
         onToggleVisibility={handleToggleVisibility}
         onDelete={handleDelete}
         onSelectionChange={handleSelectionChange}
@@ -701,10 +701,16 @@ const Profile = ({ userName }) => {
         hiddenIds={hiddenNames}
         showAdminControls={isAdmin}
         selectionFilter={selectionFilter}
+        setSelectionFilter={setSelectionFilter}
         selectionStats={selectionStats}
         onBulkHide={handleBulkHide}
         onBulkUnhide={handleBulkUnhide}
         onFilteredCountChange={handleFilteredCountChange}
+        onApplyFilters={handleApplyFilters}
+        stats={stats}
+        highlights={highlights}
+        filteredCount={filteredCount}
+        totalCount={allNames.length}
       />
     </div>
   );

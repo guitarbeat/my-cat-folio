@@ -16,7 +16,7 @@ function Login({ onLogin }) {
   const [error, setError] = useState("");
   const [catFact, setCatFact] = useState("");
   const [isTyping, setIsTyping] = useState(false);
-  const [isExpanded, setIsExpanded] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(true);
   const { showSuccess, showError } = useToast();
 
   const containerRef = useRef(null);
