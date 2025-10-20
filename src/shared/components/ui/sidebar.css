@@ -8,7 +8,7 @@
   z-index: var(--z-sticky, 100);
   display: flex;
   flex-direction: column;
-  width: var(--sidebar-expanded-width, 280px);
+  width: var(--sidebar-expanded-width, 300px);
   background: var(--glass-bg);
   border-right: 1px solid var(--glass-border);
   box-shadow: var(--glass-shadow-colored);
@@ -372,11 +372,22 @@
 /* Responsive */
 @media (width <= 768px) {
   .sidebar {
-    width: min(80vw, 320px);
+    width: min(85vw, 300px);
     transform: translateX(0);
   }
 
   .app--sidebar-collapsed .sidebar {
     width: var(--sidebar-collapsed-width, 56px);
+  }
+
+  /* * Improve touch targets on mobile */
+  .sidebar-menu-button {
+    min-height: 52px;
+    padding: 1rem 1.25rem;
+  }
+
+  .sidebar-collapse-toggle {
+    width: 40px;
+    height: 40px;
   }
 }

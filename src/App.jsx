@@ -287,7 +287,7 @@ function AppLayout({
 
   const layoutStyle = useMemo(
     () => ({
-      "--sidebar-expanded-width": "min(80vw, 280px)",
+      "--sidebar-expanded-width": "min(85vw, 300px)",
       "--sidebar-collapsed-width": `${collapsedWidth}px`,
     }),
     [collapsedWidth]

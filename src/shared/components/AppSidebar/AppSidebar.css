@@ -6,6 +6,19 @@
   position: relative;
 }
 
+/* * Screen reader only utility */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
 .sidebar-top-controls {
   display: flex;
   justify-content: flex-end;
@@ -24,12 +37,13 @@
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   /* * Minimal, clean design */
   position: relative;
-  overflow: hidden;
-  width: 32px;
+  overflow: visible;
+  min-width: 32px;
   height: 32px;
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: 0.5rem;
 }
 
 .sidebar-collapse-toggle:hover {
@@ -40,6 +54,11 @@
 
 .sidebar-collapse-toggle:active {
   transform: scale(0.95);
+}
+
+.sidebar-collapse-toggle:focus-visible {
+  outline: 2px solid var(--neon-cyan);
+  outline-offset: 2px;
 }
 
 .sidebar-collapse-toggle svg {
@@ -53,12 +72,24 @@
   transform: scale(1.1);
 }
 
+/* * Hide text in collapsed state with smooth transition */
+.sidebar--collapsed .sidebar-collapse-toggle span {
+  opacity: 0;
+  visibility: hidden;
+  width: 0;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
 .sidebar-logo {
   padding: 1.5rem 1.25rem;
   margin-bottom: 1.5rem;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   /* * Enhanced visual separation */
   position: relative;
+  /* * Ensure full width for text */
+  min-width: 0;
+  overflow: visible;
 }
 
 .sidebar-logo::after {
@@ -94,6 +125,7 @@
   overflow: visible;
   /* * Ensure text is not clipped */
   min-width: 0;
+  flex-shrink: 0;
 }
 
 .sidebar-logo-button::before {
@@ -151,7 +183,7 @@
 .sidebar-logo-text {
   overflow: visible;
   text-overflow: unset;
-  font-size: 1.1rem;
+  font-size: 1rem;
   font-weight: 800;
   color: rgb(255 255 255 / 95%);
   white-space: nowrap;
@@ -164,6 +196,7 @@
   transition: all 0.3s ease;
   /* * Ensure full text is visible */
   min-width: max-content;
+  flex-shrink: 0;
 }
 
 .sidebar-logo-button:hover .sidebar-logo-text {

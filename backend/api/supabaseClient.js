@@ -4,24 +4,37 @@
  * Combines all database operations, real-time subscriptions, and utility functions.
  */
 
-import {
-  getSupabaseClient,
-  getSupabaseClientSync
-} from '../../src/integrations/supabase/client';
+// * Import Supabase client directly to avoid TypeScript/JavaScript compatibility issues
+import { createClient } from '@supabase/supabase-js';
 
-let supabase = getSupabaseClientSync() ?? null;
+// * Supabase configuration
+const SUPABASE_URL = process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL;
+const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY || process.env.VITE_SUPABASE_ANON_KEY;
+
+let supabase = null;
 
 const resolveSupabaseClient = async () => {
   if (supabase) {
     return supabase;
   }
 
-  supabase = (await getSupabaseClient()) ?? null;
+  if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
+    if (process.env.NODE_ENV === 'development') {
+      console.warn('Missing Supabase environment variables (SUPABASE_URL / SUPABASE_ANON_KEY). Supabase features are disabled.');
+    }
+    return null;
+  }
 
-  return supabase;
+  try {
+    supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    return supabase;
+  } catch (error) {
+    console.error('Failed to initialize Supabase client:', error);
+    return null;
+  }
 };
 
-export { supabase };
+export { supabase, resolveSupabaseClient };
 export const getSupabaseServiceClient = resolveSupabaseClient;
 
 // ===== HELPER FUNCTIONS =====

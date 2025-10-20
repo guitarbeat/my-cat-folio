@@ -101,13 +101,24 @@ export function AppSidebar({
 
   return (
     <Sidebar className="app-sidebar" collapsible>
+      {/* * Screen reader announcements */}
+      <div aria-live="polite" aria-atomic="true" className="sr-only">
+        {collapsed ? "Sidebar collapsed" : "Sidebar expanded"}
+      </div>
       <SidebarContent>
         <div className="sidebar-top-controls">
           <SidebarMenuButton
             type="button"
             className="sidebar-collapse-toggle"
             onClick={toggleCollapsed}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                toggleCollapsed();
+              }
+            }}
             aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+            tabIndex={0}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -151,6 +162,12 @@ export function AppSidebar({
               playsInline
               preload="none"
               aria-label="Cat animation"
+              onError={(e) => {
+                // * Fallback to image if video fails to load
+                e.target.style.display = "none";
+                const img = e.target.nextElementSibling;
+                if (img) img.style.display = "block";
+              }}
             >
               <source src="/assets/images/cat.webm" type="video/webm" />
               <img
@@ -161,6 +178,7 @@ export function AppSidebar({
                 loading="lazy"
                 decoding="async"
                 fetchPriority="low"
+                style={{ display: "none" }}
               />
             </video>
             {!collapsed && (
@@ -187,6 +205,7 @@ export function AppSidebar({
                         }}
                         className={isActive ? "active" : ""}
                         aria-current={isActive ? "page" : undefined}
+                        title={collapsed ? item.label : undefined}
                       >
                         {item.icon}
                         <span>{item.label}</span>
@@ -212,6 +231,7 @@ export function AppSidebar({
                         href={link.url}
                         target="_blank"
                         rel="noopener noreferrer"
+                        title={collapsed ? link.label : undefined}
                       >
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
@@ -277,6 +297,13 @@ export function AppSidebar({
                         ? "Switch to dark theme"
                         : "Switch to light theme"
                     }
+                    title={
+                      collapsed
+                        ? isLightTheme
+                          ? "Dark Mode"
+                          : "Light Mode"
+                        : undefined
+                    }
                   >
                     {isLightTheme ? (
                       <svg
@@ -328,6 +355,7 @@ export function AppSidebar({
                       type="button"
                       onClick={onTogglePerformanceDashboard}
                       aria-label="Open performance dashboard"
+                      title={collapsed ? "Dashboard" : undefined}
                     >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -358,6 +386,7 @@ export function AppSidebar({
                       type="button"
                       onClick={onLogout}
                       className="sidebar-logout-button"
+                      title={collapsed ? "Logout" : undefined}
                     >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
