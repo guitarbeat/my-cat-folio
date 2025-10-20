@@ -73,7 +73,10 @@ export default [
 
       // Disable problematic rules temporarily
       'react/prop-types': 'off', // Disable prop-types validation
-      'react/display-name': 'off' // Disable display-name validation
+      'react/display-name': 'off', // Disable display-name validation
+
+      // Modern JSX transform doesn't require React in scope
+      'react/react-in-jsx-scope': 'off'
     },
     settings: {
       react: {
