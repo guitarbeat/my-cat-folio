@@ -5,94 +5,118 @@
  */
 
 // * Core UI Components
-export { default as Button } from './Button/Button';
-export { default as Card } from './Card/Card';
-export { default as Loading } from './Loading/Loading';
-export { default as Error } from './Error/Error';
-export { default as Toast } from './Toast/Toast';
-export { default as Modal } from './Modal/Modal';
-export { default as Tooltip } from './Tooltip/Tooltip';
-export { default as Badge } from './Badge/Badge';
-export { default as SkeletonLoader } from './SkeletonLoader/SkeletonLoader';
+import Button from './Button/Button';
+import Card from './Card/Card';
+import Loading, { LoadingSpinner, SuspenseView } from './Loading/Loading';
+import Error from './Error/Error';
+import Toast from './Toast/Toast';
+import SkeletonLoader from './SkeletonLoader/SkeletonLoader';
 
 // * Form Components
-export { default as Form } from './Form/Form';
-export { default as Input } from './Form/Input';
-export { default as Select } from './Form/Select';
-export { default as Textarea } from './Form/Textarea';
-export { default as Checkbox } from './Form/Checkbox';
-export { default as Radio } from './Form/Radio';
+import Form from './Form/Form';
+import Input from './Form/Input';
+import Select from './Form/Select';
 
 // * Layout Components
-export { default as AppSidebar } from './AppSidebar/AppSidebar';
-export { default as Breadcrumb } from './Breadcrumb/Breadcrumb';
-export { default as Header } from './Header/Header';
-export { default as Footer } from './Footer/Footer';
+import { AppSidebar } from './AppSidebar/AppSidebar';
+import Breadcrumb from './Breadcrumb/Breadcrumb';
 
 // * Feature Components
-export { default as NameCard } from './NameCard/NameCard';
-export { default as StatsCard } from './StatsCard/StatsCard';
-export { default as Bracket } from './Bracket/Bracket';
-export { default as BongoCat } from './BongoCat/BongoCat';
-export { default as CatBackground } from './CatBackground/CatBackground';
-export { default as PerformanceDashboard } from './PerformanceDashboard/PerformanceDashboard';
-export { default as StartTournamentButton } from './StartTournamentButton/StartTournamentButton';
-export { default as CalendarButton } from './CalendarButton/CalendarButton';
+import NameCard from './NameCard/NameCard';
+import StatsCard from './StatsCard/StatsCard';
+import Bracket from './Bracket/Bracket';
+import BongoCat from './BongoCat/BongoCat';
+import CatBackground from './CatBackground/CatBackground';
+import CatImage from './CatImage/CatImage';
+import PerformanceDashboard from './PerformanceDashboard/PerformanceDashboard';
+import StartTournamentButton from './StartTournamentButton/StartTournamentButton';
+import CalendarButton from './CalendarButton/CalendarButton';
+import ViewRouter from './ViewRouter/ViewRouter';
 
 // * UI System Components
+import ErrorBoundary from './Error/ErrorBoundary';
+import ErrorBoundaryFallback from './Error/ErrorBoundaryFallback';
 export { SidebarProvider, useSidebar } from './ui/sidebar';
-export { default as ErrorBoundary } from './Error/ErrorBoundary';
-export { default as ErrorBoundaryFallback } from './Error/ErrorBoundaryFallback';
-
-// * Re-export commonly used components for convenience
-export {
-    LoadingSpinner,
-    SuspenseView
-} from './Loading/Loading';
 
 // * Component prop types for external use
 export { default as PropTypes } from 'prop-types';
 
+// * Named exports
+export {
+  // Core UI
+  Button,
+  Card,
+  Loading,
+  Error,
+  Toast,
+  SkeletonLoader,
+
+  // Form
+  Form,
+  Input,
+  Select,
+
+  // Layout
+  AppSidebar,
+  Breadcrumb,
+
+  // Features
+  NameCard,
+  StatsCard,
+  Bracket,
+  BongoCat,
+  CatBackground,
+  CatImage,
+  PerformanceDashboard,
+  StartTournamentButton,
+  CalendarButton,
+  ViewRouter,
+
+  // UI System
+  ErrorBoundary,
+  ErrorBoundaryFallback,
+
+  // Legacy helpers
+  LoadingSpinner,
+  SuspenseView,
+};
+
 // * Default export with all components
 export default {
-    // Core UI
-    Button,
-    Card,
-    Loading,
-    Error,
-    Toast,
-    Modal,
-    Tooltip,
-    Badge,
-    SkeletonLoader,
+  // Core UI
+  Button,
+  Card,
+  Loading,
+  Error,
+  Toast,
+  SkeletonLoader,
 
-    // Forms
-    Form,
-    Input,
-    Select,
-    Textarea,
-    Checkbox,
-    Radio,
+  // Form
+  Form,
+  Input,
+  Select,
 
-    // Layout
-    AppSidebar,
-    Breadcrumb,
-    Header,
-    Footer,
+  // Layout
+  AppSidebar,
+  Breadcrumb,
 
-    // Features
-    NameCard,
-    StatsCard,
-    Bracket,
-    BongoCat,
-    CatBackground,
-    PerformanceDashboard,
-    StartTournamentButton,
-    CalendarButton,
+  // Features
+  NameCard,
+  StatsCard,
+  Bracket,
+  BongoCat,
+  CatBackground,
+  CatImage,
+  PerformanceDashboard,
+  StartTournamentButton,
+  CalendarButton,
+  ViewRouter,
 
-    // UI System
-    SidebarProvider,
-    useSidebar,
-    ErrorBoundary,
-    ErrorBoundaryFallback
+  // UI System
+  ErrorBoundary,
+  ErrorBoundaryFallback,
+
+  // Legacy helpers
+  LoadingSpinner,
+  SuspenseView,
 };
