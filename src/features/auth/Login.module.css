@@ -95,11 +95,12 @@
 .formCard {
   width: 100%;
   max-width: 500px;
-  color: rgb(248 250 252);
-  background: linear-gradient(135deg, rgb(30 41 59 / 95%), rgb(51 65 85 / 95%));
-  border: 1px solid rgb(255 255 255 / 15%);
+  color: var(--text-primary);
+  background: linear-gradient(135deg, var(--glass-bg-strong), var(--glass-bg));
+  border: 1px solid var(--glass-border);
   border-radius: 28px;
-  backdrop-filter: blur(25px);
+  backdrop-filter: blur(var(--glass-blur));
+  box-shadow: var(--glass-shadow-colored);
   transition: max-width 0.4s ease, transform 0.4s ease, padding 0.3s ease;
   animation: slideUp 0.6s 0.4s ease-out both;
 }
@@ -137,7 +138,7 @@
   margin: 0;
   font-size: clamp(1rem, 2.6vw, 1.15rem);
   line-height: 1.6;
-  color: rgb(226 232 240);
+  color: var(--text-secondary);
 }
 
 .expandedContent {
@@ -178,8 +179,8 @@
   align-items: center;
   padding: 0.5rem 1rem;
   margin-bottom: 1rem;
-  background: rgb(232 191 118 / 10%);
-  border: 1px solid rgb(232 191 118 / 30%);
+  background: var(--accent-subtle);
+  border: 1px solid var(--glass-border);
   border-radius: 25px;
   backdrop-filter: blur(10px);
 }
@@ -192,17 +193,17 @@
   height: 28px;
   font-size: 0.875rem;
   font-weight: 700;
-  color: #1f2937;
-  background: linear-gradient(135deg, #e8bf76, #f1a438);
+  color: var(--background-color);
+  background: linear-gradient(135deg, var(--accent-color), var(--highlight-color));
   border-radius: 50%;
-  box-shadow: 0 2px 8px rgb(232 191 118 / 30%);
+  box-shadow: 0 2px 8px rgba(var(--accent-rgb), 0.3);
 }
 
 .stepText {
   font-size: 0.875rem;
   font-weight: 600;
-  color: #f8fafc;
-  text-shadow: 0 1px 2px rgb(0 0 0 / 30%);
+  color: var(--text-primary);
+  text-shadow: 0 1px 2px rgba(var(--black-rgb), 0.3);
 }
 
 /* Hero Content Styles */
@@ -211,19 +212,19 @@
   font-size: clamp(2rem, 6vw, 3rem);
   font-weight: 700;
   line-height: 1.2;
-  color: #f8fafc;
+  color: var(--text-primary);
   text-align: center;
-  text-shadow: 0 2px 8px rgb(0 0 0 / 50%);
+  text-shadow: 0 2px 8px rgba(var(--black-rgb), 0.5);
 }
 
 .catImage {
   width: clamp(120px, 18vw, 180px);
   height: clamp(120px, 18vw, 180px);
-  border: 4px solid rgb(59 130 246 / 40%);
+  border: 4px solid var(--glass-border-hover);
   border-radius: 50%;
   box-shadow:
-    0 12px 30px rgb(59 130 246 / 30%),
-    0 0 0 1px rgb(255 255 255 / 10%);
+    var(--glow-cyan),
+    0 0 0 1px var(--glass-border);
   animation: float 3s ease-in-out infinite;
 }
 
@@ -243,7 +244,7 @@
   margin: 0;
   font-size: clamp(1rem, 3.5vw, 1.3rem);
   line-height: 1.6;
-  color: #cbd5e1;
+  color: var(--text-secondary);
   text-align: center;
 }
 
@@ -252,10 +253,10 @@
   margin: 0 0 clamp(1rem, 3vw, 1.5rem);
   font-size: clamp(1.5rem, 5vw, 2rem);
   font-weight: 700;
-  color: #f8fafc;
+  color: var(--text-primary);
   text-align: center;
-  text-shadow: 0 2px 8px rgb(0 0 0 / 30%);
-  background: linear-gradient(135deg, #60a5fa, #a78bfa);
+  text-shadow: 0 2px 8px rgba(var(--black-rgb), 0.3);
+  background: var(--gradient-primary);
   background-clip: text;
   -webkit-text-fill-color: transparent;
 }
@@ -265,10 +266,10 @@
   margin: 0 0 clamp(1rem, 3vw, 1.5rem);
   font-size: clamp(0.875rem, 3vw, 1rem);
   line-height: 1.4;
-  color: rgb(255 255 255 / 90%);
+  color: var(--text-primary);
   text-align: center;
-  background: rgb(255 255 255 / 10%);
-  border-left: 3px solid #e8bf76;
+  background: var(--glass-bg-light);
+  border-left: 3px solid var(--accent-color);
   border-radius: 8px;
   backdrop-filter: blur(10px);
 }
@@ -382,31 +383,31 @@
   padding: clamp(0.75rem, 2vw, 1rem) clamp(2.5rem, 6vw, 3rem)
     clamp(0.75rem, 2vw, 1rem) clamp(1rem, 2.5vw, 1.25rem);
   font-size: clamp(0.875rem, 3vw, 1rem);
-  color: #fff;
-  background: rgb(255 255 255 / 15%);
-  border: 2px solid rgb(255 255 255 / 30%);
+  color: var(--text-primary);
+  background: var(--glass-bg-light);
+  border: 2px solid var(--glass-border);
   border-radius: 8px;
   backdrop-filter: blur(10px);
   transition: all 0.2s ease;
 }
 
 .loginInput::placeholder {
-  color: rgb(255 255 255 / 75%);
+  color: var(--muted-foreground);
 }
 
 .loginInput:focus {
-  outline: 2px solid #e8bf76;
+  outline: 2px solid var(--accent-color);
   outline-offset: 2px;
-  background: rgb(255 255 255 / 20%);
-  border-color: #e8bf76;
-  box-shadow: 0 0 0 3px rgb(232 191 118 / 30%);
+  background: var(--glass-bg);
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 3px rgba(var(--accent-rgb), 0.3);
 }
 
 .loginInput.error {
-  outline: 2px solid #ef4444;
+  outline: 2px solid var(--vibrant-error);
   outline-offset: 2px;
-  border-color: #ef4444;
-  box-shadow: 0 0 0 3px rgb(239 68 68 / 30%);
+  border-color: var(--vibrant-error);
+  box-shadow: 0 0 0 3px rgba(var(--fire-red-rgb), 0.3);
 }
 
 .randomNameIndicator {
@@ -465,7 +466,7 @@
 
 .counterProgress {
   height: 100%;
-  background: linear-gradient(90deg, #e8bf76, #f1a438);
+  background: linear-gradient(90deg, var(--accent-color), var(--highlight-color));
   border-radius: 2px;
   transition: width 0.3s ease;
 }
@@ -476,17 +477,17 @@
   margin-top: 1rem;
   font-size: clamp(0.9rem, 3vw, 1rem);
   font-weight: 600;
-  color: white;
+  color: var(--background-color);
   cursor: pointer;
-  background: linear-gradient(135deg, #e8bf76, #f1a438);
+  background: linear-gradient(135deg, var(--accent-color), var(--highlight-color));
   border: none;
   border-radius: clamp(8px, 2vw, 12px);
-  box-shadow: 0 4px 16px rgb(232 191 118 / 30%);
+  box-shadow: 0 4px 16px rgba(var(--accent-rgb), 0.3);
   transition: all 0.2s ease;
 }
 
 .singleButton:hover {
-  box-shadow: 0 6px 20px rgb(249 115 22 / 40%);
+  box-shadow: 0 6px 20px rgba(var(--highlight-rgb), 0.4);
   transform: translateY(-2px);
 }
 
@@ -498,6 +499,7 @@
   cursor: not-allowed;
   opacity: 0.7;
   transform: none;
+}
 }
 
 .buttonContent {
