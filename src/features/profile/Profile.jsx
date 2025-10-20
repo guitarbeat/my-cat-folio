@@ -24,7 +24,7 @@ import { isUserAdmin } from "../../shared/utils/authUtils";
 import ProfileStats from "./ProfileStats";
 import ProfileFilters from "./ProfileFilters";
 import ProfileNameList from "./ProfileNameList";
-import { Error, StartTournamentButton } from "../../shared/components";
+import { Error } from "../../shared/components";
 import styles from "./Profile.module.css";
 
 // * Use database-optimized stats calculation
@@ -237,7 +237,7 @@ const generateImprovementTip = (
 };
 
 // * Main Profile Component
-const Profile = ({ userName, onStartNewTournament }) => {
+const Profile = ({ userName }) => {
   // * State
   const [filterStatus, setFilterStatus] = useState(
     FILTER_OPTIONS.STATUS.ACTIVE
@@ -443,9 +443,7 @@ const Profile = ({ userName, onStartNewTournament }) => {
   const handleToggleVisibility = useCallback(
     async (nameId) => {
       try {
-        console.log("🔍 Toggle visibility called for nameId:", nameId);
         const currentlyHidden = hiddenNames.has(nameId);
-        console.log("🔍 Currently hidden:", currentlyHidden);
 
         const supabaseClient = await resolveSupabaseClient();
         setHasSupabaseClient(!!supabaseClient);
@@ -459,11 +457,9 @@ const Profile = ({ userName, onStartNewTournament }) => {
         }
 
         if (currentlyHidden) {
-          console.log("🔍 Unhiding name...");
           await hiddenNamesAPI.unhideName(userName, nameId);
           showSuccess("Unhidden");
         } else {
-          console.log("🔍 Hiding name...");
           await hiddenNamesAPI.hideName(userName, nameId);
           showSuccess("Hidden");
         }
@@ -473,7 +469,6 @@ const Profile = ({ userName, onStartNewTournament }) => {
           const next = new Set(prev);
           if (currentlyHidden) next.delete(nameId);
           else next.add(nameId);
-          console.log("🔍 Updated hiddenNames:", Array.from(next));
           return next;
         });
 
@@ -485,10 +480,6 @@ const Profile = ({ userName, onStartNewTournament }) => {
               )
             : prev
         );
-
-        console.log("🔍 Local updates applied, skipping fetchNames()");
-        // Don't call fetchNames() as it overrides our optimistic updates
-        // fetchNames();
       } catch (error) {
         console.error("Profile - Toggle Visibility error:", error);
         showToast("Failed to toggle name visibility", "error");
@@ -649,28 +640,15 @@ const Profile = ({ userName, onStartNewTournament }) => {
     return (
       <div className={styles.profileContainer}>
         <div className={styles.header}>
-          <h1 className={styles.title}>Profile: {userName}</h1>
-          <StartTournamentButton
-            onClick={onStartNewTournament}
-            className={styles.newTournamentButton}
-          >
-            Start New Tournament
-          </StartTournamentButton>
+          <h1 className={styles.title}>{userName}</h1>
         </div>
         <div className={styles.noDataContainer}>
           <h2>No Data Available</h2>
           <p>
             {!hasSupabaseClient
               ? "Database not configured. Please set up Supabase environment variables to view your profile data."
-              : "No names found in your profile. Start a tournament to begin collecting data!"}
+              : "No names found in your profile."}
           </p>
-          <StartTournamentButton
-            onClick={onStartNewTournament}
-            className={styles.noDataButton}
-            size="large"
-          >
-            Start New Tournament
-          </StartTournamentButton>
         </div>
       </div>
     );
@@ -678,30 +656,17 @@ const Profile = ({ userName, onStartNewTournament }) => {
 
   return (
     <div className={styles.profileContainer}>
-      {/* * Header */}
       <div className={styles.header}>
-        <h1 className={styles.title}>Profile: {userName}</h1>
-        <div className={styles.headerButtons}>
-          <StartTournamentButton
-            onClick={onStartNewTournament}
-            className={styles.newTournamentButton}
-            size="medium"
-          >
-            Start New Tournament
-          </StartTournamentButton>
-        </div>
+        <h1 className={styles.title}>{userName}</h1>
       </div>
 
-      {/* * Statistics Section */}
       <ProfileStats
         stats={stats}
         selectionStats={selectionStats}
         highlights={highlights}
         isLoading={statsLoading || ratingsLoading}
-        className={styles.statsSection}
       />
 
-      {/* * Filters Section */}
       <ProfileFilters
         filterStatus={filterStatus}
         setFilterStatus={setFilterStatus}
@@ -712,16 +677,14 @@ const Profile = ({ userName, onStartNewTournament }) => {
         sortOrder={sortOrder}
         setSortOrder={setSortOrder}
         isAdmin={isAdmin}
-        className={styles.filtersSection}
         selectionFilter={selectionFilter}
         setSelectionFilter={setSelectionFilter}
-        hasSelectionData={!!selectionStats} // * Show selection filters if we have selection data
+        hasSelectionData={!!selectionStats}
         filteredCount={filteredCount}
         totalCount={allNames.length}
         onApplyFilters={handleApplyFilters}
       />
 
-      {/* * Names List Section */}
       <ProfileNameList
         names={allNames}
         ratings={{ userName }}
@@ -736,8 +699,7 @@ const Profile = ({ userName, onStartNewTournament }) => {
         onSelectionChange={handleSelectionChange}
         selectedNames={selectedNames}
         hiddenIds={hiddenNames}
-        className={styles.namesSection}
-        showAdminControls={isAdmin} // * Pass admin controls flag
+        showAdminControls={isAdmin}
         selectionFilter={selectionFilter}
         selectionStats={selectionStats}
         onBulkHide={handleBulkHide}
@@ -750,7 +712,6 @@ const Profile = ({ userName, onStartNewTournament }) => {
 
 Profile.propTypes = {
   userName: PropTypes.string.isRequired,
-  onStartNewTournament: PropTypes.func.isRequired,
 };
 
 // * Wrap Profile with error boundary
