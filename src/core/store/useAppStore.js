@@ -40,7 +40,19 @@ const getInitialTheme = () => {
   try {
     const storedTheme = window.localStorage.getItem('theme');
     if (storedTheme !== null) {
-      return storedTheme === 'true' ? 'light' : 'dark';
+      const normalizedTheme = storedTheme.trim().toLowerCase();
+
+      if (normalizedTheme === 'light' || normalizedTheme === 'dark') {
+        return normalizedTheme;
+      }
+
+      if (normalizedTheme === 'true') {
+        return 'light';
+      }
+
+      if (normalizedTheme === 'false') {
+        return 'dark';
+      }
     }
   } catch (error) {
     if (process.env.NODE_ENV === 'development') {
