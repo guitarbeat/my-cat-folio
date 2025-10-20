@@ -5,10 +5,7 @@
  */
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import PropTypes from 'prop-types';
-import {
-  getSupabaseClient,
-  getSupabaseClientSync
-} from '../../integrations/supabase/client';
+import { resolveSupabaseClient } from '../../integrations/supabase/client';
 import {
   getNamesWithDescriptions,
   tournamentsAPI,
@@ -63,9 +60,6 @@ const GALLERY_IMAGE_SIZES =
 const LIGHTBOX_IMAGE_SIZES = '(max-width: 768px) 94vw, 80vw';
 
 const DEFAULT_DESCRIPTION = 'A name as unique as your future companion';
-
-const resolveSupabaseClient = async () =>
-  getSupabaseClientSync() ?? (await getSupabaseClient());
 
 const FALLBACK_NAMES = [
   {

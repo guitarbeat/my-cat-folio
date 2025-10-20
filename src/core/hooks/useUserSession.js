@@ -8,15 +8,9 @@
  */
 
 import { useState, useCallback, useEffect } from 'react';
-import {
-  getSupabaseClient,
-  getSupabaseClientSync
-} from '../../integrations/supabase/client';
+import { resolveSupabaseClient } from '../../integrations/supabase/client';
 import useAppStore from '../store/useAppStore';
 import { isUserAdmin } from '@/shared/utils/authUtils';
-
-const resolveSupabaseClient = async () =>
-  getSupabaseClientSync() ?? (await getSupabaseClient());
 
 let canUseSetUserContext = true;
 

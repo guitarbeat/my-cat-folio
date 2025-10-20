@@ -3,13 +3,7 @@
  * @description Utilities for authentication and authorization checks with role-based access control
  */
 
-import {
-  getSupabaseClient,
-  getSupabaseClientSync
-} from '@/integrations/supabase/client';
-
-const resolveSupabaseClient = async () =>
-  getSupabaseClientSync() ?? (await getSupabaseClient());
+import { resolveSupabaseClient } from '@/integrations/supabase/client';
 
 /**
  * User roles hierarchy (higher number = more permissions)

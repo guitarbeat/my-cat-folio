@@ -79,6 +79,10 @@ export const getSupabaseClient = async (): Promise<SupabaseClient<Database> | nu
 
 export const getSupabaseClientSync = (): SupabaseClient<Database> | null => supabase;
 
+export const resolveSupabaseClient = async (): Promise<
+  SupabaseClient<Database> | null
+> => getSupabaseClientSync() ?? (await getSupabaseClient());
+
 if (!supabase) {
   void getSupabaseClient();
 }

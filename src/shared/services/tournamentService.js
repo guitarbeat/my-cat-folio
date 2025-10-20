@@ -1,10 +1,4 @@
-import {
-  getSupabaseClient,
-  getSupabaseClientSync
-} from '@/integrations/supabase/client';
-
-const resolveSupabaseClient = async () =>
-  getSupabaseClientSync() ?? (await getSupabaseClient());
+import { resolveSupabaseClient } from '@/integrations/supabase/client';
 
 /**
  * @module TournamentService
