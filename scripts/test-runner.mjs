@@ -1,9 +1,32 @@
 #!/usr/bin/env node
 import { spawn } from 'node:child_process';
 import { createRequire } from 'node:module';
+import { dirname, resolve } from 'node:path';
 
 const require = createRequire(import.meta.url);
-const vitestBin = require.resolve('vitest/vitest.mjs');
+
+const resolveVitestBin = () => {
+  let vitestPackageJsonPath;
+
+  try {
+    vitestPackageJsonPath = require.resolve('vitest/package.json');
+  } catch (error) {
+    throw new Error('Unable to locate vitest package. Ensure dependencies are installed.', { cause: error });
+  }
+
+  const vitestPackageJson = require(vitestPackageJsonPath);
+  const binField = vitestPackageJson?.bin;
+
+  const binEntry = typeof binField === 'string' ? binField : binField?.vitest;
+
+  if (!binEntry) {
+    throw new Error('Could not determine Vitest CLI entry point from package metadata.');
+  }
+
+  return resolve(dirname(vitestPackageJsonPath), binEntry);
+};
+
+const vitestBin = resolveVitestBin();
 
 const rawArgs = process.argv.slice(2);
 const vitestArgs = ['run', '--config', 'config/vitest.config.mjs'];
