@@ -19,7 +19,7 @@ Run the SQL migration to add the missing columns to your database.
 1. **Start your local Supabase instance:**
 
    ```bash
-   cd /Users/aaron/Downloads/github/meow-namester-react
+   cd /Users/aaron/Downloads/github/name-nosferatu
    supabase start
    ```
 
