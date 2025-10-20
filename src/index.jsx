@@ -20,6 +20,8 @@ import '@styles/components-global.css';
 import '@styles/app-layout.css';
 import '@styles/responsive.css';
 import App from './App.jsx';
+import ErrorBoundary from './shared/components/Error/ErrorBoundary.jsx';
+import ErrorBoundaryFallback from './shared/components/Error/ErrorBoundaryFallback.jsx';
 import { Analytics } from '@vercel/analytics/react';
 
 // Set up global error handling
@@ -31,8 +33,10 @@ console.info('[Boot] index.jsx loaded');
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <StrictMode>
-    <App />
-    <Analytics />
+    <ErrorBoundary FallbackComponent={ErrorBoundaryFallback}>
+      <App />
+      <Analytics />
+    </ErrorBoundary>
   </StrictMode>
 );
 
