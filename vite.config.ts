@@ -95,10 +95,9 @@ export default defineConfig(({ mode }) => {
         module: true,
       },
       rollupOptions: {
-        // * Use default Rollup tree-shaking to preserve React module initialization
         output: {
-          manualChunks: (id) => {
-            // * More granular chunking for better tree shaking
+          manualChunks: mode === 'development' ? undefined : (id) => {
+            // * Only use granular chunking in production
             if (id.includes('node_modules')) {
               if (id.includes('@supabase/supabase-js')) return 'vendor-supabase';
               if (id.includes('@hello-pangea/dnd')) return 'vendor-dnd';
@@ -106,10 +105,8 @@ export default defineConfig(({ mode }) => {
               if (id.includes('zustand')) return 'vendor-zustand';
               if (id.includes('@heroicons')) return 'vendor-icons';
               if (id.includes('prop-types')) return 'vendor-prop-types';
-              // * Group smaller libraries together
               return 'vendor-misc';
             }
-            // * Chunk by feature for better code splitting
             if (id.includes('/features/')) {
               const feature = id.split('/features/')[1]?.split('/')[0];
               if (feature) return `feature-${feature}`;
@@ -117,13 +114,11 @@ export default defineConfig(({ mode }) => {
             if (id.includes('/shared/utils/coreUtils')) {
               return 'shared-utils';
             }
-            // * Allow shared components to remain with their importers to avoid early execution ordering issues
           },
           chunkFileNames: 'assets/js/[name]-[hash].js',
           entryFileNames: 'assets/js/[name]-[hash].js',
           assetFileNames: 'assets/[ext]/[name]-[hash].[ext]',
-          // * Optimize chunk loading
-          experimentalMinChunkSize: 1000,
+          experimentalMinChunkSize: mode === 'development' ? undefined : 1000,
         },
       },
       chunkSizeWarningLimit: 1000,
