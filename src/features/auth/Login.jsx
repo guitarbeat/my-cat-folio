@@ -2,19 +2,19 @@
  * @module Login
  * @description User login component with fun cat-themed interactions.
  */
-import React, { useState, useEffect, useRef } from 'react';
-import PropTypes from 'prop-types';
+import React, { useState, useEffect, useRef } from "react";
+import PropTypes from "prop-types";
 
-import { Card, Error } from '../../shared/components';
-import useToast from '../../core/hooks/useToast';
-import { validateUsername } from '../../shared/utils/validationUtils';
-import styles from './Login.module.css';
+import { Card, Error } from "../../shared/components";
+import useToast from "../../core/hooks/useToast";
+import { validateUsername } from "../../shared/utils/validationUtils";
+import styles from "./Login.module.css";
 
 function Login({ onLogin }) {
-  const [name, setName] = useState('');
+  const [name, setName] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState('');
-  const [catFact, setCatFact] = useState('');
+  const [error, setError] = useState("");
+  const [catFact, setCatFact] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
   const { showSuccess, showError } = useToast();
@@ -25,46 +25,46 @@ function Login({ onLogin }) {
 
   // Add login-page class to body and html when component mounts
   useEffect(() => {
-    document.body.classList.add('login-page');
-    document.documentElement.classList.add('login-page');
+    document.body.classList.add("login-page");
+    document.documentElement.classList.add("login-page");
 
     // Remove class when component unmounts
     return () => {
-      document.body.classList.remove('login-page');
-      document.documentElement.classList.remove('login-page');
+      document.body.classList.remove("login-page");
+      document.documentElement.classList.remove("login-page");
     };
   }, []);
 
   const funnyPrefixes = [
-    'Captain',
-    'Dr.',
-    'Professor',
-    'Lord',
-    'Lady',
-    'Sir',
-    'Duchess',
-    'Count',
-    'Princess',
-    'Chief',
-    'Master',
-    'Agent',
-    'Detective',
-    'Admiral'
+    "Captain",
+    "Dr.",
+    "Professor",
+    "Lord",
+    "Lady",
+    "Sir",
+    "Duchess",
+    "Count",
+    "Princess",
+    "Chief",
+    "Master",
+    "Agent",
+    "Detective",
+    "Admiral",
   ];
 
   const funnyAdjectives = [
-    'Whiskers',
-    'Purrington',
-    'Meowington',
-    'Pawsome',
-    'Fluffles',
-    'Scratchy',
-    'Naptastic',
-    'Furball',
-    'Cattastic',
-    'Pawdorable',
-    'Whiskertron',
-    'Purrfect'
+    "Whiskers",
+    "Purrington",
+    "Meowington",
+    "Pawsome",
+    "Fluffles",
+    "Scratchy",
+    "Naptastic",
+    "Furball",
+    "Cattastic",
+    "Pawdorable",
+    "Whiskertron",
+    "Purrfect",
   ];
 
   const generateFunName = () => {
@@ -86,14 +86,14 @@ function Login({ onLogin }) {
 
   // Fetch cat fact on component mount
   useEffect(() => {
-    fetch('https://catfact.ninja/fact')
+    fetch("https://catfact.ninja/fact")
       .then((response) => response.json())
       .then((data) => setCatFact(data.fact))
       .catch((error) => {
-        if (process.env.NODE_ENV === 'development') {
-          console.error('Error fetching cat fact:', error);
+        if (process.env.NODE_ENV === "development") {
+          console.error("Error fetching cat fact:", error);
         }
-        setCatFact('Cats are amazing creatures with unique personalities!');
+        setCatFact("Cats are amazing creatures with unique personalities!");
       });
 
     const currentTimeout = typingTimeoutRef.current;
@@ -107,8 +107,8 @@ function Login({ onLogin }) {
   useEffect(() => {
     if (isExpanded && containerRef.current) {
       containerRef.current.scrollIntoView({
-        behavior: 'smooth',
-        block: 'center'
+        behavior: "smooth",
+        block: "center",
       });
     }
   }, [isExpanded]);
@@ -118,8 +118,9 @@ function Login({ onLogin }) {
     setIsTyping(true);
     resetTypingTimer();
     if (error) {
-      setError('');
+      setError("");
     }
+    // * Always expand when user starts typing
     if (!isExpanded) {
       setIsExpanded(true);
     }
@@ -132,18 +133,25 @@ function Login({ onLogin }) {
   };
 
   const handleCardMouseLeave = () => {
-    if (name.trim()) {
+    // * Don't collapse if user has entered text or is interacting
+    if (name.trim() || isLoading) {
       return;
     }
 
-    const activeElement = typeof document !== 'undefined' ? document.activeElement : null;
+    const activeElement =
+      typeof document !== "undefined" ? document.activeElement : null;
     if (formCardRef.current && activeElement) {
       if (formCardRef.current.contains(activeElement)) {
         return;
       }
     }
 
-    setIsExpanded(false);
+    // * Add a small delay to prevent accidental collapse
+    setTimeout(() => {
+      if (!name.trim() && !isLoading) {
+        setIsExpanded(false);
+      }
+    }, 300);
   };
 
   const handleSubmit = async (e) => {
@@ -169,8 +177,8 @@ function Login({ onLogin }) {
       await onLogin(validation.value);
       showSuccess(`Welcome back, ${validation.value}! 🎉`);
     } catch (err) {
-      setError(err.message || 'Something went wrong. Please try again.');
-      showError('Login failed. Please try again.');
+      setError(err.message || "Something went wrong. Please try again.");
+      showError("Login failed. Please try again.");
     } finally {
       setIsLoading(false);
     }
@@ -297,11 +305,11 @@ function Login({ onLogin }) {
                       onChange={handleNameChange}
                       onFocus={handleInputFocus}
                       placeholder="Enter your judge name"
-                      className={`${styles.loginInput} ${error ? styles.error : ''}`}
+                      className={`${styles.loginInput} ${error ? styles.error : ""}`}
                       autoFocus
                       disabled={isLoading}
                       aria-label="Your name"
-                      aria-describedby={error ? 'loginError' : 'loginHelp'}
+                      aria-describedby={error ? "loginError" : "loginHelp"}
                       aria-required="false"
                       maxLength={30}
                     />
@@ -321,7 +329,7 @@ function Login({ onLogin }) {
                       error={error}
                       context="form"
                       position="below"
-                      onDismiss={() => setError('')}
+                      onDismiss={() => setError("")}
                       showRetry={false}
                       showDismiss={true}
                       size="medium"
@@ -329,8 +337,8 @@ function Login({ onLogin }) {
                     />
                   )}
                   <p id="loginHelp" className={styles.explainerText}>
-                    Type your judge name to sign in. We&apos;ll create an account
-                    automatically if it&apos;s your first time.
+                    Type your judge name to sign in. We&apos;ll create an
+                    account automatically if it&apos;s your first time.
                   </p>
                   {name.trim() && (
                     <div className={styles.characterCounter}>
@@ -349,7 +357,7 @@ function Login({ onLogin }) {
 
                 <button
                   type="submit"
-                  className={`${styles.singleButton} ${isLoading ? styles.loading : ''} ${name.trim() ? styles.hasName : ''}`}
+                  className={`${styles.singleButton} ${isLoading ? styles.loading : ""} ${name.trim() ? styles.hasName : ""}`}
                   disabled={isLoading}
                 >
                   <span className={styles.buttonContent}>
@@ -360,9 +368,7 @@ function Login({ onLogin }) {
                       </>
                     ) : (
                       <>
-                        {name.trim()
-                          ? 'Continue'
-                          : 'Get Random Name & Start'}
+                        {name.trim() ? "Continue" : "Get Random Name & Start"}
                         <span className={styles.buttonEmoji} aria-hidden="true">
                           🏆
                         </span>
@@ -375,12 +381,16 @@ function Login({ onLogin }) {
               <div className={styles.namePreview}>
                 {name ? (
                   <p className={styles.helperText}>
-                    You&apos;ll login or create an account as{' '}
-                    <span className={styles.nameHighlight}>&quot;{name}&quot;</span>
+                    You&apos;ll login or create an account as{" "}
+                    <span className={styles.nameHighlight}>
+                      &quot;{name}&quot;
+                    </span>
                   </p>
                 ) : (
                   <div className={styles.randomPreview}>
-                    <p className={`${styles.helperText} ${styles.randomNameText}`}>
+                    <p
+                      className={`${styles.helperText} ${styles.randomNameText}`}
+                    >
                       We&apos;ll generate a fun name automatically!
                     </p>
                     <p className={styles.randomNameExample}>
@@ -396,15 +406,14 @@ function Login({ onLogin }) {
           )}
         </Card>
       </div>
-
     </div>
   );
 }
 
-Login.displayName = 'Login';
+Login.displayName = "Login";
 
 Login.propTypes = {
-  onLogin: PropTypes.func.isRequired
+  onLogin: PropTypes.func.isRequired,
 };
 
 // * Wrap Login with error boundary
