@@ -1,7 +1,13 @@
-import useAppStore, { selectTournamentStats } from './useAppStore';
-
 describe('useTournamentStats', () => {
-  beforeEach(() => {
+  let useAppStore;
+  let selectTournamentStats;
+
+  beforeEach(async () => {
+    jest.resetModules();
+    const storeModule = await import('./useAppStore');
+    useAppStore = storeModule.default;
+    selectTournamentStats = storeModule.selectTournamentStats;
+
     useAppStore.setState((state) => ({
       ...state,
       tournament: {
@@ -61,5 +67,28 @@ describe('useTournamentStats', () => {
 
     expect(stats.totalNames).toBe(3);
     expect(stats.progress).toBe(100);
+  });
+});
+
+describe('theme initialization', () => {
+  beforeEach(() => {
+    window.localStorage.clear();
+    jest.resetModules();
+  });
+
+  it('preserves a persisted light theme value', async () => {
+    window.localStorage.setItem('theme', 'light');
+
+    const { default: store } = await import('./useAppStore');
+
+    expect(store.getState().ui.theme).toBe('light');
+  });
+
+  it('supports legacy boolean theme values', async () => {
+    window.localStorage.setItem('theme', 'false');
+
+    const { default: store } = await import('./useAppStore');
+
+    expect(store.getState().ui.theme).toBe('dark');
   });
 });
