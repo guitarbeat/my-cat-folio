@@ -330,19 +330,19 @@
 }
 
 /* Light Theme Overrides */
-body.light-theme {
+:root[data-theme='light'] {
   --primary-color: var(--primary-600);
   --primary-light: var(--primary-100);
   --primary-dark: var(--primary-800);
-  --surface-color: #ffffff;
+  --surface-color: #fff;
   --background-color: #f4f7fb;
   --surface-muted: #f1f5fb;
-  --surface-elevated: #ffffff;
+  --surface-elevated: #fff;
   --text-primary: #0f172a;
   --text-secondary: #475569;
   --text-tertiary: #64748b;
   --border-color: #dbe3f0;
-  --card-background: #ffffff;
+  --card-background: #fff;
   --card-border: #dbe3f0;
   --card-hover: #eef2f9;
   --header-background: rgb(255 255 255 / 90%);
@@ -370,8 +370,8 @@ body.light-theme {
   --shadow-medium: 0 18px 40px rgb(15 23 42 / 14%);
 
   /* Synced light-mode variables for components using legacy names */
-  --surface-light: #ffffff;
-  --card-background-light: #ffffff;
+  --surface-light: #fff;
+  --card-background-light: #fff;
   --card-hover-light: #eef2f9;
   --border-color-light: #dbe3f0;
   --text-primary-light: #1e293b;
@@ -394,21 +394,23 @@ body.light-theme {
   --namecard-selected-bg: linear-gradient(135deg, var(--primary-600), var(--primary-700));
   --namecard-selected-border: var(--primary-400);
   --namecard-selected-description: var(--primary-300);
-
   --muted: #eef2f9;
   --muted-foreground: #475569;
 
   color-scheme: light;
+}
+
+:root[data-theme='light'] body {
   background-image:
     radial-gradient(circle at -10% -10%, rgba(var(--accent-rgb), 0.16), transparent 60%),
     radial-gradient(circle at 120% -20%, rgba(var(--neon-cyan-rgb), 0.12), transparent 55%),
     radial-gradient(circle at 10% 120%, rgba(var(--hot-pink-rgb), 0.1), transparent 60%);
-  background-attachment: fixed;
   background-repeat: no-repeat;
+  background-attachment: fixed;
 }
 
 /* Dark Theme Overrides */
-body.dark-theme {
+:root[data-theme='dark'] {
   --primary-color: var(--primary-400);
   --primary-light: var(--primary-700);
   --primary-dark: var(--primary-200);
@@ -472,17 +474,19 @@ body.dark-theme {
   --namecard-selected-bg: linear-gradient(135deg, var(--primary-700), var(--primary-800));
   --namecard-selected-border: var(--primary-300);
   --namecard-selected-description: var(--primary-300);
-
   --muted: #111827;
   --muted-foreground: #94a3b8;
 
   color-scheme: dark;
+}
+
+:root[data-theme='dark'] body {
   background-image:
     radial-gradient(circle at 15% -20%, rgba(var(--hot-pink-rgb), 0.24), transparent 55%),
     radial-gradient(circle at 120% 10%, rgba(var(--neon-cyan-rgb), 0.18), transparent 55%),
     radial-gradient(circle at -10% 70%, rgba(var(--fire-red-rgb), 0.12), transparent 60%);
-  background-attachment: fixed;
   background-repeat: no-repeat;
+  background-attachment: fixed;
 }
 
 /* High Contrast Mode */

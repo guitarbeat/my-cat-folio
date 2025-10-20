@@ -1,4 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 describe('useTournamentStats', () => {
   let useAppStore;
@@ -9,6 +10,9 @@ describe('useTournamentStats', () => {
     const storeModule = await import('./useAppStore');
     useAppStore = storeModule.default;
     selectTournamentStats = storeModule.selectTournamentStats;
+    const { default: store, selectTournamentStats: statsSelector } = await import('./useAppStore');
+    useAppStore = store;
+    selectTournamentStats = statsSelector;
 
     useAppStore.setState((state) => ({
       ...state,
@@ -92,5 +96,62 @@ describe('theme initialization', () => {
     const { default: store } = await import('./useAppStore');
 
     expect(store.getState().ui.theme).toBe('dark');
+  });
+});
+
+describe('system theme synchronization', () => {
+  const createMatchMediaMock = (initialMatches = false) => {
+    let changeListener;
+
+    return {
+      matches: initialMatches,
+      media: '(prefers-color-scheme: dark)',
+      addEventListener: vi.fn((event, listener) => {
+        if (event === 'change') {
+          changeListener = listener;
+        }
+      }),
+      removeEventListener: vi.fn(),
+      addListener: undefined,
+      removeListener: undefined,
+      dispatch(matches) {
+        this.matches = matches;
+        if (changeListener) {
+          changeListener({ matches });
+        }
+      }
+    };
+  };
+
+  beforeEach(() => {
+    window.localStorage.clear();
+    vi.resetModules();
+  });
+
+  afterEach(() => {
+    delete window.matchMedia;
+    vi.restoreAllMocks();
+  });
+
+  it('reacts to system preference changes when following the system theme', async () => {
+    const matchMediaMock = createMatchMediaMock(false);
+    window.matchMedia = vi.fn().mockReturnValue(matchMediaMock);
+
+    const { default: store } = await import('./useAppStore');
+
+    store.getState().uiActions.initializeTheme();
+
+    matchMediaMock.dispatch(true);
+    expect(store.getState().ui.theme).toBe('dark');
+
+    store.getState().uiActions.setTheme('light');
+    matchMediaMock.dispatch(false);
+    expect(store.getState().ui.theme).toBe('light');
+
+    store.getState().uiActions.setTheme('system');
+    matchMediaMock.dispatch(true);
+    expect(store.getState().ui.theme).toBe('dark');
+    matchMediaMock.dispatch(false);
+    expect(store.getState().ui.theme).toBe('light');
   });
 });

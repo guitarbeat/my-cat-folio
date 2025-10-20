@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 
 <head>
     <meta charset="UTF-8">
@@ -16,7 +16,9 @@
     <!-- SEO -->
     <meta name="description"
         content="Pick the perfect cat name via a fun tournament. Save, compare, and share results.">
-    <meta name="theme-color" content="#f4f7fb">
+    <meta name="color-scheme" content="light dark">
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f4f7fb">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#020617">
 
     <!-- Open Graph -->
     <meta property="og:title" content="Name Nosferatu">
@@ -44,86 +46,40 @@
 
 <body>
     <script>
-      (function initializeTheme() {
-        try {
-          const THEME_KEY = 'theme';
-          const metaTheme = document.querySelector('meta[name="theme-color"]');
-          const { body, documentElement } = document;
+      (function applyInitialTheme() {
+        const { documentElement, body } = document;
+        if (!documentElement) {
+          return;
+        }
 
-          const applyTheme = (theme) => {
-            const isLight = theme === 'light';
-
-            body.classList.toggle('light-theme', isLight);
-            body.classList.toggle('dark-theme', !isLight);
-
-            documentElement.dataset.theme = theme;
-            documentElement.style.colorScheme = theme;
-            body.style.colorScheme = theme;
-
-            if (metaTheme) {
-              metaTheme.setAttribute('content', isLight ? '#f4f7fb' : '#020617');
+        const STORAGE_KEY = 'theme';
+        const resolveStoredPreference = () => {
+          try {
+            if (!window.localStorage) return null;
+            const stored = window.localStorage.getItem(STORAGE_KEY);
+            return stored === 'light' || stored === 'dark' ? stored : null;
+          } catch (error) {
+            if (
+              typeof process !== 'undefined' &&
+              process.env &&
+              process.env.NODE_ENV === 'development'
+            ) {
+              console.error('Unable to read stored theme during boot:', error);
             }
-          };
-
-          const parseStoredTheme = (value) => {
-            if (value === null) return null;
-            if (value === 'light' || value === 'dark') {
-              return value;
-            }
-            if (value === 'true' || value === 'false') {
-              return value === 'true' ? 'light' : 'dark';
-            }
-
-            try {
-              const parsed = JSON.parse(value);
-              if (typeof parsed === 'boolean') {
-                return parsed ? 'light' : 'dark';
-              }
-            } catch (error) {
-              if (
-                typeof process !== 'undefined' &&
-                process.env &&
-                process.env.NODE_ENV === 'development'
-              ) {
-                console.error('Error parsing stored theme value during boot:', error);
-              }
-            }
-
             return null;
-          };
-
-          const saved =
-            typeof window !== 'undefined' && window.localStorage
-              ? window.localStorage.getItem(THEME_KEY)
-              : null;
-
-          const resolvePreferredTheme = () => {
-            const prefersDark =
-              typeof window !== 'undefined' &&
-              window.matchMedia &&
-              window.matchMedia('(prefers-color-scheme: dark)').matches;
-            if (prefersDark) {
-              return 'dark';
-            }
-
-            const now = new Date();
-            const hour = now.getHours();
-            const minute = now.getMinutes();
-            const afterSunset = hour > 18 || (hour === 18 && minute >= 30) || hour < 6;
-
-            return afterSunset ? 'dark' : 'light';
-          };
-
-          const storedTheme = parseStoredTheme(saved);
-          const themeToApply = storedTheme ?? resolvePreferredTheme();
-
-          applyTheme(themeToApply);
-
-          if (!storedTheme && typeof window !== 'undefined' && window.localStorage) {
-            window.localStorage.setItem('theme', themeToApply);
           }
-        } catch (error) {
-          document.body.classList.add('light-theme');
+        };
+
+        const resolveSystemPreference = () =>
+          window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+            ? 'dark'
+            : 'light';
+
+        const theme = resolveStoredPreference() ?? resolveSystemPreference();
+
+        documentElement.dataset.theme = theme;
+        if (body) {
+          body.dataset.theme = theme;
         }
       })();
     </script>

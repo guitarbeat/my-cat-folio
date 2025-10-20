@@ -2,6 +2,142 @@ import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
 import { useEffect } from 'react';
 
+const THEME_STORAGE_KEY = 'theme';
+const COLOR_SCHEME_QUERY = '(prefers-color-scheme: dark)';
+
+const getSystemTheme = () => {
+  if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') {
+    return 'light';
+  }
+
+  return window.matchMedia(COLOR_SCHEME_QUERY).matches ? 'dark' : 'light';
+};
+
+const normalizeStoredTheme = (value) => {
+  if (!value) {
+    return null;
+  }
+
+  if (value === 'light' || value === 'dark') {
+    return value;
+  }
+
+  if (value === 'true') {
+    return 'light';
+  }
+
+  if (value === 'false') {
+    return 'dark';
+  }
+
+  return null;
+};
+
+const getInitialThemeState = () => {
+  const defaultState = {
+    theme: 'light',
+    themePreference: 'system'
+  };
+
+  if (typeof window === 'undefined') {
+    return defaultState;
+  }
+
+  let storedPreference = null;
+
+  try {
+    const stored = window.localStorage?.getItem(THEME_STORAGE_KEY);
+    const normalized = normalizeStoredTheme(stored);
+
+    if (normalized) {
+      if (stored !== normalized && window.localStorage) {
+        window.localStorage.setItem(THEME_STORAGE_KEY, normalized);
+      }
+      storedPreference = normalized;
+    } else if (stored && window.localStorage) {
+      window.localStorage.removeItem(THEME_STORAGE_KEY);
+    }
+  } catch (error) {
+    if (process.env.NODE_ENV === 'development') {
+      console.warn('Unable to read stored theme from localStorage:', error);
+    }
+  }
+
+  if (storedPreference) {
+    return {
+      theme: storedPreference,
+      themePreference: storedPreference
+    };
+  }
+
+  const domTheme = typeof document !== 'undefined' ? document.documentElement?.dataset?.theme : null;
+
+  if (domTheme === 'light' || domTheme === 'dark') {
+    return {
+      theme: domTheme,
+      themePreference: 'system'
+    };
+  }
+
+  return {
+    theme: getSystemTheme(),
+    themePreference: 'system'
+  };
+};
+
+let hasSubscribedToSystemTheme = false;
+
+const subscribeToSystemTheme = (set, get) => {
+  if (hasSubscribedToSystemTheme) {
+    return;
+  }
+
+  if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') {
+    return;
+  }
+
+  const mediaQuery = window.matchMedia(COLOR_SCHEME_QUERY);
+
+  const handleChange = (event) => {
+    if (get().ui.themePreference !== 'system') {
+      return;
+    }
+
+    const nextTheme = event.matches ? 'dark' : 'light';
+
+    set((state) => {
+      if (state.ui.theme === nextTheme) {
+        return state;
+      }
+
+      return {
+        ui: {
+          ...state.ui,
+          theme: nextTheme
+        }
+      };
+    });
+  };
+
+  if (typeof mediaQuery.addEventListener === 'function') {
+    mediaQuery.addEventListener('change', handleChange);
+  } else {
+    mediaQuery.addListener(handleChange);
+  }
+
+  hasSubscribedToSystemTheme = true;
+
+  const preferredTheme = mediaQuery.matches ? 'dark' : 'light';
+  if (get().ui.themePreference === 'system' && get().ui.theme !== preferredTheme) {
+    set((state) => ({
+      ui: {
+        ...state.ui,
+        theme: preferredTheme
+      }
+    }));
+  }
+};
+
 const getInitialUserState = () => {
   const defaultState = {
     name: '',
@@ -32,37 +168,6 @@ const getInitialUserState = () => {
   return defaultState;
 };
 
-const getInitialTheme = () => {
-  if (typeof window === 'undefined') {
-    return 'light';
-  }
-
-  try {
-    const storedTheme = window.localStorage.getItem('theme');
-    if (storedTheme !== null) {
-      const normalizedTheme = storedTheme.trim().toLowerCase();
-
-      if (normalizedTheme === 'light' || normalizedTheme === 'dark') {
-        return normalizedTheme;
-      }
-
-      if (normalizedTheme === 'true') {
-        return 'light';
-      }
-
-      if (normalizedTheme === 'false') {
-        return 'dark';
-      }
-    }
-  } catch (error) {
-    if (process.env.NODE_ENV === 'development') {
-      console.warn('Unable to read stored theme from localStorage:', error);
-    }
-  }
-
-  return 'light';
-};
-
 /**
  * @module useAppStore
  * @description Centralized state management for the entire application using Zustand.
@@ -87,7 +192,7 @@ const useAppStore = create(
 
       // * UI State
       ui: {
-        theme: getInitialTheme(),
+        ...getInitialThemeState(),
         showPerformanceDashboard: false,
         showGlobalAnalytics: false,
         showUserComparison: false,
@@ -271,109 +376,83 @@ const useAppStore = create(
 
       // * UI Actions
       uiActions: {
-        // * Initialize theme from localStorage
-        initializeTheme: () =>
-          set((state) => {
-            try {
-              const storedTheme =
-                typeof window !== 'undefined' && window.localStorage
-                  ? window.localStorage.getItem('theme')
-                  : null;
-
-              const parseStoredTheme = (value) => {
-                if (value === null) return null;
-                if (value === 'light' || value === 'dark') {
-                  return value;
-                }
-                if (value === 'true' || value === 'false') {
-                  return value === 'true' ? 'light' : 'dark';
-                }
-
-                try {
-                  const parsed = JSON.parse(value);
-                  if (typeof parsed === 'boolean') {
-                    return parsed ? 'light' : 'dark';
-                  }
-                } catch (error) {
-                  if (process.env.NODE_ENV === 'development') {
-                    console.error('Error parsing stored theme value:', error);
-                  }
-                }
-                return null;
-              };
-
-              const resolvedStoredTheme = parseStoredTheme(storedTheme);
-
-              if (resolvedStoredTheme && resolvedStoredTheme !== state.ui.theme) {
-                return {
+        // * Initialize theme from DOM and system preference
+        initializeTheme: () => {
+          if (typeof document !== 'undefined') {
+            const domTheme = document.documentElement?.dataset?.theme;
+            if (domTheme === 'light' || domTheme === 'dark') {
+              const { theme, themePreference } = get().ui;
+              if (themePreference === 'system' && theme !== domTheme) {
+                set((state) => ({
                   ui: {
                     ...state.ui,
-                    theme: resolvedStoredTheme
+                    theme: domTheme
                   }
-                };
-              }
-
-              if (typeof window !== 'undefined' && window.matchMedia) {
-                const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-                const preferredTheme = prefersDark ? 'dark' : 'light';
-
-                if (preferredTheme !== state.ui.theme) {
-                  return {
-                    ui: {
-                      ...state.ui,
-                      theme: preferredTheme
-                    }
-                  };
-                }
-              }
-            } catch (error) {
-              if (process.env.NODE_ENV === 'development') {
-                console.error('Error reading theme from localStorage:', error);
+                }));
               }
             }
-            return state;
-          }),
+          }
 
-        setTheme: (theme) =>
-          set((state) => {
-            // * Persist to localStorage
-            try {
-              if (typeof window !== 'undefined' && window.localStorage) {
-                window.localStorage.setItem('theme', theme);
-              }
-            } catch (error) {
-              if (process.env.NODE_ENV === 'development') {
-                console.error('Error updating theme localStorage:', error);
+          subscribeToSystemTheme(set, get);
+        },
+
+        setTheme: (nextPreference) => {
+          if (!['light', 'dark', 'system'].includes(nextPreference)) {
+            return;
+          }
+
+          const isSystemPreference = nextPreference === 'system';
+          const themeToApply = isSystemPreference ? getSystemTheme() : nextPreference;
+
+          try {
+            if (typeof window !== 'undefined' && window.localStorage) {
+              if (isSystemPreference) {
+                window.localStorage.removeItem(THEME_STORAGE_KEY);
+              } else {
+                window.localStorage.setItem(THEME_STORAGE_KEY, nextPreference);
               }
             }
-            return {
-              ui: {
-                ...state.ui,
-                theme
-              }
-            };
-          }),
-
-        toggleTheme: () =>
-          set((state) => {
-            const newTheme = state.ui.theme === 'light' ? 'dark' : 'light';
-            // * Persist to localStorage
-            try {
-              if (typeof window !== 'undefined' && window.localStorage) {
-                window.localStorage.setItem('theme', newTheme);
-              }
-            } catch (error) {
-              if (process.env.NODE_ENV === 'development') {
-                console.error('Error updating theme localStorage:', error);
-              }
+          } catch (error) {
+            if (process.env.NODE_ENV === 'development') {
+              console.error('Error updating theme localStorage:', error);
             }
-            return {
-              ui: {
-                ...state.ui,
-                theme: newTheme
-              }
-            };
-          }),
+          }
+
+          set((state) => ({
+            ui: {
+              ...state.ui,
+              theme: themeToApply,
+              themePreference: isSystemPreference ? 'system' : nextPreference
+            }
+          }));
+
+          if (isSystemPreference) {
+            subscribeToSystemTheme(set, get);
+          }
+        },
+
+        toggleTheme: () => {
+          const currentTheme = get().ui.theme;
+          const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+
+          try {
+            if (typeof window !== 'undefined' && window.localStorage) {
+              window.localStorage.setItem(THEME_STORAGE_KEY, newTheme);
+            }
+          } catch (error) {
+            if (process.env.NODE_ENV === 'development') {
+              console.error('Error updating theme localStorage:', error);
+            }
+          }
+
+          set((state) => ({
+            ui: {
+              ...state.ui,
+              theme: newTheme,
+              themePreference: newTheme
+            }
+          }));
+        },
 
         setPerformanceDashboardVisible: (show) =>
           set((state) => ({
