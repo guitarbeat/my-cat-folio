@@ -26,11 +26,11 @@ export default defineConfig(({ mode }) => {
   };
 
   if (supabaseUrl !== undefined) {
-    defineEnv['import.meta.env.SUPABASE_URL'] = JSON.stringify(supabaseUrl);
+    defineEnv['import.meta.env.VITE_SUPABASE_URL'] = JSON.stringify(supabaseUrl);
   }
 
   if (supabaseAnonKey !== undefined) {
-    defineEnv['import.meta.env.SUPABASE_ANON_KEY'] = JSON.stringify(supabaseAnonKey);
+    defineEnv['import.meta.env.VITE_SUPABASE_ANON_KEY'] = JSON.stringify(supabaseAnonKey);
   }
 
   return {
