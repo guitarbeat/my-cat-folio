@@ -1,9 +1,11 @@
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+
 describe('useTournamentStats', () => {
   let useAppStore;
   let selectTournamentStats;
 
   beforeEach(async () => {
-    jest.resetModules();
+    vi.resetModules();
     const storeModule = await import('./useAppStore');
     useAppStore = storeModule.default;
     selectTournamentStats = storeModule.selectTournamentStats;
@@ -73,7 +75,7 @@ describe('useTournamentStats', () => {
 describe('theme initialization', () => {
   beforeEach(() => {
     window.localStorage.clear();
-    jest.resetModules();
+    vi.resetModules();
   });
 
   it('preserves a persisted light theme value', async () => {

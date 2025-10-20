@@ -2,11 +2,11 @@
  * @module Card
  * @description Reusable card component with flexible styling options
  */
-import { forwardRef } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import styles from './Card.module.css';
 
-const Card = forwardRef(({ 
+const Card = React.forwardRef(({ 
   children,
   className = '',
   variant = 'default',
