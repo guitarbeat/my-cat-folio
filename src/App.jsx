@@ -29,11 +29,13 @@ import { TournamentService } from '@services/tournamentService';
 import { ErrorManager } from '@services/errorManager';
 
 /**
- * Generate a cat background video element
- * @param {number} index - The index number for the CSS class
- * @returns {JSX.Element} Video element with fallback image
+ * Root application component that wires together global state, routing, and
+ * layout providers for the cat name tournament experience. It manages
+ * authentication, toast notifications, tournament lifecycle events, and
+ * renders the primary interface shell.
+ *
+ * @returns {JSX.Element} Fully configured application layout.
  */
-
 function App() {
   // * Toast notifications
   const { toasts, removeToast, showToast } = useToast();
