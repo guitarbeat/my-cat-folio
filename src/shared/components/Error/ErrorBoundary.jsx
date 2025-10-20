@@ -61,10 +61,7 @@ class ErrorBoundary extends React.Component {
     const { FallbackComponent } = this.props;
 
     if (typeof FallbackComponent === 'function') {
-      return FallbackComponent({
-        error,
-        resetErrorBoundary: this.resetErrorBoundary,
-      });
+      return <FallbackComponent error={error} resetErrorBoundary={this.resetErrorBoundary} />;
     }
 
     if (React.isValidElement(FallbackComponent)) {
