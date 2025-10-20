@@ -3,16 +3,16 @@
  * @description Simple wizard for selecting cat names and starting a tournament.
  * Shows names and descriptions by default. Admin users get advanced filtering options.
  */
-import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
-import PropTypes from 'prop-types';
-import { resolveSupabaseClient } from '../../integrations/supabase/client';
+import { useState, useEffect, useCallback, useRef, useMemo } from "react";
+import PropTypes from "prop-types";
+import { resolveSupabaseClient } from "../../integrations/supabase/client";
 import {
   getNamesWithDescriptions,
   tournamentsAPI,
   catNamesAPI,
-  imagesAPI
-} from '../../integrations/supabase/api';
-import { compressImageFile, devLog } from '../../shared/utils/coreUtils';
+  imagesAPI,
+} from "../../integrations/supabase/api";
+import { compressImageFile, devLog } from "../../shared/utils/coreUtils";
 import {
   Card,
   Loading,
@@ -21,76 +21,76 @@ import {
   Input,
   Select,
   CatImage,
-  StartTournamentButton
-} from '../../shared/components';
+  StartTournamentButton,
+} from "../../shared/components";
 
 // * Import Error components for specific use cases
 const ErrorDisplay = Error;
 const ErrorBoundary = Error;
-import useToast from '../../core/hooks/useToast';
-import useAppStore from '../../core/store/useAppStore';
-import useMobileGestures from '../../core/hooks/useMobileGestures';
+import useToast from "../../core/hooks/useToast";
+import useAppStore from "../../core/store/useAppStore";
+import useMobileGestures from "../../core/hooks/useMobileGestures";
 import {
   validateCatName,
-  validateDescription
-} from '../../shared/utils/validationUtils';
-import { isUserAdmin } from '../../shared/utils/authUtils';
-import styles from './TournamentSetup.module.css';
+  validateDescription,
+} from "../../shared/utils/validationUtils";
+import { isUserAdmin } from "../../shared/utils/authUtils";
+import styles from "./TournamentSetup.module.css";
 
 // Use absolute paths for better image loading compatibility
 const CAT_IMAGES = [
-  '/assets/images/IMG_4844.jpg',
-  '/assets/images/IMG_4845.jpg',
-  '/assets/images/IMG_4846.jpg',
-  '/assets/images/IMG_4847.jpg',
-  '/assets/images/IMG_5044.JPEG',
-  '/assets/images/IMG_5071.JPG',
-  '/assets/images/IMG_0778.jpg',
-  '/assets/images/IMG_0779.jpg',
-  '/assets/images/IMG_0865.jpg',
-  '/assets/images/IMG_0884.jpg',
-  '/assets/images/IMG_0923.jpg',
-  '/assets/images/IMG_1116.jpg',
-  '/assets/images/IMG_7205.jpg',
-  '/assets/images/75209580524__60DCC26F-55A1-4EF8-A0B2-14E80A026A8D.jpg'
+  "/assets/images/IMG_4844.jpg",
+  "/assets/images/IMG_4845.jpg",
+  "/assets/images/IMG_4846.jpg",
+  "/assets/images/IMG_4847.jpg",
+  "/assets/images/IMG_5044.JPEG",
+  "/assets/images/IMG_5071.JPG",
+  "/assets/images/IMG_0778.jpg",
+  "/assets/images/IMG_0779.jpg",
+  "/assets/images/IMG_0865.jpg",
+  "/assets/images/IMG_0884.jpg",
+  "/assets/images/IMG_0923.jpg",
+  "/assets/images/IMG_1116.jpg",
+  "/assets/images/IMG_7205.jpg",
+  "/assets/images/75209580524__60DCC26F-55A1-4EF8-A0B2-14E80A026A8D.jpg",
 ];
 
 const GALLERY_IMAGE_SIZES =
-  '(max-width: 480px) 88vw, (max-width: 768px) 44vw, (max-width: 1280px) 28vw, 200px';
-const LIGHTBOX_IMAGE_SIZES = '(max-width: 768px) 94vw, 80vw';
+  "(max-width: 480px) 88vw, (max-width: 768px) 44vw, (max-width: 1280px) 28vw, 200px";
+const LIGHTBOX_IMAGE_SIZES = "(max-width: 768px) 94vw, 80vw";
 
-const DEFAULT_DESCRIPTION = 'A name as unique as your future companion';
+const DEFAULT_DESCRIPTION = "A name as unique as your future companion";
 
 const FALLBACK_NAMES = [
   {
-    id: 'aaron',
-    name: 'aaron',
-    description: 'temporary fallback — backend offline'
+    id: "aaron",
+    name: "aaron",
+    description: "temporary fallback — backend offline",
   },
   {
-    id: 'fix',
-    name: 'fix',
-    description: 'temporary fallback — backend offline'
+    id: "fix",
+    name: "fix",
+    description: "temporary fallback — backend offline",
   },
   {
-    id: 'the',
-    name: 'the',
-    description: 'temporary fallback — backend offline'
+    id: "the",
+    name: "the",
+    description: "temporary fallback — backend offline",
   },
   {
-    id: 'site',
-    name: 'site',
-    description: 'temporary fallback — backend offline'
-  }
+    id: "site",
+    name: "site",
+    description: "temporary fallback — backend offline",
+  },
 ];
 
 // Helper function to get random cat images
 const getRandomCatImage = (nameId, imageList = CAT_IMAGES) => {
   // Convert UUID string to a number for consistent image selection
   let numericId;
-  if (typeof nameId === 'string') {
+  if (typeof nameId === "string") {
     // Use a simple hash of the UUID string to get a consistent number
-    numericId = nameId.split('').reduce((hash, char) => {
+    numericId = nameId.split("").reduce((hash, char) => {
       return char.charCodeAt(0) + ((hash << 5) - hash);
     }, 0);
   } else {
@@ -120,7 +120,7 @@ const NameSelection = ({
   onSortChange,
   isSwipeMode,
   showCatPictures,
-  imageList
+  imageList,
 }) => {
   // For non-admin users, just show all names
   const displayNames = isAdmin
@@ -148,11 +148,11 @@ const NameSelection = ({
         // Sort names
         return [...searchFilteredNames].sort((a, b) => {
           switch (sortBy) {
-            case 'rating':
+            case "rating":
               return (b.avg_rating || 1500) - (a.avg_rating || 1500);
-            case 'popularity':
+            case "popularity":
               return (b.popularity_score || 0) - (a.popularity_score || 0);
-            case 'alphabetical':
+            case "alphabetical":
               return a.name.localeCompare(b.name);
             default:
               return 0;
@@ -168,24 +168,23 @@ const NameSelection = ({
 
     const categoryCounts = categories.map((category) => {
       const count = availableNames.filter(
-        (name) =>
-          name.categories && name.categories.includes(category.name)
+        (name) => name.categories && name.categories.includes(category.name)
       ).length;
 
       return {
         value: category.name,
-        label: `${category.name} (${count})`
+        label: `${category.name} (${count})`,
       };
     });
 
-    return [{ value: '', label: 'All Categories' }, ...categoryCounts];
+    return [{ value: "", label: "All Categories" }, ...categoryCounts];
   }, [categories, availableNames]);
 
   const sortOptions = useMemo(
     () => [
-      { value: 'alphabetical', label: 'Alphabetical' },
-      { value: 'rating', label: 'Rating (High to Low)' },
-      { value: 'popularity', label: 'Popularity' }
+      { value: "alphabetical", label: "Alphabetical" },
+      { value: "rating", label: "Rating (High to Low)" },
+      { value: "popularity", label: "Popularity" },
     ],
     []
   );
@@ -210,7 +209,7 @@ const NameSelection = ({
               <Select
                 name="category"
                 label="Category"
-                value={selectedCategory ?? ''}
+                value={selectedCategory ?? ""}
                 onChange={(e) => onCategoryChange(e.target.value || null)}
                 options={categoryOptions}
                 className={styles.filterSelect}
@@ -290,7 +289,7 @@ const NameSelection = ({
                       rating: nameObj.avg_rating,
                       popularity: nameObj.popularity_score,
                       tournaments: nameObj.total_tournaments,
-                      categories: nameObj.categories
+                      categories: nameObj.categories,
                     }
                   : undefined
               }
@@ -316,7 +315,7 @@ const SwipeableNameCards = ({
   onToggleName,
   isAdmin,
   showCatPictures = false,
-  imageList = CAT_IMAGES
+  imageList = CAT_IMAGES,
 }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
@@ -341,17 +340,17 @@ const SwipeableNameCards = ({
     onSwipe: (data) => {
       const { direction, distance } = data;
       if (distance > 100) {
-        if (direction === 'right') {
+        if (direction === "right") {
           // Swipe right = select
           if (!isSelected) {
             onToggleName(currentName);
-            addHapticFeedback('success');
+            addHapticFeedback("success");
           }
-        } else if (direction === 'left') {
+        } else if (direction === "left") {
           // Swipe left = deselect
           if (isSelected) {
             onToggleName(currentName);
-            addHapticFeedback('light');
+            addHapticFeedback("light");
           }
         }
         // Move to next card
@@ -362,15 +361,15 @@ const SwipeableNameCards = ({
     },
     onLongPress: () => {
       setIsLongPressing(true);
-      addHapticFeedback('heavy');
+      addHapticFeedback("heavy");
       // Show additional info or context menu
       setTimeout(() => setIsLongPressing(false), 1000);
     },
     onDoubleTap: () => {
       // Double tap to toggle selection
       onToggleName(currentName);
-      addHapticFeedback('success');
-    }
+      addHapticFeedback("success");
+    },
   });
 
   const handleDragStart = (e) => {
@@ -396,7 +395,7 @@ const SwipeableNameCards = ({
 
     // Determine swipe direction
     if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > 50) {
-      setSwipeDirection(deltaX > 0 ? 'right' : 'left');
+      setSwipeDirection(deltaX > 0 ? "right" : "left");
     }
   };
 
@@ -409,12 +408,12 @@ const SwipeableNameCards = ({
 
     // If swiped far enough, process the swipe
     if (swipeProgress > 0.5) {
-      if (swipeDirection === 'right') {
+      if (swipeDirection === "right") {
         // Swipe right = select/like (add to tournament)
         if (!isSelected) {
           onToggleName(currentName);
         }
-      } else if (swipeDirection === 'left') {
+      } else if (swipeDirection === "left") {
         // Swipe left = pass (remove from tournament if selected)
         if (isSelected) {
           onToggleName(currentName);
@@ -441,12 +440,12 @@ const SwipeableNameCards = ({
     setSwipeProgress(1);
 
     setTimeout(() => {
-      if (direction === 'right') {
+      if (direction === "right") {
         // Right button = select/like (add to tournament)
         if (!isSelected) {
           onToggleName(currentName);
         }
-      } else if (direction === 'left') {
+      } else if (direction === "left") {
         // Left button = pass (remove from tournament if selected)
         if (isSelected) {
           onToggleName(currentName);
@@ -464,22 +463,22 @@ const SwipeableNameCards = ({
 
   const cardStyle = {
     transform: `translate(${dragOffset.x}px, ${dragOffset.y}px) rotate(${dragOffset.x * 0.1}deg)`,
-    opacity: isDragging ? 0.9 : 1
+    opacity: isDragging ? 0.9 : 1,
   };
 
   const swipeOverlayStyle = {
     opacity: swipeProgress,
-    transform: `scale(${0.8 + swipeProgress * 0.2})`
+    transform: `scale(${0.8 + swipeProgress * 0.2})`,
   };
 
   return (
     <div className={styles.swipeContainer}>
       <div
-        className={`${styles.swipeCardWrapper} ${showCatPictures ? styles.withCatPictures : ''}`}
+        className={`${styles.swipeCardWrapper} ${showCatPictures ? styles.withCatPictures : ""}`}
       >
         <div
           ref={gestureRef}
-          className={`${styles.swipeCard} ${isSelected ? styles.selected : ''} ${showCatPictures ? styles.withCatPictures : ''} ${isLongPressing ? styles.longPressing : ''}`}
+          className={`${styles.swipeCard} ${isSelected ? styles.selected : ""} ${showCatPictures ? styles.withCatPictures : ""} ${isLongPressing ? styles.longPressing : ""}`}
           style={cardStyle}
           onMouseDown={handleDragStart}
           onMouseMove={handleDragMove}
@@ -491,17 +490,17 @@ const SwipeableNameCards = ({
         >
           {/* Swipe direction overlays - Fixed to show correct overlay */}
           <div
-            className={`${styles.swipeOverlay} ${styles.swipeRight} ${swipeDirection === 'right' ? styles.active : ''}`}
+            className={`${styles.swipeOverlay} ${styles.swipeRight} ${swipeDirection === "right" ? styles.active : ""}`}
             style={
-              swipeDirection === 'right' ? swipeOverlayStyle : { opacity: 0 }
+              swipeDirection === "right" ? swipeOverlayStyle : { opacity: 0 }
             }
           >
             <span className={styles.swipeText}>👍 SELECTED</span>
           </div>
           <div
-            className={`${styles.swipeOverlay} ${styles.swipeLeft} ${swipeDirection === 'left' ? styles.active : ''}`}
+            className={`${styles.swipeOverlay} ${styles.swipeLeft} ${swipeDirection === "left" ? styles.active : ""}`}
             style={
-              swipeDirection === 'left' ? swipeOverlayStyle : { opacity: 0 }
+              swipeDirection === "left" ? swipeOverlayStyle : { opacity: 0 }
             }
           >
             <span className={styles.swipeText}>👎 SKIPPED</span>
@@ -541,7 +540,7 @@ const SwipeableNameCards = ({
                 {currentName.categories &&
                   currentName.categories.length > 0 && (
                     <span className={styles.metadataItem}>
-                      🏷️ {currentName.categories.join(', ')}
+                      🏷️ {currentName.categories.join(", ")}
                     </span>
                   )}
               </div>
@@ -560,7 +559,7 @@ const SwipeableNameCards = ({
       {/* Swipe buttons */}
       <div className={styles.swipeButtons}>
         <button
-          onClick={() => handleSwipeButton('left')}
+          onClick={() => handleSwipeButton("left")}
           className={`${styles.swipeButton} ${styles.swipeLeftButton}`}
           // Remove disabled state - always allow skipping
         >
@@ -572,7 +571,7 @@ const SwipeableNameCards = ({
         </div>
 
         <button
-          onClick={() => handleSwipeButton('right')}
+          onClick={() => handleSwipeButton("right")}
           className={`${styles.swipeButton} ${styles.swipeRightButton}`}
           // Remove disabled state - always allow selecting
         >
@@ -583,10 +582,10 @@ const SwipeableNameCards = ({
   );
 };
 
-const StartButton = ({ selectedNames, onStart, variant = 'default' }) => {
+const StartButton = ({ selectedNames, onStart, variant = "default" }) => {
   const validateNames = (names) => {
     return names.every((nameObj) => {
-      if (!nameObj || typeof nameObj !== 'object' || !nameObj.id) {
+      if (!nameObj || typeof nameObj !== "object" || !nameObj.id) {
         return false;
       }
 
@@ -594,7 +593,7 @@ const StartButton = ({ selectedNames, onStart, variant = 'default' }) => {
       const nameValidation = validateCatName(nameObj.name);
       if (!nameValidation.success) {
         console.warn(
-          'Invalid name detected:',
+          "Invalid name detected:",
           nameObj.name,
           nameValidation.error
         );
@@ -607,17 +606,17 @@ const StartButton = ({ selectedNames, onStart, variant = 'default' }) => {
 
   const handleStart = () => {
     console.log(
-      '[DEV] 🎮 StartButton: handleStart called with selectedNames:',
+      "[DEV] 🎮 StartButton: handleStart called with selectedNames:",
       selectedNames
     );
 
     if (!validateNames(selectedNames)) {
-      console.error('Invalid name objects detected:', selectedNames);
+      console.error("Invalid name objects detected:", selectedNames);
       return;
     }
 
     console.log(
-      '[DEV] 🎮 StartButton: Calling onStart with validated names:',
+      "[DEV] 🎮 StartButton: Calling onStart with validated names:",
       selectedNames
     );
     onStart(selectedNames);
@@ -625,11 +624,11 @@ const StartButton = ({ selectedNames, onStart, variant = 'default' }) => {
 
   const buttonText =
     selectedNames.length < 2
-      ? `Need ${2 - selectedNames.length} More Name${selectedNames.length === 0 ? 's' : ''} 🎯`
-      : 'Start Tournament! 🏆';
+      ? `Need ${2 - selectedNames.length} More Name${selectedNames.length === 0 ? "s" : ""} 🎯`
+      : "Start Tournament! 🏆";
 
   const buttonClass =
-    variant === 'header' ? styles.startButtonHeader : styles.startButton;
+    variant === "header" ? styles.startButtonHeader : styles.startButton;
   const isReady = selectedNames.length >= 2;
 
   return (
@@ -638,9 +637,9 @@ const StartButton = ({ selectedNames, onStart, variant = 'default' }) => {
       className={buttonClass}
       disabled={!isReady}
       ariaLabel={
-        isReady ? 'Start Tournament' : 'Select at least 2 names to start'
+        isReady ? "Start Tournament" : "Select at least 2 names to start"
       }
-      size={variant === 'header' ? 'medium' : 'large'}
+      size={variant === "header" ? "medium" : "large"}
       startIcon={isReady ? undefined : null}
     >
       {buttonText}
@@ -649,17 +648,17 @@ const StartButton = ({ selectedNames, onStart, variant = 'default' }) => {
 };
 
 const NameSuggestionSection = () => {
-  const [name, setName] = useState('');
-  const [description, setDescription] = useState('');
-  const [error, setError] = useState('');
-  const [success, setSuccess] = useState('');
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { showSuccess, showError } = useToast();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError('');
-    setSuccess('');
+    setError("");
+    setSuccess("");
 
     const nameValidation = validateCatName(name.trim());
     if (!nameValidation.success) {
@@ -680,18 +679,18 @@ const NameSuggestionSection = () => {
         descriptionValidation.value
       );
       if (res?.success === false) {
-        throw new Error(res.error || 'Failed to add name');
+        throw new Error(res.error || "Failed to add name");
       }
-      setSuccess('Thank you for your suggestion!');
-      showSuccess('Name suggestion submitted successfully!', {
-        duration: 4000
+      setSuccess("Thank you for your suggestion!");
+      showSuccess("Name suggestion submitted successfully!", {
+        duration: 4000,
       });
-      setName('');
-      setDescription('');
+      setName("");
+      setDescription("");
     } catch {
-      setError('Failed to add name. It might already exist.');
-      showError('Failed to submit name suggestion. Please try again.', {
-        duration: 5000
+      setError("Failed to add name. It might already exist.");
+      showError("Failed to submit name suggestion. Please try again.", {
+        duration: 5000,
       });
     } finally {
       setIsSubmitting(false);
@@ -755,7 +754,7 @@ const NameSuggestionSection = () => {
               error={error}
               context="form"
               position="below"
-              onDismiss={() => setError('')}
+              onDismiss={() => setError("")}
               showRetry={false}
               showDismiss={true}
               size="medium"
@@ -770,11 +769,11 @@ const NameSuggestionSection = () => {
             disabled={isSubmitting}
             aria-label={
               isSubmitting
-                ? 'Submitting name suggestion...'
-                : 'Submit name suggestion'
+                ? "Submitting name suggestion..."
+                : "Submit name suggestion"
             }
           >
-            {isSubmitting ? 'Submitting...' : 'Submit Name'}
+            {isSubmitting ? "Submitting..." : "Submit Name"}
           </button>
         </form>
       </div>
@@ -787,7 +786,7 @@ function useTournamentSetup(userName) {
   const [selectedNames, setSelectedNames] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const saveTimeoutRef = useRef(null);
-  const lastSavedHashRef = useRef('');
+  const lastSavedHashRef = useRef("");
 
   // * Error handling is now managed by the store
 
@@ -811,9 +810,9 @@ function useTournamentSetup(userName) {
           await Promise.all([
             getNamesWithDescriptions(),
             supabaseClient
-              .from('cat_name_ratings')
-              .select('name_id')
-              .eq('is_hidden', true)
+              .from("cat_name_ratings")
+              .select("name_id")
+              .eq("is_hidden", true),
           ]);
 
         if (hiddenError) {
@@ -836,10 +835,10 @@ function useTournamentSetup(userName) {
           a.name.localeCompare(b.name)
         );
 
-        devLog('🎮 TournamentSetup: Data loaded', {
+        devLog("🎮 TournamentSetup: Data loaded", {
           availableNames: sortedNames.length,
           hiddenNames: hiddenIds.size,
-          userPreferences: hiddenData?.length || 0
+          userPreferences: hiddenData?.length || 0,
         });
 
         setAvailableNames(sortedNames);
@@ -851,10 +850,10 @@ function useTournamentSetup(userName) {
       } catch (err) {
         // Provide a clear offline fallback list when backend fails
         setAvailableNames(FALLBACK_NAMES);
-        errorActions.logError(err, 'TournamentSetup - Fetch Names', {
+        errorActions.logError(err, "TournamentSetup - Fetch Names", {
           isRetryable: true,
           affectsUserData: false,
-          isCritical: false
+          isCritical: false,
         });
       } finally {
         setIsLoading(false);
@@ -882,9 +881,9 @@ function useTournamentSetup(userName) {
           tournamentId
         );
 
-        devLog('🎮 TournamentSetup: Selections saved to database', result);
+        devLog("🎮 TournamentSetup: Selections saved to database", result);
       } catch (error) {
-        console.error('Error saving tournament selections:', error);
+        console.error("Error saving tournament selections:", error);
         // Don't block the UI if saving fails
       }
     },
@@ -899,7 +898,7 @@ function useTournamentSetup(userName) {
       const hash = namesToSave
         .map((n) => n.id || n.name)
         .sort()
-        .join(',');
+        .join(",");
 
       if (hash === lastSavedHashRef.current) return;
 
@@ -907,7 +906,7 @@ function useTournamentSetup(userName) {
       saveTimeoutRef.current = setTimeout(() => {
         lastSavedHashRef.current = hash;
         saveTournamentSelections(namesToSave).catch((e) =>
-          console.warn('Save selections debounce error:', e)
+          console.warn("Save selections debounce error:", e)
         );
       }, 800);
     },
@@ -928,7 +927,7 @@ function useTournamentSetup(userName) {
 
       // Log the updated selected names (throttled to avoid spam)
       if (!toggleName.lastLogTs || Date.now() - toggleName.lastLogTs > 1000) {
-        devLog('🎮 TournamentSetup: Selected names updated', newSelectedNames);
+        devLog("🎮 TournamentSetup: Selected names updated", newSelectedNames);
         toggleName.lastLogTs = Date.now();
       }
 
@@ -954,7 +953,7 @@ function useTournamentSetup(userName) {
     clearErrors: () => errorActions.clearError(),
     clearError: () => errorActions.clearError(),
     toggleName,
-    handleSelectAll
+    handleSelectAll,
   };
 }
 
@@ -968,14 +967,14 @@ function TournamentSetupContent({ onStart, userName }) {
     clearErrors,
     clearError,
     toggleName,
-    handleSelectAll
+    handleSelectAll,
   } = useTournamentSetup(userName);
 
   // Enhanced state for new features
   const [openImages, setOpenImages] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(null);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [sortBy, setSortBy] = useState('alphabetical');
+  const [searchTerm, setSearchTerm] = useState("");
+  const [sortBy, setSortBy] = useState("alphabetical");
   const [isSwipeMode, setIsSwipeMode] = useState(false);
   const [showCatPictures, setShowCatPictures] = useState(false);
   const [showAllPhotos, setShowAllPhotos] = useState(false);
@@ -992,7 +991,7 @@ function TournamentSetupContent({ onStart, userName }) {
         const supabaseClient = await resolveSupabaseClient();
 
         if (!supabaseClient) return false;
-        const list = await imagesAPI.list('');
+        const list = await imagesAPI.list("");
         if (Array.isArray(list) && list.length) return list;
       } catch {
         // Ignore errors when trying to load images
@@ -1002,7 +1001,7 @@ function TournamentSetupContent({ onStart, userName }) {
 
     const tryStaticManifest = async () => {
       try {
-        const res = await fetch('/assets/images/gallery.json');
+        const res = await fetch("/assets/images/gallery.json");
         if (!res.ok) return [];
         const data = await res.json();
         if (Array.isArray(data) && data.length) return data;
@@ -1026,8 +1025,8 @@ function TournamentSetupContent({ onStart, userName }) {
         if (!url) continue;
         // strip query/hash and extension
         const [clean] = String(url).split(/[?#]/);
-        const name = clean.substring(clean.lastIndexOf('/') + 1);
-        const base = name.replace(/\.[^.]+$/, '').toLowerCase();
+        const name = clean.substring(clean.lastIndexOf("/") + 1);
+        const base = name.replace(/\.[^.]+$/, "").toLowerCase();
         if (seen.has(base)) continue;
         seen.add(base);
         deduped.push(url);
@@ -1068,9 +1067,10 @@ function TournamentSetupContent({ onStart, userName }) {
 
       try {
         const adminStatus = await isUserAdmin(userName);
+        console.log("🔍 Admin check for", userName, ":", adminStatus);
         setIsAdmin(adminStatus);
       } catch (error) {
-        console.error('Error checking admin status:', error);
+        console.error("Error checking admin status:", error);
         setIsAdmin(false);
       }
     };
@@ -1092,8 +1092,8 @@ function TournamentSetupContent({ onStart, userName }) {
             ...img,
             position: {
               x: e.clientX - img.dragStart.x,
-              y: e.clientY - img.dragStart.y
-            }
+              y: e.clientY - img.dragStart.y,
+            },
           };
         }
         return img;
@@ -1105,7 +1105,7 @@ function TournamentSetupContent({ onStart, userName }) {
     setOpenImages((prev) =>
       prev.map((img) => ({
         ...img,
-        isDragging: false
+        isDragging: false,
       }))
     );
   };
@@ -1121,19 +1121,19 @@ function TournamentSetupContent({ onStart, userName }) {
           let newHeight = img.size.height;
 
           switch (img.resizeHandle) {
-            case 'nw':
+            case "nw":
               newWidth = Math.max(200, img.size.width - deltaX);
               newHeight = newWidth / aspectRatio;
               break;
-            case 'ne':
+            case "ne":
               newWidth = Math.max(200, img.size.width + deltaX);
               newHeight = newWidth / aspectRatio;
               break;
-            case 'sw':
+            case "sw":
               newWidth = Math.max(200, img.size.width - deltaX);
               newHeight = newWidth / aspectRatio;
               break;
-            case 'se':
+            case "se":
               newWidth = Math.max(200, img.size.width + deltaX);
               newHeight = newWidth / aspectRatio;
               break;
@@ -1143,12 +1143,12 @@ function TournamentSetupContent({ onStart, userName }) {
             ...img,
             size: {
               width: newWidth,
-              height: newHeight
+              height: newHeight,
             },
             resizeStart: {
               x: e.clientX,
-              y: e.clientY
-            }
+              y: e.clientY,
+            },
           };
         }
         return img;
@@ -1161,7 +1161,7 @@ function TournamentSetupContent({ onStart, userName }) {
       prev.map((img) => ({
         ...img,
         isResizing: false,
-        resizeHandle: null
+        resizeHandle: null,
       }))
     );
   };
@@ -1172,20 +1172,20 @@ function TournamentSetupContent({ onStart, userName }) {
 
     if (hasDragging || hasResizing) {
       window.addEventListener(
-        'mousemove',
+        "mousemove",
         hasResizing ? handleResizeMove : handleMouseMove
       );
       window.addEventListener(
-        'mouseup',
+        "mouseup",
         hasResizing ? handleResizeEnd : handleMouseUp
       );
       return () => {
         window.removeEventListener(
-          'mousemove',
+          "mousemove",
           hasResizing ? handleResizeMove : handleMouseMove
         );
         window.removeEventListener(
-          'mouseup',
+          "mouseup",
           hasResizing ? handleResizeEnd : handleMouseUp
         );
       };
@@ -1206,7 +1206,7 @@ function TournamentSetupContent({ onStart, userName }) {
             onRetry={() => window.location.reload()}
             onDismiss={clearError}
             onClearAll={clearErrors}
-            showDetails={process.env.NODE_ENV === 'development'}
+            showDetails={process.env.NODE_ENV === "development"}
           />
         </div>
       </div>
@@ -1245,40 +1245,40 @@ function TournamentSetupContent({ onStart, userName }) {
                   className={styles.selectAllButton}
                   aria-label={
                     selectedNames.length === availableNames.length
-                      ? 'Clear all selections'
-                      : 'Select all names'
+                      ? "Clear all selections"
+                      : "Select all names"
                   }
                 >
                   {selectedNames.length === availableNames.length
-                    ? '✨ Start Fresh'
-                    : '🎲 Select All'}
+                    ? "✨ Start Fresh"
+                    : "🎲 Select All"}
                 </button>
 
                 <button
                   onClick={() => setIsSwipeMode(!isSwipeMode)}
                   className={`${styles.headerActionButton} ${styles.swipeModeToggleButton} ${
-                    isSwipeMode ? styles.headerActionButtonActive : ''
+                    isSwipeMode ? styles.headerActionButtonActive : ""
                   }`}
                   aria-label={
-                    isSwipeMode ? 'Switch to card mode' : 'Switch to swipe mode'
+                    isSwipeMode ? "Switch to card mode" : "Switch to swipe mode"
                   }
                 >
-                  {isSwipeMode ? '🎯 Cards' : '💫 Swipe'}
+                  {isSwipeMode ? "🎯 Cards" : "💫 Swipe"}
                 </button>
 
                 <button
                   onClick={() => setShowCatPictures(!showCatPictures)}
                   className={`${styles.headerActionButton} ${styles.catPicturesToggleButton} ${
-                    showCatPictures ? styles.headerActionButtonActive : ''
+                    showCatPictures ? styles.headerActionButtonActive : ""
                   }`}
                   aria-label={
                     showCatPictures
-                      ? 'Hide cat pictures'
-                      : 'Show cat pictures on cards'
+                      ? "Hide cat pictures"
+                      : "Show cat pictures on cards"
                   }
                   title="Add random cat pictures to make it more like Tinder! 🐱"
                 >
-                  {showCatPictures ? '🐱 Hide Cats' : '🐱 Show Cats'}
+                  {showCatPictures ? "🐱 Hide Cats" : "🐱 Show Cats"}
                 </button>
 
                 {selectedNames.length >= 2 && (
@@ -1302,7 +1302,7 @@ function TournamentSetupContent({ onStart, userName }) {
             >
               <span className={styles.countText}>
                 {selectedNames.length === 0
-                  ? 'Pick some pawsome names! 🐾'
+                  ? "Pick some pawsome names! 🐾"
                   : `${selectedNames.length} Names Selected`}
               </span>
 
@@ -1320,7 +1320,7 @@ function TournamentSetupContent({ onStart, userName }) {
                   📊 {availableNames.length} total names
                 </span>
                 <span className={styles.statItem}>
-                  ⭐{' '}
+                  ⭐{" "}
                   {availableNames.length > 0
                     ? Math.round(
                         availableNames.reduce(
@@ -1328,16 +1328,16 @@ function TournamentSetupContent({ onStart, userName }) {
                           0
                         ) / availableNames.length
                       )
-                    : 1500}{' '}
+                    : 1500}{" "}
                   avg rating
                 </span>
                 <span className={styles.statItem}>
-                  🔥{' '}
+                  🔥{" "}
                   {
                     availableNames.filter(
                       (name) => (name.popularity_score || 0) > 5
                     ).length
-                  }{' '}
+                  }{" "}
                   popular names
                 </span>
               </div>
@@ -1396,7 +1396,7 @@ function TournamentSetupContent({ onStart, userName }) {
                 <div
                   className={styles.progressFill}
                   style={{
-                    width: `${Math.max((selectedNames.length / Math.max(availableNames.length, 1)) * 100, 5)}%`
+                    width: `${Math.max((selectedNames.length / Math.max(availableNames.length, 1)) * 100, 5)}%`,
                   }}
                 />
               </div>
@@ -1422,9 +1422,9 @@ function TournamentSetupContent({ onStart, userName }) {
                     onClick={() => handleImageOpen(image)}
                     aria-label={`Open cat photo ${index + 1}`}
                   >
-                    {image.startsWith('/assets/images/') ? (
+                    {image.startsWith("/assets/images/") ? (
                       (() => {
-                        const base = image.replace(/\.[^.]+$/, '');
+                        const base = image.replace(/\.[^.]+$/, "");
                         return (
                           <picture>
                             <source
@@ -1476,11 +1476,27 @@ function TournamentSetupContent({ onStart, userName }) {
                       onClick={() => setShowAllPhotos((v) => !v)}
                     >
                       {showAllPhotos
-                        ? 'Show fewer photos'
+                        ? "Show fewer photos"
                         : `Show ${galleryImages.length - 8} more photos`}
                     </button>
                   </div>
                 )}
+                {/* * Debug: Show admin status */}
+                <div
+                  style={{
+                    padding: "10px",
+                    margin: "10px 0",
+                    background: isAdmin ? "#4ade80" : "#ef4444",
+                    color: "white",
+                    borderRadius: "8px",
+                    fontSize: "14px",
+                    fontWeight: "bold",
+                  }}
+                >
+                  Debug: User: {userName || "none"} | Admin:{" "}
+                  {isAdmin ? "YES" : "NO"}
+                </div>
+
                 {isAdmin && (
                   <div className={styles.photoUploadRow}>
                     <input
@@ -1489,7 +1505,7 @@ function TournamentSetupContent({ onStart, userName }) {
                       accept="image/*"
                       multiple
                       capture="environment"
-                      style={{ display: 'none' }}
+                      style={{ display: "none" }}
                       onChange={async (e) => {
                         const files = Array.from(e.target.files || []);
                         if (!files.length) return;
@@ -1499,11 +1515,11 @@ function TournamentSetupContent({ onStart, userName }) {
                             const compressed = await compressImageFile(f, {
                               maxWidth: 1600,
                               maxHeight: 1600,
-                              quality: 0.82
+                              quality: 0.82,
                             });
                             const url = await imagesAPI.upload(
                               compressed,
-                              userName || 'aaron'
+                              userName || "aaron"
                             );
                             if (url) uploaded.push(url);
                           }
@@ -1511,11 +1527,11 @@ function TournamentSetupContent({ onStart, userName }) {
                             setGalleryImages((prev) => [...uploaded, ...prev]);
                           }
                         } catch (err) {
-                          console.error('Upload failed', err);
+                          console.error("Upload failed", err);
 
-                          alert('Upload failed. Please try again.');
+                          alert("Upload failed. Please try again.");
                         } finally {
-                          e.target.value = '';
+                          e.target.value = "";
                         }
                       }}
                     />
@@ -1568,10 +1584,10 @@ function TournamentSetup(props) {
   );
 }
 
-TournamentSetup.displayName = 'TournamentSetup';
+TournamentSetup.displayName = "TournamentSetup";
 
 TournamentSetup.propTypes = {
-  onStart: PropTypes.func.isRequired
+  onStart: PropTypes.func.isRequired,
 };
 
 export default TournamentSetup;
@@ -1582,12 +1598,12 @@ function Lightbox({ images, index, onClose, onPrev, onNext }) {
 
   useEffect(() => {
     const onKey = (e) => {
-      if (e.key === 'Escape') onClose();
-      else if (e.key === 'ArrowLeft') onPrev();
-      else if (e.key === 'ArrowRight') onNext();
+      if (e.key === "Escape") onClose();
+      else if (e.key === "ArrowLeft") onPrev();
+      else if (e.key === "ArrowRight") onNext();
     };
-    window.addEventListener('keydown', onKey);
-    return () => window.removeEventListener('keydown', onKey);
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
   }, [onClose, onPrev, onNext]);
 
   useEffect(() => {
@@ -1595,7 +1611,7 @@ function Lightbox({ images, index, onClose, onPrev, onNext }) {
   }, []);
 
   const current = images[index] || images[0];
-  const base = current.replace(/\.[^.]+$/, '');
+  const base = current.replace(/\.[^.]+$/, "");
 
   return (
     <div
@@ -1669,5 +1685,5 @@ Lightbox.propTypes = {
   index: PropTypes.number.isRequired,
   onClose: PropTypes.func.isRequired,
   onPrev: PropTypes.func.isRequired,
-  onNext: PropTypes.func.isRequired
+  onNext: PropTypes.func.isRequired,
 };
