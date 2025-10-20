@@ -32,6 +32,11 @@ const ProfileNameList = ({
   onBulkUnhide,
   onFilteredCountChange, // * New prop to report filtered count
 }) => {
+  // Debug logging
+  console.log("🔍 ProfileNameList props:", {
+    isAdmin,
+    onToggleVisibility: !!onToggleVisibility,
+  });
   // * Filter and sort names based on current filters
   const filteredAndSortedNames = useMemo(() => {
     if (!names || names.length === 0) return [];
@@ -359,6 +364,7 @@ const ProfileNameList = ({
                   title="Click to unhide"
                   onClick={(e) => {
                     e.stopPropagation();
+                    console.log("🔍 Hidden badge clicked for:", name.id);
                     onToggleVisibility?.(name.id);
                   }}
                 >
@@ -398,7 +404,15 @@ const ProfileNameList = ({
                 isAdmin={isAdmin}
                 isHidden={isHidden}
                 onToggleVisibility={
-                  isAdmin ? () => onToggleVisibility(name.id) : undefined
+                  isAdmin
+                    ? () => {
+                        console.log(
+                          "🔍 NameCard onToggleVisibility called for:",
+                          name.id
+                        );
+                        onToggleVisibility(name.id);
+                      }
+                    : undefined
                 }
                 onDelete={isAdmin ? () => onDelete(name) : undefined}
                 onSelectionChange={

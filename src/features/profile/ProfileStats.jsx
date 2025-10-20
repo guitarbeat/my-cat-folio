@@ -139,6 +139,7 @@ const buildSelectionInsights = (insights) => {
 const ProfileStats = ({
   stats,
   selectionStats,
+  highlights,
   isLoading = false,
   className = "",
 }) => {
@@ -210,6 +211,82 @@ const ProfileStats = ({
           </div>
         </div>
       )}
+
+      {/* Highlights Section (compact lists) */}
+      {highlights &&
+        (highlights.topRated.length ||
+          highlights.mostWins.length ||
+          highlights.recent.length) > 0 && (
+          <div className={styles.insightsSection}>
+            <div className={styles.insightsGrid}>
+              {highlights.topRated.length > 0 && (
+                <Card
+                  className={styles.insightCard}
+                  variant="outlined"
+                  padding="medium"
+                  shadow="small"
+                  background="transparent"
+                >
+                  <div className={styles.insightContent}>
+                    <h4>Top Rated</h4>
+                    <ul className={styles.compactList}>
+                      {highlights.topRated.map((i) => (
+                        <li key={i.id} className={styles.compactItem}>
+                          <span className={styles.itemName}>{i.name}</span>
+                          <span className={styles.itemValue}>{i.value}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </Card>
+              )}
+
+              {highlights.mostWins.length > 0 && (
+                <Card
+                  className={styles.insightCard}
+                  variant="outlined"
+                  padding="medium"
+                  shadow="small"
+                  background="transparent"
+                >
+                  <div className={styles.insightContent}>
+                    <h4>Most Wins</h4>
+                    <ul className={styles.compactList}>
+                      {highlights.mostWins.map((i) => (
+                        <li key={i.id} className={styles.compactItem}>
+                          <span className={styles.itemName}>{i.name}</span>
+                          <span className={styles.itemValue}>{i.value}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </Card>
+              )}
+
+              {highlights.recent.length > 0 && (
+                <Card
+                  className={styles.insightCard}
+                  variant="outlined"
+                  padding="medium"
+                  shadow="small"
+                  background="transparent"
+                >
+                  <div className={styles.insightContent}>
+                    <h4>Recent Updates</h4>
+                    <ul className={styles.compactList}>
+                      {highlights.recent.map((i) => (
+                        <li key={i.id} className={styles.compactItem}>
+                          <span className={styles.itemName}>{i.name}</span>
+                          <span className={styles.itemValue}>{i.value}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </Card>
+              )}
+            </div>
+          </div>
+        )}
     </div>
   );
 };
@@ -233,6 +310,29 @@ ProfileStats.propTypes = {
       preferredCategories: PropTypes.string,
       improvementTip: PropTypes.string,
     }),
+  }),
+  highlights: PropTypes.shape({
+    topRated: PropTypes.arrayOf(
+      PropTypes.shape({
+        id: PropTypes.string,
+        name: PropTypes.string,
+        value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+      })
+    ),
+    mostWins: PropTypes.arrayOf(
+      PropTypes.shape({
+        id: PropTypes.string,
+        name: PropTypes.string,
+        value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+      })
+    ),
+    recent: PropTypes.arrayOf(
+      PropTypes.shape({
+        id: PropTypes.string,
+        name: PropTypes.string,
+        value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+      })
+    ),
   }),
   isLoading: PropTypes.bool,
   className: PropTypes.string,

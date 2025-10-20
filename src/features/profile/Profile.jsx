@@ -239,7 +239,9 @@ const generateImprovementTip = (
 // * Main Profile Component
 const Profile = ({ userName, onStartNewTournament }) => {
   // * State
-  const [filterStatus, setFilterStatus] = useState(FILTER_OPTIONS.STATUS.ALL);
+  const [filterStatus, setFilterStatus] = useState(
+    FILTER_OPTIONS.STATUS.ACTIVE
+  );
   const [userFilter, setUserFilter] = useState(FILTER_OPTIONS.USER.ALL);
   const [sortBy, setSortBy] = useState(FILTER_OPTIONS.SORT.RATING);
   const [sortOrder, setSortOrder] = useState(FILTER_OPTIONS.ORDER.DESC);
@@ -250,10 +252,22 @@ const Profile = ({ userName, onStartNewTournament }) => {
   const [selectionFilter, setSelectionFilter] = useState("all");
   // * Filter count state
   const [filteredCount, setFilteredCount] = useState(0);
+  // * Highlights derived from user ratings
+  const [highlights, setHighlights] = useState({
+    topRated: [],
+    mostWins: [],
+    recent: [],
+  });
 
   // * Handle filtered count change from ProfileNameList
   const handleFilteredCountChange = useCallback((count) => {
     setFilteredCount(count);
+  }, []);
+
+  // * Optional: Apply Filters button (filters are live; this is UX affordance)
+  const handleApplyFilters = useCallback(() => {
+    // No-op for now; state already applied. Kept for future server-side filter batching.
+    setFilteredCount((c) => c);
   }, []);
 
   const { showSuccess, showError, showToast } = useToast();
@@ -314,6 +328,43 @@ const Profile = ({ userName, onStartNewTournament }) => {
       setRatingsLoading(false);
     }
   }, [userName]);
+
+  // * Compute highlights whenever names change
+  useEffect(() => {
+    if (!Array.isArray(allNames) || allNames.length === 0) {
+      setHighlights({ topRated: [], mostWins: [], recent: [] });
+      return;
+    }
+
+    const withRatings = allNames.filter(
+      (n) => typeof n.user_rating === "number" && n.user_rating !== null
+    );
+    const topRated = [...withRatings]
+      .sort((a, b) => (b.user_rating || 0) - (a.user_rating || 0))
+      .slice(0, 5)
+      .map((n) => ({
+        id: n.id,
+        name: n.name,
+        value: Math.round(n.user_rating || 0),
+      }));
+
+    const mostWins = [...allNames]
+      .sort((a, b) => (b.user_wins || 0) - (a.user_wins || 0))
+      .slice(0, 5)
+      .map((n) => ({ id: n.id, name: n.name, value: n.user_wins || 0 }));
+
+    const recent = [...allNames]
+      .filter((n) => n.updated_at)
+      .sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at))
+      .slice(0, 5)
+      .map((n) => ({
+        id: n.id,
+        name: n.name,
+        value: new Date(n.updated_at).toLocaleDateString(),
+      }));
+
+    setHighlights({ topRated, mostWins, recent });
+  }, [allNames]);
 
   // * Fetch selection statistics
   const fetchSelectionStats = useCallback(async () => {
@@ -392,7 +443,9 @@ const Profile = ({ userName, onStartNewTournament }) => {
   const handleToggleVisibility = useCallback(
     async (nameId) => {
       try {
+        console.log("🔍 Toggle visibility called for nameId:", nameId);
         const currentlyHidden = hiddenNames.has(nameId);
+        console.log("🔍 Currently hidden:", currentlyHidden);
 
         const supabaseClient = await resolveSupabaseClient();
         setHasSupabaseClient(!!supabaseClient);
@@ -406,9 +459,11 @@ const Profile = ({ userName, onStartNewTournament }) => {
         }
 
         if (currentlyHidden) {
+          console.log("🔍 Unhiding name...");
           await hiddenNamesAPI.unhideName(userName, nameId);
           showSuccess("Unhidden");
         } else {
+          console.log("🔍 Hiding name...");
           await hiddenNamesAPI.hideName(userName, nameId);
           showSuccess("Hidden");
         }
@@ -418,18 +473,29 @@ const Profile = ({ userName, onStartNewTournament }) => {
           const next = new Set(prev);
           if (currentlyHidden) next.delete(nameId);
           else next.add(nameId);
+          console.log("🔍 Updated hiddenNames:", Array.from(next));
           return next;
         });
 
-        // Refresh backing data (ensures filters reflect server state)
-        fetchNames();
+        // Immediately reflect hidden state in local names collection
+        setAllNames((prev) =>
+          Array.isArray(prev)
+            ? prev.map((n) =>
+                n.id === nameId ? { ...n, isHidden: !currentlyHidden } : n
+              )
+            : prev
+        );
+
+        console.log("🔍 Local updates applied, skipping fetchNames()");
+        // Don't call fetchNames() as it overrides our optimistic updates
+        // fetchNames();
       } catch (error) {
         console.error("Profile - Toggle Visibility error:", error);
         showToast("Failed to toggle name visibility", "error");
         showError("Failed to update visibility");
       }
     },
-    [hiddenNames, fetchNames, userName, showSuccess, showError, showToast]
+    [hiddenNames, userName, showSuccess, showError, showToast]
   );
 
   // * Handle name deletion
@@ -630,6 +696,7 @@ const Profile = ({ userName, onStartNewTournament }) => {
       <ProfileStats
         stats={stats}
         selectionStats={selectionStats}
+        highlights={highlights}
         isLoading={statsLoading || ratingsLoading}
         className={styles.statsSection}
       />
@@ -651,6 +718,7 @@ const Profile = ({ userName, onStartNewTournament }) => {
         hasSelectionData={!!selectionStats} // * Show selection filters if we have selection data
         filteredCount={filteredCount}
         totalCount={allNames.length}
+        onApplyFilters={handleApplyFilters}
       />
 
       {/* * Names List Section */}

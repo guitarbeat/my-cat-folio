@@ -2,13 +2,13 @@
 .container {
   display: flex;
   flex-direction: column;
-  gap: var(--space-4, 1.5rem);
-  margin-bottom: var(--space-6, 2rem);
+  gap: var(--space-3, 0.75rem);
+  margin-bottom: var(--space-4, 1rem);
 }
 
 .sectionTitle {
-  margin: 0 0 var(--space-4, 1.5rem) 0;
-  font-size: var(--text-lg, 1.25rem);
+  margin: 0 0 var(--space-3, 0.75rem) 0;
+  font-size: var(--text-base, 1rem);
   font-weight: 600;
   color: var(--text-primary, #111827);
   text-align: center;
@@ -17,16 +17,16 @@
 /* * Filters Grid Layout */
 .filtersGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: var(--space-4, 1.5rem);
-  margin-bottom: var(--space-4, 1.5rem);
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: var(--space-3, 0.75rem);
+  margin-bottom: var(--space-3, 0.75rem);
 }
 
 /* * Filter Group */
 .filterGroup {
   display: flex;
   flex-direction: column;
-  gap: var(--space-2, 0.5rem);
+  gap: var(--space-1, 0.25rem);
 }
 
 .filterLabel {
@@ -37,15 +37,15 @@
 }
 
 .filterSelect {
-  padding: var(--space-2, 0.5rem) var(--space-3, 0.75rem);
+  padding: var(--space-1, 0.25rem) var(--space-2, 0.5rem);
   font-family: inherit;
-  font-size: var(--text-sm, 0.875rem);
+  font-size: var(--text-xs, 0.75rem);
   color: var(--text-primary, #111827);
   cursor: pointer;
   background: var(--card-background, #fff);
   border: 1px solid var(--border-color, #d1d5db);
-  border-radius: var(--radius-md, 6px);
-  transition: var(--transition-all, all 0.2s ease);
+  border-radius: var(--radius-sm, 4px);
+  transition: var(--transition-all, all 0.15s ease);
 }
 
 .filterSelect:hover {
@@ -65,16 +65,16 @@
   display: flex;
   gap: var(--space-2, 0.5rem);
   align-items: center;
-  min-height: 38px;
-  padding: var(--space-2, 0.5rem) var(--space-3, 0.75rem);
+  min-height: 32px;
+  padding: var(--space-1, 0.25rem) var(--space-2, 0.5rem);
   font-family: inherit;
-  font-size: var(--text-sm, 0.875rem);
+  font-size: var(--text-xs, 0.75rem);
   color: var(--text-primary);
   cursor: pointer;
   background: var(--card-background);
   border: 1px solid var(--border-color);
-  border-radius: var(--radius-md, 6px);
-  transition: var(--transition-all, all 0.2s ease);
+  border-radius: var(--radius-sm, 4px);
+  transition: var(--transition-all, all 0.15s ease);
 }
 
 .sortOrderButton:hover {
@@ -237,6 +237,13 @@
   border-radius: var(--radius-md, 6px);
 }
 
+.resultsBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2, 0.5rem);
+}
+
 .resultsInfo {
   display: flex;
   align-items: center;
@@ -246,17 +253,37 @@
 }
 
 .resultsCount {
-  font-size: var(--text-base, 1rem);
+  font-size: var(--text-sm, 0.875rem);
 }
 
 .filteredIndicator {
   padding: var(--space-1, 0.25rem) var(--space-2, 0.5rem);
-  font-size: var(--text-xs, 0.75rem);
+  font-size: var(--text-2xs, 0.7rem);
   font-weight: 500;
   color: var(--text-accent, #3b82f6);
   background: var(--accent-light, rgba(59, 130, 246, 0.1));
   border: 1px solid var(--accent-border, rgba(59, 130, 246, 0.2));
   border-radius: var(--radius-sm, 4px);
+}
+
+.applyButton {
+  padding: var(--space-1, 0.25rem) var(--space-3, 0.75rem);
+  font-size: var(--text-xs, 0.75rem);
+  font-weight: 600;
+  color: #fff;
+  background: linear-gradient(180deg, #3b82f6, #1d4ed8);
+  border: 1px solid #1d4ed8;
+  border-radius: var(--radius-sm, 4px);
+  cursor: pointer;
+  transition: var(--transition-all, all 0.15s ease);
+}
+
+.applyButton:hover {
+  filter: brightness(1.05);
+}
+
+.applyButton:active {
+  transform: translateY(1px);
 }
 
 /* * Active Filters Display */

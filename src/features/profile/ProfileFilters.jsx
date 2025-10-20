@@ -175,12 +175,23 @@ const ProfileFilters = ({
         as="section"
         aria-label="Filter results summary"
       >
-        <div className={styles.resultsInfo}>
-          <span className={styles.resultsCount}>
-            Showing {filteredCount} of {totalCount} names
-          </span>
-          {filteredCount !== totalCount && (
-            <span className={styles.filteredIndicator}>(Filtered)</span>
+        <div className={styles.resultsBar}>
+          <div className={styles.resultsInfo}>
+            <span className={styles.resultsCount}>
+              Showing {filteredCount} of {totalCount} names
+            </span>
+            {filteredCount !== totalCount && (
+              <span className={styles.filteredIndicator}>(Filtered)</span>
+            )}
+          </div>
+          {onApplyFilters && (
+            <button
+              type="button"
+              className={styles.applyButton}
+              onClick={onApplyFilters}
+            >
+              Apply Filters
+            </button>
           )}
         </div>
 
