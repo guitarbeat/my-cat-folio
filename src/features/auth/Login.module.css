@@ -111,12 +111,7 @@
   border-radius: 28px;
   backdrop-filter: blur(var(--glass-blur));
   box-shadow: var(--glass-shadow-colored);
-  transition:
-    max-width 0.5s cubic-bezier(0.4, 0, 0.2, 1),
-    transform 0.5s cubic-bezier(0.4, 0, 0.2, 1),
-    padding 0.4s cubic-bezier(0.4, 0, 0.2, 1),
-    box-shadow 0.3s ease,
-    border-color 0.3s ease;
+  transition: border-color 0.3s ease;
   animation: slideUp 0.6s 0.4s ease-out both;
   will-change: max-width, transform, padding;
 }
@@ -131,29 +126,12 @@
   padding: clamp(1.75rem, 5vw, 2.5rem);
   text-align: center;
   cursor: pointer;
-  transform: scale(0.98);
   box-shadow:
     0 4px 20px rgba(var(--accent-rgb), 0.08),
     0 2px 8px rgba(var(--accent-rgb), 0.04);
-  animation: subtlePulse 3s ease-in-out infinite;
-}
-
-@keyframes subtlePulse {
-  0%,
-  100% {
-    box-shadow:
-      0 4px 20px rgba(var(--accent-rgb), 0.08),
-      0 2px 8px rgba(var(--accent-rgb), 0.04);
-  }
-  50% {
-    box-shadow:
-      0 6px 24px rgba(var(--accent-rgb), 0.12),
-      0 3px 12px rgba(var(--accent-rgb), 0.08);
-  }
 }
 
 .formCollapsed:hover {
-  transform: scale(1.02);
   box-shadow:
     0 6px 24px rgba(var(--accent-rgb), 0.12),
     0 3px 12px rgba(var(--accent-rgb), 0.08);
@@ -163,12 +141,10 @@
 .formCollapsed:focus-visible {
   outline: 3px solid rgb(148 163 184 / 65%);
   outline-offset: 6px;
-  transform: scale(1.02);
 }
 
 .formExpanded {
   max-width: 520px;
-  transform: scale(1);
   box-shadow:
     var(--glass-shadow-colored),
     0 8px 32px rgba(var(--accent-rgb), 0.12),

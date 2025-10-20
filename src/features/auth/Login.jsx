@@ -248,7 +248,6 @@ function Login({ onLogin }) {
           <p className={styles.loginSubtitle}>
             Enter your name to login or create a new account
           </p>
-
           {!isExpanded ? (
             <div className={styles.collapsedContent}>
               <p className={styles.collapsedDescription}>
