@@ -58,6 +58,8 @@ export default defineConfig(({ mode }) => {
         '@features': pathResolve(__dirname, './src/features'),
         '@core': pathResolve(__dirname, './src/core'),
       },
+      // Ensure a single React instance to avoid hooks dispatcher being null
+      dedupe: ['react', 'react-dom', 'react/jsx-runtime', 'react/jsx-dev-runtime'],
     },
     optimizeDeps: {
       include: ['react', 'react-dom']
