@@ -1,9 +1,9 @@
 /* * Profile Filters Container */
 .container {
-  margin-bottom: var(--space-6, 2rem);
   display: flex;
   flex-direction: column;
   gap: var(--space-4, 1.5rem);
+  margin-bottom: var(--space-6, 2rem);
 }
 
 .sectionTitle {
@@ -108,8 +108,7 @@
 /* * Active Filters Display */
 .activeFilters {
   display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
+  flex-flow: row wrap;
   gap: var(--space-3, 0.75rem);
   align-items: center;
 }
@@ -181,7 +180,7 @@
   }
 }
 
-/* Theme is driven by global CSS variables on body.light-theme/dark-theme */
+/* Theme is driven by global CSS variables on :root[data-theme] */
 
 /* Component respects global variables; no local theme overrides here */
 

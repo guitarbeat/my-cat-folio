@@ -170,21 +170,21 @@
 }
 
 /* Dark theme support */
-:global(.dark-theme) .default {
+:global(:root[data-theme='dark']) .default {
   background: rgb(30 30 30 / 95%);
   border-color: rgb(255 255 255 / 10%);
 }
 
-:global(.dark-theme) .elevated {
+:global(:root[data-theme='dark']) .elevated {
   background: rgb(40 40 40 / 98%);
   border-color: rgb(255 255 255 / 20%);
 }
 
-:global(.dark-theme) .outlined {
+:global(:root[data-theme='dark']) .outlined {
   border-color: rgb(255 255 255 / 30%);
 }
 
-:global(.dark-theme) .filled {
+:global(:root[data-theme='dark']) .filled {
   background: linear-gradient(
     135deg,
     rgb(30 30 30 / 90%),
@@ -193,12 +193,12 @@
   border-color: rgb(255 255 255 / 15%);
 }
 
-:global(.dark-theme) .background-glass {
+:global(:root[data-theme='dark']) .background-glass {
   background: rgb(30 30 30 / 80%);
   border-color: rgb(255 255 255 / 20%);
 }
 
-:global(.dark-theme) .background-gradient {
+:global(:root[data-theme='dark']) .background-gradient {
   background: linear-gradient(
     135deg,
     rgb(30 30 30 / 95%),
