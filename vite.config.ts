@@ -92,9 +92,10 @@ export default defineConfig(({ mode }) => {
             regex: /^_/,
           },
         },
-        // * Additional Terser options for better tree shaking
-        toplevel: true,
-        module: true,
+        // NOTE: We intentionally omit `toplevel` and `module` here. Enabling
+        // both flags simultaneously allows Terser to reorder top-level
+        // bindings across chunks, which triggered "Cannot access '<var>'
+        // before initialization" errors in the production preview build.
       },
       rollupOptions: {
         output: {
