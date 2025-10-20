@@ -2,7 +2,6 @@ import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { PreferenceSorter } from '../../features/tournament/PreferenceSorter';
 import EloRating from '../../features/tournament/EloRating';
 import useLocalStorage from './useLocalStorage';
-import useUserSession from './useUserSession';
 import useAppStore from '../store/useAppStore';
 import {
   computeRating,
@@ -26,7 +25,7 @@ export function useTournament({
 }) {
   // Single Elo instance
   const elo = useMemo(() => new EloRating(), []);
-  const { userName } = useUserSession();
+  const userName = useAppStore((state) => state.user.name);
 
   // * Tournament state management
   const [tournamentState, setTournamentState] = useState({
