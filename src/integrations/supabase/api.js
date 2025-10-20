@@ -16,6 +16,7 @@ export {
   adminAPI,
   deleteName,
   getNamesWithDescriptions,
+  getNamesWithUserRatings,
   addRatingHistory,
   updateRating,
   getRatingHistory,

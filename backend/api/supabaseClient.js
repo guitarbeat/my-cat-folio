@@ -569,6 +569,83 @@ export const catNamesAPI = {
   },
 
   /**
+   * Get all names with user-specific ratings and statistics
+   */
+  async getNamesWithUserRatings(userName) {
+    try {
+      if (!(await isSupabaseAvailable())) {
+        console.warn('Supabase not available, using fallback names');
+        return [
+          {
+            id: 'aaron',
+            name: 'aaron',
+            description: 'temporary fallback — Supabase not configured',
+            avg_rating: 1500,
+            popularity_score: 0,
+            total_tournaments: 0,
+            is_active: true,
+            created_at: new Date().toISOString(),
+            updated_at: null,
+            user_rating: null,
+            user_wins: 0,
+            user_losses: 0,
+            isHidden: false,
+            has_user_rating: false
+          }
+        ];
+      }
+
+      // Get all names with user-specific ratings
+      const { data, error } = await supabase
+        .from('cat_name_options')
+        .select(`
+          id,
+          name,
+          description,
+          created_at,
+          avg_rating,
+          popularity_score,
+          total_tournaments,
+          is_active,
+          cat_name_ratings!left (
+            user_name,
+            rating,
+            wins,
+            losses,
+            is_hidden,
+            updated_at
+          )
+        `)
+        .eq('is_active', true)
+        .order('name');
+
+      if (error) {
+        console.error('Error fetching names with user ratings:', error);
+        return [];
+      }
+
+      // Process data to include user-specific ratings
+      return data?.map((item) => {
+        const userRating = item.cat_name_ratings?.find(r => r.user_name === userName);
+        return {
+          ...item,
+          user_rating: userRating?.rating || null,
+          user_wins: userRating?.wins || 0,
+          user_losses: userRating?.losses || 0,
+          isHidden: userRating?.is_hidden || false,
+          updated_at: userRating?.updated_at || null,
+          has_user_rating: !!userRating?.rating
+        };
+      }) || [];
+    } catch (error) {
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Error fetching names with user ratings:', error);
+      }
+      return [];
+    }
+  },
+
+  /**
    * Get Aaron's top names with his ratings
    */
   async getAaronsTopNames(limit = 10) {
@@ -1951,6 +2028,7 @@ export const adminAPI = {
 
 // Keep these for existing code that might still use them
 export const getNamesWithDescriptions = catNamesAPI.getNamesWithDescriptions;
+export const getNamesWithUserRatings = catNamesAPI.getNamesWithUserRatings;
 export const addRatingHistory = ratingsAPI.addRatingHistory;
 export const updateRating = ratingsAPI.updateRating;
 export const getRatingHistory = ratingsAPI.getRatingHistory;

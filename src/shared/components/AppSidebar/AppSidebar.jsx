@@ -279,7 +279,7 @@ export function AppSidebar({
               <span>Welcome, {userName}</span>
             </div>
             {/* * Admin Badge for Aaron */}
-            {isAdmin && userName.toLowerCase() === "aaron" && (
+            {isAdmin && userName && userName.toLowerCase() === "aaron" && (
               <div className="sidebar-admin-badge">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"

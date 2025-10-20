@@ -1,8 +1,8 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { FILTER_OPTIONS } from '../../core/constants';
-import { Card, Select } from '../../shared/components';
-import styles from './ProfileFilters.module.css';
+import React from "react";
+import PropTypes from "prop-types";
+import { FILTER_OPTIONS } from "../../core/constants";
+import { Card, Select } from "../../shared/components";
+import styles from "./ProfileFilters.module.css";
 
 /**
  * @module ProfileFilters
@@ -20,11 +20,15 @@ const ProfileFilters = ({
   sortOrder,
   setSortOrder,
   isAdmin = false,
-  className = '',
+  className = "",
   // * New selection-based filter props
-  selectionFilter = 'all',
+  selectionFilter = "all",
   setSelectionFilter,
-  hasSelectionData = false
+  hasSelectionData = false,
+  // * Filter count and apply function
+  filteredCount = 0,
+  totalCount = 0,
+  onApplyFilters = null,
 }) => {
   const handleSortOrderToggle = () => {
     setSortOrder(
@@ -35,47 +39,52 @@ const ProfileFilters = ({
   };
 
   const statusOptions = [
-    { value: FILTER_OPTIONS.STATUS.ALL, label: 'All Names' },
-    { value: FILTER_OPTIONS.STATUS.ACTIVE, label: 'Active Only' },
-    { value: FILTER_OPTIONS.STATUS.HIDDEN, label: 'Hidden Only' }
+    { value: FILTER_OPTIONS.STATUS.ALL, label: "All Names" },
+    { value: FILTER_OPTIONS.STATUS.ACTIVE, label: "Active Only" },
+    { value: FILTER_OPTIONS.STATUS.HIDDEN, label: "Hidden Only" },
   ];
 
   const userOptions = [
-    { value: FILTER_OPTIONS.USER.ALL, label: 'All Users' },
-    { value: FILTER_OPTIONS.USER.CURRENT, label: 'Current User' }
+    { value: FILTER_OPTIONS.USER.ALL, label: "All Users" },
+    { value: FILTER_OPTIONS.USER.CURRENT, label: "Current User" },
   ];
 
   if (isAdmin) {
-    userOptions.push({ value: FILTER_OPTIONS.USER.OTHER, label: 'Other Users' });
+    userOptions.push({
+      value: FILTER_OPTIONS.USER.OTHER,
+      label: "Other Users",
+    });
   }
 
   const selectionOptions = [
-    { value: 'all', label: 'All Names' },
-    { value: 'selected', label: "Names I've Selected" },
-    { value: 'never_selected', label: "Names I've Never Selected" },
-    { value: 'frequently_selected', label: 'Frequently Selected' },
-    { value: 'recently_selected', label: 'Recently Selected' }
+    { value: "all", label: "All Names" },
+    { value: "selected", label: "Names I've Selected" },
+    { value: "never_selected", label: "Names I've Never Selected" },
+    { value: "frequently_selected", label: "Frequently Selected" },
+    { value: "recently_selected", label: "Recently Selected" },
   ];
 
   const sortOptions = [
-    { value: FILTER_OPTIONS.SORT.RATING, label: 'Rating' },
-    { value: FILTER_OPTIONS.SORT.NAME, label: 'Name' },
-    { value: FILTER_OPTIONS.SORT.WINS, label: 'Wins' },
-    { value: FILTER_OPTIONS.SORT.LOSSES, label: 'Losses' },
-    { value: FILTER_OPTIONS.SORT.WIN_RATE, label: 'Win Rate' },
-    { value: FILTER_OPTIONS.SORT.CREATED, label: 'Created Date' }
+    { value: FILTER_OPTIONS.SORT.RATING, label: "Rating" },
+    { value: FILTER_OPTIONS.SORT.NAME, label: "Name" },
+    { value: FILTER_OPTIONS.SORT.WINS, label: "Wins" },
+    { value: FILTER_OPTIONS.SORT.LOSSES, label: "Losses" },
+    { value: FILTER_OPTIONS.SORT.WIN_RATE, label: "Win Rate" },
+    { value: FILTER_OPTIONS.SORT.CREATED, label: "Created Date" },
   ];
 
   if (hasSelectionData) {
     sortOptions.push(
-      { value: 'selection_count', label: 'Selection Count' },
-      { value: 'last_selected', label: 'Last Selected' },
-      { value: 'selection_frequency', label: 'Selection Frequency' },
-      { value: 'tournament_appearances', label: 'Tournament Appearances' }
+      { value: "selection_count", label: "Selection Count" },
+      { value: "last_selected", label: "Last Selected" },
+      { value: "selection_frequency", label: "Selection Frequency" },
+      { value: "tournament_appearances", label: "Tournament Appearances" }
     );
   }
 
-  const containerClasses = [styles.container, className].filter(Boolean).join(' ');
+  const containerClasses = [styles.container, className]
+    .filter(Boolean)
+    .join(" ");
 
   return (
     <Card className={containerClasses} shadow="medium">
@@ -143,50 +152,62 @@ const ProfileFilters = ({
             type="button"
             onClick={handleSortOrderToggle}
             className={styles.sortOrderButton}
-            aria-label={`Sort ${sortOrder === FILTER_OPTIONS.ORDER.ASC ? 'ascending' : 'descending'}`}
+            aria-label={`Sort ${sortOrder === FILTER_OPTIONS.ORDER.ASC ? "ascending" : "descending"}`}
           >
             <span className={styles.sortOrderIcon}>
-              {sortOrder === FILTER_OPTIONS.ORDER.ASC ? '↑' : '↓'}
+              {sortOrder === FILTER_OPTIONS.ORDER.ASC ? "↑" : "↓"}
             </span>
             <span className={styles.sortOrderText}>
               {sortOrder === FILTER_OPTIONS.ORDER.ASC
-                ? 'Ascending'
-                : 'Descending'}
+                ? "Ascending"
+                : "Descending"}
             </span>
           </button>
         </div>
       </div>
 
-      {/* * Active Filters Display - Enhanced */}
+      {/* * Filter Results Display */}
       <Card
-        className={styles.activeFilters}
+        className={styles.filterResults}
         padding="small"
         shadow="small"
         background="glass"
         as="section"
-        aria-label="Active filters summary"
+        aria-label="Filter results summary"
       >
-        <span className={styles.activeFilterLabel}>Active Filters:</span>
-        <span className={styles.activeFilter}>
-          Status:{' '}
-          {filterStatus === FILTER_OPTIONS.STATUS.ALL ? 'All' : filterStatus}
-        </span>
-        <span className={styles.activeFilter}>
-          User: {userFilter === FILTER_OPTIONS.USER.ALL ? 'All' : userFilter}
-        </span>
-        {hasSelectionData && selectionFilter !== 'all' && (
-          <span className={styles.activeFilter}>
-            Selection:{' '}
-            {selectionFilter
-              .replace('_', ' ')
-              .replace(/\b\w/g, (l) => l.toUpperCase())}
+        <div className={styles.resultsInfo}>
+          <span className={styles.resultsCount}>
+            Showing {filteredCount} of {totalCount} names
           </span>
-        )}
-        <span className={styles.activeFilter}>
-          Sort:{' '}
-          {sortBy.replace('_', ' ').replace(/\b\w/g, (l) => l.toUpperCase())} (
-          {sortOrder})
-        </span>
+          {filteredCount !== totalCount && (
+            <span className={styles.filteredIndicator}>(Filtered)</span>
+          )}
+        </div>
+
+        {/* * Active Filters Display */}
+        <div className={styles.activeFiltersList}>
+          <span className={styles.activeFilterLabel}>Active:</span>
+          <span className={styles.activeFilter}>
+            Status:{" "}
+            {filterStatus === FILTER_OPTIONS.STATUS.ALL ? "All" : filterStatus}
+          </span>
+          <span className={styles.activeFilter}>
+            User: {userFilter === FILTER_OPTIONS.USER.ALL ? "All" : userFilter}
+          </span>
+          {hasSelectionData && selectionFilter !== "all" && (
+            <span className={styles.activeFilter}>
+              Selection:{" "}
+              {selectionFilter
+                .replace("_", " ")
+                .replace(/\b\w/g, (l) => l.toUpperCase())}
+            </span>
+          )}
+          <span className={styles.activeFilter}>
+            Sort:{" "}
+            {sortBy.replace("_", " ").replace(/\b\w/g, (l) => l.toUpperCase())}{" "}
+            ({sortOrder})
+          </span>
+        </div>
       </Card>
     </Card>
   );
@@ -206,7 +227,11 @@ ProfileFilters.propTypes = {
   // * New props for selection-based filtering
   selectionFilter: PropTypes.string,
   setSelectionFilter: PropTypes.func,
-  hasSelectionData: PropTypes.bool
+  hasSelectionData: PropTypes.bool,
+  // * Filter count and apply function
+  filteredCount: PropTypes.number,
+  totalCount: PropTypes.number,
+  onApplyFilters: PropTypes.func,
 };
 
 export default ProfileFilters;

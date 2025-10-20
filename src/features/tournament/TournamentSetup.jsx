@@ -1067,7 +1067,6 @@ function TournamentSetupContent({ onStart, userName }) {
 
       try {
         const adminStatus = await isUserAdmin(userName);
-        console.log("🔍 Admin check for", userName, ":", adminStatus);
         setIsAdmin(adminStatus);
       } catch (error) {
         console.error("Error checking admin status:", error);
@@ -1481,21 +1480,6 @@ function TournamentSetupContent({ onStart, userName }) {
                     </button>
                   </div>
                 )}
-                {/* * Debug: Show admin status */}
-                <div
-                  style={{
-                    padding: "10px",
-                    margin: "10px 0",
-                    background: isAdmin ? "#4ade80" : "#ef4444",
-                    color: "white",
-                    borderRadius: "8px",
-                    fontSize: "14px",
-                    fontWeight: "bold",
-                  }}
-                >
-                  Debug: User: {userName || "none"} | Admin:{" "}
-                  {isAdmin ? "YES" : "NO"}
-                </div>
 
                 {isAdmin && (
                   <div className={styles.photoUploadRow}>
