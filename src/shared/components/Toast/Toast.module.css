@@ -14,6 +14,33 @@
   animation: slideIn 0.3s ease-out forwards;
 }
 
+/* * Tournament mode visual: higher contrast glass/blur so it stands out over game UI */
+:global(.tournamentToast) .item {
+  background: rgb(17 24 39 / 75%);
+  color: #fff;
+  border-left-color: var(--secondary-500, #3b82f6);
+  backdrop-filter: blur(8px) saturate(120%);
+  box-shadow: 0 8px 28px rgb(0 0 0 / 35%);
+}
+
+:global(.tournamentToast) .progressBar {
+  background: rgb(255 255 255 / 25%);
+}
+
+:global(.tournamentToast) .progressFill {
+  background: #3b82f6; /* keep visible against dark glass */
+  opacity: 0.9;
+}
+
+:global(.tournamentToast) .dismissButton {
+  background: rgb(255 255 255 / 12%);
+  border-color: rgb(255 255 255 / 35%);
+}
+
+:global(.tournamentToast) .dismissButton:hover {
+  background: rgb(255 255 255 / 18%);
+}
+
 .item.exiting {
   opacity: 0;
   transform: translateX(100%);

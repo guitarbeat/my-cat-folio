@@ -363,6 +363,24 @@
   transform: translateY(-1px);
 }
 
+/* * Ensure adequate contrast in light theme for Select All button */
+:global(:root[data-theme="light"]) .selectAllButton {
+  color: #fff;
+  background: #1f2937; /* slate-800 */
+  border-color: #0f172a; /* slate-900 */
+}
+
+:global(:root[data-theme="light"]) .selectAllButton:hover:not(:disabled) {
+  background: #111827; /* slate-900 */
+  border-color: #0b1220;
+}
+
+/* * Accessible focus style with high-contrast ring */
+.selectAllButton:focus-visible {
+  outline: 3px solid #111827;
+  outline-offset: 2px;
+}
+
 .selectionStats {
   display: flex;
   gap: var(--space-1);
@@ -535,7 +553,6 @@
   margin: var(--space-6) 0;
   text-align: center;
 }
-
 
 .startButton {
   width: 100%;
@@ -1434,8 +1451,9 @@
 
   /* * Glassmorphism background */
   background: var(--glass-bg);
-  background-image: linear-gradient(var(--card-background), var(--card-background)),
-                    var(--gradient-primary);
+  background-image:
+    linear-gradient(var(--card-background), var(--card-background)),
+    var(--gradient-primary);
 
   /* * Gradient border effect */
   background-clip: padding-box;
@@ -1460,7 +1478,7 @@
   height: 100%;
 
   /* * Animated background overlay */
-  content: '';
+  content: "";
   background: linear-gradient(
     90deg,
     transparent,
@@ -1472,8 +1490,9 @@
 
 .headerActionButton:hover:not(:disabled) {
   /* * Enhanced hover state */
-  background-image: linear-gradient(var(--card-hover), var(--card-hover)),
-                    var(--gradient-vibrant);
+  background-image:
+    linear-gradient(var(--card-hover), var(--card-hover)),
+    var(--gradient-vibrant);
   border-color: var(--neon-cyan-100);
   box-shadow:
     0 8px 25px rgb(0 0 0 / 20%),
@@ -1497,8 +1516,9 @@
   text-shadow: none;
 
   /* * Active state with vibrant styling */
-  background-image: linear-gradient(var(--accent-color), var(--highlight-color)),
-                    var(--gradient-vibrant);
+  background-image:
+    linear-gradient(var(--accent-color), var(--highlight-color)),
+    var(--gradient-vibrant);
   border-color: var(--mimosa);
   box-shadow:
     0 6px 20px rgb(232 191 118 / 40%),
@@ -1509,8 +1529,9 @@
 
 .headerActionButtonActive:hover:not(:disabled) {
   /* * Enhanced active hover state */
-  background-image: linear-gradient(var(--highlight-color), var(--accent-color)),
-                    var(--gradient-vibrant);
+  background-image:
+    linear-gradient(var(--highlight-color), var(--accent-color)),
+    var(--gradient-vibrant);
   box-shadow:
     0 10px 30px rgb(232 191 118 / 50%),
     0 5px 15px rgb(241 164 56 / 40%),
@@ -1633,7 +1654,8 @@
   margin-bottom: 1rem;
   overflow: hidden;
   background: linear-gradient(135deg, rgb(15 23 42 / 85%), rgb(15 23 42 / 95%));
-  background: radial-gradient(
+  background:
+    radial-gradient(
       circle at 30% 25%,
       rgb(var(--cat-image-accent-rgb, 100 116 139) / 60%) 0%,
       rgb(15 23 42 / 92%) 65%
@@ -1641,7 +1663,8 @@
     linear-gradient(135deg, rgb(15 23 42 / 85%), rgb(15 23 42 / 95%));
   border-radius: 15px;
   box-shadow: 0 8px 28px rgb(15 23 42 / 45%);
-  transition: box-shadow var(--duration-normal) var(--ease-out),
+  transition:
+    box-shadow var(--duration-normal) var(--ease-out),
     transform var(--duration-normal) var(--ease-out);
 }
 
@@ -1679,45 +1702,50 @@
   z-index: 1;
   width: 100%;
   height: 100%;
-  object-fit: var(--cat-image-fit, contain); /* show full cat; blurred bg fills behind */
+  object-fit: var(
+    --cat-image-fit,
+    contain
+  ); /* show full cat; blurred bg fills behind */
   object-position: 50% var(--image-pos-y, 20%);
   opacity: 0;
   filter: drop-shadow(0 18px 28px rgb(15 23 42 / 45%));
   transform: scale(1.04);
-  transition: transform 0.35s ease, opacity 0.25s ease;
+  transition:
+    transform 0.35s ease,
+    opacity 0.25s ease;
 }
 
 .swipeCardImage:hover {
   transform: scale(1.02);
 }
 
-.swipeCardImageContainer[data-loaded='true']::before,
-.swipeCardImageContainer[data-loaded='true']::after {
+.swipeCardImageContainer[data-loaded="true"]::before,
+.swipeCardImageContainer[data-loaded="true"]::after {
   opacity: 1;
 }
 
-.swipeCardImageContainer[data-loaded='true'] .swipeCardImage {
+.swipeCardImageContainer[data-loaded="true"] .swipeCardImage {
   opacity: 1;
   transform: scale(1);
 }
 
-.swipeCardImageContainer[data-orientation='portrait'] {
+.swipeCardImageContainer[data-orientation="portrait"] {
   height: 260px;
 }
 
-.swipeCardImageContainer[data-orientation='landscape'] {
+.swipeCardImageContainer[data-orientation="landscape"] {
   height: 210px;
 }
 
-.swipeCardImageContainer[data-orientation='square'] {
+.swipeCardImageContainer[data-orientation="square"] {
   height: 235px;
 }
 
-.swipeCardImageContainer[data-orientation='portrait'] .swipeCardImage {
+.swipeCardImageContainer[data-orientation="portrait"] .swipeCardImage {
   transform-origin: center 20%;
 }
 
-.swipeCardImageContainer[data-orientation='landscape'] .swipeCardImage {
+.swipeCardImageContainer[data-orientation="landscape"] .swipeCardImage {
   object-position: 50% var(--image-pos-y, 40%);
 }
 
@@ -1848,7 +1876,7 @@
   overflow: hidden;
   font-size: var(--text-sm);
   font-weight: 600;
-  
+
   /* * Text styling */
   color: var(--text-primary);
   text-transform: uppercase;
@@ -1856,20 +1884,21 @@
   text-shadow: 0 1px 2px rgb(0 0 0 / 10%);
   cursor: pointer;
   user-select: none;
-  
+
   /* * Glassmorphism background */
   background: var(--glass-bg);
-  background-image: linear-gradient(var(--card-background), var(--card-background)), 
-                    var(--gradient-primary);
-  
+  background-image:
+    linear-gradient(var(--card-background), var(--card-background)),
+    var(--gradient-primary);
+
   /* * Gradient border effect */
   background-clip: padding-box;
   background-origin: border-box;
   border: 2px solid transparent;
   border-radius: var(--radius-xl);
-  
+
   /* * Subtle glow effect */
-  box-shadow: 
+  box-shadow:
     0 4px 12px rgb(0 0 0 / 15%),
     0 2px 4px rgb(0 0 0 / 10%),
     inset 0 1px 0 rgb(255 255 255 / 10%);
@@ -1885,7 +1914,7 @@
   height: 100%;
 
   /* * Animated background overlay */
-  content: '';
+  content: "";
   background: linear-gradient(
     90deg,
     transparent,
@@ -1897,7 +1926,7 @@
 
 .swipeButton:hover:not(:disabled) {
   border-color: var(--neon-cyan-100);
-  box-shadow: 
+  box-shadow:
     0 8px 25px rgb(0 0 0 / 20%),
     0 4px 12px rgb(0 0 0 / 15%),
     var(--glow-cyan);
@@ -1930,24 +1959,25 @@
   /* * Focus state for accessibility */
   outline: 3px solid var(--accent-color);
   outline-offset: 3px;
-  box-shadow: 
+  box-shadow:
     0 0 0 3px rgb(232 191 118 / 30%),
     0 4px 12px rgb(0 0 0 / 15%);
 }
 
 /* * Skip button (left) styling */
 .swipeLeftButton {
-  background-image: linear-gradient(var(--card-background), var(--card-background)), 
-                    var(--gradient-danger);
+  background-image:
+    linear-gradient(var(--card-background), var(--card-background)),
+    var(--gradient-danger);
   border-color: transparent;
 }
 
 .swipeLeftButton:hover:not(:disabled) {
   color: white;
-  background-image: linear-gradient(var(--error-600), var(--error-500)), 
-                    var(--gradient-danger);
+  background-image:
+    linear-gradient(var(--error-600), var(--error-500)), var(--gradient-danger);
   border-color: var(--error-300);
-  box-shadow: 
+  box-shadow:
     0 8px 25px rgb(239 68 68 / 30%),
     0 4px 12px rgb(220 38 38 / 20%),
     var(--glow-red);
@@ -1955,17 +1985,19 @@
 
 /* * Select button (right) styling */
 .swipeRightButton {
-  background-image: linear-gradient(var(--card-background), var(--card-background)), 
-                    var(--gradient-success);
+  background-image:
+    linear-gradient(var(--card-background), var(--card-background)),
+    var(--gradient-success);
   border-color: transparent;
 }
 
 .swipeRightButton:hover:not(:disabled) {
   color: white;
-  background-image: linear-gradient(var(--success-600), var(--success-500)), 
-                    var(--gradient-success);
+  background-image:
+    linear-gradient(var(--success-600), var(--success-500)),
+    var(--gradient-success);
   border-color: var(--success-300);
-  box-shadow: 
+  box-shadow:
     0 8px 25px rgb(16 185 129 / 30%),
     0 4px 12px rgb(5 150 105 / 20%),
     var(--glow-green);
@@ -2158,8 +2190,10 @@
     text-overflow: ellipsis; /* * Show ellipsis for very long text */
     font-size: var(--text-xs); /* * Reduce font size for better fit */
     white-space: nowrap; /* * Prevent text wrapping */
-    border-radius: var(--radius-md); /* * Smaller radius on very small screens */
-    
+    border-radius: var(
+      --radius-md
+    ); /* * Smaller radius on very small screens */
+
     /* * Reduce effects on very small screens for performance */
     backdrop-filter: blur(8px);
   }
@@ -2186,15 +2220,16 @@
   .catPicturesToggleButton {
     min-height: 48px; /* * Ensure minimum touch target size on touch devices */
     touch-action: manipulation; /* * Optimize touch behavior */
-    
+
     /* * Enhanced touch feedback */
     -webkit-tap-highlight-color: rgb(232 191 118 / 30%);
-    
+
     /* * Optimize for touch interactions */
-    transition: transform var(--duration-fast) var(--ease-out),
-                box-shadow var(--duration-fast) var(--ease-out);
+    transition:
+      transform var(--duration-fast) var(--ease-out),
+      box-shadow var(--duration-fast) var(--ease-out);
   }
-  
+
   .catPicturesToggleButton:active {
     transform: scale(0.98); /* * Subtle press feedback */
   }

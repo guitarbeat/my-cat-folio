@@ -374,13 +374,16 @@ function AppLayout({
           </div>
         )}
 
-        {/* * Toast notifications */}
+        {/* * Toast notifications - optimized for tournament view */}
         <Toast
           variant="container"
           toasts={toasts}
           removeToast={removeToast}
-          position="top-right"
-          maxToasts={5}
+          position={
+            currentView === "tournament" ? "bottom-center" : "top-right"
+          }
+          maxToasts={currentView === "tournament" ? 1 : 5}
+          className={currentView === "tournament" ? "tournamentToast" : ""}
         />
 
         {/* * Performance Dashboard - Admin (Aaron) only */}
