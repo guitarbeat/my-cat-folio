@@ -105,8 +105,9 @@ function Login({ onLogin }) {
   }, []);
 
   useEffect(() => {
-    if (isExpanded && containerRef.current) {
-      containerRef.current.scrollIntoView({
+    const containerEl = containerRef.current;
+    if (isExpanded && containerEl && typeof containerEl.scrollIntoView === "function") {
+      containerEl.scrollIntoView({
         behavior: "smooth",
         block: "center",
       });
@@ -305,6 +306,10 @@ function Login({ onLogin }) {
               className={styles.expandedContent}
               aria-live="polite"
             >
+              <p className={styles.accessibilityHint}>
+                Hover or focus here to open the judge login form—no clicks
+                needed. We&apos;ll help you enter or generate a name in seconds.
+              </p>
               <p className={styles.catFact}>
                 <span className={styles.catFactIcon} aria-hidden="true">
                   🐱
