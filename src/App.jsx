@@ -108,7 +108,7 @@ function App() {
         });
       }
     },
-    [user.name, tournament.voteHistory, tournament.ratings, tournamentActions]
+    [user.name, tournamentActions]
   );
 
   // * Handle start new tournament
@@ -135,7 +135,7 @@ function App() {
         tournamentActions.setLoading(false);
       }, 100);
     },
-    [tournament.ratings, tournamentActions]
+    [tournamentActions]
   );
 
   // * Handle ratings update
@@ -155,7 +155,7 @@ function App() {
         throw error;
       }
     },
-    [user.name, tournamentActions]
+    [tournamentActions]
   );
 
   // * Handle logout
