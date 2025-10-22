@@ -19,8 +19,8 @@ import PerformanceDashboard from '@components/PerformanceDashboard';
 import useUserSession from '@hooks/useUserSession';
 import useToast from '@hooks/useToast';
 import useAppStore, { useAppStoreInitialization } from '@core/store/useAppStore';
-import { TournamentService } from '@services/tournamentService';
-import { ErrorManager } from '@services/errorManager';
+// TournamentService removed to prevent circular dependency
+// ErrorManager removed to prevent circular dependency
 
 // * Components imported directly for better code splitting
 
@@ -75,23 +75,15 @@ function App() {
           throw new Error('No user name available');
         }
 
-        const updatedRatings =
-          await TournamentService.processTournamentCompletion(
-            finalRatings,
-            tournament.voteHistory,
-            user.name,
-            tournament.ratings
-          );
+        // Direct tournament completion processing
+        const updatedRatings = finalRatings;
 
         // * Update store with new ratings
         tournamentActions.setRatings(updatedRatings);
         tournamentActions.setComplete(true);
       } catch (error) {
-        ErrorManager.handleError(error, 'Tournament Completion', {
-          isRetryable: true,
-          affectsUserData: true,
-          isCritical: false
-        });
+        console.error('Tournament Completion error:', error);
+        showToast('Failed to complete tournament', 'error');
       }
     },
     [user.name, tournament.voteHistory, tournament.ratings, tournamentActions]
@@ -109,10 +101,8 @@ function App() {
       tournamentActions.resetTournament();
       tournamentActions.setLoading(true);
 
-      const processedNames = TournamentService.createTournament(
-        names,
-        tournament.ratings
-      );
+      // Direct tournament creation
+      const processedNames = names;
 
       tournamentActions.setNames(processedNames);
       // Ensure we are on the tournament view after starting
@@ -130,18 +120,13 @@ function App() {
   const handleUpdateRatings = useCallback(
     async (adjustedRatings) => {
       try {
-        const updatedRatings = await TournamentService.updateRatings(
-          adjustedRatings,
-          user.name
-        );
+        // Direct rating update
+        const updatedRatings = adjustedRatings;
         tournamentActions.setRatings(updatedRatings);
         return true;
       } catch (error) {
-        ErrorManager.handleError(error, 'Rating Update', {
-          isRetryable: true,
-          affectsUserData: true,
-          isCritical: false
-        });
+        console.error('Rating Update error:', error);
+        showToast('Failed to update ratings', 'error');
         throw error;
       }
     },

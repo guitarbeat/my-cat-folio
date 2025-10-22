@@ -5,13 +5,32 @@
  */
 import React, { useState, useCallback, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import {
-  supabase,
-  deleteName,
-  catNamesAPI,
-  tournamentsAPI,
-  hiddenNamesAPI
-} from '../../../backend/api/supabaseClient';
+import { supabase } from '../../../backend/api/supabaseClientIsolated';
+import { catNamesAPI } from '../../../backend/api/catNamesAPI';
+import { tournamentsAPI } from '../../../backend/api/tournamentsAPI';
+import { hiddenNamesAPI } from '../../../backend/api/hiddenNamesAPI';
+
+// Simple delete function to avoid circular dependency
+const deleteName = async (nameId, userName) => {
+  if (!supabase || !nameId || !userName) return false;
+  
+  try {
+    const { error } = await supabase
+      .from('cat_name_ratings')
+      .delete()
+      .eq('name_id', nameId)
+      .eq('user_name', userName);
+    
+    if (error) {
+      console.error('Error deleting name:', error);
+      return false;
+    }
+    return true;
+  } catch (error) {
+    console.error('Error in deleteName:', error);
+    return false;
+  }
+};
 import useToast from '../../core/hooks/useToast';
 import { FILTER_OPTIONS } from '../../core/constants';
 // ErrorManager removed to prevent circular dependency
@@ -20,7 +39,7 @@ import { isUserAdmin } from '../../shared/utils/authUtils';
 import ProfileStats from './ProfileStats';
 import ProfileFilters from './ProfileFilters';
 import ProfileNameList from './ProfileNameList';
-import DataMigration from '../admin/DataMigration';
+// DataMigration removed to prevent circular dependency - will be lazy loaded if needed
 import { Error } from '../../shared/components';
 import styles from './Profile.module.css';
 
@@ -623,9 +642,9 @@ const Profile = ({ userName, onStartNewTournament }) => {
 
   return (
     <div className={styles.profileContainer}>
-      {/* * Show migration tool for admins */}
+      {/* * Show migration tool for admins - temporarily disabled to prevent circular dependency */}
       {showMigration && isAdmin ? (
-        <DataMigration />
+        <div>Data Migration tool temporarily disabled</div>
       ) : (
         <>
           {/* * Header */}

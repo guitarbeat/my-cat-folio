@@ -5,13 +5,15 @@
  */
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import PropTypes from 'prop-types';
-import {
-  supabase,
-  getNamesWithDescriptions,
-  tournamentsAPI,
-  catNamesAPI,
-  imagesAPI
-} from '../../../backend/api/supabaseClient';
+import { supabase } from '../../../backend/api/supabaseClientIsolated';
+import { catNamesAPI } from '../../../backend/api/catNamesAPI';
+import { tournamentsAPI } from '../../../backend/api/tournamentsAPI';
+import { imagesAPI } from '../../../backend/api/imagesAPI';
+
+// Simple function to get names with descriptions
+const getNamesWithDescriptions = async () => {
+  return await catNamesAPI.getNamesWithDescriptions();
+};
 import { compressImageFile, devLog } from '../../shared/utils/coreUtils';
 import {
   Loading,

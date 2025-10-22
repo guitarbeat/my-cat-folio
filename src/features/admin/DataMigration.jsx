@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { supabase } from '../../../backend/api/supabaseClient';
+import { supabase } from '../../../backend/api/supabaseClientIsolated';
 import useToast from '../../core/hooks/useToast';
 import styles from './DataMigration.module.css';
 

@@ -4,33 +4,10 @@
  * Combines all database operations, real-time subscriptions, and utility functions.
  */
 
-import { createClient } from '@supabase/supabase-js';
+// Import the simple supabase client to avoid circular dependencies
+import { supabase } from './supabaseClientSimple.js';
 
-// Environment configuration
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
-
-// Only create the Supabase client if the required environment variables are present
-// Otherwise export `null` so the application can still render without Supabase
-let supabase = null;
-if (!supabaseUrl || !supabaseAnonKey) {
-  if (process.env.NODE_ENV === 'development') {
-    console.warn(
-      'Missing Supabase environment variables. Supabase features are disabled.'
-    );
-  }
-} else {
-  // Ensure a single Supabase client instance in browser (avoids multiple GoTrueClient warnings)
-  if (typeof window !== 'undefined') {
-    if (!window.__supabaseClient) {
-      window.__supabaseClient = createClient(supabaseUrl, supabaseAnonKey);
-    }
-    supabase = window.__supabaseClient;
-  } else {
-    supabase = createClient(supabaseUrl, supabaseAnonKey);
-  }
-}
-
+// Re-export the supabase client
 export { supabase };
 
 // ===== HELPER FUNCTIONS =====

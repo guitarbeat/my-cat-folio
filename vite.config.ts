@@ -75,28 +75,8 @@ export default defineConfig(({ mode }) => ({
         tryCatchDeoptimization: false,
       },
       output: {
-        manualChunks: (id) => {
-          // * More granular chunking for better tree shaking
-          if (id.includes('node_modules')) {
-            if (id.includes('@supabase/supabase-js')) return 'vendor-supabase';
-            if (id.includes('@hello-pangea/dnd')) return 'vendor-dnd';
-            if (id.includes('react') || id.includes('react-dom')) return 'vendor-react';
-            if (id.includes('zustand')) return 'vendor-zustand';
-            if (id.includes('@heroicons')) return 'vendor-icons';
-            if (id.includes('prop-types')) return 'vendor-prop-types';
-            // * Group smaller libraries together
-            return 'vendor-misc';
-          }
-          // * Chunk by feature for better code splitting
-          if (id.includes('/features/')) {
-            const feature = id.split('/features/')[1]?.split('/')[0];
-            if (feature) return `feature-${feature}`;
-          }
-          // * Chunk shared components
-          if (id.includes('/shared/components/')) {
-            return 'shared-components';
-          }
-        },
+        // Disable manual chunking to avoid circular dependency issues
+        // Let Vite handle chunking automatically
         chunkFileNames: 'assets/js/[name]-[hash].js',
         entryFileNames: 'assets/js/[name]-[hash].js',
         assetFileNames: 'assets/[ext]/[name]-[hash].[ext]',
