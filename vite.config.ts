@@ -111,10 +111,11 @@ export default defineConfig(({ mode }) => {
               if (id.includes('prop-types')) return 'vendor-prop-types';
               return 'vendor-misc';
             }
-            if (id.includes('/features/')) {
-              const feature = id.split('/features/')[1]?.split('/')[0];
-              if (feature) return `feature-${feature}`;
-            }
+            // * Disable feature chunking to avoid circular dependency issues
+            // if (id.includes('/features/')) {
+            //   const feature = id.split('/features/')[1]?.split('/')[0];
+            //   if (feature) return `feature-${feature}`;
+            // }
             if (id.includes('/shared/utils/coreUtils')) {
               return 'shared-utils';
             }
@@ -122,7 +123,8 @@ export default defineConfig(({ mode }) => {
           chunkFileNames: 'assets/js/[name]-[hash].js',
           entryFileNames: 'assets/js/[name]-[hash].js',
           assetFileNames: 'assets/[ext]/[name]-[hash].[ext]',
-          experimentalMinChunkSize: mode === 'development' ? undefined : 1000,
+          // * Disable experimental min chunk size to avoid initialization issues
+          // experimentalMinChunkSize: mode === 'development' ? undefined : 1000,
         },
       },
       chunkSizeWarningLimit: 1000,
