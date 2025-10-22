@@ -5,7 +5,7 @@
  */
 
 import { useCallback, useMemo, useRef, useState } from 'react';
-import { VALIDATION, UI } from '../../core/constants';
+import { UI } from '../../core/constants';
 
 /**
  * * Creates a standardized form state manager
@@ -363,11 +363,7 @@ export function useKeyboardHandler(keyHandlers, dependencies = []) {
  * @returns {Object} Focus state and handlers
  */
 export function useFocusManager(options = {}) {
-    const {
-        initialFocus = false,
-        trapFocus = false,
-        restoreFocus = true
-    } = options;
+    const { initialFocus = false, restoreFocus = true } = options;
 
     const [isFocused, setIsFocused] = useState(initialFocus);
     const previousActiveElement = useRef(null);

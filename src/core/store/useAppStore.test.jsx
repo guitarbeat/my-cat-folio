@@ -1,4 +1,3 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 describe('useTournamentStats', () => {
@@ -7,10 +6,9 @@ describe('useTournamentStats', () => {
 
   beforeEach(async () => {
     vi.resetModules();
-    const storeModule = await import('./useAppStore');
-    useAppStore = storeModule.default;
-    selectTournamentStats = storeModule.selectTournamentStats;
-    const { default: store, selectTournamentStats: statsSelector } = await import('./useAppStore');
+    const { default: store, selectTournamentStats: statsSelector } = await import(
+      './useAppStore'
+    );
     useAppStore = store;
     selectTournamentStats = statsSelector;
 
