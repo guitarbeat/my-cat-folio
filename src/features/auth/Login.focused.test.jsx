@@ -202,9 +202,11 @@ describe('Login Component - Focused Tests', () => {
     const { validateUsername } = await import(
       '../../shared/utils/validationUtils'
     );
+    const errorMessage = 'That name is cursed by ancient cat magic.';
+
     validateUsername.mockReturnValue({
       success: false,
-      error: 'Username must be at least 2 characters long'
+      error: errorMessage
     });
 
     await act(async () => {
@@ -241,11 +243,12 @@ describe('Login Component - Focused Tests', () => {
     });
 
     await waitFor(() => {
-      expect(
-        screen.getByText('Username must be at least 2 characters long')
-      ).toBeInTheDocument();
+      expect(mockShowError).toHaveBeenCalledWith(errorMessage);
     });
 
+    expect(screen.getByText(errorMessage)).toBeInTheDocument();
     expect(mockOnLogin).not.toHaveBeenCalled();
+
+    validateUsername.mockReset();
   });
 });
