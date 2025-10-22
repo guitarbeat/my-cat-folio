@@ -117,6 +117,10 @@ export function AppSidebar({
     }
   };
 
+  const logoButtonLabel = collapsed
+    ? "Expand sidebar and go to home page"
+    : "Collapse sidebar and go to home page";
+
   return (
     <Sidebar className="app-sidebar" collapsible>
       {/* * Screen reader announcements */}
@@ -130,8 +134,8 @@ export function AppSidebar({
             type="button"
             onClick={handleLogoClick}
             className="sidebar-logo-button"
-            aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
-            title={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+            aria-label={logoButtonLabel}
+            title={logoButtonLabel}
           >
             <video
               className="sidebar-logo-video"
