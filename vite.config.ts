@@ -74,7 +74,7 @@ export default defineConfig(({ mode }) => {
     build: {
       outDir: 'dist',
       sourcemap: 'hidden', // * Enable source maps for debugging production issues (hidden from public)
-      minify: mode === 'development' ? false : 'terser',
+      minify: false, // * Completely disable minification to eliminate any minification-related issues
       terserOptions: mode === 'development' ? undefined : {
         compress: {
           drop_console: true,
