@@ -80,11 +80,11 @@ export default defineConfig(({ mode }) => {
           drop_console: true,
           drop_debugger: true,
           pure_funcs: ['console.log', 'console.info', 'console.warn'],
-          // * Enhanced dead code elimination
+          // * Less aggressive optimization to avoid React issues
           dead_code: true,
-          unused: true,
+          unused: false, // * Disable unused variable removal
           side_effects: false,
-          passes: 2, // * Multiple passes for better optimization
+          passes: 1, // * Single pass to avoid reordering issues
         },
         mangle: {
           safari10: true,
