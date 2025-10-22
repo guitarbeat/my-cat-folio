@@ -54,8 +54,12 @@ export default [
       'no-multiple-empty-lines': ['error', { max: 2 }],
       'no-trailing-spaces': 'error',
       'eol-last': 'error',
-      'comma-dangle': ['error', 'never'],
-      'quotes': ['error', 'single', { avoidEscape: true }],
+      // Align with existing codebase style which primarily uses trailing commas
+      // and a mix of single/double quotes. Enforcing a single quote style
+      // creates noise across untouched files, so disable strict enforcement
+      // here to keep linting focused on functional issues.
+      'comma-dangle': 'off',
+      'quotes': 'off',
       'semi': ['error', 'always'],
 
       // * Import/export optimization rules
