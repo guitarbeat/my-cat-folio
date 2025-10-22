@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 
 <head>
     <meta charset="UTF-8">
@@ -16,7 +16,9 @@
     <!-- SEO -->
     <meta name="description"
         content="Pick the perfect cat name via a fun tournament. Save, compare, and share results.">
-    <meta name="theme-color" content="#eef1f6">
+    <meta name="color-scheme" content="light dark">
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f4f7fb">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#020617">
 
     <!-- Open Graph -->
     <meta property="og:title" content="Name Nosferatu">
@@ -38,58 +40,48 @@
       href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@700&family=Josefin+Slab:wght@400;600&family=Waiting+for+the+Sunrise&display=swap"
       rel="stylesheet"></noscript>
 
-  <!-- Lightweight inline SVG favicon to avoid loading large /favicon.ico -->
-  <link
-    rel="icon"
-    href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ctext y='0.9em' font-size='64'%3E%F0%9F%90%B1%3C/text%3E%3C/svg%3E"
-    type="image/svg+xml"
-  />
+  <!-- Black cat favicon stored as a standalone SVG asset -->
+  <link rel="icon" href="/assets/images/black-cat-favicon.svg" type="image/svg+xml" />
 </head>
 
 <body>
     <script>
-      // Initialize theme before React renders to prevent flash
-      // Logic: Respect saved preference; otherwise default to dark after local "sunset" hours.
-      try {
-        const THEME_KEY = 'theme'; // stores boolean: true = light, false = dark
-        const metaTheme = document.querySelector('meta[name="theme-color"]');
+      (function applyInitialTheme() {
+        const { documentElement, body } = document;
+        if (!documentElement) {
+          return;
+        }
 
-        const applyTheme = (isLight) => {
-          const body = document.body;
-          if (isLight) {
-            body.classList.add('light-theme');
-            body.classList.remove('dark-theme');
-            if (metaTheme) metaTheme.setAttribute('content', '#eef1f6');
-          } else {
-            body.classList.add('dark-theme');
-            body.classList.remove('light-theme');
-            if (metaTheme) metaTheme.setAttribute('content', '#1a1f2e');
+        const STORAGE_KEY = 'theme';
+        const resolveStoredPreference = () => {
+          try {
+            if (!window.localStorage) return null;
+            const stored = window.localStorage.getItem(STORAGE_KEY);
+            return stored === 'light' || stored === 'dark' ? stored : null;
+          } catch (error) {
+            if (
+              typeof process !== 'undefined' &&
+              process.env &&
+              process.env.NODE_ENV === 'development'
+            ) {
+              console.error('Unable to read stored theme during boot:', error);
+            }
+            return null;
           }
         };
 
-        const saved = localStorage.getItem(THEME_KEY);
-        if (saved !== null) {
-          // Stored as JSON boolean by useLocalStorage hook
-          const isLight = JSON.parse(saved);
-          applyTheme(Boolean(isLight));
-        } else {
-          // No saved preference: infer by time and system preference
-          const now = new Date();
-          const hour = now.getHours();
-          const minute = now.getMinutes();
-          // Consider "after sunset" roughly as after 6:30pm until 6:00am
-          const afterSunset = (hour > 18) || (hour === 18 && minute >= 30) || (hour < 6);
-          const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-          const isDark = afterSunset || prefersDark;
+        const resolveSystemPreference = () =>
+          window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+            ? 'dark'
+            : 'light';
 
-          // Persist the inferred choice so React hook picks it up consistently
-          localStorage.setItem(THEME_KEY, JSON.stringify(!isDark ? true : false));
-          applyTheme(!isDark ? true : false);
+        const theme = resolveStoredPreference() ?? resolveSystemPreference();
+
+        documentElement.dataset.theme = theme;
+        if (body) {
+          body.dataset.theme = theme;
         }
-      } catch (e) {
-        // Safe fallback
-        document.body.classList.add('light-theme');
-      }
+      })();
     </script>
     <div id="root"></div>
     <script type="module" src="/src/index.jsx"></script>

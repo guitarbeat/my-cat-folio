@@ -6,7 +6,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styles from './Card.module.css';
 
-function Card({
+const Card = React.forwardRef(({ 
   children,
   className = '',
   variant = 'default',
@@ -16,7 +16,7 @@ function Card({
   background = 'solid',
   as: Component = 'div',
   ...props
-}) {
+}, ref) => {
   const cardClasses = [
     styles.card,
     styles[variant],
@@ -28,11 +28,11 @@ function Card({
   ].filter(Boolean).join(' ');
 
   return (
-    <Component className={cardClasses} {...props}>
+    <Component ref={ref} className={cardClasses} {...props}>
       {children}
     </Component>
   );
-}
+});
 
 Card.displayName = 'Card';
 

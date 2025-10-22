@@ -45,19 +45,11 @@ import PropTypes from 'prop-types';
 import RankingAdjustment from './RankingAdjustment';
 import Bracket from '../../shared/components/Bracket/Bracket';
 import CalendarButton from '../../shared/components/CalendarButton/CalendarButton';
-import styles from './Results.module.css';
+import StartTournamentButton from '../../shared/components/StartTournamentButton/StartTournamentButton';
 import StatsCard from '../../shared/components/StatsCard/StatsCard';
-
-// Toast component extracted for reusability
-const Toast = memo(({ message, type, onClose }) => (
-  <div
-    role="alert"
-    className={type === 'success' ? styles.toastSuccess : styles.toastError}
-    onClick={onClose}
-  >
-    {message}
-  </div>
-));
+import { Card, Toast } from '@components';
+import useToast from '@hooks/useToast';
+import styles from './Results.module.css';
 
 function Results({
   ratings,
@@ -69,12 +61,19 @@ function Results({
 }) {
   const [currentRankings, setCurrentRankings] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [toast, setToast] = useState({
-    show: false,
-    message: '',
-    type: 'success'
-  });
   const [hiddenNames] = useState(new Set());
+
+  const { toasts, showToast, removeToast } = useToast({
+    maxToasts: 1,
+    defaultDuration: 3000
+  });
+
+  const showToastMessage = useCallback((message, type = 'info') => {
+    showToast({
+      message,
+      type
+    });
+  }, [showToast]);
 
   // Convert vote history to bracket matches
   const getBracketMatches = useCallback(() => {
@@ -146,10 +145,16 @@ function Results({
       const tournamentNameSet = new Set(
         currentTournamentNames?.map((n) => n.name) || []
       );
+      const nameToIdMap = new Map(
+        (currentTournamentNames || [])
+          .filter((name) => name?.name)
+          .map(({ id, name }) => [name, id])
+      );
 
       return Object.entries(ratingsData || {})
         .filter(([name]) => tournamentNameSet.has(name))
         .map(([name, rating]) => ({
+          id: nameToIdMap.get(name),
           name,
           rating: Math.round(
             typeof rating === 'number' ? rating : rating?.rating || 1500
@@ -169,15 +174,11 @@ function Results({
       setCurrentRankings(processedRankings);
     } catch (error) {
       console.error('Error processing rankings:', error);
-      setToast({
-        show: true,
-        message: 'Error processing rankings data',
-        type: 'error'
-      });
+      showToastMessage('Error processing rankings data', 'error');
     } finally {
       setIsLoading(false);
     }
-  }, [ratings, processRankings]);
+  }, [ratings, processRankings, showToastMessage]);
 
   const handleSaveAdjustments = useCallback(
     async (adjustedRankings) => {
@@ -207,35 +208,16 @@ function Results({
         await onUpdateRatings(newRatings);
         setCurrentRankings(updatedRankings);
 
-        setToast({
-          show: true,
-          message: 'Rankings updated successfully!',
-          type: 'success'
-        });
+        showToastMessage('Rankings updated successfully!', 'success');
       } catch (error) {
         console.error('Failed to update rankings:', error);
-        setToast({
-          show: true,
-          message: 'Failed to update rankings. Please try again.',
-          type: 'error'
-        });
+        showToastMessage('Failed to update rankings. Please try again.', 'error');
       } finally {
         setIsLoading(false);
       }
     },
-    [currentRankings, ratings, onUpdateRatings]
+    [currentRankings, ratings, onUpdateRatings, showToastMessage]
   );
-
-  const closeToast = useCallback(() => {
-    setToast((prev) => ({ ...prev, show: false }));
-  }, []);
-
-  useEffect(() => {
-    if (toast.show) {
-      const timer = setTimeout(closeToast, 3000);
-      return () => clearTimeout(timer);
-    }
-  }, [toast.show, closeToast]);
 
   useEffect(() => {
     // Add cool effects to the results header
@@ -313,13 +295,19 @@ function Results({
 
   return (
     <div className={styles.container}>
-      <header className={styles.header}>
+      <Card
+        as="header"
+        className={styles.header}
+        background="glass"
+        padding="none"
+        shadow="medium"
+      >
         <h2>Name Rankings</h2>
         <p className={styles.welcome}>
           Welcome back, <span className={styles.userName}>{userName}</span>!
           Here are your latest name rankings.
         </p>
-      </header>
+      </Card>
 
       <div className={styles.content}>
         <div className={styles.statsGrid}>
@@ -340,25 +328,13 @@ function Results({
         />
 
         <div className={styles.actions}>
-          <button
+          <StartTournamentButton
             onClick={onStartNew}
             className={styles.startNewButton}
-            aria-label="Start new tournament"
+            ariaLabel="Start new tournament"
           >
-            <svg
-              viewBox="0 0 24 24"
-              width="20"
-              height="20"
-              stroke="currentColor"
-              strokeWidth="2"
-              fill="none"
-              className={styles.buttonIcon}
-              aria-hidden="true"
-            >
-              <path d="M12 4v16m8-8H4" />
-            </svg>
             Start New Tournament
-          </button>
+          </StartTournamentButton>
           <CalendarButton
             rankings={currentRankings}
             userName={userName}
@@ -378,9 +354,13 @@ function Results({
         )}
       </div>
 
-      {toast.show && (
-        <Toast message={toast.message} type={toast.type} onClose={closeToast} />
-      )}
+      <Toast
+        variant="container"
+        toasts={toasts}
+        removeToast={removeToast}
+        position="bottom-right"
+        maxToasts={1}
+      />
     </div>
   );
 }

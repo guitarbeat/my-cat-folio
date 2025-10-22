@@ -10,8 +10,35 @@
   border-radius: 8px;
   box-shadow: 0 4px 12px rgb(0 0 0 / 15%);
   transform: translateX(100%);
-  transition: all 0.3s ease-in-out;
-  animation: slideIn 0.3s ease-out forwards;
+  transition: all 0.15s ease-out;
+  animation: slideIn 0.15s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+}
+
+/* * Tournament mode visual: higher contrast glass/blur so it stands out over game UI */
+:global(.tournamentToast) .item {
+  background: rgb(17 24 39 / 75%);
+  color: #fff;
+  border-left-color: var(--secondary-500, #3b82f6);
+  backdrop-filter: blur(8px) saturate(120%);
+  box-shadow: 0 8px 28px rgb(0 0 0 / 35%);
+}
+
+:global(.tournamentToast) .progressBar {
+  background: rgb(255 255 255 / 25%);
+}
+
+:global(.tournamentToast) .progressFill {
+  background: #3b82f6; /* keep visible against dark glass */
+  opacity: 0.9;
+}
+
+:global(.tournamentToast) .dismissButton {
+  background: rgb(255 255 255 / 12%);
+  border-color: rgb(255 255 255 / 35%);
+}
+
+:global(.tournamentToast) .dismissButton:hover {
+  background: rgb(255 255 255 / 18%);
 }
 
 .item.exiting {
@@ -79,12 +106,13 @@
   background: rgb(255 255 255 / 80%);
   border: 1px solid currentcolor;
   border-radius: 4px;
-  transition: all 0.2s ease;
+  transition: all 0.1s ease;
 }
 
 .dismissButton:hover {
   background: rgb(255 255 255 / 100%);
-  transform: scale(1.1);
+  transform: scale(1.15);
+  transition: all 0.1s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
 
 .dismissButton:active {
@@ -130,12 +158,12 @@
 @keyframes slideIn {
   from {
     opacity: 0;
-    transform: translateX(100%);
+    transform: translateX(100%) scale(0.95);
   }
 
   to {
     opacity: 1;
-    transform: translateX(0);
+    transform: translateX(0) scale(1);
   }
 }
 
@@ -157,12 +185,12 @@
   @keyframes slideIn {
     from {
       opacity: 0;
-      transform: translateY(-100%);
+      transform: translateY(-100%) scale(0.95);
     }
 
     to {
       opacity: 1;
-      transform: translateY(0);
+      transform: translateY(0) scale(1);
     }
   }
 
@@ -364,12 +392,12 @@
   @keyframes slideIn {
     from {
       opacity: 0;
-      transform: translateY(-100%);
+      transform: translateY(-100%) scale(0.95);
     }
 
     to {
       opacity: 1;
-      transform: translateY(0);
+      transform: translateY(0) scale(1);
     }
   }
 

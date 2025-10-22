@@ -37,17 +37,13 @@
    ========================================================================== */
 .progressInfo {
   display: flex;
+  flex-direction: row;
   align-items: center;
   justify-content: space-between;
   width: 100%;
   max-width: 1200px;
   padding: var(--space-4);
   margin-bottom: var(--space-6);
-  background: var(--glass-bg);
-  border: 1px solid var(--glass-border);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--glass-shadow);
-  backdrop-filter: blur(var(--glass-blur));
   transition:
     transform var(--duration-normal) var(--ease-out),
     box-shadow var(--duration-normal) var(--ease-out);
@@ -104,11 +100,6 @@
   /* Improve touch target size on mobile */
   min-height: 200px;
   padding: var(--space-6);
-  background: var(--glass-bg);
-  border: 1px solid var(--glass-border);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--glass-shadow);
-  backdrop-filter: blur(var(--glass-blur));
   transition: all var(--duration-normal) var(--ease-out);
   will-change: transform, box-shadow;
 }
@@ -167,20 +158,58 @@
 }
 
 .extraOptionsButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  min-height: 48px;
   min-width: 120px;
+  padding: var(--space-2) var(--space-5);
+  font-size: var(--text-base);
+  font-weight: 600;
+  color: var(--text-primary);
+  background: linear-gradient(
+    135deg,
+    var(--glass-bg-light, rgba(255, 255, 255, 0.5)),
+    var(--glass-bg, rgba(255, 255, 255, 0.7))
+  );
+  border: 1px solid var(--glass-border, rgba(0, 0, 0, 0.1));
+  border-radius: var(--radius-full);
+  box-shadow: var(--shadow-subtle, 0 1px 3px rgb(0 0 0 / 10%));
+  backdrop-filter: blur(var(--glass-blur, 16px));
   transition: all var(--duration-normal) var(--ease-out);
 }
 
 .extraOptionsButton:hover:not(:disabled) {
   transform: translateY(-1px);
+  border-color: var(--glass-border-hover, rgba(0, 0, 0, 0.15));
+  box-shadow: var(--shadow-medium, 0 4px 12px rgb(0 0 0 / 15%));
 }
 
 .extraOptionsButton:active:not(:disabled) {
   transform: translateY(0);
 }
 
-.selected {
-  background: var(--primary-color);
+.extraOptionsButton:focus-visible {
+  outline: 2px solid var(--primary-400);
+  outline-offset: 2px;
+}
+
+.extraOptionsButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.extraOptionsButton.selected {
+  color: var(--button-text-light, #fff);
+  background: linear-gradient(135deg, var(--primary-600), var(--primary-700));
+  border-color: transparent;
+  box-shadow: var(
+    --glass-shadow-colored,
+    0 8px 32px rgb(47 243 224 / 10%),
+    0 8px 16px rgb(250 38 160 / 5%)
+  );
 }
 
 /* Controls & Buttons
@@ -207,6 +236,39 @@
 }
 
 .controlButton {
+  display: inline-flex;
+  gap: var(--space-2);
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  min-width: 180px;
+  padding: var(--space-2) var(--space-5);
+  font-size: var(--text-sm);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: var(--button-text-light, #fff);
+  cursor: pointer;
+  background: linear-gradient(135deg, var(--error-500), var(--error-600));
+  border: 1px solid var(--error-400);
+  border-radius: var(--radius-full);
+  box-shadow: 0 6px 18px rgb(220 38 38 / 25%);
+  transition: all var(--duration-normal) var(--ease-out);
+}
+
+.controlButton:hover:not(:disabled) {
+  background: linear-gradient(135deg, var(--error-600), var(--error-700));
+  border-color: var(--error-500);
+  box-shadow: 0 10px 24px rgb(220 38 38 / 35%);
+  transform: translateY(-1px);
+}
+
+.controlButton:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.controlButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
 .soundControls {
@@ -551,9 +613,55 @@
 }
 
 .confirmButton {
+  display: inline-flex;
+  gap: var(--space-2);
+  align-items: center;
+  justify-content: center;
+  min-height: 42px;
+  min-width: 160px;
+  padding: var(--space-2) var(--space-5);
+  font-weight: 700;
+  color: var(--button-text-light, #fff);
+  background: linear-gradient(135deg, var(--error-600), var(--error-700));
+  border: 1px solid var(--error-500);
+  border-radius: var(--radius-full);
+  box-shadow: 0 6px 18px rgb(220 38 38 / 25%);
+  transition: all var(--duration-normal) var(--ease-out);
 }
 
 .cancelButton {
+  display: inline-flex;
+  gap: var(--space-2);
+  align-items: center;
+  justify-content: center;
+  min-height: 42px;
+  min-width: 140px;
+  padding: var(--space-2) var(--space-5);
+  font-weight: 700;
+  color: var(--text-primary);
+  background: var(--surface-color);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-full);
+  transition: all var(--duration-normal) var(--ease-out);
+}
+
+.confirmButton:hover {
+  background: linear-gradient(135deg, var(--error-700), var(--error-800));
+  border-color: var(--error-600);
+  transform: translateY(-1px);
+}
+
+.cancelButton:hover {
+  background: var(--card-hover);
+  border-color: var(--primary-300);
+  transform: translateY(-1px);
+}
+
+.confirmButton:focus-visible,
+.cancelButton:focus-visible,
+.controlButton:focus-visible {
+  outline: 3px solid var(--primary-color);
+  outline-offset: 2px;
 }
 
 /* Animations

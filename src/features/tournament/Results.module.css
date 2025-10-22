@@ -9,15 +9,11 @@
 
 .header {
   display: flex;
+  flex-direction: row;
   align-items: center;
   justify-content: space-between;
   padding: var(--space-4);
   margin-bottom: var(--space-6);
-  background: var(--glass-bg);
-  border: 1px solid var(--glass-border);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--glass-shadow);
-  backdrop-filter: blur(var(--glass-blur));
 }
 
 .header h1 {
@@ -58,10 +54,6 @@
 .actionButton:active {
   box-shadow: var(--shadow-sm);
   transform: translateY(0);
-}
-
-.buttonIcon {
-  font-size: 1.2em;
 }
 
 .welcome {
@@ -130,13 +122,7 @@
 }
 
 .startNewButton {
-  display: inline-flex;
-  gap: var(--space-2);
-  align-items: center;
-}
-
-.startNewButton:hover {
-  transform: translateY(-1px);
+  white-space: nowrap;
 }
 
 .tip {
@@ -164,35 +150,6 @@
   border-top-color: var(--primary-500);
   border-radius: 50%;
   animation: spin 1s linear infinite;
-}
-
-.toast {
-  position: fixed;
-  right: var(--space-4);
-  bottom: var(--space-4);
-  z-index: var(--z-30);
-  padding: var(--space-3) var(--space-4);
-  font-size: var(--text-sm);
-  color: var(--text-primary);
-  cursor: pointer;
-  background: var(--card-background);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-lg);
-  animation: slideIn 0.3s var(--ease-out);
-}
-
-.toastSuccess {
-  composes: toast;
-  color: var(--success-700);
-  background: var(--success-50);
-  border: 1px solid var(--success-200);
-}
-
-.toastError {
-  composes: toast;
-  color: var(--error-700);
-  background: var(--error-50);
-  border: 1px solid var(--error-200);
 }
 
 .tournamentBracket {
@@ -352,21 +309,11 @@
     font-size: var(--text-xs);
   }
 
-  .toast {
-    right: var(--space-2);
-    bottom: var(--space-2);
-    left: var(--space-2);
-    text-align: center;
-  }
 }
 
 /* Accessibility */
 @media (prefers-reduced-motion: reduce) {
   .loadingSpinner {
-    animation: none;
-  }
-
-  .toast {
     animation: none;
   }
 
@@ -409,18 +356,6 @@
 
 .actionButton {
   min-width: 200px;
-}
-
-/* Toast Notifications */
-.toast {
-  position: fixed;
-  bottom: var(--space-4);
-  left: 50%;
-  z-index: 1000;
-  padding: var(--space-4);
-  border-radius: var(--radius-lg);
-  transform: translateX(-50%);
-  animation: slideUp 0.3s var(--ease-out);
 }
 
 @media (width <= 640px) {

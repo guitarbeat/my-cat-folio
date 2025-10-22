@@ -8,8 +8,52 @@
  */
 
 import { useState, useCallback, useEffect } from 'react';
-import { supabase } from '../../../backend/api/supabaseClientIsolated';
+import { resolveSupabaseClient } from '../../integrations/supabase/client';
 import useAppStore from '../store/useAppStore';
+import { isUserAdmin } from '@/shared/utils/authUtils';
+
+let canUseSetUserContext = true;
+
+const isRpcUnavailableError = (error) => {
+  if (!error) return false;
+
+  const statusCode = typeof error.status === 'number' ? error.status : null;
+  const errorCode = typeof error.code === 'string' ? error.code.toUpperCase() : '';
+  const message = error.message?.toLowerCase?.() ?? '';
+
+  return (
+    statusCode === 404 ||
+    errorCode === '404' ||
+    errorCode === 'PGRST301' ||
+    errorCode === 'PGRST303' ||
+    message.includes('not found') ||
+    message.includes('does not exist')
+  );
+};
+
+const setSupabaseUserContext = async (activeSupabase, userName) => {
+  if (!canUseSetUserContext || !activeSupabase || !userName) {
+    return;
+  }
+
+  try {
+    const trimmedName = userName.trim?.() ?? userName;
+    if (!trimmedName) return;
+
+    await activeSupabase.rpc('set_user_context', { user_name_param: trimmedName });
+  } catch (error) {
+    if (isRpcUnavailableError(error)) {
+      canUseSetUserContext = false;
+      if (process.env.NODE_ENV === 'development') {
+        console.info(
+          'Supabase set_user_context RPC is unavailable. Skipping future context calls.'
+        );
+      }
+    } else if (process.env.NODE_ENV === 'development') {
+      console.warn('Failed to set Supabase user context:', error);
+    }
+  }
+};
 
 function useUserSession({ showToast } = {}) {
   const [error, setError] = useState(null);
@@ -21,6 +65,25 @@ function useUserSession({ showToast } = {}) {
     const storedUserName = localStorage.getItem('catNamesUser');
     if (storedUserName && storedUserName.trim()) {
       userActions.login(storedUserName);
+
+      // Set username context for RLS policies (username-based auth)
+      (async () => {
+        try {
+          const activeSupabase = await resolveSupabaseClient();
+          await setSupabaseUserContext(activeSupabase, storedUserName);
+        } catch (error) {
+          if (process.env.NODE_ENV === 'development') {
+            console.warn('Failed to initialize Supabase user context:', error);
+          }
+        }
+      })();
+
+      // Check admin status server-side
+      isUserAdmin(storedUserName).then(adminStatus => {
+        userActions.setAdminStatus(adminStatus);
+      }).catch(() => {
+        userActions.setAdminStatus(false);
+      });
     }
     setIsInitialized(true);
   }, [userActions]);
@@ -40,7 +103,9 @@ function useUserSession({ showToast } = {}) {
       setError(null);
       const trimmedName = userName.trim();
 
-      if (!supabase) {
+      const activeSupabase = await resolveSupabaseClient();
+
+      if (!activeSupabase) {
         console.warn(
           'Supabase client is not configured. Proceeding with local-only login.'
         );
@@ -50,8 +115,11 @@ function useUserSession({ showToast } = {}) {
         return true;
       }
 
+      // Ensure the RLS session uses the current username
+      await setSupabaseUserContext(activeSupabase, trimmedName);
+
       // Check if user exists in database
-      const { data: existingUser, error: fetchError } = await supabase
+      const { data: existingUser, error: fetchError } = await activeSupabase
         .from('cat_app_users')
         .select('user_name, preferences, user_role')
         .eq('user_name', trimmedName)
@@ -66,7 +134,7 @@ function useUserSession({ showToast } = {}) {
 
       // Create user if doesn't exist
       if (!existingUser) {
-        const { error: insertError } = await supabase
+        const { error: insertError } = await activeSupabase
           .from('cat_app_users')
           .insert({
             user_name: trimmedName,
@@ -98,6 +166,10 @@ function useUserSession({ showToast } = {}) {
       // Store username and update state
       localStorage.setItem('catNamesUser', trimmedName);
       userActions.login(trimmedName);
+
+      // Check admin status server-side
+      const adminStatus = await isUserAdmin(trimmedName);
+      userActions.setAdminStatus(adminStatus);
 
       return true;
     } catch (err) {

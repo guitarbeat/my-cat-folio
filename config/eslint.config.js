@@ -1,9 +1,9 @@
-const js = require('@eslint/js');
-const react = require('eslint-plugin-react');
-const reactHooks = require('eslint-plugin-react-hooks');
-const globals = require('globals');
+import js from '@eslint/js';
+import react from 'eslint-plugin-react';
+import reactHooks from 'eslint-plugin-react-hooks';
+import globals from 'globals';
 
-module.exports = [
+export default [
   // Base JavaScript recommended rules
   js.configs.recommended,
 
@@ -73,7 +73,10 @@ module.exports = [
 
       // Disable problematic rules temporarily
       'react/prop-types': 'off', // Disable prop-types validation
-      'react/display-name': 'off' // Disable display-name validation
+      'react/display-name': 'off', // Disable display-name validation
+
+      // Modern JSX transform doesn't require React in scope
+      'react/react-in-jsx-scope': 'off'
     },
     settings: {
       react: {

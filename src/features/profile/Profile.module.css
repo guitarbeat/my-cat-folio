@@ -8,25 +8,12 @@
   background: transparent; /* let galaxy show */
 }
 
-/* Header - Fixed at top */
-.header {
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 1rem 2rem;
-  background: var(--glass-bg);
-  border-bottom: 1px solid var(--glass-border);
-  box-shadow: var(--glass-shadow);
-  backdrop-filter: blur(var(--glass-blur));
-}
-
+/* Title - Integrated into container */
 .title {
-  margin: 0;
+  margin: 0 0 1.5rem;
   font-size: 2rem;
   font-weight: 700;
+  text-align: center;
   background: linear-gradient(135deg, var(--primary-400), var(--primary-600));
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -38,30 +25,24 @@
   align-items: center;
 }
 
-.newTournamentButton,
+.newTournamentButton {
+  min-width: 200px;
+  white-space: nowrap;
+}
+
+.noDataButton {
+  margin-top: 1.5rem;
+}
+
 .migrationButton {
   padding: 0.75rem 1.5rem;
   font-weight: 600;
   cursor: pointer;
-  border: none;
-  border-radius: 8px;
-  transition: all 0.2s;
-}
-
-.newTournamentButton {
-  color: white;
-  background: var(--accent-primary);
-}
-
-.newTournamentButton:hover {
-  background: var(--accent-hover);
-  transform: translateY(-1px);
-}
-
-.migrationButton {
   color: var(--text-primary);
   background: var(--bg-secondary);
   border: 1px solid var(--border-color);
+  border-radius: 8px;
+  transition: all 0.2s;
 }
 
 .migrationButton:hover {
@@ -69,27 +50,18 @@
   transform: translateY(-1px);
 }
 
-.button {
-}
-
-/* Main Content - Sidebar Layout */
-.mainContent {
+/* Main Content - Single Column Layout */
+.profileContainer {
   display: flex;
-  gap: 0;
+  flex-direction: column;
+  gap: 1.5rem;
   min-height: calc(100vh - 80px);
+  padding: 1.5rem;
 }
 
-/* Left Sidebar - Admin Controls */
+/* Left Sidebar - Admin Controls (removed) */
 .adminSidebar {
-  position: sticky;
-  top: 80px;
-  width: 320px;
-  height: calc(100vh - 80px);
-  padding: 1.5rem;
-  background: var(--glass-bg);
-  border-right: 1px solid var(--glass-border);
-  box-shadow: var(--glass-shadow);
-  backdrop-filter: blur(var(--glass-blur));
+  display: none;
 }
 
 .sidebarHeader {
@@ -346,12 +318,9 @@
   color: var(--warning-700);
 }
 
-/* Right Content Area */
+/* Content Area - Now the main area (removed - using profileContainer directly) */
 .contentArea {
-  flex: 1;
-  padding: 2rem;
-  overflow-y: auto;
-  background: var(--background-color);
+  display: none;
 }
 
 /* Enhanced Stats Overview - Compact */
@@ -909,25 +878,6 @@
   color: var(--text-secondary);
 }
 
-.primaryButton {
-  padding: 1rem 2rem;
-  font-size: 1.1rem;
-  font-weight: 600;
-  color: white;
-  text-decoration: none;
-  cursor: pointer;
-  background: linear-gradient(135deg, var(--primary-500), var(--primary-600));
-  border: 1px solid var(--primary-500);
-  border-radius: 12px;
-  box-shadow: var(--shadow-md);
-  transition: all 0.3s ease;
-}
-
-.primaryButton:hover {
-  box-shadow: var(--shadow-lg);
-  transform: translateY(-2px);
-}
-
 /* Error Container */
 .errorContainer {
   display: flex;
@@ -993,19 +943,9 @@
 }
 
 @media (width <= 1024px) {
-  .mainContent {
-    flex-direction: column;
-  }
-
-  .adminSidebar {
-    position: static;
-    order: 2;
-    width: 100%;
-    height: auto;
-  }
-
-  .contentArea {
-    order: 1;
+  .profileContainer {
+    padding: 1.25rem;
+    gap: 1.25rem;
   }
 
   .statsOverview {
@@ -1018,28 +958,25 @@
 }
 
 @media (width <= 768px) {
-  .profileHeader {
+  .header {
     flex-direction: column;
     gap: 1rem;
     padding: 1rem;
     text-align: center;
   }
 
-  .profileTitle {
+  .title {
     font-size: 1.5rem;
   }
 
-  .headerActions {
+  .headerButtons {
     flex-wrap: wrap;
     justify-content: center;
   }
 
-  .contentArea {
+  .profileContainer {
     padding: 1rem;
-  }
-
-  .adminSidebar {
-    padding: 1rem;
+    gap: 1rem;
   }
 
   .statsOverview {

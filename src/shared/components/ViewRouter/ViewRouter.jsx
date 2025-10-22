@@ -1,31 +1,32 @@
 import React, { lazy, Suspense } from 'react';
 import PropTypes from 'prop-types';
-import { Loading, Error } from '@components';
+import Loading from '../Loading/Loading';
+import Error from '../Error/Error';
 import Login from '@features/auth/Login';
-import { useRouting } from '../../../core/hooks/useRouting';
+import { useRouting } from '@hooks/useRouting';
 
 // * Dynamic imports with better error handling and loading states
-const Tournament = lazy(() => 
+const Tournament = lazy(() =>
   import('@features/tournament/Tournament').catch(() => ({
     default: () => <Error variant="list" error={{ message: 'Failed to load Tournament' }} />
   }))
 );
-const TournamentSetup = lazy(() => 
+const TournamentSetup = lazy(() =>
   import('@features/tournament/TournamentSetup').catch(() => ({
     default: () => <Error variant="list" error={{ message: 'Failed to load Tournament Setup' }} />
   }))
 );
-const Results = lazy(() => 
+const Results = lazy(() =>
   import('@features/tournament/Results').catch(() => ({
     default: () => <Error variant="list" error={{ message: 'Failed to load Results' }} />
   }))
 );
-const Profile = lazy(() => 
+const Profile = lazy(() =>
   import('@features/profile/Profile').catch(() => ({
     default: () => <Error variant="list" error={{ message: 'Failed to load Profile' }} />
   }))
 );
-const BongoPage = lazy(() => 
+const BongoPage = lazy(() =>
   import('@features/bongo/BongoPage').catch(() => ({
     default: () => <Error variant="list" error={{ message: 'Failed to load Bongo Page' }} />
   }))
@@ -61,7 +62,9 @@ export default function ViewRouter({
     );
   }
 
-  if (tournament.currentView === 'profile') {
+  const shouldShowProfile = isRoute('/profile') || tournament.currentView === 'profile';
+
+  if (shouldShowProfile) {
     return (
       <Suspense fallback={<Loading variant="spinner" text="Loading Profile..." />}>
         <Profile
@@ -86,7 +89,18 @@ export default function ViewRouter({
     );
   }
 
-  if (tournament.isComplete) {
+  const shouldShowResults = tournament.isComplete || isRoute('/results');
+
+  if (shouldShowResults) {
+    if (!tournament.isComplete) {
+      return (
+        <Error
+          variant="list"
+          error={{ message: 'Results are only available after completing a tournament.' }}
+        />
+      );
+    }
+
     return (
       <Suspense fallback={<Loading variant="spinner" text="Loading Results..." />}>
         <Results

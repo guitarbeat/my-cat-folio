@@ -1,6 +1,6 @@
-/* Utility Classes - Reusable atomic styles */
+/* Consolidated Utility Classes - Optimized for performance and maintainability */
 
-/* Layout */
+/* ===== LAYOUT UTILITIES ===== */
 .container {
   width: 100%;
   max-width: 1600px;
@@ -15,6 +15,7 @@
   height: 100vh;
 }
 
+/* ===== FLEXBOX UTILITIES ===== */
 .flex-center {
   display: flex;
   align-items: center;
@@ -75,37 +76,184 @@
   flex: none;
 }
 
-/* Grid - Only keeping used classes */
+/* ===== GRID UTILITIES ===== */
 .grid {
   display: grid;
 }
 
-/* Spacing - Only keeping used classes */
-.gap-2 { gap: var(--space-2); }
-.gap-4 { gap: var(--space-4); }
-.gap-6 { gap: var(--space-6); }
+/* ===== SPACING UTILITIES ===== */
+.gap-2 {
+  gap: var(--space-2);
+}
+.gap-4 {
+  gap: var(--space-4);
+}
+.gap-6 {
+  gap: var(--space-6);
+}
 
-/* Margin - Only keeping used classes */
-.m-0 { margin: 0; }
+.m-0 {
+  margin: 0;
+}
+.p-0 {
+  padding: 0;
+}
 
-/* Padding - Only keeping used classes */
-.p-0 { padding: 0; }
+/* ===== TYPOGRAPHY UTILITIES ===== */
+.text-center {
+  text-align: center;
+}
+.text-primary {
+  color: var(--text-primary);
+}
+.text-secondary {
+  color: var(--text-secondary);
+}
 
-/* Typography - Only keeping used classes */
-.text-center { text-align: center; }
-.text-primary { color: var(--text-primary); }
-.text-secondary { color: var(--text-secondary); }
+/* ===== COLOR UTILITIES ===== */
+.bg-primary {
+  background-color: var(--primary-color);
+}
 
-/* Colors - Only keeping used classes */
-.bg-primary { background-color: var(--primary-color); }
+/* ===== STATE UTILITIES ===== */
+.hidden {
+  display: none;
+}
 
-/* States - Only keeping used classes */
-.hidden { display: none; }
+/* ===== POSITION UTILITIES ===== */
+.relative {
+  position: relative;
+}
 
-/* Position - Only keeping used classes */
-.relative { position: relative; }
+/* ===== TRANSITION UTILITIES ===== */
+.transition-all {
+  transition: var(--transition-all);
+}
 
-/* Transitions - Only keeping used classes */
-.transition-all { transition: var(--transition-all); }
+/* ===== COMPONENT-SPECIFIC UTILITIES ===== */
+/* Card utilities */
+.card-base {
+  background: var(--card-background);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-6);
+  transition: var(--transition-all);
+}
 
-/* Responsive utilities - Removed unused classes */
+.card-hover {
+  transition: var(--transition-all);
+}
+
+.card-hover:hover {
+  border-color: var(--card-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgb(0 0 0 / 15%);
+}
+
+/* Button utilities */
+.btn-base {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: var(--transition-all);
+  text-decoration: none;
+  min-height: 40px;
+}
+
+.btn-primary {
+  background: var(--primary-color);
+  color: var(--text-primary);
+  border-color: var(--primary-color);
+}
+
+.btn-primary:hover {
+  background: var(--primary-dark);
+  border-color: var(--primary-dark);
+}
+
+.btn-secondary {
+  background: transparent;
+  color: var(--text-secondary);
+  border-color: var(--border-color);
+}
+
+.btn-secondary:hover {
+  background: var(--surface-color);
+  color: var(--text-primary);
+}
+
+/* Form utilities */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.form-label {
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.form-input {
+  width: 100%;
+  min-height: 40px;
+  padding: var(--space-3);
+  font-size: var(--text-base);
+  color: var(--text-primary);
+  background: var(--surface-color);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  transition: var(--transition-all);
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 3px rgb(232 191 118 / 20%);
+}
+
+/* Loading utilities */
+.loading-spinner {
+  display: inline-block;
+  font-size: 2rem;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Error utilities */
+.error-text {
+  color: var(--error-500);
+  font-size: var(--text-sm);
+  margin-top: var(--space-1);
+}
+
+/* Responsive utilities */
+@media (width <= 640px) {
+  .container {
+    padding: 0 var(--space-3);
+  }
+
+  .btn-base {
+    min-height: 44px; /* Touch-friendly */
+  }
+
+  .form-input {
+    min-height: 48px; /* Touch-friendly */
+  }
+}

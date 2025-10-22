@@ -2,6 +2,8 @@
  * @module Button
  * @description Unified button component system replacing 8+ button variants.
  * Provides consistent styling, accessibility, and behavior across the app.
+ * Now supports leading/trailing icons so feature-specific buttons can reuse
+ * the shared presentation layer.
  */
 
 import React from 'react';
@@ -31,12 +33,16 @@ const Button = ({
   type = 'button',
   className = '',
   onClick,
+  startIcon = null,
+  endIcon = null,
+  iconOnly = false,
   ...rest
 }) => {
   const buttonClasses = [
     styles.btn,
     styles[`btn--${variant}`],
     styles[`btn--${size}`],
+    iconOnly && styles['btn--icon'],
     loading && styles['btn--loading'],
     disabled && styles['btn--disabled'],
     className
@@ -65,7 +71,17 @@ const Button = ({
         </span>
       )}
       <span className={loading ? styles['btn__content--loading'] : styles.btn__content}>
+        {startIcon && (
+          <span className={`${styles.btn__icon} ${styles['btn__icon--leading']}`.trim()}>
+            {startIcon}
+          </span>
+        )}
         {children}
+        {endIcon && (
+          <span className={`${styles.btn__icon} ${styles['btn__icon--trailing']}`.trim()}>
+            {endIcon}
+          </span>
+        )}
       </span>
     </button>
   );
@@ -79,7 +95,10 @@ Button.propTypes = {
   loading: PropTypes.bool,
   type: PropTypes.oneOf(['button', 'submit', 'reset']),
   className: PropTypes.string,
-  onClick: PropTypes.func
+  onClick: PropTypes.func,
+  startIcon: PropTypes.node,
+  endIcon: PropTypes.node,
+  iconOnly: PropTypes.bool
 };
 
 Button.displayName = 'Button';

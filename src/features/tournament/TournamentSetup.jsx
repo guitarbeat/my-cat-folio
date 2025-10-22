@@ -3,87 +3,94 @@
  * @description Simple wizard for selecting cat names and starting a tournament.
  * Shows names and descriptions by default. Admin users get advanced filtering options.
  */
-import React, { useState, useEffect, useCallback, useRef } from 'react';
-import PropTypes from 'prop-types';
-import { supabase } from '../../../backend/api/supabaseClientIsolated';
-import { catNamesAPI } from '../../../backend/api/catNamesAPI';
-import { tournamentsAPI } from '../../../backend/api/tournamentsAPI';
-import { imagesAPI } from '../../../backend/api/imagesAPI';
-
-// Simple function to get names with descriptions
-const getNamesWithDescriptions = async () => {
-  return await catNamesAPI.getNamesWithDescriptions();
-};
-import { compressImageFile, devLog } from '../../shared/utils/coreUtils';
+import { useState, useEffect, useCallback, useRef, useMemo } from "react";
+import PropTypes from "prop-types";
+import { resolveSupabaseClient } from "../../integrations/supabase/client";
 import {
+  getNamesWithDescriptions,
+  tournamentsAPI,
+  catNamesAPI,
+  imagesAPI,
+} from "../../integrations/supabase/api";
+import { compressImageFile, devLog } from "../../shared/utils/coreUtils";
+import {
+  Card,
   Loading,
   NameCard,
-  Error
-} from '../../shared/components';
+  Error,
+  Input,
+  Select,
+  CatImage,
+  StartTournamentButton,
+} from "../../shared/components";
 
 // * Import Error components for specific use cases
 const ErrorDisplay = Error;
 const ErrorBoundary = Error;
-import useToast from '../../core/hooks/useToast';
-import useAppStore from '../../core/store/useAppStore';
-import useMobileGestures from '../../core/hooks/useMobileGestures';
+import useToast from "../../core/hooks/useToast";
+import useAppStore from "../../core/store/useAppStore";
+import useMobileGestures from "../../core/hooks/useMobileGestures";
 import {
   validateCatName,
-  validateDescription
-} from '../../shared/utils/validationUtils';
-import { isUserAdmin } from '../../shared/utils/authUtils';
-import styles from './TournamentSetup.module.css';
+  validateDescription,
+} from "../../shared/utils/validationUtils";
+import { isUserAdmin } from "../../shared/utils/authUtils";
+import styles from "./TournamentSetup.module.css";
 
 // Use absolute paths for better image loading compatibility
 const CAT_IMAGES = [
-  '/assets/images/IMG_4844.jpg',
-  '/assets/images/IMG_4845.jpg',
-  '/assets/images/IMG_4846.jpg',
-  '/assets/images/IMG_4847.jpg',
-  '/assets/images/IMG_5044.JPEG',
-  '/assets/images/IMG_5071.JPG',
-  '/assets/images/IMG_0778.jpg',
-  '/assets/images/IMG_0779.jpg',
-  '/assets/images/IMG_0865.jpg',
-  '/assets/images/IMG_0884.jpg',
-  '/assets/images/IMG_0923.jpg',
-  '/assets/images/IMG_1116.jpg',
-  '/assets/images/IMG_7205.jpg',
-  '/assets/images/75209580524__60DCC26F-55A1-4EF8-A0B2-14E80A026A8D.jpg'
+  "/assets/images/IMG_4844.jpg",
+  "/assets/images/IMG_4845.jpg",
+  "/assets/images/IMG_4846.jpg",
+  "/assets/images/IMG_4847.jpg",
+  "/assets/images/IMG_5044.JPEG",
+  "/assets/images/IMG_5071.JPG",
+  "/assets/images/IMG_0778.jpg",
+  "/assets/images/IMG_0779.jpg",
+  "/assets/images/IMG_0865.jpg",
+  "/assets/images/IMG_0884.jpg",
+  "/assets/images/IMG_0923.jpg",
+  "/assets/images/IMG_1116.jpg",
+  "/assets/images/IMG_7205.jpg",
+  "/assets/images/75209580524__60DCC26F-55A1-4EF8-A0B2-14E80A026A8D.jpg",
 ];
 
-const DEFAULT_DESCRIPTION = 'A name as unique as your future companion';
+const GALLERY_IMAGE_SIZES =
+  "(max-width: 480px) 88vw, (max-width: 768px) 44vw, (max-width: 1280px) 28vw, 200px";
+const LIGHTBOX_IMAGE_SIZES = "(max-width: 768px) 94vw, 80vw";
+
+const DEFAULT_DESCRIPTION = "A name as unique as your future companion";
 
 const FALLBACK_NAMES = [
   {
-    id: 'aaron',
-    name: 'aaron',
-    description: 'temporary fallback — backend offline'
+    id: "aaron",
+    name: "aaron",
+    description: "temporary fallback — backend offline",
   },
   {
-    id: 'fix',
-    name: 'fix',
-    description: 'temporary fallback — backend offline'
+    id: "fix",
+    name: "fix",
+    description: "temporary fallback — backend offline",
   },
   {
-    id: 'the',
-    name: 'the',
-    description: 'temporary fallback — backend offline'
+    id: "the",
+    name: "the",
+    description: "temporary fallback — backend offline",
   },
   {
-    id: 'site',
-    name: 'site',
-    description: 'temporary fallback — backend offline'
-  }
+    id: "site",
+    name: "site",
+    description: "temporary fallback — backend offline",
+  },
 ];
 
 // Helper function to get random cat images
 const getRandomCatImage = (nameId, imageList = CAT_IMAGES) => {
   // Convert UUID string to a number for consistent image selection
   let numericId;
-  if (typeof nameId === 'string') {
+  if (typeof nameId === "string") {
     // Use a simple hash of the UUID string to get a consistent number
-    numericId = nameId.split('').reduce((hash, char) => {
+    numericId = nameId.split("").reduce((hash, char) => {
       return char.charCodeAt(0) + ((hash << 5) - hash);
     }, 0);
   } else {
@@ -113,7 +120,7 @@ const NameSelection = ({
   onSortChange,
   isSwipeMode,
   showCatPictures,
-  imageList
+  imageList,
 }) => {
   // For non-admin users, just show all names
   const displayNames = isAdmin
@@ -141,11 +148,11 @@ const NameSelection = ({
         // Sort names
         return [...searchFilteredNames].sort((a, b) => {
           switch (sortBy) {
-            case 'rating':
+            case "rating":
               return (b.avg_rating || 1500) - (a.avg_rating || 1500);
-            case 'popularity':
+            case "popularity":
               return (b.popularity_score || 0) - (a.popularity_score || 0);
-            case 'alphabetical':
+            case "alphabetical":
               return a.name.localeCompare(b.name);
             default:
               return 0;
@@ -153,6 +160,34 @@ const NameSelection = ({
         });
       })()
     : availableNames; // Non-admin users see all names
+
+  const categoryOptions = useMemo(() => {
+    if (!categories?.length) {
+      return [];
+    }
+
+    const categoryCounts = categories.map((category) => {
+      const count = availableNames.filter(
+        (name) => name.categories && name.categories.includes(category.name)
+      ).length;
+
+      return {
+        value: category.name,
+        label: `${category.name} (${count})`,
+      };
+    });
+
+    return [{ value: "", label: "All Categories" }, ...categoryCounts];
+  }, [categories, availableNames]);
+
+  const sortOptions = useMemo(
+    () => [
+      { value: "alphabetical", label: "Alphabetical" },
+      { value: "rating", label: "Rating (High to Low)" },
+      { value: "popularity", label: "Popularity" },
+    ],
+    []
+  );
 
   return (
     <div className={styles.nameSelection}>
@@ -169,59 +204,44 @@ const NameSelection = ({
       {isAdmin && (
         <div className={styles.controlsSection}>
           {/* Category filter */}
-          {categories && categories.length > 0 && (
+          {categoryOptions.length > 0 && (
             <div className={styles.filterGroup}>
-              <label htmlFor="category-filter">Category:</label>
-              <select
-                id="category-filter"
-                value={selectedCategory || ''}
+              <Select
+                name="category"
+                label="Category"
+                value={selectedCategory ?? ""}
                 onChange={(e) => onCategoryChange(e.target.value || null)}
+                options={categoryOptions}
                 className={styles.filterSelect}
-              >
-                <option value="">All Categories</option>
-                {categories.map((category) => (
-                  <option key={category.id} value={category.name}>
-                    {category.name} (
-                    {
-                      availableNames.filter(
-                        (name) =>
-                          name.categories &&
-                          name.categories.includes(category.name)
-                      ).length
-                    }
-                    )
-                  </option>
-                ))}
-              </select>
+                placeholder=""
+              />
             </div>
           )}
 
           {/* Search filter */}
           <div className={styles.filterGroup}>
-            <label htmlFor="search-filter">Search:</label>
-            <input
-              type="text"
-              id="search-filter"
+            <Input
+              name="search-filter"
+              label="Search"
               value={searchTerm}
               onChange={(e) => onSearchChange(e.target.value)}
               placeholder="Search names or descriptions..."
               className={styles.searchInput}
+              type="text"
             />
           </div>
 
           {/* Sort options */}
           <div className={styles.filterGroup}>
-            <label htmlFor="sort-filter">Sort by:</label>
-            <select
-              id="sort-filter"
+            <Select
+              name="sort-filter"
+              label="Sort by"
               value={sortBy}
               onChange={(e) => onSortChange(e.target.value)}
+              options={sortOptions}
               className={styles.filterSelect}
-            >
-              <option value="alphabetical">Alphabetical</option>
-              <option value="rating">Rating (High to Low)</option>
-              <option value="popularity">Popularity</option>
-            </select>
+              placeholder=""
+            />
           </div>
         </div>
       )}
@@ -269,7 +289,7 @@ const NameSelection = ({
                       rating: nameObj.avg_rating,
                       popularity: nameObj.popularity_score,
                       tournaments: nameObj.total_tournaments,
-                      categories: nameObj.categories
+                      categories: nameObj.categories,
                     }
                   : undefined
               }
@@ -295,10 +315,8 @@ const SwipeableNameCards = ({
   onToggleName,
   isAdmin,
   showCatPictures = false,
-  imageList = CAT_IMAGES
+  imageList = CAT_IMAGES,
 }) => {
-  const imgRef = React.useRef(null);
-  const imgContainerRef = React.useRef(null);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
@@ -322,17 +340,17 @@ const SwipeableNameCards = ({
     onSwipe: (data) => {
       const { direction, distance } = data;
       if (distance > 100) {
-        if (direction === 'right') {
+        if (direction === "right") {
           // Swipe right = select
           if (!isSelected) {
             onToggleName(currentName);
-            addHapticFeedback('success');
+            addHapticFeedback("success");
           }
-        } else if (direction === 'left') {
+        } else if (direction === "left") {
           // Swipe left = deselect
           if (isSelected) {
             onToggleName(currentName);
-            addHapticFeedback('light');
+            addHapticFeedback("light");
           }
         }
         // Move to next card
@@ -343,15 +361,15 @@ const SwipeableNameCards = ({
     },
     onLongPress: () => {
       setIsLongPressing(true);
-      addHapticFeedback('heavy');
+      addHapticFeedback("heavy");
       // Show additional info or context menu
       setTimeout(() => setIsLongPressing(false), 1000);
     },
     onDoubleTap: () => {
       // Double tap to toggle selection
       onToggleName(currentName);
-      addHapticFeedback('success');
-    }
+      addHapticFeedback("success");
+    },
   });
 
   const handleDragStart = (e) => {
@@ -377,7 +395,7 @@ const SwipeableNameCards = ({
 
     // Determine swipe direction
     if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > 50) {
-      setSwipeDirection(deltaX > 0 ? 'right' : 'left');
+      setSwipeDirection(deltaX > 0 ? "right" : "left");
     }
   };
 
@@ -390,12 +408,12 @@ const SwipeableNameCards = ({
 
     // If swiped far enough, process the swipe
     if (swipeProgress > 0.5) {
-      if (swipeDirection === 'right') {
+      if (swipeDirection === "right") {
         // Swipe right = select/like (add to tournament)
         if (!isSelected) {
           onToggleName(currentName);
         }
-      } else if (swipeDirection === 'left') {
+      } else if (swipeDirection === "left") {
         // Swipe left = pass (remove from tournament if selected)
         if (isSelected) {
           onToggleName(currentName);
@@ -422,12 +440,12 @@ const SwipeableNameCards = ({
     setSwipeProgress(1);
 
     setTimeout(() => {
-      if (direction === 'right') {
+      if (direction === "right") {
         // Right button = select/like (add to tournament)
         if (!isSelected) {
           onToggleName(currentName);
         }
-      } else if (direction === 'left') {
+      } else if (direction === "left") {
         // Left button = pass (remove from tournament if selected)
         if (isSelected) {
           onToggleName(currentName);
@@ -441,86 +459,26 @@ const SwipeableNameCards = ({
     }, 300);
   };
 
-  // Lightweight vertical edge-density focal detector (same approach as NameCard)
-  const computeFocalY = React.useCallback((imgEl) => {
-    try {
-      const naturalW = imgEl.naturalWidth || imgEl.width;
-      const naturalH = imgEl.naturalHeight || imgEl.height;
-      if (!naturalW || !naturalH) return null;
-      const targetW = 128;
-      const scale = targetW / naturalW;
-      const w = Math.max(16, Math.min(targetW, naturalW));
-      const h = Math.max(16, Math.floor(naturalH * scale));
-      const canvas = document.createElement('canvas');
-      canvas.width = w;
-      canvas.height = h;
-      const ctx = canvas.getContext('2d', { willReadFrequently: true });
-      ctx.drawImage(imgEl, 0, 0, w, h);
-      const { data } = ctx.getImageData(0, 0, w, h);
-      const rowEnergy = new Array(h).fill(0);
-      const toGray = (r, g, b) => r * 0.299 + g * 0.587 + b * 0.114;
-      const idx = (x, y) => (y * w + x) * 4;
-      for (let y = 1; y < h - 1; y++) {
-        let sum = 0;
-        for (let x = 0; x < w; x++) {
-          const i1 = idx(x, y - 1);
-          const i2 = idx(x, y + 1);
-          sum += Math.abs(
-            toGray(data[i2], data[i2 + 1], data[i2 + 2]) -
-              toGray(data[i1], data[i1 + 1], data[i1 + 2])
-          );
-        }
-        rowEnergy[y] = sum / w;
-      }
-      const start = Math.floor(h * 0.08);
-      const end = Math.floor(h * 0.7);
-      let bestY = start;
-      let bestVal = -Infinity;
-      for (let y = start; y < end; y++) {
-        const e =
-          (rowEnergy[y - 1] || 0) + rowEnergy[y] + (rowEnergy[y + 1] || 0);
-        if (e > bestVal) {
-          bestVal = e;
-          bestY = y;
-        }
-      }
-      const pct = Math.min(60, Math.max(10, Math.round((bestY / h) * 100)));
-      return pct;
-    } catch {
-      return null;
-    }
-  }, []);
-
-  const handleImageLoad = React.useCallback(() => {
-    const imgEl = imgRef.current;
-    const container = imgContainerRef.current;
-    if (!imgEl || !container) return;
-    const focal = computeFocalY(imgEl);
-    if (focal != null) {
-      container.style.setProperty('--image-pos-y', `${focal}%`);
-    }
-  }, [computeFocalY]);
-
   if (!currentName) return null;
 
   const cardStyle = {
     transform: `translate(${dragOffset.x}px, ${dragOffset.y}px) rotate(${dragOffset.x * 0.1}deg)`,
-    opacity: isDragging ? 0.9 : 1
+    opacity: isDragging ? 0.9 : 1,
   };
 
   const swipeOverlayStyle = {
     opacity: swipeProgress,
-    transform: `scale(${0.8 + swipeProgress * 0.2})`
+    transform: `scale(${0.8 + swipeProgress * 0.2})`,
   };
 
   return (
     <div className={styles.swipeContainer}>
       <div
-        className={`${styles.swipeCardWrapper} ${showCatPictures ? styles.withCatPictures : ''}`}
+        className={`${styles.swipeCardWrapper} ${showCatPictures ? styles.withCatPictures : ""}`}
       >
         <div
           ref={gestureRef}
-          className={`${styles.swipeCard} ${isSelected ? styles.selected : ''} ${showCatPictures ? styles.withCatPictures : ''} ${isLongPressing ? styles.longPressing : ''}`}
+          className={`${styles.swipeCard} ${isSelected ? styles.selected : ""} ${showCatPictures ? styles.withCatPictures : ""} ${isLongPressing ? styles.longPressing : ""}`}
           style={cardStyle}
           onMouseDown={handleDragStart}
           onMouseMove={handleDragMove}
@@ -532,17 +490,17 @@ const SwipeableNameCards = ({
         >
           {/* Swipe direction overlays - Fixed to show correct overlay */}
           <div
-            className={`${styles.swipeOverlay} ${styles.swipeRight} ${swipeDirection === 'right' ? styles.active : ''}`}
+            className={`${styles.swipeOverlay} ${styles.swipeRight} ${swipeDirection === "right" ? styles.active : ""}`}
             style={
-              swipeDirection === 'right' ? swipeOverlayStyle : { opacity: 0 }
+              swipeDirection === "right" ? swipeOverlayStyle : { opacity: 0 }
             }
           >
             <span className={styles.swipeText}>👍 SELECTED</span>
           </div>
           <div
-            className={`${styles.swipeOverlay} ${styles.swipeLeft} ${swipeDirection === 'left' ? styles.active : ''}`}
+            className={`${styles.swipeOverlay} ${styles.swipeLeft} ${swipeDirection === "left" ? styles.active : ""}`}
             style={
-              swipeDirection === 'left' ? swipeOverlayStyle : { opacity: 0 }
+              swipeDirection === "left" ? swipeOverlayStyle : { opacity: 0 }
             }
           >
             <span className={styles.swipeText}>👎 SKIPPED</span>
@@ -552,55 +510,13 @@ const SwipeableNameCards = ({
           <div className={styles.swipeCardContent}>
             {/* Cat picture when enabled */}
             {showCatPictures && imageSrc && (
-              <div
-                className={styles.swipeCardImageContainer}
-                ref={imgContainerRef}
-                style={{ ['--bg-image']: `url(${imageSrc})` }}
-              >
-                {(() => {
-                  const src = imageSrc;
-                  if (String(src).startsWith('/assets/images/')) {
-                    const base = src.includes('.')
-                      ? src.replace(/\.[^.]+$/, '')
-                      : src;
-                    return (
-                      <picture>
-                        <source type="image/avif" srcSet={`${base}.avif`} />
-                        <source type="image/webp" srcSet={`${base}.webp`} />
-                        <img
-                          ref={imgRef}
-                          src={src}
-                          alt="Random cat picture"
-                          className={styles.swipeCardImage}
-                          loading="eager"
-                          decoding="async"
-                          onLoad={handleImageLoad}
-                          onError={(e) => {
-                            console.error(
-                              'Image failed to load:',
-                              e.target.src
-                            );
-                          }}
-                        />
-                      </picture>
-                    );
-                  }
-                  return (
-                    <img
-                      ref={imgRef}
-                      src={src}
-                      alt="Random cat picture"
-                      className={styles.swipeCardImage}
-                      loading="eager"
-                      decoding="async"
-                      onLoad={handleImageLoad}
-                      onError={(e) => {
-                        console.error('Image failed to load:', e.target.src);
-                      }}
-                    />
-                  );
-                })()}
-              </div>
+              <CatImage
+                src={imageSrc}
+                containerClassName={styles.swipeCardImageContainer}
+                imageClassName={styles.swipeCardImage}
+                loading="eager"
+                decoding="async"
+              />
             )}
 
             <h3 className={styles.swipeCardName}>{currentName.name}</h3>
@@ -624,7 +540,7 @@ const SwipeableNameCards = ({
                 {currentName.categories &&
                   currentName.categories.length > 0 && (
                     <span className={styles.metadataItem}>
-                      🏷️ {currentName.categories.join(', ')}
+                      🏷️ {currentName.categories.join(", ")}
                     </span>
                   )}
               </div>
@@ -643,7 +559,7 @@ const SwipeableNameCards = ({
       {/* Swipe buttons */}
       <div className={styles.swipeButtons}>
         <button
-          onClick={() => handleSwipeButton('left')}
+          onClick={() => handleSwipeButton("left")}
           className={`${styles.swipeButton} ${styles.swipeLeftButton}`}
           // Remove disabled state - always allow skipping
         >
@@ -655,7 +571,7 @@ const SwipeableNameCards = ({
         </div>
 
         <button
-          onClick={() => handleSwipeButton('right')}
+          onClick={() => handleSwipeButton("right")}
           className={`${styles.swipeButton} ${styles.swipeRightButton}`}
           // Remove disabled state - always allow selecting
         >
@@ -666,10 +582,10 @@ const SwipeableNameCards = ({
   );
 };
 
-const StartButton = ({ selectedNames, onStart, variant = 'default' }) => {
+const StartButton = ({ selectedNames, onStart, variant = "default" }) => {
   const validateNames = (names) => {
     return names.every((nameObj) => {
-      if (!nameObj || typeof nameObj !== 'object' || !nameObj.id) {
+      if (!nameObj || typeof nameObj !== "object" || !nameObj.id) {
         return false;
       }
 
@@ -677,7 +593,7 @@ const StartButton = ({ selectedNames, onStart, variant = 'default' }) => {
       const nameValidation = validateCatName(nameObj.name);
       if (!nameValidation.success) {
         console.warn(
-          'Invalid name detected:',
+          "Invalid name detected:",
           nameObj.name,
           nameValidation.error
         );
@@ -690,17 +606,17 @@ const StartButton = ({ selectedNames, onStart, variant = 'default' }) => {
 
   const handleStart = () => {
     console.log(
-      '[DEV] 🎮 StartButton: handleStart called with selectedNames:',
+      "[DEV] 🎮 StartButton: handleStart called with selectedNames:",
       selectedNames
     );
 
     if (!validateNames(selectedNames)) {
-      console.error('Invalid name objects detected:', selectedNames);
+      console.error("Invalid name objects detected:", selectedNames);
       return;
     }
 
     console.log(
-      '[DEV] 🎮 StartButton: Calling onStart with validated names:',
+      "[DEV] 🎮 StartButton: Calling onStart with validated names:",
       selectedNames
     );
     onStart(selectedNames);
@@ -708,40 +624,41 @@ const StartButton = ({ selectedNames, onStart, variant = 'default' }) => {
 
   const buttonText =
     selectedNames.length < 2
-      ? `Need ${2 - selectedNames.length} More Name${selectedNames.length === 0 ? 's' : ''} 🎯`
-      : 'Start Tournament! 🏆';
+      ? `Need ${2 - selectedNames.length} More Name${selectedNames.length === 0 ? "s" : ""} 🎯`
+      : "Start Tournament! 🏆";
 
   const buttonClass =
-    variant === 'header' ? styles.startButtonHeader : styles.startButton;
+    variant === "header" ? styles.startButtonHeader : styles.startButton;
+  const isReady = selectedNames.length >= 2;
 
   return (
-    <button
+    <StartTournamentButton
       onClick={handleStart}
       className={buttonClass}
-      disabled={selectedNames.length < 2}
-      aria-label={
-        selectedNames.length < 2
-          ? 'Select at least 2 names to start'
-          : 'Start Tournament'
+      disabled={!isReady}
+      ariaLabel={
+        isReady ? "Start Tournament" : "Select at least 2 names to start"
       }
+      size={variant === "header" ? "medium" : "large"}
+      startIcon={isReady ? undefined : null}
     >
       {buttonText}
-    </button>
+    </StartTournamentButton>
   );
 };
 
 const NameSuggestionSection = () => {
-  const [name, setName] = useState('');
-  const [description, setDescription] = useState('');
-  const [error, setError] = useState('');
-  const [success, setSuccess] = useState('');
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { showSuccess, showError } = useToast();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError('');
-    setSuccess('');
+    setError("");
+    setSuccess("");
 
     const nameValidation = validateCatName(name.trim());
     if (!nameValidation.success) {
@@ -762,18 +679,18 @@ const NameSuggestionSection = () => {
         descriptionValidation.value
       );
       if (res?.success === false) {
-        throw new Error(res.error || 'Failed to add name');
+        throw new Error(res.error || "Failed to add name");
       }
-      setSuccess('Thank you for your suggestion!');
-      showSuccess('Name suggestion submitted successfully!', {
-        duration: 4000
+      setSuccess("Thank you for your suggestion!");
+      showSuccess("Name suggestion submitted successfully!", {
+        duration: 4000,
       });
-      setName('');
-      setDescription('');
+      setName("");
+      setDescription("");
     } catch {
-      setError('Failed to add name. It might already exist.');
-      showError('Failed to submit name suggestion. Please try again.', {
-        duration: 5000
+      setError("Failed to add name. It might already exist.");
+      showError("Failed to submit name suggestion. Please try again.", {
+        duration: 5000,
       });
     } finally {
       setIsSubmitting(false);
@@ -795,17 +712,18 @@ const NameSuggestionSection = () => {
           aria-label="Name suggestion form"
         >
           <div className={styles.formGroup}>
-            <label htmlFor="suggestion-name">Name</label>
-            <input
-              type="text"
-              id="suggestion-name"
+            <Input
+              name="suggestion-name"
+              label="Name"
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="Enter a cat name"
               maxLength={50}
               disabled={isSubmitting}
               aria-required="true"
-              aria-describedby="name-help"
+              ariaDescribedBy="name-help"
+              required
+              type="text"
             />
             <div id="name-help" className={styles.helpText}>
               Enter a unique cat name (maximum 50 characters)
@@ -836,7 +754,7 @@ const NameSuggestionSection = () => {
               error={error}
               context="form"
               position="below"
-              onDismiss={() => setError('')}
+              onDismiss={() => setError("")}
               showRetry={false}
               showDismiss={true}
               size="medium"
@@ -851,11 +769,11 @@ const NameSuggestionSection = () => {
             disabled={isSubmitting}
             aria-label={
               isSubmitting
-                ? 'Submitting name suggestion...'
-                : 'Submit name suggestion'
+                ? "Submitting name suggestion..."
+                : "Submit name suggestion"
             }
           >
-            {isSubmitting ? 'Submitting...' : 'Submit Name'}
+            {isSubmitting ? "Submitting..." : "Submit Name"}
           </button>
         </form>
       </div>
@@ -868,7 +786,7 @@ function useTournamentSetup(userName) {
   const [selectedNames, setSelectedNames] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const saveTimeoutRef = useRef(null);
-  const lastSavedHashRef = useRef('');
+  const lastSavedHashRef = useRef("");
 
   // * Error handling is now managed by the store
 
@@ -879,7 +797,9 @@ function useTournamentSetup(userName) {
     const fetchNames = async () => {
       try {
         setIsLoading(true);
-        if (!supabase) {
+        const supabaseClient = await resolveSupabaseClient();
+
+        if (!supabaseClient) {
           setAvailableNames(FALLBACK_NAMES);
           setIsLoading(false);
           return;
@@ -889,10 +809,10 @@ function useTournamentSetup(userName) {
         const [namesData, { data: hiddenData, error: hiddenError }] =
           await Promise.all([
             getNamesWithDescriptions(),
-            supabase
-              .from('cat_name_ratings')
-              .select('name_id')
-              .eq('is_hidden', true)
+            supabaseClient
+              .from("cat_name_ratings")
+              .select("name_id")
+              .eq("is_hidden", true),
           ]);
 
         if (hiddenError) {
@@ -915,10 +835,10 @@ function useTournamentSetup(userName) {
           a.name.localeCompare(b.name)
         );
 
-        devLog('🎮 TournamentSetup: Data loaded', {
+        devLog("🎮 TournamentSetup: Data loaded", {
           availableNames: sortedNames.length,
           hiddenNames: hiddenIds.size,
-          userPreferences: hiddenData?.length || 0
+          userPreferences: hiddenData?.length || 0,
         });
 
         setAvailableNames(sortedNames);
@@ -930,10 +850,10 @@ function useTournamentSetup(userName) {
       } catch (err) {
         // Provide a clear offline fallback list when backend fails
         setAvailableNames(FALLBACK_NAMES);
-        errorActions.logError(err, 'TournamentSetup - Fetch Names', {
+        errorActions.logError(err, "TournamentSetup - Fetch Names", {
           isRetryable: true,
           affectsUserData: false,
-          isCritical: false
+          isCritical: false,
         });
       } finally {
         setIsLoading(false);
@@ -951,7 +871,9 @@ function useTournamentSetup(userName) {
         const tournamentId = `selection_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
 
         // Save selections to database
-        if (!supabase) return;
+        const supabaseClient = await resolveSupabaseClient();
+
+        if (!supabaseClient) return;
 
         const result = await tournamentsAPI.saveTournamentSelections(
           userName,
@@ -959,9 +881,9 @@ function useTournamentSetup(userName) {
           tournamentId
         );
 
-        devLog('🎮 TournamentSetup: Selections saved to database', result);
+        devLog("🎮 TournamentSetup: Selections saved to database", result);
       } catch (error) {
-        console.error('Error saving tournament selections:', error);
+        console.error("Error saving tournament selections:", error);
         // Don't block the UI if saving fails
       }
     },
@@ -976,7 +898,7 @@ function useTournamentSetup(userName) {
       const hash = namesToSave
         .map((n) => n.id || n.name)
         .sort()
-        .join(',');
+        .join(",");
 
       if (hash === lastSavedHashRef.current) return;
 
@@ -984,7 +906,7 @@ function useTournamentSetup(userName) {
       saveTimeoutRef.current = setTimeout(() => {
         lastSavedHashRef.current = hash;
         saveTournamentSelections(namesToSave).catch((e) =>
-          console.warn('Save selections debounce error:', e)
+          console.warn("Save selections debounce error:", e)
         );
       }, 800);
     },
@@ -1005,7 +927,7 @@ function useTournamentSetup(userName) {
 
       // Log the updated selected names (throttled to avoid spam)
       if (!toggleName.lastLogTs || Date.now() - toggleName.lastLogTs > 1000) {
-        devLog('🎮 TournamentSetup: Selected names updated', newSelectedNames);
+        devLog("🎮 TournamentSetup: Selected names updated", newSelectedNames);
         toggleName.lastLogTs = Date.now();
       }
 
@@ -1031,7 +953,7 @@ function useTournamentSetup(userName) {
     clearErrors: () => errorActions.clearError(),
     clearError: () => errorActions.clearError(),
     toggleName,
-    handleSelectAll
+    handleSelectAll,
   };
 }
 
@@ -1045,14 +967,14 @@ function TournamentSetupContent({ onStart, userName }) {
     clearErrors,
     clearError,
     toggleName,
-    handleSelectAll
+    handleSelectAll,
   } = useTournamentSetup(userName);
 
   // Enhanced state for new features
   const [openImages, setOpenImages] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(null);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [sortBy, setSortBy] = useState('alphabetical');
+  const [searchTerm, setSearchTerm] = useState("");
+  const [sortBy, setSortBy] = useState("alphabetical");
   const [isSwipeMode, setIsSwipeMode] = useState(false);
   const [showCatPictures, setShowCatPictures] = useState(false);
   const [showAllPhotos, setShowAllPhotos] = useState(false);
@@ -1066,8 +988,10 @@ function TournamentSetupContent({ onStart, userName }) {
     let cancelled = false;
     const trySupabase = async () => {
       try {
-        if (!supabase) return false;
-        const list = await imagesAPI.list('');
+        const supabaseClient = await resolveSupabaseClient();
+
+        if (!supabaseClient) return false;
+        const list = await imagesAPI.list("");
         if (Array.isArray(list) && list.length) return list;
       } catch {
         // Ignore errors when trying to load images
@@ -1077,7 +1001,7 @@ function TournamentSetupContent({ onStart, userName }) {
 
     const tryStaticManifest = async () => {
       try {
-        const res = await fetch('/assets/images/gallery.json');
+        const res = await fetch("/assets/images/gallery.json");
         if (!res.ok) return [];
         const data = await res.json();
         if (Array.isArray(data) && data.length) return data;
@@ -1100,9 +1024,9 @@ function TournamentSetupContent({ onStart, userName }) {
       for (const url of merged) {
         if (!url) continue;
         // strip query/hash and extension
-        const clean = String(url).split(/[?#]/)[0];
-        const name = clean.substring(clean.lastIndexOf('/') + 1);
-        const base = name.replace(/\.[^.]+$/, '').toLowerCase();
+        const [clean] = String(url).split(/[?#]/);
+        const name = clean.substring(clean.lastIndexOf("/") + 1);
+        const base = name.replace(/\.[^.]+$/, "").toLowerCase();
         if (seen.has(base)) continue;
         seen.add(base);
         deduped.push(url);
@@ -1145,7 +1069,7 @@ function TournamentSetupContent({ onStart, userName }) {
         const adminStatus = await isUserAdmin(userName);
         setIsAdmin(adminStatus);
       } catch (error) {
-        console.error('Error checking admin status:', error);
+        console.error("Error checking admin status:", error);
         setIsAdmin(false);
       }
     };
@@ -1167,8 +1091,8 @@ function TournamentSetupContent({ onStart, userName }) {
             ...img,
             position: {
               x: e.clientX - img.dragStart.x,
-              y: e.clientY - img.dragStart.y
-            }
+              y: e.clientY - img.dragStart.y,
+            },
           };
         }
         return img;
@@ -1180,7 +1104,7 @@ function TournamentSetupContent({ onStart, userName }) {
     setOpenImages((prev) =>
       prev.map((img) => ({
         ...img,
-        isDragging: false
+        isDragging: false,
       }))
     );
   };
@@ -1196,19 +1120,19 @@ function TournamentSetupContent({ onStart, userName }) {
           let newHeight = img.size.height;
 
           switch (img.resizeHandle) {
-            case 'nw':
+            case "nw":
               newWidth = Math.max(200, img.size.width - deltaX);
               newHeight = newWidth / aspectRatio;
               break;
-            case 'ne':
+            case "ne":
               newWidth = Math.max(200, img.size.width + deltaX);
               newHeight = newWidth / aspectRatio;
               break;
-            case 'sw':
+            case "sw":
               newWidth = Math.max(200, img.size.width - deltaX);
               newHeight = newWidth / aspectRatio;
               break;
-            case 'se':
+            case "se":
               newWidth = Math.max(200, img.size.width + deltaX);
               newHeight = newWidth / aspectRatio;
               break;
@@ -1218,12 +1142,12 @@ function TournamentSetupContent({ onStart, userName }) {
             ...img,
             size: {
               width: newWidth,
-              height: newHeight
+              height: newHeight,
             },
             resizeStart: {
               x: e.clientX,
-              y: e.clientY
-            }
+              y: e.clientY,
+            },
           };
         }
         return img;
@@ -1236,7 +1160,7 @@ function TournamentSetupContent({ onStart, userName }) {
       prev.map((img) => ({
         ...img,
         isResizing: false,
-        resizeHandle: null
+        resizeHandle: null,
       }))
     );
   };
@@ -1247,20 +1171,20 @@ function TournamentSetupContent({ onStart, userName }) {
 
     if (hasDragging || hasResizing) {
       window.addEventListener(
-        'mousemove',
+        "mousemove",
         hasResizing ? handleResizeMove : handleMouseMove
       );
       window.addEventListener(
-        'mouseup',
+        "mouseup",
         hasResizing ? handleResizeEnd : handleMouseUp
       );
       return () => {
         window.removeEventListener(
-          'mousemove',
+          "mousemove",
           hasResizing ? handleResizeMove : handleMouseMove
         );
         window.removeEventListener(
-          'mouseup',
+          "mouseup",
           hasResizing ? handleResizeEnd : handleMouseUp
         );
       };
@@ -1281,7 +1205,7 @@ function TournamentSetupContent({ onStart, userName }) {
             onRetry={() => window.location.reload()}
             onDismiss={clearError}
             onClearAll={clearErrors}
-            showDetails={process.env.NODE_ENV === 'development'}
+            showDetails={process.env.NODE_ENV === "development"}
           />
         </div>
       </div>
@@ -1320,36 +1244,40 @@ function TournamentSetupContent({ onStart, userName }) {
                   className={styles.selectAllButton}
                   aria-label={
                     selectedNames.length === availableNames.length
-                      ? 'Clear all selections'
-                      : 'Select all names'
+                      ? "Clear all selections"
+                      : "Select all names"
                   }
                 >
                   {selectedNames.length === availableNames.length
-                    ? '✨ Start Fresh'
-                    : '🎲 Select All'}
+                    ? "✨ Start Fresh"
+                    : "🎲 Select All"}
                 </button>
 
                 <button
                   onClick={() => setIsSwipeMode(!isSwipeMode)}
-                  className={`${styles.swipeModeToggleButton} ${isSwipeMode ? styles.active : ''}`}
+                  className={`${styles.headerActionButton} ${styles.swipeModeToggleButton} ${
+                    isSwipeMode ? styles.headerActionButtonActive : ""
+                  }`}
                   aria-label={
-                    isSwipeMode ? 'Switch to card mode' : 'Switch to swipe mode'
+                    isSwipeMode ? "Switch to card mode" : "Switch to swipe mode"
                   }
                 >
-                  {isSwipeMode ? '🎯 Cards' : '💫 Swipe'}
+                  {isSwipeMode ? "🎯 Cards" : "💫 Swipe"}
                 </button>
 
                 <button
                   onClick={() => setShowCatPictures(!showCatPictures)}
-                  className={`${styles.catPicturesToggleButton} ${showCatPictures ? styles.active : ''}`}
+                  className={`${styles.headerActionButton} ${styles.catPicturesToggleButton} ${
+                    showCatPictures ? styles.headerActionButtonActive : ""
+                  }`}
                   aria-label={
                     showCatPictures
-                      ? 'Hide cat pictures'
-                      : 'Show cat pictures on cards'
+                      ? "Hide cat pictures"
+                      : "Show cat pictures on cards"
                   }
                   title="Add random cat pictures to make it more like Tinder! 🐱"
                 >
-                  {showCatPictures ? '🐱 Hide Cats' : '🐱 Show Cats'}
+                  {showCatPictures ? "🐱 Hide Cats" : "🐱 Show Cats"}
                 </button>
 
                 {selectedNames.length >= 2 && (
@@ -1363,10 +1291,17 @@ function TournamentSetupContent({ onStart, userName }) {
             </div>
 
             {/* Name count for all users */}
-            <div className={styles.nameCount}>
+            <Card
+              className={styles.nameCount}
+              padding="small"
+              shadow="medium"
+              background="glass"
+              as="section"
+              aria-live="polite"
+            >
               <span className={styles.countText}>
                 {selectedNames.length === 0
-                  ? 'Pick some pawsome names! 🐾'
+                  ? "Pick some pawsome names! 🐾"
                   : `${selectedNames.length} Names Selected`}
               </span>
 
@@ -1375,7 +1310,7 @@ function TournamentSetupContent({ onStart, userName }) {
                   Just one more to start! 🎯
                 </span>
               )}
-            </div>
+            </Card>
 
             {/* Admin-only enhanced statistics */}
             {isAdmin && (
@@ -1384,7 +1319,7 @@ function TournamentSetupContent({ onStart, userName }) {
                   📊 {availableNames.length} total names
                 </span>
                 <span className={styles.statItem}>
-                  ⭐{' '}
+                  ⭐{" "}
                   {availableNames.length > 0
                     ? Math.round(
                         availableNames.reduce(
@@ -1392,16 +1327,16 @@ function TournamentSetupContent({ onStart, userName }) {
                           0
                         ) / availableNames.length
                       )
-                    : 1500}{' '}
+                    : 1500}{" "}
                   avg rating
                 </span>
                 <span className={styles.statItem}>
-                  🔥{' '}
+                  🔥{" "}
                   {
                     availableNames.filter(
                       (name) => (name.popularity_score || 0) > 5
                     ).length
-                  }{' '}
+                  }{" "}
                   popular names
                 </span>
               </div>
@@ -1435,9 +1370,20 @@ function TournamentSetupContent({ onStart, userName }) {
 
         {/* Sidebar */}
         <aside className={styles.sidebar}>
-          <div className={styles.sidebarCard}>
+          <Card
+            className={styles.sidebarCard}
+            padding="large"
+            shadow="large"
+            as="section"
+            aria-labelledby="tournament-setup-overview"
+          >
             <div className={styles.tournamentHeader}>
-              <h1 className={styles.tournamentTitle}>🏆 Cat Name Tournament</h1>
+              <h1
+                id="tournament-setup-overview"
+                className={styles.tournamentTitle}
+              >
+                🏆 Cat Name Tournament
+              </h1>
               <p className={styles.tournamentSubtitle}>
                 Pick the perfect name for your cat through fun head-to-head
                 battles!
@@ -1449,7 +1395,7 @@ function TournamentSetupContent({ onStart, userName }) {
                 <div
                   className={styles.progressFill}
                   style={{
-                    width: `${Math.max((selectedNames.length / Math.max(availableNames.length, 1)) * 100, 5)}%`
+                    width: `${Math.max((selectedNames.length / Math.max(availableNames.length, 1)) * 100, 5)}%`,
                   }}
                 />
               </div>
@@ -1475,13 +1421,21 @@ function TournamentSetupContent({ onStart, userName }) {
                     onClick={() => handleImageOpen(image)}
                     aria-label={`Open cat photo ${index + 1}`}
                   >
-                    {image.startsWith('/assets/images/') ? (
+                    {image.startsWith("/assets/images/") ? (
                       (() => {
-                        const base = image.replace(/\.[^.]+$/, '');
+                        const base = image.replace(/\.[^.]+$/, "");
                         return (
                           <picture>
-                            <source type="image/avif" srcSet={`${base}.avif`} />
-                            <source type="image/webp" srcSet={`${base}.webp`} />
+                            <source
+                              type="image/avif"
+                              srcSet={`${base}.avif`}
+                              sizes={GALLERY_IMAGE_SIZES}
+                            />
+                            <source
+                              type="image/webp"
+                              srcSet={`${base}.webp`}
+                              sizes={GALLERY_IMAGE_SIZES}
+                            />
                             <img
                               src={image}
                               alt=""
@@ -1489,6 +1443,7 @@ function TournamentSetupContent({ onStart, userName }) {
                               decoding="async"
                               width="200"
                               height="200"
+                              sizes={GALLERY_IMAGE_SIZES}
                             />
                           </picture>
                         );
@@ -1501,6 +1456,7 @@ function TournamentSetupContent({ onStart, userName }) {
                         decoding="async"
                         width="200"
                         height="200"
+                        sizes={GALLERY_IMAGE_SIZES}
                       />
                     )}
                     <div className={styles.photoOverlay}>
@@ -1519,11 +1475,12 @@ function TournamentSetupContent({ onStart, userName }) {
                       onClick={() => setShowAllPhotos((v) => !v)}
                     >
                       {showAllPhotos
-                        ? 'Show fewer photos'
+                        ? "Show fewer photos"
                         : `Show ${galleryImages.length - 8} more photos`}
                     </button>
                   </div>
                 )}
+
                 {isAdmin && (
                   <div className={styles.photoUploadRow}>
                     <input
@@ -1532,7 +1489,7 @@ function TournamentSetupContent({ onStart, userName }) {
                       accept="image/*"
                       multiple
                       capture="environment"
-                      style={{ display: 'none' }}
+                      style={{ display: "none" }}
                       onChange={async (e) => {
                         const files = Array.from(e.target.files || []);
                         if (!files.length) return;
@@ -1542,11 +1499,11 @@ function TournamentSetupContent({ onStart, userName }) {
                             const compressed = await compressImageFile(f, {
                               maxWidth: 1600,
                               maxHeight: 1600,
-                              quality: 0.82
+                              quality: 0.82,
                             });
                             const url = await imagesAPI.upload(
                               compressed,
-                              userName || 'aaron'
+                              userName || "aaron"
                             );
                             if (url) uploaded.push(url);
                           }
@@ -1554,11 +1511,11 @@ function TournamentSetupContent({ onStart, userName }) {
                             setGalleryImages((prev) => [...uploaded, ...prev]);
                           }
                         } catch (err) {
-                          console.error('Upload failed', err);
+                          console.error("Upload failed", err);
 
-                          alert('Upload failed. Please try again.');
+                          alert("Upload failed. Please try again.");
                         } finally {
-                          e.target.value = '';
+                          e.target.value = "";
                         }
                       }}
                     />
@@ -1572,11 +1529,17 @@ function TournamentSetupContent({ onStart, userName }) {
                 )}
               </div>
             </div>
-          </div>
+          </Card>
 
-          <div className={styles.sidebarCard}>
+          <Card
+            className={styles.sidebarCard}
+            padding="large"
+            shadow="large"
+            as="section"
+            aria-label="Name suggestions"
+          >
             <NameSuggestionSection />
-          </div>
+          </Card>
         </aside>
       </div>
 
@@ -1605,34 +1568,34 @@ function TournamentSetup(props) {
   );
 }
 
-TournamentSetup.displayName = 'TournamentSetup';
+TournamentSetup.displayName = "TournamentSetup";
 
 TournamentSetup.propTypes = {
-  onStart: PropTypes.func.isRequired
+  onStart: PropTypes.func.isRequired,
 };
 
 export default TournamentSetup;
 
 // Lightweight lightbox component with keyboard navigation
 function Lightbox({ images, index, onClose, onPrev, onNext }) {
-  const closeBtnRef = React.useRef(null);
+  const closeBtnRef = useRef(null);
 
-  React.useEffect(() => {
+  useEffect(() => {
     const onKey = (e) => {
-      if (e.key === 'Escape') onClose();
-      else if (e.key === 'ArrowLeft') onPrev();
-      else if (e.key === 'ArrowRight') onNext();
+      if (e.key === "Escape") onClose();
+      else if (e.key === "ArrowLeft") onPrev();
+      else if (e.key === "ArrowRight") onNext();
     };
-    window.addEventListener('keydown', onKey);
-    return () => window.removeEventListener('keydown', onKey);
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
   }, [onClose, onPrev, onNext]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     closeBtnRef.current?.focus();
   }, []);
 
   const current = images[index] || images[0];
-  const base = current.replace(/\.[^.]+$/, '');
+  const base = current.replace(/\.[^.]+$/, "");
 
   return (
     <div
@@ -1665,14 +1628,23 @@ function Lightbox({ images, index, onClose, onPrev, onNext }) {
         </button>
         <div className={styles.lightboxImageWrap}>
           <picture>
-            <source type="image/avif" srcSet={`${base}.avif`} />
-            <source type="image/webp" srcSet={`${base}.webp`} />
+            <source
+              type="image/avif"
+              srcSet={`${base}.avif`}
+              sizes={LIGHTBOX_IMAGE_SIZES}
+            />
+            <source
+              type="image/webp"
+              srcSet={`${base}.webp`}
+              sizes={LIGHTBOX_IMAGE_SIZES}
+            />
             <img
               src={current}
               alt={`Cat photo ${index + 1} of ${images.length}`}
               className={styles.lightboxImage}
               loading="eager"
               decoding="async"
+              sizes={LIGHTBOX_IMAGE_SIZES}
             />
           </picture>
         </div>
@@ -1697,5 +1669,5 @@ Lightbox.propTypes = {
   index: PropTypes.number.isRequired,
   onClose: PropTypes.func.isRequired,
   onPrev: PropTypes.func.isRequired,
-  onNext: PropTypes.func.isRequired
+  onNext: PropTypes.func.isRequired,
 };

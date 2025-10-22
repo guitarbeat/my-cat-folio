@@ -1,4 +1,4 @@
-import React from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 import './CatBackground.css';
 
 function createCatVideo(index) {
@@ -18,9 +18,9 @@ function createCatVideo(index) {
 }
 
 export default function CatBackground() {
-  const containerRef = React.useRef(null);
+  const containerRef = useRef(null);
 
-  React.useEffect(() => {
+  useEffect(() => {
     const prefersReduced =
       typeof window !== 'undefined' &&
       window.matchMedia &&
@@ -47,7 +47,7 @@ export default function CatBackground() {
       requestAnimationFrame(() => {
         time += 0.01;
         const y = window.scrollY || 0;
-        
+
         if (stars) {
           const sTranslate = Math.min(40, y * 0.03);
           const sParallaxX = (mouseX - window.innerWidth / 2) * 0.0003;
@@ -55,7 +55,7 @@ export default function CatBackground() {
           const sRotate = Math.sin(time * 0.5) * 0.5;
           stars.style.transform = `translate(${sParallaxX * 20}px, ${sTranslate + sParallaxY * 15}px) rotate(${sRotate}deg)`;
         }
-        
+
         if (nebula) {
           const nTranslate = Math.min(80, y * 0.06);
           const nScale = 1 + Math.min(0.15, y * 0.0003);
@@ -65,7 +65,7 @@ export default function CatBackground() {
           const nPulse = 1 + Math.sin(time * 0.8) * 0.05;
           nebula.style.transform = `translate(${nParallaxX * 50}px, ${nTranslate + nParallaxY * 40}px) scale(${nScale * nPulse}) rotate(${nRotate}deg)`;
         }
-        
+
         if (cats.length) {
           cats.forEach((node, idx) => {
             const speed = 0.04 + idx * 0.015;
@@ -110,10 +110,10 @@ export default function CatBackground() {
     window.addEventListener('scroll', onScroll, { passive: true });
     window.addEventListener('mousemove', onMouseMove, { passive: true });
     el.addEventListener('click', onCatClick);
-    
+
     // * Start the animation loop
     animate();
-    
+
     return () => {
       window.removeEventListener('scroll', onScroll);
       window.removeEventListener('mousemove', onMouseMove);
@@ -121,7 +121,7 @@ export default function CatBackground() {
     };
   }, []);
 
-  const showCats = React.useMemo(() => {
+  const showCats = useMemo(() => {
     const prefersReducedMotion =
       typeof window !== 'undefined' &&
       window.matchMedia &&

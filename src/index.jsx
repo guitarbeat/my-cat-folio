@@ -8,7 +8,7 @@
  * @requires App
  */
 
-import React from 'react';
+import { StrictMode } from 'react';
 import ReactDOM from 'react-dom/client';
 import { setupGlobalErrorHandling } from '@services/errorManager';
 import '@styles/reset.css';
@@ -17,9 +17,12 @@ import '@styles/utilities.css';
 import '@styles/animations.css';
 import '@styles/background-effects.css';
 import '@styles/components-global.css';
+import '@styles/app-layout.css';
 import '@styles/responsive.css';
 import App from './App.jsx';
-// import { Analytics } from "@vercel/analytics/react"
+import ErrorBoundary from './shared/components/Error/ErrorBoundary.jsx';
+import ErrorBoundaryFallback from './shared/components/Error/ErrorBoundaryFallback.jsx';
+import { Analytics } from '@vercel/analytics/react';
 
 // Set up global error handling
 setupGlobalErrorHandling();
@@ -29,8 +32,11 @@ console.info('[Boot] index.jsx loaded');
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
+  <StrictMode>
+    <ErrorBoundary FallbackComponent={ErrorBoundaryFallback}>
+      <App />
+      <Analytics />
+    </ErrorBoundary>
+  </StrictMode>
 );
 

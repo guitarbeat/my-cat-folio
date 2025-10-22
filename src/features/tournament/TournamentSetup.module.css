@@ -2,9 +2,7 @@
 .container {
   width: 100%;
   min-height: 100vh;
-  padding-top: calc(
-    var(--space-6) + 70px
-  ); /* Add navbar height to prevent content cutoff */
+  padding-top: var(--space-6);
 
   background: transparent; /* Let galaxy background show through */
 }
@@ -365,6 +363,24 @@
   transform: translateY(-1px);
 }
 
+/* * Ensure adequate contrast in light theme for Select All button */
+:global(:root[data-theme="light"]) .selectAllButton {
+  color: #fff;
+  background: #1f2937; /* slate-800 */
+  border-color: #0f172a; /* slate-900 */
+}
+
+:global(:root[data-theme="light"]) .selectAllButton:hover:not(:disabled) {
+  background: #111827; /* slate-900 */
+  border-color: #0b1220;
+}
+
+/* * Accessible focus style with high-contrast ring */
+.selectAllButton:focus-visible {
+  outline: 3px solid #111827;
+  outline-offset: 2px;
+}
+
 .selectionStats {
   display: flex;
   gap: var(--space-1);
@@ -446,17 +462,9 @@
 }
 
 .sidebarCard {
-  padding: var(--space-5);
-  background: var(--card-background);
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-md);
-  transition: all var(--duration-normal) var(--ease-out);
-}
-
-.sidebarCard:hover {
-  box-shadow: var(--shadow-lg);
-  transform: translateY(-2px);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
 }
 
 .sidebarTitle {
@@ -489,19 +497,12 @@
 
 /* Name Counter */
 .nameCount {
-  padding: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
   margin: var(--space-6) 0;
-  cursor: pointer;
-  background: var(--card-background);
-  border: 1px solid var(--card-border);
-  border-radius: var(--radius-lg);
-  transition: var(--transition-all);
-}
-
-.nameCount:hover {
-  background: var(--card-hover);
-  border-color: var(--border-color);
-  box-shadow: var(--shadow-md);
+  text-align: center;
 }
 
 .countAndSelect {
@@ -554,60 +555,13 @@
 }
 
 .startButton {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-2);
-  align-items: center;
-  justify-content: center;
   width: 100%;
-  max-width: 400px;
-  padding: var(--space-4);
+  max-width: 420px;
   margin: 0 auto;
-  font-size: var(--text-base);
-  font-weight: 500;
-  color: var(--button-text-light, white);
-  cursor: pointer;
-  background: var(--button-primary-bg, var(--primary-color));
-  border: none;
-  border-radius: var(--radius-md);
-  transition: var(--transition-all);
 }
 
-.startButton:hover:not(:disabled) {
-  background: var(--button-primary-hover, var(--primary-dark));
-  box-shadow: var(--shadow-md);
-  transform: translateY(-1px);
-}
-
-/* Header variant of start button - matches select all button styling */
 .startButtonHeader {
-  display: inline-flex;
-  gap: var(--space-2);
-  align-items: center;
-  justify-content: center;
-  min-width: fit-content;
-  padding: var(--space-3) var(--space-4);
-  font-size: var(--text-sm);
-  font-weight: 500;
-  color: var(--button-text-light, white);
   white-space: nowrap;
-  cursor: pointer;
-  background: var(--button-primary-bg, var(--primary-color));
-  border: none;
-  border-radius: var(--radius-md);
-  transition: var(--transition-all);
-}
-
-.startButtonHeader:hover:not(:disabled) {
-  background: var(--button-primary-hover, var(--primary-dark));
-  box-shadow: var(--shadow-md);
-  transform: translateY(-1px);
-}
-
-.startButtonHeader:disabled {
-  cursor: not-allowed;
-  opacity: 0.3;
-  transform: none;
 }
 
 .buttonText {
@@ -644,8 +598,10 @@
 
 .photoGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  grid-auto-flow: row dense;
   gap: var(--space-3);
+  align-items: stretch;
 }
 
 .photoThumbnail {
@@ -1139,6 +1095,66 @@
   transform: translateX(-50%);
 }
 
+@media (width <= 768px) {
+  .lightboxContent {
+    padding: var(--space-4);
+  }
+
+  .lightboxImageWrap {
+    max-width: min(94vw, 720px);
+    max-height: 70vh;
+  }
+
+  .lightboxNav {
+    width: 40px;
+    height: 40px;
+    font-size: var(--text-xl);
+  }
+
+  .lightboxNav.left {
+    left: var(--space-3);
+  }
+
+  .lightboxNav.right {
+    right: var(--space-3);
+  }
+
+  .lightboxClose {
+    top: var(--space-3);
+    right: var(--space-3);
+    width: 38px;
+    height: 38px;
+    font-size: var(--text-xl);
+  }
+
+  .lightboxCounter {
+    bottom: var(--space-3);
+    padding: var(--space-1) var(--space-2);
+    font-size: var(--text-xs);
+  }
+}
+
+@media (width <= 480px) {
+  .lightboxContent {
+    padding: var(--space-3);
+  }
+
+  .lightboxImageWrap {
+    max-height: 60vh;
+  }
+
+  .lightboxNav {
+    width: 36px;
+    height: 36px;
+    font-size: 1.75rem;
+  }
+
+  .lightboxClose {
+    width: 34px;
+    height: 34px;
+  }
+}
+
 /* Messages */
 .errorMessage {
   margin: var(--space-2) 0;
@@ -1203,7 +1219,7 @@
   }
 
   .photoGrid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: var(--space-2);
   }
 
@@ -1239,7 +1255,7 @@
   }
 
   .photoGrid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .catPicturesToggleButton {
@@ -1249,6 +1265,53 @@
     margin-top: var(--space-2);
     font-size: var(--text-xs); /* * Slightly smaller text on mobile */
     border-radius: var(--radius-lg); /* * Slightly smaller radius on mobile */
+  }
+
+  .photoToolbar {
+    flex-direction: column;
+    gap: var(--space-2);
+    align-items: stretch;
+  }
+
+  .photoUploadRow {
+    justify-content: center;
+    width: 100%;
+  }
+
+  .photoUploadButton,
+  .photoMoreButton {
+    width: 100%;
+  }
+}
+
+@media (width <= 600px) {
+  .photoGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-2);
+  }
+}
+
+@media (width <= 480px) {
+  .photoGrid {
+    grid-template-columns: minmax(0, 1fr);
+    max-width: 360px;
+    margin-inline: auto;
+  }
+
+  .photoThumbnail {
+    aspect-ratio: 4 / 3;
+  }
+
+  .photoUploadRow {
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+}
+
+@media (width >= 1280px) {
+  .photoGrid {
+    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+    gap: var(--space-4);
   }
 }
 
@@ -1365,252 +1428,140 @@
   gap: var(--space-6);
 }
 
-/* Swipe Mode Toggle Button - Enhanced Modern Styling */
-.swipeModeToggleButton {
-  /* * Base button styling */
+/* Header Action Buttons - Shared Styling */
+.headerActionButton {
+  position: relative;
+  display: inline-flex;
+  gap: var(--space-2);
+  align-items: center;
+  justify-content: center;
   min-height: 48px;
   padding: var(--space-3) var(--space-4);
-  border: 2px solid transparent;
-  border-radius: var(--radius-xl);
-  font-weight: 600;
-  font-size: var(--text-sm);
-  letter-spacing: 0.025em;
-  transition: all var(--duration-normal) var(--ease-out);
-  position: relative;
   overflow: hidden;
-  
-  /* * Glassmorphism background */
-  background: var(--glass-bg);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  
-  /* * Gradient border effect */
-  background-clip: padding-box;
-  border: 2px solid transparent;
-  background-image: linear-gradient(var(--card-background), var(--card-background)), 
-                    var(--gradient-primary);
-  background-origin: border-box;
-  
-  /* * Subtle glow effect */
-  box-shadow: 
-    0 4px 12px rgba(0, 0, 0, 0.15),
-    0 2px 4px rgba(0, 0, 0, 0.1),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1);
-  
+  font-size: var(--text-sm);
+  font-weight: 600;
+
   /* * Text styling */
   color: var(--text-primary);
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-  
-  /* * Interactive states */
+  letter-spacing: 0.025em;
+  white-space: nowrap;
+  text-shadow: 0 1px 2px rgb(0 0 0 / 10%);
   cursor: pointer;
   user-select: none;
+
+  /* * Glassmorphism background */
+  background: var(--glass-bg);
+  background-image:
+    linear-gradient(var(--card-background), var(--card-background)),
+    var(--gradient-primary);
+
+  /* * Gradient border effect */
+  background-clip: padding-box;
+  background-origin: border-box;
+  border: 2px solid transparent;
+  border-radius: var(--radius-xl);
+
+  /* * Subtle glow effect */
+  box-shadow:
+    0 4px 12px rgb(0 0 0 / 15%),
+    0 2px 4px rgb(0 0 0 / 10%),
+    inset 0 1px 0 rgb(255 255 255 / 10%);
+  backdrop-filter: blur(12px);
+  transition: all var(--duration-normal) var(--ease-out);
 }
 
-.swipeModeToggleButton::before {
-  /* * Animated background overlay */
-  content: '';
+.headerActionButton::before {
   position: absolute;
   top: 0;
   left: -100%;
   width: 100%;
   height: 100%;
+
+  /* * Animated background overlay */
+  content: "";
   background: linear-gradient(
     90deg,
     transparent,
-    rgba(255, 255, 255, 0.1),
+    rgb(255 255 255 / 10%),
     transparent
   );
   transition: left var(--duration-slow) var(--ease-out);
 }
 
-.swipeModeToggleButton:hover:not(:disabled) {
+.headerActionButton:hover:not(:disabled) {
   /* * Enhanced hover state */
-  background-image: linear-gradient(var(--card-hover), var(--card-hover)), 
-                    var(--gradient-vibrant);
-  transform: translateY(-2px) scale(1.02);
-  box-shadow: 
-    0 8px 25px rgba(0, 0, 0, 0.2),
-    0 4px 12px rgba(0, 0, 0, 0.15),
-    var(--glow-cyan);
+  background-image:
+    linear-gradient(var(--card-hover), var(--card-hover)),
+    var(--gradient-vibrant);
   border-color: var(--neon-cyan-100);
+  box-shadow:
+    0 8px 25px rgb(0 0 0 / 20%),
+    0 4px 12px rgb(0 0 0 / 15%),
+    var(--glow-cyan);
+  transform: translateY(-2px) scale(1.02);
 }
 
-.swipeModeToggleButton:hover:not(:disabled)::before {
+.headerActionButton:hover:not(:disabled)::before {
   left: 100%;
 }
 
-.swipeModeToggleButton:active:not(:disabled) {
+.headerActionButton:active:not(:disabled) {
   transform: translateY(-1px) scale(1.01);
   transition: transform var(--duration-fast) var(--ease-out);
 }
 
-.swipeModeToggleButton.active {
-  /* * Active state with vibrant styling */
-  background-image: linear-gradient(var(--accent-color), var(--highlight-color)), 
-                    var(--gradient-vibrant);
-  color: var(--charcoal);
+.headerActionButtonActive {
   font-weight: 700;
+  color: var(--charcoal);
   text-shadow: none;
-  box-shadow: 
-    0 6px 20px rgba(232, 191, 118, 0.4),
-    0 3px 8px rgba(241, 164, 56, 0.3),
-    var(--glow-pink);
+
+  /* * Active state with vibrant styling */
+  background-image:
+    linear-gradient(var(--accent-color), var(--highlight-color)),
+    var(--gradient-vibrant);
   border-color: var(--mimosa);
+  box-shadow:
+    0 6px 20px rgb(232 191 118 / 40%),
+    0 3px 8px rgb(241 164 56 / 30%),
+    var(--glow-pink);
   transform: translateY(-1px);
 }
 
-.swipeModeToggleButton.active:hover:not(:disabled) {
+.headerActionButtonActive:hover:not(:disabled) {
   /* * Enhanced active hover state */
-  background-image: linear-gradient(var(--highlight-color), var(--accent-color)), 
-                    var(--gradient-vibrant);
-  transform: translateY(-3px) scale(1.03);
-  box-shadow: 
-    0 10px 30px rgba(232, 191, 118, 0.5),
-    0 5px 15px rgba(241, 164, 56, 0.4),
+  background-image:
+    linear-gradient(var(--highlight-color), var(--accent-color)),
+    var(--gradient-vibrant);
+  box-shadow:
+    0 10px 30px rgb(232 191 118 / 50%),
+    0 5px 15px rgb(241 164 56 / 40%),
     var(--glow-vibrant);
+  transform: translateY(-3px) scale(1.03);
 }
 
-.swipeModeToggleButton:disabled {
+.headerActionButton:disabled {
+  color: var(--text-tertiary);
+  cursor: not-allowed;
+  background: var(--glass-bg-light);
+  box-shadow: none;
+
   /* * Disabled state */
   opacity: 0.5;
-  cursor: not-allowed;
   transform: none;
-  box-shadow: none;
-  background: var(--glass-bg-light);
-  color: var(--text-tertiary);
 }
 
-.swipeModeToggleButton:focus-visible {
+.headerActionButton:focus-visible {
   /* * Focus state for accessibility */
   outline: 3px solid var(--accent-color);
   outline-offset: 3px;
-  box-shadow: 
-    0 0 0 3px rgba(232, 191, 118, 0.3),
-    0 4px 12px rgba(0, 0, 0, 0.15);
+  box-shadow:
+    0 0 0 3px rgb(232 191 118 / 30%),
+    0 4px 12px rgb(0 0 0 / 15%);
 }
 
-/* Cat Pictures Toggle Button - Enhanced Modern Styling */
+.swipeModeToggleButton,
 .catPicturesToggleButton {
-  /* * Base button styling */
-  min-height: 48px;
-  padding: var(--space-3) var(--space-4);
-  border: 2px solid transparent;
-  border-radius: var(--radius-xl);
-  font-weight: 600;
-  font-size: var(--text-sm);
-  letter-spacing: 0.025em;
-  transition: all var(--duration-normal) var(--ease-out);
   position: relative;
-  overflow: hidden;
-  
-  /* * Glassmorphism background */
-  background: var(--glass-bg);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  
-  /* * Gradient border effect */
-  background-clip: padding-box;
-  border: 2px solid transparent;
-  background-image: linear-gradient(var(--card-background), var(--card-background)), 
-                    var(--gradient-primary);
-  background-origin: border-box;
-  
-  /* * Subtle glow effect */
-  box-shadow: 
-    0 4px 12px rgba(0, 0, 0, 0.15),
-    0 2px 4px rgba(0, 0, 0, 0.1),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1);
-  
-  /* * Text styling */
-  color: var(--text-primary);
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-  
-  /* * Interactive states */
-  cursor: pointer;
-  user-select: none;
-}
-
-.catPicturesToggleButton::before {
-  /* * Animated background overlay */
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(255, 255, 255, 0.1),
-    transparent
-  );
-  transition: left var(--duration-slow) var(--ease-out);
-}
-
-.catPicturesToggleButton:hover:not(:disabled) {
-  /* * Enhanced hover state */
-  background-image: linear-gradient(var(--card-hover), var(--card-hover)), 
-                    var(--gradient-vibrant);
-  transform: translateY(-2px) scale(1.02);
-  box-shadow: 
-    0 8px 25px rgba(0, 0, 0, 0.2),
-    0 4px 12px rgba(0, 0, 0, 0.15),
-    var(--glow-cyan);
-  border-color: var(--neon-cyan-100);
-}
-
-.catPicturesToggleButton:hover:not(:disabled)::before {
-  left: 100%;
-}
-
-.catPicturesToggleButton:active:not(:disabled) {
-  transform: translateY(-1px) scale(1.01);
-  transition: transform var(--duration-fast) var(--ease-out);
-}
-
-.catPicturesToggleButton.active {
-  /* * Active state with vibrant styling */
-  background-image: linear-gradient(var(--accent-color), var(--highlight-color)), 
-                    var(--gradient-vibrant);
-  color: var(--charcoal);
-  font-weight: 700;
-  text-shadow: none;
-  box-shadow: 
-    0 6px 20px rgba(232, 191, 118, 0.4),
-    0 3px 8px rgba(241, 164, 56, 0.3),
-    var(--glow-pink);
-  border-color: var(--mimosa);
-  transform: translateY(-1px);
-}
-
-.catPicturesToggleButton.active:hover:not(:disabled) {
-  /* * Enhanced active hover state */
-  background-image: linear-gradient(var(--highlight-color), var(--accent-color)), 
-                    var(--gradient-vibrant);
-  transform: translateY(-3px) scale(1.03);
-  box-shadow: 
-    0 10px 30px rgba(232, 191, 118, 0.5),
-    0 5px 15px rgba(241, 164, 56, 0.4),
-    var(--glow-vibrant);
-}
-
-.catPicturesToggleButton:disabled {
-  /* * Disabled state */
-  opacity: 0.5;
-  cursor: not-allowed;
-  transform: none;
-  box-shadow: none;
-  background: var(--glass-bg-light);
-  color: var(--text-tertiary);
-}
-
-.catPicturesToggleButton:focus-visible {
-  /* * Focus state for accessibility */
-  outline: 3px solid var(--accent-color);
-  outline-offset: 3px;
-  box-shadow: 
-    0 0 0 3px rgba(232, 191, 118, 0.3),
-    0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 /* Swipe Mode Container */
@@ -1702,8 +1653,19 @@
   height: 220px; /* show more of the cat */
   margin-bottom: 1rem;
   overflow: hidden;
+  background: linear-gradient(135deg, rgb(15 23 42 / 85%), rgb(15 23 42 / 95%));
+  background:
+    radial-gradient(
+      circle at 30% 25%,
+      rgb(var(--cat-image-accent-rgb, 100 116 139) / 60%) 0%,
+      rgb(15 23 42 / 92%) 65%
+    ),
+    linear-gradient(135deg, rgb(15 23 42 / 85%), rgb(15 23 42 / 95%));
   border-radius: 15px;
-  box-shadow: 0 4px 20px rgb(0 0 0 / 20%);
+  box-shadow: 0 8px 28px rgb(15 23 42 / 45%);
+  transition:
+    box-shadow var(--duration-normal) var(--ease-out),
+    transform var(--duration-normal) var(--ease-out);
 }
 
 /* Blurred background fill for swipe card images */
@@ -1715,8 +1677,10 @@
   background-image: var(--bg-image);
   background-position: 50% var(--image-pos-y, 20%);
   background-size: cover;
-  filter: blur(16px) brightness(0.9) saturate(110%);
+  opacity: 0;
+  filter: blur(18px) brightness(0.92) saturate(112%);
   transform: scale(1.1);
+  transition: opacity var(--duration-normal) var(--ease-out);
 }
 
 .swipeCardImageContainer::after {
@@ -1724,7 +1688,13 @@
   inset: 0;
   z-index: 0;
   content: "";
-  background: linear-gradient(180deg, rgb(0 0 0 / 0%) 0%, rgb(0 0 0 / 6%) 100%);
+  background: linear-gradient(
+    180deg,
+    rgb(15 23 42 / 5%) 0%,
+    rgb(2 6 23 / 55%) 100%
+  );
+  opacity: 0;
+  transition: opacity var(--duration-normal) var(--ease-out);
 }
 
 .swipeCardImage {
@@ -1732,13 +1702,51 @@
   z-index: 1;
   width: 100%;
   height: 100%;
-  object-fit: contain; /* show full cat; blurred bg fills behind */
+  object-fit: var(
+    --cat-image-fit,
+    contain
+  ); /* show full cat; blurred bg fills behind */
   object-position: 50% var(--image-pos-y, 20%);
-  transition: transform 0.3s ease;
+  opacity: 0;
+  filter: drop-shadow(0 18px 28px rgb(15 23 42 / 45%));
+  transform: scale(1.04);
+  transition:
+    transform 0.35s ease,
+    opacity 0.25s ease;
 }
 
 .swipeCardImage:hover {
   transform: scale(1.02);
+}
+
+.swipeCardImageContainer[data-loaded="true"]::before,
+.swipeCardImageContainer[data-loaded="true"]::after {
+  opacity: 1;
+}
+
+.swipeCardImageContainer[data-loaded="true"] .swipeCardImage {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.swipeCardImageContainer[data-orientation="portrait"] {
+  height: 260px;
+}
+
+.swipeCardImageContainer[data-orientation="landscape"] {
+  height: 210px;
+}
+
+.swipeCardImageContainer[data-orientation="square"] {
+  height: 235px;
+}
+
+.swipeCardImageContainer[data-orientation="portrait"] .swipeCardImage {
+  transform-origin: center 20%;
+}
+
+.swipeCardImageContainer[data-orientation="landscape"] .swipeCardImage {
+  object-position: 50% var(--image-pos-y, 40%);
 }
 
 .swipeCardName {
@@ -1859,69 +1867,72 @@
 }
 
 .swipeButton {
+  position: relative;
+
   /* * Base button styling */
   min-width: 120px;
   min-height: 48px;
   padding: var(--space-3) var(--space-4);
-  border: 2px solid transparent;
-  border-radius: var(--radius-xl);
-  font-weight: 600;
-  font-size: var(--text-sm);
-  letter-spacing: 0.025em;
-  text-transform: uppercase;
-  transition: all var(--duration-normal) var(--ease-out);
-  position: relative;
   overflow: hidden;
-  cursor: pointer;
-  user-select: none;
-  
-  /* * Glassmorphism background */
-  background: var(--glass-bg);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  
-  /* * Gradient border effect */
-  background-clip: padding-box;
-  background-image: linear-gradient(var(--card-background), var(--card-background)), 
-                    var(--gradient-primary);
-  background-origin: border-box;
-  
-  /* * Subtle glow effect */
-  box-shadow: 
-    0 4px 12px rgba(0, 0, 0, 0.15),
-    0 2px 4px rgba(0, 0, 0, 0.1),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1);
-  
+  font-size: var(--text-sm);
+  font-weight: 600;
+
   /* * Text styling */
   color: var(--text-primary);
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+  text-shadow: 0 1px 2px rgb(0 0 0 / 10%);
+  cursor: pointer;
+  user-select: none;
+
+  /* * Glassmorphism background */
+  background: var(--glass-bg);
+  background-image:
+    linear-gradient(var(--card-background), var(--card-background)),
+    var(--gradient-primary);
+
+  /* * Gradient border effect */
+  background-clip: padding-box;
+  background-origin: border-box;
+  border: 2px solid transparent;
+  border-radius: var(--radius-xl);
+
+  /* * Subtle glow effect */
+  box-shadow:
+    0 4px 12px rgb(0 0 0 / 15%),
+    0 2px 4px rgb(0 0 0 / 10%),
+    inset 0 1px 0 rgb(255 255 255 / 10%);
+  backdrop-filter: blur(12px);
+  transition: all var(--duration-normal) var(--ease-out);
 }
 
 .swipeButton::before {
-  /* * Animated background overlay */
-  content: '';
   position: absolute;
   top: 0;
   left: -100%;
   width: 100%;
   height: 100%;
+
+  /* * Animated background overlay */
+  content: "";
   background: linear-gradient(
     90deg,
     transparent,
-    rgba(255, 255, 255, 0.1),
+    rgb(255 255 255 / 10%),
     transparent
   );
   transition: left var(--duration-slow) var(--ease-out);
 }
 
 .swipeButton:hover:not(:disabled) {
+  border-color: var(--neon-cyan-100);
+  box-shadow:
+    0 8px 25px rgb(0 0 0 / 20%),
+    0 4px 12px rgb(0 0 0 / 15%),
+    var(--glow-cyan);
+
   /* * Enhanced hover state */
   transform: translateY(-2px) scale(1.02);
-  box-shadow: 
-    0 8px 25px rgba(0, 0, 0, 0.2),
-    0 4px 12px rgba(0, 0, 0, 0.15),
-    var(--glow-cyan);
-  border-color: var(--neon-cyan-100);
 }
 
 .swipeButton:hover:not(:disabled)::before {
@@ -1934,58 +1945,62 @@
 }
 
 .swipeButton:disabled {
+  color: var(--text-tertiary);
+  cursor: not-allowed;
+  background: var(--glass-bg-light);
+  box-shadow: none;
+
   /* * Disabled state */
   opacity: 0.5;
-  cursor: not-allowed;
   transform: none;
-  box-shadow: none;
-  background: var(--glass-bg-light);
-  color: var(--text-tertiary);
 }
 
 .swipeButton:focus-visible {
   /* * Focus state for accessibility */
   outline: 3px solid var(--accent-color);
   outline-offset: 3px;
-  box-shadow: 
-    0 0 0 3px rgba(232, 191, 118, 0.3),
-    0 4px 12px rgba(0, 0, 0, 0.15);
+  box-shadow:
+    0 0 0 3px rgb(232 191 118 / 30%),
+    0 4px 12px rgb(0 0 0 / 15%);
 }
 
 /* * Skip button (left) styling */
 .swipeLeftButton {
-  background-image: linear-gradient(var(--card-background), var(--card-background)), 
-                    var(--gradient-danger);
+  background-image:
+    linear-gradient(var(--card-background), var(--card-background)),
+    var(--gradient-danger);
   border-color: transparent;
 }
 
 .swipeLeftButton:hover:not(:disabled) {
-  background-image: linear-gradient(var(--error-600), var(--error-500)), 
-                    var(--gradient-danger);
   color: white;
-  box-shadow: 
-    0 8px 25px rgba(239, 68, 68, 0.3),
-    0 4px 12px rgba(220, 38, 38, 0.2),
-    var(--glow-red);
+  background-image:
+    linear-gradient(var(--error-600), var(--error-500)), var(--gradient-danger);
   border-color: var(--error-300);
+  box-shadow:
+    0 8px 25px rgb(239 68 68 / 30%),
+    0 4px 12px rgb(220 38 38 / 20%),
+    var(--glow-red);
 }
 
 /* * Select button (right) styling */
 .swipeRightButton {
-  background-image: linear-gradient(var(--card-background), var(--card-background)), 
-                    var(--gradient-success);
+  background-image:
+    linear-gradient(var(--card-background), var(--card-background)),
+    var(--gradient-success);
   border-color: transparent;
 }
 
 .swipeRightButton:hover:not(:disabled) {
-  background-image: linear-gradient(var(--success-600), var(--success-500)), 
-                    var(--gradient-success);
   color: white;
-  box-shadow: 
-    0 8px 25px rgba(16, 185, 129, 0.3),
-    0 4px 12px rgba(5, 150, 105, 0.2),
-    var(--glow-green);
+  background-image:
+    linear-gradient(var(--success-600), var(--success-500)),
+    var(--gradient-success);
   border-color: var(--success-300);
+  box-shadow:
+    0 8px 25px rgb(16 185 129 / 30%),
+    0 4px 12px rgb(5 150 105 / 20%),
+    var(--glow-green);
 }
 
 /* Card Progress */
@@ -2032,7 +2047,7 @@
 /* Mobile Responsiveness */
 @media (width <= 768px) {
   .container {
-    padding-top: calc(var(--space-4) + 70px); /* Adjust for mobile */
+    padding-top: var(--space-4);
   }
 
   .mainContent {
@@ -2048,7 +2063,7 @@
   .swipeContainer {
     gap: 1.5rem;
     padding: 1rem 0;
-    margin-top: 1rem; /* Add margin to prevent navbar overlap */
+    margin-top: 1rem;
   }
 
   .swipeCardWrapper {
@@ -2117,7 +2132,7 @@
 /* Extra small mobile devices */
 @media (width <= 480px) {
   .container {
-    padding-top: calc(var(--space-3) + 60px); /* Adjust for smaller navbar */
+    padding-top: var(--space-3);
   }
 
   .headerActions {
@@ -2175,11 +2190,12 @@
     text-overflow: ellipsis; /* * Show ellipsis for very long text */
     font-size: var(--text-xs); /* * Reduce font size for better fit */
     white-space: nowrap; /* * Prevent text wrapping */
-    border-radius: var(--radius-md); /* * Smaller radius on very small screens */
-    
+    border-radius: var(
+      --radius-md
+    ); /* * Smaller radius on very small screens */
+
     /* * Reduce effects on very small screens for performance */
     backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
   }
 }
 
@@ -2204,15 +2220,16 @@
   .catPicturesToggleButton {
     min-height: 48px; /* * Ensure minimum touch target size on touch devices */
     touch-action: manipulation; /* * Optimize touch behavior */
-    
+
     /* * Enhanced touch feedback */
-    -webkit-tap-highlight-color: rgba(232, 191, 118, 0.3);
-    
+    -webkit-tap-highlight-color: rgb(232 191 118 / 30%);
+
     /* * Optimize for touch interactions */
-    transition: transform var(--duration-fast) var(--ease-out),
-                box-shadow var(--duration-fast) var(--ease-out);
+    transition:
+      transform var(--duration-fast) var(--ease-out),
+      box-shadow var(--duration-fast) var(--ease-out);
   }
-  
+
   .catPicturesToggleButton:active {
     transform: scale(0.98); /* * Subtle press feedback */
   }

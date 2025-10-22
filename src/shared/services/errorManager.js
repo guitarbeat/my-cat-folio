@@ -4,6 +4,39 @@
  * Consolidates error handling, logging, retry logic, and circuit breaker patterns.
  */
 
+const GLOBAL_SCOPE = typeof globalThis !== 'undefined'
+  ? globalThis
+  : typeof window !== 'undefined'
+    ? window
+    : {};
+
+const deepFreeze = (object) => {
+  if (object && typeof object === 'object' && !Object.isFrozen(object)) {
+    Object.values(object).forEach((value) => {
+      if (typeof value === 'object' && value !== null) {
+        deepFreeze(value);
+      }
+    });
+    Object.freeze(object);
+  }
+  return object;
+};
+
+const createHash = (value) => {
+  const stringValue = typeof value === 'string' ? value : JSON.stringify(value);
+  let hash = 0;
+  if (!stringValue) {
+    return 'hash_0';
+  }
+
+  for (let index = 0; index < stringValue.length; index += 1) {
+    hash = (hash << 5) - hash + stringValue.charCodeAt(index);
+    hash |= 0; // Convert to 32bit integer
+  }
+
+  return `hash_${Math.abs(hash)}`;
+};
+
 // * Error types for categorization
 export const ERROR_TYPES = {
   NETWORK: 'network',
@@ -14,6 +47,8 @@ export const ERROR_TYPES = {
   UNKNOWN: 'unknown'
 };
 
+deepFreeze(ERROR_TYPES);
+
 // * Error severity levels
 export const ERROR_SEVERITY = {
   LOW: 'low',
@@ -21,6 +56,8 @@ export const ERROR_SEVERITY = {
   HIGH: 'high',
   CRITICAL: 'critical'
 };
+
+deepFreeze(ERROR_SEVERITY);
 
 // * User-friendly error messages
 export const USER_FRIENDLY_MESSAGES = {
@@ -62,6 +99,8 @@ export const USER_FRIENDLY_MESSAGES = {
   }
 };
 
+deepFreeze(USER_FRIENDLY_MESSAGES);
+
 // * Retry configuration
 export const RETRY_CONFIG = {
   maxAttempts: 3,
@@ -70,6 +109,8 @@ export const RETRY_CONFIG = {
   backoffMultiplier: 2,
   jitter: 0.1
 };
+
+deepFreeze(RETRY_CONFIG);
 
 /**
  * * Comprehensive error management class
@@ -103,7 +144,8 @@ export class ErrorManager {
         message: error.message,
         name: error.name,
         stack: error.stack,
-        type: this.determineErrorType(error)
+        type: this.determineErrorType(error),
+        cause: error.cause || null
       };
     }
 
@@ -123,7 +165,8 @@ export class ErrorManager {
         stack: error.stack || null,
         type: this.determineErrorType(error),
         code: error.code || null,
-        status: error.status || null
+        status: error.status || null,
+        cause: error.cause || null
       };
     }
 
@@ -183,8 +226,9 @@ export class ErrorManager {
     const severity = this.determineSeverity(errorInfo, metadata);
     const userMessage = this.getUserFriendlyMessage(errorInfo, context);
     const isRetryable = this.isRetryable(errorInfo, metadata);
+    const diagnostics = this.buildDiagnostics(errorInfo, context, metadata);
 
-    return {
+    const formatted = {
       id: this.generateErrorId(),
       message: errorInfo.message,
       userMessage,
@@ -197,8 +241,17 @@ export class ErrorManager {
         ...metadata,
         originalError: errorInfo,
         stack: errorInfo.stack
-      }
+      },
+      diagnostics,
+      aiContext: ''
     };
+
+    formatted.aiContext = this.buildAIContext({
+      formattedError: formatted,
+      diagnostics
+    });
+
+    return formatted;
   }
 
   /**
@@ -298,7 +351,12 @@ export class ErrorManager {
    * @returns {string} Unique error identifier
    */
   static generateErrorId() {
-    return `error_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    if (GLOBAL_SCOPE.crypto?.randomUUID) {
+      return `error_${GLOBAL_SCOPE.crypto.randomUUID()}`;
+    }
+
+    const randomSegment = Math.random().toString(36).slice(2, 11);
+    return `error_${Date.now()}_${randomSegment}`;
   }
 
   /**
@@ -328,6 +386,233 @@ export class ErrorManager {
     }
   }
 
+  static buildDiagnostics(errorInfo, context, metadata) {
+    const environment = this.collectEnvironmentSnapshot();
+    const stackFrames = this.extractStackFrames(errorInfo.stack);
+    const debugHints = this.deriveDebugHints(errorInfo, context, metadata, environment);
+    const fingerprint = this.generateFingerprint(errorInfo, context, metadata, environment);
+
+    return {
+      fingerprint,
+      stackFrames,
+      environment,
+      debugHints,
+      relatedIdentifiers: this.collectRelatedIdentifiers(metadata)
+    };
+  }
+
+  static extractStackFrames(stack) {
+    if (!stack || typeof stack !== 'string') {
+      return [];
+    }
+
+    return stack
+      .split('\n')
+      .slice(1)
+      .map(line => line.trim())
+      .map((frame) => {
+        const stackRegex = /at (?:(?<functionName>[^\s]+)\s+)?\(?(?<file>[^:]+):(?<line>\d+):(?<column>\d+)\)?/;
+        const match = frame.match(stackRegex);
+        if (!match || !match.groups) {
+          return { raw: frame };
+        }
+
+        return {
+          functionName: match.groups.functionName || 'anonymous',
+          file: match.groups.file,
+          line: Number.parseInt(match.groups.line, 10),
+          column: Number.parseInt(match.groups.column, 10)
+        };
+      });
+  }
+
+  static collectEnvironmentSnapshot() {
+    try {
+      const { navigator = {}, location = {}, performance = {} } = GLOBAL_SCOPE;
+      const memory = navigator.deviceMemory ?? navigator.hardwareConcurrency;
+      const timing = performance?.timing || {};
+      const timezone = (() => {
+        try {
+          if (typeof Intl !== 'undefined' && typeof Intl.DateTimeFormat === 'function') {
+            return new Intl.DateTimeFormat().resolvedOptions().timeZone;
+          }
+        } catch (_) {
+          return undefined;
+        }
+        return undefined;
+      })();
+
+      return {
+        userAgent: navigator.userAgent,
+        language: navigator.language,
+        online: navigator.onLine,
+        platform: navigator.platform,
+        deviceMemory: memory,
+        timezone,
+        viewport: {
+          width: GLOBAL_SCOPE.innerWidth,
+          height: GLOBAL_SCOPE.innerHeight
+        },
+        location: location.href,
+        performance: {
+          navigationStart: timing.navigationStart,
+          domComplete: timing.domComplete,
+          firstPaint: performance?.getEntriesByName?.('first-paint')?.[0]?.startTime
+        }
+      };
+    } catch (error) {
+      if (process.env.NODE_ENV === 'development') {
+        console.warn('Failed to collect environment snapshot:', error);
+      }
+      return {};
+    }
+  }
+
+  static deriveDebugHints(errorInfo, context, metadata, environment) {
+    const hints = [];
+
+    if (errorInfo.cause) {
+      let causeDetail;
+      if (typeof errorInfo.cause === 'string') {
+        causeDetail = errorInfo.cause;
+      } else {
+        try {
+          causeDetail = JSON.stringify(errorInfo.cause);
+        } catch (err) {
+          causeDetail = `Cause available but could not be stringified (${err.message})`;
+        }
+      }
+
+      hints.push({
+        title: 'Root cause provided',
+        detail: causeDetail
+      });
+    }
+
+    if (metadata?.request) {
+      hints.push({
+        title: 'Network request context',
+        detail: `Request to ${metadata.request?.url || 'unknown URL'} failed with status ${metadata.request?.status ?? 'unknown'}`
+      });
+    }
+
+    switch (errorInfo.type) {
+      case ERROR_TYPES.NETWORK:
+        hints.push({
+          title: 'Connectivity check',
+          detail: environment.online === false
+            ? 'Navigator reports the client is offline.'
+            : 'Verify the network request payload and server availability.'
+        });
+        break;
+      case ERROR_TYPES.AUTH:
+        hints.push({
+          title: 'Authentication hint',
+          detail: 'Confirm that the session token is valid and has not expired.'
+        });
+        break;
+      case ERROR_TYPES.DATABASE:
+        hints.push({
+          title: 'Database hint',
+          detail: 'Check Supabase policies or stored procedures relevant to this operation.'
+        });
+        break;
+      case ERROR_TYPES.VALIDATION:
+        hints.push({
+          title: 'Validation hint',
+          detail: 'Compare the provided payload against the schema definition.'
+        });
+        break;
+      case ERROR_TYPES.RUNTIME:
+        hints.push({
+          title: 'Runtime hint',
+          detail: 'Inspect recent code changes for undefined variables or null references.'
+        });
+        break;
+      default:
+        break;
+    }
+
+    if (errorInfo.stack && metadata?.componentStack) {
+      hints.push({
+        title: 'React component stack',
+        detail: metadata.componentStack
+      });
+    }
+
+    return hints;
+  }
+
+  static generateFingerprint(errorInfo, context, metadata, environment) {
+    const source = {
+      type: errorInfo.type,
+      name: errorInfo.name,
+      message: errorInfo.message,
+      context,
+      metadata,
+      location: environment.location
+    };
+
+    return createHash(source);
+  }
+
+  static collectRelatedIdentifiers(metadata) {
+    const identifiers = new Set();
+
+    if (metadata?.userId) {
+      identifiers.add(metadata.userId);
+    }
+
+    if (metadata?.sessionId) {
+      identifiers.add(metadata.sessionId);
+    }
+
+    if (metadata?.request?.id) {
+      identifiers.add(metadata.request.id);
+    }
+
+    return Array.from(identifiers);
+  }
+
+  static buildAIContext({ formattedError, diagnostics }) {
+    const baseInfo = [
+      `Error ID: ${formattedError.id || 'unknown'}`,
+      `Type: ${formattedError.type}`,
+      `Severity: ${formattedError.severity}`,
+      `Context: ${formattedError.context}`,
+      `Message: ${formattedError.message}`
+    ];
+
+    if (formattedError.code) {
+      baseInfo.push(`Code: ${formattedError.code}`);
+    }
+
+    if (formattedError.status) {
+      baseInfo.push(`Status: ${formattedError.status}`);
+    }
+
+    if (diagnostics?.debugHints?.length) {
+      baseInfo.push('Hints:');
+      diagnostics.debugHints.forEach((hint, index) => {
+        baseInfo.push(`  ${index + 1}. ${hint.title} - ${hint.detail}`);
+      });
+    }
+
+    if (diagnostics?.stackFrames?.length) {
+      baseInfo.push('Top stack frame:');
+      const [topFrame] = diagnostics.stackFrames;
+      if (topFrame?.raw) {
+        baseInfo.push(`  ${topFrame.raw}`);
+      } else {
+        baseInfo.push(`  ${topFrame.functionName} at ${topFrame.file}:${topFrame.line}:${topFrame.column}`);
+      }
+    }
+
+    baseInfo.push(`Fingerprint: ${diagnostics?.fingerprint}`);
+
+    return baseInfo.join('\n');
+  }
+
   /**
    * * Sends error data to external error tracking service
    * @param {Object} logData - Error log data to send
@@ -335,6 +620,8 @@ export class ErrorManager {
    */
   static sendToErrorService(logData) {
     try {
+      const { navigator = {}, location = {} } = GLOBAL_SCOPE;
+
       const errorData = {
         message: logData.error.message,
         level: logData.error.severity,
@@ -342,7 +629,7 @@ export class ErrorManager {
         context: logData.context,
         metadata: logData.metadata,
         userAgent: navigator.userAgent,
-        url: window.location.href,
+        url: location.href,
         userId: this.getUserId(),
         sessionId: this.getSessionId(),
         buildVersion: process.env.REACT_APP_VERSION || '1.0.0'
@@ -368,11 +655,12 @@ export class ErrorManager {
    */
   static sendToSentry(errorData) {
     try {
-      if (window.Sentry && typeof window.Sentry.captureException === 'function') {
+      const sentry = GLOBAL_SCOPE.Sentry;
+      if (sentry && typeof sentry.captureException === 'function') {
         const error = new Error(errorData.message);
         error.name = errorData.context || 'ApplicationError';
 
-        window.Sentry.captureException(error, {
+        sentry.captureException(error, {
           tags: {
             context: errorData.context,
             level: errorData.level,
@@ -402,7 +690,8 @@ export class ErrorManager {
     try {
       const errorEndpoint = process.env.REACT_APP_ERROR_ENDPOINT;
       if (errorEndpoint) {
-        fetch(errorEndpoint, {
+        const fetchFn = GLOBAL_SCOPE.fetch || (typeof fetch === 'function' ? fetch : null);
+        fetchFn?.(errorEndpoint, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -427,9 +716,9 @@ export class ErrorManager {
    */
   static sendToConsole(errorData) {
     if (process.env.NODE_ENV === 'development') {
-      console.group('🚨 Error Tracking Service');
+      console.groupCollapsed('🚨 Error Tracking Service');
       console.log('Error Data:', errorData);
-      console.log('Sentry Available:', !!window.Sentry);
+      console.log('Sentry Available:', !!GLOBAL_SCOPE.Sentry);
       console.log('Custom Endpoint:', process.env.REACT_APP_ERROR_ENDPOINT || 'Not configured');
       console.groupEnd();
     }
@@ -442,13 +731,19 @@ export class ErrorManager {
    */
   static getSessionId() {
     try {
-      let sessionId = sessionStorage.getItem('errorSessionId');
+      const storage = GLOBAL_SCOPE.sessionStorage;
+      let sessionId = storage?.getItem('errorSessionId');
       if (!sessionId) {
-        sessionId = `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-        sessionStorage.setItem('errorSessionId', sessionId);
+        sessionId = GLOBAL_SCOPE.crypto?.randomUUID
+          ? `session_${GLOBAL_SCOPE.crypto.randomUUID()}`
+          : `session_${Date.now()}_${Math.random().toString(36).slice(2, 11)}`;
+        storage?.setItem('errorSessionId', sessionId);
       }
       return sessionId;
     } catch {
+      if (GLOBAL_SCOPE.crypto?.randomUUID) {
+        return `session_${GLOBAL_SCOPE.crypto.randomUUID()}`;
+      }
       return `session_${Date.now()}`;
     }
   }
@@ -460,7 +755,7 @@ export class ErrorManager {
    */
   static getUserId() {
     try {
-      return localStorage.getItem('catNamesUser') || null;
+      return GLOBAL_SCOPE.localStorage?.getItem('catNamesUser') ?? null;
     } catch {
       return null;
     }
@@ -512,7 +807,7 @@ export class ErrorManager {
           }
 
           // * Wait before retrying with exponential backoff and jitter
-          const exponentialDelay = baseDelay * Math.pow(backoffMultiplier, attempt - 1);
+          const exponentialDelay = baseDelay * backoffMultiplier ** (attempt - 1);
           const cappedDelay = Math.min(exponentialDelay, config.maxDelay);
           const jitterRange = cappedDelay * jitter;
           const jitterValue = (Math.random() - 0.5) * jitterRange;
@@ -606,8 +901,8 @@ export class ErrorManager {
    */
   static createResilientFunction(fn, options = {}) {
     const circuitBreaker = new this.CircuitBreaker(
-      options.failureThreshold || 5,
-      options.resetTimeout || 60000
+      options.failureThreshold ?? 5,
+      options.resetTimeout ?? 60000
     );
 
     return async (...args) => {
@@ -619,25 +914,36 @@ export class ErrorManager {
    * * Global error handler setup
    */
   static setupGlobalErrorHandling() {
+    if (!GLOBAL_SCOPE.addEventListener) {
+      return;
+    }
+
     // Handle unhandled promise rejections
-    window.addEventListener('unhandledrejection', (event) => {
+    const rejectionHandler = (event) => {
       event.preventDefault();
       this.handleError(event.reason, 'Unhandled Promise Rejection', {
         isRetryable: false,
         affectsUserData: false,
         isCritical: true
       });
-    });
+    };
+    GLOBAL_SCOPE.addEventListener('unhandledrejection', rejectionHandler);
 
     // Handle unhandled errors
-    window.addEventListener('error', (event) => {
+    const errorHandler = (event) => {
       event.preventDefault();
       this.handleError(event.error, 'Unhandled Error', {
         isRetryable: false,
         affectsUserData: false,
         isCritical: true
       });
-    });
+    };
+    GLOBAL_SCOPE.addEventListener('error', errorHandler);
+
+    return () => {
+      GLOBAL_SCOPE.removeEventListener?.('unhandledrejection', rejectionHandler);
+      GLOBAL_SCOPE.removeEventListener?.('error', errorHandler);
+    };
   }
 
   /**
@@ -678,7 +984,7 @@ export class ErrorManager {
       timestamp: new Date().toISOString(),
       retry: () => {
         if (errorInfo.isRetryable) {
-          window.location.reload();
+          GLOBAL_SCOPE.location?.reload?.();
         }
       }
     };

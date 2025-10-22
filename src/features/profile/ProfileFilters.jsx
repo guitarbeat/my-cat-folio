@@ -1,7 +1,8 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { FILTER_OPTIONS } from '../../core/constants';
-import styles from './ProfileFilters.module.css';
+import React from "react";
+import PropTypes from "prop-types";
+import { FILTER_OPTIONS } from "../../core/constants";
+import { Card, Select } from "../../shared/components";
+import styles from "./ProfileFilters.module.css";
 
 /**
  * @module ProfileFilters
@@ -19,11 +20,15 @@ const ProfileFilters = ({
   sortOrder,
   setSortOrder,
   isAdmin = false,
-  className = '',
+  className = "",
   // * New selection-based filter props
-  selectionFilter = 'all',
+  selectionFilter = "all",
   setSelectionFilter,
-  hasSelectionData = false
+  hasSelectionData = false,
+  // * Filter count and apply function
+  filteredCount = 0,
+  totalCount = 0,
+  onApplyFilters = null,
 }) => {
   const handleSortOrderToggle = () => {
     setSortOrder(
@@ -33,99 +38,111 @@ const ProfileFilters = ({
     );
   };
 
+  const statusOptions = [
+    { value: FILTER_OPTIONS.STATUS.ALL, label: "All Names" },
+    { value: FILTER_OPTIONS.STATUS.ACTIVE, label: "Active Only" },
+    { value: FILTER_OPTIONS.STATUS.HIDDEN, label: "Hidden Only" },
+  ];
+
+  const userOptions = [
+    { value: FILTER_OPTIONS.USER.ALL, label: "All Users" },
+    { value: FILTER_OPTIONS.USER.CURRENT, label: "Current User" },
+  ];
+
+  if (isAdmin) {
+    userOptions.push({
+      value: FILTER_OPTIONS.USER.OTHER,
+      label: "Other Users",
+    });
+  }
+
+  const selectionOptions = [
+    { value: "all", label: "All Names" },
+    { value: "selected", label: "Names I've Selected" },
+    { value: "never_selected", label: "Names I've Never Selected" },
+    { value: "frequently_selected", label: "Frequently Selected" },
+    { value: "recently_selected", label: "Recently Selected" },
+  ];
+
+  const sortOptions = [
+    { value: FILTER_OPTIONS.SORT.RATING, label: "Rating" },
+    { value: FILTER_OPTIONS.SORT.NAME, label: "Name" },
+    { value: FILTER_OPTIONS.SORT.WINS, label: "Wins" },
+    { value: FILTER_OPTIONS.SORT.LOSSES, label: "Losses" },
+    { value: FILTER_OPTIONS.SORT.WIN_RATE, label: "Win Rate" },
+    { value: FILTER_OPTIONS.SORT.CREATED, label: "Created Date" },
+  ];
+
+  if (hasSelectionData) {
+    sortOptions.push(
+      { value: "selection_count", label: "Selection Count" },
+      { value: "last_selected", label: "Last Selected" },
+      { value: "selection_frequency", label: "Selection Frequency" },
+      { value: "tournament_appearances", label: "Tournament Appearances" }
+    );
+  }
+
+  const containerClasses = [styles.container, className]
+    .filter(Boolean)
+    .join(" ");
+
   return (
-    <div className={`${styles.container} ${className}`}>
+    <Card className={containerClasses} shadow="medium">
       <h3 className={styles.sectionTitle}>Filters & Sorting</h3>
 
       <div className={styles.filtersGrid}>
         {/* * Status Filter */}
         <div className={styles.filterGroup}>
-          <label htmlFor="status-filter" className={styles.filterLabel}>
-            Status
-          </label>
-          <select
-            id="status-filter"
+          <Select
+            name="status"
+            label="Status"
             value={filterStatus}
             onChange={(e) => setFilterStatus(e.target.value)}
+            options={statusOptions}
             className={styles.filterSelect}
-          >
-            <option value={FILTER_OPTIONS.STATUS.ALL}>All Names</option>
-            <option value={FILTER_OPTIONS.STATUS.ACTIVE}>Active Only</option>
-            <option value={FILTER_OPTIONS.STATUS.HIDDEN}>Hidden Only</option>
-          </select>
+            placeholder=""
+          />
         </div>
 
         {/* * User Filter */}
         <div className={styles.filterGroup}>
-          <label htmlFor="user-filter" className={styles.filterLabel}>
-            User
-          </label>
-          <select
-            id="user-filter"
+          <Select
+            name="user"
+            label="User"
             value={userFilter}
             onChange={(e) => setUserFilter(e.target.value)}
+            options={userOptions}
             className={styles.filterSelect}
-          >
-            <option value={FILTER_OPTIONS.USER.ALL}>All Users</option>
-            <option value={FILTER_OPTIONS.USER.CURRENT}>Current User</option>
-            {isAdmin && (
-              <option value={FILTER_OPTIONS.USER.OTHER}>Other Users</option>
-            )}
-          </select>
+            placeholder=""
+          />
         </div>
 
         {/* * NEW: Selection Status Filter */}
         {hasSelectionData && (
           <div className={styles.filterGroup}>
-            <label htmlFor="selection-filter" className={styles.filterLabel}>
-              Selection Status
-            </label>
-            <select
-              id="selection-filter"
+            <Select
+              name="selection"
+              label="Selection Status"
               value={selectionFilter}
               onChange={(e) => setSelectionFilter(e.target.value)}
+              options={selectionOptions}
               className={styles.filterSelect}
-            >
-              <option value="all">All Names</option>
-              <option value="selected">Names I&apos;ve Selected</option>
-              <option value="never_selected">
-                Names I&apos;ve Never Selected
-              </option>
-              <option value="frequently_selected">Frequently Selected</option>
-              <option value="recently_selected">Recently Selected</option>
-            </select>
+              placeholder=""
+            />
           </div>
         )}
 
         {/* * Sort By - Enhanced with selection options */}
         <div className={styles.filterGroup}>
-          <label htmlFor="sort-by" className={styles.filterLabel}>
-            Sort By
-          </label>
-          <select
-            id="sort-by"
+          <Select
+            name="sort"
+            label="Sort By"
             value={sortBy}
             onChange={(e) => setSortBy(e.target.value)}
+            options={sortOptions}
             className={styles.filterSelect}
-          >
-            <option value={FILTER_OPTIONS.SORT.RATING}>Rating</option>
-            <option value={FILTER_OPTIONS.SORT.NAME}>Name</option>
-            <option value={FILTER_OPTIONS.SORT.WINS}>Wins</option>
-            <option value={FILTER_OPTIONS.SORT.LOSSES}>Losses</option>
-            <option value={FILTER_OPTIONS.SORT.WIN_RATE}>Win Rate</option>
-            <option value={FILTER_OPTIONS.SORT.CREATED}>Created Date</option>
-            {/* * NEW: Selection-based sort options */}
-            {hasSelectionData && (
-              <>
-                <option value="selection_count">Selection Count</option>
-                <option value="last_selected">Last Selected</option>
-                <option value="selection_frequency">Selection Frequency</option>
-                <option value="tournament_appearances">
-                  Tournament Appearances
-                </option>
-              </>
-            )}
-          </select>
+            placeholder=""
+          />
         </div>
 
         {/* * Sort Order Toggle */}
@@ -135,45 +152,75 @@ const ProfileFilters = ({
             type="button"
             onClick={handleSortOrderToggle}
             className={styles.sortOrderButton}
-            aria-label={`Sort ${sortOrder === FILTER_OPTIONS.ORDER.ASC ? 'ascending' : 'descending'}`}
+            aria-label={`Sort ${sortOrder === FILTER_OPTIONS.ORDER.ASC ? "ascending" : "descending"}`}
           >
             <span className={styles.sortOrderIcon}>
-              {sortOrder === FILTER_OPTIONS.ORDER.ASC ? '↑' : '↓'}
+              {sortOrder === FILTER_OPTIONS.ORDER.ASC ? "↑" : "↓"}
             </span>
             <span className={styles.sortOrderText}>
               {sortOrder === FILTER_OPTIONS.ORDER.ASC
-                ? 'Ascending'
-                : 'Descending'}
+                ? "Ascending"
+                : "Descending"}
             </span>
           </button>
         </div>
       </div>
 
-      {/* * Active Filters Display - Enhanced */}
-      <div className={styles.activeFilters}>
-        <span className={styles.activeFilterLabel}>Active Filters:</span>
-        <span className={styles.activeFilter}>
-          Status:{' '}
-          {filterStatus === FILTER_OPTIONS.STATUS.ALL ? 'All' : filterStatus}
-        </span>
-        <span className={styles.activeFilter}>
-          User: {userFilter === FILTER_OPTIONS.USER.ALL ? 'All' : userFilter}
-        </span>
-        {hasSelectionData && selectionFilter !== 'all' && (
+      {/* * Filter Results Display */}
+      <Card
+        className={styles.filterResults}
+        padding="small"
+        shadow="small"
+        background="glass"
+        as="section"
+        aria-label="Filter results summary"
+      >
+        <div className={styles.resultsBar}>
+          <div className={styles.resultsInfo}>
+            <span className={styles.resultsCount}>
+              Showing {filteredCount} of {totalCount} names
+            </span>
+            {filteredCount !== totalCount && (
+              <span className={styles.filteredIndicator}>(Filtered)</span>
+            )}
+          </div>
+          {onApplyFilters && (
+            <button
+              type="button"
+              className={styles.applyButton}
+              onClick={onApplyFilters}
+            >
+              Apply Filters
+            </button>
+          )}
+        </div>
+
+        {/* * Active Filters Display */}
+        <div className={styles.activeFiltersList}>
+          <span className={styles.activeFilterLabel}>Active:</span>
           <span className={styles.activeFilter}>
-            Selection:{' '}
-            {selectionFilter
-              .replace('_', ' ')
-              .replace(/\b\w/g, (l) => l.toUpperCase())}
+            Status:{" "}
+            {filterStatus === FILTER_OPTIONS.STATUS.ALL ? "All" : filterStatus}
           </span>
-        )}
-        <span className={styles.activeFilter}>
-          Sort:{' '}
-          {sortBy.replace('_', ' ').replace(/\b\w/g, (l) => l.toUpperCase())} (
-          {sortOrder})
-        </span>
-      </div>
-    </div>
+          <span className={styles.activeFilter}>
+            User: {userFilter === FILTER_OPTIONS.USER.ALL ? "All" : userFilter}
+          </span>
+          {hasSelectionData && selectionFilter !== "all" && (
+            <span className={styles.activeFilter}>
+              Selection:{" "}
+              {selectionFilter
+                .replace("_", " ")
+                .replace(/\b\w/g, (l) => l.toUpperCase())}
+            </span>
+          )}
+          <span className={styles.activeFilter}>
+            Sort:{" "}
+            {sortBy.replace("_", " ").replace(/\b\w/g, (l) => l.toUpperCase())}{" "}
+            ({sortOrder})
+          </span>
+        </div>
+      </Card>
+    </Card>
   );
 };
 
@@ -191,7 +238,11 @@ ProfileFilters.propTypes = {
   // * New props for selection-based filtering
   selectionFilter: PropTypes.string,
   setSelectionFilter: PropTypes.func,
-  hasSelectionData: PropTypes.bool
+  hasSelectionData: PropTypes.bool,
+  // * Filter count and apply function
+  filteredCount: PropTypes.number,
+  totalCount: PropTypes.number,
+  onApplyFilters: PropTypes.func,
 };
 
 export default ProfileFilters;

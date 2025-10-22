@@ -4,11 +4,64 @@
  * Combines all database operations, real-time subscriptions, and utility functions.
  */
 
-// Import the simple supabase client to avoid circular dependencies
-import { supabase } from './supabaseClientSimple.js';
+// * Import Supabase client directly to avoid TypeScript/JavaScript compatibility issues
+import { createClient } from '@supabase/supabase-js';
 
-// Re-export the supabase client
-export { supabase };
+// * Supabase configuration (isomorphic: works in browser and Node)
+const readFromViteEnv = (key) => {
+  try {
+    // Vite replaces import.meta.env at build time in the browser
+    // Guard access so Node does not error
+    // eslint-disable-next-line no-undef
+    return typeof import.meta !== 'undefined' && import.meta.env ? import.meta.env[key] : undefined;
+  } catch {
+    return undefined;
+  }
+};
+
+const SUPABASE_URL =
+  readFromViteEnv('SUPABASE_URL') ||
+  readFromViteEnv('VITE_SUPABASE_URL') ||
+  process.env.SUPABASE_URL ||
+  process.env.VITE_SUPABASE_URL;
+
+const SUPABASE_ANON_KEY =
+  readFromViteEnv('SUPABASE_ANON_KEY') ||
+  readFromViteEnv('VITE_SUPABASE_ANON_KEY') ||
+  process.env.SUPABASE_ANON_KEY ||
+  process.env.VITE_SUPABASE_ANON_KEY;
+
+let supabase = null;
+
+const resolveSupabaseClient = async () => {
+  if (supabase) {
+    return supabase;
+  }
+
+  console.log('🔧 Backend: Resolving Supabase client...');
+  console.log('   SUPABASE_URL:', SUPABASE_URL ? 'SET' : 'NOT SET');
+  console.log('   SUPABASE_ANON_KEY:', SUPABASE_ANON_KEY ? 'SET' : 'NOT SET');
+
+  if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
+    if (process.env.NODE_ENV === 'development') {
+      console.warn('Missing Supabase environment variables (SUPABASE_URL / SUPABASE_ANON_KEY). Supabase features are disabled.');
+    }
+    return null;
+  }
+
+  try {
+    console.log('   Creating Supabase client...');
+    supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    console.log('   ✅ Supabase client created successfully');
+    return supabase;
+  } catch (error) {
+    console.error('Failed to initialize Supabase client:', error);
+    return null;
+  }
+};
+
+export { supabase, resolveSupabaseClient };
+export const getSupabaseServiceClient = resolveSupabaseClient;
 
 // ===== HELPER FUNCTIONS =====
 
@@ -16,8 +69,9 @@ export { supabase };
  * Check if Supabase is configured and available
  * @returns {boolean} True if Supabase is available
  */
-const isSupabaseAvailable = () => {
-  if (!supabase) {
+const isSupabaseAvailable = async () => {
+  const client = await resolveSupabaseClient();
+  if (!client) {
     if (process.env.NODE_ENV === 'development') {
       console.warn('Supabase not configured. Some features may not work.');
     }
@@ -37,8 +91,138 @@ export const catNamesAPI = {
    */
   async getNamesWithDescriptions() {
     try {
-      if (!isSupabaseAvailable()) {
-        return [];
+      if (!(await isSupabaseAvailable())) {
+        console.warn('Supabase not available, using fallback names');
+        return [
+          {
+            id: 'aaron',
+            name: 'aaron',
+            description: 'temporary fallback — Supabase not configured',
+            avg_rating: 1500,
+            popularity_score: 0,
+            total_tournaments: 0,
+            is_active: true,
+            created_at: new Date().toISOString(),
+            updated_at: null,
+            user_rating: null,
+            user_wins: 0,
+            user_losses: 0,
+            isHidden: false,
+            has_user_rating: false
+          },
+          {
+            id: 'fix',
+            name: 'fix',
+            description: 'temporary fallback — Supabase not configured',
+            avg_rating: 1500,
+            popularity_score: 0,
+            total_tournaments: 0,
+            is_active: true,
+            created_at: new Date().toISOString(),
+            updated_at: null,
+            user_rating: null,
+            user_wins: 0,
+            user_losses: 0,
+            isHidden: false,
+            has_user_rating: false
+          },
+          {
+            id: 'the',
+            name: 'the',
+            description: 'temporary fallback — Supabase not configured',
+            avg_rating: 1500,
+            popularity_score: 0,
+            total_tournaments: 0,
+            is_active: true,
+            created_at: new Date().toISOString(),
+            updated_at: null,
+            user_rating: null,
+            user_wins: 0,
+            user_losses: 0,
+            isHidden: false,
+            has_user_rating: false
+          },
+          {
+            id: 'whiskers',
+            name: 'whiskers',
+            description: 'temporary fallback — Supabase not configured',
+            avg_rating: 1500,
+            popularity_score: 0,
+            total_tournaments: 0,
+            is_active: true,
+            created_at: new Date().toISOString(),
+            updated_at: null,
+            user_rating: null,
+            user_wins: 0,
+            user_losses: 0,
+            isHidden: false,
+            has_user_rating: false
+          },
+          {
+            id: 'shadow',
+            name: 'shadow',
+            description: 'temporary fallback — Supabase not configured',
+            avg_rating: 1500,
+            popularity_score: 0,
+            total_tournaments: 0,
+            is_active: true,
+            created_at: new Date().toISOString(),
+            updated_at: null,
+            user_rating: null,
+            user_wins: 0,
+            user_losses: 0,
+            isHidden: false,
+            has_user_rating: false
+          },
+          {
+            id: 'luna',
+            name: 'luna',
+            description: 'temporary fallback — Supabase not configured',
+            avg_rating: 1500,
+            popularity_score: 0,
+            total_tournaments: 0,
+            is_active: true,
+            created_at: new Date().toISOString(),
+            updated_at: null,
+            user_rating: null,
+            user_wins: 0,
+            user_losses: 0,
+            isHidden: false,
+            has_user_rating: false
+          },
+          {
+            id: 'felix',
+            name: 'felix',
+            description: 'temporary fallback — Supabase not configured',
+            avg_rating: 1500,
+            popularity_score: 0,
+            total_tournaments: 0,
+            is_active: true,
+            created_at: new Date().toISOString(),
+            updated_at: null,
+            user_rating: null,
+            user_wins: 0,
+            user_losses: 0,
+            isHidden: false,
+            has_user_rating: false
+          },
+          {
+            id: 'milo',
+            name: 'milo',
+            description: 'temporary fallback — Supabase not configured',
+            avg_rating: 1500,
+            popularity_score: 0,
+            total_tournaments: 0,
+            is_active: true,
+            created_at: new Date().toISOString(),
+            updated_at: null,
+            user_rating: null,
+            user_wins: 0,
+            user_losses: 0,
+            isHidden: false,
+            has_user_rating: false
+          }
+        ];
       }
 
       // Get ALL hidden name IDs globally (not user-specific)
@@ -66,8 +250,8 @@ export const catNamesAPI = {
         total_tournaments,
         is_active
       `)
-      .eq('is_active', true)  // Add this to use partial index
-      .order('avg_rating', { ascending: false }); // Order uses index
+        .eq('is_active', true)  // Add this to use partial index
+        .order('avg_rating', { ascending: false }); // Order uses index
 
       // Filter out ALL hidden names globally
       if (hiddenIds.length > 0) {
@@ -77,8 +261,157 @@ export const catNamesAPI = {
       const { data, error } = await query;
       if (error) {
         console.error('Error fetching names with descriptions:', error);
+        console.error('Query details:', {
+          table: 'cat_name_options',
+          filter: 'is_active = true',
+          hiddenIds: hiddenIds.length,
+          errorCode: error.code,
+          errorMessage: error.message
+        });
         return [];
       }
+
+      console.log('Names query result:', {
+        totalNames: data?.length || 0,
+        hiddenNames: hiddenIds.length,
+        hasActiveNames: data?.some(name => name.is_active) || false
+      });
+
+      // * If no active names found, return fallback names
+      if (!data || data.length === 0) {
+        console.warn('No active names found in database, using fallback names');
+        return [
+          {
+            id: 'aaron',
+            name: 'aaron',
+            description: 'temporary fallback — no active names in database',
+            avg_rating: 1500,
+            popularity_score: 0,
+            total_tournaments: 0,
+            is_active: true,
+            created_at: new Date().toISOString(),
+            updated_at: null,
+            user_rating: null,
+            user_wins: 0,
+            user_losses: 0,
+            isHidden: false,
+            has_user_rating: false
+          },
+          {
+            id: 'fix',
+            name: 'fix',
+            description: 'temporary fallback — no active names in database',
+            avg_rating: 1500,
+            popularity_score: 0,
+            total_tournaments: 0,
+            is_active: true,
+            created_at: new Date().toISOString(),
+            updated_at: null,
+            user_rating: null,
+            user_wins: 0,
+            user_losses: 0,
+            isHidden: false,
+            has_user_rating: false
+          },
+          {
+            id: 'the',
+            name: 'the',
+            description: 'temporary fallback — no active names in database',
+            avg_rating: 1500,
+            popularity_score: 0,
+            total_tournaments: 0,
+            is_active: true,
+            created_at: new Date().toISOString(),
+            updated_at: null,
+            user_rating: null,
+            user_wins: 0,
+            user_losses: 0,
+            isHidden: false,
+            has_user_rating: false
+          },
+          {
+            id: 'whiskers',
+            name: 'whiskers',
+            description: 'temporary fallback — no active names in database',
+            avg_rating: 1500,
+            popularity_score: 0,
+            total_tournaments: 0,
+            is_active: true,
+            created_at: new Date().toISOString(),
+            updated_at: null,
+            user_rating: null,
+            user_wins: 0,
+            user_losses: 0,
+            isHidden: false,
+            has_user_rating: false
+          },
+          {
+            id: 'shadow',
+            name: 'shadow',
+            description: 'temporary fallback — no active names in database',
+            avg_rating: 1500,
+            popularity_score: 0,
+            total_tournaments: 0,
+            is_active: true,
+            created_at: new Date().toISOString(),
+            updated_at: null,
+            user_rating: null,
+            user_wins: 0,
+            user_losses: 0,
+            isHidden: false,
+            has_user_rating: false
+          },
+          {
+            id: 'luna',
+            name: 'luna',
+            description: 'temporary fallback — no active names in database',
+            avg_rating: 1500,
+            popularity_score: 0,
+            total_tournaments: 0,
+            is_active: true,
+            created_at: new Date().toISOString(),
+            updated_at: null,
+            user_rating: null,
+            user_wins: 0,
+            user_losses: 0,
+            isHidden: false,
+            has_user_rating: false
+          },
+          {
+            id: 'felix',
+            name: 'felix',
+            description: 'temporary fallback — no active names in database',
+            avg_rating: 1500,
+            popularity_score: 0,
+            total_tournaments: 0,
+            is_active: true,
+            created_at: new Date().toISOString(),
+            updated_at: null,
+            user_rating: null,
+            user_wins: 0,
+            user_losses: 0,
+            isHidden: false,
+            has_user_rating: false
+          },
+          {
+            id: 'milo',
+            name: 'milo',
+            description: 'temporary fallback — no active names in database',
+            avg_rating: 1500,
+            popularity_score: 0,
+            total_tournaments: 0,
+            is_active: true,
+            created_at: new Date().toISOString(),
+            updated_at: null,
+            user_rating: null,
+            user_wins: 0,
+            user_losses: 0,
+            isHidden: false,
+            has_user_rating: false
+          }
+        ];
+      }
+
       // Process data to include default values (no user-specific data in this view)
       return (
         (data || []).map((item) => ({
@@ -104,7 +437,7 @@ export const catNamesAPI = {
    */
   async addName(name, description = '') {
     try {
-      if (!isSupabaseAvailable()) {
+      if (!(await isSupabaseAvailable())) {
         return { success: false, error: 'Supabase not configured' };
       }
 
@@ -135,7 +468,7 @@ export const catNamesAPI = {
    */
   async removeName(name) {
     try {
-      if (!isSupabaseAvailable()) {
+      if (!(await isSupabaseAvailable())) {
         return { success: false, error: 'Supabase not configured' };
       }
 
@@ -168,7 +501,7 @@ export const catNamesAPI = {
    */
   async getLeaderboard(limit = 50, categoryId = null, minTournaments = 3) {
     try {
-      if (!isSupabaseAvailable()) {
+      if (!(await isSupabaseAvailable())) {
         return [];
       }
 
@@ -184,7 +517,7 @@ export const catNamesAPI = {
           p_category: categoryId,
           p_limit: limit
         });
-        
+
         if (categoryError) {
           console.error('Error fetching category leaderboard:', categoryError);
           return [];
@@ -214,7 +547,7 @@ export const catNamesAPI = {
    */
   async getUserStats(userName) {
     try {
-      if (!isSupabaseAvailable()) {
+      if (!(await isSupabaseAvailable())) {
         return null;
       }
 
@@ -236,11 +569,208 @@ export const catNamesAPI = {
   },
 
   /**
+   * Get all names with user-specific ratings and statistics
+   */
+  async getNamesWithUserRatings(userName) {
+    try {
+      if (!(await isSupabaseAvailable())) {
+        console.warn('Supabase not available, using fallback names');
+        return [
+          {
+            id: 'aaron',
+            name: 'aaron',
+            description: 'temporary fallback — Supabase not configured',
+            avg_rating: 1500,
+            popularity_score: 0,
+            total_tournaments: 0,
+            is_active: true,
+            created_at: new Date().toISOString(),
+            updated_at: null,
+            user_rating: null,
+            user_wins: 0,
+            user_losses: 0,
+            isHidden: false,
+            has_user_rating: false
+          }
+        ];
+      }
+
+      // Get all names with user-specific ratings
+      const { data, error } = await supabase
+        .from('cat_name_options')
+        .select(`
+          id,
+          name,
+          description,
+          created_at,
+          avg_rating,
+          popularity_score,
+          total_tournaments,
+          is_active,
+          cat_name_ratings!left (
+            user_name,
+            rating,
+            wins,
+            losses,
+            is_hidden,
+            updated_at
+          )
+        `)
+        .eq('is_active', true)
+        .order('name');
+
+      if (error) {
+        console.error('Error fetching names with user ratings:', error);
+        return [];
+      }
+
+      // Process data to include user-specific ratings
+      return data?.map((item) => {
+        // * Find user-specific rating data (including hidden status)
+        const userRating = item.cat_name_ratings?.find(r => r.user_name === userName);
+
+        // * Check if name is hidden for this user (even without a rating)
+        const isHidden = userRating?.is_hidden === true;
+
+        // * Debug logging for hidden names
+        if (process.env.NODE_ENV === 'development' && isHidden) {
+          console.log(`🔍 Found hidden name: ${item.name} (${item.id}) for user: ${userName}`, {
+            userRating,
+            isHidden,
+            allRatings: item.cat_name_ratings
+          });
+        }
+
+        return {
+          ...item,
+          user_rating: userRating?.rating || null,
+          user_wins: userRating?.wins || 0,
+          user_losses: userRating?.losses || 0,
+          isHidden: isHidden,
+          updated_at: userRating?.updated_at || null,
+          has_user_rating: !!userRating?.rating
+        };
+      }) || [];
+    } catch (error) {
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Error fetching names with user ratings:', error);
+      }
+      return [];
+    }
+  },
+
+  /**
+   * Get meaningful user statistics for profile page
+   */
+  async getUserStats(userName) {
+    try {
+      if (!(await isSupabaseAvailable())) {
+        return {
+          names_rated: 0,
+          active_ratings: 0,
+          hidden_ratings: 0,
+          avg_rating_given: 0,
+          min_rating_given: 0,
+          max_rating_given: 0,
+          high_ratings: 0,
+          low_ratings: 0,
+          total_selections: 0,
+          tournaments_participated: 0,
+          unique_names_selected: 0,
+          most_selected_name: "None",
+          first_selection: null,
+          last_selection: null
+        };
+      }
+
+      // Get user rating statistics
+      const { data: ratingStats, error: ratingError } = await supabase
+        .from('cat_name_ratings')
+        .select('rating, is_hidden')
+        .eq('user_name', userName);
+
+      if (ratingError) {
+        console.error('Error fetching user rating stats:', ratingError);
+        return null;
+      }
+
+      // Get tournament selection statistics
+      const { data: selectionStats, error: selectionError } = await supabase
+        .from('tournament_selections')
+        .select('name_id, tournament_id, selected_at, name')
+        .eq('user_name', userName);
+
+      if (selectionError) {
+        console.error('Error fetching selection stats:', selectionError);
+        return null;
+      }
+
+      // Calculate rating statistics
+      const ratings = ratingStats || [];
+      const activeRatings = ratings.filter(r => !r.is_hidden);
+      const hiddenRatings = ratings.filter(r => r.is_hidden);
+      const ratingValues = ratings.map(r => r.rating).filter(r => r != null);
+
+      const avgRating = ratingValues.length > 0
+        ? ratingValues.reduce((sum, r) => sum + r, 0) / ratingValues.length
+        : 0;
+
+      const minRating = ratingValues.length > 0 ? Math.min(...ratingValues) : 0;
+      const maxRating = ratingValues.length > 0 ? Math.max(...ratingValues) : 0;
+      const highRatings = ratingValues.filter(r => r >= 1500).length;
+      const lowRatings = ratingValues.filter(r => r < 1000).length;
+
+      // Calculate selection statistics
+      const selections = selectionStats || [];
+      const uniqueTournaments = new Set(selections.map(s => s.tournament_id)).size;
+      const uniqueNames = new Set(selections.map(s => s.name_id)).size;
+
+      // Find most selected name
+      const nameCounts = {};
+      selections.forEach(s => {
+        nameCounts[s.name] = (nameCounts[s.name] || 0) + 1;
+      });
+      const mostSelected = Object.keys(nameCounts).length > 0
+        ? Object.entries(nameCounts).reduce((a, b) => a[1] > b[1] ? a : b)[0]
+        : "None";
+
+      const firstSelection = selections.length > 0
+        ? Math.min(...selections.map(s => new Date(s.selected_at).getTime()))
+        : null;
+      const lastSelection = selections.length > 0
+        ? Math.max(...selections.map(s => new Date(s.selected_at).getTime()))
+        : null;
+
+      return {
+        names_rated: ratings.length,
+        active_ratings: activeRatings.length,
+        hidden_ratings: hiddenRatings.length,
+        avg_rating_given: avgRating,
+        min_rating_given: minRating,
+        max_rating_given: maxRating,
+        high_ratings: highRatings,
+        low_ratings: lowRatings,
+        total_selections: selections.length,
+        tournaments_participated: uniqueTournaments,
+        unique_names_selected: uniqueNames,
+        most_selected_name: mostSelected,
+        first_selection: firstSelection ? new Date(firstSelection).toISOString() : null,
+        last_selection: lastSelection ? new Date(lastSelection).toISOString() : null
+      };
+    } catch (error) {
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Error fetching user stats:', error);
+      }
+      return null;
+    }
+  },
+
+  /**
    * Get Aaron's top names with his ratings
    */
   async getAaronsTopNames(limit = 10) {
     try {
-      if (!isSupabaseAvailable()) {
+      if (!(await isSupabaseAvailable())) {
         return [];
       }
 
@@ -310,7 +840,7 @@ export const ratingsAPI = {
     const now = new Date().toISOString();
 
     try {
-      if (!isSupabaseAvailable()) {
+      if (!(await isSupabaseAvailable())) {
         return { success: false, error: 'Supabase not configured' };
       }
 
@@ -389,7 +919,7 @@ export const ratingsAPI = {
    */
   async getRatingHistory(userName, nameId = null, limit = 20) {
     try {
-      if (!isSupabaseAvailable()) {
+      if (!(await isSupabaseAvailable())) {
         return [];
       }
 
@@ -437,7 +967,7 @@ export const ratingsAPI = {
     context = 'manual'
   ) {
     try {
-      if (!isSupabaseAvailable()) {
+      if (!(await isSupabaseAvailable())) {
         return { success: false, error: 'Supabase not configured' };
       }
 
@@ -506,7 +1036,7 @@ export const hiddenNamesAPI = {
    */
   async hideName(userName, nameId) {
     try {
-      if (!isSupabaseAvailable()) {
+      if (!(await isSupabaseAvailable())) {
         return { success: false, error: 'Supabase not configured' };
       }
 
@@ -554,7 +1084,7 @@ export const hiddenNamesAPI = {
    */
   async unhideName(userName, nameId) {
     try {
-      if (!isSupabaseAvailable()) {
+      if (!(await isSupabaseAvailable())) {
         return { success: false, error: 'Supabase not configured' };
       }
 
@@ -580,7 +1110,7 @@ export const hiddenNamesAPI = {
    */
   async hideNames(userName, nameIds) {
     try {
-      if (!isSupabaseAvailable()) {
+      if (!(await isSupabaseAvailable())) {
         return { success: false, error: 'Supabase not configured' };
       }
 
@@ -615,7 +1145,7 @@ export const hiddenNamesAPI = {
    */
   async unhideNames(userName, nameIds) {
     try {
-      if (!isSupabaseAvailable()) {
+      if (!(await isSupabaseAvailable())) {
         return { success: false, error: 'Supabase not configured' };
       }
 
@@ -650,7 +1180,7 @@ export const hiddenNamesAPI = {
    */
   async getHiddenNames(userName) {
     try {
-      if (!isSupabaseAvailable()) {
+      if (!(await isSupabaseAvailable())) {
         return [];
       }
 
@@ -695,7 +1225,7 @@ export const tournamentsAPI = {
     tournamentData = {}
   ) {
     try {
-      if (!isSupabaseAvailable()) {
+      if (!(await isSupabaseAvailable())) {
         return { success: false, error: 'Supabase not configured' };
       }
 
@@ -798,7 +1328,7 @@ export const tournamentsAPI = {
    */
   async updateTournamentStatus(tournamentId, status) {
     try {
-      if (!isSupabaseAvailable()) {
+      if (!(await isSupabaseAvailable())) {
         return { success: false, error: 'Supabase not configured' };
       }
 
@@ -884,7 +1414,7 @@ export const tournamentsAPI = {
    */
   async getUserTournaments(userName, status = null) {
     try {
-      if (!isSupabaseAvailable()) {
+      if (!(await isSupabaseAvailable())) {
         return [];
       }
 
@@ -936,7 +1466,7 @@ export const tournamentsAPI = {
    */
   async saveTournamentSelections(userName, selectedNames, tournamentId = null) {
     try {
-      if (!isSupabaseAvailable()) {
+      if (!(await isSupabaseAvailable())) {
         return { success: false, error: 'Supabase not configured' };
       }
 
@@ -1052,7 +1582,7 @@ export const tournamentsAPI = {
    */
   async createTournamentSelectionsTable() {
     try {
-      if (!isSupabaseAvailable()) {
+      if (!(await isSupabaseAvailable())) {
         return { success: false, error: 'Supabase not configured' };
       }
 
@@ -1085,7 +1615,7 @@ export const tournamentsAPI = {
    */
   async getTournamentSelectionHistory(userName, limit = 50) {
     try {
-      if (!isSupabaseAvailable()) {
+      if (!(await isSupabaseAvailable())) {
         return [];
       }
 
@@ -1128,7 +1658,7 @@ export const tournamentsAPI = {
    */
   async getPopularTournamentNames(limit = 20) {
     try {
-      if (!isSupabaseAvailable()) {
+      if (!(await isSupabaseAvailable())) {
         return [];
       }
 
@@ -1173,7 +1703,7 @@ export const tournamentsAPI = {
    */
   async getPersonalizedRecommendations(userName, limit = 10) {
     try {
-      if (!isSupabaseAvailable()) {
+      if (!(await isSupabaseAvailable())) {
         return [];
       }
 
@@ -1205,7 +1735,7 @@ export const tournamentsAPI = {
    */
   async getSelectionDashboard() {
     try {
-      if (!isSupabaseAvailable()) {
+      if (!(await isSupabaseAvailable())) {
         return null;
       }
 
@@ -1235,7 +1765,7 @@ export const tournamentsAPI = {
    */
   async getPopularNamesBySelections(limit = 20) {
     try {
-      if (!isSupabaseAvailable()) {
+      if (!(await isSupabaseAvailable())) {
         return [];
       }
 
@@ -1268,7 +1798,7 @@ export const userPreferencesAPI = {
    */
   async getPreferences(userName) {
     try {
-      if (!isSupabaseAvailable()) {
+      if (!(await isSupabaseAvailable())) {
         return {
           user_name: userName,
           preferred_categories: [],
@@ -1336,7 +1866,7 @@ export const userPreferencesAPI = {
    */
   async updatePreferences(userName, preferences) {
     try {
-      if (!isSupabaseAvailable()) {
+      if (!(await isSupabaseAvailable())) {
         return preferences;
       }
 
@@ -1386,7 +1916,7 @@ export const categoriesAPI = {
    */
   async getCategories() {
     try {
-      if (!isSupabaseAvailable()) {
+      if (!(await isSupabaseAvailable())) {
         return [];
       }
 
@@ -1411,7 +1941,7 @@ export const categoriesAPI = {
    */
   async getNamesByCategory(categoryId, limit = 100) {
     try {
-      if (!isSupabaseAvailable()) {
+      if (!(await isSupabaseAvailable())) {
         return [];
       }
 
@@ -1450,7 +1980,7 @@ export const ensureRatingHistoryTable = async () => {
  */
 export const deleteName = async (nameId) => {
   try {
-    if (!isSupabaseAvailable()) {
+    if (!(await isSupabaseAvailable())) {
       return { success: false, error: 'Supabase not configured' };
     }
 
@@ -1509,7 +2039,7 @@ export const imagesAPI = {
    */
   async list(prefix = '', limit = 1000) {
     try {
-      if (!isSupabaseAvailable()) {
+      if (!(await isSupabaseAvailable())) {
         return [];
       }
 
@@ -1569,7 +2099,7 @@ export const imagesAPI = {
    * Upload an image file to the `cat-images` bucket. Returns public URL.
    */
   async upload(file, _userName = 'anon', prefix = '') {
-    if (!isSupabaseAvailable()) {
+    if (!(await isSupabaseAvailable())) {
       throw new Error('Supabase not configured');
     }
 
@@ -1595,7 +2125,7 @@ export const adminAPI = {
    */
   async refreshMaterializedViews() {
     try {
-      if (!isSupabaseAvailable()) {
+      if (!(await isSupabaseAvailable())) {
         return { success: false, error: 'Supabase not available' };
       }
 
@@ -1618,6 +2148,8 @@ export const adminAPI = {
 
 // Keep these for existing code that might still use them
 export const getNamesWithDescriptions = catNamesAPI.getNamesWithDescriptions;
+export const getNamesWithUserRatings = catNamesAPI.getNamesWithUserRatings;
+export const getUserStats = catNamesAPI.getUserStats;
 export const addRatingHistory = ratingsAPI.addRatingHistory;
 export const updateRating = ratingsAPI.updateRating;
 export const getRatingHistory = ratingsAPI.getRatingHistory;

@@ -1,4 +1,4 @@
-import { supabase } from '../../../backend/api/supabaseClientIsolated';
+import { resolveSupabaseClient } from '@/integrations/supabase/client';
 
 /**
  * @module TournamentService
@@ -80,7 +80,9 @@ export class TournamentService {
         // * For values near 0 (both/none), we don't update wins/losses
       });
 
-      if (!supabase) {
+      const supabaseClient = await resolveSupabaseClient();
+
+      if (!supabaseClient) {
         const updatedRatings = { ...existingRatings };
         Object.entries(tournamentResults).forEach(([name, results]) => {
           const finalRating = ratingMap.get(name) ?? 1500;
@@ -95,7 +97,7 @@ export class TournamentService {
       }
 
       // * Get name_ids from cat_name_options table
-      const { data: nameOptions, error: nameError } = await supabase
+      const { data: nameOptions, error: nameError } = await supabaseClient
         .from('cat_name_options')
         .select('id, name')
         .in('name', Object.keys(tournamentResults));
@@ -173,7 +175,9 @@ export class TournamentService {
    */
   static async updateRatings(adjustedRatings, userName) {
     try {
-      if (!supabase) {
+      const supabaseClient = await resolveSupabaseClient();
+
+      if (!supabaseClient) {
         return adjustedRatings.reduce(
           (acc, { name, rating, wins = 0, losses = 0 }) => {
             acc[name] = {
@@ -192,8 +196,8 @@ export class TournamentService {
         (acc, { name, rating, wins = 0, losses = 0 }) => {
           acc[name] = {
             rating: Math.round(rating),
-            wins: wins,
-            losses: losses
+            wins,
+            losses
           };
           return acc;
         },
@@ -201,7 +205,7 @@ export class TournamentService {
       );
 
       // * Get name_ids in a single query
-      const { data: nameOptions, error: nameError } = await supabase
+      const { data: nameOptions, error: nameError } = await supabaseClient
         .from('cat_name_options')
         .select('id, name')
         .in('name', Object.keys(updatedRatings));
@@ -239,7 +243,13 @@ export class TournamentService {
       throw new Error('No valid records to update');
     }
 
-    const { error: upsertError } = await supabase
+    const supabaseClient = await resolveSupabaseClient();
+
+    if (!supabaseClient) {
+      throw new Error('Supabase client is not configured');
+    }
+
+    const { error: upsertError } = await supabaseClient
       .from('cat_name_ratings')
       .upsert(recordsToUpsert, {
         onConflict: 'user_name,name_id',
@@ -257,13 +267,15 @@ export class TournamentService {
    */
   static async generateCatName() {
     try {
+      const supabaseClient = await resolveSupabaseClient();
+
       // If Supabase is not available, return a default name with Woods
-      if (!supabase) {
+      if (!supabaseClient) {
         return 'Mystery Cat Woods';
       }
 
       // First get all names from cat_name_options
-      const { data: allNames, error: namesError } = await supabase
+      const { data: allNames, error: namesError } = await supabaseClient
         .from('cat_name_options')
         .select('id, name')
         .order('name');
@@ -277,7 +289,7 @@ export class TournamentService {
       }
 
       // Get hidden name IDs
-      const { data: hiddenData, error: hiddenError } = await supabase
+      const { data: hiddenData, error: hiddenError } = await supabaseClient
         .from('cat_name_ratings')
         .select('name_id')
         .eq('is_hidden', true);
@@ -296,7 +308,7 @@ export class TournamentService {
       }
 
       // Get ratings for visible names
-      const { data: ratingsData, error: ratingsError } = await supabase
+      const { data: ratingsData, error: ratingsError } = await supabaseClient
         .from('cat_name_ratings')
         .select(
           `
@@ -346,8 +358,14 @@ export class TournamentService {
    */
   static async getCatNameStats() {
     try {
+      const supabaseClient = await resolveSupabaseClient();
+
+      if (!supabaseClient) {
+        return [];
+      }
+
       // First get all names from cat_name_options
-      const { data: allNames, error: namesError } = await supabase
+      const { data: allNames, error: namesError } = await supabaseClient
         .from('cat_name_options')
         .select('id, name, description, categories')
         .order('name');
@@ -361,7 +379,7 @@ export class TournamentService {
       }
 
       // Get hidden name IDs
-      const { data: hiddenData, error: hiddenError } = await supabase
+      const { data: hiddenData, error: hiddenError } = await supabaseClient
         .from('cat_name_ratings')
         .select('name_id')
         .eq('is_hidden', true);
@@ -380,7 +398,7 @@ export class TournamentService {
       }
 
       // Get ratings for visible names (no JOIN to avoid duplicates)
-      const { data: ratingsData, error: ratingsError } = await supabase
+      const { data: ratingsData, error: ratingsError } = await supabaseClient
         .from('cat_name_ratings')
         .select('name_id, rating, wins, losses')
         .in('name_id', visibleNames.map((n) => n.id))

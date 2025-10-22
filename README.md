@@ -77,7 +77,7 @@ npm run dev
 
 - **Frontend**: React 19 + Vite + CSS Modules
 - **Backend**: Supabase (PostgreSQL + Auth)
-- **State**: Zustand + Immer
+- **State**: Zustand
 - **Testing**: Vitest + React Testing Library
 - **Deployment**: Vercel with edge computing
 - **Performance**: Code splitting, lazy loading, compression
@@ -170,6 +170,9 @@ const {
 # Run all tests
 npm run test
 
+# Run a specific test file (Jest-compatible flag supported)
+npm run test -- --runTestsByPath src/App.test.jsx
+
 # Run tests with coverage
 npm run test:coverage
 
@@ -200,9 +203,12 @@ npm run test:watch
 ### **Environment Variables**
 
 ```bash
-# Required for Supabase integration
-VITE_SUPABASE_URL=https://your-project.supabase.co
-VITE_SUPABASE_ANON_KEY=your-anon-key
+# Required for Supabase integration (supports both prefixes)
+SUPABASE_URL=https://your-project.supabase.co
+SUPABASE_ANON_KEY=your-anon-key
+# Legacy Vite-prefixed variables are still supported for local development:
+# VITE_SUPABASE_URL=...
+# VITE_SUPABASE_ANON_KEY=...
 ```
 
 ### **Build Commands**
@@ -210,7 +216,7 @@ VITE_SUPABASE_ANON_KEY=your-anon-key
 ```bash
 npm run build    # Production build
 npm run preview  # Preview production build
-npm run deploy   # Deploy to Vercel
+npx vercel --prod  # Deploy to Vercel (requires Vercel CLI login)
 ```
 
 ---

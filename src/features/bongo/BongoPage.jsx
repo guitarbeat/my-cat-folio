@@ -1,7 +1,7 @@
 /**
  * @module BongoPage
  * @description Hidden page featuring the BongoCat component - only accessible via /bongo route
- * 
+ *
  * NOTE: This page is intentionally hidden and has no navigation links.
  * Users must manually type "/bongo" in the URL to access this page.
  * This is a secret feature for cat lovers who discover the URL!
@@ -57,7 +57,7 @@ function BongoPage({ isLoggedIn, userName }) {
           <p className={styles.instructions}>
             Click around the page to see the bongo cat in action!
           </p>
-          
+
           {/* BongoCat component */}
           <div className={styles.bongoContainer}>
             <BongoCat
@@ -75,7 +75,7 @@ function BongoPage({ isLoggedIn, userName }) {
             <li>This page is only accessible via the /bongo route</li>
             <li>It features the interactive BongoCat component</li>
             <li>The cat responds to user interactions and clicks</li>
-            <li>It's a fun hidden feature for cat lovers!</li>
+            <li>It&apos;s a fun hidden feature for cat lovers!</li>
           </ul>
         </div>
 

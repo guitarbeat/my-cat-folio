@@ -2,7 +2,6 @@ import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { PreferenceSorter } from '../../features/tournament/PreferenceSorter';
 import EloRating from '../../features/tournament/EloRating';
 import useLocalStorage from './useLocalStorage';
-import useUserSession from './useUserSession';
 import useAppStore from '../store/useAppStore';
 import {
   computeRating,
@@ -26,7 +25,7 @@ export function useTournament({
 }) {
   // Single Elo instance
   const elo = useMemo(() => new EloRating(), []);
-  const { userName } = useUserSession();
+  const userName = useAppStore((state) => state.user.name);
 
   // * Tournament state management
   const [tournamentState, setTournamentState] = useState({
@@ -48,6 +47,7 @@ export function useTournament({
 
   // * Destructure state for easier access
   const {
+    currentMatch,
     isTransitioning,
     sorter
   } = tournamentState;
@@ -82,10 +82,9 @@ export function useTournament({
   });
 
   // * Get persistent state values for backward compatibility
-  const currentMatch = persistentState.currentMatch;
   const roundNumber = persistentState.currentRound;
   const currentMatchNumber = persistentState.currentMatch;
-  const totalMatches = persistentState.totalMatches;
+  const {totalMatches} = persistentState;
   const canUndo = persistentState.matchHistory.length > 1;
   const isError = false; // * Error state is now managed by store
 
@@ -163,8 +162,7 @@ export function useTournament({
       if (first) {
         updateTournamentState({ currentMatch: first });
       } else {
-        const left = names[0];
-        const right = names[1];
+        const [left, right] = names;
         updateTournamentState({ currentMatch: { left, right } });
       }
     }
@@ -681,7 +679,7 @@ function getNextMatch(names, sorter, _matchNumber, options = {}) {
       if (nextMatch) {
         const leftName = names.find((n) => n.name === nextMatch.left);
         const rightName = names.find((n) => n.name === nextMatch.right);
-        
+
         return {
           left: leftName || { name: nextMatch.left, id: nextMatch.left },
           right: rightName || { name: nextMatch.right, id: nextMatch.right }

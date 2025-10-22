@@ -14,7 +14,7 @@ import { useState, useCallback, useRef } from 'react';
  * @returns {Object} Toast management utilities and state
  */
 export const useToast = (options = {}) => {
-  const { maxToasts = 5, defaultDuration = 5000 } = options;
+  const { maxToasts = 5, defaultDuration = 2500 } = options;
 
   const [toasts, setToasts] = useState([]);
   const toastIdCounter = useRef(0);
