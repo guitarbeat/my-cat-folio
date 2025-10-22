@@ -34,6 +34,7 @@ export default defineConfig(({ mode }) => {
   }
 
   return {
+    base: '/', // * Explicit base path for Vercel deployment
     plugins: [
       react(),
       

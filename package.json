@@ -4,7 +4,6 @@
   "description": "A React application for managing cat names and related data",
   "type": "module",
   "main": "index.js",
-  "homepage": ".",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/guitarbeat/name-nosferatu.git"
