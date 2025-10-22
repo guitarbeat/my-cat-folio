@@ -71,7 +71,7 @@ export default defineConfig(({ mode }) => {
       open: false,
     },
     build: {
-      outDir: 'build',
+      outDir: 'dist',
       sourcemap: 'hidden', // * Enable source maps for debugging production issues (hidden from public)
       minify: mode === 'development' ? false : 'terser',
       terserOptions: mode === 'development' ? undefined : {
