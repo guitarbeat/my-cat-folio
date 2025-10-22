@@ -22,7 +22,7 @@ import '@styles/responsive.css';
 import App from './App.jsx';
 import ErrorBoundary from './shared/components/Error/ErrorBoundary.jsx';
 import ErrorBoundaryFallback from './shared/components/Error/ErrorBoundaryFallback.jsx';
-import { Analytics } from '@vercel/analytics/react';
+// import { Analytics } from '@vercel/analytics/react';
 
 // Set up global error handling
 setupGlobalErrorHandling();
@@ -35,7 +35,7 @@ root.render(
   <StrictMode>
     <ErrorBoundary FallbackComponent={ErrorBoundaryFallback}>
       <App />
-      <Analytics />
+      {/* <Analytics /> */}
     </ErrorBoundary>
   </StrictMode>
 );

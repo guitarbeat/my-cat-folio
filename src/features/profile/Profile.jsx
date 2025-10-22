@@ -679,7 +679,6 @@ const Profile = ({ userName }) => {
 
   return (
     <div className={styles.profileContainer}>
-<<<<<<< HEAD
       {/* * Show migration tool for admins - temporarily disabled to prevent circular dependency */}
       {showMigration && isAdmin ? (
         <div>Data Migration tool temporarily disabled</div>
@@ -706,9 +705,8 @@ const Profile = ({ userName }) => {
               </button>
             </div>
           </div>
-=======
-      <h1 className={styles.title}>{userName}</h1>
->>>>>>> 358606cddcb79880afe6e5076637b9f32c49d8ae
+        </>
+      )}
 
       <ProfileNameList
         names={allNames}
