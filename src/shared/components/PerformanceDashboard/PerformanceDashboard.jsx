@@ -1,6 +1,6 @@
 /**
  * @module PerformanceDashboard
- * @description Real-time performance monitoring dashboard for all users
+ * @description Real-time performance monitoring dashboard restricted to administrators (as enforced in App.jsx)
  */
 
 import { useState, useEffect, useCallback, useRef } from 'react';
