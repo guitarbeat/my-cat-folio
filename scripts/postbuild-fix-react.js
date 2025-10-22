@@ -4,7 +4,12 @@ import { globSync } from 'glob';
 const reactFiles = globSync('dist/assets/js/vendor-react-*.js');
 for (const file of reactFiles) {
   let code = readFileSync(file, 'utf8');
-  const childrenPattern = /(ReactCurrentOwner:K};[\s\S]*?)react_production_min\.Children=\{/;
+  const childrenPattern = new RegExp(
+    [
+      '(ReactCurrentOwner:[^}]+}',
+      '\\s*[,;]?\\s*[\\s\\S]*?)react_production_min\\.Children=\\{',
+    ].join('')
+  );
   if (childrenPattern.test(code)) {
     code = code.replace(
       childrenPattern,
