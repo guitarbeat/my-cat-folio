@@ -96,6 +96,7 @@
   /* * Ensure full width for text */
   min-width: 0;
   overflow: visible;
+  text-align: center;
 }
 
 .sidebar-logo::after {
@@ -117,10 +118,12 @@
 
 .sidebar-logo-button {
   display: flex;
-  gap: 1rem;
+  flex-direction: column;
+  gap: 0.75rem;
   align-items: center;
+  justify-content: center;
   width: 100%;
-  padding: 0.85rem 1rem;
+  padding: 1rem;
   cursor: pointer;
   background: transparent;
   border: none;
@@ -132,6 +135,7 @@
   /* * Ensure text is not clipped */
   min-width: 0;
   flex-shrink: 0;
+  text-align: center;
 }
 
 .sidebar-logo-button::before {
@@ -187,6 +191,7 @@
 }
 
 .sidebar-logo-text {
+  display: block;
   overflow: visible;
   text-overflow: unset;
   font-size: 1rem;
