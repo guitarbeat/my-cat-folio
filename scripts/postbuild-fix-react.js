@@ -4,11 +4,12 @@ import { globSync } from 'glob';
 const reactFiles = globSync('dist/assets/js/vendor-react-*.js');
 for (const file of reactFiles) {
   let code = readFileSync(file, 'utf8');
-  const childrenPattern = /ReactCurrentOwner:K};react_production_min\.Children=\{/;
+  const childrenPattern = /(ReactCurrentOwner:K};[\s\S]*?)react_production_min\.Children=\{/;
   if (childrenPattern.test(code)) {
     code = code.replace(
       childrenPattern,
-      'ReactCurrentOwner:K};return (react_production_min || (react_production_min = {})).Children={'
+      (_match, prefix) =>
+        `${prefix}return (react_production_min || (react_production_min = {})).Children={`
     );
   } else {
     console.warn(`[postbuild-fix-react] No Children pattern found in ${file}`);
