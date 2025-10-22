@@ -37,10 +37,10 @@ export default defineConfig(({ mode }) => {
     plugins: [
       react(),
       
-      // Gzip compression for broader CDN compatibility
-      viteCompression({ algorithm: 'gzip' }),
-      // Brotli compression for modern clients
-      viteCompression({ algorithm: 'brotliCompress' }),
+      // * Compression disabled - Vercel handles compression automatically
+      // * The vite-plugin-compression was causing absolute path issues
+      // viteCompression({ algorithm: 'gzip' }),
+      // viteCompression({ algorithm: 'brotliCompress' }),
     ].filter(Boolean),
     root: '.',
     publicDir: 'public',
