@@ -225,7 +225,7 @@ function App() {
   );
 
   return (
-    <SidebarProvider collapsedWidth={56}>
+    <SidebarProvider collapsedWidth={112}>
       <AppLayout
         sidebarProps={sidebarProps}
         user={user}
@@ -272,16 +272,39 @@ function AppLayout({
   const isLoggedIn = user.isLoggedIn;
   const { view: currentView, setView, onStartNewTournament } = sidebarProps;
 
-  const appClassName = ["app", collapsed ? "app--sidebar-collapsed" : ""]
+  const appClassName = [
+    "app",
+    collapsed ? "app--sidebar-collapsed" : "",
+    !isLoggedIn ? "app--login" : "",
+  ]
     .filter(Boolean)
     .join(" ");
 
   const layoutStyle = useMemo(
     () => ({
-      "--sidebar-expanded-width": "min(85vw, 300px)",
+      "--sidebar-expanded-width": "clamp(208px, 24vw, 224px)",
       "--sidebar-collapsed-width": `${collapsedWidth}px`,
     }),
     [collapsedWidth]
+  );
+
+  const mainWrapperClassName = useMemo(
+    () =>
+      [
+        "app-main-wrapper",
+        !isLoggedIn ? "app-main-wrapper--login" : "",
+      ]
+        .filter(Boolean)
+        .join(" "),
+    [isLoggedIn]
+  );
+
+  const mainContentClassName = useMemo(
+    () =>
+      ["main-content", !isLoggedIn ? "main-content--login" : ""]
+        .filter(Boolean)
+        .join(" "),
+    [isLoggedIn]
   );
 
   const handleBreadcrumbHome = useCallback(() => {
@@ -324,13 +347,13 @@ function AppLayout({
       {/* * Primary navigation lives in the sidebar */}
       <AppSidebar {...sidebarProps} />
 
-      <main className="app-main-wrapper">
+      <main className={mainWrapperClassName}>
         {breadcrumbItems.length > 0 && (
           <div className="app-breadcrumb-container">
             <Breadcrumb items={breadcrumbItems} />
           </div>
         )}
-        <div id="main-content" className="main-content" tabIndex="-1">
+        <div id="main-content" className={mainContentClassName} tabIndex="-1">
           {errors.current && isLoggedIn && (
             <Error
               variant="list"
