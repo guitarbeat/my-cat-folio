@@ -78,10 +78,10 @@ function Login({ onLogin }) {
   const exampleRandomName = generateFunName();
 
   const resetTypingTimer = () => {
-    if (typingTimeoutRef.current) {
-      clearTimeout(typingTimeoutRef.current);
-    }
-    setIsTyping(false);
+    typingTimeoutRef.current = setTimeout(() => {
+      setIsTyping(false);
+      typingTimeoutRef.current = null;
+    }, 1200);
   };
 
   // Fetch cat fact on component mount
@@ -96,10 +96,10 @@ function Login({ onLogin }) {
         setCatFact("Cats are amazing creatures with unique personalities!");
       });
 
-    const currentTimeout = typingTimeoutRef.current;
     return () => {
-      if (currentTimeout) {
-        clearTimeout(currentTimeout);
+      if (typingTimeoutRef.current) {
+        clearTimeout(typingTimeoutRef.current);
+        typingTimeoutRef.current = null;
       }
     };
   }, []);
@@ -117,6 +117,9 @@ function Login({ onLogin }) {
   const handleNameChange = (e) => {
     setName(e.target.value);
     setIsTyping(true);
+    if (typingTimeoutRef.current) {
+      clearTimeout(typingTimeoutRef.current);
+    }
     resetTypingTimer();
     if (error) {
       setError("");
