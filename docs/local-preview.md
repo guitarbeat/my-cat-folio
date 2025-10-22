@@ -22,4 +22,4 @@ If you see a similar message, you've successfully replicated the production fail
 
 > **Latest verification**
 >
-> Running `npm run preview -- --host 0.0.0.0 --port 4173` and driving a headless Chromium session against `http://127.0.0.1:4173/` with Playwright logged `pageerror:Cannot access 'u' before initialization`, confirming the production error reproduces on the current build.
+> Running `npm run preview -- --host 0.0.0.0 --port 4173` and driving a headless Chromium session against `http://127.0.0.1:4173/` with Playwright logged `pageerror: Cannot access 'u' before initialization`, confirming the production error reproduces on the current build.
