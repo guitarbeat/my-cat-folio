@@ -33,7 +33,7 @@
   "scripts": {
     "dev": "vite --config config/vite.config.ts",
     "start": "npm run dev",
-    "build": "vite build --config config/vite.config.ts",
+    "build": "vite build --config config/vite.config.ts && node scripts/postbuild-fix-react.js",
     "build:dev": "vite build --mode development --config config/vite.config.ts",
     "build:analyze": "vite build --mode analyze --config config/vite.config.ts",
     "preview": "vite preview --config config/vite.config.ts",
@@ -76,8 +76,8 @@
     "dotenv": "^17.2.3",
     "lovable-tagger": "^1.1.11",
     "prop-types": "^15.8.1",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
     "zustand": "^5.0.2"
   },
   "devDependencies": {
@@ -98,6 +98,7 @@
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-react": "^7.37.3",
     "eslint-plugin-react-hooks": "^5.1.0",
+    "glob": "^11.0.3",
     "globals": "^15.14.0",
     "husky": "^9.1.7",
     "jsdom": "^25.0.1",
