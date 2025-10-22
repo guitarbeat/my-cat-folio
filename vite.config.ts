@@ -100,26 +100,26 @@ export default defineConfig(({ mode }) => {
       },
       rollupOptions: {
         output: {
-          manualChunks: mode === 'development' ? undefined : (id) => {
-            // * Only use granular chunking in production
-            if (id.includes('node_modules')) {
-              if (id.includes('@supabase/supabase-js')) return 'vendor-supabase';
-              if (id.includes('@hello-pangea/dnd')) return 'vendor-dnd';
-              if (id.includes('react') || id.includes('react-dom')) return 'vendor-react';
-              if (id.includes('zustand')) return 'vendor-zustand';
-              if (id.includes('@heroicons')) return 'vendor-icons';
-              if (id.includes('prop-types')) return 'vendor-prop-types';
-              return 'vendor-misc';
-            }
-            // * Disable feature chunking to avoid circular dependency issues
-            // if (id.includes('/features/')) {
-            //   const feature = id.split('/features/')[1]?.split('/')[0];
-            //   if (feature) return `feature-${feature}`;
-            // }
-            if (id.includes('/shared/utils/coreUtils')) {
-              return 'shared-utils';
-            }
-          },
+          // * Disable manual chunking entirely to avoid React initialization issues
+          // manualChunks: mode === 'development' ? undefined : (id) => {
+          //   // * Simplified chunking strategy to avoid React initialization issues
+          //   if (id.includes('node_modules')) {
+          //     // * Keep React and React-DOM together to avoid initialization issues
+          //     if (id.includes('react') || id.includes('react-dom') || id.includes('react/jsx')) {
+          //       return 'vendor-react';
+          //     }
+          //     // * Group other vendor libraries
+          //     if (id.includes('@supabase/supabase-js')) return 'vendor-supabase';
+          //     if (id.includes('@hello-pangea/dnd')) return 'vendor-dnd';
+          //     if (id.includes('zustand')) return 'vendor-zustand';
+          //     if (id.includes('@heroicons')) return 'vendor-icons';
+          //     if (id.includes('prop-types')) return 'vendor-prop-types';
+          //     return 'vendor-misc';
+          //   }
+          //   if (id.includes('/shared/utils/coreUtils')) {
+          //     return 'shared-utils';
+          //   }
+          // },
           chunkFileNames: 'assets/js/[name]-[hash].js',
           entryFileNames: 'assets/js/[name]-[hash].js',
           assetFileNames: 'assets/[ext]/[name]-[hash].[ext]',
