@@ -3,7 +3,7 @@
  * @description Application sidebar navigation component
  */
 
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import PropTypes from "prop-types";
 import {
   Sidebar,
@@ -31,6 +31,12 @@ export function AppSidebar({
   onTogglePerformanceDashboard,
 }) {
   const { collapsed, toggleCollapsed } = useSidebar();
+
+  useEffect(() => {
+    if (!isLoggedIn && !collapsed) {
+      toggleCollapsed();
+    }
+  }, [collapsed, isLoggedIn, toggleCollapsed]);
 
   // Define navigation items
   const navItems = [
@@ -99,6 +105,18 @@ export function AppSidebar({
     [isLoggedIn]
   );
 
+  const handleLogoClick = () => {
+    const wasCollapsed = collapsed;
+    toggleCollapsed();
+
+    if (wasCollapsed) {
+      setView("tournament");
+      if (typeof onStartNewTournament === "function") {
+        onStartNewTournament();
+      }
+    }
+  };
+
   return (
     <Sidebar className="app-sidebar" collapsible>
       {/* * Screen reader announcements */}
@@ -106,56 +124,19 @@ export function AppSidebar({
         {collapsed ? "Sidebar collapsed" : "Sidebar expanded"}
       </div>
       <SidebarContent>
-        <div className="sidebar-top-controls">
-          <SidebarMenuButton
-            type="button"
-            className="sidebar-collapse-toggle"
-            onClick={toggleCollapsed}
-            onKeyDown={(e) => {
-              if (e.key === "Enter" || e.key === " ") {
-                e.preventDefault();
-                toggleCollapsed();
-              }
-            }}
-            aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
-            tabIndex={0}
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <path d="M3 6h18" />
-              <path d="M3 12h18" />
-              <path d="M3 18h18" />
-            </svg>
-            <span>{collapsed ? "Expand Sidebar" : "Collapse Sidebar"}</span>
-          </SidebarMenuButton>
-        </div>
-
         {/* Logo Section */}
         <div className="sidebar-logo">
           <button
             type="button"
-            onClick={() => {
-              setView("tournament");
-              if (typeof onStartNewTournament === "function") {
-                onStartNewTournament();
-              }
-            }}
+            onClick={handleLogoClick}
             className="sidebar-logo-button"
-            aria-label="Go to home page"
+            aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+            title={collapsed ? "Expand sidebar" : "Collapse sidebar"}
           >
             <video
               className="sidebar-logo-video"
-              width="32"
-              height="32"
+              width="96"
+              height="96"
               muted
               loop
               autoPlay
@@ -173,8 +154,8 @@ export function AppSidebar({
               <img
                 src="/assets/images/cat.gif"
                 alt="Cat animation"
-                width="32"
-                height="32"
+                width="96"
+                height="96"
                 loading="lazy"
                 decoding="async"
                 fetchPriority="low"
