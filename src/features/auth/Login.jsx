@@ -232,36 +232,6 @@ function Login({ onLogin }) {
             Now it&apos;s your turn! Enter your name to start judging cat names
             and help find the perfect one.
           </p>
-          <div
-            className={styles.heroHighlights}
-            role="list"
-            aria-label="Why you&apos;ll love the Cat Name Olympics"
-          >
-            <div className={styles.highlightItem} role="listitem">
-              <span className={styles.highlightIcon} aria-hidden="true">
-                🐾
-              </span>
-              <p className={styles.highlightText}>
-                Track every name you score across playful brackets.
-              </p>
-            </div>
-            <div className={styles.highlightItem} role="listitem">
-              <span className={styles.highlightIcon} aria-hidden="true">
-                ⚡️
-              </span>
-              <p className={styles.highlightText}>
-                Instant onboarding with automatic account creation.
-              </p>
-            </div>
-            <div className={styles.highlightItem} role="listitem">
-              <span className={styles.highlightIcon} aria-hidden="true">
-                🎉
-              </span>
-              <p className={styles.highlightText}>
-                Celebrate milestones as you crown champion cat names.
-              </p>
-            </div>
-          </div>
         </div>
 
         {/* Form Section */}
