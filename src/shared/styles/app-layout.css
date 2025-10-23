@@ -2,7 +2,8 @@
 
 .app {
   display: flex;
-  min-height: 100vh;
+  flex-direction: row;
+  height: 100vh;
   width: 100%;
   --sidebar-expanded-width: clamp(208px, 24vw, 224px);
   --sidebar-collapsed-width: 160px;
@@ -54,6 +55,8 @@
   transition: padding-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   width: 100%;
   max-width: 100%;
+  overflow: auto;
+  height: 100vh;
 }
 
 /* * Update padding based on sidebar state */
@@ -106,10 +109,9 @@
   flex-direction: column;
   align-items: stretch;
   padding: 0 1rem 2rem 1rem;
-  overflow-y: auto;
-  max-width: 1400px;
+  overflow: auto;
   width: 100%;
-  margin: 0 auto;
+  height: 100%;
   animation: fade-in 0.3s ease-out;
 }
 
