@@ -217,7 +217,7 @@
   --space-48: 12rem;
 
   /* Layout */
-  --container-max-width: 1800px;
+  --container-max-width: clamp(70rem, 95vw, 112.5rem);
 
   /* Border Radius */
   --radius-sm: 0.375rem;
