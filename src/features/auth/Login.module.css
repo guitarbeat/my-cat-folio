@@ -637,11 +637,30 @@
   justify-content: center;
   width: 32px;
   height: 32px;
-  cursor: help;
+  cursor: pointer;
   background: rgb(232 191 118 / 20%);
   border-radius: 50%;
   transform: translateY(-50%);
   animation: pulse 2s infinite ease-in-out;
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.randomNameIndicator:focus-visible {
+  outline: 2px solid var(--accent-color);
+  outline-offset: 2px;
+}
+
+.randomNameIndicator:hover:not([aria-disabled="true"]),
+.randomNameIndicator:focus-visible:not([aria-disabled="true"]) {
+  transform: translateY(-50%) scale(1.05);
+  background: rgb(232 191 118 / 30%);
+}
+
+.randomNameIndicator[aria-disabled="true"] {
+  cursor: not-allowed;
+  opacity: 0.6;
+  animation: none;
+  pointer-events: none;
 }
 
 .diceIcon {
