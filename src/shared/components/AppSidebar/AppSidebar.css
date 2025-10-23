@@ -4,8 +4,8 @@
   /* Inherits from sidebar.css */
   /* * Enhanced app-specific styling */
   position: relative;
-  --sidebar-collapsed-width: 160px;
-  --sidebar-expanded-width: clamp(208px, 24vw, 224px);
+  --sidebar-collapsed-width: clamp(9.5rem, 20vw, 12rem);
+  --sidebar-expanded-width: clamp(13rem, 24vw, 14rem);
 }
 
 /* * Screen reader only utility */
@@ -35,13 +35,13 @@
   color: rgb(255 255 255 / 70%);
   background: transparent;
   border: none;
-  border-radius: 8px;
+  border-radius: clamp(0.5rem, 1.8vw, 0.75rem);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   /* * Minimal, clean design */
   position: relative;
   overflow: visible;
-  min-width: 32px;
-  height: 32px;
+  min-width: clamp(2.25rem, 6vw, 2.75rem);
+  height: clamp(2.25rem, 6vw, 2.75rem);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -65,8 +65,8 @@
 
 .sidebar-collapse-toggle svg {
   flex-shrink: 0;
-  width: 16px;
-  height: 16px;
+  width: clamp(1rem, 3vw, 1.25rem);
+  height: clamp(1rem, 3vw, 1.25rem);
   transition: transform 0.2s ease;
 }
 
@@ -129,7 +129,7 @@
   cursor: pointer;
   background: transparent;
   border: none;
-  border-radius: 12px;
+  border-radius: clamp(0.75rem, 2vw, 1rem);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   /* * Enhanced interactive effects */
   position: relative;
@@ -173,9 +173,9 @@
 
 .sidebar-logo-video {
   flex-shrink: 0;
-  width: 96px;
-  height: 96px;
-  border-radius: 26px;
+  width: clamp(5rem, 14vw, 6rem);
+  height: clamp(5rem, 14vw, 6rem);
+  border-radius: clamp(1.5rem, 6vw, 1.75rem);
   /* * Enhanced visual effects */
   border: 3px solid rgba(var(--neon-cyan-rgb), 0.25);
   box-shadow:
@@ -245,7 +245,7 @@
 
 .sidebar--collapsed .sidebar-menu-button {
   width: auto;
-  min-width: 40px;
+  min-width: clamp(2.5rem, 6vw, 3rem);
 }
 
 .sidebar-user-info {

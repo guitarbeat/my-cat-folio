@@ -3,7 +3,7 @@
 /* ===== LAYOUT UTILITIES ===== */
 .container {
   width: 100%;
-  max-width: 1600px;
+  max-width: clamp(70rem, 96vw, 100rem);
   padding: 0 var(--space-4);
   margin: 0 auto;
 }
