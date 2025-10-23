@@ -507,3 +507,4 @@ function ScrollToTopButton({ isLoggedIn }) {
 ScrollToTopButton.propTypes = {
   isLoggedIn: PropTypes.bool.isRequired
 };
+// Test auto-deployment - Wed Oct 22 21:26:25 CDT 2025
