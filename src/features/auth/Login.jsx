@@ -77,6 +77,32 @@ function Login({ onLogin }) {
 
   const exampleRandomName = generateFunName();
 
+  const handleRandomNameClick = () => {
+    if (isLoading) {
+      return;
+    }
+    const funName = generateFunName();
+    setName(funName);
+    setIsTyping(false);
+    if (typingTimeoutRef.current) {
+      clearTimeout(typingTimeoutRef.current);
+      typingTimeoutRef.current = null;
+    }
+    if (error) {
+      setError("");
+    }
+    if (!isExpanded) {
+      setIsExpanded(true);
+    }
+  };
+
+  const handleRandomNameKeyDown = (event) => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      handleRandomNameClick();
+    }
+  };
+
   const resetTypingTimer = () => {
     typingTimeoutRef.current = setTimeout(() => {
       setIsTyping(false);
@@ -328,10 +354,17 @@ function Login({ onLogin }) {
                     {!name.trim() && (
                       <div
                         className={styles.randomNameIndicator}
-                        title="A random name will be generated"
-                        aria-hidden="true"
+                        title="Generate a random judge name"
+                        role="button"
+                        tabIndex={isLoading ? -1 : 0}
+                        aria-label="Generate a random judge name"
+                        aria-disabled={isLoading}
+                        onClick={handleRandomNameClick}
+                        onKeyDown={handleRandomNameKeyDown}
                       >
-                        <span className={styles.diceIcon}>🎲</span>
+                        <span aria-hidden="true" className={styles.diceIcon}>
+                          🎲
+                        </span>
                       </div>
                     )}
                   </div>
