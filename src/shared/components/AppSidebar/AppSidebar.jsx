@@ -32,11 +32,12 @@ export function AppSidebar({
 }) {
   const { collapsed, toggleCollapsed } = useSidebar();
 
-  useEffect(() => {
-    if (!isLoggedIn && !collapsed) {
-      toggleCollapsed();
-    }
-  }, [collapsed, isLoggedIn, toggleCollapsed]);
+  // * Allow sidebar to expand/collapse freely regardless of login state
+  // useEffect(() => {
+  //   if (!isLoggedIn && !collapsed) {
+  //     toggleCollapsed();
+  //   }
+  // }, [collapsed, isLoggedIn, toggleCollapsed]);
 
   // Define navigation items
   const navItems = [
@@ -106,10 +107,12 @@ export function AppSidebar({
   );
 
   const handleLogoClick = () => {
-    const wasCollapsed = collapsed;
+    // * Toggle sidebar expansion/collapse
+    console.log('Sidebar clicked, current collapsed state:', collapsed);
     toggleCollapsed();
-
-    if (wasCollapsed) {
+    
+    // * If expanding, also navigate to tournament
+    if (collapsed) {
       setView("tournament");
       if (typeof onStartNewTournament === "function") {
         onStartNewTournament();

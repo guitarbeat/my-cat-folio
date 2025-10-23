@@ -458,17 +458,6 @@ function Login({ onLogin }) {
                   </div>
                 )}
               </div>
-              <div className={styles.supportSection}>
-                <p className={styles.supportText}>
-                  Need help picking a name or having trouble signing in?
-                </p>
-                <a
-                  className={styles.supportLink}
-                  href="mailto:support@catnameolympics.com"
-                >
-                  Contact our friendly support cats
-                </a>
-              </div>
             </div>
           )}
         </Card>

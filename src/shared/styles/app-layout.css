@@ -25,6 +25,20 @@
   box-shadow: 0 20px 40px -15px hsl(var(--foreground) / 0.35);
 }
 
+/* * Allow sidebar to expand when not in login mode */
+.app:not(.app--login) .sidebar {
+  width: var(--sidebar-expanded-width) !important;
+}
+
+.app:not(.app--login).app--sidebar-collapsed .sidebar {
+  width: var(--sidebar-collapsed-width) !important;
+}
+
+/* * Force sidebar to expand when not collapsed and not in login mode */
+.app:not(.app--login):not(.app--sidebar-collapsed) .sidebar {
+  width: var(--sidebar-expanded-width) !important;
+}
+
 .app--sidebar-collapsed {
   --sidebar-current-width: var(--sidebar-collapsed-width);
 }
@@ -40,6 +54,15 @@
   transition: padding-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   width: 100%;
   max-width: 100%;
+}
+
+/* * Update padding based on sidebar state */
+.app:not(.app--login) .app-main-wrapper {
+  padding-left: var(--sidebar-expanded-width);
+}
+
+.app:not(.app--login).app--sidebar-collapsed .app-main-wrapper {
+  padding-left: var(--sidebar-collapsed-width);
 }
 
 .app-main-wrapper--login {
