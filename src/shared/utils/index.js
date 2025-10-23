@@ -4,6 +4,12 @@
  * Provides a single import point for all utility functions and classes.
  */
 
+import * as coreUtils from './coreUtils';
+import * as validationUtils from './validationUtils';
+import * as authUtils from './authUtils';
+import * as componentUtils from './componentUtils';
+import * as apiUtils from './apiUtils';
+
 // * Core utilities
 export * from './coreUtils';
 export * from './validationUtils';
@@ -90,11 +96,12 @@ export {
 } from './apiUtils';
 
 // * Default export with all utilities
-export default {
-    // Core utilities
-    ...require('./coreUtils'),
-    ...require('./validationUtils'),
-    ...require('./authUtils'),
-    ...require('./componentUtils'),
-    ...require('./apiUtils')
+const combinedUtils = {
+    ...coreUtils,
+    ...validationUtils,
+    ...authUtils,
+    ...componentUtils,
+    ...apiUtils
 };
+
+export default combinedUtils;

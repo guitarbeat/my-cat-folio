@@ -6,7 +6,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styles from './Card.module.css';
 
-const Card = React.forwardRef(({ 
+const Card = React.forwardRef(({
   children,
   className = '',
   variant = 'default',

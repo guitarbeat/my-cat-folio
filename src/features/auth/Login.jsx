@@ -78,10 +78,10 @@ function Login({ onLogin }) {
   const exampleRandomName = generateFunName();
 
   const resetTypingTimer = () => {
-    if (typingTimeoutRef.current) {
-      clearTimeout(typingTimeoutRef.current);
-    }
-    setIsTyping(false);
+    typingTimeoutRef.current = setTimeout(() => {
+      setIsTyping(false);
+      typingTimeoutRef.current = null;
+    }, 1200);
   };
 
   // Fetch cat fact on component mount
@@ -96,17 +96,18 @@ function Login({ onLogin }) {
         setCatFact("Cats are amazing creatures with unique personalities!");
       });
 
-    const currentTimeout = typingTimeoutRef.current;
     return () => {
-      if (currentTimeout) {
-        clearTimeout(currentTimeout);
+      if (typingTimeoutRef.current) {
+        clearTimeout(typingTimeoutRef.current);
+        typingTimeoutRef.current = null;
       }
     };
   }, []);
 
   useEffect(() => {
-    if (isExpanded && containerRef.current) {
-      containerRef.current.scrollIntoView({
+    const containerEl = containerRef.current;
+    if (isExpanded && containerEl && typeof containerEl.scrollIntoView === "function") {
+      containerEl.scrollIntoView({
         behavior: "smooth",
         block: "center",
       });
@@ -116,6 +117,9 @@ function Login({ onLogin }) {
   const handleNameChange = (e) => {
     setName(e.target.value);
     setIsTyping(true);
+    if (typingTimeoutRef.current) {
+      clearTimeout(typingTimeoutRef.current);
+    }
     resetTypingTimer();
     if (error) {
       setError("");
@@ -228,6 +232,50 @@ function Login({ onLogin }) {
             Now it&apos;s your turn! Enter your name to start judging cat names
             and help find the perfect one.
           </p>
+          <div
+            className={styles.heroHighlights}
+            role="list"
+            aria-label="Why you&apos;ll love the Cat Name Olympics"
+          >
+            <div className={styles.highlightItem} role="listitem">
+              <span className={styles.highlightIcon} aria-hidden="true">
+                🐾
+              </span>
+              <p className={styles.highlightText}>
+                Track every name you score across playful brackets.
+              </p>
+            </div>
+            <div className={styles.highlightItem} role="listitem">
+              <span className={styles.highlightIcon} aria-hidden="true">
+                ⚡️
+              </span>
+              <p className={styles.highlightText}>
+                Instant onboarding with automatic account creation.
+              </p>
+            </div>
+            <div className={styles.highlightItem} role="listitem">
+              <span className={styles.highlightIcon} aria-hidden="true">
+                🎉
+              </span>
+              <p className={styles.highlightText}>
+                Celebrate milestones as you crown champion cat names.
+              </p>
+            </div>
+          </div>
+          <div className={styles.heroStats} aria-hidden="true">
+            <div className={styles.statCard}>
+              <span className={styles.statValue}>5k+</span>
+              <span className={styles.statLabel}>Names Judged</span>
+            </div>
+            <div className={styles.statCard}>
+              <span className={styles.statValue}>98%</span>
+              <span className={styles.statLabel}>Happy Judges</span>
+            </div>
+            <div className={styles.statCard}>
+              <span className={styles.statValue}>24/7</span>
+              <span className={styles.statLabel}>Cat Facts</span>
+            </div>
+          </div>
         </div>
 
         {/* Form Section */}
@@ -261,17 +309,26 @@ function Login({ onLogin }) {
               className={styles.expandedContent}
               aria-live="polite"
             >
+              <p className={styles.accessibilityHint}>
+                Hover or focus here to open the judge login form—no clicks
+                needed. We&apos;ll help you enter or generate a name in seconds.
+              </p>
               <p className={styles.catFact}>
-                {catFact ? (
-                  <>{catFact}</>
-                ) : (
-                  <span className={styles.loadingFact}>
-                    <span className={styles.loadingDots}>
-                      Loading a fun cat fact
+                <span className={styles.catFactIcon} aria-hidden="true">
+                  🐱
+                </span>
+                <span>
+                  {catFact ? (
+                    <>{catFact}</>
+                  ) : (
+                    <span className={styles.loadingFact}>
+                      <span className={styles.loadingDots}>
+                        Loading a fun cat fact
+                      </span>
+                      <span className={styles.loadingDots}>...</span>
                     </span>
-                    <span className={styles.loadingDots}>...</span>
-                  </span>
-                )}
+                  )}
+                </span>
               </p>
               {isTyping ? (
                 <div className={styles.typingIndicator}>
@@ -400,6 +457,17 @@ function Login({ onLogin }) {
                     </p>
                   </div>
                 )}
+              </div>
+              <div className={styles.supportSection}>
+                <p className={styles.supportText}>
+                  Need help picking a name or having trouble signing in?
+                </p>
+                <a
+                  className={styles.supportLink}
+                  href="mailto:support@catnameolympics.com"
+                >
+                  Contact our friendly support cats
+                </a>
               </div>
             </div>
           )}

@@ -4,8 +4,8 @@
  * Reduces code duplication across components and provides consistent implementations.
  */
 
-import { useCallback, useMemo, useRef, useState } from 'react';
-import { VALIDATION, UI } from '../../core/constants';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { UI } from '../../core/constants';
 
 /**
  * * Creates a standardized form state manager
@@ -258,7 +258,7 @@ export function useAsyncOperation(asyncFn, options = {}) {
     }, []);
 
     // Execute immediately if requested
-    useMemo(() => {
+    useEffect(() => {
         if (immediate) {
             execute();
         }
@@ -280,7 +280,7 @@ export function useAsyncOperation(asyncFn, options = {}) {
 export function useDebounce(value, delay = UI.DEBOUNCE_DELAY) {
     const [debouncedValue, setDebouncedValue] = useState(value);
 
-    useMemo(() => {
+    useEffect(() => {
         const handler = setTimeout(() => {
             setDebouncedValue(value);
         }, delay);
@@ -318,7 +318,7 @@ export function useThrottle(callback, delay = UI.THROTTLE_DELAY) {
 export function useClickOutside(handler) {
     const ref = useRef();
 
-    useMemo(() => {
+    useEffect(() => {
         const handleClickOutside = (event) => {
             if (ref.current && !ref.current.contains(event.target)) {
                 handler();
@@ -341,7 +341,7 @@ export function useClickOutside(handler) {
  * @returns {void}
  */
 export function useKeyboardHandler(keyHandlers, dependencies = []) {
-    useMemo(() => {
+    useEffect(() => {
         const handleKeyDown = (event) => {
             const handler = keyHandlers[event.key];
             if (handler) {
@@ -354,7 +354,7 @@ export function useKeyboardHandler(keyHandlers, dependencies = []) {
         return () => {
             document.removeEventListener('keydown', handleKeyDown);
         };
-    }, [keyHandlers, ...dependencies]);
+    }, [keyHandlers, dependencies]);
 }
 
 /**
@@ -363,11 +363,7 @@ export function useKeyboardHandler(keyHandlers, dependencies = []) {
  * @returns {Object} Focus state and handlers
  */
 export function useFocusManager(options = {}) {
-    const {
-        initialFocus = false,
-        trapFocus = false,
-        restoreFocus = true
-    } = options;
+    const { initialFocus = false, restoreFocus = true } = options;
 
     const [isFocused, setIsFocused] = useState(initialFocus);
     const previousActiveElement = useRef(null);
@@ -418,7 +414,7 @@ export function useVisibilityManager(options = {}) {
     const [hasBeenVisible, setHasBeenVisible] = useState(initialVisible);
     const ref = useRef();
 
-    useMemo(() => {
+    useEffect(() => {
         const observer = new IntersectionObserver(
             ([entry]) => {
                 const visible = entry.isIntersecting;
@@ -438,7 +434,7 @@ export function useVisibilityManager(options = {}) {
         return () => {
             observer.disconnect();
         };
-    }, [threshold, rootMargin, hasBeenVisible]);
+    }, [threshold, rootMargin, hasBeenVisible, ref]);
 
     return {
         isVisible,
@@ -496,7 +492,7 @@ export function useMediaQuery(query) {
         return window.matchMedia(query).matches;
     });
 
-    useMemo(() => {
+    useEffect(() => {
         if (typeof window === 'undefined') return;
 
         const mediaQuery = window.matchMedia(query);
@@ -519,7 +515,7 @@ export function useMediaQuery(query) {
 export function usePrevious(value) {
     const ref = useRef();
 
-    useMemo(() => {
+    useEffect(() => {
         ref.current = value;
     }, [value]);
 
