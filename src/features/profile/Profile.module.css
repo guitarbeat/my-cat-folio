@@ -19,12 +19,6 @@
   background-clip: text;
 }
 
-.headerButtons {
-  display: flex;
-  gap: 1rem;
-  align-items: center;
-}
-
 .newTournamentButton {
   min-width: 200px;
   white-space: nowrap;
@@ -32,22 +26,6 @@
 
 .noDataButton {
   margin-top: 1.5rem;
-}
-
-.migrationButton {
-  padding: 0.75rem 1.5rem;
-  font-weight: 600;
-  cursor: pointer;
-  color: var(--text-primary);
-  background: var(--bg-secondary);
-  border: 1px solid var(--border-color);
-  border-radius: 8px;
-  transition: all 0.2s;
-}
-
-.migrationButton:hover {
-  background: var(--bg-tertiary);
-  transform: translateY(-1px);
 }
 
 /* Main Content - Single Column Layout */
@@ -967,11 +945,6 @@
 
   .title {
     font-size: 1.5rem;
-  }
-
-  .headerButtons {
-    flex-wrap: wrap;
-    justify-content: center;
   }
 
   .profileContainer {

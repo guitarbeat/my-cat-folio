@@ -681,18 +681,6 @@ const Profile = ({ userName }) => {
       {/* * Header */}
       <div className={styles.header}>
         <h1 className={styles.title}>Profile: {userName}</h1>
-        <div className={styles.headerButtons}>
-          {isAdmin && (
-            <button
-              type="button"
-              className={styles.migrationButton}
-              title="Migrate data from external Supabase"
-              disabled
-            >
-              🔄 Migration Disabled
-            </button>
-          )}
-        </div>
       </div>
 
       <ProfileNameList
