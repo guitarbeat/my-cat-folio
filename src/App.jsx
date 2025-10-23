@@ -224,7 +224,7 @@ function App() {
   );
 
   return (
-    <SidebarProvider collapsedWidth={112} defaultCollapsed={false}>
+    <SidebarProvider collapsedWidth={160} defaultCollapsed={false}>
       <AppLayout
         sidebarProps={sidebarProps}
         user={user}

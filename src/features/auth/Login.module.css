@@ -154,52 +154,6 @@
   color: #1f2937;
 }
 
-.heroStats {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-  gap: 1rem;
-  width: 100%;
-}
-
-.statCard {
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-  align-items: center;
-  justify-content: center;
-  padding: 1rem;
-  background: linear-gradient(160deg, rgba(30, 64, 175, 0.75), rgba(14, 116, 144, 0.6));
-  border-radius: 16px;
-  border: 1px solid rgba(148, 163, 184, 0.35);
-  backdrop-filter: blur(10px);
-  box-shadow: 0 12px 40px rgba(14, 116, 144, 0.35);
-  text-align: center;
-}
-
-:root[data-theme="light"] .statCard {
-  background: linear-gradient(160deg, rgba(30, 64, 175, 0.9), rgba(56, 189, 248, 0.8));
-  box-shadow: 0 14px 38px rgba(30, 64, 175, 0.25);
-}
-
-.statValue {
-  font-size: 1.75rem;
-  font-weight: 700;
-  letter-spacing: 0.02em;
-  color: white;
-  text-shadow: 0 4px 16px rgba(15, 23, 42, 0.4);
-}
-
-.statLabel {
-  font-size: 0.85rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: rgb(226 232 240 / 85%);
-}
-
-:root[data-theme="light"] .statLabel {
-  color: rgb(241 245 249 / 90%);
-}
 
 /* Form Section */
 .formCard {
@@ -955,8 +909,7 @@
     gap: 1.5rem;
   }
 
-  .heroHighlights,
-  .heroStats {
+  .heroHighlights {
     grid-template-columns: 1fr;
   }
 

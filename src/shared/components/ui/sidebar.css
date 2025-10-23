@@ -9,6 +9,9 @@
   display: flex;
   flex-direction: column;
   width: var(--sidebar-expanded-width, 300px);
+  min-width: var(--sidebar-expanded-width, 300px);
+  max-width: var(--sidebar-expanded-width, 300px);
+  flex-shrink: 0;
   background: var(--glass-bg);
   border-right: 1px solid var(--glass-border);
   box-shadow: var(--glass-shadow-colored);
@@ -44,7 +47,10 @@
 }
 
 .sidebar--collapsed {
-  width: var(--sidebar-collapsed-width, 56px);
+  width: var(--sidebar-collapsed-width, 160px);
+  min-width: var(--sidebar-collapsed-width, 160px);
+  max-width: var(--sidebar-collapsed-width, 160px);
+  flex-shrink: 0;
   /* * Enhanced collapsed state animation */
   transform: translateX(0);
 }
@@ -93,28 +99,15 @@
   flex: 1;
   padding: 1.5rem 0;
   overflow: hidden auto;
-  /* * Enhanced scrolling */
-  scrollbar-width: thin;
-  scrollbar-color: rgba(var(--neon-cyan-rgb), 0.3) transparent;
+  min-width: 0;
+  /* * Hide scrollbar but keep scrolling functionality */
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
 }
 
-/* * Custom scrollbar for webkit browsers */
+/* * Hide scrollbar for webkit browsers */
 .sidebar-content::-webkit-scrollbar {
-  width: 4px;
-}
-
-.sidebar-content::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.sidebar-content::-webkit-scrollbar-thumb {
-  background: rgba(var(--neon-cyan-rgb), 0.3);
-  border-radius: 2px;
-  transition: background 0.2s ease;
-}
-
-.sidebar-content::-webkit-scrollbar-thumb:hover {
-  background: rgba(var(--neon-cyan-rgb), 0.5);
+  display: none;
 }
 
 .sidebar-group {

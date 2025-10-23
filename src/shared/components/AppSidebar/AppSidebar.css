@@ -4,7 +4,7 @@
   /* Inherits from sidebar.css */
   /* * Enhanced app-specific styling */
   position: relative;
-  --sidebar-collapsed-width: 112px;
+  --sidebar-collapsed-width: 160px;
   --sidebar-expanded-width: clamp(208px, 24vw, 224px);
 }
 

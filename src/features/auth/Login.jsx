@@ -262,20 +262,6 @@ function Login({ onLogin }) {
               </p>
             </div>
           </div>
-          <div className={styles.heroStats} aria-hidden="true">
-            <div className={styles.statCard}>
-              <span className={styles.statValue}>5k+</span>
-              <span className={styles.statLabel}>Names Judged</span>
-            </div>
-            <div className={styles.statCard}>
-              <span className={styles.statValue}>98%</span>
-              <span className={styles.statLabel}>Happy Judges</span>
-            </div>
-            <div className={styles.statCard}>
-              <span className={styles.statValue}>24/7</span>
-              <span className={styles.statLabel}>Cat Facts</span>
-            </div>
-          </div>
         </div>
 
         {/* Form Section */}
