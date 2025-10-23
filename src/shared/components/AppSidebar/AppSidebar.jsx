@@ -3,7 +3,6 @@
  * @description Application sidebar navigation component
  */
 
-import { useEffect, useMemo } from "react";
 import PropTypes from "prop-types";
 import {
   Sidebar,
@@ -90,21 +89,6 @@ export function AppSidebar({
       ),
     });
   }
-
-  const externalLinks = useMemo(
-    () =>
-      isLoggedIn
-        ? []
-        : [
-            { key: "kpop", label: "K-Pop Site", url: "https://kpop.alw.lol" },
-            {
-              key: "personal",
-              label: "Personal Site",
-              url: "https://aaronwoods.info",
-            },
-          ],
-    [isLoggedIn]
-  );
 
   const handleLogoClick = () => {
     // * Toggle sidebar expansion/collapse
@@ -205,46 +189,6 @@ export function AppSidebar({
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
-
-        {/* External Links for guests */}
-        {externalLinks.length > 0 && (
-          <SidebarGroup open={true}>
-            <SidebarGroupLabel>Explore</SidebarGroupLabel>
-            <SidebarGroupContent>
-              <SidebarMenu>
-                {externalLinks.map((link) => (
-                  <SidebarMenuItem key={link.key}>
-                    <SidebarMenuButton asChild>
-                      <a
-                        href={link.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        title={collapsed ? link.label : undefined}
-                      >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="20"
-                          height="20"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        >
-                          <path d="M14 3h7v7" />
-                          <path d="M10 14 21 3" />
-                          <path d="M21 14v7H3V3h7" />
-                        </svg>
-                        <span>{link.label}</span>
-                      </a>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                ))}
-              </SidebarMenu>
-            </SidebarGroupContent>
-          </SidebarGroup>
-        )}
 
         {/* User Info Section */}
         {isLoggedIn && userName && !collapsed && (
