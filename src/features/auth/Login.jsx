@@ -67,12 +67,27 @@ function Login({ onLogin }) {
     "Purrfect",
   ];
 
+  const sanitizeGeneratedName = (value) =>
+    value
+      .replace(/[^a-zA-Z0-9 _-]/g, "")
+      .replace(/\s+/g, " ")
+      .trim();
+
   const generateFunName = () => {
-    const prefix =
-      funnyPrefixes[Math.floor(Math.random() * funnyPrefixes.length)];
-    const adjective =
-      funnyAdjectives[Math.floor(Math.random() * funnyAdjectives.length)];
-    return `${prefix} ${adjective}`;
+    let attempts = 0;
+    let generatedName = "";
+
+    while (!generatedName && attempts < 3) {
+      const prefix =
+        funnyPrefixes[Math.floor(Math.random() * funnyPrefixes.length)];
+      const adjective =
+        funnyAdjectives[Math.floor(Math.random() * funnyAdjectives.length)];
+
+      generatedName = sanitizeGeneratedName(`${prefix} ${adjective}`);
+      attempts += 1;
+    }
+
+    return generatedName || "Cat Judge";
   };
 
   const exampleRandomName = generateFunName();
